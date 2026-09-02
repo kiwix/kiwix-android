@@ -18,18 +18,24 @@
 
 package org.kiwix.kiwixmobile.nav.destination.library.online.helper
 
+import android.content.Context
 import android.net.ConnectivityManager
 import com.tonyodev.fetch2.Error
 import com.tonyodev.fetch2.Status
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.mockkObject
+import io.mockk.unmockkObject
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.kiwix.kiwixmobile.core.compat.CompatHelper
+import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.isAirplaneModeOn
 import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.isNetworkAvailable
 import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.isWifi
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadState
@@ -40,6 +46,7 @@ import org.kiwix.kiwixmobile.zimManager.libraryView.AvailableSpaceCalculator.Ava
 import org.kiwix.kiwixmobile.zimManager.libraryView.LibraryListItem.BookItem
 import org.kiwix.kiwixmobile.zimManager.libraryView.LibraryListItem.LibraryDownloadItem
 import org.kiwix.kiwixmobile.nav.destination.library.online.helper.ResolveBookClickAction.LibraryActionResult
+import org.kiwix.kiwixmobile.nav.destination.library.online.helper.ResolveBookClickAction.LibraryActionResult.AirplaneModeEnabled
 import org.kiwix.kiwixmobile.nav.destination.library.online.helper.ResolveBookClickAction.LibraryActionResult.CancelDownload
 import org.kiwix.kiwixmobile.nav.destination.library.online.helper.ResolveBookClickAction.LibraryActionResult.NoInternet
 import org.kiwix.kiwixmobile.nav.destination.library.online.helper.ResolveBookClickAction.LibraryActionResult.RetryDownload
@@ -60,18 +67,27 @@ class ResolveBookClickActionTest {
   private val permissionChecker: KiwixPermissionChecker = mockk()
   private val availableSpaceCalculator: AvailableSpaceCalculator = mockk()
   private val connectivityManager: ConnectivityManager = mockk()
+  private val context: Context = mockk()
   private val bookItem = mockk<BookItem>(relaxed = true)
 
   private lateinit var resolver: ResolveBookClickAction
 
   @BeforeEach
   fun setup() {
+    mockkObject(CompatHelper.Companion)
+    every { any<Context>().isAirplaneModeOn() } returns false
     resolver = ResolveBookClickAction(
       kiwixDataStore,
       permissionChecker,
       availableSpaceCalculator,
-      connectivityManager
+      connectivityManager,
+      context
     )
+  }
+
+  @AfterEach
+  fun tearDown() {
+    unmockkObject(CompatHelper.Companion)
   }
 
   @Test
@@ -81,6 +97,16 @@ class ResolveBookClickActionTest {
     val result = resolver.onBookItemClick(bookItem, 1)
 
     assertEquals(RequestNotificationPermission, result)
+  }
+
+  @Test
+  fun `returns AirplaneModeEnabled when airplane mode is on`() = runTest {
+    coEvery { permissionChecker.hasNotificationPermission() } returns true
+    every { any<Context>().isAirplaneModeOn() } returns true
+
+    val result = resolver.onBookItemClick(bookItem, 1)
+
+    assertEquals(AirplaneModeEnabled, result)
   }
 
   @Test

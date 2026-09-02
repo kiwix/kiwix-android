@@ -18,11 +18,14 @@
 
 package org.kiwix.kiwixmobile.nav.destination.library.online.helper
 
+import android.content.Context
 import android.net.ConnectivityManager
 import kotlinx.coroutines.flow.first
+import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.isAirplaneModeOn
 import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.isNetworkAvailable
 import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.isWifi
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
+import org.kiwix.kiwixmobile.nav.destination.library.online.helper.ResolveRefreshLibraryAction.Result.AirplaneModeBlocked
 import org.kiwix.kiwixmobile.nav.destination.library.online.helper.ResolveRefreshLibraryAction.Result.Proceed
 import org.kiwix.kiwixmobile.nav.destination.library.online.helper.ResolveRefreshLibraryAction.Result.NoInternetWithContent
 import org.kiwix.kiwixmobile.nav.destination.library.online.helper.ResolveRefreshLibraryAction.Result.NoInternetWithEmptyContent
@@ -31,17 +34,21 @@ import javax.inject.Inject
 
 class ResolveRefreshLibraryAction @Inject constructor(
   private val kiwixDataStore: KiwixDataStore,
-  private val connectivityManager: ConnectivityManager
+  private val connectivityManager: ConnectivityManager,
+  private val context: Context
 ) {
   sealed class Result {
     object Proceed : Result()
     object NoInternetWithContent : Result()
     object NoInternetWithEmptyContent : Result()
     object WifiOnlyBlocked : Result()
+    object AirplaneModeBlocked : Result()
   }
 
   suspend operator fun invoke(hasItems: Boolean): Result {
-    return if (!connectivityManager.isNetworkAvailable()) {
+    return if (context.isAirplaneModeOn()) {
+      AirplaneModeBlocked
+    } else if (!connectivityManager.isNetworkAvailable()) {
       if (hasItems) {
         NoInternetWithContent
       } else {

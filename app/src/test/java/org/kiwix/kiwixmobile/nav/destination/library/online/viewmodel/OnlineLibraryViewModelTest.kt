@@ -31,7 +31,9 @@ import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
+import io.mockk.mockkObject
 import io.mockk.spyk
+import io.mockk.unmockkObject
 import io.mockk.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
@@ -51,6 +53,9 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.RegisterExtension
 import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.compat.CompatHelper
+import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.isAirplaneModeOn
+import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.isNetworkAvailable
 import org.kiwix.kiwixmobile.core.dao.DownloadRoomDao
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookOnDisk
 import org.kiwix.kiwixmobile.core.downloader.Downloader
@@ -79,11 +84,13 @@ import org.kiwix.kiwixmobile.nav.destination.library.online.helper.ResolveBookCl
 import org.kiwix.kiwixmobile.nav.destination.library.online.helper.ResolveBookClickAction.LibraryActionResult.ShowWifiOnlyDialog
 import org.kiwix.kiwixmobile.nav.destination.library.online.helper.ResolveBookClickAction.LibraryActionResult.StartDownload
 import org.kiwix.kiwixmobile.nav.destination.library.online.helper.ResolveRefreshLibraryAction
+import org.kiwix.kiwixmobile.nav.destination.library.online.helper.ResolveRefreshLibraryAction.Result.AirplaneModeBlocked
 import org.kiwix.kiwixmobile.nav.destination.library.online.helper.ResolveRefreshLibraryAction.Result.NoInternetWithContent
 import org.kiwix.kiwixmobile.nav.destination.library.online.helper.ResolveRefreshLibraryAction.Result.NoInternetWithEmptyContent
 import org.kiwix.kiwixmobile.nav.destination.library.online.helper.ResolveRefreshLibraryAction.Result.Proceed
 import org.kiwix.kiwixmobile.nav.destination.library.online.helper.ResolveRefreshLibraryAction.Result.WifiOnlyBlocked
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.OnlineLibraryViewModel.OnlineLibraryRequest
+import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.OnlineLibraryViewModel.OnlineLibraryState.AirplaneModeEnabled
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.OnlineLibraryViewModel.OnlineLibraryState.Idle
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.OnlineLibraryViewModel.OnlineLibraryState.Loading
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.OnlineLibraryViewModel.OnlineLibraryState.NoInternetConnection
@@ -96,6 +103,7 @@ import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.OnlineLibr
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.OnlineLibraryViewModel.UiEvent.ShowDialog
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.OnlineLibraryViewModel.UiEvent.ShowNoSpaceSnackbar
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.OnlineLibraryViewModel.UiEvent.ShowSnackbar
+import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.OnlineLibraryViewModel.UiEvent.ShowToast
 import org.kiwix.kiwixmobile.zimManager.libraryView.AvailableSpaceCalculator
 import org.kiwix.kiwixmobile.zimManager.libraryView.LibraryListItem
 import org.kiwix.sharedFunctions.MainDispatcherRule
@@ -127,9 +135,13 @@ class OnlineLibraryViewModelTest {
 
   @BeforeEach
   fun setup() {
+    mockkObject(CompatHelper.Companion)
+    every { context.isAirplaneModeOn() } returns false
     every { connectivityReceiver.networkStates } returns MutableStateFlow(NetworkState.NOT_CONNECTED)
     every { observeItems.invoke(any(), any(), any(), any(), any()) } returns emptyFlow()
-    every { observeLibrary.invoke(any()) } returns flowOf(mockk(relaxed = true))
+    // Real state, not a relaxed mock - relaxed mock of a sealed class picks a random
+    // concrete subtype, breaking object-identity `when` branches.
+    every { observeLibrary.invoke(any()) } returns flowOf(NoInternetConnection)
     every { observeNetwork.invoke(any()) } returns emptyFlow()
     every { kiwixDataStore.selectedOnlineContentCategory } returns MutableStateFlow("")
     every { kiwixDataStore.selectedOnlineContentLanguage } returns MutableStateFlow("")
@@ -166,6 +178,7 @@ class OnlineLibraryViewModelTest {
   @AfterEach
   fun dispose() {
     viewModel.onClearedExposed()
+    unmockkObject(CompatHelper.Companion)
   }
 
   @Nested
@@ -239,6 +252,21 @@ class OnlineLibraryViewModelTest {
 
       assertTrue(viewModel.uiState.value.showNoContent)
     }
+
+    @Test
+    fun `given airplane mode blocked when refreshScreen then show no content`() = runTest {
+      coEvery { refreshAction.invoke(any()) } returns AirplaneModeBlocked
+
+      viewModel.refreshScreen(true)
+      advanceUntilIdle()
+
+      val uiState = viewModel.uiState.value
+      assertTrue(uiState.showNoContent)
+      assertEquals(
+        context.getString(R.string.airplane_mode_not_supported),
+        uiState.noContentMessage
+      )
+    }
   }
 
   @Nested
@@ -269,6 +297,23 @@ class OnlineLibraryViewModelTest {
         advanceUntilIdle()
         val snackBar = awaitItem() as ShowSnackbar
         assertTrue(snackBar.message == context.getString(R.string.no_network_connection))
+
+        cancelAndIgnoreRemainingEvents()
+      }
+    }
+
+    @Test
+    fun `when action is AirplaneModeEnabled then emits toast`() = runTest {
+      val item = mockk<LibraryListItem.BookItem>(relaxed = true)
+
+      coEvery { resolveClick.onBookItemClick(any(), any()) } returns
+        ResolveBookClickAction.LibraryActionResult.AirplaneModeEnabled
+      viewModel.uiEvents.test {
+        viewModel.onBookItemClick(item)
+
+        advanceUntilIdle()
+        val toast = awaitItem() as ShowToast
+        assertTrue(toast.message == context.getString(R.string.airplane_mode_not_supported))
 
         cancelAndIgnoreRemainingEvents()
       }
@@ -600,6 +645,15 @@ class OnlineLibraryViewModelTest {
     }
 
     @Test
+    fun `when state is AirplaneModeEnabled then stops loading`() = runTest {
+      viewModel.handleLibraryState(AirplaneModeEnabled)
+
+      val state = viewModel.uiState.value
+      assertFalse(state.showScanningProgressBar)
+      assertFalse(state.isLoadingMore)
+    }
+
+    @Test
     fun `when state is Loading then updates loading flags`() = runTest {
       viewModel.handleLibraryState(Loading(isLoadMore = false))
 
@@ -708,6 +762,56 @@ class OnlineLibraryViewModelTest {
       assertTrue(uiState.items.isEmpty())
       assertTrue(uiState.showNoContent)
     }
+
+    @Test
+    fun `when success returns empty list and network is available then shows no items message`() =
+      runTest {
+        every { connectivityManager.isNetworkAvailable() } returns true
+        val request = mockk<OnlineLibraryViewModel.OnlineLibraryRequest> {
+          every { isLoadMoreItem } returns false
+        }
+
+        val state = Success(
+          books = emptyList(),
+          totalPages = 1,
+          request = request
+        )
+
+        viewModel.handleLibraryState(state)
+
+        val uiState = viewModel.uiState.value
+
+        assertTrue(uiState.showNoContent)
+        assertEquals(
+          context.getString(R.string.no_items_msg),
+          uiState.noContentMessage
+        )
+      }
+
+    @Test
+    fun `when success returns empty list and airplane mode is on then shows airplane message`() =
+      runTest {
+        every { context.isAirplaneModeOn() } returns true
+        val request = mockk<OnlineLibraryViewModel.OnlineLibraryRequest> {
+          every { isLoadMoreItem } returns false
+        }
+
+        val state = Success(
+          books = emptyList(),
+          totalPages = 1,
+          request = request
+        )
+
+        viewModel.handleLibraryState(state)
+
+        val uiState = viewModel.uiState.value
+
+        assertTrue(uiState.showNoContent)
+        assertEquals(
+          context.getString(R.string.airplane_mode_not_supported),
+          uiState.noContentMessage
+        )
+      }
 
     @Test
     fun `when error and no existing books then emits empty list`() = runTest {
