@@ -76,6 +76,13 @@ class LibkiwixBookmarks @Inject constructor(
   private var bookmarkList: List<LibkiwixBookmarkItem> = arrayListOf()
   private var libraryBooksList: List<String> = arrayListOf()
   private val initMutex = Mutex()
+
+  // ensureInitialized() reads this outside initMutex before deciding whether to take the
+  // lock at all; without @Volatile that read has no visibility guarantee across threads for
+  // the write inside the lock (set after a withContext(ioDispatcher) hop), so a second
+  // caller could see stale `false` and redo the init work, or worse, see partially-visible
+  // state from it.
+  @Volatile
   private var initialized: Boolean = false
 
   private val bookmarkListFlow: MutableStateFlow<List<LibkiwixBookmarkItem>> by lazy {
