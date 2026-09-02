@@ -66,11 +66,17 @@ class StorageObserver @Inject constructor(
   private suspend fun convertToLibkiwixBook(file: File) =
     zimReaderFactory.create(ZimReaderSource(file), false)
       ?.let { zimFileReader ->
-        libkiwixBookFactory.create().apply {
-          update(zimFileReader.jniKiwixReader)
-        }.also {
-          // add the book to libkiwix library to validate the imported bookmarks
-          libkiwixBookmarks.addBookToLibrary(archive = zimFileReader.jniKiwixReader)
+        // dispose() must run even if create()/update()/addBookToLibrary() throws below,
+        // or the native Archive for this file leaks - once per failing ZIM during a full
+        // device scan.
+        try {
+          libkiwixBookFactory.create().apply {
+            update(zimFileReader.jniKiwixReader)
+          }.also {
+            // add the book to libkiwix library to validate the imported bookmarks
+            libkiwixBookmarks.addBookToLibrary(archive = zimFileReader.jniKiwixReader)
+          }
+        } finally {
           zimFileReader.dispose()
         }
       }
