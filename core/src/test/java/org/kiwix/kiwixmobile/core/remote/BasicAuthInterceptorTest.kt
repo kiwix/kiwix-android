@@ -18,13 +18,67 @@
 
 package org.kiwix.kiwixmobile.core.remote
 
+import io.mockk.every
+import io.mockk.mockk
+import io.mockk.slot
+import io.mockk.verify
+import okhttp3.Interceptor
+import okhttp3.Protocol
+import okhttp3.Request
+import okhttp3.Response
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Test
+import org.kiwix.kiwixmobile.core.data.remote.BasicAuthInterceptor
 import org.kiwix.kiwixmobile.core.data.remote.isAuthenticationUrl
 import org.kiwix.kiwixmobile.core.data.remote.removeAuthenticationFromUrl
 import org.kiwix.kiwixmobile.core.data.remote.secretKey
 
 class BasicAuthInterceptorTest {
+  private val interceptor = BasicAuthInterceptor()
+
+  private fun intercept(url: String): Request {
+    val request = Request.Builder().url(url).build()
+    val requestSlot = slot<Request>()
+    val chain = mockk<Interceptor.Chain> {
+      every { request() } returns request
+      every { proceed(capture(requestSlot)) } returns Response.Builder()
+        .request(request)
+        .protocol(Protocol.HTTP_1_1)
+        .code(200)
+        .message("OK")
+        .build()
+    }
+    interceptor.intercept(chain)
+    verify { chain.proceed(any()) }
+    return requestSlot.captured
+  }
+
+  @Test
+  fun `untrusted host is not authenticated even with a recognised key placeholder`() {
+    val forwarded =
+      intercept("https://{{BASIC_AUTH_KEY}}@attacker.example/x.zim")
+    assertEquals("attacker.example", forwarded.url.host)
+    assertNull(forwarded.header("Authorization"))
+  }
+
+  @Test
+  fun `trusted host with an unrecognised key placeholder is not authenticated`() {
+    val forwarded =
+      intercept("https://{{SOME_OTHER_ENV_VAR}}@dwds.de/x.zim")
+    assertNull(forwarded.header("Authorization"))
+  }
+
+  @Test
+  fun `trusted host with the recognised key placeholder is authenticated and rewritten`() {
+    val forwarded =
+      intercept("https://{{BASIC_AUTH_KEY}}@dwds.de/x.zim")
+    assertFalse(forwarded.url.toString().contains("{{"))
+    assertEquals("dwds.de", forwarded.url.host)
+    assertEquals(true, forwarded.header("Authorization")?.startsWith("Basic "))
+  }
+
   private val authenticationUrl =
     "https://{{BASIC_AUTH_KEY}}@www.dwds.de/kiwix/f/dwds_de_dictionary_nopic_2023-09-12.zim"
 

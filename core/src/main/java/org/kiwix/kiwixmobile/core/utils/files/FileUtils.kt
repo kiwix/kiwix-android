@@ -402,8 +402,16 @@ object FileUtils {
       // For file managers that provide the full path in the URI (common on devices below Android 11).
       // This triggers when the user clicks directly on a ZIM file in the file manager, and the file
       // manager returns the path via its own file provider.
+      // The URI comes from an external app's ACTION_VIEW intent, so the extracted path is
+      // canonicalized and required to actually resolve under a real storage volume before use -
+      // this rejects path traversal segments and any URI that merely happens to contain "root".
       "$uri".contains("root") && "$uri".endsWith("zim") -> {
-        "$uri".substringAfter("/root")
+        val extractedPath = "$uri".substringAfter("/root")
+        val canonicalPath = runCatching { File(extractedPath).canonicalPath }.getOrNull()
+        canonicalPath?.takeIf { path ->
+          getStorageVolumesList(context).any { volume -> path.startsWith(volume) } &&
+            File(path).isFileExist(ioDispatcher)
+        }
       }
 
       // Handles URIs from the download provider, commonly used when files are opened from browsers.
