@@ -24,25 +24,43 @@ import kotlinx.coroutines.withContext
 import org.kiwix.kiwixmobile.core.di.IoDispatcher
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader.Factory
 import java.net.HttpURLConnection
+import java.util.concurrent.locks.ReentrantReadWriteLock
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlin.concurrent.read
+import kotlin.concurrent.write
 
 @Singleton
 class ZimReaderContainer @Inject constructor(
   private val zimFileReaderFactory: Factory,
   @param:IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) {
-  var zimFileReader: ZimFileReader? = null
+  // Guards `backingZimFileReader` against the native use-after-free that happens when the
+  // setter below disposes the current reader (native Archive/SuggestionSearcher) while the
+  // WebView's Chromium worker thread is mid-read via isRedirect/getRedirect/load, called from
+  // CoreWebViewClient.shouldInterceptRequest. The write lock ensures dispose() only runs once
+  // every in-flight read of this class's own methods has finished; readers see either the old
+  // or the new reader, never a disposed one.
+  private val lock = ReentrantReadWriteLock()
+  private var backingZimFileReader: ZimFileReader? = null
+
+  var zimFileReader: ZimFileReader?
+    get() = lock.read { backingZimFileReader }
     set(value) {
-      field?.dispose()
-      field = value
+      lock.write {
+        backingZimFileReader?.dispose()
+        backingZimFileReader = value
+      }
     }
+
+  private inline fun <T> withReader(block: (ZimFileReader?) -> T): T =
+    lock.read { block(backingZimFileReader) }
 
   suspend fun setZimReaderSource(
     zimReaderSource: ZimReaderSource?,
     showSearchSuggestionsSpellChecked: Boolean = false
   ) {
-    if (zimReaderSource == zimFileReader?.zimReaderSource) {
+    if (zimReaderSource == withReader { it?.zimReaderSource }) {
       return
     }
     zimFileReader = withContext(ioDispatcher) {
@@ -57,45 +75,47 @@ class ZimReaderContainer @Inject constructor(
     }
   }
 
-  fun getPageUrlFromTitle(title: String) = zimFileReader?.getPageUrlFrom(title)
+  fun getPageUrlFromTitle(title: String) = withReader { it?.getPageUrlFrom(title) }
 
-  fun getRandomPageUrl() = zimFileReader?.getRandomPageUrl()
-  fun isRedirect(url: String): Boolean = zimFileReader?.isRedirect(url) == true
-  fun getRedirect(url: String): String = zimFileReader?.getRedirect(url).orEmpty()
+  fun getRandomPageUrl() = withReader { it?.getRandomPageUrl() }
+  fun isRedirect(url: String): Boolean = withReader { it?.isRedirect(url) == true }
+  fun getRedirect(url: String): String = withReader { it?.getRedirect(url) }.orEmpty()
   fun load(url: String, requestHeaders: Map<String, String>): WebResourceResponse = runBlocking {
-    return@runBlocking WebResourceResponse(
-      zimFileReader?.getMimeTypeFromUrl(url),
-      Charsets.UTF_8.name(),
-      zimFileReader?.load(url)
-    )
-      .apply {
-        val headers = mutableMapOf("Accept-Ranges" to "bytes")
-        if ("Range" in requestHeaders.keys) {
-          setStatusCodeAndReasonPhrase(HttpURLConnection.HTTP_PARTIAL, "Partial Content")
-          val fullSize = zimFileReader?.getItem(url)?.itemSize() ?: 0L
-          val lastByte = fullSize - 1
-          val byteRanges = requestHeaders.getValue("Range").substringAfter("=").split("-")
-          headers["Content-Range"] = "bytes ${byteRanges[0]}-$lastByte/$fullSize"
-          if (byteRanges.size == 1) {
-            headers["Connection"] = "close"
+    return@runBlocking withReader { reader ->
+      WebResourceResponse(
+        reader?.getMimeTypeFromUrl(url),
+        Charsets.UTF_8.name(),
+        reader?.load(url)
+      )
+        .apply {
+          val headers = mutableMapOf("Accept-Ranges" to "bytes")
+          if ("Range" in requestHeaders.keys) {
+            setStatusCodeAndReasonPhrase(HttpURLConnection.HTTP_PARTIAL, "Partial Content")
+            val fullSize = reader?.getItem(url)?.itemSize() ?: 0L
+            val lastByte = fullSize - 1
+            val byteRanges = requestHeaders.getValue("Range").substringAfter("=").split("-")
+            headers["Content-Range"] = "bytes ${byteRanges[0]}-$lastByte/$fullSize"
+            if (byteRanges.size == 1) {
+              headers["Connection"] = "close"
+            }
+          } else {
+            setStatusCodeAndReasonPhrase(HttpURLConnection.HTTP_OK, "OK")
           }
-        } else {
-          setStatusCodeAndReasonPhrase(HttpURLConnection.HTTP_OK, "OK")
+          responseHeaders = headers
         }
-        responseHeaders = headers
-      }
+    }
   }
 
-  val zimReaderSource get() = zimFileReader?.zimReaderSource
-  val zimFileTitle get() = zimFileReader?.title
-  val mainPage get() = zimFileReader?.mainPage
-  val id get() = zimFileReader?.id
-  val fileSize get() = zimFileReader?.fileSize ?: 0L
-  val creator get() = zimFileReader?.creator
-  val publisher get() = zimFileReader?.publisher
-  val name get() = zimFileReader?.name
-  val date get() = zimFileReader?.date
-  val description get() = zimFileReader?.description
-  val favicon get() = zimFileReader?.favicon
-  val language get() = zimFileReader?.language
+  val zimReaderSource get() = withReader { it?.zimReaderSource }
+  val zimFileTitle get() = withReader { it?.title }
+  val mainPage get() = withReader { it?.mainPage }
+  val id get() = withReader { it?.id }
+  val fileSize get() = withReader { it?.fileSize } ?: 0L
+  val creator get() = withReader { it?.creator }
+  val publisher get() = withReader { it?.publisher }
+  val name get() = withReader { it?.name }
+  val date get() = withReader { it?.date }
+  val description get() = withReader { it?.description }
+  val favicon get() = withReader { it?.favicon }
+  val language get() = withReader { it?.language }
 }
