@@ -39,6 +39,11 @@ import java.io.Serializable
 class ZimReaderSource(
   val file: File? = null,
   val uri: Uri? = null,
+  // AssetFileDescriptor isn't Serializable (it wraps a native fd), so without @Transient
+  // any attempt to serialize a URI-based ZimReaderSource (e.g. into a Bundle) throws
+  // NotSerializableException. It comes back null after deserialization instead - callers
+  // already handle a null list here (see the primary constructor's file-only case).
+  @Transient
   val assetFileDescriptorList: List<AssetFileDescriptor>? = null
 ) : Serializable {
   constructor(uri: Uri) : this(
