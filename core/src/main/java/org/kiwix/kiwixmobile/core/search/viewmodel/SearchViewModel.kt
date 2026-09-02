@@ -95,10 +95,26 @@ class SearchViewModel @Inject constructor(
   private lateinit var alertDialogShower: AlertDialogShower
   private val debouncedSearchQuery = MutableStateFlow("")
 
+  // Native object created per debounced keystroke in searchResults() below; tracked here
+  // so the previous one can be disposed once it's superseded, instead of leaking native
+  // memory on every search-as-you-type update. See #5070.
+  private var currentSuggestionSearch: SuggestionSearch? = null
+
   init {
     viewModelScope.launch { reducer() }
     viewModelScope.launch { actionMapper() }
     viewModelScope.launch { debouncedSearchQuery() }
+  }
+
+  override fun onCleared() {
+    super.onCleared()
+    currentSuggestionSearch?.dispose()
+    currentSuggestionSearch = null
+  }
+
+  private fun replaceCurrentSuggestionSearch(next: SuggestionSearch?) {
+    currentSuggestionSearch?.takeIf { it !== next }?.dispose()
+    currentSuggestionSearch = next
   }
 
   private suspend fun getSuggestedSpelledWords(word: String, maxCount: Int): List<String> =
@@ -193,11 +209,10 @@ class SearchViewModel @Inject constructor(
   private fun searchResults() =
     filter.asStateFlow()
       .mapLatest {
-        SearchResultsWithTerm(
-          it,
-          searchResultGenerator.generateSearchResults(it, zimReaderContainer.zimFileReader),
-          searchMutex
-        )
+        val suggestionSearch =
+          searchResultGenerator.generateSearchResults(it, zimReaderContainer.zimFileReader)
+        replaceCurrentSuggestionSearch(suggestionSearch)
+        SearchResultsWithTerm(it, suggestionSearch, searchMutex)
       }
 
   @Suppress("CyclomaticComplexMethod")

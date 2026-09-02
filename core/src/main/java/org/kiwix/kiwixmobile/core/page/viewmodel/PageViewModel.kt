@@ -107,6 +107,16 @@ abstract class PageViewModel<T : Page, S : PageState<T>>(
   @VisibleForTesting
   fun getMutableStateForTestCases() = _state
 
+  /**
+   * Applies [transform] to the current state outside the Action/reducer pipeline. For
+   * subclasses that seed [initialState] with a synchronous default and then load the
+   * real value asynchronously (e.g. a DataStore-backed preference), instead of blocking
+   * the caller of the constructor with `runBlocking`.
+   */
+  protected fun updateState(transform: (S) -> S) {
+    _state.value = transform(_state.value)
+  }
+
   init {
     coroutineJobs.apply {
       add(observeActions())

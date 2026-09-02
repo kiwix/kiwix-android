@@ -290,17 +290,28 @@ class DownloadMonitorService : Service() {
 
   private fun startForegroundService() {
     runCatching {
-      CoroutineScope(ioDispatcher).launch {
-        downloadNotificationChannel()
-        startForeground(DOWNLOAD_SERVICE_NOTIFICATION_ID, buildForegroundNotification())
+      // startForeground() must be called synchronously, promptly after the service
+      // starts, or the system throws ForegroundServiceDidNotStartInTimeException.
+      // Suspending on the DataStore-backed app name first (as this used to, inside an
+      // ad-hoc scope that also outlived onDestroy) risked missing that window. Start
+      // with a placeholder notification using the synchronously-available app label,
+      // then swap in the real content once the DataStore read completes.
+      downloadNotificationChannel()
+      startForeground(DOWNLOAD_SERVICE_NOTIFICATION_ID, buildForegroundNotification(appLabel))
+      scope?.launch {
+        val notification = buildForegroundNotification(kiwixDataStore.appName.first())
+        notificationManager.notify(DOWNLOAD_SERVICE_NOTIFICATION_ID, notification)
         startPausedDownloadsDueToAndroidServiceLimitation()
       }
     }.onFailure { it.printStackTrace() }
   }
 
-  private suspend fun buildForegroundNotification(): Notification =
+  private val appLabel: String
+    get() = applicationInfo.loadLabel(packageManager).toString()
+
+  private fun buildForegroundNotification(title: String): Notification =
     NotificationCompat.Builder(this, DOWNLOAD_NOTIFICATION_CHANNEL_ID)
-      .setContentTitle(kiwixDataStore.appName.first())
+      .setContentTitle(title)
       .setContentText(getString(string.download_notification_channel_description))
       .setSmallIcon(android.R.drawable.stat_sys_download)
       .setGroup(ACTIVE_DOWNLOAD_GROUP_KEY)

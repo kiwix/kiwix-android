@@ -18,10 +18,11 @@
 
 package org.kiwix.kiwixmobile.core.page.notes.viewmodel
 
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.dao.NotesRoomDao
 import org.kiwix.kiwixmobile.core.di.IoDispatcher
 import org.kiwix.kiwixmobile.core.page.adapter.Page
@@ -52,12 +53,17 @@ class NotesViewModel @Inject constructor(
   PageViewModelClickListener {
   init {
     setOnItemClickListener(this)
+    // Seed initialState() with a synchronous default (no runBlocking on the caller's
+    // thread, which is main during ViewModel construction) and apply the real,
+    // DataStore-backed value once it's loaded.
+    viewModelScope.launch {
+      val showAll = kiwixDataStore.showNotesOfAllBooks.first()
+      updateState { it.copy(showAll = showAll) }
+    }
   }
 
-  override fun initialState(): NotesState {
-    val showAll = runBlocking { kiwixDataStore.showNotesOfAllBooks.first() }
-    return NotesState(emptyList(), showAll, zimReaderContainer.id)
-  }
+  override fun initialState(): NotesState =
+    NotesState(emptyList(), showAll = false, zimReaderContainer.id)
 
   override fun updatePagesBasedOnFilter(state: NotesState, action: Action.Filter): NotesState =
     state.copy(searchTerm = action.searchTerm)
