@@ -82,10 +82,11 @@ class ZimReaderContainer @Inject constructor(
   fun getRedirect(url: String): String = withReader { it?.getRedirect(url) }.orEmpty()
   fun load(url: String, requestHeaders: Map<String, String>): WebResourceResponse = runBlocking {
     return@runBlocking withReader { reader ->
+      val stream = reader?.load(url)
       WebResourceResponse(
         reader?.getMimeTypeFromUrl(url),
         Charsets.UTF_8.name(),
-        reader?.load(url)
+        stream
       )
         .apply {
           val headers = mutableMapOf("Accept-Ranges" to "bytes")
@@ -94,7 +95,13 @@ class ZimReaderContainer @Inject constructor(
             val fullSize = reader?.getItem(url)?.itemSize() ?: 0L
             val lastByte = fullSize - 1
             val byteRanges = requestHeaders.getValue("Range").substringAfter("=").split("-")
-            headers["Content-Range"] = "bytes ${byteRanges[0]}-$lastByte/$fullSize"
+            val parsedStart = byteRanges[0].toLongOrNull()?.coerceAtLeast(0L) ?: 0L
+            val rangeStart = if (fullSize > 0) parsedStart.coerceAtMost(lastByte) else parsedStart
+            // The delivered stream previously always started at offset 0 regardless of
+            // what range was declared above, corrupting seeking in embedded video/audio.
+            // Skip forward so the body actually matches the advertised Content-Range.
+            stream?.skip(rangeStart)
+            headers["Content-Range"] = "bytes $rangeStart-$lastByte/$fullSize"
             if (byteRanges.size == 1) {
               headers["Connection"] = "close"
             }
