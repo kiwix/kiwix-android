@@ -1455,7 +1455,7 @@ abstract class CoreReaderViewModel(
     emitEffect(effect)
   }
 
-  protected suspend fun restoreTabs(
+  protected open suspend fun restoreTabs(
     webViewHistoryItemList: List<WebViewHistoryItem>,
     currentTab: Int,
     onComplete: suspend () -> Unit
@@ -1783,11 +1783,6 @@ abstract class CoreReaderViewModel(
     actionMode = null
     findInPageManager.stop()
     super.onCleared()
-  }
-
-  @VisibleForTesting
-  fun onClearedExposed() {
-    onCleared()
   }
 
   protected fun mainDispatcherImmediate() = mainDispatcher.immediate

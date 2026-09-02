@@ -21,6 +21,7 @@ package org.kiwix.kiwixmobile.core.main.reader
 import android.Manifest.permission.POST_NOTIFICATIONS
 import android.app.Application
 import android.content.Intent
+import android.net.Uri
 import android.view.ActionMode
 import android.view.Menu
 import android.view.MenuInflater
@@ -60,8 +61,10 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.RegisterExtension
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.R.string
+import org.kiwix.kiwixmobile.core.extensions.browserIntent
 import org.kiwix.kiwixmobile.core.extensions.navigateToAppSettings
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
+import org.kiwix.kiwixmobile.core.main.KIWIX_SUPPORT_URL
 import org.kiwix.kiwixmobile.core.main.KiwixTextToSpeech
 import org.kiwix.kiwixmobile.core.main.KiwixWebView
 import org.kiwix.kiwixmobile.core.main.MainRepositoryActions
@@ -91,6 +94,7 @@ import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.SearchItemToOpen
 import org.kiwix.kiwixmobile.core.ui.models.IconItem
+import org.kiwix.kiwixmobile.core.ui.theme.White
 import org.kiwix.kiwixmobile.core.utils.DonationDialogHandler
 import org.kiwix.kiwixmobile.core.utils.ExternalLinkOpener
 import org.kiwix.kiwixmobile.core.utils.KiwixPermissionChecker
@@ -103,7 +107,6 @@ import org.kiwix.kiwixmobile.core.utils.files.FileUtils.readFile
 import org.kiwix.kiwixmobile.core.utils.titleToUrl
 import org.kiwix.sharedFunctions.MainDispatcherRule
 import java.io.File
-import kotlin.math.exp
 
 @OptIn(ExperimentalCoroutinesApi::class)
 internal class CoreReaderViewModelTest {
@@ -2587,34 +2590,170 @@ internal class CoreReaderViewModelTest {
   }
 
   @Nested
-  inner class AddToHomeScreen
+  inner class RestoreTabs {
+
+    @Test
+    fun stateTabsRestored_selectsTabAndShowWebViewOptions() = runTest {
+      val viewModel = spyk(viewModel)
+      val historyItems = listOf(mockk<WebViewHistoryItem>())
+      val currentTab = 2
+
+      viewModel.getUiState().update { it.copy(showTabSwitcher = true) }
+      viewModel.selectTab(1)
+      coEvery {
+        readerWebViewManager.restoreTabs(historyItems, currentTab, any())
+      } returns ReaderWebViewManager.RestoreTabsResult.TabsRestored
+      coEvery { viewModel.selectTab(currentTab) } just Runs
+      every { readerMenuState.showWebViewOptions(true) } just Runs
+
+      val onCompleteCallback = mockk<suspend () -> Unit>(relaxed = true)
+
+      viewModel.readerMenuState = readerMenuState
+      viewModel.restoreTabs(historyItems, currentTab, onCompleteCallback)
+      advanceUntilIdle()
+
+      assertThat(viewModel.uiState.value.showTabSwitcher).isFalse()
+      coVerify { viewModel.selectTab(currentTab) }
+      coVerify { onCompleteCallback.invoke() }
+      verify { readerMenuState.showWebViewOptions(true) }
+    }
+
+    @Test
+    fun stateErrorInRestoringTabs_showsToast() = runTest {
+      val historyItems = listOf(mockk<WebViewHistoryItem>())
+      val onCompleteCallback = mockk<suspend () -> Unit>(relaxed = true)
+
+      every {
+        context.getString(string.could_not_restore_tabs)
+      } returns "Could not restore tabs."
+
+      coEvery {
+        readerWebViewManager.restoreTabs(
+          historyItems,
+          1,
+          any() // newTabConfig("", shouldLoadUrl = false, selectTab = false)
+        )
+      } returns ReaderWebViewManager.RestoreTabsResult.ErrorInRestoringTabs(Exception("Error"))
+
+      viewModel.effects.test {
+
+        viewModel.restoreTabs(historyItems, 1, onCompleteCallback)
+
+        advanceUntilIdle()
+
+        val effect = awaitItem() as CoreReaderViewModel.ReaderEffect.ShowToast
+
+        assertThat(effect.message).isEqualTo("Could not restore tabs.")
+
+        expectNoEvents()
+      }
+
+    }
+  }
 
   @Nested
-  inner class Tabs
+  inner class OnUserBackPress
+
+  @Test
+  fun openKiwixSupportUrl_opensExternalLinkWithDialog() {
+    val viewModel = spyk(viewModel)
+
+    mockkStatic(Uri::class)
+    mockkStatic("org.kiwix.kiwixmobile.core.extensions.UriExtensionsKt")
+
+    val mockIntent = mockk<Intent>()
+    every { Uri.parse(KIWIX_SUPPORT_URL).browserIntent() } returns mockIntent
+
+    every {
+      context.getString(string.support_donation_platform)
+    } returns "donation platform"
+
+    every {
+      externalLinkOpener.openExternalLinkWithDialog(any(), "donation platform")
+    } just Runs
+
+    viewModel.openKiwixSupportUrl()
+
+    verify {
+      externalLinkOpener.openExternalLinkWithDialog(
+        mockIntent, // KIWIX_SUPPORT_URL.toUri().browserIntent()
+        "donation platform"
+      )
+    }
+  }
+
+  @Test
+  fun navigationIconTint_returnsWhiteColor() {
+
+    val color = viewModel.navigationIconTint()
+    assertThat(color).isEqualTo(White)
+  }
 
   @Nested
-  inner class WebViewCallbacks
+  inner class NavigationIconClick {
+    @Test
+    fun whenShowTabSwitcherTrue_triggersOnHomeMenuClickedAndDoesNothing() = runTest {
+      val viewModel = spyk(viewModel)
 
-  @Nested
-  inner class Permissions
+      every { viewModel.onHomeMenuClicked() } just Runs
 
-  @Nested
-  inner class Navigation
+      viewModel.getUiState().update { it.copy(showTabSwitcher = true) }
+      viewModel.effects.test {
+        viewModel.navigationIconClick(true)
 
-  @Nested
-  inner class FindInPage
+        verify { viewModel.onHomeMenuClicked() }
 
-  @Nested
-  inner class SessionRestore
+        expectNoEvents() // No other effects are emitted
+      }
+    }
 
-  @Nested
-  inner class Donation
+    @Test
+    fun whenShowTabSwitcherIsFalseAndIsNavigationDrawerOpen_emitsCloseActivitySideBar() = runTest {
+      viewModel.effects.test {
+        viewModel.navigationIconClick(true)
+        advanceUntilIdle()
 
-  @Nested
-  inner class BackPress
+        val effect = awaitItem()
+        assertThat(effect).isEqualTo(ReaderEffect.CloseActivitySideBar)
 
-  @Nested
-  inner class Cleanup
+        expectNoEvents()
+      }
+    }
+
+    @Test
+    fun whenShowTabSwitcherIsFalseAndIsNavigationDrawerClosed_emitsOpenActivitySideBar() = runTest {
+      viewModel.effects.test {
+        viewModel.navigationIconClick(false)
+        advanceUntilIdle()
+
+        val effect = awaitItem()
+        assertThat(effect).isEqualTo(ReaderEffect.OpenActivitySideBar)
+
+        expectNoEvents()
+      }
+    }
+  }
+
+  @Test
+  fun onCleared_cleansUpAllResourcesAndManagers() {
+
+    every { bookmarkManager.stopObserving() } just Runs
+    every { pendingSearchItemManager.consume() } returns mockk()
+    every { readAloudManager.stopReadAloudSafely() } just Runs
+    every { donationDialogHandler.setDonationDialogCallBack(null) } just Runs
+    every { findInPageManager.stop() } just Runs
+
+    viewModel.onCleared()
+
+    verify { bookmarkManager.stopObserving() }
+    verify { pendingSearchItemManager.consume() }
+    verify { readAloudManager.stopReadAloudSafely() }
+    verify { donationDialogHandler.setDonationDialogCallBack(null) }
+    verify { findInPageManager.stop() }
+
+    // hideBackToJob.cancel() called as well
+    // Also sets documentParser, zimReaderSource, hideBackToTopJob to null
+  }
 
   private class TestCoreReaderViewModel(
     context: Application,
@@ -2717,6 +2856,18 @@ internal class CoreReaderViewModelTest {
 
     public override suspend fun loadUrlWithCurrentWebview(url: String?) {
       super.loadUrlWithCurrentWebview(url)
+    }
+
+    public override suspend fun restoreTabs(
+      webViewHistoryItemList: List<WebViewHistoryItem>,
+      currentTab: Int,
+      onComplete: suspend () -> Unit
+    ) {
+      super.restoreTabs(webViewHistoryItemList, currentTab, onComplete)
+    }
+
+    public override fun onCleared() {
+      super.onCleared()
     }
 
     override suspend fun restoreViewStateOnInvalidWebViewHistory() {
