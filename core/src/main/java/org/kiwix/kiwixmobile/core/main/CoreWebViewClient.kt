@@ -57,7 +57,9 @@ open class CoreWebViewClient(
       return handleUnsupportedFiles(url)
     }
     if (url.startsWith("javascript:")) {
-      // Allow javascript for HTML functions and code execution (EX: night mode)
+      // javascript: URIs (e.g. from HTML functions like night-mode toggles) already run
+      // via the WebView's own JS engine when triggered; returning true here just stops
+      // WebView from also trying to navigate to them as if they were a normal page load.
       return true
     }
     if (url.startsWith(ZimFileReader.UI_URI_STRING)) {
@@ -152,12 +154,10 @@ open class CoreWebViewClient(
   }
 
   companion object {
-    private val DOCUMENT_TYPES: HashMap<String?, String?> = object : HashMap<String?, String?>() {
-      init {
-        put("epub", "application/epub+zip")
-        put("pdf", "application/pdf")
-      }
-    }
+    private val DOCUMENT_TYPES: Map<String, String> = mapOf(
+      "epub" to "application/epub+zip",
+      "pdf" to "application/pdf"
+    )
     private val LEGACY_CONTENT_PREFIXES = arrayOf(
       "zim://content/",
       "content://${instance.packageName}.zim.base/".toUri().toString()

@@ -23,6 +23,14 @@ import org.kiwix.kiwixmobile.core.utils.files.Log
 import java.util.UUID
 
 object NetworkUtils {
+  // Compiled once instead of on every parseURL() call.
+  private val UNDERSCORE_REGEX = "_".toRegex()
+  private val ALL_REGEX = "all".toRegex()
+  private val NOPIC_REGEX = "nopic".toRegex()
+  private val NOVID_REGEX = "novid".toRegex()
+  private val SIMPLE_REGEX = "simple".toRegex()
+  private val EXTRA_SPACES_REGEX = " +".toRegex()
+
   fun getFileNameFromUrl(url: String?): String {
     var filename = ""
     url?.let { url1 ->
@@ -57,12 +65,12 @@ object NetworkUtils {
           return ""
         }
         details = details.substring(beginIndex, endIndex)
-        details = details.replace("_".toRegex(), " ")
-        details = details.replace("all".toRegex(), "")
-        details = details.replace("nopic".toRegex(), context.getString(R.string.zim_no_pic))
-        details = details.replace("novid".toRegex(), context.getString(R.string.zim_no_vid))
-        details = details.replace("simple".toRegex(), context.getString(R.string.zim_simple))
-        details = details.trim { it <= ' ' }.replace(" +".toRegex(), " ")
+        details = details.replace(UNDERSCORE_REGEX, " ")
+        details = details.replace(ALL_REGEX, "")
+        details = details.replace(NOPIC_REGEX, context.getString(R.string.zim_no_pic))
+        details = details.replace(NOVID_REGEX, context.getString(R.string.zim_no_vid))
+        details = details.replace(SIMPLE_REGEX, context.getString(R.string.zim_simple))
+        details = details.trim { it <= ' ' }.replace(EXTRA_SPACES_REGEX, " ")
         details
       } catch (e: Exception) {
         Log.d(TAG_KIWIX, "Context invalid url: $url", e)
