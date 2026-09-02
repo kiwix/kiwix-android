@@ -51,6 +51,7 @@ import java.io.FileInputStream
 import java.io.IOException
 import java.io.InputStream
 import java.net.URLDecoder
+import java.security.MessageDigest
 import javax.inject.Inject
 
 private const val TAG = "ZimFileReader"
@@ -376,11 +377,27 @@ class ZimFileReader(
 
   @Throws(IOException::class)
   private fun loadAssetFromCache(uri: String): FileInputStream {
-    return File(
-      FileUtils.getFileCacheDir(CoreApp.instance),
-      uri.substringAfterLast("/")
-    ).apply { getContent(uri)?.let(::writeBytes) }
-      .inputStream()
+    val cacheFile = File(FileUtils.getFileCacheDir(CoreApp.instance), cacheFileNameFor(uri))
+    // Only buffer + write the item once per uri; every later request for the same
+    // asset (e.g. seeking within a video) can just read the file already on disk.
+    if (!cacheFile.exists()) {
+      getContent(uri)?.let(cacheFile::writeBytes)
+    }
+    return cacheFile.inputStream()
+  }
+
+  /**
+   * Two assets in different ZIM directories can share the same last path segment
+   * (e.g. "A/video/clip.mp4" vs "A/other/clip.mp4"). Keying the cache file on just
+   * that segment, as this used to, lets one serve the other's cached bytes. Hash the
+   * full uri instead so distinct assets never collide; keep the original extension so
+   * the cached file still has one.
+   */
+  private fun cacheFileNameFor(uri: String): String {
+    val extension = uri.substringAfterLast("/").substringAfterLast(".", "")
+    val hash = MessageDigest.getInstance("SHA-256").digest(uri.toByteArray())
+      .joinToString("") { "%02x".format(it) }
+    return if (extension.isEmpty()) hash else "$hash.$extension"
   }
 
   private fun getContent(url: String) =
