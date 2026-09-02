@@ -125,6 +125,23 @@ class StorageObserverTest {
     verify { zimFileReader.dispose() }
   }
 
+  @Test
+  fun `reader is disposed even when addBookToLibrary throws`() = runTest {
+    withNoFiltering()
+    every { zimFileReader.toBook() } returns mockk()
+    every { zimFileReader.zimReaderSource } returns zimReaderSource
+    // Must match the call site's own argument shape (named archive=, file left at its
+    // default) - a positional addBookToLibrary(any()) stub pins archive to the default
+    // null instead of matching it, so it wouldn't match this call at all.
+    coEvery { libkiwixBookmarks.addBookToLibrary(archive = any()) } throws RuntimeException("boom")
+
+    booksOnFileSystem().test {
+      awaitError()
+    }
+
+    verify { zimFileReader.dispose() }
+  }
+
   private fun booksOnFileSystem() =
     storageObserver.getBooksOnFileSystem(scanningProgressListener)
       .also {
