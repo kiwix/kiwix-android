@@ -2,6 +2,7 @@ package org.kiwix.kiwixmobile.nav.destination.library.local
 
 import android.app.Application
 import android.content.Intent
+import android.net.Uri
 import android.widget.Toast
 import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.result.ActivityResult
@@ -86,6 +87,17 @@ class LocalLibraryViewModelTest {
 
   @BeforeEach
   fun setUp() {
+    mockkStatic(Uri::class)
+    every { Uri.parse(any()) } answers {
+      val mockUri = mockk<Uri>(relaxed = true)
+      every { mockUri.scheme } returns "content"
+      every { mockUri.toString() } returns firstArg()
+      mockUri
+    }
+
+    val contentResolverMock = mockk<android.content.ContentResolver>(relaxed = true)
+    every { application.contentResolver } returns contentResolverMock
+
     every { dataSource.booksOnDiskAsListItems() } returns flowOf(emptyList())
     every { libkiwixBookOnDisk.books() } returns flowOf(emptyList())
     coEvery { storageObserver.getBooksOnFileSystem(any()) } returns flowOf(emptyList())
@@ -696,7 +708,7 @@ class LocalLibraryViewModelTest {
   }
 
   @Test
-  fun `processZimFileArguments does nothing when uri is empty`() = runTest {
+  fun `processSelectedZimFiles does nothing when intent is null`() = runTest {
     clearMocks(
       processSelectedZimFilesForStandalone,
       processSelectedZimFilesForPlayStore,
@@ -704,7 +716,7 @@ class LocalLibraryViewModelTest {
       recordedCalls = true
     )
     viewModel.localLibraryUiActions.test {
-      viewModel.processZimFileArguments("")
+      viewModel.processSelectedZimFiles(null)
 
       advanceUntilIdle()
 
@@ -721,50 +733,7 @@ class LocalLibraryViewModelTest {
   }
 
   @Test
-  fun `processZimFileArguments requests permission when write permission denied`() = runTest {
-    coEvery {
-      kiwixPermissionChecker.hasWriteExternalStoragePermission()
-    } returns false
-
-    viewModel.localLibraryUiActions.test {
-      viewModel.processZimFileArguments("content://test.zim")
-
-      val action = awaitItem()
-
-      assertThat(action)
-        .isInstanceOf(
-          LocalLibraryViewModel.LocalLibraryUiActions.RequestReadWritePermission::class.java
-        )
-
-      cancelAndIgnoreRemainingEvents()
-    }
-  }
-
-  @Test
-  fun `processZimFileArguments shows manage files dialog when manage storage permission denied`() =
-    runTest {
-      coEvery {
-        kiwixPermissionChecker.hasWriteExternalStoragePermission()
-      } returns true
-
-      coEvery {
-        kiwixPermissionChecker.isManageExternalStoragePermissionGranted()
-      } returns false
-
-      viewModel.localLibraryUiActions.test {
-        viewModel.processZimFileArguments("content://test.zim")
-
-        assertThat(awaitItem())
-          .isEqualTo(
-            LocalLibraryViewModel.LocalLibraryUiActions.ManageFilesPermissionDialog
-          )
-
-        cancelAndIgnoreRemainingEvents()
-      }
-    }
-
-  @Test
-  fun `processZimFileArguments processes files using standalone processor`() = runTest {
+  fun `processSelectedZimFiles processes files using standalone processor`() = runTest {
     coEvery {
       kiwixPermissionChecker.hasWriteExternalStoragePermission()
     } returns true
@@ -777,7 +746,11 @@ class LocalLibraryViewModelTest {
       processSelectedZimFilesForStandalone.canHandleUris()
     } returns true
 
-    viewModel.processZimFileArguments("content://test.zim")
+    val intent = mockk<Intent>(relaxed = true)
+    every { intent.clipData } returns null
+    every { intent.data } returns android.net.Uri.parse("content://test.zim")
+
+    viewModel.processSelectedZimFiles(intent)
 
     advanceUntilIdle()
 
@@ -791,7 +764,7 @@ class LocalLibraryViewModelTest {
   }
 
   @Test
-  fun `processZimFileArguments processes files using playstore processor`() = runTest {
+  fun `processSelectedZimFiles processes files using playstore processor`() = runTest {
     coEvery {
       kiwixPermissionChecker.hasWriteExternalStoragePermission()
     } returns true
@@ -808,7 +781,11 @@ class LocalLibraryViewModelTest {
       processSelectedZimFilesForPlayStore.canHandleUris()
     } returns true
 
-    viewModel.processZimFileArguments("content://test.zim")
+    val intent = mockk<Intent>(relaxed = true)
+    every { intent.clipData } returns null
+    every { intent.data } returns android.net.Uri.parse("content://test.zim")
+
+    viewModel.processSelectedZimFiles(intent)
 
     advanceUntilIdle()
 
@@ -822,7 +799,7 @@ class LocalLibraryViewModelTest {
   }
 
   @Test
-  fun `processZimFileArguments does nothing when no processor can handle files`() = runTest {
+  fun `processSelectedZimFiles does nothing when no processor can handle files`() = runTest {
     clearMocks(
       processSelectedZimFilesForStandalone,
       processSelectedZimFilesForPlayStore,
@@ -845,7 +822,11 @@ class LocalLibraryViewModelTest {
       processSelectedZimFilesForPlayStore.canHandleUris()
     } returns false
 
-    viewModel.processZimFileArguments("content://test.zim")
+    val intent = mockk<Intent>(relaxed = true)
+    every { intent.clipData } returns null
+    every { intent.data } returns android.net.Uri.parse("content://test.zim")
+
+    viewModel.processSelectedZimFiles(intent)
 
     advanceUntilIdle()
 
