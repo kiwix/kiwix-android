@@ -592,7 +592,12 @@ class OnlineLibraryViewModel @Inject constructor(
         NoInternet -> emitNoInternetSnackbar()
         RequestStoragePermission -> sendUiEvent(RequestPermission(WRITE_EXTERNAL_STORAGE))
         RequestNotificationPermission -> if (isAndroid13OrAbove) {
-          sendUiEvent(RequestPermission(POST_NOTIFICATIONS))
+          // Explain why we're asking before the OS prompt fires, so the ask isn't a bare
+          // system dialog with no context. Reuses the existing rationale message/dialog.
+          emitDialog(
+            KiwixDialog.NotificationPermissionDialog,
+            positiveAction = { sendUiEvent(RequestPermission(POST_NOTIFICATIONS)) }
+          )
         }
 
         RequestManageExternalFilesPermission -> emitDialog(
