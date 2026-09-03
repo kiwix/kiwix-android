@@ -87,7 +87,7 @@
   <string name="no_email_application_installed">Proszę zainstalować klienta poczty elektronicznej</string>
   <string name="no_app_found_to_select_bookmark_file">Nie znaleziono aplikacji umożliwiającej wybór pliku zakładek</string>
   <string name="no_section_info">Nie znaleziono nagłówków treści</string>
-  <string name="request_storage">Aby uzyskać dostęp do plików ZIM, musimy mieć dostęp do twojego nośnika</string>
+  <string name="request_storage">Aby uzyskać dostęp do plików ZIM, musimy mieć dostęp do Twojego nośnika</string>
   <string name="request_write_storage">Aby pobrać pliki ZIM, potrzebujemy uprawnień zapisu do pamięci Twojego urządzenia</string>
   <string name="clear_recent_and_tabs_history_dialog">Czy na pewno chcesz usunąć historię wyszukiwania i zresetować wszystkie aktywne karty?</string>
   <string name="delete_recent_search_item">Usunąć ten obiekt?</string>
