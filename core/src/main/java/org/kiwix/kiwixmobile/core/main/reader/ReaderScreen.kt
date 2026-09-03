@@ -42,9 +42,12 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -53,9 +56,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.itemsIndexed
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -94,6 +99,7 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
@@ -176,6 +182,9 @@ import org.kiwix.kiwixmobile.core.utils.ComposeDimens.READER_BOTTOM_APP_BAR_DISA
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.READER_BOTTOM_APP_BAR_LAYOUT_HEIGHT
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SEARCH_PLACEHOLDER_TEXT_SIZE
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SIXTEEN_DP
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TAB_CARD_ASPECT_RATIO
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TAB_CARD_MIN_WIDTH
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TAB_SWITCHER_BOTTOM_PADDING
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TEN_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.THREE_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TTS_BUTTONS_CONTROL_ALPHA
@@ -764,15 +773,19 @@ fun TabSwitcherView(
   tabsState: TabsManager.TabsState,
   onReaderAction: (ReaderAction) -> Unit
 ) {
-  val state = rememberLazyListState()
+  val state = rememberLazyGridState()
   Box(modifier = Modifier.fillMaxSize()) {
-    LazyRow(
-      modifier = Modifier
-        .fillMaxWidth()
-        .align(Alignment.TopCenter)
-        .padding(top = SIXTEEN_DP),
-      contentPadding = PaddingValues(horizontal = SIXTEEN_DP, vertical = EIGHT_DP),
-      horizontalArrangement = Arrangement.spacedBy(EIGHT_DP),
+    LazyVerticalGrid(
+      columns = GridCells.Adaptive(minSize = TAB_CARD_MIN_WIDTH),
+      modifier = Modifier.fillMaxSize(),
+      contentPadding = PaddingValues(
+        start = TWELVE_DP,
+        top = TWELVE_DP,
+        end = TWELVE_DP,
+        bottom = TAB_SWITCHER_BOTTOM_PADDING
+      ),
+      horizontalArrangement = Arrangement.spacedBy(TWELVE_DP),
+      verticalArrangement = Arrangement.spacedBy(TWELVE_DP),
       state = state
     ) {
       itemsIndexed(tabsState.webViews, key = { _, item -> item.hashCode() }) { index, webView ->
@@ -792,7 +805,9 @@ fun TabSwitcherView(
       }
     }
     LaunchedEffect(Unit) {
-      state.animateScrollToItem(tabsState.selectedIndex)
+      if (tabsState.selectedIndex in tabsState.webViews.indices) {
+        state.animateScrollToItem(tabsState.selectedIndex)
+      }
     }
     CloseAllTabButton { onReaderAction(CloseAllTabs) }
   }
@@ -867,22 +882,25 @@ fun TabItemView(
 ) {
   val cardElevation = if (isSelected) EIGHT_DP else TWO_DP
   val borderColor = if (isSelected) MaterialTheme.colorScheme.primary else Color.Transparent
-  val (cardWidth, cardHeight) = getTabCardSize(toolbarHeightDp = KIWIX_TOOLBAR_HEIGHT)
-  Box(modifier = modifier) {
+  val borderWidth = if (isSelected) TWO_DP else ONE_DP
+  Card(
+    elevation = CardDefaults.cardElevation(defaultElevation = cardElevation),
+    border = BorderStroke(borderWidth, borderColor),
+    shape = RoundedCornerShape(TWELVE_DP),
+    modifier = modifier
+      .fillMaxWidth()
+      .aspectRatio(TAB_CARD_ASPECT_RATIO)
+      .semantics { hideFromAccessibility() }
+  ) {
     Column(
-      horizontalAlignment = Alignment.CenterHorizontally,
       modifier = Modifier
-        .padding(horizontal = EIGHT_DP, vertical = FOUR_DP)
-        .width(cardWidth)
+        .fillMaxSize()
+        .clickable { onReaderAction(SelectTab(index)) }
     ) {
-      TabItemHeader(title, index, onReaderAction)
+      TabItemHeader(title, index, webView, onReaderAction)
       TabItemCard(
         webView,
-        cardWidth,
-        cardHeight,
         onReaderAction,
-        borderColor,
-        cardElevation,
         index
       )
     }
@@ -893,18 +911,30 @@ fun TabItemView(
 private fun TabItemHeader(
   title: String,
   index: Int,
+  webView: KiwixWebView,
   onReaderAction: (ReaderAction) -> Unit
 ) {
   Row(
     modifier = Modifier
       .fillMaxWidth()
-      .padding(horizontal = FOUR_DP),
+      .background(MaterialTheme.colorScheme.surfaceVariant)
+      .padding(start = EIGHT_DP, end = FOUR_DP, top = FOUR_DP, bottom = FOUR_DP),
     verticalAlignment = Alignment.CenterVertically
   ) {
+    val favicon = remember(webView) { webView.favicon }
+    if (favicon != null) {
+      Image(
+        bitmap = favicon.asImageBitmap(),
+        contentDescription = null,
+        modifier = Modifier.size(SIXTEEN_DP)
+      )
+      Spacer(modifier = Modifier.width(FOUR_DP))
+    }
     Text(
       text = title,
       maxLines = 1,
       overflow = TextOverflow.Ellipsis,
+      color = MaterialTheme.colorScheme.onSurfaceVariant,
       modifier = Modifier
         .padding(end = FOUR_DP)
         .weight(1f)
@@ -917,30 +947,23 @@ private fun TabItemHeader(
     ) {
       Icon(
         painter = painterResource(id = R.drawable.ic_clear_white_24dp),
-        contentDescription = stringResource(R.string.close_tab) + index
+        contentDescription = stringResource(R.string.close_tab) + index,
+        tint = MaterialTheme.colorScheme.onSurfaceVariant
       )
     }
   }
 }
 
 @Composable
-private fun TabItemCard(
+private fun ColumnScope.TabItemCard(
   webView: KiwixWebView,
-  cardWidth: Dp,
-  cardHeight: Dp,
   onReaderAction: (ReaderAction) -> Unit,
-  borderColor: Color,
-  elevation: Dp,
   index: Int
 ) {
-  Card(
-    elevation = CardDefaults.cardElevation(defaultElevation = elevation),
-    border = BorderStroke(ONE_DP, borderColor),
-    shape = MaterialTheme.shapes.extraSmall,
+  Box(
     modifier = Modifier
-      .width(cardWidth)
-      .height(cardHeight)
-      .semantics { hideFromAccessibility() }
+      .fillMaxWidth()
+      .weight(1f)
   ) {
     AndroidView(
       factory = { context ->
