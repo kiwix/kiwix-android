@@ -291,19 +291,25 @@ class OnlineLibraryViewModelTest {
     }
 
     @Test
-    fun `when action is RequestNotificationPermission then emits permission event`() = runTest {
-      val item = mockk<LibraryListItem.BookItem>(relaxed = true)
-      coEvery { resolveClick.onBookItemClick(any(), any()) } returns RequestNotificationPermission
+    fun `when action is RequestNotificationPermission then shows rationale then emits permission event`() =
+      runTest {
+        val item = mockk<LibraryListItem.BookItem>(relaxed = true)
+        coEvery {
+          resolveClick.onBookItemClick(any(), any())
+        } returns RequestNotificationPermission
 
-      viewModel.uiEvents.test {
-        viewModel.onBookItemClick(item)
-        advanceUntilIdle()
-        val permission = awaitItem() as RequestPermission
-        assertTrue(permission.permission == POST_NOTIFICATIONS)
+        viewModel.uiEvents.test {
+          viewModel.onBookItemClick(item)
+          advanceUntilIdle()
+          val dialog = awaitItem() as ShowDialog
+          assertTrue(dialog.dialog == KiwixDialog.NotificationPermissionDialog)
+          dialog.positiveAction.invoke()
+          val permission = awaitItem() as RequestPermission
+          assertTrue(permission.permission == POST_NOTIFICATIONS)
 
-        cancelAndIgnoreRemainingEvents()
+          cancelAndIgnoreRemainingEvents()
+        }
       }
-    }
 
     @Test
     fun `when action is RequestManageExternalFilesPermission then emits permission event`() =
