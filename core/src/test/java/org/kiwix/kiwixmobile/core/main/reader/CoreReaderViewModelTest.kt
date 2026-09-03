@@ -25,10 +25,12 @@ import android.net.Uri
 import android.view.ActionMode
 import android.view.Menu
 import android.view.MenuInflater
+import android.view.MenuItem
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.SnackbarResult
 import androidx.lifecycle.viewModelScope
+import androidx.room.util.readVersion
 import app.cash.turbine.test
 import io.mockk.CapturingSlot
 import io.mockk.Runs
@@ -61,6 +63,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.RegisterExtension
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.R.string
+import org.kiwix.kiwixmobile.core.base.BackPressActivityExtensions
 import org.kiwix.kiwixmobile.core.extensions.browserIntent
 import org.kiwix.kiwixmobile.core.extensions.navigateToAppSettings
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
@@ -2652,7 +2655,170 @@ internal class CoreReaderViewModelTest {
   }
 
   @Nested
-  inner class OnUserBackPress
+  inner class NavigationIconContentDescription {
+
+    @Test
+    fun whenShowTabSwitcherTrue_returnsSearchOpenInNewTabString() {
+
+      viewModel.getUiState().update { it.copy(showTabSwitcher = true) }
+      val result = viewModel.navigationIconContentDescription()
+
+      assertThat(result).isEqualTo(string.search_open_in_new_tab)
+    }
+
+    @Test
+    fun whenShowTabSwitcherFalse_returnsOpenDrawer() {
+
+      viewModel.getUiState().update { it.copy(showTabSwitcher = false) }
+
+      val result = viewModel.navigationIconContentDescription()
+
+      assertThat(result).isEqualTo(string.open_drawer)
+    }
+  }
+
+  @Test
+  fun configureWebViewSelectionHandler_successPath_startsReadAloudAndFinishesActionMode() =
+    runTest {
+      val viewModel = spyk(viewModel)
+
+      val menu = mockk<Menu>()
+      val menuItem = mockk<MenuItem>()
+      every { menu.findItem(R.id.menu_speak_text) } returns menuItem
+
+      val listenerSlot = slot<MenuItem.OnMenuItemClickListener>()
+      every { menuItem.setOnMenuItemClickListener(capture(listenerSlot)) } returns menuItem
+
+      every { readAloudManager.isTtsInitialed() } returns true
+      coEvery { readAloudManager.readSelection(mockWebView) } just Runs
+
+
+      viewModel.configureWebViewSelectionHandler(menu)
+
+      val result = listenerSlot.captured.onMenuItemClick(menuItem)
+      advanceUntilIdle()
+
+      // also calls actionMode?.finish()
+      coVerify { readAloudManager.readSelection(mockWebView) }
+      assertThat(result).isTrue()
+    }
+
+  @Nested
+  inner class OnUserBackPress {
+
+    @Test
+    fun wheNavigationDrawerIsOpenTrue_closesNavigationAndBackPressActivityExtensionsSuperShouldNotCall() =
+      runTest {
+
+        every { coreMainActivity.navigationDrawerIsOpen() } returns true
+        every { coreMainActivity.closeNavigationDrawer() } just Runs
+
+        val result = viewModel.onUserBackPressed(coreMainActivity)
+
+        verify { coreMainActivity.closeNavigationDrawer() }
+
+        assertThat(result).isEqualTo(BackPressActivityExtensions.Super.ShouldNotCall)
+
+      }
+
+    @Test
+    fun whenNavigationDrawerIsOpenFalse_callsBackPressActivityExtensionsSuperShouldCall() =
+      runTest {
+        every { coreMainActivity.navigationDrawerIsOpen() } returns false
+
+        val result = viewModel.onUserBackPressed(coreMainActivity)
+
+        assertThat(result).isEqualTo(BackPressActivityExtensions.Super.ShouldCall)
+      }
+
+    @Nested
+    inner class ShowTabSwitcher {
+
+      @Test
+      fun when_navigationDrawerIsOpenFalseAndShowTabSwitcherTrue_selectsCurrentWebViewIndexWhenIndexSmallerThanWebViewListSize() =
+        runTest {
+          val viewModel = spyk(viewModel)
+
+          viewModel.getUiState().update { it.copy(showTabSwitcher = true) }
+          every { coreMainActivity.navigationDrawerIsOpen() } returns false
+          every { readerWebViewManager.currentWebViewIndex } returns 1
+          every { readerWebViewManager.tabsSize() } returns 3
+          coEvery { viewModel.hideTabSwitcher() } just Runs
+
+          val result = viewModel.onUserBackPressed(coreMainActivity)
+          advanceUntilIdle()
+
+          coVerify { viewModel.selectTab(1) }
+          coVerify { viewModel.hideTabSwitcher() }
+          assertThat(result).isEqualTo(BackPressActivityExtensions.Super.ShouldNotCall)
+
+        }
+
+      @Test
+      fun when_navigationDrawerIsOpenFalseAndShowTabSwitcherTrue_selectsWebViewListSizeIndexWhenCurrentIndexGreaterThanWebViewListSize() =
+        runTest {
+          val viewModel = spyk(viewModel)
+
+          viewModel.getUiState().update { it.copy(showTabSwitcher = true) }
+          every { coreMainActivity.navigationDrawerIsOpen() } returns false
+          every { readerWebViewManager.currentWebViewIndex } returns 4
+          every { readerWebViewManager.tabsSize() } returns 3
+          coEvery { viewModel.hideTabSwitcher() } just Runs
+
+          val result = viewModel.onUserBackPressed(coreMainActivity)
+          advanceUntilIdle()
+
+          coVerify { viewModel.selectTab(2) } // As webViewListSize - 1
+          coVerify { viewModel.hideTabSwitcher() }
+          assertThat(result).isEqualTo(BackPressActivityExtensions.Super.ShouldNotCall)
+
+        }
+    }
+
+    @Test
+    fun whenNavigationDrawerIsOpenFalseAndFindInPageUiStateIsVisible_closesFindInPageAndCallsBackPressActivityExtensionsSuperShouldCall() =
+      runTest {
+
+        viewModel.getUiState().update {
+          it.copy(findInPageUiState = FindInPageManager.FindInPageUiState(visible = true))
+        }
+        every { findInPageManager.stop() } just Runs
+        every { coreMainActivity.navigationDrawerIsOpen() } returns false
+
+        val result = viewModel.onUserBackPressed(coreMainActivity)
+
+        verify { findInPageManager.stop() }
+        assertThat(result).isEqualTo(BackPressActivityExtensions.Super.ShouldNotCall)
+
+      }
+
+    @Test
+    fun whenNavigationDrawerIsOpenFalseAndShowTableOfContentDrawer_emitsReaderActionCloseTocDrawerAndBackPressActivityExtensionsSuperShouldNotCall() =
+      runTest {
+        val viewModel = spyk(viewModel)
+        viewModel.getUiState().update { it.copy(showTableOfContentDrawer = true) }
+        every { coreMainActivity.navigationDrawerIsOpen() } returns false
+
+        val result = viewModel.onUserBackPressed(coreMainActivity)
+
+        verify { viewModel.onAction(ReaderAction.CloseTocDrawer) }
+        assertThat(result).isEqualTo(BackPressActivityExtensions.Super.ShouldNotCall)
+      }
+
+    @Test
+    fun whenNavigationDrawerIsOpenFalseAndWebViewCanGoBack_invokesWebViewGoBackAndBackPressActivityExtensionsSuperShouldNotCall() =
+      runTest {
+        every { coreMainActivity.navigationDrawerIsOpen() } returns false
+        every { mockWebView.canGoBack() } returns true
+        every { mockWebView.goBack() } just Runs
+
+        val result = viewModel.onUserBackPressed(coreMainActivity)
+
+        verify { mockWebView.goBack() }
+        assertThat(result).isEqualTo(BackPressActivityExtensions.Super.ShouldNotCall)
+
+      }
+  }
 
   @Test
   fun openKiwixSupportUrl_opensExternalLinkWithDialog() {
@@ -2733,6 +2899,25 @@ internal class CoreReaderViewModelTest {
       }
     }
   }
+
+  @Test
+  fun whenReadAloudManagerTtsNull_updateBottomToolbarVisibilityAndSetsUpTTSAndShowDonationPopUp() =
+    runTest {
+
+      // Bottom bar visibility depends on TabSwitcher
+      viewModel.getUiState().update { it.copy(showTabSwitcher = true) }
+
+      every { readAloudManager.tts } returns null
+      every { readAloudManager.setUpTTS() } just Runs
+      coEvery { donationDialogHandler.attemptToShowDonationPopup() } just Runs
+      viewModel.onResume()
+
+      advanceUntilIdle()
+
+      verify { readAloudManager.setUpTTS() } // Only sets if tts is null
+
+      coVerify { donationDialogHandler.attemptToShowDonationPopup() }
+    }
 
   @Test
   fun onCleared_cleansUpAllResourcesAndManagers() {
@@ -2864,6 +3049,10 @@ internal class CoreReaderViewModelTest {
       onComplete: suspend () -> Unit
     ) {
       super.restoreTabs(webViewHistoryItemList, currentTab, onComplete)
+    }
+
+    public override fun configureWebViewSelectionHandler(menu: Menu?) {
+      super.configureWebViewSelectionHandler(menu)
     }
 
     public override fun onCleared() {
