@@ -19,34 +19,30 @@
 package org.kiwix.kiwixmobile.language.viewmodel
 
 import android.app.Application
-import io.mockk.Runs
 import io.mockk.coEvery
-import io.mockk.coVerify
 import io.mockk.every
-import io.mockk.just
 import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.RegisterExtension
-import org.kiwix.kiwixmobile.core.R
-import org.kiwix.kiwixmobile.core.data.remote.KiwixService
-import org.kiwix.kiwixmobile.core.data.remote.LanguageEntry
-import org.kiwix.kiwixmobile.core.data.remote.LanguageFeed
+import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.zim_manager.ConnectivityBroadcastReceiver
 import org.kiwix.kiwixmobile.core.zim_manager.Language
 import org.kiwix.kiwixmobile.core.zim_manager.NetworkState
 import org.kiwix.kiwixmobile.language.composables.LanguageListItem
+import org.kiwix.kiwixmobile.language.helper.ObserveLanguages
 import org.kiwix.kiwixmobile.language.viewmodel.State.Loading
 import org.kiwix.sharedFunctions.MainDispatcherRule
 
@@ -57,20 +53,18 @@ class LanguageViewModelTest {
   val mainDispatcherRule = MainDispatcherRule()
   private val application: Application = mockk(relaxed = true)
   private val kiwixDataStore: KiwixDataStore = mockk()
-  private val kiwixService: KiwixService = mockk()
+  private val observeLanguages: ObserveLanguages = mockk()
   private val connectivityBroadcastReceiver: ConnectivityBroadcastReceiver = mockk()
   private val networkStates = MutableStateFlow(NetworkState.NOT_CONNECTED)
   private lateinit var languageViewModel: LanguageViewModel
-  private var languages: MutableStateFlow<List<Language>?> = MutableStateFlow(null)
 
   private fun createViewModel() {
     languageViewModel =
       LanguageViewModel(
         application,
         kiwixDataStore,
-        kiwixService,
-        connectivityBroadcastReceiver,
-        mainDispatcherRule.dispatcher
+        observeLanguages,
+        connectivityBroadcastReceiver
       )
   }
 
@@ -92,14 +86,13 @@ class LanguageViewModelTest {
   fun init() {
     every { connectivityBroadcastReceiver.action } returns "test"
     every { connectivityBroadcastReceiver.networkStates } returns networkStates
-    LanguageSessionCache.hasFetched = false
-    networkStates.value = NetworkState.NOT_CONNECTED
-    every { kiwixDataStore.cachedLanguageList } returns languages
+    every { kiwixDataStore.prefLanguage } returns MutableStateFlow("")
     every { kiwixDataStore.selectedOnlineContentLanguage } returns MutableStateFlow("eng")
   }
 
   @Test
   fun `unregisters broadcastReceiver in onCleared`() {
+    coEvery { observeLanguages(any(), any()) } returns ObserveLanguages.Result.Success(emptyList())
     createViewModel()
     every { application.unregisterReceiver(any()) } returns mockk()
     languageViewModel.onClearedExposed()
@@ -108,451 +101,360 @@ class LanguageViewModelTest {
     }
   }
 
-  @Test
-  fun init_whenInvoked_returnsDefaultLoadingState() = runTest {
-    createViewModel()
-    assertThat(languageViewModel.state.value).isEqualTo(Loading)
+  @Nested
+  inner class Init {
+    @Test
+    fun whenObserveLanguagesReturnsSuccess_returnsContent() = runTest {
+      val english = createLanguage()
+      coEvery { observeLanguages(any(), any()) } returns ObserveLanguages.Result.Success(listOf(english))
+
+      createViewModel()
+      advanceUntilIdle()
+
+      val expected = State.Content(listOf(english))
+      assertEquals(expected, languageViewModel.state.value)
+    }
+
+    @Test
+    fun whenObserveLanguagesReturnsError_returnsError() = runTest {
+      coEvery { observeLanguages(any(), any()) } returns ObserveLanguages.Result.Error("No network connection")
+
+      createViewModel()
+      advanceUntilIdle()
+
+      assertEquals(
+        State.Error("No network connection"),
+        languageViewModel.state.value
+      )
+    }
   }
 
   @Nested
-  inner class Init {
+  inner class ObserveActions {
     @Nested
-    inner class ObserveLanguages {
-      @Nested
-      inner class SessionCache {
-        @Test
-        fun whenHasFetchedTrueAndCachedLanguageExists_returnsContent() = runTest {
-          LanguageSessionCache.hasFetched = true
+    inner class ActionError {
+      @Test
+      fun whenErrorAction_returnsErrorMessage() = runTest {
+        coEvery { observeLanguages(any(), any()) } returns ObserveLanguages.Result.Success(emptyList())
+        createViewModel()
+        advanceUntilIdle()
 
-          val english = createLanguage()
-          languages.value = listOf(english)
+        languageViewModel.actions.emit(
+          Action.Error("No internet connection")
+        )
 
-          createViewModel()
+        advanceUntilIdle()
 
-          advanceUntilIdle()
+        assertEquals(
+          State.Error("No internet connection"),
+          languageViewModel.state.value
+        )
+      }
+    }
 
-          assertEquals(State.Content(listOf(english)), languageViewModel.state.value)
-        }
+    @Nested
+    inner class ActionUpdateLanguages {
+      @Test
+      fun whenStateLoading_returnsContent() = runTest {
+        coEvery { observeLanguages(any(), any()) } returns ObserveLanguages.Result.Success(emptyList())
+        createViewModel()
+        advanceUntilIdle()
+        languageViewModel.state.value = Loading
 
-        @Test
-        fun whenHasFetchedTrueAndCachedLanguageEmpty_returnsNoNetworkError() = runTest {
-          LanguageSessionCache.hasFetched = true
+        val english = createLanguage()
 
-          every {
-            application.getString(
-              R.string.no_network_connection
-            )
-          } returns "No network connection"
-
-          languages.value = null
-
-          createViewModel()
-
-          advanceUntilIdle()
-
-          assertEquals(
-            State.Error("No network connection"),
-            languageViewModel.state.value
+        languageViewModel.actions.emit(
+          Action.UpdateLanguages(
+            listOf(english)
           )
-        }
+        )
+
+        advanceUntilIdle()
+
+        assertEquals(
+          State.Content(
+            listOf(english)
+          ),
+          languageViewModel.state.value
+        )
       }
 
-      @Nested
-      inner class Online {
-        @Test
-        fun whenApiReturnsLanguages_returnsContent() = runTest {
-          networkStates.value = NetworkState.CONNECTED
+      @Test
+      fun whenStateNotLoading_returnsCurrentState() = runTest {
+        coEvery { observeLanguages(any(), any()) } returns ObserveLanguages.Result.Success(emptyList())
+        createViewModel()
+        advanceUntilIdle()
+        languageViewModel.state.value = Loading
 
-          val languageEntry =
-            LanguageEntry().apply {
-              languageCode = "eng"
-              count = 10
-            }
+        languageViewModel.state.value =
+          State.Error("Error")
 
-          val languageFeed =
-            LanguageFeed().apply {
-              entries = listOf(languageEntry)
-            }
-
-          coEvery { kiwixService.getLanguages() } returns languageFeed
-
-          coEvery { kiwixDataStore.saveLanguageList(any()) } just Runs
-
-          createViewModel()
-
-          advanceUntilIdle()
-
-          val expected =
-            State.Content(
-              listOf(
-                createLanguage(
-                  code = "",
-                  active = false,
-                  occurrences = 10,
-                  id = 0
-                ),
-                createLanguage(
-                  code = "eng",
-                  active = true,
-                  occurrences = 10,
-                  id = 1
-                )
-              )
-            )
-
-          assertTrue(
-            LanguageSessionCache.hasFetched
+        languageViewModel.actions.emit(
+          Action.UpdateLanguages(
+            listOf(createLanguage())
           )
-          coVerify(exactly = 1) {
-            kiwixDataStore.saveLanguageList(any())
-          }
-          assertEquals(
-            expected,
-            languageViewModel.state.value
-          )
-        }
+        )
 
-        @Test
-        fun whenApiReturnsEmptyAndCachedLanguageExists_returnsContent() = runTest {
-          networkStates.value = NetworkState.CONNECTED
+        advanceUntilIdle()
 
-          val english = createLanguage()
+        assertEquals(
+          State.Error("Error"),
+          languageViewModel.state.value
+        )
+      }
+    }
 
-          languages.value = listOf(english)
+    @Nested
+    inner class ActionFilter {
+      @Test
+      fun whenStateNotContent_returnsCurrentState() = runTest {
+        coEvery { observeLanguages(any(), any()) } returns ObserveLanguages.Result.Success(emptyList())
+        createViewModel()
+        advanceUntilIdle()
+        languageViewModel.state.value = Loading
 
-          coEvery {
-            kiwixService.getLanguages()
-          } returns LanguageFeed().apply {
-            entries = emptyList()
-          }
+        languageViewModel.actions.emit(
+          Action.Filter("eng")
+        )
 
-          createViewModel()
+        advanceUntilIdle()
 
-          advanceUntilIdle()
-
-          assertEquals(
-            State.Content(
-              listOf(english)
-            ),
-            languageViewModel.state.value
-          )
-        }
-
-        @Test
-        fun whenApiReturnsEmptyAndCachedLanguageEmpty_returnsNoLanguageError() = runTest {
-          networkStates.value = NetworkState.CONNECTED
-
-          languages.value = null
-
-          every {
-            application.getString(R.string.no_language_available)
-          } returns "No language available"
-
-          coEvery {
-            kiwixService.getLanguages()
-          } returns LanguageFeed().apply {
-            entries = emptyList()
-          }
-
-          createViewModel()
-
-          advanceUntilIdle()
-
-          assertEquals(
-            State.Error("No language available"),
-            languageViewModel.state.value
-          )
-        }
-
-        @Test
-        fun whenApiThrowsAndCachedLanguageExists_returnsContent() = runTest {
-          networkStates.value = NetworkState.CONNECTED
-
-          val english = createLanguage()
-
-          languages.value = listOf(english)
-
-          coEvery {
-            kiwixService.getLanguages()
-          } throws RuntimeException()
-
-          createViewModel()
-
-          advanceUntilIdle()
-
-          assertEquals(
-            State.Content(listOf(english)),
-            languageViewModel.state.value
-          )
-        }
-
-        @Test
-        fun whenApiThrowsAndCachedLanguageEmpty_returnsNoLanguageError() = runTest {
-          networkStates.value = NetworkState.CONNECTED
-
-          languages.value = null
-
-          every {
-            application.getString(R.string.no_language_available)
-          } returns "No language available"
-
-          coEvery {
-            kiwixService.getLanguages()
-          } throws RuntimeException()
-
-          createViewModel()
-
-          advanceUntilIdle()
-
-          assertEquals(
-            State.Error("No language available"),
-            languageViewModel.state.value
-          )
-        }
+        assertEquals(
+          Loading,
+          languageViewModel.state.value
+        )
       }
 
-      @Nested
-      inner class ObserveActions {
-        @Nested
-        inner class ActionError {
-          @Test
-          fun whenErrorAction_returnsErrorMessage() = runTest {
-            createViewModel()
-            advanceUntilIdle()
+      @Test
+      fun whenStateContent_returnsFilteredContent() = runTest {
+        coEvery { observeLanguages(any(), any()) } returns ObserveLanguages.Result.Success(emptyList())
+        createViewModel()
+        advanceUntilIdle()
 
-            languageViewModel.actions.emit(
-              Action.Error("No internet connection")
+        val english =
+          createLanguage(
+            code = "eng"
+          )
+
+        val french =
+          createLanguage(
+            code = "fr",
+            active = false,
+            id = 2
+          )
+
+        languageViewModel.state.value = State.Content(listOf(english, french))
+
+        languageViewModel.actions.emit(Action.Filter("eng"))
+
+        advanceUntilIdle()
+
+        val content = languageViewModel.state.value as State.Content
+
+        assertEquals(
+          "eng",
+          content.filter
+        )
+
+        assertEquals(
+          2,
+          content.items.size
+        )
+
+        assertEquals(
+          2,
+          content.viewItems.size
+        )
+      }
+    }
+
+    @Nested
+    inner class ActionSelect {
+      @Test
+      fun whenStateNotContent_returnsCurrentState() = runTest {
+        coEvery { observeLanguages(any(), any()) } returns ObserveLanguages.Result.Success(emptyList())
+        createViewModel()
+        advanceUntilIdle()
+        languageViewModel.state.value = Loading
+
+        languageViewModel.actions.emit(
+          Action.Select(
+            LanguageListItem.LanguageItem(
+              createLanguage()
             )
+          )
+        )
 
-            advanceUntilIdle()
+        advanceUntilIdle()
 
-            assertEquals(
-              State.Error("No internet connection"),
-              languageViewModel.state.value
-            )
+        assertEquals(
+          Loading,
+          languageViewModel.state.value
+        )
+      }
+
+      @Test
+      fun whenStateContent_updatesSelectedLanguage() = runTest {
+        coEvery { observeLanguages(any(), any()) } returns ObserveLanguages.Result.Success(emptyList())
+        createViewModel()
+        advanceUntilIdle()
+        val english =
+          createLanguage(
+            code = "eng",
+            active = true
+          )
+
+        val french =
+          createLanguage(
+            code = "fr",
+            active = false,
+            id = 2
+          )
+
+        languageViewModel.state.value =
+          State.Content(listOf(english, french))
+
+        languageViewModel.actions.emit(
+          Action.Select(LanguageListItem.LanguageItem(french))
+        )
+
+        advanceUntilIdle()
+
+        val content =
+          languageViewModel.state.value as State.Content
+
+        val updatedEnglish =
+          content.items.first {
+            it.languageCode == english.languageCode
+          }
+
+        val updatedFrench =
+          content.items.first {
+            it.languageCode == french.languageCode
+          }
+
+        assertTrue(
+          updatedEnglish.active
+        )
+
+        assertTrue(
+          updatedFrench.active
+        )
+      }
+    }
+
+    @Nested
+    inner class ActionCancel {
+      @Test
+      fun whenStateNotContent_returnsCurrentState() = runTest {
+        coEvery { observeLanguages(any(), any()) } returns ObserveLanguages.Result.Success(emptyList())
+        createViewModel()
+        advanceUntilIdle()
+        languageViewModel.state.value = Loading
+
+        languageViewModel.actions.emit(Action.Cancel)
+
+        advanceUntilIdle()
+
+        assertEquals(
+          Loading,
+          languageViewModel.state.value
+        )
+      }
+
+      @Test
+      fun whenStateContent_emitsCancelSideEffect() = runTest {
+        coEvery { observeLanguages(any(), any()) } returns ObserveLanguages.Result.Success(emptyList())
+        createViewModel()
+        advanceUntilIdle()
+        languageViewModel.state.value = State.Content(listOf(createLanguage()))
+
+        var sideEffect: SideEffect<*>? = null
+        val collectJob = launch(UnconfinedTestDispatcher(testScheduler)) {
+          languageViewModel.effects.collect {
+            sideEffect = it
           }
         }
 
-        @Nested
-        inner class ActionUpdateLanguages {
-          @Test
-          fun whenStateLoading_returnsContent() = runTest {
-            createViewModel()
-            advanceUntilIdle()
-            languageViewModel.state.value = Loading
+        languageViewModel.actions.emit(Action.Cancel)
+        advanceUntilIdle()
 
-            val english = createLanguage()
+        assertThat(sideEffect).isNotNull
+        collectJob.cancel()
+      }
+    }
 
-            languageViewModel.actions.emit(
-              Action.UpdateLanguages(
-                listOf(english)
-              )
-            )
+    @Nested
+    inner class ActionSave {
+      @Test
+      fun whenStateNotContent_returnsCurrentState() = runTest {
+        coEvery { observeLanguages(any(), any()) } returns ObserveLanguages.Result.Success(emptyList())
+        createViewModel()
+        advanceUntilIdle()
+        languageViewModel.state.value = Loading
 
-            advanceUntilIdle()
+        languageViewModel.actions.emit(Action.Save)
 
-            assertEquals(
-              State.Content(
-                listOf(english)
-              ),
-              languageViewModel.state.value
-            )
-          }
+        advanceUntilIdle()
 
-          @Test
-          fun whenStateNotLoading_returnsCurrentState() = runTest {
-            createViewModel()
-            advanceUntilIdle()
-            languageViewModel.state.value = Loading
+        assertEquals(
+          Loading,
+          languageViewModel.state.value
+        )
+      }
 
-            languageViewModel.state.value =
-              State.Error("Error")
+      @Test
+      fun whenStateContent_returnsSavingAndEmitsSideEffect() = runTest {
+        coEvery { observeLanguages(any(), any()) } returns ObserveLanguages.Result.Success(emptyList())
+        createViewModel()
+        advanceUntilIdle()
+        val english = createLanguage(code = "eng", active = true)
+        val french = createLanguage(code = "fr", active = false, id = 2)
+        languageViewModel.state.value = State.Content(listOf(english, french))
 
-            languageViewModel.actions.emit(
-              Action.UpdateLanguages(
-                listOf(createLanguage())
-              )
-            )
-
-            advanceUntilIdle()
-
-            assertEquals(
-              State.Error("Error"),
-              languageViewModel.state.value
-            )
+        var sideEffect: SideEffect<*>? = null
+        val collectJob = launch(UnconfinedTestDispatcher(testScheduler)) {
+          languageViewModel.effects.collect {
+            sideEffect = it
           }
         }
 
-        @Nested
-        inner class ActionFilter {
-          @Test
-          fun whenStateNotContent_returnsCurrentState() = runTest {
-            createViewModel()
-            advanceUntilIdle()
-            languageViewModel.state.value = Loading
+        languageViewModel.actions.emit(Action.Save)
+        advanceUntilIdle()
 
-            languageViewModel.actions.emit(
-              Action.Filter("eng")
-            )
+        assertEquals(
+          State.Saving,
+          languageViewModel.state.value
+        )
 
-            advanceUntilIdle()
+        assertThat(sideEffect).isInstanceOf(SaveLanguagesAndFinish::class.java)
+        val saveEffect = sideEffect as SaveLanguagesAndFinish
+        assertThat(saveEffect.languages.map { it.languageCode }).containsExactly("eng")
 
-            assertEquals(
-              Loading,
-              languageViewModel.state.value
-            )
-          }
-
-          @Test
-          fun whenStateContent_returnsFilteredContent() = runTest {
-            createViewModel()
-            advanceUntilIdle()
-
-            val english =
-              createLanguage(
-                code = "eng"
-              )
-
-            val french =
-              createLanguage(
-                code = "fr",
-                active = false,
-                id = 2
-              )
-
-            languageViewModel.state.value = State.Content(listOf(english, french))
-
-            languageViewModel.actions.emit(Action.Filter("eng"))
-
-            advanceUntilIdle()
-
-            val content = languageViewModel.state.value as State.Content
-
-            assertEquals(
-              "eng",
-              content.filter
-            )
-
-            assertEquals(
-              2,
-              content.items.size
-            )
-
-            assertEquals(
-              2,
-              content.viewItems.size
-            )
-          }
-        }
-
-        @Nested
-        inner class ActionSelect {
-          @Test
-          fun whenStateNotContent_returnsCurrentState() = runTest {
-            createViewModel()
-            advanceUntilIdle()
-            languageViewModel.state.value = Loading
-
-            languageViewModel.actions.emit(
-              Action.Select(
-                LanguageListItem.LanguageItem(
-                  createLanguage()
-                )
-              )
-            )
-
-            advanceUntilIdle()
-
-            assertEquals(
-              Loading,
-              languageViewModel.state.value
-            )
-          }
-
-          @Test
-          fun whenStateContent_updatesSelectedLanguage() = runTest {
-            createViewModel()
-            advanceUntilIdle()
-            val english =
-              createLanguage(
-                code = "eng",
-                active = true
-              )
-
-            val french =
-              createLanguage(
-                code = "fr",
-                active = false,
-                id = 2
-              )
-
-            languageViewModel.state.value =
-              State.Content(listOf(english, french))
-
-            languageViewModel.actions.emit(
-              Action.Select(LanguageListItem.LanguageItem(french))
-            )
-
-            advanceUntilIdle()
-
-            val content =
-              languageViewModel.state.value as State.Content
-
-            val updatedEnglish =
-              content.items.first {
-                it.languageCode == english.languageCode
-              }
-
-            val updatedFrench =
-              content.items.first {
-                it.languageCode == french.languageCode
-              }
-
-            assertFalse(
-              updatedEnglish.active
-            )
-
-            assertTrue(
-              updatedFrench.active
-            )
-          }
-        }
-
-        @Nested
-        inner class ActionSave {
-          @Test
-          fun whenStateNotContent_returnsCurrentState() = runTest {
-            createViewModel()
-            advanceUntilIdle()
-            languageViewModel.state.value = Loading
-
-            languageViewModel.actions.emit(Action.Save)
-
-            advanceUntilIdle()
-
-            assertEquals(
-              Loading,
-              languageViewModel.state.value
-            )
-          }
-
-          @Test
-          fun whenStateContent_returnsSaving() = runTest {
-            createViewModel()
-            advanceUntilIdle()
-            languageViewModel.state.value = State.Content(listOf(createLanguage()))
-
-            languageViewModel.actions.emit(Action.Save)
-
-            advanceUntilIdle()
-
-            assertEquals(
-              State.Saving,
-              languageViewModel.state.value
-            )
-          }
-        }
+        collectJob.cancel()
       }
     }
   }
+}
+
+// TODO ONCE ALL flakyTest{} are eliminated clear this
+inline fun flakyTest(
+  maxRetries: Int = 10,
+  delayMillis: Long = 0,
+  block: () -> Unit
+) {
+  var lastError: Throwable? = null
+
+  repeat(maxRetries) { attempt ->
+    try {
+      block()
+      return
+    } catch (e: Throwable) {
+      lastError = e
+      println("Test attempt ${attempt + 1} failed: ${e.message}")
+      if (delayMillis > 0) Thread.sleep(delayMillis)
+    }
+  }
+
+  throw lastError ?: AssertionError("Test failed after $maxRetries attempts")
 }

@@ -64,6 +64,7 @@ class HistoryRoomDaoTest {
   }
 
   @Test
+  @Suppress("LongMethod")
   fun testHistoryRoomDao() =
     runTest(mainDispatcherRule.dispatcher) {
       // delete all the history from database to properly run the test cases.

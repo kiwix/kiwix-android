@@ -56,7 +56,9 @@ class MetaLinkNetworkEntityTest {
         }
       }
       val stream =
-        MetaLinkNetworkEntityTest::class.java.classLoader!!.getResourceAsStream("wikipedia_af_all_nopic_2016-05.zim.meta4")
+        MetaLinkNetworkEntityTest::class.java.classLoader!!.getResourceAsStream(
+          "wikipedia_af_all_nopic_2016-05.zim.meta4"
+        )
       val xmlString = stream.bufferedReader().use { it.readText() }
       result = xml.decodeFromString(MetaLinkNetworkEntity.serializer(), xmlString)
     }

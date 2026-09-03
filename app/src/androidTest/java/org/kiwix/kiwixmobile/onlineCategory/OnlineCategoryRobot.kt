@@ -19,7 +19,7 @@
 package org.kiwix.kiwixmobile.onlineCategory
 
 import androidx.compose.ui.test.ComposeTimeoutException
-import androidx.compose.ui.test.assertIsSelected
+import androidx.compose.ui.test.assertIsOn
 import androidx.compose.ui.test.filter
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.isDisplayed
@@ -29,13 +29,16 @@ import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.hasTestTag
+import androidx.compose.ui.test.performScrollToNode
 import applyWithViewHierarchyPrinting
 import org.kiwix.kiwixmobile.BaseRobot
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.ui.components.TOOLBAR_TITLE_TESTING_TAG
 import org.kiwix.kiwixmobile.core.utils.files.Log
-import org.kiwix.kiwixmobile.nav.destination.library.online.CATEGORY_ITEM_RADIO_BUTTON_TESTING_TAG
+import org.kiwix.kiwixmobile.nav.destination.library.online.CATEGORY_ITEM_CHECKBOX_TESTING_TAG
 import org.kiwix.kiwixmobile.nav.destination.library.online.CATEGORY_MENU_ICON_TESTING_TAG
+import org.kiwix.kiwixmobile.nav.destination.library.online.ONLINE_CATEGORY_LIST_TEST_TAG
 import org.kiwix.kiwixmobile.testutils.TestUtils
 import org.kiwix.kiwixmobile.testutils.TestUtils.testFlakyView
 
@@ -68,7 +71,9 @@ class OnlineCategoryRobot : BaseRobot() {
     composeTestRule: ComposeContentTestRule,
     matchLanguage: String
   ) {
-    composeTestRule.onNodeWithTag("$CATEGORY_ITEM_RADIO_BUTTON_TESTING_TAG$matchLanguage")
+    composeTestRule.onNodeWithTag(ONLINE_CATEGORY_LIST_TEST_TAG)
+      .performScrollToNode(hasTestTag("$CATEGORY_ITEM_CHECKBOX_TESTING_TAG$matchLanguage"))
+    composeTestRule.onNodeWithTag("$CATEGORY_ITEM_CHECKBOX_TESTING_TAG$matchLanguage")
       .performClick()
   }
 
@@ -111,8 +116,17 @@ class OnlineCategoryRobot : BaseRobot() {
   fun assertCategorySelected(composeTestRule: ComposeContentTestRule, matchLanguage: String) {
     composeTestRule.apply {
       waitForIdle()
-      onNodeWithTag("$CATEGORY_ITEM_RADIO_BUTTON_TESTING_TAG$matchLanguage")
-        .assertIsSelected()
+      onNodeWithTag(ONLINE_CATEGORY_LIST_TEST_TAG)
+        .performScrollToNode(hasTestTag("$CATEGORY_ITEM_CHECKBOX_TESTING_TAG$matchLanguage"))
+      onNodeWithTag("$CATEGORY_ITEM_CHECKBOX_TESTING_TAG$matchLanguage")
+        .assertIsOn()
+    }
+  }
+
+  fun clickOnSaveCategoryIcon(composeTestRule: ComposeContentTestRule) {
+    composeTestRule.apply {
+      waitForIdle()
+      onNodeWithTag(org.kiwix.kiwixmobile.language.SAVE_ICON_TESTING_TAG).performClick()
     }
   }
 }
