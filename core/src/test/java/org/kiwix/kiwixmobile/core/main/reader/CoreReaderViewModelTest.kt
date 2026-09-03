@@ -144,47 +144,6 @@ internal class CoreReaderViewModelTest {
   private val mockWebView = mockk<KiwixWebView>(relaxed = true)
 
   private lateinit var viewModel: TestCoreReaderViewModel
-
-  // @BeforeEach
-  // fun setup() {
-  //   clearAllMocks()
-  //
-  //   every { context.getString(any()) } returns "Test String"
-  //   every { context.getString(any(), any()) } returns "Test String"
-  //
-  //   every { bookmarkManager.bookmarkState } returns MutableStateFlow(
-  //     BookmarkManager.BookmarkState()
-  //   )
-  //   every { readerWebViewManager.tabsState } returns MutableStateFlow(
-  //     TabsManager.TabsState()
-  //   )
-  //   every { readerIntentManager.events } returns readerIntentManagerFlow
-  //   every { readerIntentManager.consumePendingAction() } returns PendingIntentParser.ReaderIntentAction.None
-  //   every { findInPageManager.uiState } returns MutableStateFlow(
-  //     FindInPageManager.FindInPageUiState()
-  //   )
-  //   every { kiwixDataStore.backToTop } returns MutableStateFlow(true)
-  //   every { kiwixDataStore.isFirstRun } returns MutableStateFlow(false)
-  //   every { kiwixDataStore.isDebugBuild } returns MutableStateFlow(false)
-  //   every { kiwixDataStore.appName } returns MutableStateFlow("TestApp")
-  //
-  //   every { readerWebViewManager.tabsSize() } returns 1
-  //   every { readerWebViewManager.currentWebViewIndex } returns 0
-  //   every { readerWebViewManager.closeTab(any()) } returns null
-  //   every { readerWebViewManager.closeAllTabs() } returns TabsManager.TabsState()
-  //
-  //   // Mock WebView related methods
-  //   every { mockWebView.url } returns "https://example.com"
-  //   every { readerWebViewManager.getCurrentWebView() } returns mockWebView
-  //
-  //   // Mock ReadAloudManager methods
-  //   every { readAloudManager.stopReadAloud() } returns Unit
-  //
-  //   // Mock zimReaderContainer - set zimFileReader to null to skip onAddToHomeScreenMenuClicked logic
-  //   every { zimReaderContainer.zimFileReader } returns null
-  //
-  //   coEvery { readerArticleManager.getRandomArticle() } returns ReaderArticleManager.GetRandomArticleResult.NoZimFileLoaded
-  // }
   @BeforeEach
   fun setup() {
     clearAllMocks()
@@ -199,6 +158,7 @@ internal class CoreReaderViewModelTest {
     every { findInPageManager.uiState } returns MutableStateFlow(FindInPageManager.FindInPageUiState())
     every { readerWebViewManager.tabsState } returns MutableStateFlow(TabsManager.TabsState())
     coEvery { readerWebViewManager.getCurrentWebView() } returns mockWebView
+    every { readAloudManager.tts } returns null
 
     viewModel = TestCoreReaderViewModel(
       context,
