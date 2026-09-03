@@ -28,6 +28,7 @@ import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertFalse
 import junit.framework.TestCase.assertTrue
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.advanceUntilIdle
@@ -81,6 +82,9 @@ class ZimHostViewModelTest {
     coEvery { dataSource.getLanguageCategorizedBooks() } returns flowOf(
       listOf(book1, book2)
     )
+    // Empty by default (no removal to react to); tests covering #4341 override this with a
+    // MutableSharedFlow they control.
+    coEvery { dataSource.bookRemovedIds() } returns flowOf()
     coEvery { kiwixDataStore.hostedBookIds } returns flowOf(emptySet())
     coEvery { kiwixDataStore.setHostedBookIds(any()) } returns Unit
 
@@ -212,6 +216,160 @@ class ZimHostViewModelTest {
     assertEquals("", state.serverIpAddress)
     assertFalse(state.showShareIcon)
     assertFalse(state.qrVisible)
+  }
+
+  // ======== loadBooks() reacts to a hosted book disappearing (#4341) ========
+  //
+  // These react to dataSource.bookRemovedIds() - a lightweight, id-only signal - rather
+  // than a re-emission of the full book list, so a book deletion is the only thing that
+  // triggers this screen to do anything once the initial load has completed. See the
+  // PR discussion on #4341 for why the earlier approach (continuously collecting and
+  // reprocessing the full, I/O-heavy book list) was replaced with this.
+
+  @Test
+  fun loadBooks_whenHostedBookRemoved_restartsServerWithRemainingBooksAndDropsItFromTheList() =
+    runTest {
+      val reader1: ZimFileReader =
+        mockk(relaxed = true) { every { toBook() } returns LibkiwixBook(_id = "id1") }
+      val reader2: ZimFileReader =
+        mockk(relaxed = true) { every { toBook() } returns LibkiwixBook(_id = "id2") }
+      coEvery { dataSource.getLanguageCategorizedBooks() } returns flowOf(
+        listOf(
+          BookOnDisk(zimFileReader = reader1, isSelected = false),
+          BookOnDisk(zimFileReader = reader2, isSelected = false)
+        )
+      )
+      val removedIds = MutableSharedFlow<String>(extraBufferCapacity = 8)
+      coEvery { dataSource.bookRemovedIds() } returns removedIds
+      coEvery { kiwixDataStore.hostedBookIds } returns flowOf(setOf("id1", "id2"))
+      coEvery { kiwixDataStore.isBrandedApp } returns flowOf(false)
+      ServerUtils.isServerStarted = true
+
+      viewModel.events.test {
+        viewModel.loadBooks()
+        advanceUntilIdle()
+        assertEquals(Event.DismissDialog, awaitItem())
+
+        // "id2" is deleted from disk while the hotspot is still running.
+        removedIds.emit("id2")
+        advanceUntilIdle()
+
+        val event = awaitItem() as Event.StartServer
+        assertTrue("Deleting a hosted book must trigger a restart", event.restart)
+        assertEquals(1, event.paths.size)
+        cancelAndIgnoreRemainingEvents()
+      }
+
+      val books = viewModel.uiState.value.books.filterIsInstance<BookOnDisk>()
+      assertTrue("id1 must remain in the list", books.any { it.book.id == "id1" })
+      assertFalse(
+        "id2 must be dropped from the list once removed",
+        books.any { it.book.id == "id2" }
+      )
+
+      ServerUtils.isServerStarted = false
+    }
+
+  @Test
+  fun loadBooks_whenOnlyHostedBookRemoved_stopsServer() = runTest {
+    val reader1: ZimFileReader =
+      mockk(relaxed = true) { every { toBook() } returns LibkiwixBook(_id = "id1") }
+    coEvery { dataSource.getLanguageCategorizedBooks() } returns flowOf(
+      listOf(BookOnDisk(zimFileReader = reader1, isSelected = false))
+    )
+    val removedIds = MutableSharedFlow<String>(extraBufferCapacity = 8)
+    coEvery { dataSource.bookRemovedIds() } returns removedIds
+    coEvery { kiwixDataStore.hostedBookIds } returns flowOf(setOf("id1"))
+    coEvery { kiwixDataStore.isBrandedApp } returns flowOf(false)
+    ServerUtils.isServerStarted = true
+
+    viewModel.events.test {
+      viewModel.loadBooks()
+      advanceUntilIdle()
+      assertEquals(Event.DismissDialog, awaitItem())
+
+      // The only hosted book is deleted from disk.
+      removedIds.emit("id1")
+      advanceUntilIdle()
+
+      assertEquals(Event.StopServer, awaitItem())
+      cancelAndIgnoreRemainingEvents()
+    }
+
+    ServerUtils.isServerStarted = false
+  }
+
+  @Test
+  fun loadBooks_whenNonHostedBookRemoved_updatesListButDoesNotTouchServer() = runTest {
+    val reader1: ZimFileReader =
+      mockk(relaxed = true) { every { toBook() } returns LibkiwixBook(_id = "id1") }
+    val reader2: ZimFileReader =
+      mockk(relaxed = true) { every { toBook() } returns LibkiwixBook(_id = "id2") }
+    coEvery { dataSource.getLanguageCategorizedBooks() } returns flowOf(
+      listOf(
+        BookOnDisk(zimFileReader = reader1, isSelected = false),
+        BookOnDisk(zimFileReader = reader2, isSelected = false)
+      )
+    )
+    val removedIds = MutableSharedFlow<String>(extraBufferCapacity = 8)
+    coEvery { dataSource.bookRemovedIds() } returns removedIds
+    // Only id1 is hosted; id2 is on-screen but unselected.
+    coEvery { kiwixDataStore.hostedBookIds } returns flowOf(setOf("id1"))
+    coEvery { kiwixDataStore.isBrandedApp } returns flowOf(false)
+    ServerUtils.isServerStarted = true
+
+    viewModel.events.test {
+      viewModel.loadBooks()
+      advanceUntilIdle()
+      assertEquals(Event.DismissDialog, awaitItem())
+
+      // The unselected book is deleted; nothing being served is affected.
+      removedIds.emit("id2")
+      advanceUntilIdle()
+
+      expectNoEvents()
+      cancelAndIgnoreRemainingEvents()
+    }
+
+    val books = viewModel.uiState.value.books.filterIsInstance<BookOnDisk>()
+    assertFalse("id2 must still be dropped from the list", books.any { it.book.id == "id2" })
+    assertTrue(
+      "id1's selection must be untouched by an unrelated removal",
+      books.first { it.book.id == "id1" }.isSelected
+    )
+
+    ServerUtils.isServerStarted = false
+  }
+
+  @Test
+  fun loadBooks_whenRemovedBookIdIsNotOnScreen_isNoOp() = runTest {
+    val reader1: ZimFileReader =
+      mockk(relaxed = true) { every { toBook() } returns LibkiwixBook(_id = "id1") }
+    coEvery { dataSource.getLanguageCategorizedBooks() } returns flowOf(
+      listOf(BookOnDisk(zimFileReader = reader1, isSelected = false))
+    )
+    val removedIds = MutableSharedFlow<String>(extraBufferCapacity = 8)
+    coEvery { dataSource.bookRemovedIds() } returns removedIds
+    coEvery { kiwixDataStore.hostedBookIds } returns flowOf(setOf("id1"))
+    coEvery { kiwixDataStore.isBrandedApp } returns flowOf(false)
+    ServerUtils.isServerStarted = true
+
+    viewModel.events.test {
+      viewModel.loadBooks()
+      advanceUntilIdle()
+      assertEquals(Event.DismissDialog, awaitItem())
+
+      // A removal event for a book this screen never had - e.g. removed before this
+      // screen's initial load ran.
+      removedIds.emit("unrelated-id")
+      advanceUntilIdle()
+
+      expectNoEvents()
+      cancelAndIgnoreRemainingEvents()
+    }
+
+    assertEquals(1, viewModel.uiState.value.books.filterIsInstance<BookOnDisk>().size)
+    ServerUtils.isServerStarted = false
   }
 
   // ======== startServerButtonClick() ========

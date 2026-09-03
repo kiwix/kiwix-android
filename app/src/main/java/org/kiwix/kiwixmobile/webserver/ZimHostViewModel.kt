@@ -26,6 +26,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -114,12 +115,22 @@ class ZimHostViewModel @Inject constructor(
   private val _events = MutableSharedFlow<Event>(extraBufferCapacity = Int.MAX_VALUE)
   val events = _events.asSharedFlow()
 
+  private var booksCollectionJob: Job? = null
+
   fun loadBooks() {
-    viewModelScope.launch(ioDispatcher) {
+    // loadBooks() is invoked again every time this screen re-enters STARTED; cancel any
+    // previous collector first so re-entries don't pile up concurrent collections.
+    booksCollectionJob?.cancel()
+    booksCollectionJob = viewModelScope.launch(ioDispatcher) {
       val previouslyHostedBookIds = kiwixDataStore.hostedBookIds.first()
-      val books = dataSource.getLanguageCategorizedBooks().first()
       val isBrandedApp = kiwixDataStore.isBrandedApp.first()
       val zimFileReader = zimReaderContainer.zimFileReader
+      // One-shot load to populate the selection screen - deliberately not a continuous
+      // collection of the full book list: getLanguageCategorizedBooks() re-runs a
+      // per-book zimReaderSource.exists() I/O check on every emission from the shared
+      // library flow, for every unrelated library change anywhere in the app, not just
+      // ones relevant to hosting. See #4341's PR discussion.
+      val books = dataSource.getLanguageCategorizedBooks().first()
       val processedBooks = processBooks(books, previouslyHostedBookIds, isBrandedApp, zimFileReader)
       _uiState.update { it.copy(books = processedBooks) }
 
@@ -128,6 +139,36 @@ class ZimHostViewModel @Inject constructor(
       } else {
         layoutStopped()
       }
+
+      // Cheap, targeted reactivity for #4341: react only when a book is actually removed
+      // from the library (no I/O, just an id), instead of continuously collecting and
+      // reprocessing the full book list for every unrelated library change.
+      dataSource.bookRemovedIds().collect { removedBookId ->
+        handleBookRemoved(removedBookId)
+      }
+    }
+  }
+
+  /**
+   * Drops a removed book from the on-screen list so a deleted ZIM doesn't linger as a
+   * stale entry, and - if it was selected+hosted while the server is running - restarts
+   * the server with the remaining hosted paths, or stops it entirely if none are left.
+   */
+  private fun handleBookRemoved(removedBookId: String) {
+    val currentBooks = _uiState.value.books
+    val removedBook = currentBooks.filterIsInstance<BookOnDisk>()
+      .find { it.book.id == removedBookId }
+      ?: return // Not a book this screen knew about.
+
+    val updatedBooks = currentBooks.filterNot { it === removedBook }
+    _uiState.update { it.copy(books = updatedBooks) }
+
+    if (!removedBook.isSelected || !ServerUtils.isServerStarted) return
+    val paths = selectedBooksPath(updatedBooks)
+    if (paths.isEmpty()) {
+      sendEvent(StopServer)
+    } else {
+      sendEvent(StartServer(paths, restart = true))
     }
   }
 

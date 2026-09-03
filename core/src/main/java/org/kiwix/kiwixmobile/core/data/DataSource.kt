@@ -31,6 +31,15 @@ import org.kiwix.libkiwix.Book
  */
 interface DataSource {
   fun getLanguageCategorizedBooks(): Flow<List<BooksOnDiskListItem>>
+
+  /**
+   * Emits the id of a book each time one is removed from the local library, regardless of
+   * which screen triggered the removal. Cheap to collect continuously - unlike
+   * [getLanguageCategorizedBooks], it carries no I/O and doesn't re-run on every unrelated
+   * library change - so consumers that only care about "did a specific book disappear"
+   * (e.g. the hotspot screen, #4341) should prefer this over collecting the full book list.
+   */
+  fun bookRemovedIds(): Flow<String>
   suspend fun saveBook(book: Book)
   suspend fun saveBooks(books: List<Book>)
   suspend fun saveHistory(history: HistoryItem)

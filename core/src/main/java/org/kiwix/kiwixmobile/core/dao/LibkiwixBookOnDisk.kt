@@ -22,7 +22,10 @@ import android.os.Build
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
@@ -59,6 +62,13 @@ class LibkiwixBookOnDisk @Inject constructor(
   private var isManagerInitialized = false
   private var libraryBooksList: List<String> = arrayListOf()
   private var localBooksList: List<LibkiwixBook> = arrayListOf()
+
+  // Lightweight signal carrying just the id of a book removed from the library, for
+  // consumers (e.g. the hotspot screen, see #4341) that only care about deletions and
+  // would otherwise have to continuously collect+reprocess the full books() list - with
+  // its per-book zimReaderSource.exists() I/O check - just to notice one disappearing.
+  private val _bookRemovedIds = MutableSharedFlow<String>(extraBufferCapacity = 64)
+  val bookRemovedIds: SharedFlow<String> = _bookRemovedIds.asSharedFlow()
 
   /**
    * Request new data from Libkiwix when changes occur inside it; otherwise,
@@ -226,6 +236,7 @@ class LibkiwixBookOnDisk @Inject constructor(
     Regex("/\\.Trash/").containsMatchIn(filePath)
 
   suspend fun delete(books: List<LibkiwixBook>) {
+    if (books.isEmpty()) return
     runCatching {
       ensureInitialized()
       books.forEach {
@@ -234,6 +245,7 @@ class LibkiwixBookOnDisk @Inject constructor(
     }.onFailure { it.printStackTrace() }
     writeBookMarksAndSaveLibraryToFile()
     updateLocalBooksFlow()
+    books.forEach { _bookRemovedIds.emit(it.id) }
   }
 
   suspend fun delete(bookId: String) {
@@ -242,6 +254,7 @@ class LibkiwixBookOnDisk @Inject constructor(
       library.removeBookById(bookId)
       writeBookMarksAndSaveLibraryToFile()
       updateLocalBooksFlow()
+      _bookRemovedIds.emit(bookId)
     }.onFailure { it.printStackTrace() }
   }
 
