@@ -166,6 +166,24 @@ class KiwixDataStore @Inject constructor(
     }
   }
 
+  /**
+   * Android 13+ requires POST_NOTIFICATIONS to show a notification, but not to run a
+   * foreground service or download in the background - so a denial no longer needs to
+   * block downloads. This tracks whether the user has already been told that once, so
+   * later downloads with the permission still denied can proceed straight away instead
+   * of asking/explaining again every time.
+   */
+  val hasSeenNotificationPermissionDeniedInfo: Flow<Boolean> =
+    context.kiwixDataStore.data.map { prefs ->
+      prefs[PreferencesKeys.PREF_SEEN_NOTIFICATION_PERMISSION_DENIED_INFO] ?: false
+    }
+
+  suspend fun setHasSeenNotificationPermissionDeniedInfo(hasSeen: Boolean = true) {
+    context.kiwixDataStore.edit { prefs ->
+      prefs[PreferencesKeys.PREF_SEEN_NOTIFICATION_PERMISSION_DENIED_INFO] = hasSeen
+    }
+  }
+
   val showShowCaseToUser: Flow<Boolean> =
     context.kiwixDataStore.data.map { prefs ->
       prefs[PreferencesKeys.PREF_SHOW_SHOWCASE] ?: true
@@ -700,6 +718,8 @@ class KiwixDataStore @Inject constructor(
     const val PREF_BOOK_ON_DISK_MIGRATED = "pref_book_on_disk_migrated"
     const val PREF_SHOW_COPY_MOVE_STORAGE_SELECTION_DIALOG = "pref_show_copy_move_storage_dialog"
     const val PREF_LATER_CLICKED_MILLIS = "pref_later_clicked_millis"
+    const val PREF_SEEN_NOTIFICATION_PERMISSION_DENIED_INFO =
+      "pref_seen_notification_permission_denied_info"
     const val PREF_LAST_DONATION_POPUP_SHOWN_IN_MILLISECONDS =
       "pref_last_donation_shown_in_milliseconds"
     const val SELECTED_ONLINE_CONTENT_LANGUAGE = "selectedOnlineContentLanguage"

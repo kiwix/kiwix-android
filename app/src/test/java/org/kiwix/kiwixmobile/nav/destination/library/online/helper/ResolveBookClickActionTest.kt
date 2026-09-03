@@ -75,13 +75,35 @@ class ResolveBookClickActionTest {
   }
 
   @Test
-  fun `returns RequestNotificationPermission when notification permission not granted`() = runTest {
+  fun `returns RequestNotificationPermission when not granted and info not yet shown`() = runTest {
     coEvery { permissionChecker.hasNotificationPermission() } returns false
+    every { kiwixDataStore.hasSeenNotificationPermissionDeniedInfo } returns
+      MutableStateFlow(false)
 
     val result = resolver.onBookItemClick(bookItem, 1)
 
     assertEquals(RequestNotificationPermission, result)
   }
+
+  @Test
+  fun `proceeds past the permission gate once the denied-info dialog was already shown`() =
+    runTest {
+      coEvery { permissionChecker.hasNotificationPermission() } returns false
+      every { kiwixDataStore.hasSeenNotificationPermissionDeniedInfo } returns
+        MutableStateFlow(true)
+      every { connectivityManager.isNetworkAvailable() } returns true
+      every { connectivityManager.isWifi() } returns true
+      every { kiwixDataStore.wifiOnly } returns MutableStateFlow(false)
+      coEvery { permissionChecker.hasWriteExternalStoragePermission() } returns true
+      every { kiwixDataStore.showStorageOption } returns MutableStateFlow(false)
+      coEvery { permissionChecker.isManageExternalStoragePermissionGranted() } returns true
+      coEvery { availableSpaceCalculator.hasAvailableSpaceFor(bookItem) } returns
+        HasAvailableSpaceForBook(bookItem)
+
+      val result = resolver.onBookItemClick(bookItem, 1)
+
+      assertEquals(StartDownload(bookItem), result)
+    }
 
   @Test
   fun `returns NoInternet when network unavailable`() = runTest {

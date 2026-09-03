@@ -402,6 +402,7 @@
   <string name="navigation_history_cleared">Navigation History Cleared</string>
   <string name="go_to_settings_label">Go to Settings</string>
   <string name="request_notification_permission_message">To perform this action, please grant notification access</string>
+  <string name="notification_permission_denied_download_info">Downloads will continue in the background without a progress notification. You can allow notifications later in Settings if you\'d like to see download progress.</string>
   <string name="empty_string" />
   <string name="click_nearby_devices_message">Click here to search for nearby devices.</string>
   <string name="your_device_name_message">Your device name will appear here.</string>

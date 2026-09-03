@@ -291,19 +291,25 @@ class OnlineLibraryViewModelTest {
     }
 
     @Test
-    fun `when action is RequestNotificationPermission then emits permission event`() = runTest {
-      val item = mockk<LibraryListItem.BookItem>(relaxed = true)
-      coEvery { resolveClick.onBookItemClick(any(), any()) } returns RequestNotificationPermission
+    fun `when action is RequestNotificationPermission then shows rationale then emits permission event`() =
+      runTest {
+        val item = mockk<LibraryListItem.BookItem>(relaxed = true)
+        coEvery {
+          resolveClick.onBookItemClick(any(), any())
+        } returns RequestNotificationPermission
 
-      viewModel.uiEvents.test {
-        viewModel.onBookItemClick(item)
-        advanceUntilIdle()
-        val permission = awaitItem() as RequestPermission
-        assertTrue(permission.permission == POST_NOTIFICATIONS)
+        viewModel.uiEvents.test {
+          viewModel.onBookItemClick(item)
+          advanceUntilIdle()
+          val dialog = awaitItem() as ShowDialog
+          assertTrue(dialog.dialog == KiwixDialog.NotificationPermissionDialog)
+          dialog.positiveAction.invoke()
+          val permission = awaitItem() as RequestPermission
+          assertTrue(permission.permission == POST_NOTIFICATIONS)
 
-        cancelAndIgnoreRemainingEvents()
+          cancelAndIgnoreRemainingEvents()
+        }
       }
-    }
 
     @Test
     fun `when action is RequestManageExternalFilesPermission then emits permission event`() =
@@ -781,54 +787,39 @@ class OnlineLibraryViewModelTest {
     @Test
     fun `when permission granted then retries book click`() = runTest {
       val item = mockk<LibraryListItem.BookItem>(relaxed = true)
-      val activity = mockk<KiwixMainActivity>(relaxed = true)
 
       viewModel.downloadBookItem = item
 
       val spyVm = spyk(viewModel)
       every { spyVm.onBookItemClick(item) } just Runs
 
-      spyVm.onNotificationPermissionResult(true, activity)
+      spyVm.onNotificationPermissionResult(true)
 
       verify { spyVm.onBookItemClick(item) }
     }
 
     @Test
-    fun `when denied and should not show rationale then shows settings dialog`() = runTest {
-      val activity = mockk<KiwixMainActivity>(relaxed = true)
+    fun `when denied shows the denied-info dialog once and retries the download on ok`() =
+      runTest {
+        val item = mockk<LibraryListItem.BookItem>(relaxed = true)
+        viewModel.downloadBookItem = item
 
-      every {
-        permissionChecker.shouldShowRationale(activity, POST_NOTIFICATIONS)
-      } returns false
+        val spyVm = spyk(viewModel)
+        every { spyVm.onBookItemClick(item) } just Runs
 
-      viewModel.uiEvents.test {
-        viewModel.onNotificationPermissionResult(false, activity)
+        spyVm.uiEvents.test {
+          spyVm.onNotificationPermissionResult(false)
 
-        val event = awaitItem() as ShowDialog
-        assertTrue(event.dialog is KiwixDialog.NotificationPermissionDialog)
-        event.positiveAction.invoke()
+          val event = awaitItem() as ShowDialog
+          assertTrue(event.dialog is KiwixDialog.NotificationPermissionDeniedInfoDialog)
+          event.positiveAction.invoke()
 
-        val next = awaitItem()
-        assertTrue(next is NavigateToAppSettings)
-        cancelAndIgnoreRemainingEvents()
+          cancelAndIgnoreRemainingEvents()
+        }
+
+        coVerify { kiwixDataStore.setHasSeenNotificationPermissionDeniedInfo() }
+        verify { spyVm.onBookItemClick(item) }
       }
-    }
-
-    @Test
-    fun `when denied and should show rationale then does nothing`() = runTest {
-      val activity = mockk<KiwixMainActivity>(relaxed = true)
-
-      every {
-        permissionChecker.shouldShowRationale(activity, POST_NOTIFICATIONS)
-      } returns true
-
-      viewModel.uiEvents.test {
-        viewModel.onNotificationPermissionResult(false, activity)
-
-        expectNoEvents()
-        cancelAndIgnoreRemainingEvents()
-      }
-    }
   }
 
   @Nested

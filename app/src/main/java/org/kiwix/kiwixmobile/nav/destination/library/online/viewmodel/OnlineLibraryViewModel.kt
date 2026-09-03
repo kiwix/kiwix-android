@@ -592,7 +592,12 @@ class OnlineLibraryViewModel @Inject constructor(
         NoInternet -> emitNoInternetSnackbar()
         RequestStoragePermission -> sendUiEvent(RequestPermission(WRITE_EXTERNAL_STORAGE))
         RequestNotificationPermission -> if (isAndroid13OrAbove) {
-          sendUiEvent(RequestPermission(POST_NOTIFICATIONS))
+          // Explain why we're asking before the OS prompt fires, so the ask isn't a bare
+          // system dialog with no context. Reuses the existing rationale message/dialog.
+          emitDialog(
+            KiwixDialog.NotificationPermissionDialog,
+            positiveAction = { sendUiEvent(RequestPermission(POST_NOTIFICATIONS)) }
+          )
         }
 
         RequestManageExternalFilesPermission -> emitDialog(
@@ -806,17 +811,23 @@ class OnlineLibraryViewModel @Inject constructor(
     super.onCleared()
   }
 
-  fun onNotificationPermissionResult(isGranted: Boolean, activity: KiwixMainActivity) {
+  fun onNotificationPermissionResult(isGranted: Boolean) {
     if (isGranted) {
       downloadBookItem?.let { onBookItemClick(it) }
       return
     }
-    if (!permissionChecker.shouldShowRationale(activity, POST_NOTIFICATIONS)) {
-      emitDialog(
-        KiwixDialog.NotificationPermissionDialog,
-        positiveAction = ::onNavigateToAppSettingsClicked
-      )
+    // POST_NOTIFICATIONS only gates the progress notification, not the foreground
+    // service backing the download itself - so a denial shouldn't keep blocking
+    // downloads. Explain that once, then let this attempt (and every later one) proceed
+    // without asking again; see ResolveBookClickAction.onBookItemClick for the other
+    // half of this.
+    viewModelScope.launch {
+      kiwixDataStore.setHasSeenNotificationPermissionDeniedInfo()
     }
+    emitDialog(
+      KiwixDialog.NotificationPermissionDeniedInfoDialog,
+      positiveAction = { downloadBookItem?.let { onBookItemClick(it) } }
+    )
   }
 
   fun onStoragePermissionResult(isGranted: Boolean, activity: KiwixMainActivity) {
