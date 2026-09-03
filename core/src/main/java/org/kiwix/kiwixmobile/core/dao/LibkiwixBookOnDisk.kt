@@ -245,6 +245,19 @@ class LibkiwixBookOnDisk @Inject constructor(
     }.onFailure { it.printStackTrace() }
   }
 
+  suspend fun deleteByPath(filePath: String) {
+    val normalizedPath = File(filePath).canonicalPath
+
+    getBooksList()
+      .firstOrNull { book ->
+        runCatching {
+          File(book.zimReaderSource.toDatabase()).canonicalPath == normalizedPath
+        }.getOrDefault(false)
+      }?.let { book ->
+        delete(book.id)
+      }
+  }
+
   suspend fun bookMatching(downloadTitle: String) =
     getBooks().firstOrNull {
       it.zimReaderSource.toDatabase().endsWith(downloadTitle, true)

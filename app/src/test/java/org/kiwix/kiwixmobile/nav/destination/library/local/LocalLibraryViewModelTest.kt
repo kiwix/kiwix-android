@@ -27,6 +27,8 @@ import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.RegisterExtension
+import org.kiwix.kiwixmobile.core.LibkiwixBookFactory
+import org.kiwix.kiwixmobile.core.dao.LibkiwixBookmarks
 import org.kiwix.kiwixmobile.core.StorageObserver
 import org.kiwix.kiwixmobile.core.base.BackPressActivityExtensions
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookOnDisk
@@ -36,6 +38,7 @@ import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.reader.integrity.ValidateZimViewModel
 import org.kiwix.kiwixmobile.core.utils.KiwixPermissionChecker
+import org.kiwix.kiwixmobile.core.utils.StorageDeviceProvider
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.effects.ManageExternalFilesPermissionDialog
@@ -59,6 +62,8 @@ import java.io.File
 
 @ExperimentalCoroutinesApi
 class LocalLibraryViewModelTest {
+  private val libkiwixBookFactory: LibkiwixBookFactory = mockk(relaxed = true)
+  private val libkiwixBookmarks: LibkiwixBookmarks = mockk(relaxed = true)
   private val libkiwixBookOnDisk: LibkiwixBookOnDisk = mockk(relaxed = true)
   private val storageObserver: StorageObserver = mockk(relaxed = true)
   private val dataSource: DataSource = mockk(relaxed = true)
@@ -75,6 +80,7 @@ class LocalLibraryViewModelTest {
   private val validateZimViewModel: ValidateZimViewModel = mockk(relaxed = true)
   private val deleteFilesUseCase = mockk<DeleteFilesUseCase>(relaxed = true)
   private val snackBarHostState: SnackbarHostState = mockk(relaxed = true)
+  private val storageDeviceProvider: StorageDeviceProvider = mockk(relaxed = true)
 
   @RegisterExtension
   @JvmField
@@ -124,6 +130,7 @@ class LocalLibraryViewModelTest {
       kiwixDataStore,
       zimReaderFactory,
       deleteFilesUseCase,
+      storageDeviceProvider,
       mainDispatcherRule.dispatcher
     )
     vm.initialize(

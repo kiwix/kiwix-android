@@ -53,7 +53,6 @@ import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.nav.destination.library.local.SELECT_FILE_BUTTON_TESTING_TAG
 import org.kiwix.kiwixmobile.testutils.RetryRule
 import org.kiwix.kiwixmobile.testutils.TestUtils.TEST_PAUSE_MS_FOR_DOWNLOAD_TEST
-import org.kiwix.kiwixmobile.testutils.TestUtils.getZimFileFromResourceFolder
 import org.kiwix.kiwixmobile.ui.KiwixDestination
 import java.io.File
 import java.io.FileNotFoundException
@@ -72,13 +71,14 @@ class OpeningFilesFromStorageTest : BaseActivityTest() {
   @Rule(order = COMPOSE_TEST_RULE_ORDER)
   @JvmField
   val composeTestRule = createComposeRule()
-  private val fileName = "testzim.zim"
+  private val resourceFileName = "testzim.zim"
 
   @Before
   override fun waitForIdle() {
     hiltRule.injectOnce()
     Intents.init()
     super.waitForIdle()
+    deleteTestZimFromAppSpecificDirs()
     launchMainActivity()
     composeTestRule.enableAccessibilityChecks(createAccessibilityValidator())
   }
@@ -90,14 +90,20 @@ class OpeningFilesFromStorageTest : BaseActivityTest() {
         it.navigate(KiwixDestination.Library.route)
       }
       composeTestRule.waitForIdle()
-      val uri = copyFileToDownloadsFolder(context, fileName)
+      val pickerFileName = "testzim_picker.zim"
+      val uri = copyFileToDownloadsFolder(context, pickerFileName)
       try {
-        updateKiwixDataStore { setShowStorageSelectionDialogOnCopyMove(true) }
+        updateKiwixDataStore {
+          setShowStorageSelectionDialogOnCopyMove(true)
+          setIsPlayStoreBuild(true)
+        }
         intending(hasAction(Intent.ACTION_CHOOSER))
           .respondWith(
             Instrumentation.ActivityResult(
               Activity.RESULT_OK,
-              Intent().setData(uri)
+              Intent().setData(uri).apply {
+                addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+              }
             )
           )
         // open file picker to select a file to test the real scenario.
@@ -117,9 +123,7 @@ class OpeningFilesFromStorageTest : BaseActivityTest() {
       } catch (ignore: Exception) {
         fail("Could not open file from file manager. Original exception = $ignore")
       } finally {
-        deleteAllFilesInDirectory(
-          runBlocking { File(kiwixDataStore.selectedStorage.first()) }
-        )
+        deleteTestZimFromAppSpecificDirs()
         deleteZimFileFromDownloadsFolder(uri)
       }
     }
@@ -132,9 +136,13 @@ class OpeningFilesFromStorageTest : BaseActivityTest() {
         it.navigate(KiwixDestination.Library.route)
       }
       composeTestRule.waitForIdle()
-      val uri = copyFileToDownloadsFolder(context, fileName)
+      val managerFileName = "testzim_manager.zim"
+      val uri = copyFileToDownloadsFolder(context, managerFileName)
       try {
-        updateKiwixDataStore { setShowStorageSelectionDialogOnCopyMove(true) }
+        updateKiwixDataStore {
+          setShowStorageSelectionDialogOnCopyMove(true)
+          setIsPlayStoreBuild(true)
+        }
         ActivityScenario.launch<KiwixMainActivity>(createDeepLinkIntent(uri)).onActivity {}
         composeTestRule.waitForIdle()
         copyMoveFileHandler {
@@ -147,9 +155,7 @@ class OpeningFilesFromStorageTest : BaseActivityTest() {
       } catch (ignore: Exception) {
         fail("Could not open file from file manager. Original exception = $ignore")
       } finally {
-        deleteAllFilesInDirectory(
-          runBlocking { File(kiwixDataStore.selectedStorage.first()) }
-        )
+        deleteTestZimFromAppSpecificDirs()
         deleteZimFileFromDownloadsFolder(uri)
       }
     }
@@ -175,7 +181,10 @@ class OpeningFilesFromStorageTest : BaseActivityTest() {
   }
 
   private fun testCopyMoveDialogShowing(uri: Uri) {
-    updateKiwixDataStore { setShowStorageSelectionDialogOnCopyMove(true) }
+    updateKiwixDataStore {
+      setShowStorageSelectionDialogOnCopyMove(true)
+      setIsPlayStoreBuild(true)
+    }
     ActivityScenario.launch<KiwixMainActivity>(
       createDeepLinkIntent(uri)
     ).onActivity {}
@@ -214,7 +223,12 @@ class OpeningFilesFromStorageTest : BaseActivityTest() {
   private fun copyFileToDownloadsFolder(
     context: Context,
     fileName: String,
-    content: ByteArray = getZimFileFromResourceFolder(context, fileName).readBytes()
+    content: ByteArray = requireNotNull(
+      OpeningFilesFromStorageTest::class.java.classLoader
+        ?.getResourceAsStream(resourceFileName)
+    ) {
+      "Unable to load $resourceFileName from test resources"
+    }.use { it.readBytes() }
   ): Uri {
     val contentValues =
       ContentValues().apply {
@@ -238,20 +252,32 @@ class OpeningFilesFromStorageTest : BaseActivityTest() {
     return uri
   }
 
-  private fun deleteAllFilesInDirectory(directory: File) {
-    if (directory.isDirectory) {
-      directory.listFiles()?.forEach { file ->
-        if (file.isDirectory) {
-          // Recursively delete files in subdirectories
-          deleteAllFilesInDirectory(file)
+  private fun deleteTestZimFromAppSpecificDirs() {
+    val dirs = mutableListOf<File>()
+    context.getExternalFilesDirs("")?.filterNotNull()?.let { dirs.addAll(it) }
+    context.getExternalFilesDirs(null)?.filterNotNull()?.let { dirs.addAll(it) }
+    context.filesDir?.let { dirs.add(it) }
+    context.cacheDir?.let { dirs.add(it) }
+    runBlocking {
+      val selectedStoragePath = kiwixDataStore.selectedStorage.first()
+      if (selectedStoragePath.isNotEmpty()) {
+        dirs.add(File(selectedStoragePath))
+      }
+    }
+    dirs.distinctBy { it.absolutePath }.forEach { dir ->
+      if (dir.exists() && dir.isDirectory) {
+        dir.walkTopDown().forEach { file ->
+          if (file.isFile && file.name.contains("testzim", ignoreCase = true)) {
+            file.delete()
+          }
         }
-        file.delete()
       }
     }
   }
 
   @After
   fun release() {
+    deleteTestZimFromAppSpecificDirs()
     Intents.release()
   }
 }

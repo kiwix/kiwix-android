@@ -139,6 +139,7 @@ class CopyMoveFileHandlerTest {
 
       fileHandler.showMoveFileToPublicDirectoryDialog(
         storageDeviceList = emptyList(),
+        multipleFilesProcessAction = MultipleFilesProcessAction.Copy,
         isSingleFileSelected = true
       )
 
@@ -204,6 +205,7 @@ class CopyMoveFileHandlerTest {
             storageDeviceList = listOf(
               StorageDevice(File("/internal"), true)
             ),
+            multipleFilesProcessAction = MultipleFilesProcessAction.Copy,
             isSingleFileSelected = true
           )
 
@@ -436,6 +438,96 @@ class CopyMoveFileHandlerTest {
 
       coVerify {
         fileOperationHandler.copy(any(), any(), any())
+      }
+    }
+
+    // Regression test for the bug where selecting a storage device re-opened the
+    // storage-selection dialog instead of committing the move. This reproduces the full flow:
+    // the user taps "Move" (which shows the storage dialog once), then selects a storage device,
+    // after which the file must actually be moved and the dialog must not be shown again.
+    @Test
+    fun moveOperation_afterStorageSelected_movesFileWithoutReShowingStorageDialog() = runTest {
+      fileHandler = spyk(fileHandler)
+
+      every {
+        fileHandler.showStorageSelectDialog(any())
+      } just Runs
+
+      // User taps "Move" while multiple storages are available: this shows the storage dialog.
+      fileHandler.performMoveOperation(showStorageSelectionDialog = true)
+      assertTrue(fileHandler.isMoveOperation)
+
+      coEvery {
+        fileHandler.validateZimFileCanCopyOrMove()
+      } returns true
+
+      coEvery {
+        fileOperationHandler.move(selectedFile, sourceUri, any(), any(), any())
+      } returns true
+
+      coEvery {
+        fileOperationHandler.delete(sourceUri, selectedFile)
+      } returns true
+
+      val storageDevice = StorageDevice(
+        File("/storage/internal"),
+        true
+      )
+
+      // User selects a storage device from the dialog.
+      fileHandler.copyMoveZIMFileInSelectedStorage(storageDevice)
+
+      // The file is actually moved...
+      coVerify(exactly = 1) {
+        fileOperationHandler.move(selectedFile, sourceUri, any(), any(), any())
+      }
+      verify {
+        fileCopyMoveCallback.onFileMoved(any())
+      }
+
+      // ...and the storage-selection dialog is not shown a second time.
+      verify(exactly = 1) {
+        fileHandler.showStorageSelectDialog(any())
+      }
+    }
+
+    // Regression test mirroring the move case above, for the copy branch of the same flow.
+    @Test
+    fun copyOperation_afterStorageSelected_copiesFileWithoutReShowingStorageDialog() = runTest {
+      fileHandler = spyk(fileHandler)
+
+      every {
+        fileHandler.showStorageSelectDialog(any())
+      } just Runs
+
+      // User taps "Copy" while multiple storages are available: this shows the storage dialog.
+      fileHandler.performCopyOperation(showStorageSelectionDialog = true)
+      assertFalse(fileHandler.isMoveOperation)
+
+      coEvery {
+        fileHandler.validateZimFileCanCopyOrMove()
+      } returns true
+
+      coEvery {
+        fileOperationHandler.copy(any(), any(), any())
+      } just Runs
+
+      val storageDevice = StorageDevice(
+        File("/storage/internal"),
+        true
+      )
+
+      // User selects a storage device from the dialog.
+      fileHandler.copyMoveZIMFileInSelectedStorage(storageDevice)
+
+      // The file is actually copied...
+      coVerify(exactly = 1) {
+        fileOperationHandler.copy(any(), any(), any())
+      }
+
+      // ...and the storage-selection dialog is not shown a second time.
+      verify(exactly = 1) {
+        fileHandler.showStorageSelectDialog(any())
       }
     }
   }

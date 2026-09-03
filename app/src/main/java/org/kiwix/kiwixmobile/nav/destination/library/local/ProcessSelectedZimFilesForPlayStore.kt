@@ -39,7 +39,6 @@ import org.kiwix.kiwixmobile.core.ui.components.ONE
 import org.kiwix.kiwixmobile.core.utils.EXTERNAL_SELECT_POSITION
 import org.kiwix.kiwixmobile.core.utils.INTERNAL_SELECT_POSITION
 import org.kiwix.kiwixmobile.core.utils.StorageDeviceProvider
-import org.kiwix.kiwixmobile.core.utils.ZERO
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
@@ -125,23 +124,10 @@ class ProcessSelectedZimFilesForPlayStore @Inject constructor(
   suspend fun processSelectedFiles(uris: List<Uri>, isAfterRetry: Boolean = false) {
     storeSelectedFiles(uris)
     selectedStoragePath = kiwixDataStore.selectedStorage.first()
-    val totalSelectedFileSize = getTotalSizeOfSelectedZIMFiles(uris)
-    // Exclude files already in the app directory from the space calculation,
-    // since they don't need to be copied/moved.
-    val sizeAlreadyInAppDir = getSizeOfFilesAlreadyInAppDirectory(uris, selectedStoragePath)
-    val additionalSpaceNeeded = totalSelectedFileSize - sizeAlreadyInAppDir
-    if (additionalSpaceNeeded > ZERO) {
-      val availableSpaceInStorage =
-        storageCalculator.availableBytes(File(selectedStoragePath))
-      if (availableSpaceInStorage < additionalSpaceNeeded) {
-        // Not enough storage → show storage selection dialog/snackbar
-        insufficientSpaceInStorage(availableSpaceInStorage)
-        return
-      }
-    }
 
     if (uris.size == 1 && !isAfterRetry) {
       isSingleFileSelected = true
+      multipleFilesProcessAction = null
       processSingleFile(uris.first())
     } else {
       isSingleFileSelected = false
@@ -172,10 +158,13 @@ class ProcessSelectedZimFilesForPlayStore @Inject constructor(
       return
     }
 
-    // If the file is already in the app's public directory,
-    // open it directly without copying/moving.
+    // If a file with the same name and size already exists in the app's
+    // public directory, open it directly without copying/moving.
+    // We exclude the source file itself (for file:// URIs) to avoid
+    // skipping the dialog when the user selects a file that happens
+    // to be inside an app-specific directory already.
     val existingFile = getExistingFileInAppDirectory(documentFile)
-    if (existingFile != null) {
+    if (existingFile != null && !isSameAsSourceFile(uri, existingFile)) {
       validateAndOpenZimInReader(existingFile)
       return
     }
@@ -229,22 +218,6 @@ class ProcessSelectedZimFilesForPlayStore @Inject constructor(
     processSingleFile(uri, true)
   }
 
-  /** Returns total size of all selected ZIM files. */
-  private fun getTotalSizeOfSelectedZIMFiles(urisList: List<Uri>): Long {
-    var totalFilesSize = 0L
-    urisList.forEach { uri ->
-      val documentFile =
-        when (uri.scheme) {
-          "file" -> DocumentFile.fromFile(File("$uri"))
-          else -> {
-            DocumentFile.fromSingleUri(kiwixDataStore.context, uri)
-          }
-        }
-      totalFilesSize = totalFilesSize.plus(documentFile?.length() ?: ZERO.toLong())
-    }
-    return totalFilesSize
-  }
-
   /** Validates whether the given file is a valid ZIM or a split ZIM file. */
   private fun isValidZimFile(fileName: String?): Boolean =
     fileName?.let {
@@ -252,47 +225,64 @@ class ProcessSelectedZimFilesForPlayStore @Inject constructor(
     } ?: false
 
   /**
-   * Checks if a file with the same name and size already exists in the app's
-   * public directory. Returns the existing [File] if found, null otherwise.
-   * This avoids unnecessary copy/move operations for files the user has
-   * already placed in the app directory.
+   * Checks whether the found [existingFile] is the same physical file as
+   * the one referenced by [sourceUri]. For `file://` URIs we compare
+   * canonical paths; for `content://` URIs the source always comes from
+   * outside the app directory, so they can never be the same.
    */
-  @VisibleForTesting
-  suspend fun getExistingFileInAppDirectory(documentFile: DocumentFile?): File? {
-    val fileName = documentFile?.name ?: return null
-    if (selectedStoragePath.isEmpty()) {
-      selectedStoragePath = kiwixDataStore.selectedStorage.first()
-    }
-    val fileInAppDir = File(selectedStoragePath, fileName)
-    return if (fileInAppDir.exists() && fileInAppDir.length() == documentFile.length()) {
-      fileInAppDir
-    } else {
-      null
+  private fun isSameAsSourceFile(sourceUri: Uri, existingFile: File): Boolean {
+    if (sourceUri.scheme != "file") return false
+    return try {
+      val sourcePath = sourceUri.path?.let { File(it).canonicalPath }
+      sourcePath == existingFile.canonicalPath
+    } catch (_: Exception) {
+      false
     }
   }
 
-  /**
-   * Returns the total size of files from the given URIs that already exist
-   * in the app's public directory. Used to exclude these files from the
-   * upfront storage space check.
-   */
-  private fun getSizeOfFilesAlreadyInAppDirectory(
-    uris: List<Uri>,
-    selectedStoragePath: String
-  ): Long {
-    var totalSize = 0L
-    uris.forEach { uri ->
-      val documentFile = when (uri.scheme) {
-        "file" -> DocumentFile.fromFile(File("$uri"))
-        else -> DocumentFile.fromSingleUri(context, uri)
-      }
-      val fileName = documentFile?.name ?: return@forEach
-      val fileInAppDir = File(selectedStoragePath, fileName)
-      if (fileInAppDir.exists() && fileInAppDir.length() == documentFile.length()) {
-        totalSize += documentFile.length()
+  private fun findFileRecursively(dir: File, fileName: String, fileSize: Long): File? {
+    var foundFile: File? = null
+    val files = dir.listFiles()
+    if (files != null) {
+      for (file in files) {
+        if (file.isDirectory) {
+          foundFile = findFileRecursively(file, fileName, fileSize)
+        } else if (file.isFile &&
+          file.name.equals(fileName, ignoreCase = true) &&
+          file.length() == fileSize
+        ) {
+          foundFile = file
+        }
+        if (foundFile != null) break
       }
     }
-    return totalSize
+    return foundFile
+  }
+
+  @VisibleForTesting
+  suspend fun getExistingFileInAppDirectory(documentFile: DocumentFile?): File? {
+    val fileName = documentFile?.name ?: return null
+    val fileSize = documentFile.length()
+    val appSpecificDirs = storageDeviceProvider.getAppSpecificDirs()
+
+    var existingFile: File? = null
+    for (dir in appSpecificDirs) {
+      // In unit tests, relaxed mock File objects may return null paths.
+      // We skip them to avoid NullPointerException in File constructor.
+      val dirPath = try {
+        dir.path
+      } catch (_: Exception) {
+        null
+      }
+      if (!dirPath.isNullOrEmpty()) {
+        val foundFile = findFileRecursively(File(dirPath), fileName, fileSize)
+        if (foundFile != null) {
+          existingFile = foundFile
+          break
+        }
+      }
+    }
+    return existingFile
   }
 
   /** Shows a snackbar suggesting the user to change storage. */
@@ -323,7 +313,7 @@ class ProcessSelectedZimFilesForPlayStore @Inject constructor(
    * and retries copying/moving the ZIM file.
    */
   private fun storeDeviceInPreferences(storageDevice: StorageDevice) {
-    requireLifecycleScope().runSafelyInLifecycleScope {
+    requireLifecycleScope().launch {
       kiwixDataStore.apply {
         setSelectedStorage(kiwixDataStore.getPublicDirectoryPath(storageDevice.name))
         setSelectedStoragePosition(
@@ -355,6 +345,9 @@ class ProcessSelectedZimFilesForPlayStore @Inject constructor(
   }
 
   override fun insufficientSpaceInStorage(availableSpace: Long) {
+    if (isSingleFileSelected) {
+      multipleFilesProcessAction = null
+    }
     val message =
       """
       ${context.getString(string.move_no_space)}
@@ -365,6 +358,9 @@ class ProcessSelectedZimFilesForPlayStore @Inject constructor(
   }
 
   override fun filesystemDoesNotSupportedCopyMoveFilesOver4GB() {
+    if (isSingleFileSelected) {
+      multipleFilesProcessAction = null
+    }
     showStorageSelectionSnackBar(context.getString(R.string.file_system_does_not_support_4gb))
   }
 
