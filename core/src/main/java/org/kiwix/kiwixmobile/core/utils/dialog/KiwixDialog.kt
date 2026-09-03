@@ -105,6 +105,16 @@ sealed class KiwixDialog(
     android.R.string.cancel
   )
 
+  // Shown once, the first time a download proceeds without notification permission -
+  // unlike NotificationPermissionDialog above, dismissing this doesn't block anything,
+  // it's purely informational.
+  object NotificationPermissionDeniedInfoDialog : KiwixDialog(
+    null,
+    R.string.notification_permission_denied_download_info,
+    android.R.string.ok,
+    null
+  )
+
   object EnableWifiP2pServices : KiwixDialog(
     null,
     R.string.request_enable_wifi,
