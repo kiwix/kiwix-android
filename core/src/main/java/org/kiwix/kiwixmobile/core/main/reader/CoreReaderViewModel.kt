@@ -28,7 +28,6 @@ import android.view.ViewGroup
 import android.webkit.WebView
 import android.widget.FrameLayout
 import androidx.annotation.StringRes
-import androidx.annotation.VisibleForTesting
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -87,8 +86,8 @@ import org.kiwix.kiwixmobile.core.main.reader.helper.ReadAloudManager.TtsState.S
 import org.kiwix.kiwixmobile.core.main.reader.helper.ReadAloudManager.TtsState.StartReadSelection
 import org.kiwix.kiwixmobile.core.main.reader.helper.ReadAloudManager.TtsState.TtsPaused
 import org.kiwix.kiwixmobile.core.main.reader.helper.ReadAloudManager.TtsState.TtsResumed
-import org.kiwix.kiwixmobile.core.main.reader.helper.ReaderPageManager
 import org.kiwix.kiwixmobile.core.main.reader.helper.ReaderHistoryManager
+import org.kiwix.kiwixmobile.core.main.reader.helper.ReaderPageManager
 import org.kiwix.kiwixmobile.core.main.reader.helper.ReaderSessionManager
 import org.kiwix.kiwixmobile.core.main.reader.helper.ReaderSessionManager.RestoreSessionResult
 import org.kiwix.kiwixmobile.core.main.reader.helper.ReaderWebViewManager
@@ -110,6 +109,7 @@ import org.kiwix.kiwixmobile.core.page.history.models.WebViewHistoryItem
 import org.kiwix.kiwixmobile.core.read_aloud.ReadAloudCallbacks
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader.Companion.CONTENT_PREFIX
+import org.kiwix.kiwixmobile.core.reader.ZimFileReader.Companion.UI_URI_STRING
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.SearchItemToOpen
@@ -162,6 +162,7 @@ abstract class CoreReaderViewModel(
   private val findInPageManager: FindInPageManager,
   @param:MainDispatcher private val mainDispatcher: MainCoroutineDispatcher
 ) : ViewModel(),
+  SectionsListener,
   WebViewCallback,
   ReaderMenuState.MenuClickListener,
   ShowDonationDialogCallback,
@@ -276,16 +277,17 @@ abstract class CoreReaderViewModel(
 
   val isAndroid13OrAbove = kiwixPermissionChecker.isAndroid13orAbove()
 
-  private var documentSectionListener: SectionsListener? = object : SectionsListener {
-    override fun sectionsLoaded(
-      title: String,
-      sections: List<DocumentSection>
-    ) {
-      updateState { copy(tableOfContentTitle = title, documentSections = sections) }
-    }
+  override fun sectionsLoaded(title: String, sections: List<DocumentSection>) {
+    updateState { copy(tableOfContentTitle = title, documentSections = sections) }
+  }
 
-    override fun clearSections() {
-      updateState { copy(documentSections = emptyList()) }
+  override fun clearSections() {
+    updateState { copy(documentSections = emptyList()) }
+  }
+
+  private fun setupDocumentParser() {
+    documentParser = DocumentParser(this).apply {
+      loadDocumentParserJs(context)
     }
   }
 
@@ -297,12 +299,6 @@ abstract class CoreReaderViewModel(
       add(observeTabsState())
       add(observeReaderPendingIntent())
       add(observeBookmarkState())
-    }
-  }
-
-  private fun setupDocumentParser() {
-    documentParser = DocumentParser(requireNotNull(documentSectionListener)).apply {
-      loadDocumentParserJs(context)
     }
   }
 
@@ -532,7 +528,7 @@ abstract class CoreReaderViewModel(
   }
 
   @Volatile var isWebViewHistoryRestoring = false
-  private var zimReaderSource: ZimReaderSource? = null
+  protected var zimReaderSource: ZimReaderSource? = null
 
   /**
    * Returns true if user enables the backToTop setting from setting screen.
@@ -700,6 +696,21 @@ abstract class CoreReaderViewModel(
     }
   }
 
+  protected open fun isXiaomiDevice(): Boolean = ShortcutUtils.isXiaomiDevice()
+
+  protected open fun isShortcutPermissionGranted(): Boolean =
+    ShortcutUtils.isShortcutPermissionGranted(context)
+
+  protected open fun addBookShortcut(
+    zimFileReader: ZimFileReader,
+    pageUrl: String?,
+    customName: String?
+  ): ShortcutResult = ShortcutUtils.addBookShortcut(context, zimFileReader, pageUrl, customName)
+
+  protected open fun openMiuiPermissionEditor() {
+    ShortcutUtils.openMiuiPermissionEditor(context)
+  }
+
   override fun onAddToHomeScreenMenuClicked() {
     val reader = zimReaderContainer.zimFileReader
     if (reader == null) {
@@ -708,15 +719,15 @@ abstract class CoreReaderViewModel(
     }
 
     // On Xiaomi/MIUI devices, check shortcut permission first
-    val effect = if (ShortcutUtils.isXiaomiDevice() &&
-      !ShortcutUtils.isShortcutPermissionGranted(context)
+    val effect = if (isXiaomiDevice() &&
+      !isShortcutPermissionGranted()
     ) {
       // Show permission dialog first, then proceed to naming dialog after user grants permission
       ReaderEffect.ShowKiwixDialog(
         KiwixDialog.XiaomiShortcutPermission
       ) {
         // "Open Settings" button — open MIUI permission editor
-        ShortcutUtils.openMiuiPermissionEditor(context)
+        openMiuiPermissionEditor()
       }
     } else {
       // Permission is granted (or not Xiaomi) — show the shortcut naming dialog
@@ -740,8 +751,7 @@ abstract class CoreReaderViewModel(
       )
       ReaderEffect.ShowKiwixDialog(dialog) {
         launchInMainScope {
-          val result = ShortcutUtils.addBookShortcut(
-            context = context,
+          val result = addBookShortcut(
             zimFileReader = reader,
             pageUrl = getCurrentWebView().url,
             customName = nameState.value
@@ -855,10 +865,10 @@ abstract class CoreReaderViewModel(
   override fun webViewPageChanged(page: Int, maxPages: Int) {
     launchInMainScope {
       if (!isBackToTopEnabled()) return@launchInMainScope
-      restartHideBackToTopTimer()
       val scrollY = getCurrentWebView().scrollY
       if (scrollY > 200 && !uiState.value.showTtsControls) {
         showBackToTopButton()
+        restartHideBackToTopTimer()
       } else {
         hideBackToTopButton()
       }
@@ -883,23 +893,9 @@ abstract class CoreReaderViewModel(
   }
 
   override fun webViewLongClick(url: String) {
-    var handleEvent = false
-    when {
-      url.startsWith(CONTENT_PREFIX) -> {
-        // This is my web site, so do not override; let my WebView load the page
-        handleEvent = true
-      }
-
-      url.startsWith("file://") -> {
-        // To handle help page (loaded from resources)
-        handleEvent = true
-      }
-
-      url.startsWith(ZimFileReader.UI_URI_STRING) -> {
-        handleEvent = true
-      }
-    }
-    if (handleEvent) {
+    // CONTENT_PREFIX -> This is my web site, so do not override; let my WebView load the page
+    // "file://" -> To handle help page (loaded from resources)
+    if (url.startsWith(CONTENT_PREFIX) || url.startsWith("file://") || url.startsWith(UI_URI_STRING)) {
       showOpenInNewTabDialog(zimReaderContainer.getRedirect(url))
     }
   }
@@ -972,7 +968,7 @@ abstract class CoreReaderViewModel(
       )
     }
 
-  protected suspend fun selectTab(position: Int) {
+  protected open suspend fun selectTab(position: Int) {
     readerWebViewManager.setCurrentWebViewIndex(position)
     updateBottomToolbarVisibility()
     updateUrlFlow()
@@ -1094,7 +1090,7 @@ abstract class CoreReaderViewModel(
   private fun isInvalidTitle(zimFileTitle: String?): Boolean =
     zimFileTitle == null || zimFileTitle.trim { it <= ' ' }.isEmpty()
 
-  protected suspend fun exitBook(shouldCloseZimBook: Boolean = true) {
+  protected open suspend fun exitBook(shouldCloseZimBook: Boolean = true) {
     showNoBookOpenViews()
     updateState {
       copy(
@@ -1129,7 +1125,7 @@ abstract class CoreReaderViewModel(
     readerWebViewManager.openPage(pageUrl, getCurrentWebView())
   }
 
-  protected suspend fun loadUrlWithCurrentWebview(url: String?) {
+  protected open suspend fun loadUrlWithCurrentWebview(url: String?) {
     readerWebViewManager.loadUrlWithCurrentWebview(url, getCurrentWebView())
   }
 
@@ -1151,7 +1147,7 @@ abstract class CoreReaderViewModel(
     }
   }
 
-  protected fun observeBookmarks(zimFileReader: ZimFileReader) {
+  protected open fun observeBookmarks(zimFileReader: ZimFileReader) {
     runCatching {
       bookmarkManager.observeBookmarks(viewModelScope, zimFileReader.id, webUrlsFlow)
       updateUrlFlow()
@@ -1163,7 +1159,7 @@ abstract class CoreReaderViewModel(
     }
   }
 
-  protected suspend fun manageExternalLaunchAndRestoringViewState(
+  protected open suspend fun manageExternalLaunchAndRestoringViewState(
     restoreOrigin: RestoreOrigin = FromExternalLaunch
   ) {
     when (val readerSession = readerSessionManager.restoreReaderSession()) {
@@ -1469,7 +1465,7 @@ abstract class CoreReaderViewModel(
     emitEffect(effect)
   }
 
-  protected suspend fun restoreTabs(
+  protected open suspend fun restoreTabs(
     webViewHistoryItemList: List<WebViewHistoryItem>,
     currentTab: Int,
     onComplete: suspend () -> Unit
@@ -1579,7 +1575,7 @@ abstract class CoreReaderViewModel(
   protected open fun openKiwixSupportUrl() {
     externalLinkOpener.openExternalLinkWithDialog(
       KIWIX_SUPPORT_URL.toUri().browserIntent(),
-      context.getString(R.string.support_donation_platform)
+      context.getString(string.support_donation_platform)
     )
   }
 
@@ -1648,7 +1644,7 @@ abstract class CoreReaderViewModel(
    * KiwixReaderViewModel.restoreViewStateOnValidWebViewHistory) to ensure consistent behavior
    * when handling valid webViewHistory scenarios.
    */
-  protected abstract suspend fun restoreViewStateOnValidWebViewHistory(
+  protected open abstract suspend fun restoreViewStateOnValidWebViewHistory(
     webViewHistoryItemList: List<WebViewHistoryItem>,
     currentTab: Int,
     currentZimFile: String?,
@@ -1789,7 +1785,6 @@ abstract class CoreReaderViewModel(
     bookmarkManager.stopObserving()
     pendingSearchItemManager.consume()
     readAloudManager.stopReadAloudSafely()
-    documentSectionListener = null
     documentParser = null
     zimReaderSource = null
     donationDialogHandler.setDonationDialogCallBack(null)
@@ -1798,11 +1793,6 @@ abstract class CoreReaderViewModel(
     actionMode = null
     findInPageManager.stop()
     super.onCleared()
-  }
-
-  @VisibleForTesting
-  fun onClearedExposed() {
-    onCleared()
   }
 
   protected fun mainDispatcherImmediate() = mainDispatcher.immediate
