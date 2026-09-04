@@ -141,6 +141,13 @@ abstract class CoreSettingsViewModel(
       initialValue = false
     )
 
+  val disableAnimationsEnabled = kiwixDataStore.disableAnimations
+    .stateIn(
+      scope = viewModelScope,
+      started = SharingStarted.Eagerly,
+      initialValue = false
+    )
+
   val externalLinkPopup = kiwixDataStore.externalLinkPopup
     .stateIn(
       scope = viewModelScope,
@@ -191,6 +198,12 @@ abstract class CoreSettingsViewModel(
   fun setBackToTop(enabled: Boolean) {
     viewModelScope.launch {
       kiwixDataStore.setPrefBackToTop(enabled)
+    }
+  }
+
+  fun setDisableAnimations(disabled: Boolean) {
+    viewModelScope.launch {
+      kiwixDataStore.setDisableAnimations(disabled)
     }
   }
 
