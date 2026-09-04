@@ -550,6 +550,8 @@ private fun ExtrasCategory(
 private fun DisplayCategory(coreSettingsViewModel: CoreSettingsViewModel) {
   val themeLabel by coreSettingsViewModel.themeLabel.collectAsStateWithLifecycle()
   val backToTopEnabled by coreSettingsViewModel.backToTopEnabled.collectAsStateWithLifecycle()
+  val articlePaginationEnabled by
+    coreSettingsViewModel.articlePaginationEnabled.collectAsStateWithLifecycle()
   val textZoom by coreSettingsViewModel.textZoom.collectAsStateWithLifecycle()
   val textZoomPosition = (textZoom / ZOOM_SCALE) - ZOOM_OFFSET
   SettingsCategory(stringResource(R.string.pref_display_title)) {
@@ -559,6 +561,12 @@ private fun DisplayCategory(coreSettingsViewModel: CoreSettingsViewModel) {
       summary = stringResource(R.string.pref_back_to_top_summary),
       checked = backToTopEnabled,
       onCheckedChange = { coreSettingsViewModel.setBackToTop(it) }
+    )
+    SwitchPreference(
+      title = stringResource(R.string.pref_article_pagination),
+      summary = stringResource(R.string.pref_article_pagination_summary),
+      checked = articlePaginationEnabled,
+      onCheckedChange = { coreSettingsViewModel.setArticlePagination(it) }
     )
     SeekBarPreference(
       title = stringResource(R.string.pref_text_zoom_title),

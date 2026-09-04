@@ -137,6 +137,8 @@ import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderAction.N
 import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderAction.OpenLibrary
 import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderAction.OpenSearch
 import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderAction.OpenTocDrawer
+import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderAction.PaginationDownClicked
+import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderAction.PaginationUpClicked
 import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderAction.PauseTts
 import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderAction.PreviousClicked
 import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderAction.PreviousLongClicked
@@ -378,6 +380,7 @@ private fun ReaderContentLayout(
             TtsControls(state, onReaderAction)
             ShowDonationLayout(state, onReaderAction)
           }
+          ArticlePaginationControls(state, onReaderAction)
         }
       }
     }
@@ -637,6 +640,75 @@ private fun BackToTopFab(showBackToTop: Boolean, onReaderAction: (ReaderAction) 
     contentDescription = stringResource(R.string.pref_back_to_top),
     shouldPulse = true
   )
+}
+
+// Article pagination (issue #4122): while enabled, free scrolling is disabled in
+// KiwixWebView and page navigation happens through these two buttons instead.
+// Alignment.TopEnd/BottomEnd mirror to the left automatically in RTL layouts.
+@Composable
+private fun BoxScope.ArticlePaginationControls(
+  state: ReaderUiState,
+  onReaderAction: (ReaderAction) -> Unit
+) {
+  if (!state.isArticlePaginationEnabled) return
+  PaginationButton(
+    icon = Drawable(R.drawable.ic_arrow_upward_24dp),
+    contentDescription = stringResource(R.string.go_to_previous_article_page),
+    enabled = state.isPaginationUpEnabled,
+    onClick = { onReaderAction(PaginationUpClicked) },
+    modifier = Modifier
+      .align(Alignment.TopEnd)
+      .padding(SIXTEEN_DP)
+  )
+  Row(
+    verticalAlignment = Alignment.CenterVertically,
+    modifier = Modifier
+      .align(Alignment.BottomEnd)
+      .padding(SIXTEEN_DP)
+  ) {
+    if (state.paginationPageLabel.isNotEmpty()) {
+      Text(
+        text = state.paginationPageLabel,
+        style = MaterialTheme.typography.labelMedium
+      )
+      Spacer(modifier = Modifier.width(EIGHT_DP))
+    }
+    PaginationButton(
+      icon = Drawable(R.drawable.ic_arrow_downward_24dp),
+      contentDescription = stringResource(R.string.go_to_next_article_page),
+      enabled = state.isPaginationDownEnabled,
+      onClick = { onReaderAction(PaginationDownClicked) }
+    )
+  }
+}
+
+@Composable
+private fun PaginationButton(
+  icon: IconItem,
+  contentDescription: String,
+  enabled: Boolean,
+  onClick: () -> Unit,
+  modifier: Modifier = Modifier
+) {
+  Box(
+    modifier = modifier
+      .size(READER_BOTTOM_APP_BAR_BUTTON_ICON_SIZE + TEN_DP)
+      .clip(CircleShape)
+      .background(MaterialTheme.colorScheme.surfaceContainerHighest)
+      .clickable(enabled = enabled, onClick = onClick),
+    contentAlignment = Alignment.Center
+  ) {
+    Icon(
+      icon.toPainter(),
+      contentDescription,
+      modifier = Modifier.size(READER_BOTTOM_APP_BAR_BUTTON_ICON_SIZE),
+      tint = if (enabled) {
+        LocalContentColor.current
+      } else {
+        LocalContentColor.current.copy(alpha = READER_BOTTOM_APP_BAR_DISABLE_BUTTON_ALPHA)
+      }
+    )
+  }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)

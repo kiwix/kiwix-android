@@ -117,6 +117,7 @@ internal class CoreReaderViewModelTest {
       FindInPageManager.FindInPageUiState()
     )
     every { kiwixDataStore.backToTop } returns MutableStateFlow(true)
+    every { kiwixDataStore.articlePagination } returns MutableStateFlow(false)
     every { kiwixDataStore.isFirstRun } returns MutableStateFlow(false)
     every { kiwixDataStore.isDebugBuild } returns MutableStateFlow(false)
     every { kiwixDataStore.appName } returns MutableStateFlow("TestApp")
@@ -138,7 +139,11 @@ internal class CoreReaderViewModelTest {
 
     coEvery { readerPageManager.getRandomPage() } returns ReaderPageManager.GetRandomPageResult.NoZimFileLoaded
 
-    viewModel = TestCoreReaderViewModel(
+    viewModel = createViewModel()
+  }
+
+  private fun createViewModel(): TestCoreReaderViewModel =
+    TestCoreReaderViewModel(
       context = context,
       kiwixDataStore = kiwixDataStore,
       externalLinkOpener = externalLinkOpener,
@@ -159,7 +164,6 @@ internal class CoreReaderViewModelTest {
       findInPageManager = findInPageManager,
       mainDispatcher = mainDispatcherRule.mainDispatcher
     )
-  }
 
   @AfterEach
   fun tearDown() {
@@ -482,6 +486,71 @@ internal class CoreReaderViewModelTest {
     fun `webViewPageChanged with single page should handle correctly`() {
       viewModel.webViewPageChanged(page = 1, maxPages = 1)
       assertThat(true).isTrue()
+    }
+
+    @Test
+    fun `webViewPageChanged does not touch pagination state when pagination is disabled`() =
+      runTest {
+        viewModel.webViewPageChanged(page = 5, maxPages = 20)
+        advanceUntilIdle()
+
+        assertThat(viewModel.uiState.value.paginationPageLabel).isEmpty()
+      }
+
+    @Test
+    fun `webViewPageChanged updates the pagination label and button state when enabled`() =
+      runTest {
+        every { kiwixDataStore.articlePagination } returns MutableStateFlow(true)
+
+        viewModel.webViewPageChanged(page = 5, maxPages = 20)
+        advanceUntilIdle()
+
+        val state = viewModel.uiState.value
+        assertThat(state.paginationPageLabel).isEqualTo("6/21")
+        assertThat(state.isPaginationUpEnabled).isTrue()
+        assertThat(state.isPaginationDownEnabled).isTrue()
+      }
+
+    @Test
+    fun `webViewPageChanged disables up button on the first page`() = runTest {
+      every { kiwixDataStore.articlePagination } returns MutableStateFlow(true)
+
+      viewModel.webViewPageChanged(page = 0, maxPages = 5)
+      advanceUntilIdle()
+
+      val state = viewModel.uiState.value
+      assertThat(state.isPaginationUpEnabled).isFalse()
+      assertThat(state.isPaginationDownEnabled).isTrue()
+    }
+
+    @Test
+    fun `webViewPageChanged disables down button on the last page`() = runTest {
+      every { kiwixDataStore.articlePagination } returns MutableStateFlow(true)
+
+      viewModel.webViewPageChanged(page = 5, maxPages = 5)
+      advanceUntilIdle()
+
+      val state = viewModel.uiState.value
+      assertThat(state.isPaginationUpEnabled).isTrue()
+      assertThat(state.isPaginationDownEnabled).isFalse()
+    }
+
+    @Test
+    fun `onPaginationDownClicked scrolls the current webView down by one viewport`() = runTest {
+      every { mockWebView.height } returns 800
+      viewModel.onPaginationDownClicked()
+      advanceUntilIdle()
+
+      verify { mockWebView.scrollBy(0, 800) }
+    }
+
+    @Test
+    fun `onPaginationUpClicked scrolls the current webView up by one viewport`() = runTest {
+      every { mockWebView.height } returns 800
+      viewModel.onPaginationUpClicked()
+      advanceUntilIdle()
+
+      verify { mockWebView.scrollBy(0, -800) }
     }
 
     @Test

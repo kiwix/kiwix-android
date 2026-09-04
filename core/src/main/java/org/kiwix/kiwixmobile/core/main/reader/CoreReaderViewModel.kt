@@ -197,7 +197,11 @@ abstract class CoreReaderViewModel(
     val tableOfContentTitle: String = "",
     val documentSections: List<DocumentSection> = emptyList(),
     val showDonationPopup: Boolean = false,
-    val findInPageUiState: FindInPageManager.FindInPageUiState = FindInPageManager.FindInPageUiState()
+    val findInPageUiState: FindInPageManager.FindInPageUiState = FindInPageManager.FindInPageUiState(),
+    val isArticlePaginationEnabled: Boolean = false,
+    val isPaginationUpEnabled: Boolean = false,
+    val isPaginationDownEnabled: Boolean = false,
+    val paginationPageLabel: String = ""
   )
 
   sealed interface ReaderAction {
@@ -233,6 +237,8 @@ abstract class CoreReaderViewModel(
     data object FindInPageNextClicked : ReaderAction
     data object FindInPagePreviousClicked : ReaderAction
     data object FindInPageCloseClicked : ReaderAction
+    data object PaginationUpClicked : ReaderAction
+    data object PaginationDownClicked : ReaderAction
   }
 
   sealed interface ReaderEffect {
@@ -345,11 +351,18 @@ abstract class CoreReaderViewModel(
 
   private fun observeSettings() =
     viewModelScope.launch {
-      kiwixDataStore.backToTop.collect {
-        if (!it) {
-          hideBackToTopButton()
+      launch {
+        kiwixDataStore.backToTop.collect {
+          if (!it) {
+            hideBackToTopButton()
+          }
+          // Showing backToTop button based on webView scrolling.
         }
-        // Showing backToTop button based on webView scrolling.
+      }
+      launch {
+        kiwixDataStore.articlePagination.collect { enabled ->
+          updateState { copy(isArticlePaginationEnabled = enabled) }
+        }
       }
     }
 
@@ -493,6 +506,8 @@ abstract class CoreReaderViewModel(
       ReaderAction.FindInPageNextClicked -> onFindNextClicked()
       ReaderAction.FindInPagePreviousClicked -> onFindPreviousClicked()
       ReaderAction.FindInPageCloseClicked -> closeFindInPage()
+      ReaderAction.PaginationUpClicked -> onPaginationUpClicked()
+      ReaderAction.PaginationDownClicked -> onPaginationDownClicked()
     }
   }
 
@@ -854,6 +869,7 @@ abstract class CoreReaderViewModel(
   @Suppress("MagicNumber")
   override fun webViewPageChanged(page: Int, maxPages: Int) {
     launchInMainScope {
+      updatePaginationState(page, maxPages)
       if (!isBackToTopEnabled()) return@launchInMainScope
       restartHideBackToTopTimer()
       val scrollY = getCurrentWebView().scrollY
@@ -862,6 +878,32 @@ abstract class CoreReaderViewModel(
       } else {
         hideBackToTopButton()
       }
+    }
+  }
+
+  private suspend fun updatePaginationState(page: Int, maxPages: Int) {
+    if (!kiwixDataStore.articlePagination.first()) return
+    val totalPages = maxPages + 1
+    updateState {
+      copy(
+        isPaginationUpEnabled = page > 0,
+        isPaginationDownEnabled = page < maxPages,
+        paginationPageLabel = "${page + 1}/$totalPages"
+      )
+    }
+  }
+
+  fun onPaginationUpClicked() {
+    launchInMainScope {
+      val webView = getCurrentWebView()
+      webView.scrollBy(0, -webView.height)
+    }
+  }
+
+  fun onPaginationDownClicked() {
+    launchInMainScope {
+      val webView = getCurrentWebView()
+      webView.scrollBy(0, webView.height)
     }
   }
 

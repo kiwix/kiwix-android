@@ -69,6 +69,10 @@
   <string name="theme_dark">Dark</string>
   <string name="pref_back_to_top">Back to Top</string>
   <string name="pref_back_to_top_summary">Display a button at the end of the page to scroll up to the top</string>
+  <string name="pref_article_pagination">Article pagination</string>
+  <string name="pref_article_pagination_summary">Navigate articles page by page instead of scrolling</string>
+  <string name="go_to_previous_article_page">Go to previous page</string>
+  <string name="go_to_next_article_page">Go to next page</string>
   <string name="pref_language_title">Language</string>
   <string name="pref_language_chooser">Choose a language</string>
   <string name="pref_credits">Contributors and Licenses</string>
