@@ -233,18 +233,60 @@ class RateDialogHandlerTest {
     }
 
   @Test
-  fun `isPlayStoreVariant returns true for playStore build`() = runTest {
+  fun `isInAppReviewEnabledBuild returns true for playStore build`() = runTest {
     coEvery { kiwixDataStore.isPlayStoreBuild } returns flowOf(true)
-    val result = rateDialogHandler.isPlayStoreVariant()
+    val result = rateDialogHandler.isInAppReviewEnabledBuild()
     assertTrue(result)
   }
 
   @Test
-  fun `isPlayStoreVariant returns false for non-playStore build`() = runTest {
+  fun `isInAppReviewEnabledBuild returns true for branded app`() = runTest {
     coEvery { kiwixDataStore.isPlayStoreBuild } returns flowOf(false)
-    val result = rateDialogHandler.isPlayStoreVariant()
+    coEvery { kiwixDataStore.isBrandedApp } returns flowOf(true)
+    val result = rateDialogHandler.isInAppReviewEnabledBuild()
+    assertTrue(result)
+  }
+
+  @Test
+  fun `isInAppReviewEnabledBuild returns false for non-playStore build`() = runTest {
+    coEvery { kiwixDataStore.isPlayStoreBuild } returns flowOf(false)
+    coEvery { kiwixDataStore.isBrandedApp } returns flowOf(false)
+    val result = rateDialogHandler.isInAppReviewEnabledBuild()
     assertFalse(result)
   }
+
+  @Test
+  fun `isBrandedApp returns true when isBrandedApp in dataStore is true`() = runTest {
+    coEvery { kiwixDataStore.isBrandedApp } returns flowOf(true)
+    val result = rateDialogHandler.isBrandedApp()
+    assertTrue(result)
+  }
+
+  @Test
+  fun `isBrandedApp returns false when isBrandedApp in dataStore is false`() = runTest {
+    coEvery { kiwixDataStore.isBrandedApp } returns flowOf(false)
+    val result = rateDialogHandler.isBrandedApp()
+    assertFalse(result)
+  }
+
+  @Test
+  fun `checkForRateDialog launches review flow for branded app when conditions are met`() =
+    runTest {
+      coEvery { kiwixDataStore.isPlayStoreBuild } returns flowOf(false)
+      coEvery { kiwixDataStore.isBrandedApp } returns flowOf(true)
+      coEvery { kiwixDataStore.incrementRateAppVisitCount() } returns 20
+
+      val mockReviewManager = mockk<ReviewManager>(relaxed = true)
+      mockkStatic(ReviewManagerFactory::class)
+      every { ReviewManagerFactory.create(any()) } returns mockReviewManager
+
+      rateDialogHandler.checkForRateDialog()
+
+      coVerify(exactly = 1) { kiwixDataStore.incrementRateAppVisitCount() }
+      verify(exactly = 1) { ReviewManagerFactory.create(activity) }
+      verify(exactly = 1) { mockReviewManager.requestReviewFlow() }
+      coVerify(exactly = 1) { kiwixDataStore.setRateAppPromptShown() }
+    }
 
   @Test
   fun `isZimFilesAvailableInLibrary returns true when isBrandedApp is true`() =

@@ -89,6 +89,6 @@ class BrandedSettingsViewModel @Inject constructor(
   }
 
   override suspend fun showRatingCategory() {
-    settingsUiState.update { it.copy(shouldShowRatingCategory = kiwixDataStore.isPlayStoreBuild.first()) }
+    settingsUiState.update { it.copy(shouldShowRatingCategory = true) }
   }
 }

@@ -51,7 +51,7 @@ class RateDialogHandler @Inject constructor(
 ) {
   fun checkForRateDialog() {
     (activity as CoreMainActivity).lifecycleScope.launch {
-      if (!isPlayStoreVariant()) return@launch
+      if (!isInAppReviewEnabledBuild()) return@launch
       val newCount = kiwixDataStore.incrementRateAppVisitCount()
 
       if (shouldShowRateDialog(newCount) && connectivityManager.isNetworkAvailable()) {
@@ -90,7 +90,7 @@ class RateDialogHandler @Inject constructor(
     val meetReading = kiwixDataStore.rateAppReadingCount.first() >= READING_MILESTONE_THRESHOLD
 
     return !isPromptShown &&
-      isPlayStoreVariant() &&
+      isInAppReviewEnabledBuild() &&
       meetVisitCount &&
       meetDownload &&
       meetReading &&
@@ -98,12 +98,19 @@ class RateDialogHandler @Inject constructor(
       isZimFilesAvailableInLibrary()
   }
 
-  internal suspend fun isPlayStoreVariant(): Boolean =
-    kiwixDataStore.isPlayStoreBuild.first()
+  /**
+   * Returns the isPlayStoreBuild value from the KiwixDataStore, or true if the app is a branded app.
+   * This is used to determine if the app is a Play Store variant or a branded app.
+   * If the app is a branded app, returns true since branded apps only publish on playStore.
+   */
+  internal suspend fun isInAppReviewEnabledBuild(): Boolean =
+    kiwixDataStore.isPlayStoreBuild.first() || isBrandedApp()
+
+  internal suspend fun isBrandedApp(): Boolean = kiwixDataStore.isBrandedApp.first()
 
   internal suspend fun isZimFilesAvailableInLibrary(): Boolean {
     // If it is a custom app, return true since custom apps always have the ZIM file.
-    if (kiwixDataStore.isBrandedApp.first()) return true
+    if (isBrandedApp()) return true
     // For Kiwix app, check if there are ZIM files available in the library.
     return libkiwixBookOnDisk.getBooks().isNotEmpty()
   }
