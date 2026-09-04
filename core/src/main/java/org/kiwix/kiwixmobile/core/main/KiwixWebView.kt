@@ -24,6 +24,7 @@ import android.os.Looper
 import android.os.Message
 import android.util.AttributeSet
 import android.view.ContextMenu
+import android.view.MotionEvent
 import android.view.ViewGroup
 import android.webkit.WebView
 import android.webkit.WebViewClient
@@ -67,6 +68,11 @@ open class KiwixWebView constructor(
 ) : VideoEnabledWebView(context, attrs) {
   private var kiwixWebChromeClient: KiwixWebChromeClient? = null
   private var textZoomJob: Job? = null
+  private var articlePaginationJob: Job? = null
+
+  // When article pagination is on, page navigation happens through the up/down
+  // buttons instead - see issue #4122.
+  private var isArticlePaginationEnabled = false
 
   init {
     if (BuildConfig.DEBUG) {
@@ -136,12 +142,38 @@ open class KiwixWebView constructor(
     textZoomJob = kiwixDataStore.textZoom
       .onEach { settings.textZoom = it }
       .launchIn(CoroutineScope(SupervisorJob() + mainDispatcher))
+    articlePaginationJob?.cancel()
+    articlePaginationJob = kiwixDataStore.articlePagination
+      .onEach { isArticlePaginationEnabled = it }
+      .launchIn(CoroutineScope(SupervisorJob() + mainDispatcher))
   }
 
   override fun onDetachedFromWindow() {
     super.onDetachedFromWindow()
     textZoomJob?.cancel()
     textZoomJob = null
+    articlePaginationJob?.cancel()
+    articlePaginationJob = null
+  }
+
+  // Article pagination replaces free scrolling with the up/down page buttons - see
+  // issue #4122. Only the drag/scroll gesture is swallowed here; DOWN/UP still reach
+  // super so taps and link clicks keep working normally.
+  override fun onTouchEvent(event: MotionEvent): Boolean {
+    if (isArticlePaginationEnabled && event.actionMasked == MotionEvent.ACTION_MOVE) {
+      return true
+    }
+    if (event.actionMasked == MotionEvent.ACTION_UP) {
+      performClick()
+    }
+    return super.onTouchEvent(event)
+  }
+
+  // Required alongside the onTouchEvent override above so accessibility services
+  // (e.g. TalkBack) can still trigger a click on this view.
+  override fun performClick(): Boolean {
+    super.performClick()
+    return true
   }
 
   override fun onScrollChanged(l: Int, t: Int, oldl: Int, oldt: Int) {

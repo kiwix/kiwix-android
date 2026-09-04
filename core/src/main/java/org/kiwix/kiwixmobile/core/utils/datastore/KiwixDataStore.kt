@@ -104,6 +104,22 @@ class KiwixDataStore @Inject constructor(
     }
   }
 
+  /**
+   * Navigate articles page by page instead of scrolling - see issue #4122. Off by default;
+   * no reliable way to auto-detect e-ink hardware to flip the default (see the issue thread),
+   * so this is manual-only for now.
+   */
+  val articlePagination: Flow<Boolean> =
+    context.kiwixDataStore.data.map { prefs ->
+      prefs[PreferencesKeys.PREF_ARTICLE_PAGINATION] ?: false
+    }
+
+  suspend fun setArticlePagination(enabled: Boolean) {
+    context.kiwixDataStore.edit { prefs ->
+      prefs[PreferencesKeys.PREF_ARTICLE_PAGINATION] = enabled
+    }
+  }
+
   val openNewTabInBackground: Flow<Boolean> =
     context.kiwixDataStore.data.map { prefs ->
       prefs[PreferencesKeys.PREF_NEW_TAB_BACKGROUND] ?: false
@@ -677,6 +693,7 @@ class KiwixDataStore @Inject constructor(
     const val PREF_IS_TEST = "is_test"
     const val PREF_SHOW_SHOWCASE = "showShowCase"
     const val PREF_BACK_TO_TOP = "pref_backtotop"
+    const val PREF_ARTICLE_PAGINATION = "pref_article_pagination"
     const val PREF_NEW_TAB_BACKGROUND = "pref_newtab_background"
     const val PREF_EXTERNAL_LINK_POPUP = "pref_external_link_popup"
     const val PREF_SHOW_STORAGE_OPTION = "show_storgae_option"

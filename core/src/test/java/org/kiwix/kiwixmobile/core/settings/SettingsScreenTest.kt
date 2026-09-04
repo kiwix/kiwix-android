@@ -84,6 +84,7 @@ class SettingsScreenTest {
     uiState: SettingsUiState = SettingsUiState(),
     themeLabel: String = "System default",
     backToTopEnabled: Boolean = false,
+    articlePaginationEnabled: Boolean = false,
     textZoom: Int = DEFAULT_ZOOM,
     newTabInBackground: Boolean = false,
     externalLinkPopup: Boolean = true,
@@ -93,6 +94,7 @@ class SettingsScreenTest {
     every { viewModel.uiState } returns MutableStateFlow(uiState)
     every { viewModel.themeLabel } returns MutableStateFlow(themeLabel)
     every { viewModel.backToTopEnabled } returns MutableStateFlow(backToTopEnabled)
+    every { viewModel.articlePaginationEnabled } returns MutableStateFlow(articlePaginationEnabled)
     every { viewModel.textZoom } returns MutableStateFlow(textZoom)
     every { viewModel.newTabInBackground } returns MutableStateFlow(newTabInBackground)
     every { viewModel.externalLinkPopup } returns MutableStateFlow(externalLinkPopup)
@@ -223,6 +225,38 @@ class SettingsScreenTest {
       .onNodeWithTag(context.getString(R.string.pref_back_to_top))
       .assertIsDisplayed()
       .assertIsOn()
+  }
+
+  @Test
+  fun settingsScreen_displayCategory_articlePaginationSwitch_isDisplayed() {
+    renderSettingsScreen(createMockViewModel())
+    scrollToContentDescription(context.getString(R.string.pref_article_pagination))
+    composeTestRule
+      .onNodeWithTag(context.getString(R.string.pref_article_pagination))
+      .assertIsDisplayed()
+      .assertIsOff()
+  }
+
+  @Test
+  fun articlePaginationSwitch_reflectsStateChange() {
+    renderSettingsScreen(createMockViewModel(articlePaginationEnabled = true))
+    scrollToContentDescription(context.getString(R.string.pref_article_pagination))
+
+    composeTestRule
+      .onNodeWithTag(context.getString(R.string.pref_article_pagination))
+      .assertIsDisplayed()
+      .assertIsOn()
+  }
+
+  @Test
+  fun settingsScreen_displayCategory_articlePaginationSwitch_toggleTriggersCallback() {
+    val viewModel = createMockViewModel(articlePaginationEnabled = false)
+    renderSettingsScreen(viewModel)
+    scrollToText(context.getString(R.string.pref_article_pagination))
+    composeTestRule
+      .onNodeWithText(context.getString(R.string.pref_article_pagination_summary))
+      .performClick()
+    verify { viewModel.setArticlePagination(true) }
   }
 
   @Test
