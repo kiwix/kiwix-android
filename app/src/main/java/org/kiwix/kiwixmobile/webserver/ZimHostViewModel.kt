@@ -114,6 +114,12 @@ class ZimHostViewModel @Inject constructor(
   private val _events = MutableSharedFlow<Event>(extraBufferCapacity = Int.MAX_VALUE)
   val events = _events.asSharedFlow()
 
+  init {
+    viewModelScope.launch(ioDispatcher) {
+      // dataSource.bookRemoved().collect { loadBooks() }
+    }
+  }
+
   fun loadBooks() {
     viewModelScope.launch(ioDispatcher) {
       val previouslyHostedBookIds = kiwixDataStore.hostedBookIds.first()

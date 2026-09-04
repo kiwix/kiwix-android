@@ -23,19 +23,25 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import eu.mhutti1.utils.storage.StorageDevice
 import eu.mhutti1.utils.storage.StorageDeviceUtils
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
+import kotlinx.coroutines.withContext
 import org.kiwix.kiwixmobile.core.di.IoDispatcher
+import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
+import java.io.File
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class StorageDeviceProvider @Inject constructor(
   @param:ApplicationContext private val context: Context,
+  private val kiwixDataStore: KiwixDataStore,
   @param:IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) {
   private val mutex = Mutex()
   private var writableStorage: List<StorageDevice>? = null
+  private var appSpecificDirsCache: List<File>? = null
 
   /**
    * Returns the writable storage devices, caching the result for the lifetime of the app process.
@@ -50,5 +56,30 @@ class StorageDeviceProvider @Inject constructor(
       writableStorage ?: StorageDeviceUtils
         .getWritableStorage(context, ioDispatcher)
         .also { writableStorage = it }
+    }
+
+  /**
+   * Returns the app-specific directories across internal and external storage,
+   * caching the result for performance.
+   */
+  suspend fun getAppSpecificDirs(): List<File> =
+    mutex.withLock {
+      appSpecificDirsCache ?: withContext(ioDispatcher) {
+        val dirs = mutableListOf<File>()
+        context.getExternalFilesDirs("")?.filterNotNull()?.let { dirs.addAll(it) }
+        context.getExternalFilesDirs(null)?.filterNotNull()?.let { dirs.addAll(it) }
+        context.filesDir?.let { dirs.add(it) }
+        context.cacheDir?.let { dirs.add(it) }
+
+        val selectedStoragePath = runCatching {
+          kiwixDataStore.selectedStorage.first()
+        }.getOrDefault("")
+
+        if (selectedStoragePath.isNotEmpty()) {
+          dirs.add(File(selectedStoragePath))
+        }
+
+        dirs.distinctBy { it.absolutePath }
+      }.also { appSpecificDirsCache = it }
     }
 }

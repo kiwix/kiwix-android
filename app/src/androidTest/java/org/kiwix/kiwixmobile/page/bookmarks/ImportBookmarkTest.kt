@@ -32,6 +32,8 @@ import org.kiwix.kiwixmobile.BaseActivityTest
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookOnDisk
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookmarks
 import org.kiwix.kiwixmobile.core.page.bookmark.models.LibkiwixBookmarkItem
+import org.kiwix.kiwixmobile.core.reader.ZimFileReader
+import org.kiwix.kiwixmobile.core.utils.StorageDeviceProvider
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.HILT_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.RETRY_RULE_ORDER
 import org.kiwix.kiwixmobile.migration.di.module.DatabaseModule
@@ -104,7 +106,17 @@ class ImportBookmarkTest : BaseActivityTest() {
     super.waitForIdle()
     launchMainActivity()
     boxStore = DatabaseModule.boxStore
-    libkiwixBookOnDisk = LibkiwixBookOnDisk(library, manager, kiwixDataStore, Dispatchers.IO)
+    val storageDeviceProvider = StorageDeviceProvider(context, kiwixDataStore, Dispatchers.IO)
+    val zimFileReaderFactory = ZimFileReader.Factory.Impl(Dispatchers.IO)
+    libkiwixBookOnDisk =
+      LibkiwixBookOnDisk(
+        library,
+        manager,
+        kiwixDataStore,
+        storageDeviceProvider,
+        zimFileReaderFactory,
+        Dispatchers.IO
+      )
     libkiwixBookmarks =
       LibkiwixBookmarks(
         library,

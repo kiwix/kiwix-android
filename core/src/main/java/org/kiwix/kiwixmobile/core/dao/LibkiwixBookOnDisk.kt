@@ -19,10 +19,15 @@
 package org.kiwix.kiwixmobile.core.dao
 
 import android.os.Build
+import android.os.FileObserver
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.channels.BufferOverflow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
@@ -37,7 +42,11 @@ import org.kiwix.kiwixmobile.core.di.modules.LOCAL_BOOKS_LIBRARY
 import org.kiwix.kiwixmobile.core.di.modules.LOCAL_BOOKS_MANAGER
 import org.kiwix.kiwixmobile.core.entity.LibkiwixBook
 import org.kiwix.kiwixmobile.core.extensions.isFileExist
+import org.kiwix.kiwixmobile.core.reader.ZimFileReader
+import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
+import org.kiwix.kiwixmobile.core.utils.StorageDeviceProvider
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
+import org.kiwix.kiwixmobile.core.utils.files.FileUtils
 import org.kiwix.kiwixmobile.core.utils.files.Log
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListItem.BookOnDisk
 import org.kiwix.libkiwix.Book
@@ -48,11 +57,14 @@ import javax.inject.Inject
 import javax.inject.Named
 import javax.inject.Singleton
 
+@Suppress("LongParameterList")
 @Singleton
 class LibkiwixBookOnDisk @Inject constructor(
   @param:Named(LOCAL_BOOKS_LIBRARY) private val library: Library,
   @param:Named(LOCAL_BOOKS_MANAGER) private val manager: Manager,
   private val kiwixDataStore: KiwixDataStore,
+  private val storageDeviceProvider: StorageDeviceProvider,
+  private val zimFileReaderFactory: ZimFileReader.Factory,
   @param:IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) {
   private val initMutex = Mutex()
@@ -65,6 +77,95 @@ class LibkiwixBookOnDisk @Inject constructor(
    * return the previous data to avoid unnecessary data load on Libkiwix.
    */
   private var booksChanged: Boolean = false
+
+  private val _bookRemoved = MutableSharedFlow<Unit>(
+    extraBufferCapacity = 1,
+    onBufferOverflow = BufferOverflow.DROP_OLDEST
+  )
+
+  /**
+   * A flow that emits a signal whenever a book is removed from the library, allowing observers
+   * to react to book removal events. See HotspotService for an example of how
+   * to use this flow to update the server when a book is removed.
+   */
+  val bookRemoved: SharedFlow<Unit> = _bookRemoved.asSharedFlow()
+
+  private val fileObservers = mutableListOf<FileObserver>()
+
+  init {
+    CoroutineScope(ioDispatcher).launch {
+      runCatching { registerFileObservers() }.onFailure { it.printStackTrace() }
+    }
+  }
+
+  private suspend fun registerFileObservers() {
+    val directoriesToWatch = storageDeviceProvider.getAppSpecificDirs()
+      .asSequence()
+      .flatMap { rootDir -> rootDir.walkTopDown().filter(File::isDirectory) }
+      .distinctBy(File::getAbsolutePath)
+
+    directoriesToWatch.forEach { directory ->
+      runCatching {
+        createFileObserver(directory).also {
+          fileObservers.add(it)
+          it.startWatching()
+        }
+      }.onFailure { it.printStackTrace() }
+    }
+  }
+
+  private fun createFileObserver(watchDir: File): FileObserver {
+    val mask =
+      FileObserver.CREATE or FileObserver.MOVED_TO or FileObserver.DELETE or FileObserver.MOVED_FROM
+    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+      object : FileObserver(watchDir, mask) {
+        override fun onEvent(event: Int, path: String?) {
+          path?.let { handleFileSystemEvent(watchDir, it, event) }
+        }
+      }
+    } else {
+      @Suppress("DEPRECATION")
+      object : FileObserver(watchDir.path, mask) {
+        override fun onEvent(event: Int, path: String?) {
+          path?.let { handleFileSystemEvent(watchDir, it, event) }
+        }
+      }
+    }
+  }
+
+  private fun handleFileSystemEvent(watchDir: File, path: String, event: Int) {
+    if (!FileUtils.isValidZimFile(path) && !FileUtils.isSplittedZimFile(path)) return
+    val file = File(watchDir, path)
+    CoroutineScope(ioDispatcher).launch {
+      runCatching {
+        when (event) {
+          FileObserver.CREATE, FileObserver.MOVED_TO -> addBookFromFile(file)
+          FileObserver.DELETE, FileObserver.MOVED_FROM -> deleteByPath(file.canonicalPath)
+        }
+      }.onFailure { it.printStackTrace() }
+    }
+  }
+
+  private suspend fun addBookFromFile(file: File) {
+    if (!file.isFileExist(ioDispatcher) || !file.isFile) return
+    zimFileReaderFactory.create(ZimReaderSource(file), false)?.let { zimFileReader ->
+      try {
+        insert(listOf(Book().apply { update(zimFileReader.jniKiwixReader) }))
+      } finally {
+        zimFileReader.dispose()
+      }
+    }
+  }
+
+  suspend fun deleteByPath(filePath: String) {
+    val normalizedPath = runCatching { File(filePath).canonicalPath }.getOrDefault(filePath)
+    getBooksList().firstOrNull { book ->
+      runCatching {
+        File(book.zimReaderSource.toDatabase()).canonicalPath == normalizedPath
+      }.getOrDefault(false)
+    }?.let { delete(it.id) }
+  }
+
   private suspend fun localBookFolderPath(): String =
     if (Build.DEVICE.contains("generic")) {
       // Workaround for emulators: Emulators have limited memory and
@@ -234,6 +335,7 @@ class LibkiwixBookOnDisk @Inject constructor(
     }.onFailure { it.printStackTrace() }
     writeBookMarksAndSaveLibraryToFile()
     updateLocalBooksFlow()
+    _bookRemoved.tryEmit(Unit)
   }
 
   suspend fun delete(bookId: String) {
@@ -242,6 +344,7 @@ class LibkiwixBookOnDisk @Inject constructor(
       library.removeBookById(bookId)
       writeBookMarksAndSaveLibraryToFile()
       updateLocalBooksFlow()
+      _bookRemoved.tryEmit(Unit)
     }.onFailure { it.printStackTrace() }
   }
 

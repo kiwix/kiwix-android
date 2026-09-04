@@ -28,6 +28,7 @@ import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertFalse
 import junit.framework.TestCase.assertTrue
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.advanceUntilIdle
@@ -69,6 +70,7 @@ class ZimHostViewModelTest {
   private val fakeReader: ZimFileReader = mockk(relaxed = true)
   private val book1 = BookOnDisk(zimFileReader = fakeReader, isSelected = false)
   private val book2 = BookOnDisk(zimFileReader = fakeReader, isSelected = false)
+  private val bookRemoved = MutableSharedFlow<Unit>()
 
   companion object {
     private const val IP_ADDRESS = "192.168.31.9:8080"
@@ -83,6 +85,7 @@ class ZimHostViewModelTest {
     )
     coEvery { kiwixDataStore.hostedBookIds } returns flowOf(emptySet())
     coEvery { kiwixDataStore.setHostedBookIds(any()) } returns Unit
+    every { dataSource.bookRemoved() } returns bookRemoved
 
     every { zimReaderContainer.zimFileReader } returns null
 
@@ -212,6 +215,22 @@ class ZimHostViewModelTest {
     assertEquals("", state.serverIpAddress)
     assertFalse(state.showShareIcon)
     assertFalse(state.qrVisible)
+  }
+
+  // ======== bookRemovals() ========
+
+  @Test
+  fun bookRemoved_whenBookRemovedElsewhere_reloadsBooks() = runTest {
+    coEvery { kiwixDataStore.isBrandedApp } returns flowOf(false)
+    coEvery { dataSource.getLanguageCategorizedBooks() } returns flowOf(listOf(book1, book2))
+    advanceUntilIdle()
+    assertTrue(viewModel.uiState.value.books.isEmpty())
+
+    coEvery { dataSource.getLanguageCategorizedBooks() } returns flowOf(listOf(book1))
+    bookRemoved.emit(Unit)
+    advanceUntilIdle()
+
+    assertEquals(1, viewModel.uiState.value.books.size)
   }
 
   // ======== startServerButtonClick() ========
