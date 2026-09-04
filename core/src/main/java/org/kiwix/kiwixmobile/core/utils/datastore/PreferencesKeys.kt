@@ -29,6 +29,7 @@ object PreferencesKeys {
   val TAG_CURRENT_FILE = stringPreferencesKey(org.kiwix.kiwixmobile.core.utils.TAG_CURRENT_FILE)
   val TAG_CURRENT_TAB = intPreferencesKey(org.kiwix.kiwixmobile.core.utils.TAG_CURRENT_TAB)
   val PREF_BACK_TO_TOP = booleanPreferencesKey(KiwixDataStore.PREF_BACK_TO_TOP)
+  val PREF_ARTICLE_PAGINATION = booleanPreferencesKey(KiwixDataStore.PREF_ARTICLE_PAGINATION)
   val PREF_NEW_TAB_BACKGROUND = booleanPreferencesKey(KiwixDataStore.PREF_NEW_TAB_BACKGROUND)
   val PREF_EXTERNAL_LINK_POPUP =
     booleanPreferencesKey(KiwixDataStore.PREF_EXTERNAL_LINK_POPUP)
