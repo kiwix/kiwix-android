@@ -700,7 +700,7 @@ internal class CoreReaderViewModelTest {
       viewModel.onAction(ReaderAction.HomeClicked)
       advanceUntilIdle()
 
-      coEvery { readerWebViewManager.openPage("https://kiwix.org", mockWebView) }
+      coVerify { readerWebViewManager.openPage("https://kiwix.org", mockWebView) }
     }
 
     @Test
