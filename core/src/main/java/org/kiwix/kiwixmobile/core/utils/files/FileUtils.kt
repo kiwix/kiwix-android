@@ -860,14 +860,22 @@ object FileUtils {
     source: String,
     zimReaderContainer: ZimReaderContainer
   ): ByteArray? {
+    // .data is a platform-nullable InputStream (null when no ZIM is currently open);
+    // read it via .use{} so the underlying fd is closed either way, instead of
+    // leaking it and NPEing on a null stream.
     val bytes = zimReaderContainer
       .load(source, emptyMap())
       .data
-      .readBytes()
+      ?.use { it.readBytes() }
+
+    if (bytes == null) {
+      Log.w("MEDIA_SAVE", "No data stream available for source=$source")
+      return null
+    }
 
     return if (bytes.isEmpty()) {
       Log.w("MEDIA_SAVE", "Loaded image bytes are empty for source=$source")
-      return null
+      null
     } else {
       bytes
     }
