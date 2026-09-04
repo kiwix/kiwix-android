@@ -28,7 +28,6 @@ import android.view.ViewGroup
 import android.webkit.WebView
 import android.widget.FrameLayout
 import androidx.annotation.StringRes
-import androidx.annotation.VisibleForTesting
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -87,8 +86,8 @@ import org.kiwix.kiwixmobile.core.main.reader.helper.ReadAloudManager.TtsState.S
 import org.kiwix.kiwixmobile.core.main.reader.helper.ReadAloudManager.TtsState.StartReadSelection
 import org.kiwix.kiwixmobile.core.main.reader.helper.ReadAloudManager.TtsState.TtsPaused
 import org.kiwix.kiwixmobile.core.main.reader.helper.ReadAloudManager.TtsState.TtsResumed
-import org.kiwix.kiwixmobile.core.main.reader.helper.ReaderPageManager
 import org.kiwix.kiwixmobile.core.main.reader.helper.ReaderHistoryManager
+import org.kiwix.kiwixmobile.core.main.reader.helper.ReaderPageManager
 import org.kiwix.kiwixmobile.core.main.reader.helper.ReaderSessionManager
 import org.kiwix.kiwixmobile.core.main.reader.helper.ReaderSessionManager.RestoreSessionResult
 import org.kiwix.kiwixmobile.core.main.reader.helper.ReaderWebViewManager
@@ -277,9 +276,6 @@ abstract class CoreReaderViewModel(
   private var actionMode: ActionMode? = null
 
   val isAndroid13OrAbove = kiwixPermissionChecker.isAndroid13orAbove()
-
-  @VisibleForTesting
-  fun getUiState() = _uiState
 
   override fun sectionsLoaded(title: String, sections: List<DocumentSection>) {
     updateState { copy(tableOfContentTitle = title, documentSections = sections) }
@@ -532,7 +528,7 @@ abstract class CoreReaderViewModel(
   }
 
   @Volatile var isWebViewHistoryRestoring = false
-  var zimReaderSource: ZimReaderSource? = null
+  protected var zimReaderSource: ZimReaderSource? = null
 
   /**
    * Returns true if user enables the backToTop setting from setting screen.
@@ -700,6 +696,21 @@ abstract class CoreReaderViewModel(
     }
   }
 
+  protected open fun isXiaomiDevice(): Boolean = ShortcutUtils.isXiaomiDevice()
+
+  protected open fun isShortcutPermissionGranted(): Boolean =
+    ShortcutUtils.isShortcutPermissionGranted(context)
+
+  protected open fun addBookShortcut(
+    zimFileReader: ZimFileReader,
+    pageUrl: String?,
+    customName: String?
+  ): ShortcutResult = ShortcutUtils.addBookShortcut(context, zimFileReader, pageUrl, customName)
+
+  protected open fun openMiuiPermissionEditor() {
+    ShortcutUtils.openMiuiPermissionEditor(context)
+  }
+
   override fun onAddToHomeScreenMenuClicked() {
     val reader = zimReaderContainer.zimFileReader
     if (reader == null) {
@@ -708,15 +719,15 @@ abstract class CoreReaderViewModel(
     }
 
     // On Xiaomi/MIUI devices, check shortcut permission first
-    val effect = if (ShortcutUtils.isXiaomiDevice() &&
-      !ShortcutUtils.isShortcutPermissionGranted(context)
+    val effect = if (isXiaomiDevice() &&
+      !isShortcutPermissionGranted()
     ) {
       // Show permission dialog first, then proceed to naming dialog after user grants permission
       ReaderEffect.ShowKiwixDialog(
         KiwixDialog.XiaomiShortcutPermission
       ) {
         // "Open Settings" button — open MIUI permission editor
-        ShortcutUtils.openMiuiPermissionEditor(context)
+        openMiuiPermissionEditor()
       }
     } else {
       // Permission is granted (or not Xiaomi) — show the shortcut naming dialog
@@ -740,8 +751,7 @@ abstract class CoreReaderViewModel(
       )
       ReaderEffect.ShowKiwixDialog(dialog) {
         launchInMainScope {
-          val result = ShortcutUtils.addBookShortcut(
-            context = context,
+          val result = addBookShortcut(
             zimFileReader = reader,
             pageUrl = getCurrentWebView().url,
             customName = nameState.value

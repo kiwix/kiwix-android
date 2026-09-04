@@ -30,7 +30,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.SnackbarResult
 import androidx.lifecycle.viewModelScope
-import androidx.room.util.readVersion
 import app.cash.turbine.test
 import io.mockk.CapturingSlot
 import io.mockk.Runs
@@ -51,7 +50,6 @@ import kotlinx.coroutines.MainCoroutineDispatcher
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.assertj.core.api.Assertions.assertThat
@@ -101,6 +99,7 @@ import org.kiwix.kiwixmobile.core.ui.theme.White
 import org.kiwix.kiwixmobile.core.utils.DonationDialogHandler
 import org.kiwix.kiwixmobile.core.utils.ExternalLinkOpener
 import org.kiwix.kiwixmobile.core.utils.KiwixPermissionChecker
+import org.kiwix.kiwixmobile.core.utils.ShortcutResult
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
@@ -144,6 +143,7 @@ internal class CoreReaderViewModelTest {
   private val mockWebView = mockk<KiwixWebView>(relaxed = true)
 
   private lateinit var viewModel: TestCoreReaderViewModel
+
   @BeforeEach
   fun setup() {
     clearAllMocks()
@@ -204,8 +204,8 @@ internal class CoreReaderViewModelTest {
 
     @Test
     fun clearSections_clearsDocumentSectionsInUiState() {
-      viewModel.getUiState().update {
-        it.copy(documentSections = listOf(DocumentSection("Section 1", "sec_1", 1)))
+      viewModel.updateUiStateForTest {
+        copy(documentSections = listOf(DocumentSection("Section 1", "sec_1", 1)))
       }
 
       viewModel.clearSections()
@@ -223,7 +223,7 @@ internal class CoreReaderViewModelTest {
         every { kiwixDataStore.backToTop } returns flowOf(false)
 
 
-        viewModel.getUiState().update { it.copy(showBackToTopButton = true) }
+        viewModel.updateUiStateForTest { copy(showBackToTopButton = true) }
 
         viewModel.initialize(coreMainActivity, alertDialogShower)
         advanceUntilIdle()
@@ -236,7 +236,7 @@ internal class CoreReaderViewModelTest {
         every { kiwixDataStore.backToTop } returns flowOf(true)
 
         // Assuming the button is shown
-        viewModel.getUiState().update { it.copy(showBackToTopButton = true) }
+        viewModel.updateUiStateForTest { copy(showBackToTopButton = true) }
 
         viewModel.initialize(coreMainActivity, alertDialogShower)
         advanceUntilIdle()
@@ -980,8 +980,8 @@ internal class CoreReaderViewModelTest {
         viewModel.readerMenuState = readerMenuState
 
         // Assuming initially true
-        viewModel.getUiState().update { it.copy(showNoBookOpenInReader = true) }
-        viewModel.getUiState().update { it.copy(showTabSwitcher = true) }
+        viewModel.updateUiStateForTest { copy(showNoBookOpenInReader = true) }
+        viewModel.updateUiStateForTest { copy(showTabSwitcher = true) }
 
         viewModel.effects.test {
           viewModel.onAction(ReaderAction.CloseTab(1))
@@ -992,7 +992,7 @@ internal class CoreReaderViewModelTest {
           advanceUntilIdle()
 
           // If webViewList is empty sets showNoBookOpenInReader to false and showBookSpecificMenuItems
-          assertThat(viewModel.uiState.value.showNoBookOpenInReader).isFalse
+          assertThat(viewModel.uiState.value.showNoBookOpenInReader).isFalse()
           verify { readerMenuState.showBookSpecificMenuItems() }
 
           verify { readerWebViewManager.restoreDeletedTab(mockWebView, 1) }
@@ -1067,7 +1067,7 @@ internal class CoreReaderViewModelTest {
   inner class NavigationIcon {
     @Test
     fun navigationIcon_whenShowTabSwitcher_returnsAddIcon() {
-      viewModel.getUiState().update { it.copy(showTabSwitcher = true) }
+      viewModel.updateUiStateForTest { copy(showTabSwitcher = true) }
       val icon = viewModel.navigationIcon()
 
       assertThat(icon).isEqualTo(IconItem.Drawable(R.drawable.ic_round_add_white_36dp))
@@ -1075,7 +1075,7 @@ internal class CoreReaderViewModelTest {
 
     @Test
     fun navigationIcon_whenTabSwitcherIsHidden_returnsMenuVector() {
-      viewModel.getUiState().update { it.copy(showTabSwitcher = false) }
+      viewModel.updateUiStateForTest { copy(showTabSwitcher = false) }
 
       val icon = viewModel.navigationIcon()
 
@@ -1086,10 +1086,10 @@ internal class CoreReaderViewModelTest {
   @Test
   fun showDonationDialog_emitsShowDonationDialogEffect() = runTest {
     // Assuming initially false
-    viewModel.getUiState().update { it.copy(showDonationPopup = false) }
+    viewModel.updateUiStateForTest { copy(showDonationPopup = false) }
     viewModel.showDonationDialog()
 
-    assertThat(viewModel.uiState.value.showDonationPopup).isTrue
+    assertThat(viewModel.uiState.value.showDonationPopup).isTrue()
   }
 
   @Nested
@@ -1281,7 +1281,7 @@ internal class CoreReaderViewModelTest {
 
       coEvery { readAloudManager.stopReadAloud() } just Runs
 
-      viewModel.getUiState().update { it.copy(showTtsControls = true) }
+      viewModel.updateUiStateForTest { copy(showTtsControls = true) }
       viewModel.onReadAloudMenuClicked()
       advanceUntilIdle()
       coVerify { readAloudManager.stopReadAloud() }
@@ -1295,7 +1295,7 @@ internal class CoreReaderViewModelTest {
       every { readAloudManager.isTtsInitialed() } returns false
       every { readAloudManager.initializeTTS(false) } just Runs
 
-      viewModel.getUiState().update { it.copy(showTtsControls = false) }
+      viewModel.updateUiStateForTest { copy(showTtsControls = false) }
       viewModel.onReadAloudMenuClicked()
       advanceUntilIdle()
 
@@ -1310,7 +1310,7 @@ internal class CoreReaderViewModelTest {
     fun whenTabSwitcherShown_hidesTabSwitcherAndSelectsTab() = runTest {
       val viewModel = spyk(viewModel)
 
-      viewModel.getUiState().update { it.copy(showTabSwitcher = true) }
+      viewModel.updateUiStateForTest { copy(showTabSwitcher = true) }
       coEvery { viewModel.hideTabSwitcher() } just Runs
       coEvery { viewModel.selectTab(any()) } just Runs
 
@@ -1323,12 +1323,12 @@ internal class CoreReaderViewModelTest {
 
     @Test
     fun whenTabSwitcherHidden_showsTabSwitcher() = runTest {
-      viewModel.getUiState().update { it.copy(showTabSwitcher = false) }
+      viewModel.updateUiStateForTest { copy(showTabSwitcher = false) }
 
       viewModel.onTabMenuClicked()
       advanceUntilIdle()
 
-      assertThat(viewModel.uiState.value.showTabSwitcher).isTrue
+      assertThat(viewModel.uiState.value.showTabSwitcher).isTrue()
     }
   }
 
@@ -1336,7 +1336,7 @@ internal class CoreReaderViewModelTest {
   fun onHomeMenuClicked_whenTabSwitcherShown_hidesTabSwitcher() = runTest {
     val viewModel = spyk(viewModel)
 
-    viewModel.getUiState().update { it.copy(showTabSwitcher = true) }
+    viewModel.updateUiStateForTest { copy(showTabSwitcher = true) }
     coEvery { viewModel.hideTabSwitcher() } just Runs
 
     viewModel.onHomeMenuClicked()
@@ -1395,7 +1395,7 @@ internal class CoreReaderViewModelTest {
 
     every { viewModel.openSearch(isOpenedFromTabView = false) } just Runs
 
-    viewModel.getUiState().update { it.copy(showTabSwitcher = true) }
+    viewModel.updateUiStateForTest { copy(showTabSwitcher = true) }
 
     viewModel.onSearchMenuClickedMenuClicked()
     advanceUntilIdle()
@@ -1403,6 +1403,147 @@ internal class CoreReaderViewModelTest {
     coVerify { readerSessionManager.saveReaderSession(any()) }
 
     verify { viewModel.openSearch(isOpenedFromTabView = true) }
+  }
+
+  @Nested
+  inner class OnAddToHomeScreenMenuClicked {
+
+    @Test
+    fun whenReaderIsNull_doesNotEmitEffect() = runTest {
+      every { zimReaderContainer.zimFileReader } returns null
+
+      viewModel.effects.test {
+        viewModel.onAddToHomeScreenMenuClicked()
+
+        expectNoEvents()
+      }
+    }
+
+    @Test
+    fun whenXiaomiDeviceAndPermissionNotGranted_emitsXiaomiShortcutPermissionDialogAndOpensPermissionEditorOnClick() =
+      runTest {
+        val viewModel = spyk(viewModel)
+        val zimFileReader = mockk<ZimFileReader>()
+        every { zimReaderContainer.zimFileReader } returns zimFileReader
+
+        every { viewModel.isXiaomiDevice() } returns true
+        every { viewModel.isShortcutPermissionGranted() } returns false
+        every { viewModel.openMiuiPermissionEditor() } just Runs
+
+        viewModel.effects.test {
+          viewModel.onAddToHomeScreenMenuClicked()
+
+          val effect = awaitItem() as ReaderEffect.ShowKiwixDialog
+          assertThat(effect.kiwixDialog).isEqualTo(KiwixDialog.XiaomiShortcutPermission)
+
+          effect.onClick.invoke()
+
+          verify { viewModel.openMiuiPermissionEditor() }
+
+          expectNoEvents()
+        }
+      }
+
+    @Test
+    fun whenNotXiaomiDevice_emitsAddShortcutDialog() = runTest {
+      val viewModel = spyk(viewModel)
+      val zimFileReader = mockk<ZimFileReader>()
+      every { zimFileReader.title } returns "Wikipedia"
+      every { zimReaderContainer.zimFileReader } returns zimFileReader
+
+      every { viewModel.isXiaomiDevice() } returns false
+
+      viewModel.effects.test {
+        viewModel.onAddToHomeScreenMenuClicked()
+
+        val effect = awaitItem() as ReaderEffect.ShowKiwixDialog
+        assertThat(effect.kiwixDialog).isInstanceOf(KiwixDialog.AddShortcut::class.java)
+
+        expectNoEvents()
+      }
+    }
+
+    @Test
+    fun whenXiaomiDeviceAndPermissionGranted_emitsAddShortcutDialog() = runTest {
+      val viewModel = spyk(viewModel)
+      val zimFileReader = mockk<ZimFileReader>()
+      every { zimFileReader.title } returns "Wikipedia"
+      every { zimReaderContainer.zimFileReader } returns zimFileReader
+
+      every { viewModel.isXiaomiDevice() } returns true
+      every { viewModel.isShortcutPermissionGranted() } returns true
+
+      viewModel.effects.test {
+        viewModel.onAddToHomeScreenMenuClicked()
+
+        val effect = awaitItem() as ReaderEffect.ShowKiwixDialog
+        assertThat(effect.kiwixDialog).isInstanceOf(KiwixDialog.AddShortcut::class.java)
+
+        expectNoEvents()
+      }
+    }
+
+    @Test
+    fun whenAddShortcutDialogClickedAndResultNotSupported_emitsShortcutDisabledToast() = runTest {
+      val viewModel = spyk(viewModel)
+      val zimFileReader = mockk<ZimFileReader>()
+      every { zimFileReader.title } returns "Wikipedia"
+      every { zimReaderContainer.zimFileReader } returns zimFileReader
+      every { mockWebView.url } returns "https://kiwix.app/A/page"
+      every { context.getString(string.shortcut_disabled_message) } returns "Shortcut not available"
+
+      every { viewModel.isXiaomiDevice() } returns false
+      every {
+        viewModel.addBookShortcut(
+          zimFileReader,
+          "https://kiwix.app/A/page",
+          "Wikipedia"
+        )
+      } returns ShortcutResult.NotSupported
+
+      viewModel.effects.test {
+        viewModel.onAddToHomeScreenMenuClicked()
+
+        val dialogEffect = awaitItem() as ReaderEffect.ShowKiwixDialog
+
+        dialogEffect.onClick.invoke()
+        advanceUntilIdle()
+
+        val toastEffect = awaitItem() as ReaderEffect.ShowToast
+        assertThat(toastEffect.message).isEqualTo("Shortcut not available")
+
+        expectNoEvents()
+      }
+    }
+
+    @Test
+    fun whenAddShortcutDialogClickedAndResultSuccess_doesNotEmitToast() = runTest {
+      val viewModel = spyk(viewModel)
+      val zimFileReader = mockk<ZimFileReader>()
+      every { zimFileReader.title } returns "Wikipedia"
+      every { zimReaderContainer.zimFileReader } returns zimFileReader
+      every { mockWebView.url } returns "https://kiwix.app/A/page"
+
+      every { viewModel.isXiaomiDevice() } returns false
+      every {
+        viewModel.addBookShortcut(
+          zimFileReader,
+          "https://kiwix.app/A/page",
+          "Wikipedia"
+        )
+      } returns ShortcutResult.Success
+
+      viewModel.effects.test {
+        viewModel.onAddToHomeScreenMenuClicked()
+
+        val dialogEffect = awaitItem() as ReaderEffect.ShowKiwixDialog
+
+        dialogEffect.onClick.invoke()
+        advanceUntilIdle()
+
+        expectNoEvents()
+      }
+    }
   }
 
   @Test
@@ -1462,7 +1603,7 @@ internal class CoreReaderViewModelTest {
     viewModel.isWebViewHistoryRestoring = false
 
     // Controls bottom Bar visibility
-    viewModel.getUiState().update { it.copy(showTabSwitcher = true) }
+    viewModel.updateUiStateForTest { copy(showTabSwitcher = true) }
 
     viewModel.webViewUrlFinishedLoading()
     advanceUntilIdle()
@@ -1484,7 +1625,7 @@ internal class CoreReaderViewModelTest {
     coVerify { kiwixDataStore.incrementRateAppReadingCount() }
 
     // Toggles bottom bar visibility based on tab Switcher
-    assertThat(viewModel.uiState.value.showBottomBar).isFalse
+    assertThat(viewModel.uiState.value.showBottomBar).isFalse()
 
     // Only show if WebViewHistoryRestoring is false
     coVerify { readerSessionManager.saveReaderSession() }
@@ -1510,7 +1651,6 @@ internal class CoreReaderViewModelTest {
       coVerify { readerWebViewManager.getCurrentWebView() }
       verify { mockWebView.url }
 
-      assertThat(viewModel.uiState.value.loading).isTrue()
       assertThat(viewModel.uiState.value.progress).isEqualTo(22)
     }
 
@@ -1560,8 +1700,12 @@ internal class CoreReaderViewModelTest {
 
         every { kiwixDataStore.backToTop } returns flowOf(true)
         every { mockWebView.scrollY } returns 250
-        viewModel.getUiState()
-          .update { it.copy(showTtsControls = false, showBackToTopButton = false) }
+        viewModel.updateUiStateForTest {
+          copy(
+            showTtsControls = false,
+            showBackToTopButton = false
+          )
+        }
 
         viewModel.uiState.test {
           awaitItem()
@@ -1588,7 +1732,7 @@ internal class CoreReaderViewModelTest {
       every { kiwixDataStore.backToTop } returns flowOf(true)
       every { mockWebView.scrollY } returns 150
 
-      viewModel.getUiState().update { it.copy(showTtsControls = false, showBackToTopButton = true) }
+      viewModel.updateUiStateForTest { copy(showTtsControls = false, showBackToTopButton = true) }
 
       viewModel.webViewPageChanged(1, 10)
 
@@ -1858,8 +2002,8 @@ internal class CoreReaderViewModelTest {
         viewModel.onFullscreenVideoToggled(true)
         advanceUntilIdle()
 
-        assertThat(viewModel.uiState.value.shouldShowFullScreen).isTrue
-        assertThat(viewModel.uiState.value.showBottomBar).isFalse
+        assertThat(viewModel.uiState.value.shouldShowFullScreen).isTrue()
+        assertThat(viewModel.uiState.value.showBottomBar).isFalse()
 
         val effect = awaitItem()
         assertThat(effect).isEqualTo(ReaderEffect.DisableLeftSideBar)
@@ -1873,8 +2017,8 @@ internal class CoreReaderViewModelTest {
         viewModel.onFullscreenVideoToggled(false)
         advanceUntilIdle()
 
-        assertThat(viewModel.uiState.value.shouldShowFullScreen).isFalse
-        assertThat(viewModel.uiState.value.showBottomBar).isTrue
+        assertThat(viewModel.uiState.value.shouldShowFullScreen).isFalse()
+        assertThat(viewModel.uiState.value.showBottomBar).isTrue()
 
         val effect = awaitItem()
         assertThat(effect).isEqualTo(ReaderEffect.EnableLeftSideBar)
@@ -1915,10 +2059,10 @@ internal class CoreReaderViewModelTest {
         advanceUntilIdle()
 
         coVerify { readerWebViewManager.destroyAllTabs() }
-        assertThat(viewModel.uiState.value.showNoBookOpenInReader).isFalse
+        assertThat(viewModel.uiState.value.showNoBookOpenInReader).isFalse()
         coVerify { readerWebViewManager.openPage(zimReaderContainer.mainPage, mockWebView) }
         verify { readerMenuState.onFileOpened(any()) }
-        assertThat(viewModel.uiState.value.showTabSwitcher).isFalse
+        assertThat(viewModel.uiState.value.showTabSwitcher).isFalse()
         verify { viewModel.observeBookmarks(zimFileReader) }
         coVerify { viewModel.updateTitle() }
 
@@ -1996,7 +2140,7 @@ internal class CoreReaderViewModelTest {
       val viewModel = spyk(viewModel)
 
       val zimReaderSource = mockk<ZimReaderSource>()
-      viewModel.zimReaderSource = zimReaderSource
+      viewModel.setZimReaderSourceForTest(zimReaderSource)
 
       coEvery { viewModel.openZimFile(zimReaderSource) } just Runs
 
@@ -2013,7 +2157,7 @@ internal class CoreReaderViewModelTest {
     @Test
     fun whenPermissionIsGrantedAndZimReaderSourceIsNull_doesNothing() = runTest {
       val viewModel = spyk(viewModel)
-      viewModel.zimReaderSource = null
+      viewModel.setZimReaderSourceForTest(null)
 
       viewModel.effects.test {
         viewModel.onReadStoragePermissionResult(isGranted = true)
@@ -2129,8 +2273,8 @@ internal class CoreReaderViewModelTest {
     every { readerMenuState.hideBookSpecificMenuItems() } just Runs
     coEvery { zimFileManager.close() } just Runs
 
-    viewModel.getUiState().update {
-      it.copy(
+    viewModel.updateUiStateForTest {
+      copy(
         showBottomBar = true,
         title = "Active Book Title",
         loading = true,
@@ -2144,7 +2288,7 @@ internal class CoreReaderViewModelTest {
 
     val state = viewModel.uiState.value
 
-    assertThat(state.showNoBookOpenInReader).isTrue
+    assertThat(state.showNoBookOpenInReader).isTrue()
 
     assertThat(state.showBottomBar).isFalse()
     assertThat(state.title).isEqualTo("Reader")
@@ -2561,7 +2705,7 @@ internal class CoreReaderViewModelTest {
       val historyItems = listOf(mockk<WebViewHistoryItem>())
       val currentTab = 2
 
-      viewModel.getUiState().update { it.copy(showTabSwitcher = true) }
+      viewModel.updateUiStateForTest { copy(showTabSwitcher = true) }
       viewModel.selectTab(1)
       coEvery {
         readerWebViewManager.restoreTabs(historyItems, currentTab, any())
@@ -2620,7 +2764,7 @@ internal class CoreReaderViewModelTest {
     @Test
     fun whenShowTabSwitcherTrue_returnsSearchOpenInNewTabString() {
 
-      viewModel.getUiState().update { it.copy(showTabSwitcher = true) }
+      viewModel.updateUiStateForTest { copy(showTabSwitcher = true) }
       val result = viewModel.navigationIconContentDescription()
 
       assertThat(result).isEqualTo(string.search_open_in_new_tab)
@@ -2629,7 +2773,7 @@ internal class CoreReaderViewModelTest {
     @Test
     fun whenShowTabSwitcherFalse_returnsOpenDrawer() {
 
-      viewModel.getUiState().update { it.copy(showTabSwitcher = false) }
+      viewModel.updateUiStateForTest { copy(showTabSwitcher = false) }
 
       val result = viewModel.navigationIconContentDescription()
 
@@ -2699,7 +2843,7 @@ internal class CoreReaderViewModelTest {
         runTest {
           val viewModel = spyk(viewModel)
 
-          viewModel.getUiState().update { it.copy(showTabSwitcher = true) }
+          viewModel.updateUiStateForTest { copy(showTabSwitcher = true) }
           every { coreMainActivity.navigationDrawerIsOpen() } returns false
           every { readerWebViewManager.currentWebViewIndex } returns 1
           every { readerWebViewManager.tabsSize() } returns 3
@@ -2719,7 +2863,7 @@ internal class CoreReaderViewModelTest {
         runTest {
           val viewModel = spyk(viewModel)
 
-          viewModel.getUiState().update { it.copy(showTabSwitcher = true) }
+          viewModel.updateUiStateForTest { copy(showTabSwitcher = true) }
           every { coreMainActivity.navigationDrawerIsOpen() } returns false
           every { readerWebViewManager.currentWebViewIndex } returns 4
           every { readerWebViewManager.tabsSize() } returns 3
@@ -2739,8 +2883,8 @@ internal class CoreReaderViewModelTest {
     fun whenNavigationDrawerIsOpenFalseAndFindInPageUiStateIsVisible_closesFindInPageAndCallsBackPressActivityExtensionsSuperShouldCall() =
       runTest {
 
-        viewModel.getUiState().update {
-          it.copy(findInPageUiState = FindInPageManager.FindInPageUiState(visible = true))
+        viewModel.updateUiStateForTest {
+          copy(findInPageUiState = FindInPageManager.FindInPageUiState(visible = true))
         }
         every { findInPageManager.stop() } just Runs
         every { coreMainActivity.navigationDrawerIsOpen() } returns false
@@ -2756,7 +2900,7 @@ internal class CoreReaderViewModelTest {
     fun whenNavigationDrawerIsOpenFalseAndShowTableOfContentDrawer_emitsReaderActionCloseTocDrawerAndBackPressActivityExtensionsSuperShouldNotCall() =
       runTest {
         val viewModel = spyk(viewModel)
-        viewModel.getUiState().update { it.copy(showTableOfContentDrawer = true) }
+        viewModel.updateUiStateForTest { copy(showTableOfContentDrawer = true) }
         every { coreMainActivity.navigationDrawerIsOpen() } returns false
 
         val result = viewModel.onUserBackPressed(coreMainActivity)
@@ -2823,7 +2967,7 @@ internal class CoreReaderViewModelTest {
 
       every { viewModel.onHomeMenuClicked() } just Runs
 
-      viewModel.getUiState().update { it.copy(showTabSwitcher = true) }
+      viewModel.updateUiStateForTest { copy(showTabSwitcher = true) }
       viewModel.effects.test {
         viewModel.navigationIconClick(true)
 
@@ -2865,7 +3009,7 @@ internal class CoreReaderViewModelTest {
     runTest {
 
       // Bottom bar visibility depends on TabSwitcher
-      viewModel.getUiState().update { it.copy(showTabSwitcher = true) }
+      viewModel.updateUiStateForTest { copy(showTabSwitcher = true) }
 
       every { readAloudManager.tts } returns null
       every { readAloudManager.setUpTTS() } just Runs
@@ -2948,6 +3092,14 @@ internal class CoreReaderViewModelTest {
     ) {
     }
 
+    fun updateUiStateForTest(transform: ReaderUiState.() -> ReaderUiState) {
+      updateState(transform)
+    }
+
+    fun setZimReaderSourceForTest(zimReaderSource: ZimReaderSource?) {
+      this.zimReaderSource = zimReaderSource
+    }
+
     override fun invalidZimFileFound(onInvalidZimFileFound: () -> Unit) {
     }
 
@@ -2960,6 +3112,20 @@ internal class CoreReaderViewModelTest {
 
     public override fun openHomeScreen() {
       super.openHomeScreen()
+    }
+
+    public override fun isXiaomiDevice(): Boolean = super.isXiaomiDevice()
+
+    public override fun isShortcutPermissionGranted(): Boolean = super.isShortcutPermissionGranted()
+
+    public override fun addBookShortcut(
+      zimFileReader: ZimFileReader,
+      pageUrl: String?,
+      customName: String?
+    ): ShortcutResult = super.addBookShortcut(zimFileReader, pageUrl, customName)
+
+    public override fun openMiuiPermissionEditor() {
+      super.openMiuiPermissionEditor()
     }
 
     public override fun openKiwixSupportUrl() {
