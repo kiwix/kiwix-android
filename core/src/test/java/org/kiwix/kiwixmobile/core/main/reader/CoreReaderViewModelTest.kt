@@ -709,26 +709,26 @@ internal class CoreReaderViewModelTest {
     findInPageManager: FindInPageManager,
     mainDispatcher: MainCoroutineDispatcher
   ) : CoreReaderViewModel(
-      context,
-      kiwixDataStore,
-      externalLinkOpener,
-      unsupportedMimeTypeHandler,
-      readerWebViewManager,
-      zimReaderContainer,
-      zimFileManager,
-      kiwixPermissionChecker,
-      repositoryActions,
-      bookmarkManager,
-      readerHistoryManager,
-      readerSessionManager,
-      readerIntentManager,
-      pendingSearchItemManager,
-      readerPageManager,
-      readAloudManager,
-      donationDialogHandler,
-      findInPageManager,
-      mainDispatcher
-    ) {
+    context,
+    kiwixDataStore,
+    externalLinkOpener,
+    unsupportedMimeTypeHandler,
+    readerWebViewManager,
+    zimReaderContainer,
+    zimFileManager,
+    kiwixPermissionChecker,
+    repositoryActions,
+    bookmarkManager,
+    readerHistoryManager,
+    readerSessionManager,
+    readerIntentManager,
+    pendingSearchItemManager,
+    readerPageManager,
+    readAloudManager,
+    donationDialogHandler,
+    findInPageManager,
+    mainDispatcher
+  ) {
     var openBookmarkScreenCalled = false
     override fun openLocalLibrary() {}
 
