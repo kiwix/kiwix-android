@@ -104,6 +104,22 @@ class KiwixDataStore @Inject constructor(
     }
   }
 
+  /**
+   * Disables the app's animated effects (e.g. the pulsing back-to-top button) - see
+   * issue #3521. Aimed at e-ink displays, where a continuously looping animation causes
+   * needless partial refreshes and drains battery for no visual benefit. Off by default.
+   */
+  val disableAnimations: Flow<Boolean> =
+    context.kiwixDataStore.data.map { prefs ->
+      prefs[PreferencesKeys.PREF_DISABLE_ANIMATIONS] ?: false
+    }
+
+  suspend fun setDisableAnimations(disabled: Boolean) {
+    context.kiwixDataStore.edit { prefs ->
+      prefs[PreferencesKeys.PREF_DISABLE_ANIMATIONS] = disabled
+    }
+  }
+
   val openNewTabInBackground: Flow<Boolean> =
     context.kiwixDataStore.data.map { prefs ->
       prefs[PreferencesKeys.PREF_NEW_TAB_BACKGROUND] ?: false
@@ -677,6 +693,7 @@ class KiwixDataStore @Inject constructor(
     const val PREF_IS_TEST = "is_test"
     const val PREF_SHOW_SHOWCASE = "showShowCase"
     const val PREF_BACK_TO_TOP = "pref_backtotop"
+    const val PREF_DISABLE_ANIMATIONS = "pref_disable_animations"
     const val PREF_NEW_TAB_BACKGROUND = "pref_newtab_background"
     const val PREF_EXTERNAL_LINK_POPUP = "pref_external_link_popup"
     const val PREF_SHOW_STORAGE_OPTION = "show_storgae_option"

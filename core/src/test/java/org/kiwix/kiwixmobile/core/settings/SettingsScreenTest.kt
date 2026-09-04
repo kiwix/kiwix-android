@@ -84,6 +84,7 @@ class SettingsScreenTest {
     uiState: SettingsUiState = SettingsUiState(),
     themeLabel: String = "System default",
     backToTopEnabled: Boolean = false,
+    disableAnimationsEnabled: Boolean = false,
     textZoom: Int = DEFAULT_ZOOM,
     newTabInBackground: Boolean = false,
     externalLinkPopup: Boolean = true,
@@ -93,6 +94,7 @@ class SettingsScreenTest {
     every { viewModel.uiState } returns MutableStateFlow(uiState)
     every { viewModel.themeLabel } returns MutableStateFlow(themeLabel)
     every { viewModel.backToTopEnabled } returns MutableStateFlow(backToTopEnabled)
+    every { viewModel.disableAnimationsEnabled } returns MutableStateFlow(disableAnimationsEnabled)
     every { viewModel.textZoom } returns MutableStateFlow(textZoom)
     every { viewModel.newTabInBackground } returns MutableStateFlow(newTabInBackground)
     every { viewModel.externalLinkPopup } returns MutableStateFlow(externalLinkPopup)
@@ -244,6 +246,38 @@ class SettingsScreenTest {
       .onNodeWithText(context.getString(R.string.pref_back_to_top_summary))
       .performClick()
     verify { viewModel.setBackToTop(true) }
+  }
+
+  @Test
+  fun settingsScreen_displayCategory_disableAnimationsSwitch_isDisplayed() {
+    renderSettingsScreen(createMockViewModel())
+    scrollToContentDescription(context.getString(R.string.pref_disable_animations))
+    composeTestRule
+      .onNodeWithTag(context.getString(R.string.pref_disable_animations))
+      .assertIsDisplayed()
+      .assertIsOff()
+  }
+
+  @Test
+  fun disableAnimationsSwitch_reflectsStateChange() {
+    renderSettingsScreen(createMockViewModel(disableAnimationsEnabled = true))
+    scrollToContentDescription(context.getString(R.string.pref_disable_animations))
+
+    composeTestRule
+      .onNodeWithTag(context.getString(R.string.pref_disable_animations))
+      .assertIsDisplayed()
+      .assertIsOn()
+  }
+
+  @Test
+  fun settingsScreen_displayCategory_disableAnimationsSwitch_toggleTriggersCallback() {
+    val viewModel = createMockViewModel(disableAnimationsEnabled = false)
+    renderSettingsScreen(viewModel)
+    scrollToText(context.getString(R.string.pref_disable_animations))
+    composeTestRule
+      .onNodeWithText(context.getString(R.string.pref_disable_animations_summary))
+      .performClick()
+    verify { viewModel.setDisableAnimations(true) }
   }
 
   @Test
