@@ -21,7 +21,7 @@ jobs:
 
   determine-api-levels:
     name: Determine available emulator API levels
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     outputs:
       api-levels: ${{ steps.filter.outputs.api-levels }}
     steps:
@@ -70,7 +70,7 @@ jobs:
         # each with its own api-level + target.
         include: ${{ fromJson(needs.determine-api-levels.outputs.api-levels) }}
       fail-fast: true
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     steps:
       - name: Free Disk Space (Ubuntu)
         uses: jlumbroso/free-disk-space@main
@@ -194,7 +194,7 @@ jobs:
         # each with its own api-level + target.
         include: ${{ fromJson(needs.determine-api-levels.outputs.api-levels) }}
       fail-fast: true
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     steps:
       - name: Free Disk Space (Ubuntu)
         uses: jlumbroso/free-disk-space@main
@@ -273,7 +273,7 @@ jobs:
         # each with its own api-level + target.
         include: ${{ fromJson(needs.determine-api-levels.outputs.api-levels) }}
       fail-fast: true
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     steps:
       - name: Free Disk Space (Ubuntu)
         uses: jlumbroso/free-disk-space@main
@@ -352,7 +352,7 @@ jobs:
         # each with its own api-level + target.
         include: ${{ fromJson(needs.determine-api-levels.outputs.api-levels) }}
       fail-fast: true
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     steps:
       - name: Free Disk Space (Ubuntu)
         uses: jlumbroso/free-disk-space@main
@@ -424,7 +424,7 @@ jobs:
 
   code-formatting-job:
     name: Code Formatting
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     continue-on-error: true
 
     steps:
@@ -451,7 +451,7 @@ jobs:
 
   detekt:
     name: Detekt
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     continue-on-error: true
 
     steps:
@@ -477,7 +477,7 @@ jobs:
 
   lint:
     name: Lint
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     continue-on-error: true
     steps:
 
@@ -505,7 +505,7 @@ jobs:
 
   assemble:
     name: Assemble
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     continue-on-error: true
 
     steps:
