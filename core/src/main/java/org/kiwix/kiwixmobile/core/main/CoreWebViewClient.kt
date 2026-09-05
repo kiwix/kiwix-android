@@ -66,7 +66,14 @@ open class CoreWebViewClient(
       return true
     }
 
-    // Otherwise, the link is not for a page on my site, so launch another Activity that handles URLs
+    // Otherwise, the link is not for a page on my site, so launch another Activity that handles URLs.
+    // ZIM content is untrusted third-party data, so only hand off well-known safe schemes -
+    // anything else (file://, content://, intent://, vendor-specific schemes, ...) is dropped
+    // rather than launched via an external ACTION_VIEW intent.
+    if (url.toUri().scheme?.lowercase() !in SAFE_EXTERNAL_SCHEMES) {
+      Log.w(TAG_KIWIX, "Blocked external navigation to unsupported scheme in url: $url")
+      return true
+    }
     val intent = Intent(Intent.ACTION_VIEW, url.toUri())
     callback.openExternalUrl(intent)
     return true
@@ -155,5 +162,11 @@ open class CoreWebViewClient(
       "zim://content/",
       "content://${instance.packageName}.zim.base/".toUri().toString()
     )
+
+    // Schemes ZIM content is allowed to hand off to an external app via ACTION_VIEW.
+    // Excludes file/content/intent and vendor-specific schemes, which would let
+    // untrusted ZIM content drive this app into launching activities on local
+    // files or other apps' exported components.
+    private val SAFE_EXTERNAL_SCHEMES = setOf("http", "https", "mailto", "tel")
   }
 }

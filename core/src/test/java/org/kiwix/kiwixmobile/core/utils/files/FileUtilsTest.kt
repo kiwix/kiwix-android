@@ -20,6 +20,9 @@ package org.kiwix.kiwixmobile.core.utils.files
 
 import android.content.Context
 import android.net.Uri
+import android.os.Environment
+import android.os.storage.StorageManager
+import android.os.storage.StorageVolume
 import android.provider.DocumentsContract
 import android.util.Log
 import android.webkit.URLUtil
@@ -246,6 +249,47 @@ class FileUtilsTest {
       "/storage/emulated/0/test.zim",
       FileUtils.getLocalFilePathByUri(mockContext, mockUri, testDispatcher)
     )
+  }
+
+  // ======== getActualFilePathOfContentUri (root-path URIs) ========
+
+  private fun mockStorageVolumes(context: Context, primaryVolumePath: File) {
+    val storageManager = mockk<StorageManager>()
+    val volume = mockk<StorageVolume>()
+    every { context.getSystemService(Context.STORAGE_SERVICE) } returns storageManager
+    every { storageManager.storageVolumes } returns listOf(volume)
+    every { volume.isPrimary } returns true
+    mockkStatic(Environment::class)
+    every { Environment.getExternalStorageDirectory() } returns primaryVolumePath
+  }
+
+  @Test
+  fun getLocalFilePathByUri_whenRootUriResolvesUnderStorageVolume_returnsCanonicalPath() =
+    runTest {
+      val mockContext = mockk<Context>()
+      val mockUri = mockk<Uri>()
+      every { mockUri.scheme } returns "content"
+      every { mockUri.toString() } returns "content://com.example/root/storage/emulated/0/test.zim"
+      mockkStatic(DocumentsContract::class)
+      every { DocumentsContract.isDocumentUri(mockContext, mockUri) } returns false
+      mockStorageVolumes(mockContext, File("/storage/emulated/0"))
+      coEvery { any<File>().isFileExist(testDispatcher) } returns true
+      assertEquals(
+        "/storage/emulated/0/test.zim",
+        FileUtils.getLocalFilePathByUri(mockContext, mockUri, testDispatcher)
+      )
+    }
+
+  @Test
+  fun getLocalFilePathByUri_whenRootUriEscapesStorageVolume_returnsNull() = runTest {
+    val mockContext = mockk<Context>()
+    val mockUri = mockk<Uri>()
+    every { mockUri.scheme } returns "content"
+    every { mockUri.toString() } returns "content://com.example/root/../../../etc/passwd.zim"
+    mockkStatic(DocumentsContract::class)
+    every { DocumentsContract.isDocumentUri(mockContext, mockUri) } returns false
+    mockStorageVolumes(mockContext, File("/storage/emulated/0"))
+    assertNull(FileUtils.getLocalFilePathByUri(mockContext, mockUri, testDispatcher))
   }
 
   // ======== extractDocumentId ========

