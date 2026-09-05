@@ -101,7 +101,7 @@ class FileOperationHandlerImpl @Inject constructor(
     originalParentUri: Uri
   ): Boolean = tryMoveWithDocumentContract(
     destinationFile.toUri(),
-    destinationFile.parentFile.toUri(),
+    destinationFile.parentFile!!.toUri(),
     originalParentUri
   )
 
