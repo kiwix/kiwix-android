@@ -31,6 +31,17 @@ touch /tmp/emulator_script_started
 # Kill it once this script exits, regardless of the test outcome.
 trap 'killall -INT crashpad_handler 2>/dev/null || true' EXIT
 
+# Play-Store-tagged images (needed for API levels with no "default" system
+# image, e.g. 37) take longer to unlock user 0's credential-encrypted
+# storage than plain AOSP images - the app crashes on launch before that
+# (DataStore's SharedPreferences migration reads CE storage at startup).
+# boot_completed doesn't imply this; wait for it explicitly.
+unlock_wait=0
+while [ "$(adb shell getprop sys.user.0.ce_available | tr -d '\r')" != "true" ] && [ $unlock_wait -lt 60 ]; do
+  sleep 2
+  unlock_wait=$(( unlock_wait + 1 ))
+done
+
 # Enable Wi-Fi on the emulator
 adb shell svc wifi enable
 adb logcat -c
