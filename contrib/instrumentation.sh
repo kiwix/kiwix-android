@@ -42,6 +42,17 @@ while [ "$(adb shell getprop sys.user.0.ce_available | tr -d '\r')" != "true" ] 
   unlock_wait=$(( unlock_wait + 1 ))
 done
 
+# API 36+ system images: SurfaceFlinger's RegionSamplingThread (only used by
+# gesture nav) repeatedly SIGABRTs on a guest mapper bug
+# (GoldfishMapper::readFromHost asserts hasReadColorBufferDma), eventually
+# Filed as https://issuetracker.google.com/issues/557246813 - 3-button
+# nav avoids the trigger until Google fixes the image.
+sdk_int=$(adb shell getprop ro.build.version.sdk | tr -d '\r')
+if [ "$sdk_int" -ge 36 ] 2>/dev/null; then
+  adb shell cmd overlay enable com.android.internal.systemui.navbar.threebutton
+  adb shell cmd overlay disable com.android.internal.systemui.navbar.gestural
+fi
+
 # Enable Wi-Fi on the emulator
 adb shell svc wifi enable
 adb logcat -c
