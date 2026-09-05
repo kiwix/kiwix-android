@@ -64,6 +64,8 @@ class Repository @Inject internal constructor(
     booksOnDiskAsListItems()
       .map { it.ifEmpty { emptyList() } }
 
+  override fun bookRemoved() = libkiwixBookOnDisk.bookRemoved
+
   override fun booksOnDiskAsListItems(): Flow<List<BooksOnDiskListItem>> =
     libkiwixBookOnDisk.books()
       .map { books ->

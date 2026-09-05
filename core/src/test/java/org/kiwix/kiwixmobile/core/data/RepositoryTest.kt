@@ -28,6 +28,7 @@ import io.mockk.just
 import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.assertj.core.api.Assertions.assertThat
@@ -533,6 +534,18 @@ class RepositoryTest {
         val items = awaitItem()
         // Only one book with ID "1" should remain
         assertThat(items.filterIsInstance<BookOnDisk>()).hasSize(1)
+        cancelAndIgnoreRemainingEvents()
+      }
+    }
+
+    @Test
+    fun `bookRemoved delegates to libkiwixBookOnDisk`() = runTest {
+      val removals = MutableSharedFlow<Unit>()
+      every { libkiwixBookOnDisk.bookRemoved } returns removals
+
+      repository.bookRemoved().test {
+        removals.emit(Unit)
+        awaitItem()
         cancelAndIgnoreRemainingEvents()
       }
     }

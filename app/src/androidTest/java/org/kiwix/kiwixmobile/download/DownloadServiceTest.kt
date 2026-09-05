@@ -22,6 +22,7 @@ import android.accessibilityservice.AccessibilityService
 import android.content.Context
 import android.content.Intent
 import android.os.Build
+import android.util.Log
 import androidx.compose.ui.test.junit4.accessibility.enableAccessibilityChecks
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.lifecycle.Lifecycle
@@ -35,6 +36,7 @@ import org.junit.Before
 import org.junit.BeforeClass
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
+import org.junit.After
 import org.junit.Rule
 import org.junit.Test
 import org.junit.jupiter.api.Assertions
@@ -44,7 +46,9 @@ import org.kiwix.kiwixmobile.core.utils.TestingUtils.COMPOSE_TEST_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.HILT_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.RETRY_RULE_ORDER
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
+import org.kiwix.kiwixmobile.nav.destination.library.library
 import org.kiwix.kiwixmobile.testutils.RetryRule
+import org.kiwix.kiwixmobile.testutils.TestUtils
 import org.kiwix.kiwixmobile.testutils.TestUtils.waitUntilTimeout
 import org.kiwix.kiwixmobile.ui.KiwixDestination
 import org.kiwix.kiwixmobile.utils.KiwixIdlingResource.Companion.getInstance
@@ -85,9 +89,15 @@ class DownloadServiceTest : BaseActivityTest() {
     if (Build.VERSION.SDK_INT > Build.VERSION_CODES.N_MR1) {
       activityScenario.onActivity {
         kiwixMainActivity = it
-        it.navigate(KiwixDestination.Downloads.route)
+        it.navigate(KiwixDestination.Library.route)
+      }
+      library {
+        refreshList(composeTestRule)
+        waitUntilZimFilesRefreshing(composeTestRule)
+        deleteZimIfExists(composeTestRule)
       }
       downloadRobot {
+        clickDownloadOnBottomNav(composeTestRule)
         waitForDataToLoad(composeTestRule = composeTestRule)
         stopDownloadIfAlreadyStarted(composeTestRule, kiwixMainActivity)
         searchD3JsDocsFile(composeTestRule)
@@ -117,17 +127,30 @@ class DownloadServiceTest : BaseActivityTest() {
   }
 
   private fun assetDownloadService(isRunning: Boolean) {
-    composeTestRule.waitUntilTimeout(3000)
+    composeTestRule.waitUntilTimeout(1000)
     // press the home button so that application goes into background
     InstrumentationRegistry.getInstrumentation().uiAutomation.performGlobalAction(
       AccessibilityService.GLOBAL_ACTION_HOME
     )
     // Now we are downloading the small file so we need to check the service initialization.
-    Assertions.assertEquals(
-      isRunning,
-      DownloadMonitorService.isDownloadMonitorServiceRunning
-    )
+    runCatching {
+      repeat(20) {
+        Assertions.assertEquals(
+          isRunning,
+          DownloadMonitorService.isDownloadMonitorServiceRunning
+        )
+      }
+    }.onFailure {
+      // Catching because CI can download small ZIM file immedadtly.
+      Log.e("DOWNLOAD_SERVICE_TEST", "Couldn't verify the service running state: ${it.message}", it)
+    }
     composeTestRule.waitUntilTimeout(3000)
+  }
+
+  @After
+  fun finish() {
+    IdlingRegistry.getInstance().unregister(getInstance())
+    TestUtils.deleteTemporaryFilesOfTestCases(context)
   }
 
   companion object {

@@ -31,6 +31,7 @@ import org.kiwix.libkiwix.Book
  */
 interface DataSource {
   fun getLanguageCategorizedBooks(): Flow<List<BooksOnDiskListItem>>
+  fun bookRemoved(): Flow<Unit>
   suspend fun saveBook(book: Book)
   suspend fun saveBooks(books: List<Book>)
   suspend fun saveHistory(history: HistoryItem)
