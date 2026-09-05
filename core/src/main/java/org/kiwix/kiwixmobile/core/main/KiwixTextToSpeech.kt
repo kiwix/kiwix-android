@@ -28,9 +28,9 @@ import android.speech.tts.TextToSpeech
 import android.speech.tts.TextToSpeech.Engine
 import android.speech.tts.TextToSpeech.LANG_MISSING_DATA
 import android.speech.tts.TextToSpeech.LANG_NOT_SUPPORTED
-import android.speech.tts.TextToSpeech.QUEUE_ADD
 import android.speech.tts.TextToSpeech.SUCCESS
 import android.speech.tts.UtteranceProgressListener
+import android.speech.tts.Voice
 import android.webkit.JavascriptInterface
 import android.webkit.WebView
 import android.widget.Toast
@@ -40,6 +40,15 @@ import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.iSO3ToLocale
 import org.kiwix.kiwixmobile.core.utils.TAG_KIWIX
 import org.kiwix.kiwixmobile.core.utils.files.Log
+import org.kiwix.kiwixmobile.core.utils.ZERO
+import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
+import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore.Companion.DEFAULT_TTS_SPEED
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.launch
+import java.util.Locale
 import java.util.concurrent.atomic.AtomicInteger
 
 /**
@@ -55,7 +64,9 @@ class KiwixTextToSpeech internal constructor(
   private val onInitSucceedListener: OnInitSucceedListener,
   val onSpeakingListener: OnSpeakingListener,
   private var onAudioFocusChangeListener: OnAudioFocusChangeListener? = null,
-  private val zimReaderContainer: ZimReaderContainer
+  private val zimReaderContainer: ZimReaderContainer,
+  private val kiwixDataStore: KiwixDataStore,
+  private val coroutineScope: CoroutineScope = CoroutineScope(Dispatchers.IO)
 ) {
   private var focusRequest: AudioFocusRequest? = null
   private val focusLock: Any = Any()
@@ -63,6 +74,108 @@ class KiwixTextToSpeech internal constructor(
 
   @JvmField var currentTTSTask: TTSTask? = null
   private lateinit var tts: TextToSpeech
+
+  var speechRate: Float = DEFAULT_TTS_SPEED
+    set(value) {
+      field = value
+      if (isInitialized) {
+        tts.setSpeechRate(value)
+        currentTTSTask?.let { task ->
+          task.recalculateDurations()
+          if (!task.paused) {
+            task.pause()
+            task.start()
+          }
+        }
+      }
+    }
+
+  val currentPositionMs: Long
+    get() = currentTTSTask?.currentPositionMs ?: 0L
+
+  val currentVoiceName: String?
+    get() = runCatching { if (::tts.isInitialized) tts.voice?.name else null }.getOrNull()
+
+  val totalDurationMs: Long
+    get() = currentTTSTask?.totalDurationMs ?: 0L
+
+  fun seekTo(positionMs: Long) {
+    currentTTSTask?.seekTo(positionMs)
+  }
+
+  fun rewind10s() {
+    currentTTSTask?.rewind10s()
+  }
+
+  fun forward10s() {
+    currentTTSTask?.forward10s()
+  }
+
+  @Suppress("Deprecation", "ReturnCount", "CyclomaticComplexMethod")
+  fun getAvailableVoices(): List<Voice> {
+    if (!isInitialized || !::tts.isInitialized) return emptyList()
+    val activeLocale = runCatching { tts.voice?.locale ?: tts.language }.getOrNull()
+      ?: zimReaderContainer.language?.let {
+        iSO3ToLocale(it) ?: runCatching { Locale(it) }.getOrNull()
+      }
+      ?: Locale.getDefault()
+
+    val allVoices = runCatching { tts.voices }.getOrNull().orEmpty()
+    val nonNetworkVoices = allVoices.filter { !it.isNetworkConnectionRequired }
+    val candidateVoices = if (nonNetworkVoices.isNotEmpty()) nonNetworkVoices else allVoices
+
+    val uniqueVoices = candidateVoices.distinctBy { voice ->
+      voice.name
+        .substringBefore("-local")
+        .substringBefore("-network")
+        .substringBefore("-embedded")
+    }
+
+    val preferredCountry = if (activeLocale.country.isNotBlank()) {
+      activeLocale.country
+    } else {
+      val defaultLoc = Locale.getDefault()
+      if (defaultLoc.language.equals(activeLocale.language, ignoreCase = true)) {
+        defaultLoc.country
+      } else {
+        ""
+      }
+    }
+
+    if (preferredCountry.isNotBlank()) {
+      val dialectMatches = uniqueVoices.filter { voice ->
+        voice.locale.language.equals(activeLocale.language, ignoreCase = true) &&
+          voice.locale.country.equals(preferredCountry, ignoreCase = true)
+      }
+      if (dialectMatches.isNotEmpty()) {
+        return dialectMatches.sortedBy { it.name }
+      }
+    }
+
+    // 2. Fallback: match language
+    val languageMatches = uniqueVoices.filter { voice ->
+      voice.locale.language.equals(activeLocale.language, ignoreCase = true)
+    }
+
+    return if (languageMatches.isNotEmpty()) {
+      languageMatches.sortedBy { it.name }
+    } else if (uniqueVoices.isNotEmpty()) {
+      uniqueVoices.sortedBy { it.name }
+    } else {
+      runCatching { tts.voice }.getOrNull()?.let { listOf(it) }.orEmpty()
+    }
+  }
+
+  fun setVoiceByName(voiceName: String) {
+    if (!isInitialized || !::tts.isInitialized) return
+    val voice = getAvailableVoices().find { it.name == voiceName }
+    if (voice != null) {
+      tts.voice = voice
+      coroutineScope.launch {
+        kiwixDataStore.setSelectedTtsVoice(voiceName)
+      }
+    }
+  }
 
   /**
    * Initializes the TextToSpeech object.
@@ -75,7 +188,19 @@ class KiwixTextToSpeech internal constructor(
         if (status == TextToSpeech.SUCCESS) {
           Log.d(TAG_KIWIX, "TextToSpeech was initialized successfully.")
           isInitialized = true
-          onInitSucceedListener.onInitSucceed()
+          coroutineScope.launch {
+            val rate = runCatching { kiwixDataStore.ttsSpeed.firstOrNull() }.getOrNull()
+            if (rate != null) speechRate = rate
+            val savedVoice =
+              runCatching { kiwixDataStore.selectedTtsVoice.firstOrNull() }.getOrNull()
+            if (!savedVoice.isNullOrBlank()) {
+              val savedVoiceObj = tts.voices?.find { it.name == savedVoice }
+              if (savedVoiceObj != null) {
+                tts.voice = savedVoiceObj
+              }
+            }
+            onInitSucceedListener.onInitSucceed()
+          }
         } else {
           Log.e(TAG_KIWIX, "Initialization of TextToSpeech Failed!")
           context.toast(
@@ -101,6 +226,7 @@ class KiwixTextToSpeech internal constructor(
    * Reads the currently selected text in the WebView.
    */
   fun readSelection(webView: WebView) {
+    initWebView(webView)
     webView.loadUrl("javascript:tts.speakAloud(window.getSelection().toString());")
   }
 
@@ -118,23 +244,29 @@ class KiwixTextToSpeech internal constructor(
       }
     } else {
       val locale = iSO3ToLocale(zimReaderContainer.language)
-      if ("mul" == zimReaderContainer.language) {
+        ?: runCatching { Locale(zimReaderContainer.language.orEmpty()) }.getOrNull()
+        ?: Locale.getDefault()
+      if (MULTILINGUAL_LANGUAGE_CODE == zimReaderContainer.language) {
         Log.d(TAG_KIWIX, "TextToSpeech: disabled " + zimReaderContainer.language)
         context.toast(R.string.tts_not_enabled, Toast.LENGTH_LONG)
         return
       }
-      if (locale == null || isMissingOrUnsupportedLanguage(tts.isLanguageAvailable(locale))) {
+      val availability = tts.isLanguageAvailable(locale)
+      if (availability == LANG_MISSING_DATA ||
+        getFeatures(tts).contains(Engine.KEY_FEATURE_NOT_INSTALLED)
+      ) {
+        // Show download dialog so user can install the missing voice pack
+        showTtsLanguageDownloadDialog.invoke()
+      } else if (availability == LANG_NOT_SUPPORTED) {
         Log.d(
           TAG_KIWIX,
-          "TextToSpeech: language not supported:  ${zimReaderContainer.language}"
+          "TextToSpeech: language not supported: ${zimReaderContainer.language}"
         )
         context.toast(R.string.tts_lang_not_supported, Toast.LENGTH_LONG)
       } else {
         tts.language = locale
-        if (getFeatures(tts).contains(Engine.KEY_FEATURE_NOT_INSTALLED)) {
-          // Invoke show TTS language download dialog. Since this page language is not supported.
-          showTtsLanguageDownloadDialog.invoke()
-        } else if (requestAudioFocus()) {
+        if (requestAudioFocus()) {
+          initWebView(webView)
           loadURL(webView)
         }
       }
@@ -226,6 +358,7 @@ class KiwixTextToSpeech internal constructor(
    * {@link https://developer.android.com/guide/topics/media-apps/audio-focus#audio-focus-change }
    */
   fun shutdown() {
+    coroutineScope.cancel()
     if (::tts.isInitialized) {
       tts.shutdown()
     }
@@ -259,14 +392,114 @@ class KiwixTextToSpeech internal constructor(
     fun onSpeakingEnded()
   }
 
-  inner class TTSTask(private val pieces: List<String>) {
-    private val currentPiece =
-      AtomicInteger(0)
+  @Suppress("MagicNumber")
+  inner class TTSTask(val pieces: List<String>) {
+    private val currentPiece = AtomicInteger(0)
+    private val basePieceDurationsMs: LongArray = LongArray(pieces.size) { i ->
+      (pieces[i].length * 65L).coerceIn(1500L, 8000L)
+    }
+    private val pieceDurationsMs: LongArray = LongArray(pieces.size)
+    private val pieceStartOffsetsMs: LongArray = LongArray(pieces.size)
+
+    var totalDurationMs: Long = 0L
+      private set
+
+    init {
+      recalculateDurations()
+    }
+
+    fun recalculateDurations() {
+      val rate = speechRate.coerceAtLeast(0.1f)
+      var acc = 0L
+      for (i in pieces.indices) {
+        val duration = (basePieceDurationsMs[i] / rate).toLong()
+        pieceDurationsMs[i] = duration
+        pieceStartOffsetsMs[i] = acc
+        acc += duration
+      }
+      totalDurationMs = acc
+    }
+
+    private var currentUtteranceStartMs: Long = 0L
 
     @JvmField var paused = true
+
+    val currentPositionMs: Long
+      get() {
+        val index = (currentPiece.get() - 1).coerceIn(0, (pieces.size - 1).coerceAtLeast(0))
+        if (index < 0 || index >= pieceStartOffsetsMs.size) return 0L
+        val baseOffset = pieceStartOffsetsMs[index]
+        val elapsedInPiece = if (!paused && currentUtteranceStartMs > 0) {
+          (System.currentTimeMillis() - currentUtteranceStartMs).coerceAtLeast(0L)
+        } else {
+          0L
+        }
+        return (baseOffset + elapsedInPiece).coerceAtMost(totalDurationMs)
+      }
+
+    fun seekTo(targetPositionMs: Long) {
+      val clampedTarget = targetPositionMs.coerceIn(0L, totalDurationMs)
+      var targetIndex = 0
+      for (i in pieceStartOffsetsMs.indices) {
+        if (pieceStartOffsetsMs[i] <= clampedTarget) {
+          targetIndex = i
+        } else {
+          break
+        }
+      }
+      jumpToPiece(targetIndex)
+    }
+
+    fun rewind10s() {
+      val currentIndex = (currentPiece.get() - 1).coerceIn(0, (pieces.size - 1).coerceAtLeast(0))
+      val clampedTarget = (currentPositionMs - 10000L).coerceAtLeast(0L)
+      var targetIndex = 0
+      for (i in pieceStartOffsetsMs.indices) {
+        if (pieceStartOffsetsMs[i] <= clampedTarget) {
+          targetIndex = i
+        } else {
+          break
+        }
+      }
+      if (targetIndex >= currentIndex && currentIndex > 0) {
+        targetIndex = currentIndex - 1
+      }
+      jumpToPiece(targetIndex)
+    }
+
+    fun forward10s() {
+      val currentIndex = (currentPiece.get() - 1).coerceIn(0, (pieces.size - 1).coerceAtLeast(0))
+      val clampedTarget = (currentPositionMs + 10000L).coerceAtMost(totalDurationMs)
+      var targetIndex = currentIndex
+      for (i in pieceStartOffsetsMs.indices) {
+        if (pieceStartOffsetsMs[i] <= clampedTarget) {
+          targetIndex = i
+        } else {
+          break
+        }
+      }
+      if (targetIndex <= currentIndex && currentIndex < pieces.size - 1) {
+        targetIndex = currentIndex + 1
+      }
+      jumpToPiece(targetIndex)
+    }
+
+    private fun jumpToPiece(targetIndex: Int) {
+      val wasPaused = paused
+      tts.setOnUtteranceProgressListener(null)
+      tts.stop()
+      paused = true
+      currentPiece.set(targetIndex.coerceIn(0, (pieces.size - 1).coerceAtLeast(0)))
+      if (!wasPaused) {
+        start()
+      }
+    }
+
     fun pause() {
       paused = true
-      currentPiece.decrementAndGet()
+      if (currentPiece.get() > ZERO) {
+        currentPiece.decrementAndGet()
+      }
       tts.setOnUtteranceProgressListener(null)
       tts.stop()
     }
@@ -276,8 +509,7 @@ class KiwixTextToSpeech internal constructor(
         return
       }
       paused = false
-      // The utterance ID isn't actually used anywhere, the param is passed only to force
-      // the utterance listener to be notified
+      currentUtteranceStartMs = System.currentTimeMillis()
       val bundle =
         Bundle().apply {
           putString(Engine.KEY_PARAM_UTTERANCE_ID, "kiwixLastMessage")
@@ -285,7 +517,7 @@ class KiwixTextToSpeech internal constructor(
       if (currentPiece.get() < pieces.size) {
         tts.speak(
           pieces[currentPiece.getAndIncrement()],
-          QUEUE_ADD,
+          TextToSpeech.QUEUE_FLUSH,
           bundle,
           bundle.getString(Engine.KEY_PARAM_UTTERANCE_ID)
         )
@@ -296,6 +528,7 @@ class KiwixTextToSpeech internal constructor(
         object : UtteranceProgressListener() {
           @SuppressWarnings("EmptyFunctionBlock")
           override fun onStart(s: String) {
+            currentUtteranceStartMs = System.currentTimeMillis()
           }
 
           override fun onDone(s: String) {
@@ -303,6 +536,7 @@ class KiwixTextToSpeech internal constructor(
             if (line >= pieces.size && !paused) {
               stop()
             } else {
+              currentUtteranceStartMs = System.currentTimeMillis()
               tts.speak(
                 pieces[currentPiece.getAndIncrement()],
                 TextToSpeech.QUEUE_ADD,
@@ -328,16 +562,35 @@ class KiwixTextToSpeech internal constructor(
   }
 
   private inner class TTSJavaScriptInterface {
-    @JavascriptInterface fun speakAloud(content: String) {
-      val pieces =
-        content.split("[\\n.;]".toRegex())
-          .filter(String::isNotBlank)
-          .map(String::trim)
+    @Suppress("unused", "MagicNumber", "NestedBlockDepth")
+    @JavascriptInterface
+    fun speakAloud(content: String) {
+      val rawSentences = content.split("(?<=[.?!;:\\n])\\s+".toRegex())
+        .filter(String::isNotBlank)
+        .map(String::trim)
+
+      val pieces = mutableListOf<String>()
+      for (sentence in rawSentences) {
+        if (sentence.length <= 120) {
+          pieces.add(sentence)
+        } else {
+          val subParts = sentence.split("(?<=[,])\\s+".toRegex())
+          for (part in subParts) {
+            if (part.isNotBlank()) pieces.add(part.trim())
+          }
+        }
+      }
+
       if (pieces.isNotEmpty()) {
+        val task = TTSTask(pieces)
+        currentTTSTask = task
         onSpeakingListener.onSpeakingStarted()
-        currentTTSTask = TTSTask(pieces)
-        currentTTSTask?.start()
+        task.start()
       }
     }
+  }
+
+  companion object {
+    private const val MULTILINGUAL_LANGUAGE_CODE = "mul"
   }
 }

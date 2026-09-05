@@ -257,4 +257,18 @@ class ReadAloudServiceTest {
     verify { readAloudCallbacks.onReadAloudPauseOrResume(false) }
     verify { readAloudCallbacks.onReadAloudStop() }
   }
+
+  @Test
+  fun `rewinds 10s when rewind action received`() {
+    val rewindIntent = createIntent(ReadAloudService.ACTION_REWIND_10)
+    readAloudService.onStartCommand(rewindIntent, 0, 1)
+    verify(exactly = 1) { readAloudCallbacks.onReadAloudRewind10s() }
+  }
+
+  @Test
+  fun `forwards 10s when forward action received`() {
+    val forwardIntent = createIntent(ReadAloudService.ACTION_FORWARD_10)
+    readAloudService.onStartCommand(forwardIntent, 0, 1)
+    verify(exactly = 1) { readAloudCallbacks.onReadAloudForward10s() }
+  }
 }

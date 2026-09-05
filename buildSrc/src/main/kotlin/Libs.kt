@@ -365,4 +365,7 @@ object Libs {
 
   const val KOTLIN_KSP: String =
     "com.google.devtools.ksp:com.google.devtools.ksp.gradle.plugin:" + Versions.KOTLIN_KSP
+
+  const val MEDIA3_SESSION: String = "androidx.media3:media3-session:${Versions.ANDROIDX_MEDIA3}"
+  const val MEDIA3_COMMON: String = "androidx.media3:media3-common:${Versions.ANDROIDX_MEDIA3}"
 }

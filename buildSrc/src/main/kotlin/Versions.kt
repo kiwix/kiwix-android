@@ -119,6 +119,7 @@ object Versions {
   const val CORE_SPLASHSCREEN: String = "1.2.0"
   const val PLAYSTORE_REVIEW: String = "2.0.2"
   const val KOTLIN_KSP: String = "2.3.4"
+  const val ANDROIDX_MEDIA3: String = "1.11.0"
 }
 
 /**

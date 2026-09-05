@@ -23,7 +23,9 @@ import android.widget.FrameLayout
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.remember
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.click
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.longClick
 import androidx.compose.ui.test.onNodeWithContentDescription
@@ -63,6 +65,10 @@ import org.robolectric.annotation.Config
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [Build.VERSION_CODES.R])
 class ReaderScreenComposablesTest {
+  companion object {
+    private const val TEST_TTS_SPEED = 1.5f
+  }
+
   @Rule
   @JvmField
   val composeTestRule = createComposeRule()
@@ -82,7 +88,8 @@ class ReaderScreenComposablesTest {
     videoView: FrameLayout? = null,
     shouldShowFullScreen: Boolean = false,
     showBackToTopButton: Boolean = false,
-    showTtsControls: Boolean = false,
+    ttsControlsItem: CoreReaderViewModel.TtsControlsItem =
+      CoreReaderViewModel.TtsControlsItem(),
     showTabSwitcher: Boolean = false,
     showBottomBar: Boolean = true,
     bookmarkButtonItem: CoreReaderViewModel.BookmarkButtonItem =
@@ -94,7 +101,6 @@ class ReaderScreenComposablesTest {
     searchPlaceHolderItemForBrandedApps: Boolean = false,
     isPreviousPageButtonEnable: Boolean = true,
     isNextPageButtonEnable: Boolean = true,
-    pauseTtsButtonText: String = "Pause",
     isTocButtonEnable: Boolean = true,
     showTableOfContentDrawer: Boolean = false,
     tableOfContentTitle: String = "Contents",
@@ -112,7 +118,7 @@ class ReaderScreenComposablesTest {
       videoView = videoView,
       shouldShowFullScreen = shouldShowFullScreen,
       showBackToTopButton = showBackToTopButton,
-      showTtsControls = showTtsControls,
+      ttsControlsItem = ttsControlsItem,
       showTabSwitcher = showTabSwitcher,
       showBottomBar = showBottomBar,
       bookmarkButtonItem = bookmarkButtonItem,
@@ -120,7 +126,6 @@ class ReaderScreenComposablesTest {
       searchPlaceHolderItemForBrandedApps = searchPlaceHolderItemForBrandedApps,
       isPreviousPageButtonEnable = isPreviousPageButtonEnable,
       isNextPageButtonEnable = isNextPageButtonEnable,
-      pauseTtsButtonText = pauseTtsButtonText,
       isTocButtonEnable = isTocButtonEnable,
       showTableOfContentDrawer = showTableOfContentDrawer,
       tableOfContentTitle = tableOfContentTitle,
@@ -274,12 +279,13 @@ class ReaderScreenComposablesTest {
   fun readerScreen_ttsControls_visibleWhenActive() {
     renderReaderScreen(
       createTestState(
-        showTtsControls = true,
-        pauseTtsButtonText = "Pause"
+        ttsControlsItem = CoreReaderViewModel.TtsControlsItem(
+          isTtsPlaying = true
+        )
       )
     )
     composeTestRule
-      .onNodeWithText("PAUSE")
+      .onNodeWithTag(TTS_CONTROL_PLAY_PAUSE_BUTTON_TESTING_TAG)
       .assertIsDisplayed()
     composeTestRule
       .onNodeWithTag(TTS_CONTROL_STOP_BUTTON_TESTING_TAG)
@@ -288,9 +294,15 @@ class ReaderScreenComposablesTest {
 
   @Test
   fun readerScreen_ttsControls_hiddenWhenInactive() {
-    renderReaderScreen(createTestState(showTtsControls = false))
+    renderReaderScreen(
+      createTestState(
+        ttsControlsItem = CoreReaderViewModel.TtsControlsItem(
+          isTtsPlaying = false
+        )
+      )
+    )
     composeTestRule
-      .onNodeWithText("PAUSE")
+      .onNodeWithTag(TTS_CONTROL_PLAY_PAUSE_BUTTON_TESTING_TAG)
       .assertDoesNotExist()
     composeTestRule
       .onNodeWithTag(TTS_CONTROL_STOP_BUTTON_TESTING_TAG)
@@ -302,13 +314,14 @@ class ReaderScreenComposablesTest {
     var action: ReaderAction? = null
     renderReaderScreen(
       createTestState(
-        showTtsControls = true,
-        pauseTtsButtonText = "Pause"
+        ttsControlsItem = CoreReaderViewModel.TtsControlsItem(
+          isTtsPlaying = true
+        )
       ),
       onReaderAction = { action = it }
     )
     composeTestRule
-      .onNodeWithText("PAUSE")
+      .onNodeWithTag(TTS_CONTROL_PLAY_PAUSE_BUTTON_TESTING_TAG)
       .performClick()
     assertEquals(ReaderAction.PauseTts, action)
   }
@@ -317,7 +330,11 @@ class ReaderScreenComposablesTest {
   fun readerScreen_ttsControls_stopButton_triggersCallback() {
     var action: ReaderAction? = null
     renderReaderScreen(
-      createTestState(showTtsControls = true),
+      createTestState(
+        ttsControlsItem = CoreReaderViewModel.TtsControlsItem(
+          isTtsPlaying = true
+        )
+      ),
       onReaderAction = { action = it }
     )
     composeTestRule
@@ -606,5 +623,233 @@ class ReaderScreenComposablesTest {
       )
       .performClick()
     assertEquals(ReaderAction.CloseTab(0), action)
+  }
+
+  @Test
+  fun readerScreen_ttsSpeedButton_isDisplayed() {
+    val state = createTestState(
+      ttsControlsItem = CoreReaderViewModel.TtsControlsItem(
+        isTtsPlaying = true,
+        ttsSpeed = 1.0f
+      )
+    )
+    renderReaderScreen(state)
+    composeTestRule
+      .onNodeWithTag(TTS_CONTROL_SPEED_BUTTON_TESTING_TAG)
+      .assertIsDisplayed()
+  }
+
+  @Test
+  fun readerScreen_ttsSpeedButton_displaysFormattedSpeed() {
+    val state = createTestState(
+      ttsControlsItem = CoreReaderViewModel.TtsControlsItem(
+        isTtsPlaying = true,
+        ttsSpeed = 1.5f
+      )
+    )
+    renderReaderScreen(state)
+    composeTestRule.waitForIdle()
+
+    composeTestRule
+      .onNodeWithText("1.5x")
+      .assertIsDisplayed()
+  }
+
+  @Test
+  fun readerScreen_ttsSpeedButton_click_cyclesToNextSpeed() {
+    var action: ReaderAction? = null
+    val state = createTestState(
+      ttsControlsItem = CoreReaderViewModel.TtsControlsItem(
+        isTtsPlaying = true,
+        ttsSpeed = 1.0f
+      )
+    )
+    renderReaderScreen(state, onReaderAction = { action = it })
+    composeTestRule.waitForIdle()
+
+    composeTestRule
+      .onNodeWithTag(TTS_CONTROL_SPEED_BUTTON_TESTING_TAG)
+      .performClick()
+    composeTestRule.waitForIdle()
+
+    assertEquals(ReaderAction.ChangeTtsSpeed(1.25f), action)
+  }
+
+  @Test
+  fun readerScreen_ttsPlayPauseButton_triggersCallback() {
+    var action: ReaderAction? = null
+    val state = createTestState(
+      ttsControlsItem = CoreReaderViewModel.TtsControlsItem(
+        isTtsPlaying = true,
+        isTtsPaused = false
+      )
+    )
+    renderReaderScreen(state, onReaderAction = { action = it })
+    composeTestRule.waitForIdle()
+
+    composeTestRule
+      .onNodeWithTag(TTS_CONTROL_PLAY_PAUSE_BUTTON_TESTING_TAG)
+      .performClick()
+    composeTestRule.waitForIdle()
+
+    assertEquals(ReaderAction.PauseTts, action)
+  }
+
+  @Test
+  fun readerScreen_ttsStopButton_triggersCallback() {
+    var action: ReaderAction? = null
+    val state = createTestState(
+      ttsControlsItem = CoreReaderViewModel.TtsControlsItem(
+        isTtsPlaying = true
+      )
+    )
+    renderReaderScreen(state, onReaderAction = { action = it })
+    composeTestRule.waitForIdle()
+
+    composeTestRule
+      .onNodeWithTag(TTS_CONTROL_STOP_BUTTON_TESTING_TAG)
+      .performClick()
+    composeTestRule.waitForIdle()
+
+    assertEquals(ReaderAction.StopTts, action)
+  }
+
+  @Test
+  fun readerScreen_ttsRewind10Button_triggersCallback() {
+    var action: ReaderAction? = null
+    val state = createTestState(
+      ttsControlsItem = CoreReaderViewModel.TtsControlsItem(
+        isTtsPlaying = true
+      )
+    )
+    renderReaderScreen(state, onReaderAction = { action = it })
+    composeTestRule.waitForIdle()
+
+    composeTestRule
+      .onNodeWithTag(TTS_CONTROL_REWIND_10_BUTTON_TESTING_TAG)
+      .performClick()
+    composeTestRule.waitForIdle()
+
+    assertEquals(ReaderAction.RewindTts10s, action)
+  }
+
+  @Test
+  fun readerScreen_ttsForward10Button_triggersCallback() {
+    var action: ReaderAction? = null
+    val state = createTestState(
+      ttsControlsItem = CoreReaderViewModel.TtsControlsItem(
+        isTtsPlaying = true
+      )
+    )
+    renderReaderScreen(state, onReaderAction = { action = it })
+    composeTestRule.waitForIdle()
+
+    composeTestRule
+      .onNodeWithTag(TTS_CONTROL_FORWARD_10_BUTTON_TESTING_TAG)
+      .performClick()
+    composeTestRule.waitForIdle()
+
+    assertEquals(ReaderAction.ForwardTts10s, action)
+  }
+
+  @Test
+  fun readerScreen_ttsVoiceButton_triggersCallback() {
+    var action: ReaderAction? = null
+    val state = createTestState(
+      ttsControlsItem = CoreReaderViewModel.TtsControlsItem(
+        isTtsPlaying = true
+      )
+    )
+    renderReaderScreen(state, onReaderAction = { action = it })
+    composeTestRule.waitForIdle()
+
+    composeTestRule
+      .onNodeWithTag(TTS_CONTROL_VOICE_BUTTON_TESTING_TAG)
+      .performClick()
+    composeTestRule.waitForIdle()
+
+    assertEquals(ReaderAction.ShowVoiceSelectionDialog, action)
+  }
+
+  @Test
+  fun readerScreen_ttsVoiceSelectionDialog_displaysVoicesAndSelectsVoice() {
+    var action: ReaderAction? = null
+    val state = createTestState(
+      ttsControlsItem = CoreReaderViewModel.TtsControlsItem(
+        isTtsPlaying = true,
+        showVoiceSelectionDialog = true,
+        availableVoices = listOf("en-us-x-sfg#female_1", "en-us-x-sfg#male_1")
+      )
+    )
+    renderReaderScreen(state, onReaderAction = { action = it })
+    composeTestRule.waitForIdle()
+
+    composeTestRule
+      .onNodeWithTag(TTS_VOICE_SELECTION_DIALOG_TESTING_TAG)
+      .assertIsDisplayed()
+
+    composeTestRule
+      .onNodeWithText("Voice 1")
+      .assertIsDisplayed()
+      .performClick()
+    composeTestRule.waitForIdle()
+
+    assertEquals(ReaderAction.SelectTtsVoice("en-us-x-sfg#female_1"), action)
+  }
+
+  @Test
+  fun readerScreen_ttsControlsOverlay_clickOutside_dismissesOverlay() {
+    var action: ReaderAction? = null
+    val state = createTestState(
+      ttsControlsItem = CoreReaderViewModel.TtsControlsItem(
+        isTtsPlaying = true,
+        showTtsControlsOverlay = true
+      )
+    )
+    renderReaderScreen(state, onReaderAction = { action = it })
+    composeTestRule.waitForIdle()
+
+    composeTestRule
+      .onNodeWithTag(TTS_CONTROLS_OVERLAY_DISMISS_TESTING_TAG)
+      .performTouchInput { click(Offset(0f, 0f)) }
+    composeTestRule.waitForIdle()
+
+    assertEquals(ReaderAction.DismissTtsControlsOverlay, action)
+  }
+
+  @Test
+  fun readerScreen_ttsFloatingSpeakerButton_visibleWhenOverlayDismissed() {
+    val state = createTestState(
+      ttsControlsItem = CoreReaderViewModel.TtsControlsItem(
+        isTtsPlaying = true,
+        showTtsControlsOverlay = false
+      )
+    )
+    renderReaderScreen(state)
+    composeTestRule.waitForIdle()
+
+    composeTestRule
+      .onNodeWithTag(TTS_FLOATING_SPEAKER_BUTTON_TESTING_TAG)
+      .assertIsDisplayed()
+  }
+
+  @Test
+  fun readerScreen_ttsFloatingSpeakerButton_click_showsOverlay() {
+    var action: ReaderAction? = null
+    val state = createTestState(
+      ttsControlsItem = CoreReaderViewModel.TtsControlsItem(
+        isTtsPlaying = true,
+        showTtsControlsOverlay = false
+      )
+    )
+    renderReaderScreen(state, onReaderAction = { action = it })
+    composeTestRule.waitForIdle()
+
+    composeTestRule
+      .onNodeWithTag(TTS_FLOATING_SPEAKER_BUTTON_TESTING_TAG)
+      .performClick()
+    composeTestRule.waitForIdle()
+
+    assertEquals(ReaderAction.ShowTtsControlsOverlay, action)
   }
 }

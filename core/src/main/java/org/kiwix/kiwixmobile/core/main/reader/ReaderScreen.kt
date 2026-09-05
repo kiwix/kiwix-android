@@ -19,6 +19,7 @@
 package org.kiwix.kiwixmobile.core.main.reader
 
 import android.view.View
+import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.TtsControlsItem
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.widget.FrameLayout
@@ -38,7 +39,11 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.gestures.detectDragGestures
+import androidx.compose.foundation.gestures.detectVerticalDragGestures
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.ui.unit.DpSize
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
@@ -49,6 +54,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -60,10 +66,10 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.BottomAppBarDefaults
 import androidx.compose.material3.BottomAppBarScrollBehavior
-import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -73,16 +79,27 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalDrawerSheet
+import androidx.compose.material3.PlainTooltip
+import androidx.compose.material3.RadioButton
+import androidx.compose.material3.RadioButtonDefaults
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Slider
+import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.TooltipBox
+import androidx.compose.material3.TooltipDefaults
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.material3.minimumInteractiveComponentSize
+import androidx.compose.material3.rememberTooltipState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -90,12 +107,12 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalWindowInfo
@@ -112,9 +129,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.compose.ui.zIndex
+import kotlin.math.roundToInt
 import androidx.navigation.NavHostController
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -138,6 +157,15 @@ import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderAction.O
 import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderAction.OpenSearch
 import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderAction.OpenTocDrawer
 import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderAction.PauseTts
+import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderAction.ChangeTtsSpeed
+import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderAction.RewindTts10s
+import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderAction.ForwardTts10s
+import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderAction.SeekTts
+import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderAction.ShowVoiceSelectionDialog
+import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderAction.DismissVoiceSelectionDialog
+import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderAction.SelectTtsVoice
+import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderAction.ShowTtsControlsOverlay
+import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderAction.DismissTtsControlsOverlay
 import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderAction.PreviousClicked
 import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderAction.PreviousLongClicked
 import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderAction.SelectTab
@@ -165,7 +193,9 @@ import org.kiwix.kiwixmobile.core.utils.ComposeDimens.CLOSE_ALL_TAB_BUTTON_BOTTO
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.CLOSE_TAB_ICON_ANIMATION_TIMEOUT
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.CLOSE_TAB_ICON_SIZE
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.EIGHT_DP
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FIFTY_SIX_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FIVE_DP
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FOURTEEN_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FOUR_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.KIWIX_TOOLBAR_HEIGHT
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.LARGE_BODY_TEXT_SIZE
@@ -176,11 +206,17 @@ import org.kiwix.kiwixmobile.core.utils.ComposeDimens.READER_BOTTOM_APP_BAR_DISA
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.READER_BOTTOM_APP_BAR_LAYOUT_HEIGHT
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SEARCH_PLACEHOLDER_TEXT_SIZE
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SIXTEEN_DP
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SIX_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TEN_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.THREE_DP
-import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TTS_BUTTONS_CONTROL_ALPHA
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TWELVE_DP
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TWENTY_EIGHT_DP
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TWENTY_FOUR_DP
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TWENTY_TWO_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TWO_DP
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.ZERO_DP
+import kotlin.math.abs
+import java.util.Locale
 import org.kiwix.kiwixmobile.core.utils.HUNDERED
 import org.kiwix.kiwixmobile.core.utils.StyleUtils.fromHtml
 import org.kiwix.kiwixmobile.core.utils.ZERO
@@ -198,6 +234,18 @@ const val READER_BOTTOM_BAR_HOME_BUTTON_TESTING_TAG = "readerBottomBarHomeButton
 const val READER_BOTTOM_BAR_TABLE_CONTENT_BUTTON_TESTING_TAG =
   "readerBottomBarTableContentButtonTestingTag"
 const val TTS_CONTROL_STOP_BUTTON_TESTING_TAG = "ttsControlStopButtonTestingTag"
+const val TTS_CONTROL_SPEED_BUTTON_TESTING_TAG = "ttsControlSpeedButtonTestingTag"
+const val TTS_CONTROL_PLAY_PAUSE_BUTTON_TESTING_TAG = "ttsControlPlayPauseButtonTestingTag"
+const val TTS_CONTROL_REWIND_10_BUTTON_TESTING_TAG = "ttsControlRewind10ButtonTestingTag"
+const val TTS_CONTROL_FORWARD_10_BUTTON_TESTING_TAG = "ttsControlForward10ButtonTestingTag"
+const val TTS_CONTROL_VOICE_BUTTON_TESTING_TAG = "ttsControlVoiceButtonTestingTag"
+const val TTS_CONTROL_SLIDER_TESTING_TAG = "ttsControlSliderTestingTag"
+const val TTS_VOICE_SELECTION_DIALOG_TESTING_TAG = "ttsVoiceSelectionDialogTestingTag"
+const val TTS_FLOATING_SPEAKER_BUTTON_TESTING_TAG = "ttsFloatingSpeakerButtonTestingTag"
+const val TTS_CONTROLS_OVERLAY_DISMISS_TESTING_TAG = "ttsControlsOverlayDismissTestingTag"
+
+val CYCLIC_TTS_SPEEDS = listOf(1.0f, 1.25f, 1.5f, 1.75f, 2.0f, 2.5f, 0.5f, 0.75f)
+private const val TTS_SPEED_TOLERANCE = 0.01f
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Suppress("ComposableLambdaParameterNaming", "LongMethod", "LongParameterList")
@@ -374,6 +422,20 @@ private fun ReaderContentLayout(
             )
           }
           ShowProgressBarIfZIMFilePageIsLoading(state)
+          if (state.ttsControlsItem.isTtsPlaying && state.ttsControlsItem.showTtsControlsOverlay) {
+            Box(
+              modifier = Modifier
+                .fillMaxSize()
+                .background(Color.Transparent)
+                .pointerInput(Unit) {
+                  detectVerticalDragGestures { _, _ ->
+                    onReaderAction(DismissTtsControlsOverlay)
+                  }
+                }
+                .clickable { onReaderAction(DismissTtsControlsOverlay) }
+                .semantics { testTag = TTS_CONTROLS_OVERLAY_DISMISS_TESTING_TAG }
+            )
+          }
           Column(Modifier.align(Alignment.BottomCenter)) {
             TtsControls(state, onReaderAction)
             ShowDonationLayout(state, onReaderAction)
@@ -596,36 +658,430 @@ private fun NoBookOpenView(
   }
 }
 
+@Suppress("MagicNumber")
+private fun formatTime(millis: Long): String {
+  val totalSeconds = (millis / 1000).coerceAtLeast(0)
+  val minutes = totalSeconds / 60
+  val seconds = totalSeconds % 60
+  return String.format(Locale.US, "%02d:%02d", minutes, seconds)
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Suppress("LongMethod", "MagicNumber")
 @Composable
 private fun TtsControls(state: ReaderUiState, onReaderAction: (ReaderAction) -> Unit) {
-  if (state.showTtsControls) {
-    Row {
-      Button(
-        onClick = { onReaderAction(PauseTts) },
-        modifier = Modifier
-          .weight(1f)
-          .alpha(TTS_BUTTONS_CONTROL_ALPHA)
+  val ttsItem = state.ttsControlsItem
+
+  if (ttsItem.isTtsPlaying) {
+    if (ttsItem.showTtsControlsOverlay) {
+      TtsControlsCard(ttsItem, onReaderAction)
+    } else {
+      TtsFloatingActionButton(onReaderAction)
+    }
+  }
+
+  if (ttsItem.showVoiceSelectionDialog) {
+    VoiceSelectionDialog(
+      voices = ttsItem.availableVoices,
+      selectedVoice = ttsItem.selectedVoiceName,
+      onVoiceSelected = { onReaderAction(SelectTtsVoice(it)) },
+      onDismiss = { onReaderAction(DismissVoiceSelectionDialog) }
+    )
+  }
+}
+
+@Composable
+private fun TtsControlsCard(
+  ttsItem: TtsControlsItem,
+  onReaderAction: (ReaderAction) -> Unit
+) {
+  var isDragging by remember { mutableStateOf(false) }
+  var dragProgress by remember { mutableFloatStateOf(0f) }
+
+  val totalDurationMs = ttsItem.totalDurationMs
+  val liveProgress = if (totalDurationMs > 0L) {
+    (ttsItem.currentPositionMs.toFloat() / totalDurationMs.toFloat()).coerceIn(0f, 1f)
+  } else {
+    0f
+  }
+
+  val displayProgress = if (isDragging) dragProgress else liveProgress
+  val displayPositionMs =
+    if (isDragging) (dragProgress * totalDurationMs).toLong() else ttsItem.currentPositionMs
+
+  Card(
+    shape = RoundedCornerShape(TWENTY_FOUR_DP),
+    colors = CardDefaults.cardColors(
+      containerColor = MaterialTheme.colorScheme.surface
+    ),
+    elevation = CardDefaults.cardElevation(defaultElevation = EIGHT_DP),
+    modifier = Modifier
+      .fillMaxWidth()
+      .padding(horizontal = SIXTEEN_DP, vertical = EIGHT_DP)
+  ) {
+    Column(
+      modifier = Modifier
+        .fillMaxWidth()
+        .padding(horizontal = SIXTEEN_DP, vertical = TWELVE_DP),
+      horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+      TtsProgressSlider(
+        displayProgress = displayProgress,
+        totalDurationMs = totalDurationMs,
+        onSeek = { targetMs -> onReaderAction(SeekTts(targetMs)) },
+        onDraggingChanged = { dragging, progress ->
+          isDragging = dragging
+          dragProgress = progress
+        }
+      )
+      TtsTimeLabelsRow(displayPositionMs = displayPositionMs, totalDurationMs = totalDurationMs)
+      Spacer(modifier = Modifier.height(EIGHT_DP))
+      TtsControlButtonsRow(ttsItem = ttsItem, onReaderAction = onReaderAction)
+    }
+  }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun TtsProgressSlider(
+  displayProgress: Float,
+  totalDurationMs: Long,
+  onSeek: (Long) -> Unit,
+  onDraggingChanged: (Boolean, Float) -> Unit
+) {
+  var sliderValue by remember(displayProgress) { mutableFloatStateOf(displayProgress) }
+
+  val sliderColors = SliderDefaults.colors(
+    thumbColor = MaterialTheme.colorScheme.primary,
+    activeTrackColor = MaterialTheme.colorScheme.primary,
+    inactiveTrackColor = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f)
+  )
+  Slider(
+    value = sliderValue,
+    onValueChange = { newProgress ->
+      sliderValue = newProgress
+      onDraggingChanged(true, newProgress)
+    },
+    onValueChangeFinished = {
+      val targetMs = (sliderValue * totalDurationMs).toLong()
+      onDraggingChanged(false, sliderValue)
+      onSeek(targetMs)
+    },
+    modifier = Modifier
+      .fillMaxWidth()
+      .semantics { testTag = TTS_CONTROL_SLIDER_TESTING_TAG },
+    thumb = {
+      SliderDefaults.Thumb(
+        interactionSource = remember { MutableInteractionSource() },
+        colors = sliderColors,
+        thumbSize = DpSize(FOURTEEN_DP, FOURTEEN_DP)
+      )
+    },
+    track = { sliderState ->
+      SliderDefaults.Track(
+        sliderState = sliderState,
+        colors = sliderColors,
+        drawStopIndicator = null,
+        thumbTrackGapSize = ZERO_DP,
+        trackInsideCornerSize = ZERO_DP,
+        modifier = Modifier.height(FOUR_DP)
+      )
+    }
+  )
+}
+
+@Composable
+private fun TtsTimeLabelsRow(displayPositionMs: Long, totalDurationMs: Long) {
+  Row(
+    modifier = Modifier
+      .fillMaxWidth()
+      .padding(horizontal = FOUR_DP),
+    horizontalArrangement = Arrangement.SpaceBetween
+  ) {
+    Text(
+      text = formatTime(displayPositionMs),
+      style = MaterialTheme.typography.labelSmall,
+      color = MaterialTheme.colorScheme.onSurfaceVariant
+    )
+    Text(
+      text = if (totalDurationMs > 0L) formatTime(totalDurationMs) else "--:--",
+      style = MaterialTheme.typography.labelSmall,
+      color = MaterialTheme.colorScheme.onSurfaceVariant
+    )
+  }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun PlayerTooltip(
+  tooltipText: String,
+  content: @Composable () -> Unit
+) {
+  TooltipBox(
+    positionProvider = TooltipDefaults.rememberPlainTooltipPositionProvider(),
+    tooltip = {
+      PlainTooltip(
+        shape = RoundedCornerShape(EIGHT_DP),
+        containerColor = MaterialTheme.colorScheme.inverseSurface,
+        contentColor = MaterialTheme.colorScheme.inverseOnSurface
       ) {
         Text(
-          text = state.pauseTtsButtonText.uppercase(),
-          fontWeight = FontWeight.Bold
+          text = tooltipText,
+          style = MaterialTheme.typography.bodySmall
         )
       }
-      Spacer(modifier = Modifier.width(FOUR_DP))
-      Button(
-        onClick = { onReaderAction(StopTts) },
-        modifier = Modifier
-          .weight(1f)
-          .alpha(TTS_BUTTONS_CONTROL_ALPHA)
-          .semantics { testTag = TTS_CONTROL_STOP_BUTTON_TESTING_TAG }
+    },
+    state = rememberTooltipState()
+  ) {
+    content()
+  }
+}
+
+@Suppress("LongMethod")
+@Composable
+private fun TtsControlButtonsRow(
+  ttsItem: TtsControlsItem,
+  onReaderAction: (ReaderAction) -> Unit
+) {
+  Row(
+    modifier = Modifier.fillMaxWidth(),
+    horizontalArrangement = Arrangement.SpaceBetween,
+    verticalAlignment = Alignment.CenterVertically
+  ) {
+    // 1. Speed button (cyclic)
+    PlayerTooltip(stringResource(R.string.tts_speech_speed)) {
+      Surface(
+        onClick = {
+          val currentIndex =
+            CYCLIC_TTS_SPEEDS.indexOfFirst { abs(it - ttsItem.ttsSpeed) < TTS_SPEED_TOLERANCE }
+          val nextSpeed = if (currentIndex != -1) {
+            CYCLIC_TTS_SPEEDS[(currentIndex + 1) % CYCLIC_TTS_SPEEDS.size]
+          } else {
+            1.0f
+          }
+          onReaderAction(ChangeTtsSpeed(nextSpeed))
+        },
+        shape = CircleShape,
+        color = MaterialTheme.colorScheme.surfaceContainerHigh,
+        contentColor = MaterialTheme.colorScheme.onSurface,
+        modifier = Modifier.semantics { testTag = TTS_CONTROL_SPEED_BUTTON_TESTING_TAG }
       ) {
+        val speedText = if (ttsItem.ttsSpeed % 1.0f == 0f) {
+          "${ttsItem.ttsSpeed.toInt()}x"
+        } else {
+          "${ttsItem.ttsSpeed}x"
+        }
         Text(
-          text = stringResource(R.string.stop).uppercase(),
-          fontWeight = FontWeight.Bold
+          text = speedText,
+          fontWeight = FontWeight.Bold,
+          style = MaterialTheme.typography.labelMedium,
+          modifier = Modifier.padding(horizontal = TWELVE_DP, vertical = SIX_DP)
+        )
+      }
+    }
+
+    // 2. Rewind 10s button
+    PlayerTooltip(stringResource(R.string.tts_rewind_10_seconds)) {
+      IconButton(
+        onClick = { onReaderAction(RewindTts10s) },
+        modifier = Modifier.semantics { testTag = TTS_CONTROL_REWIND_10_BUTTON_TESTING_TAG }
+      ) {
+        Icon(
+          painter = painterResource(id = R.drawable.ic_replay_10),
+          contentDescription = "-10s",
+          tint = MaterialTheme.colorScheme.onSurface,
+          modifier = Modifier.size(TWENTY_FOUR_DP)
+        )
+      }
+    }
+
+    // 3. Center Play / Pause button
+    val playPauseTooltip = stringResource(
+      if (ttsItem.isTtsPaused) R.string.tts_resume else R.string.tts_pause
+    )
+    PlayerTooltip(playPauseTooltip) {
+      Surface(
+        onClick = { onReaderAction(PauseTts) },
+        shape = CircleShape,
+        color = MaterialTheme.colorScheme.primary,
+        contentColor = MaterialTheme.colorScheme.onPrimary,
+        modifier = Modifier
+          .size(FIFTY_SIX_DP)
+          .semantics { testTag = TTS_CONTROL_PLAY_PAUSE_BUTTON_TESTING_TAG }
+      ) {
+        Box(contentAlignment = Alignment.Center) {
+          Icon(
+            painter = painterResource(
+              id = if (ttsItem.isTtsPaused) {
+                R.drawable.ic_baseline_play
+              } else {
+                R.drawable.ic_baseline_pause
+              }
+            ),
+            contentDescription = ttsItem.contentDescription,
+            tint = MaterialTheme.colorScheme.onPrimary,
+            modifier = Modifier.size(TWENTY_EIGHT_DP)
+          )
+        }
+      }
+    }
+
+    // 4. Forward 10s button
+    PlayerTooltip(stringResource(R.string.tts_forward_10_seconds)) {
+      IconButton(
+        onClick = { onReaderAction(ForwardTts10s) },
+        modifier = Modifier.semantics { testTag = TTS_CONTROL_FORWARD_10_BUTTON_TESTING_TAG }
+      ) {
+        Icon(
+          painter = painterResource(id = R.drawable.ic_forward_10),
+          contentDescription = "+10s",
+          tint = MaterialTheme.colorScheme.onSurface,
+          modifier = Modifier.size(TWENTY_FOUR_DP)
+        )
+      }
+    }
+
+    // 5. Voice button (Equalizer)
+    PlayerTooltip(stringResource(R.string.tts_select_voice)) {
+      IconButton(
+        onClick = { onReaderAction(ShowVoiceSelectionDialog) },
+        modifier = Modifier.semantics { testTag = TTS_CONTROL_VOICE_BUTTON_TESTING_TAG }
+      ) {
+        Icon(
+          painter = painterResource(id = R.drawable.ic_graphic_eq),
+          contentDescription = stringResource(R.string.menu_read_aloud),
+          tint = MaterialTheme.colorScheme.onSurface,
+          modifier = Modifier.size(TWENTY_FOUR_DP)
+        )
+      }
+    }
+
+    // 6. Stop button
+    PlayerTooltip(stringResource(R.string.stop)) {
+      IconButton(
+        onClick = { onReaderAction(StopTts) },
+        modifier = Modifier.semantics { testTag = TTS_CONTROL_STOP_BUTTON_TESTING_TAG }
+      ) {
+        Icon(
+          painter = painterResource(id = R.drawable.ic_stop_square_outline),
+          contentDescription = stringResource(R.string.stop),
+          tint = MaterialTheme.colorScheme.onSurface,
+          modifier = Modifier.size(TWENTY_TWO_DP)
         )
       }
     }
   }
+}
+
+@Composable
+private fun TtsFloatingActionButton(onReaderAction: (ReaderAction) -> Unit) {
+  var offsetX by remember { mutableFloatStateOf(0f) }
+  var offsetY by remember { mutableFloatStateOf(0f) }
+
+  Box(
+    modifier = Modifier
+      .fillMaxWidth()
+      .padding(horizontal = SIXTEEN_DP, vertical = EIGHT_DP),
+    contentAlignment = Alignment.BottomStart
+  ) {
+    PlayerTooltip(stringResource(R.string.tts_controls)) {
+      FloatingActionButton(
+        onClick = { onReaderAction(ShowTtsControlsOverlay) },
+        containerColor = MaterialTheme.colorScheme.primary,
+        contentColor = MaterialTheme.colorScheme.onPrimary,
+        modifier = Modifier
+          .offset { IntOffset(offsetX.roundToInt(), offsetY.roundToInt()) }
+          .pointerInput(Unit) {
+            detectDragGestures { change, dragAmount ->
+              change.consume()
+              offsetX += dragAmount.x
+              offsetY += dragAmount.y
+            }
+          }
+          .semantics { testTag = TTS_FLOATING_SPEAKER_BUTTON_TESTING_TAG }
+      ) {
+        Icon(
+          painter = painterResource(id = R.drawable.ic_volume_up),
+          contentDescription = stringResource(R.string.menu_read_aloud),
+          modifier = Modifier.size(TWENTY_FOUR_DP)
+        )
+      }
+    }
+  }
+}
+
+@Suppress("LongMethod")
+@Composable
+private fun VoiceSelectionDialog(
+  voices: List<String>,
+  selectedVoice: String?,
+  onVoiceSelected: (String) -> Unit,
+  onDismiss: () -> Unit
+) {
+  AlertDialog(
+    onDismissRequest = onDismiss,
+    containerColor = MaterialTheme.colorScheme.surface,
+    titleContentColor = MaterialTheme.colorScheme.onSurface,
+    textContentColor = MaterialTheme.colorScheme.onSurface,
+    title = {
+      Text(
+        text = stringResource(R.string.menu_read_aloud),
+        style = MaterialTheme.typography.titleMedium,
+        fontWeight = FontWeight.Bold
+      )
+    },
+    text = {
+      if (voices.isEmpty()) {
+        Text(
+          text = stringResource(R.string.tts_not_enabled),
+          style = MaterialTheme.typography.bodyMedium
+        )
+      } else {
+        LazyColumn(modifier = Modifier.fillMaxWidth()) {
+          itemsIndexed(voices) { index, voiceName ->
+            val isSelected = if (!selectedVoice.isNullOrBlank()) {
+              voiceName.equals(selectedVoice, ignoreCase = true) ||
+                voiceName.substringBefore("-local").substringBefore("-network")
+                  .equals(
+                    selectedVoice.substringBefore("-local").substringBefore("-network"),
+                    ignoreCase = true
+                  )
+            } else {
+              index == 0
+            }
+            val displayName = "Voice ${index + 1}"
+            Row(
+              modifier = Modifier
+                .fillMaxWidth()
+                .clickable { onVoiceSelected(voiceName) }
+                .padding(vertical = EIGHT_DP, horizontal = FOUR_DP),
+              verticalAlignment = Alignment.CenterVertically
+            ) {
+              RadioButton(
+                selected = isSelected,
+                onClick = { onVoiceSelected(voiceName) },
+                colors = RadioButtonDefaults.colors(
+                  selectedColor = MaterialTheme.colorScheme.primary
+                )
+              )
+              Spacer(modifier = Modifier.width(EIGHT_DP))
+              Text(
+                text = displayName,
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurface
+              )
+            }
+          }
+        }
+      }
+    },
+    confirmButton = {
+      TextButton(onClick = onDismiss) {
+        Text(text = stringResource(R.string.cancel))
+      }
+    },
+    modifier = Modifier.semantics { testTag = TTS_VOICE_SELECTION_DIALOG_TESTING_TAG }
+  )
 }
 
 @Composable

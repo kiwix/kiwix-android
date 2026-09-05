@@ -22,6 +22,7 @@ import android.content.Context
 import android.content.Intent
 import android.media.AudioManager
 import android.media.AudioManager.OnAudioFocusChangeListener
+import android.speech.tts.Voice
 import dagger.hilt.android.qualifiers.ApplicationContext
 import org.kiwix.kiwixmobile.core.main.KiwixTextToSpeech
 import org.kiwix.kiwixmobile.core.main.KiwixTextToSpeech.OnInitSucceedListener
@@ -42,11 +43,13 @@ import org.kiwix.kiwixmobile.core.read_aloud.ReadAloudService.Companion.ACTION_S
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.utils.TAG_KIWIX
 import org.kiwix.kiwixmobile.core.utils.files.Log
+import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import javax.inject.Inject
 
 class ReadAloudManager @Inject constructor(
   @param:ApplicationContext private val context: Context,
-  private val zimReaderContainer: ZimReaderContainer
+  private val zimReaderContainer: ZimReaderContainer,
+  private val kiwixDataStore: KiwixDataStore
 ) {
   sealed interface TtsState {
     data object StartReadSelection : TtsState
@@ -107,21 +110,25 @@ class ReadAloudManager @Inject constructor(
   private val audioFocusChangedListener = OnAudioFocusChangeListener { focusChange: Int ->
     val tts = tts ?: return@OnAudioFocusChangeListener
     Log.d(TAG_KIWIX, "Focus change: $focusChange")
-    tts.currentTTSTask?.let {
-      tts.stop()
-      setActionAndStartTTSService(ACTION_STOP_TTS)
-      return@OnAudioFocusChangeListener
-    }
     when (focusChange) {
-      AudioManager.AUDIOFOCUS_LOSS -> {
-        if (tts.currentTTSTask?.paused == false) tts.pauseOrResume()
-        dispatchState(AudioFocusLoss)
-        setActionAndStartTTSService(ACTION_PAUSE_OR_RESUME_TTS, true)
+      AudioManager.AUDIOFOCUS_LOSS,
+      AudioManager.AUDIOFOCUS_LOSS_TRANSIENT,
+      AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK -> {
+        val task = tts.currentTTSTask
+        if (task != null && !task.paused) {
+          tts.pauseOrResume()
+          dispatchState(AudioFocusLoss)
+          setActionAndStartTTSService(ACTION_PAUSE_OR_RESUME_TTS, true)
+        }
       }
 
       AudioManager.AUDIOFOCUS_GAIN -> {
-        dispatchState(AudioFocusGain)
-        setActionAndStartTTSService(ACTION_PAUSE_OR_RESUME_TTS, false)
+        val task = tts.currentTTSTask
+        if (task != null && task.paused) {
+          tts.pauseOrResume()
+          dispatchState(AudioFocusGain)
+          setActionAndStartTTSService(ACTION_PAUSE_OR_RESUME_TTS, false)
+        }
       }
     }
   }
@@ -133,8 +140,10 @@ class ReadAloudManager @Inject constructor(
         initListener,
         speakingListener,
         audioFocusChangedListener,
-        zimReaderContainer
+        zimReaderContainer,
+        kiwixDataStore
       )
+    initializeTTS(false)
   }
 
   fun initializeTTS(isReadSelection: Boolean) {
@@ -201,6 +210,34 @@ class ReadAloudManager @Inject constructor(
     dispatchState(if (wasPaused) TtsResumed else TtsPaused)
     setActionAndStartTTSService(ACTION_PAUSE_OR_RESUME_TTS, !wasPaused)
   }
+
+  fun seekTo(positionMs: Long) {
+    tts?.seekTo(positionMs)
+  }
+
+  fun rewind10s() {
+    tts?.rewind10s()
+  }
+
+  fun forward10s() {
+    tts?.forward10s()
+  }
+
+  fun getAvailableVoices(): List<Voice> =
+    tts?.getAvailableVoices().orEmpty()
+
+  fun setVoiceByName(voiceName: String) {
+    tts?.setVoiceByName(voiceName)
+  }
+
+  val currentPositionMs: Long
+    get() = tts?.currentPositionMs ?: 0L
+
+  val currentVoiceName: String?
+    get() = tts?.currentVoiceName
+
+  val totalDurationMs: Long
+    get() = tts?.totalDurationMs ?: 0L
 
   fun stopReadAloud() {
     val tts = requireTts()
