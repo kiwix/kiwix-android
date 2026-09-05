@@ -38,7 +38,6 @@ import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import org.junit.Rule
 import org.junit.Test
-import org.junit.jupiter.api.Assertions
 import org.kiwix.kiwixmobile.BaseActivityTest
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.DownloadMonitorService
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.COMPOSE_TEST_RULE_ORDER
@@ -135,16 +134,15 @@ class DownloadServiceTest : BaseActivityTest() {
   }
 
   private fun assetDownloadService(isRunning: Boolean) {
-    composeTestRule.waitUntilTimeout(3000)
     // press the home button so that application goes into background
     InstrumentationRegistry.getInstrumentation().uiAutomation.performGlobalAction(
       AccessibilityService.GLOBAL_ACTION_HOME
     )
-    // Now we are downloading the small file so we need to check the service initialization.
-    Assertions.assertEquals(
-      isRunning,
-      DownloadMonitorService.isDownloadMonitorServiceRunning
-    )
+    // Poll instead of a fixed sleep - a wait that's enough on one API level/device
+    // isn't guaranteed enough on a slower one.
+    composeTestRule.waitUntil(timeoutMillis = 10_000) {
+      DownloadMonitorService.isDownloadMonitorServiceRunning == isRunning
+    }
     composeTestRule.waitUntilTimeout(3000)
   }
 
