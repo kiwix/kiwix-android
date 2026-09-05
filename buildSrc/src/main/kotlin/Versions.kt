@@ -112,7 +112,7 @@ object Versions {
 
   const val LIFECYCLE_VERSION = "2.8.6"
 
-  const val ROBOLECTRIC = "4.16.1"
+  const val ROBOLECTRIC = "4.17-beta-4"
   const val BENCHMARK_MACRO: String = "1.4.1"
 
   const val ACCOMPANIST = "0.34.0"
