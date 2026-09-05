@@ -327,6 +327,7 @@ class LibkiwixBookOnDisk @Inject constructor(
     Regex("/\\.Trash/").containsMatchIn(filePath)
 
   suspend fun delete(books: List<LibkiwixBook>) {
+    if (books.isEmpty()) return
     runCatching {
       ensureInitialized()
       books.forEach {

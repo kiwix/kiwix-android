@@ -118,7 +118,9 @@ class HotspotService :
 
     if (remainingPaths == currentlyHostedPaths) return
 
-    if (!remainingPaths.isEmpty()) {
+    if (remainingPaths.isEmpty()) {
+      stopHotspotAndDismissNotification()
+    } else {
       startServerAndNotify(
         ArrayList(remainingPaths),
         restart = true
