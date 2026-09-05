@@ -36,9 +36,9 @@ import org.kiwix.kiwixmobile.core.zim_manager.Category
 import javax.inject.Inject
 
 class CategoryRepositoryImpl @Inject constructor(
-  @OPDSKiwixService private val kiwixService: KiwixService,
+  @param:OPDSKiwixService private val kiwixService: KiwixService,
   private val kiwixDataStore: KiwixDataStore,
-  @IoDispatcher private val ioDispatcher: CoroutineDispatcher
+  @param:IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : CategoryRepository {
   @Suppress("MagicNumber")
   override fun fetchCategories(): Flow<List<Category>> = flow {
