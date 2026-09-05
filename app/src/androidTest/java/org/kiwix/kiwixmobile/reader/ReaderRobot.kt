@@ -18,6 +18,9 @@
 
 package org.kiwix.kiwixmobile.reader
 
+import android.app.ActivityManager
+import android.content.Context
+import android.os.SystemClock
 import androidx.compose.ui.test.ComposeTimeoutException
 import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.isDisplayed
@@ -44,6 +47,7 @@ import org.kiwix.kiwixmobile.core.main.reader.TAB_MENU_ITEM_TESTING_TAG
 import org.kiwix.kiwixmobile.core.main.reader.TAB_TITLE_TESTING_TAG
 import org.kiwix.kiwixmobile.core.main.reader.TTS_CONTROL_STOP_BUTTON_TESTING_TAG
 import org.kiwix.kiwixmobile.core.page.PAGE_ITEM_TESTING_TAG
+import org.kiwix.kiwixmobile.core.read_aloud.ReadAloudService
 import org.kiwix.kiwixmobile.core.search.OPEN_ITEM_IN_NEW_TAB_ICON_TESTING_TAG
 import org.kiwix.kiwixmobile.core.ui.components.NAVIGATION_ICON_TESTING_TAG
 import org.kiwix.kiwixmobile.core.ui.components.OVERFLOW_MENU_BUTTON_TESTING_TAG
@@ -65,6 +69,8 @@ class ReaderRobot : BaseRobot() {
 
   companion object {
     private const val TAG = "ReaderRobot"
+    private const val READ_ALOUD_SERVICE_STOP_TIMEOUT_MS = 5_000L
+    private const val READ_ALOUD_SERVICE_STOP_POLL_INTERVAL_MS = 100L
   }
 
   fun checkZimFileLoadedSuccessful(
@@ -271,6 +277,39 @@ class ReaderRobot : BaseRobot() {
       composeTestRule.waitForIdle()
       composeTestRule.onNodeWithTag(TTS_CONTROL_STOP_BUTTON_TESTING_TAG).performClick()
     })
+    waitForReadAloudServiceToStop()
+  }
+
+  /**
+   * The Stop button click unbinds ReadAloudService (see BindReadAloudService's
+   * DisposableEffect), but Context#unbindService()/Service#onDestroy() complete on the
+   * OS's own schedule, not synchronously with the click. If this test - and its
+   * HiltAndroidRule component - finishes before that teardown completes, the pending
+   * onCreate() from a still-in-flight bind can land in the dead window between this
+   * test's teardown and the next test's setup, crashing whichever unrelated test
+   * happens to be running when it arrives (surfaces as "IllegalStateException: The
+   * component was not created" on a totally unrelated test class).
+   *
+   * Poll until the OS confirms the service is actually gone so that async completion
+   * happens inside this test's own window instead of leaking into the next one. Best
+   * effort: logs and moves on if the timeout is hit, rather than failing the test.
+   */
+  private fun waitForReadAloudServiceToStop() {
+    val activityManager =
+      context.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
+    val serviceClassName = ReadAloudService::class.java.name
+    val deadline = SystemClock.elapsedRealtime() + READ_ALOUD_SERVICE_STOP_TIMEOUT_MS
+    while (SystemClock.elapsedRealtime() < deadline) {
+      val stillRunning = activityManager.getRunningServices(Int.MAX_VALUE)
+        .any { it.service.className == serviceClassName }
+      if (!stillRunning) return
+      Thread.sleep(READ_ALOUD_SERVICE_STOP_POLL_INTERVAL_MS)
+    }
+    Log.e(
+      TAG,
+      "ReadAloudService still reported running ${READ_ALOUD_SERVICE_STOP_TIMEOUT_MS}ms " +
+        "after clicking Stop - proceeding anyway."
+    )
   }
 
   fun clickOnHistoryItem(composeTestRule: ComposeContentTestRule) {
