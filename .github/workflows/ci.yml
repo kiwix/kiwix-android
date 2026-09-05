@@ -128,9 +128,6 @@ jobs:
           disable-animations: false
           heap-size: 1024M
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -no-metrics
-          # New system images (e.g. API 37) can need a newer emulator build than
-          # the stable channel ships.
-          channel: ${{ matrix.target == 'google_apis_playstore' && 'canary' || 'stable' }}
           script: |
             trap 'killall -INT crashpad_handler 2>/dev/null || true' EXIT
             echo "Generated AVD snapshot for caching."
@@ -145,7 +142,6 @@ jobs:
           ram-size: 4096M
           cores: 4
           gradle-opts: "-Dorg.gradle.internal.http.connectionTimeout=60000 -Dorg.gradle.internal.http.socketTimeout=60000 -Dorg.gradle.internal.network.retry.max.attempts=6 -Dorg.gradle.internal.network.retry.initial.backOff=2000"
-          channel: ${{ matrix.target == 'google_apis_playstore' && 'canary' || 'stable' }}
           script: bash contrib/instrumentation.sh
 
       - name: Upload screenshot result
@@ -252,9 +248,6 @@ jobs:
           disable-animations: false
           heap-size: 1024M
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -no-metrics
-          # New system images (e.g. API 37) can need a newer emulator build than
-          # the stable channel ships.
-          channel: ${{ matrix.target == 'google_apis_playstore' && 'canary' || 'stable' }}
           script: |
             trap 'killall -INT crashpad_handler 2>/dev/null || true' EXIT
             echo "Generated AVD snapshot for caching."
@@ -269,7 +262,6 @@ jobs:
           ram-size: 4096M
           cores: 4
           gradle-opts: "-Dorg.gradle.internal.http.connectionTimeout=60000 -Dorg.gradle.internal.http.socketTimeout=60000 -Dorg.gradle.internal.network.retry.max.attempts=6 -Dorg.gradle.internal.network.retry.initial.backOff=2000"
-          channel: ${{ matrix.target == 'google_apis_playstore' && 'canary' || 'stable' }}
           script: bash contrib/instrumentation-release.sh
 
   automated-tests-branded-apps:
@@ -335,9 +327,6 @@ jobs:
           disable-animations: false
           heap-size: 1024M
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -no-metrics
-          # New system images (e.g. API 37) can need a newer emulator build than
-          # the stable channel ships.
-          channel: ${{ matrix.target == 'google_apis_playstore' && 'canary' || 'stable' }}
           script: |
             trap 'killall -INT crashpad_handler 2>/dev/null || true' EXIT
             echo "Generated AVD snapshot for caching."
@@ -352,7 +341,6 @@ jobs:
           ram-size: 4096M
           cores: 4
           gradle-opts: "-Dorg.gradle.internal.http.connectionTimeout=60000 -Dorg.gradle.internal.http.socketTimeout=60000 -Dorg.gradle.internal.network.retry.max.attempts=6 -Dorg.gradle.internal.network.retry.initial.backOff=2000"
-          channel: ${{ matrix.target == 'google_apis_playstore' && 'canary' || 'stable' }}
           script: bash contrib/instrumentation-brandedapps.sh
 
   automated-tests-on-tablet:
@@ -418,9 +406,6 @@ jobs:
           disable-animations: false
           heap-size: 1024M
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -no-metrics
-          # New system images (e.g. API 37) can need a newer emulator build than
-          # the stable channel ships.
-          channel: ${{ matrix.target == 'google_apis_playstore' && 'canary' || 'stable' }}
           script: |
             trap 'killall -INT crashpad_handler 2>/dev/null || true' EXIT
             echo "Generated AVD snapshot for caching."
@@ -435,7 +420,6 @@ jobs:
           ram-size: 4096M
           cores: 4
           gradle-opts: "-Dorg.gradle.internal.http.connectionTimeout=60000 -Dorg.gradle.internal.http.socketTimeout=60000 -Dorg.gradle.internal.network.retry.max.attempts=6 -Dorg.gradle.internal.network.retry.initial.backOff=2000"
-          channel: ${{ matrix.target == 'google_apis_playstore' && 'canary' || 'stable' }}
           script: bash contrib/instrumentation-file-opening-on-tablet.sh
 
   code-formatting-job:
