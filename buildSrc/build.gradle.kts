@@ -11,11 +11,11 @@ repositories {
 }
 
 dependencies {
-  implementation("com.android.tools.build:gradle:9.3.0")
-  implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:2.2.20")
+  implementation("com.android.tools.build:gradle:9.3.2")
+  implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:2.4.10")
   // Provides AGP's kapt plugin (`com.android.legacy-kapt`), used by `:objectboxmigration`.
-  implementation("com.android.tools.build:gradle-kotlin:9.3.0")
-  implementation("com.google.devtools.ksp:com.google.devtools.ksp.gradle.plugin:2.3.4")
+  implementation("com.android.tools.build:gradle-kotlin:9.3.2")
+  implementation("com.google.devtools.ksp:com.google.devtools.ksp.gradle.plugin:2.3.11")
   implementation("com.google.dagger:hilt-android-gradle-plugin:2.60.1")
   implementation("org.jacoco:org.jacoco.core:0.8.15")
   implementation("org.jlleitschuh.gradle:ktlint-gradle:12.1.2")
@@ -25,7 +25,7 @@ dependencies {
   implementation("com.google.http-client:google-http-client-jackson2:1.40.0") {
     exclude(group = "com.google.guava", module = "guava")
   }
-  implementation("io.gitlab.arturbosch.detekt:detekt-gradle-plugin:1.23.8")
+  implementation("dev.detekt:detekt-gradle-plugin:2.0.0-alpha.6")
   implementation("com.googlecode.json-simple:json-simple:1.1.1")
   implementation("com.squareup.okhttp3:okhttp:4.12.0")
 

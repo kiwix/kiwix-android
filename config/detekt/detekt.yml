@@ -1,16 +1,7 @@
-build:
-  maxIssues: 0
-  excludeCorrectable: false
-  weights:
-  # complexity: 2
-  # LongParameterList: 1
-  # style: 1
-  # comments: 1
-
 config:
   validation: true
   # when writing own rules with new properties, exclude the property path e.g.: "my_rule_set,.*>.*>[my_property]"
-  excludes: ""
+  excludes: []
 
 processors:
   active: true
@@ -28,15 +19,15 @@ console-reports:
     - 'ProjectStatisticsReport'
     - 'ComplexityReport'
     - 'NotificationReport'
-    #  - 'FindingsReport'
-    - 'FileBasedFindingsReport'
+    #  - 'IssuesReport'
+    - 'FileBasedIssuesReport'
 
 comments:
   active: true
-  excludes: "**/test/**,**/androidTest/**,**/*.Test.kt,**/*.Spec.kt,**/*.Spek.kt"
-  CommentOverPrivateFunction:
+  excludes: [ '**/test/**', '**/androidTest/**', '**/*.Test.kt', '**/*.Spec.kt', '**/*.Spek.kt' ]
+  DocumentationOverPrivateFunction:
     active: false
-  CommentOverPrivateProperty:
+  DocumentationOverPrivateProperty:
     active: false
   EndOfSentenceFormat:
     active: false
@@ -56,14 +47,14 @@ complexity:
   active: true
   ComplexCondition:
     active: true
-    threshold: 4
+    allowedConditions: 4
   ComplexInterface:
     active: false
-    threshold: 10
+    allowedDefinitions: 10
     includeStaticDeclarations: false
   CyclomaticComplexMethod:
     active: true
-    threshold: 15
+    allowedComplexity: 15
     ignoreSingleWhenExpression: false
     ignoreSimpleWhenEntries: false
     ignoreNestingFunctions: false
@@ -73,36 +64,36 @@ complexity:
     ignoredLabels: [ "" ]
   LargeClass:
     active: true
-    threshold: 600
+    allowedLines: 600
   LongMethod:
     active: true
-    threshold: 60
+    allowedLines: 60
   LongParameterList:
     active: true
-    functionThreshold: 8
-    constructorThreshold: 6
+    allowedFunctionParameters: 8
+    allowedConstructorParameters: 6
     ignoreDefaultParameters: true
   MethodOverloading:
     active: false
-    threshold: 6
+    allowedOverloads: 6
   NestedBlockDepth:
     active: true
-    threshold: 4
+    allowedDepth: 4
   StringLiteralDuplication:
     active: false
-    excludes: "**/test/**,**/androidTest/**,**/*.Test.kt,**/*.Spec.kt,**/*.Spek.kt"
-    threshold: 3
+    excludes: [ '**/test/**', '**/androidTest/**', '**/*.Test.kt', '**/*.Spec.kt', '**/*.Spek.kt' ]
+    allowedDuplications: 3
     ignoreAnnotation: true
-    excludeStringsWithLessThan5Characters: true
+    allowedWithLengthLessThan: 5
     ignoreStringsRegex: '$^'
   TooManyFunctions:
     active: false
-    excludes: "**/test/**,**/androidTest/**,**/*.Test.kt,**/*.Spec.kt,**/*.Spek.kt"
-    thresholdInFiles: 11
-    thresholdInClasses: 11
-    thresholdInInterfaces: 11
-    thresholdInObjects: 11
-    thresholdInEnums: 11
+    excludes: [ '**/test/**', '**/androidTest/**', '**/*.Test.kt', '**/*.Spec.kt', '**/*.Spek.kt' ]
+    allowedFunctionsPerFile: 11
+    allowedFunctionsPerClass: 11
+    allowedFunctionsPerInterface: 11
+    allowedFunctionsPerObject: 11
+    allowedFunctionsPerEnum: 11
     ignoreDeprecated: false
     ignorePrivate: false
     ignoreOverridden: false
@@ -138,7 +129,7 @@ empty-blocks:
     active: true
   EmptyInitBlock:
     active: true
-  EmptyKtFile:
+  EmptyKotlinFile:
     active: true
   EmptySecondaryConstructor:
     active: true
@@ -154,7 +145,7 @@ exceptions:
     methodNames: [ 'toString', 'hashCode', 'equals', 'finalize' ]
   InstanceOfCheckForException:
     active: false
-    excludes: "**/test/**,**/androidTest/**,**/*.Test.kt,**/*.Spec.kt,**/*.Spek.kt"
+    excludes: [ '**/test/**', '**/androidTest/**', '**/*.Test.kt', '**/*.Spec.kt', '**/*.Spek.kt' ]
   NotImplementedDeclaration:
     active: false
   PrintStackTrace:
@@ -179,7 +170,7 @@ exceptions:
     active: false
   TooGenericExceptionCaught:
     active: true
-    excludes: "**/test/**,**/androidTest/**,**/*.Test.kt,**/*.Spec.kt,**/*.Spek.kt"
+    excludes: [ '**/test/**', '**/androidTest/**', '**/*.Test.kt', '**/*.Spec.kt', '**/*.Spek.kt' ]
     exceptionNames:
       - ArrayIndexOutOfBoundsException
       - Error
@@ -202,39 +193,39 @@ naming:
   active: true
   ClassNaming:
     active: true
-    excludes: "**/test/**,**/androidTest/**,**/*.Test.kt,**/*.Spec.kt,**/*.Spek.kt"
+    excludes: [ '**/test/**', '**/androidTest/**', '**/*.Test.kt', '**/*.Spec.kt', '**/*.Spek.kt' ]
     classPattern: '[A-Z$][a-zA-Z0-9$]*'
   ConstructorParameterNaming:
     active: true
-    excludes: "**/test/**,**/androidTest/**,**/*.Test.kt,**/*.Spec.kt,**/*.Spek.kt"
+    excludes: [ '**/test/**', '**/androidTest/**', '**/*.Test.kt', '**/*.Spec.kt', '**/*.Spek.kt' ]
     parameterPattern: '[a-z][A-Za-z0-9]*'
     privateParameterPattern: '[a-z][A-Za-z0-9]*'
     excludeClassPattern: '$^'
   EnumNaming:
     active: true
-    excludes: "**/test/**,**/androidTest/**,**/*.Test.kt,**/*.Spec.kt,**/*.Spek.kt"
+    excludes: [ '**/test/**', '**/androidTest/**', '**/*.Test.kt', '**/*.Spec.kt', '**/*.Spek.kt' ]
     enumEntryPattern: '^[A-Z][_a-zA-Z0-9]*'
   ForbiddenClassName:
     active: false
-    excludes: "**/test/**,**/androidTest/**,**/*.Test.kt,**/*.Spec.kt,**/*.Spek.kt"
+    excludes: [ '**/test/**', '**/androidTest/**', '**/*.Test.kt', '**/*.Spec.kt', '**/*.Spek.kt' ]
     forbiddenName: [ '' ]
-  FunctionMaxLength:
+  FunctionNameMaxLength:
     active: false
-    excludes: "**/test/**,**/androidTest/**,**/*.Test.kt,**/*.Spec.kt,**/*.Spek.kt"
+    excludes: [ '**/test/**', '**/androidTest/**', '**/*.Test.kt', '**/*.Spec.kt', '**/*.Spek.kt' ]
     maximumFunctionNameLength: 30
-  FunctionMinLength:
+  FunctionNameMinLength:
     active: false
-    excludes: "**/test/**,**/androidTest/**,**/*.Test.kt,**/*.Spec.kt,**/*.Spek.kt"
+    excludes: [ '**/test/**', '**/androidTest/**', '**/*.Test.kt', '**/*.Spec.kt', '**/*.Spek.kt' ]
     minimumFunctionNameLength: 3
   FunctionNaming:
     active: true
-    excludes: "**/test/**,**/androidTest/**,**/*.Test.kt,**/*.Spec.kt,**/*.Spek.kt"
+    excludes: [ '**/test/**', '**/androidTest/**', '**/*.Test.kt', '**/*.Spec.kt', '**/*.Spek.kt' ]
     functionPattern: '^([a-zA-Z$][a-zA-Z$0-9]*)|(`.*`)$'
     excludeClassPattern: '$^'
     ignoreAnnotated: [ 'Composable' ]
   FunctionParameterNaming:
     active: true
-    excludes: "**/test/**,**/androidTest/**,**/*.Test.kt,**/*.Spec.kt,**/*.Spek.kt"
+    excludes: [ '**/test/**', '**/androidTest/**', '**/*.Test.kt', '**/*.Spec.kt', '**/*.Spek.kt' ]
     parameterPattern: '[a-z][A-Za-z0-9]*'
     excludeClassPattern: '$^'
   InvalidPackageDeclaration:
@@ -247,31 +238,31 @@ naming:
     ignoreOverridden: true
   ObjectPropertyNaming:
     active: true
-    excludes: "**/test/**,**/androidTest/**,**/*.Test.kt,**/*.Spec.kt,**/*.Spek.kt"
+    excludes: [ '**/test/**', '**/androidTest/**', '**/*.Test.kt', '**/*.Spec.kt', '**/*.Spek.kt' ]
     constantPattern: '[A-Za-z][_A-Za-z0-9]*'
     propertyPattern: '[A-Za-z][_A-Za-z0-9]*'
     privatePropertyPattern: '(_)?[A-Za-z][_A-Za-z0-9]*'
   PackageNaming:
     active: true
-    excludes: "**/test/**,**/androidTest/**,**/*.Test.kt,**/*.Spec.kt,**/*.Spek.kt"
+    excludes: [ '**/test/**', '**/androidTest/**', '**/*.Test.kt', '**/*.Spec.kt', '**/*.Spek.kt' ]
     packagePattern: '^[a-z]+(\.[a-z][A-Za-z0-9]*)*$'
   TopLevelPropertyNaming:
     active: true
-    excludes: "**/test/**,**/androidTest/**,**/*.Test.kt,**/*.Spec.kt,**/*.Spek.kt"
+    excludes: [ '**/test/**', '**/androidTest/**', '**/*.Test.kt', '**/*.Spec.kt', '**/*.Spek.kt' ]
     constantPattern: '[A-Z][_A-Z0-9]*'
     propertyPattern: '[A-Za-z][_A-Za-z0-9]*'
     privatePropertyPattern: '_?[A-Za-z][_A-Za-z0-9]*'
   VariableMaxLength:
     active: false
-    excludes: "**/test/**,**/androidTest/**,**/*.Test.kt,**/*.Spec.kt,**/*.Spek.kt"
+    excludes: [ '**/test/**', '**/androidTest/**', '**/*.Test.kt', '**/*.Spec.kt', '**/*.Spek.kt' ]
     maximumVariableNameLength: 64
   VariableMinLength:
     active: false
-    excludes: "**/test/**,**/androidTest/**,**/*.Test.kt,**/*.Spec.kt,**/*.Spek.kt"
+    excludes: [ '**/test/**', '**/androidTest/**', '**/*.Test.kt', '**/*.Spec.kt', '**/*.Spek.kt' ]
     minimumVariableNameLength: 1
   VariableNaming:
     active: true
-    excludes: "**/test/**,**/androidTest/**,**/*.Test.kt,**/*.Spec.kt,**/*.Spek.kt"
+    excludes: [ '**/test/**', '**/androidTest/**', '**/*.Test.kt', '**/*.Spec.kt', '**/*.Spek.kt' ]
     variablePattern: '[a-z][A-Za-z0-9]*'
     privateVariablePattern: '(_)?[a-z][A-Za-z0-9]*'
     excludeClassPattern: '$^'
@@ -282,10 +273,10 @@ performance:
     active: true
   ForEachOnRange:
     active: true
-    excludes: "**/test/**,**/androidTest/**,**/*.Test.kt,**/*.Spec.kt,**/*.Spek.kt"
+    excludes: [ '**/test/**', '**/androidTest/**', '**/*.Test.kt', '**/*.Spec.kt', '**/*.Spek.kt' ]
   SpreadOperator:
     active: false
-    excludes: "**/test/**,**/androidTest/**,**/*.Test.kt,**/*.Spec.kt,**/*.Spek.kt"
+    excludes: [ '**/test/**', '**/androidTest/**', '**/*.Test.kt', '**/*.Spec.kt', '**/*.Spek.kt' ]
   UnnecessaryTemporaryInstantiation:
     active: true
 
@@ -311,7 +302,7 @@ potential-bugs:
     active: true
   LateinitUsage:
     active: false
-    excludes: "**/test/**,**/androidTest/**,**/*.Test.kt,**/*.Spec.kt,**/*.Spek.kt"
+    excludes: [ '**/test/**', '**/androidTest/**', '**/*.Test.kt', '**/*.Spec.kt', '**/*.Spek.kt' ]
     ignoreAnnotated: [ ]
     ignoreOnClassesPattern: ""
   MapGetWithNotNullAssertionOperator:
@@ -361,11 +352,10 @@ style:
     allowedPatterns: ""
   ForbiddenImport:
     active: false
-    imports: [ '' ]
-    forbiddenPatterns: ""
+    forbiddenImports: [ '' ]
   ForbiddenMethodCall:
     active: false
-    methods: [ '' ]
+    methods: [ ]
   ForbiddenVoid:
     active: false
     ignoreOverridden: false
@@ -374,13 +364,12 @@ style:
     active: true
     ignoreOverridableFunction: true
     excludedFunctions: [ 'describeContents' ]
-    ignoreAnnotated: [ "dagger.Provides" ]
   LoopWithTooManyJumpStatements:
     active: true
     maxJumpCount: 1
   MagicNumber:
     active: true
-    excludes: "**/test/**,**/androidTest/**,**/*.Test.kt,**/*.Spec.kt,**/*.Spek.kt"
+    excludes: [ '**/test/**', '**/androidTest/**', '**/*.Test.kt', '**/*.Spec.kt', '**/*.Spek.kt' ]
     ignoreNumbers:
         - '-1'
         - '0'
@@ -403,7 +392,7 @@ style:
     excludePackageStatements: true
     excludeImportStatements: true
     excludeCommentStatements: false
-  MayBeConst:
+  MayBeConstant:
     active: true
   ModifierOrder:
     active: true
@@ -417,13 +406,11 @@ style:
     active: true
   OptionalUnit:
     active: false
-  PreferToOverPairSyntax:
-    active: false
   ProtectedMemberInFinalClass:
     active: true
   RedundantExplicitType:
     active: false
-  RedundantVisibilityModifierRule:
+  RedundantVisibilityModifier:
     active: false
   ReturnCount:
     active: true
@@ -436,7 +423,7 @@ style:
     active: true
   SerialVersionUIDInSerializableClass:
     active: false
-  SpacingBetweenPackageAndImports:
+  SpacingAfterPackageAndImports:
     active: false
   ThrowsCount:
     active: true
@@ -446,11 +433,10 @@ style:
   UnderscoresInNumericLiterals:
     active: false
     acceptableLength: 5
-  UnnecessaryAbstractClass:
+  AbstractClassCanBeConcreteClass:
     active: true
-    ignoreAnnotated: [ "dagger.Module" ]
-  UnnecessaryAnnotationUseSiteTarget:
-    active: false
+  AbstractClassCanBeInterface:
+    active: true
   UnnecessaryApply:
     active: false
   UnnecessaryInheritance:
@@ -459,13 +445,17 @@ style:
     active: false
   UnnecessaryParentheses:
     active: false
-  UntilInsteadOfRangeTo:
+  RangeUntilInsteadOfRangeTo:
     active: false
-  UnusedImports:
+  UnusedImport:
     active: false
   UnusedPrivateClass:
     active: true
-  UnusedPrivateMember:
+  UnusedPrivateFunction:
+    active: false
+    allowedNames: "(_|ignored|expected|serialVersionUID)"
+    ignoreAnnotated: [ 'Preview' ]
+  UnusedPrivateProperty:
     active: false
     allowedNames: "(_|ignored|expected|serialVersionUID)"
     ignoreAnnotated: [ 'Preview' ]
@@ -489,5 +479,5 @@ style:
     active: false
   WildcardImport:
     active: true
-    excludes: "**/test/**,**/androidTest/**,**/*.Test.kt,**/*.Spec.kt,**/*.Spek.kt"
+    excludes: [ '**/test/**', '**/androidTest/**', '**/*.Test.kt', '**/*.Spec.kt', '**/*.Spek.kt' ]
     excludeImports: [ 'java.util.*', 'kotlinx.android.synthetic.*' ]
