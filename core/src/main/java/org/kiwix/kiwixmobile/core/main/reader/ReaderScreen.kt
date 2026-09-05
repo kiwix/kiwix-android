@@ -24,6 +24,7 @@ import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.widget.FrameLayout
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
@@ -115,7 +116,6 @@ import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.compose.ui.zIndex
@@ -173,20 +173,27 @@ import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FIVE_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FOUR_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.LARGE_BODY_TEXT_SIZE
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.NAVIGATION_DRAWER_WIDTH
-import org.kiwix.kiwixmobile.core.utils.ComposeDimens.ONE_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.READER_BOTTOM_APP_BAR_BUTTON_ICON_SIZE
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.READER_BOTTOM_APP_BAR_DISABLE_BUTTON_ALPHA
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.READER_BOTTOM_APP_BAR_LAYOUT_HEIGHT
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SEARCH_PLACEHOLDER_TEXT_SIZE
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SIXTEEN_DP
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SIX_DP
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TAB_BADGE_CORNER_RADIUS
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TAB_CARD_ASPECT_RATIO
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TAB_CARD_CORNER_RADIUS
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TAB_CARD_MIN_WIDTH
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TAB_FAVICON_SIZE
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TAB_PREVIEW_CORNER_RADIUS
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TAB_SWITCHER_BOTTOM_PADDING
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TAB_SWITCHER_TEXT_SIZE
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TEN_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.THREE_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TTS_BUTTONS_CONTROL_ALPHA
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TWELVE_DP
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TWENTY_FOUR_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TWO_DP
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.ZERO_DP
 import org.kiwix.kiwixmobile.core.utils.StyleUtils.fromHtml
 import org.kiwix.kiwixmobile.core.utils.ZERO
 
@@ -487,13 +494,19 @@ private fun hasItemForPositionInDocumentSectionsList(
 private fun TabSwitcherAnimated(state: ReaderUiState, onReaderAction: (ReaderAction) -> Unit) {
   val transitionSpec = remember {
     slideInVertically(
-      initialOffsetY = { -it },
-      animationSpec = tween(durationMillis = HIDE_TAB_SWITCHER_DELAY.toInt())
-    ) + fadeIn() togetherWith
+      initialOffsetY = { it },
+      animationSpec = tween(
+        durationMillis = HIDE_TAB_SWITCHER_DELAY.toInt(),
+        easing = FastOutSlowInEasing
+      )
+    ) + fadeIn(animationSpec = tween(HIDE_TAB_SWITCHER_DELAY.toInt())) togetherWith
       slideOutVertically(
-        targetOffsetY = { -it },
-        animationSpec = tween(durationMillis = HIDE_TAB_SWITCHER_DELAY.toInt())
-      ) + fadeOut()
+        targetOffsetY = { it },
+        animationSpec = tween(
+          durationMillis = HIDE_TAB_SWITCHER_DELAY.toInt(),
+          easing = FastOutSlowInEasing
+        )
+      ) + fadeOut(animationSpec = tween(HIDE_TAB_SWITCHER_DELAY.toInt()))
   }
 
   AnimatedVisibility(
@@ -880,14 +893,17 @@ fun TabItemView(
   showTabSwitcher: Boolean = true,
   onReaderAction: (ReaderAction) -> Unit
 ) {
-  val cardElevation = if (isSelected) EIGHT_DP else TWO_DP
-  val borderColor = if (isSelected) MaterialTheme.colorScheme.primary else Color.Transparent
-  val borderWidth = if (isSelected) TWO_DP else ONE_DP
+  val cardElevation = if (isSelected) SIX_DP else ZERO_DP
+  val border = if (isSelected) {
+    BorderStroke(TWO_DP, MaterialTheme.colorScheme.primary)
+  } else {
+    null
+  }
   Card(
     elevation = CardDefaults.cardElevation(defaultElevation = cardElevation),
-    border = BorderStroke(borderWidth, borderColor),
-    shape = RoundedCornerShape(TWELVE_DP),
-    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+    border = border,
+    shape = RoundedCornerShape(TAB_CARD_CORNER_RADIUS),
+    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
     modifier = modifier
       .fillMaxWidth()
       .aspectRatio(TAB_CARD_ASPECT_RATIO)
@@ -919,38 +935,69 @@ private fun TabItemHeader(
   Row(
     modifier = Modifier
       .fillMaxWidth()
-      .background(MaterialTheme.colorScheme.surfaceVariant)
-      .padding(start = EIGHT_DP, end = FOUR_DP, top = FOUR_DP, bottom = FOUR_DP),
+      .padding(start = TWELVE_DP, end = SIX_DP, top = TEN_DP, bottom = TEN_DP),
     verticalAlignment = Alignment.CenterVertically
   ) {
-    val favicon = remember(webView) { webView.favicon }
-    if (favicon != null) {
-      Image(
-        bitmap = favicon.asImageBitmap(),
-        contentDescription = null,
-        modifier = Modifier.size(SIXTEEN_DP)
-      )
-      Spacer(modifier = Modifier.width(FOUR_DP))
-    }
+    TabFaviconOrBadge(webView, title)
+    Spacer(modifier = Modifier.width(EIGHT_DP))
     Text(
       text = title,
       maxLines = 1,
       overflow = TextOverflow.Ellipsis,
-      color = MaterialTheme.colorScheme.onSurfaceVariant,
+      color = MaterialTheme.colorScheme.onSurface,
       modifier = Modifier
         .padding(end = FOUR_DP)
         .weight(1f)
         .semantics { testTag = TAB_TITLE_TESTING_TAG },
-      style = MaterialTheme.typography.labelSmall
+      style = MaterialTheme.typography.bodyMedium
     )
     IconButton(
       onClick = { onReaderAction(CloseTab(index)) },
-      modifier = Modifier.size(CLOSE_TAB_ICON_SIZE)
+      modifier = Modifier.size(TWENTY_FOUR_DP)
     ) {
       Icon(
         painter = painterResource(id = R.drawable.ic_clear_white_24dp),
         contentDescription = stringResource(R.string.close_tab) + index,
+        modifier = Modifier.size(CLOSE_TAB_ICON_SIZE),
         tint = MaterialTheme.colorScheme.onSurfaceVariant
+      )
+    }
+  }
+}
+
+@Composable
+private fun TabFaviconOrBadge(
+  webView: KiwixWebView,
+  title: String
+) {
+  val favicon = remember(webView) { webView.favicon ?: webView.zimFavicon }
+  if (favicon != null) {
+    Image(
+      bitmap = favicon.asImageBitmap(),
+      contentDescription = null,
+      modifier = Modifier
+        .size(TAB_FAVICON_SIZE)
+        .clip(RoundedCornerShape(TAB_BADGE_CORNER_RADIUS))
+    )
+  } else {
+    val initialLetter = remember(title) {
+      title.firstOrNull { it.isLetterOrDigit() }?.uppercaseChar() ?: 'K'
+    }
+    Box(
+      modifier = Modifier
+        .size(TAB_FAVICON_SIZE)
+        .clip(RoundedCornerShape(TAB_BADGE_CORNER_RADIUS))
+        .background(MaterialTheme.colorScheme.primary),
+      contentAlignment = Alignment.Center
+    ) {
+      Text(
+        text = initialLetter.toString(),
+        color = MaterialTheme.colorScheme.onPrimary,
+        style = MaterialTheme.typography.labelSmall.copy(
+          fontSize = TAB_SWITCHER_TEXT_SIZE,
+          fontWeight = FontWeight.SemiBold
+        ),
+        textAlign = TextAlign.Center
       )
     }
   }
@@ -967,6 +1014,9 @@ private fun ColumnScope.TabItemCard(
     modifier = Modifier
       .fillMaxWidth()
       .weight(1f)
+      .padding(start = EIGHT_DP, end = EIGHT_DP, bottom = EIGHT_DP)
+      .clip(RoundedCornerShape(TAB_PREVIEW_CORNER_RADIUS))
+      .background(MaterialTheme.colorScheme.surface)
   ) {
     if (showTabSwitcher) {
       AndroidView(
