@@ -19,12 +19,56 @@ env:
 
 jobs:
 
+  determine-api-levels:
+    name: Determine available emulator API levels
+    runs-on: ubuntu-24.04
+    outputs:
+      api-levels: ${{ steps.filter.outputs.api-levels }}
+    steps:
+      - name: Filter matrix to API levels with a published emulator system image
+        id: filter
+        shell: bash
+        run: |
+          # Probe published system images instead of hardcoding exclusions.
+          # API 37 only ships as versioned "android-37.0;google_apis_playstore".
+          # sdkmanager isn't on PATH on a bare runner - find it under ANDROID_HOME.
+          sdkmanager_bin=$(find "$ANDROID_HOME" -maxdepth 4 -name sdkmanager -type f | head -n1)
+          if [ -z "$sdkmanager_bin" ]; then
+            echo "::error::Could not find sdkmanager under ANDROID_HOME ($ANDROID_HOME)."
+            exit 1
+          fi
+          candidates="25 30 34 35 36 37"
+          available="[]"
+          listing=$("$sdkmanager_bin" --list 2>/dev/null)
+          for level in $candidates; do
+            # Herestring, not `echo | grep -q`: that racing with pipefail
+            # dropped API 25/30 in a real run.
+            if grep -q "system-images;android-${level};default;x86_64" <<< "$listing"; then
+              available=$(jq -c --arg lvl "$level" --arg tgt "default" \
+                '. + [{"api-level": $lvl, "target": $tgt}]' <<< "$available")
+            else
+              versioned=$(grep -o "system-images;android-${level}\.[0-9]\+;google_apis_playstore;x86_64" <<< "$listing" \
+                | sort -t';' -k2 -V | head -n1)
+              if [ -n "$versioned" ]; then
+                version_string=$(echo "$versioned" | cut -d';' -f2 | sed 's/^android-//')
+                available=$(jq -c --arg lvl "$version_string" --arg tgt "google_apis_playstore" \
+                  '. + [{"api-level": $lvl, "target": $tgt}]' <<< "$available")
+              else
+                echo "::warning::No emulator system image published for API ${level} yet - excluding it from this run's test matrix."
+              fi
+            fi
+          done
+          echo "Resolved api-levels: $available"
+          echo "api-levels=${available}" >> "$GITHUB_OUTPUT"
+
   automated-tests:
     name: Automated tests
+    needs: determine-api-levels
     strategy:
       matrix:
-        api-level: [ 25, 30, 33, 34, 35, 36 ]
-        target: [ default ]
+        # Resolved by determine-api-levels: published system images only,
+        # each with its own api-level + target.
+        include: ${{ fromJson(needs.determine-api-levels.outputs.api-levels) }}
       fail-fast: true
     runs-on: ubuntu-24.04
     steps:
@@ -141,10 +185,12 @@ jobs:
 
   automated-tests-playstore:
     name: Automated tests for PlayStore variant
+    needs: determine-api-levels
     strategy:
       matrix:
-        api-level: [ 25, 30, 33, 34, 35, 36 ]
-        target: [ default ]
+        # Resolved by determine-api-levels: published system images only,
+        # each with its own api-level + target.
+        include: ${{ fromJson(needs.determine-api-levels.outputs.api-levels) }}
       fail-fast: true
     runs-on: ubuntu-24.04
     steps:
@@ -216,10 +262,12 @@ jobs:
 
   automated-tests-branded-apps:
     name: Automated tests for Branded app
+    needs: determine-api-levels
     strategy:
       matrix:
-        api-level: [ 25, 30, 33, 34, 35, 36 ]
-        target: [ default ]
+        # Resolved by determine-api-levels: published system images only,
+        # each with its own api-level + target.
+        include: ${{ fromJson(needs.determine-api-levels.outputs.api-levels) }}
       fail-fast: true
     runs-on: ubuntu-24.04
     steps:
@@ -291,10 +339,12 @@ jobs:
 
   automated-tests-on-tablet:
     name: Automated tests on Tablet
+    needs: determine-api-levels
     strategy:
       matrix:
-        api-level: [ 25, 30, 33, 34, 35, 36 ]
-        target: [ default ]
+        # Resolved by determine-api-levels: published system images only,
+        # each with its own api-level + target.
+        include: ${{ fromJson(needs.determine-api-levels.outputs.api-levels) }}
       fail-fast: true
     runs-on: ubuntu-24.04
     steps:
