@@ -42,6 +42,11 @@ inputs:
     required: false
     default: ""
 
+  channel:
+    description: Emulator package channel (stable/canary)
+    required: false
+    default: stable
+
 runs:
   using: composite
 
@@ -76,6 +81,7 @@ runs:
         disable-animations: true
         force-avd-creation: false
         emulator-boot-timeout: 1200
+        channel: ${{ inputs.channel }}
         script: |
           bash -c '${{ inputs.script }}'
 
@@ -126,6 +132,7 @@ runs:
         disable-animations: true
         force-avd-creation: true
         emulator-boot-timeout: 1200
+        channel: ${{ inputs.channel }}
         script: |
           bash -c '${{ inputs.script }}'
 
@@ -169,6 +176,7 @@ runs:
         disable-animations: true
         force-avd-creation: true
         emulator-boot-timeout: 1200
+        channel: ${{ inputs.channel }}
         script: |
           bash -c '${{ inputs.script }}'
 
