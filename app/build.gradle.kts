@@ -1,4 +1,12 @@
 import com.slack.keeper.optInToKeeper
+import org.gradle.api.flow.FlowAction
+import org.gradle.api.flow.FlowParameters
+import org.gradle.api.flow.FlowScope
+import org.gradle.api.provider.ListProperty
+import org.gradle.api.provider.Property
+import org.gradle.api.tasks.Input
+import org.gradle.kotlin.dsl.newInstance
+import javax.inject.Inject
 import org.w3c.dom.Element
 import plugin.KiwixConfigurationPlugin
 import java.io.StringWriter
@@ -22,6 +30,9 @@ apply(from = rootProject.file("jacoco.gradle"))
 fun generateVersionName() = "${Config.versionMajor}.${Config.versionMinor}.${Config.versionPatch}"
 
 val apkPrefix get() = System.getenv("TAG") ?: "kiwix"
+// Project.properties (Map) is deprecated (removed in Gradle 10); providers.gradleProperty
+// is the lazy Provider-API replacement for checking whether a project property is set.
+val disableSigningRequested = providers.gradleProperty("disableSigning").isPresent
 val autoModifiedTrackedFiles = listOf(
   File("$rootDir/core/src/main/res/values-b+be+tarask/strings.xml"),
   File("$rootDir/core/src/main/res/values-b+be+tarask+old/strings.xml"),
@@ -44,25 +55,6 @@ fun backupTrackedFile(file: File) {
   } else if (backupFile.exists()) {
     backupFile.delete()
   }
-}
-
-fun restoreTrackedFile(file: File) {
-  val fileKey =
-    file.relativeTo(rootDir).path.replace(File.separator, "_")
-  val backupFile = File(trackedFileBackupDir, "$fileKey.bak")
-  val existsMarkerFile = File(trackedFileBackupDir, "$fileKey.exists")
-  if (!existsMarkerFile.exists()) return
-
-  val existedBeforeBuild = existsMarkerFile.readText().trim() == "1"
-  if (existedBeforeBuild && backupFile.exists()) {
-    if (!file.parentFile.exists()) file.parentFile.mkdirs()
-    backupFile.copyTo(file, overwrite = true)
-  } else if (!existedBeforeBuild && file.exists()) {
-    file.delete()
-  }
-
-  backupFile.delete()
-  existsMarkerFile.delete()
 }
 
 android {
@@ -92,7 +84,7 @@ android {
     getByName("release") {
       buildConfigField("boolean", "KIWIX_ERROR_ACTIVITY", "true")
       buildConfigField("boolean", "IS_PLAYSTORE", "false")
-      if (properties.containsKey("disableSigning")) {
+      if (disableSigningRequested) {
         signingConfig = null
       }
     }
@@ -271,10 +263,19 @@ fun elementToString(element: Element): String {
   return result.writer.toString()
 }
 
-gradle.buildFinished {
-  autoModifiedTrackedFiles.forEach(::restoreTrackedFile)
-  if (trackedFileBackupDir.exists() && trackedFileBackupDir.listFiles().isNullOrEmpty()) {
-    trackedFileBackupDir.delete()
+// gradle.buildFinished(Action) is deprecated (removed in Gradle 10); the Flow API
+// (https://docs.gradle.org/current/userguide/dataflow_actions.html) is the replacement.
+// A FlowAction is isolated from the script - it can't see autoModifiedTrackedFiles/
+// rootDir/trackedFileBackupDir directly, so those go in via FlowParameters instead,
+// and the restore logic (previously restoreTrackedFile()) is reimplemented inline here.
+// FlowScope isn't reachable as a script-top-level service, so it's obtained through a
+// throwaway injected holder object instead.
+abstract class FlowServices @Inject constructor(val flowScope: FlowScope)
+objects.newInstance<FlowServices>().flowScope.always(RestoreTrackedFilesFlowAction::class) {
+  parameters {
+    rootDirPath.set(rootDir.path)
+    trackedFilePaths.set(autoModifiedTrackedFiles.map { it.path })
+    backupDirPath.set(trackedFileBackupDir.path)
   }
 }
 
@@ -284,6 +285,45 @@ gradle.projectsEvaluated {
       if (path != ":app:renameTarakFile") {
         dependsOn(":app:renameTarakFile")
       }
+    }
+  }
+}
+
+abstract class RestoreTrackedFilesFlowAction : FlowAction<RestoreTrackedFilesFlowAction.Params> {
+  interface Params : FlowParameters {
+    @get:Input
+    val rootDirPath: Property<String>
+
+    @get:Input
+    val trackedFilePaths: ListProperty<String>
+
+    @get:Input
+    val backupDirPath: Property<String>
+  }
+
+  override fun execute(parameters: Params) {
+    val rootDir = File(parameters.rootDirPath.get())
+    val trackedFileBackupDir = File(parameters.backupDirPath.get())
+    parameters.trackedFilePaths.get().forEach { path ->
+      val file = File(path)
+      val fileKey = file.relativeTo(rootDir).path.replace(File.separator, "_")
+      val backupFile = File(trackedFileBackupDir, "$fileKey.bak")
+      val existsMarkerFile = File(trackedFileBackupDir, "$fileKey.exists")
+      if (!existsMarkerFile.exists()) return@forEach
+
+      val existedBeforeBuild = existsMarkerFile.readText().trim() == "1"
+      if (existedBeforeBuild && backupFile.exists()) {
+        if (!file.parentFile.exists()) file.parentFile.mkdirs()
+        backupFile.copyTo(file, overwrite = true)
+      } else if (!existedBeforeBuild && file.exists()) {
+        file.delete()
+      }
+
+      backupFile.delete()
+      existsMarkerFile.delete()
+    }
+    if (trackedFileBackupDir.exists() && trackedFileBackupDir.listFiles().isNullOrEmpty()) {
+      trackedFileBackupDir.delete()
     }
   }
 }
