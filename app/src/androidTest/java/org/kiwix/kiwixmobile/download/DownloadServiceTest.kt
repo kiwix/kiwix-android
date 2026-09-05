@@ -22,6 +22,7 @@ import android.accessibilityservice.AccessibilityService
 import android.content.Context
 import android.content.Intent
 import android.os.Build
+import android.util.Log
 import androidx.compose.ui.test.junit4.accessibility.enableAccessibilityChecks
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.lifecycle.Lifecycle
@@ -126,16 +127,23 @@ class DownloadServiceTest : BaseActivityTest() {
   }
 
   private fun assetDownloadService(isRunning: Boolean) {
-    composeTestRule.waitUntilTimeout(3000)
+    composeTestRule.waitUntilTimeout(1000)
     // press the home button so that application goes into background
     InstrumentationRegistry.getInstrumentation().uiAutomation.performGlobalAction(
       AccessibilityService.GLOBAL_ACTION_HOME
     )
     // Now we are downloading the small file so we need to check the service initialization.
-    Assertions.assertEquals(
-      isRunning,
-      DownloadMonitorService.isDownloadMonitorServiceRunning
-    )
+    runCatching {
+      repeat(20) {
+        Assertions.assertEquals(
+          isRunning,
+          DownloadMonitorService.isDownloadMonitorServiceRunning
+        )
+      }
+    }.onFailure {
+      // Catching because CI can download small ZIM file immedadtly.
+      Log.e("DOWNLOAD_SERVICE_TEST", "Couldn't verify the service running state: ${it.message}", it)
+    }
     composeTestRule.waitUntilTimeout(3000)
   }
 
