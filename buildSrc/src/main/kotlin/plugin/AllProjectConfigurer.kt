@@ -111,7 +111,7 @@ class AllProjectConfigurer {
       }
       target.extensions.configure<KotlinAndroidExtension> {
         compilerOptions {
-          freeCompilerArgs.add("-Xjvm-default=all-compatibility")
+          freeCompilerArgs.add("-jvm-default=enable")
         }
       }
       buildFeatures.apply {

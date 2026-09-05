@@ -11,11 +11,11 @@ repositories {
 }
 
 dependencies {
-  implementation("com.android.tools.build:gradle:9.3.0")
-  implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:2.2.20")
+  implementation("com.android.tools.build:gradle:9.3.2")
+  implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:2.4.10")
   // Provides AGP's kapt plugin (`com.android.legacy-kapt`), used by `:objectboxmigration`.
-  implementation("com.android.tools.build:gradle-kotlin:9.3.0")
-  implementation("com.google.devtools.ksp:com.google.devtools.ksp.gradle.plugin:2.3.4")
+  implementation("com.android.tools.build:gradle-kotlin:9.3.2")
+  implementation("com.google.devtools.ksp:com.google.devtools.ksp.gradle.plugin:2.3.11")
   implementation("com.google.dagger:hilt-android-gradle-plugin:2.60.1")
   implementation("org.jacoco:org.jacoco.core:0.8.15")
   implementation("org.jlleitschuh.gradle:ktlint-gradle:12.1.2")
