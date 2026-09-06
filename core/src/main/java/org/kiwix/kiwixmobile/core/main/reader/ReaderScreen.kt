@@ -25,7 +25,6 @@ import android.widget.FrameLayout
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.FastOutSlowInEasing
-import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -66,6 +65,8 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.BottomAppBarDefaults
 import androidx.compose.material3.BottomAppBarScrollBehavior
@@ -130,7 +131,7 @@ import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderAction
 import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderAction.BackToTopButtonClick
 import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderAction.BookmarkClicked
 import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderAction.BookmarkLongClicked
-import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderAction.CloseAllTabs
+import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderAction.NewTab
 import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderAction.CloseTab
 import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderAction.CloseTocDrawer
 import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderAction.DonateButtonClick
@@ -165,8 +166,6 @@ import org.kiwix.kiwixmobile.core.ui.models.toPainter
 import org.kiwix.kiwixmobile.core.ui.theme.DenimBlue800
 import org.kiwix.kiwixmobile.core.ui.theme.KiwixTheme
 import org.kiwix.kiwixmobile.core.ui.theme.White
-import org.kiwix.kiwixmobile.core.utils.ComposeDimens.CLOSE_ALL_TAB_BUTTON_BOTTOM_PADDING
-import org.kiwix.kiwixmobile.core.utils.ComposeDimens.CLOSE_TAB_ICON_ANIMATION_TIMEOUT
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.CLOSE_TAB_ICON_SIZE
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.EIGHT_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FIVE_DP
@@ -199,6 +198,7 @@ import org.kiwix.kiwixmobile.core.utils.ZERO
 
 const val TAB_SWITCHER_VIEW_TESTING_TAG = "tabSwitcherViewTestingTag"
 const val READER_SCREEN_TESTING_TAG = "readerScreenTestingTag"
+const val NEW_TAB_BUTTON_TESTING_TAG = "newTabButtonTestingTag"
 const val CLOSE_ALL_TABS_BUTTON_TESTING_TAG = "closeAllTabsButtonTestingTag"
 const val TAB_TITLE_TESTING_TAG = "tabTitleTestingTag"
 const val READER_BOTTOM_BAR_BOOKMARK_BUTTON_TESTING_TAG = "readerBottomBarBookmarkButtonTestingTag"
@@ -821,64 +821,25 @@ fun TabSwitcherView(
         state.animateScrollToItem(tabsState.selectedIndex)
       }
     }
-    CloseAllTabButton { onReaderAction(CloseAllTabs) }
+    NewTabButton { onReaderAction(NewTab) }
   }
 }
 
 @Composable
-private fun BoxScope.CloseAllTabButton(onCloseAllTabs: () -> Unit) {
-  var isAnimating by remember { mutableStateOf(false) }
-  var isDone by remember { mutableStateOf(false) }
-
-  // Animate rotation from 0f to 360f
-  val rotation by animateFloatAsState(
-    targetValue = if (isAnimating) 360f else 0f,
-    animationSpec = tween(durationMillis = 600),
-    finishedListener = {
-      isDone = true
-      isAnimating = false
-    }
-  )
-
-  // ⏳ Auto-reset to close icon after delay
-  LaunchedEffect(isDone) {
-    if (isDone) {
-      delay(CLOSE_TAB_ICON_ANIMATION_TIMEOUT)
-      isDone = false
-    }
-  }
-
+private fun BoxScope.NewTabButton(onNewTab: () -> Unit) {
   FloatingActionButton(
-    onClick = {
-      isAnimating = true
-      onCloseAllTabs()
-    },
+    onClick = onNewTab,
     modifier = Modifier
-      .align(Alignment.BottomCenter)
-      .padding(bottom = CLOSE_ALL_TAB_BUTTON_BOTTOM_PADDING)
-      .graphicsLayer {
-        rotationZ = rotation
-      }
-      .semantics { testTag = CLOSE_ALL_TABS_BUTTON_TESTING_TAG }
-      .clickable(
-        enabled = !isAnimating,
-        onClick = {
-          isAnimating = true
-          onCloseAllTabs()
-        }
-      ),
+      .align(Alignment.BottomEnd)
+      .padding(end = SIXTEEN_DP, bottom = SIXTEEN_DP)
+      .semantics { testTag = NEW_TAB_BUTTON_TESTING_TAG },
     containerColor = DenimBlue800,
-    contentColor = White
+    contentColor = White,
+    shape = CircleShape
   ) {
     Icon(
-      painter = painterResource(
-        id = if (isDone) {
-          R.drawable.ic_done_white_24dp
-        } else {
-          R.drawable.ic_close_black_24dp
-        }
-      ),
-      contentDescription = stringResource(R.string.close_all_tabs)
+      imageVector = Icons.Filled.Add,
+      contentDescription = stringResource(R.string.search_open_in_new_tab)
     )
   }
 }

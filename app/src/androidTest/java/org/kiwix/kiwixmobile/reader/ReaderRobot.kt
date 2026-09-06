@@ -36,6 +36,8 @@ import applyWithViewHierarchyPrinting
 import com.adevinta.android.barista.interaction.BaristaSleepInteractions
 import org.kiwix.kiwixmobile.BaseRobot
 import org.kiwix.kiwixmobile.core.main.reader.CLOSE_ALL_TABS_BUTTON_TESTING_TAG
+import org.kiwix.kiwixmobile.core.main.reader.CLOSE_ALL_TABS_MENU_ITEM_TESTING_TAG
+import org.kiwix.kiwixmobile.core.main.reader.NEW_TAB_BUTTON_TESTING_TAG
 import org.kiwix.kiwixmobile.core.main.reader.READER_SCREEN_TESTING_TAG
 import org.kiwix.kiwixmobile.core.main.reader.READ_ALOUD_MENU_ITEM_TESTING_TAG
 import org.kiwix.kiwixmobile.core.main.reader.TABS_SIZE_TEXT_TESTING_TAG
@@ -100,7 +102,18 @@ class ReaderRobot : BaseRobot() {
     composeTestRule.apply {
       waitUntilTimeout()
       testFlakyView({
-        onNodeWithTag(CLOSE_ALL_TABS_BUTTON_TESTING_TAG).performClick()
+        onNodeWithTag(OVERFLOW_MENU_BUTTON_TESTING_TAG).performClick()
+        waitUntilTimeout()
+        onNodeWithTag(CLOSE_ALL_TABS_MENU_ITEM_TESTING_TAG).performClick()
+      })
+    }
+  }
+
+  fun clickOnNewTabButton(composeTestRule: ComposeContentTestRule) {
+    composeTestRule.apply {
+      waitUntilTimeout()
+      testFlakyView({
+        onNodeWithTag(NEW_TAB_BUTTON_TESTING_TAG).performClick()
       })
     }
   }

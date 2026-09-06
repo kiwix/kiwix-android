@@ -430,16 +430,16 @@ class ReaderScreenComposablesTest {
   }
 
   @Test
-  fun readerScreen_tabSwitcher_closeAllTabButton_displaysWhenTabSwitcherShown() {
+  fun readerScreen_tabSwitcher_newTabButton_displaysWhenTabSwitcherShown() {
     renderReaderScreen(createTestState(showTabSwitcher = true))
     composeTestRule.waitForIdle()
     composeTestRule
-      .onNodeWithTag(CLOSE_ALL_TABS_BUTTON_TESTING_TAG)
+      .onNodeWithTag(NEW_TAB_BUTTON_TESTING_TAG)
       .assertIsDisplayed()
   }
 
   @Test
-  fun readerScreen_tabSwitcher_closeAllTabButton_triggersCallback() {
+  fun readerScreen_tabSwitcher_newTabButton_triggersCallback() {
     var action: ReaderAction? = null
     renderReaderScreen(
       createTestState(showTabSwitcher = true),
@@ -447,9 +447,9 @@ class ReaderScreenComposablesTest {
     )
     composeTestRule.waitForIdle()
     composeTestRule
-      .onNodeWithTag(CLOSE_ALL_TABS_BUTTON_TESTING_TAG)
+      .onNodeWithTag(NEW_TAB_BUTTON_TESTING_TAG)
       .performClick()
-    assertEquals(ReaderAction.CloseAllTabs, action)
+    assertEquals(ReaderAction.NewTab, action)
   }
 
   @Test

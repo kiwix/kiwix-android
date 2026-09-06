@@ -24,6 +24,7 @@ import android.view.Menu
 import androidx.annotation.VisibleForTesting
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.ui.graphics.Color
 import androidx.core.net.toUri
@@ -347,7 +348,7 @@ class BrandedReaderViewModel @Inject constructor(
 
   override fun navigationIcon(): IconItem = when {
     uiState.value.showTabSwitcher -> {
-      IconItem.Drawable(drawable.ic_round_add_white_36dp)
+      IconItem.Vector(Icons.AutoMirrored.Filled.ArrowBack)
     }
 
     BuildConfig.DISABLE_TITLE -> {
