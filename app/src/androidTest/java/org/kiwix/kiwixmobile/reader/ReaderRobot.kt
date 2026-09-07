@@ -35,7 +35,6 @@ import androidx.test.espresso.web.webdriver.Locator
 import applyWithViewHierarchyPrinting
 import com.adevinta.android.barista.interaction.BaristaSleepInteractions
 import org.kiwix.kiwixmobile.BaseRobot
-import org.kiwix.kiwixmobile.core.main.reader.CLOSE_ALL_TABS_BUTTON_TESTING_TAG
 import org.kiwix.kiwixmobile.core.main.reader.CLOSE_ALL_TABS_MENU_ITEM_TESTING_TAG
 import org.kiwix.kiwixmobile.core.main.reader.NEW_TAB_BUTTON_TESTING_TAG
 import org.kiwix.kiwixmobile.core.main.reader.READER_SCREEN_TESTING_TAG
@@ -56,14 +55,13 @@ import org.kiwix.kiwixmobile.main.BOTTOM_NAV_READER_ITEM_TESTING_TAG
 import org.kiwix.kiwixmobile.testutils.TestUtils
 import org.kiwix.kiwixmobile.testutils.TestUtils.FIFTEEN_SECOND_DELAY
 import org.kiwix.kiwixmobile.testutils.TestUtils.TEST_PAUSE_MS_FOR_DOWNLOAD_TEST
+import org.kiwix.kiwixmobile.testutils.TestUtils.TEST_PAUSE_MS_FOR_SNACKBAR
 import org.kiwix.kiwixmobile.testutils.TestUtils.testFlakyView
 import org.kiwix.kiwixmobile.testutils.TestUtils.waitUntilTimeout
 
 fun reader(func: ReaderRobot.() -> Unit) = ReaderRobot().applyWithViewHierarchyPrinting(func)
 
 class ReaderRobot : BaseRobot() {
-  private var retryCountForClickOnUndoButton = 5
-
   companion object {
     private const val TAG = "ReaderRobot"
   }
@@ -119,16 +117,12 @@ class ReaderRobot : BaseRobot() {
   }
 
   fun clickOnUndoButton(composeTestRule: ComposeContentTestRule) {
-    try {
-      composeTestRule.apply {
-        onNodeWithText("UNDO", useUnmergedTree = true)
-          .performClick()
+    composeTestRule.apply {
+      waitUntil(TEST_PAUSE_MS_FOR_SNACKBAR) {
+        onNodeWithText("UNDO", useUnmergedTree = true).isDisplayed()
       }
-    } catch (_: AssertionError) {
-      if (retryCountForClickOnUndoButton > 0) {
-        retryCountForClickOnUndoButton--
-        clickOnUndoButton(composeTestRule)
-      }
+      onNodeWithText("UNDO", useUnmergedTree = true)
+        .performClick()
     }
   }
 

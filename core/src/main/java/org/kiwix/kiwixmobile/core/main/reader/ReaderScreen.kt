@@ -162,8 +162,8 @@ import org.kiwix.kiwixmobile.core.ui.components.TWELVE
 import org.kiwix.kiwixmobile.core.ui.models.ActionMenuItem
 import org.kiwix.kiwixmobile.core.ui.models.IconItem
 import org.kiwix.kiwixmobile.core.ui.models.IconItem.Drawable
+import org.kiwix.kiwixmobile.core.ui.models.IconItem.Vector
 import org.kiwix.kiwixmobile.core.ui.models.toPainter
-import org.kiwix.kiwixmobile.core.ui.theme.DenimBlue800
 import org.kiwix.kiwixmobile.core.ui.theme.KiwixTheme
 import org.kiwix.kiwixmobile.core.ui.theme.White
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.CLOSE_TAB_ICON_SIZE
@@ -199,7 +199,6 @@ import org.kiwix.kiwixmobile.core.utils.ZERO
 const val TAB_SWITCHER_VIEW_TESTING_TAG = "tabSwitcherViewTestingTag"
 const val READER_SCREEN_TESTING_TAG = "readerScreenTestingTag"
 const val NEW_TAB_BUTTON_TESTING_TAG = "newTabButtonTestingTag"
-const val CLOSE_ALL_TABS_BUTTON_TESTING_TAG = "closeAllTabsButtonTestingTag"
 const val TAB_TITLE_TESTING_TAG = "tabTitleTestingTag"
 const val READER_BOTTOM_BAR_BOOKMARK_BUTTON_TESTING_TAG = "readerBottomBarBookmarkButtonTestingTag"
 const val READER_BOTTOM_BAR_PREVIOUS_SCREEN_BUTTON_TESTING_TAG =
@@ -827,21 +826,15 @@ fun TabSwitcherView(
 
 @Composable
 private fun BoxScope.NewTabButton(onNewTab: () -> Unit) {
-  FloatingActionButton(
+  KiwixFloatingActionButton(
+    icon = Vector(Icons.Filled.Add).toPainter(),
     onClick = onNewTab,
     modifier = Modifier
       .align(Alignment.BottomEnd)
       .padding(end = SIXTEEN_DP, bottom = SIXTEEN_DP)
       .semantics { testTag = NEW_TAB_BUTTON_TESTING_TAG },
-    containerColor = DenimBlue800,
-    contentColor = White,
-    shape = CircleShape
-  ) {
-    Icon(
-      imageVector = Icons.Filled.Add,
-      contentDescription = stringResource(R.string.search_open_in_new_tab)
-    )
-  }
+    contentDescription = stringResource(R.string.search_open_in_new_tab)
+  )
 }
 
 @Composable
@@ -952,7 +945,7 @@ private fun TabFaviconOrBadge(
       contentAlignment = Alignment.Center
     ) {
       Text(
-        text = initialLetter.toString(),
+        text = "$initialLetter",
         color = MaterialTheme.colorScheme.onPrimary,
         style = MaterialTheme.typography.labelSmall.copy(
           fontSize = TAB_SWITCHER_TEXT_SIZE,

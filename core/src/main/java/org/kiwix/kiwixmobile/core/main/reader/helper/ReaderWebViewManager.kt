@@ -191,7 +191,8 @@ class ReaderWebViewManager @Inject constructor(
   fun getCurrentWebView(): KiwixWebView? = tabsManager.getCurrentWebView()
 
   suspend fun newMainPageTab(newTabConfig: TabsManager.NewTabConfig): KiwixWebView {
-    val mainPageUrl = redirectOrOriginal(contentUrl(readerSessionManager.zimReaderContainer.mainPage))
+    val mainPageUrl =
+      redirectOrOriginal(contentUrl(readerSessionManager.zimReaderContainer.mainPage))
     val newConfig = newTabConfig.copy(url = mainPageUrl)
     return createNewTab(newConfig).also {
       addNewTabInTabsManager(it, newConfig)
