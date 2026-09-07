@@ -53,6 +53,7 @@ import org.kiwix.libkiwix.Book
 import org.kiwix.libkiwix.Library
 import org.kiwix.libkiwix.Manager
 import java.io.File
+import java.util.concurrent.ConcurrentHashMap
 import javax.inject.Inject
 import javax.inject.Named
 import javax.inject.Singleton
@@ -90,7 +91,7 @@ class LibkiwixBookOnDisk @Inject constructor(
    */
   val bookRemoved: SharedFlow<Unit> = _bookRemoved.asSharedFlow()
 
-  private val fileObservers = mutableListOf<FileObserver>()
+  private val fileObservers = ConcurrentHashMap<String, FileObserver>()
 
   init {
     CoroutineScope(ioDispatcher).launch {
@@ -104,19 +105,29 @@ class LibkiwixBookOnDisk @Inject constructor(
       .flatMap { rootDir -> rootDir.walkTopDown().filter(File::isDirectory) }
       .distinctBy(File::getAbsolutePath)
 
-    directoriesToWatch.forEach { directory ->
-      runCatching {
-        createFileObserver(directory).also {
-          fileObservers.add(it)
-          it.startWatching()
-        }
-      }.onFailure { it.printStackTrace() }
-    }
+    directoriesToWatch.forEach(::watchDirectory)
+  }
+
+  private fun watchDirectory(directory: File) {
+    val path = runCatching { directory.canonicalPath }.getOrDefault(directory.absolutePath)
+    if (fileObservers.containsKey(path)) return
+    runCatching {
+      val observer = createFileObserver(directory)
+      if (fileObservers.putIfAbsent(path, observer) == null) {
+        observer.startWatching()
+      }
+    }.onFailure { it.printStackTrace() }
+  }
+
+  private fun unwatchDirectory(directory: File) {
+    val path = runCatching { directory.canonicalPath }.getOrDefault(directory.absolutePath)
+    fileObservers.remove(path)?.stopWatching()
   }
 
   private fun createFileObserver(watchDir: File): FileObserver {
     val mask =
-      FileObserver.CREATE or FileObserver.MOVED_TO or FileObserver.DELETE or FileObserver.MOVED_FROM
+      FileObserver.CREATE or FileObserver.CLOSE_WRITE or FileObserver.MOVED_TO or
+        FileObserver.DELETE or FileObserver.MOVED_FROM
     return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
       object : FileObserver(watchDir, mask) {
         override fun onEvent(event: Int, path: String?) {
@@ -134,16 +145,42 @@ class LibkiwixBookOnDisk @Inject constructor(
   }
 
   private fun handleFileSystemEvent(watchDir: File, path: String, event: Int) {
-    if (!FileUtils.isValidZimFile(path) && !FileUtils.isSplittedZimFile(path)) return
     val file = File(watchDir, path)
     CoroutineScope(ioDispatcher).launch {
       runCatching {
         when (event) {
-          FileObserver.CREATE, FileObserver.MOVED_TO -> addBookFromFile(file)
-          FileObserver.DELETE, FileObserver.MOVED_FROM -> deleteByPath(file.canonicalPath)
+          FileObserver.CREATE -> if (file.isDirectory) watchDirectory(file)
+          FileObserver.MOVED_TO -> handleMovedIn(file)
+          FileObserver.CLOSE_WRITE -> addZimFileIfValid(file)
+          FileObserver.DELETE, FileObserver.MOVED_FROM -> {
+            unwatchDirectory(file)
+            if (isZimFile(path)) deleteByPath(file.canonicalPath)
+          }
         }
       }.onFailure { it.printStackTrace() }
     }
+  }
+
+  /**
+   * Handles an item that was moved into a watched directory. A moved-in directory is
+   * guaranteed to already be fully written (unlike CREATE), so it's safe to start
+   * watching it and immediately scan it for ZIM files to add, covering the case
+   * where a whole folder of books is moved in at once.
+   */
+  private suspend fun handleMovedIn(file: File) {
+    if (file.isDirectory) {
+      file.walkTopDown().filter(File::isDirectory).forEach(::watchDirectory)
+      file.walkTopDown().filter { isZimFile(it.name) }.forEach { addBookFromFile(it) }
+    } else {
+      addZimFileIfValid(file)
+    }
+  }
+
+  private fun isZimFile(name: String) =
+    FileUtils.isValidZimFile(name) || FileUtils.isSplittedZimFile(name)
+
+  private suspend fun addZimFileIfValid(file: File) {
+    if (isZimFile(file.name)) addBookFromFile(file)
   }
 
   private suspend fun addBookFromFile(file: File) {
