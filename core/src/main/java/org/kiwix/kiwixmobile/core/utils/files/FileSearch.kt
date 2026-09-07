@@ -35,6 +35,9 @@ import org.kiwix.kiwixmobile.core.extensions.get
 import java.io.File
 import javax.inject.Inject
 
+// Compiled once instead of on every row of a whole-device MediaStore scan.
+private val TRASH_FOLDER_REGEX = Regex("/\\.Trash/")
+
 class FileSearch @Inject constructor(
   @param:ApplicationContext private val context: Context,
   @param:IoDispatcher private val ioDispatcher: CoroutineDispatcher
@@ -69,7 +72,7 @@ class FileSearch @Inject constructor(
 
   // Exclude any file in trash folder.
   private fun isNotInTrashFolder(it: File) =
-    !Regex("/\\.Trash/").containsMatchIn(it.path)
+    !TRASH_FOLDER_REGEX.containsMatchIn(it.path)
 
   private fun queryMediaStore() =
     context.contentResolver

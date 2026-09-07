@@ -20,10 +20,13 @@ package org.kiwix.kiwixmobile.core.extensions
 import android.database.Cursor
 
 inline fun Cursor.forEachRow(block: (Cursor) -> Unit) {
-  while (moveToNext()) {
-    block.invoke(this)
+  try {
+    while (moveToNext()) {
+      block.invoke(this)
+    }
+  } finally {
+    close()
   }
-  close()
 }
 
 @Suppress("IMPLICIT_CAST_TO_ANY")

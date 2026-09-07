@@ -25,6 +25,10 @@ import org.kiwix.kiwixmobile.core.reader.decodeUrl
 import org.kiwix.kiwixmobile.core.utils.files.Log
 import java.io.IOException
 
+// Compiled once instead of on every HTTP request these extensions run on.
+private val AUTHENTICATION_URL_REGEX = Regex("https://[^@]+@.*\\.zim")
+private val AUTHENTICATION_PREFIX_REGEX = Regex("\\{\\{\\s*[^}]+\\s*\\}\\}@")
+
 class BasicAuthInterceptor : Interceptor {
   @Throws(IOException::class)
   override fun intercept(chain: Interceptor.Chain): Response {
@@ -45,7 +49,7 @@ class BasicAuthInterceptor : Interceptor {
 }
 
 val String.isAuthenticationUrl: Boolean
-  get() = decodeUrl.trim().matches(Regex("https://[^@]+@.*\\.zim"))
+  get() = decodeUrl.trim().matches(AUTHENTICATION_URL_REGEX)
 
 val String.secretKey: String
   get() = decodeUrl.substringAfter("{{", "")
@@ -54,7 +58,7 @@ val String.secretKey: String
 
 val String.removeAuthenticationFromUrl: String
   get() = decodeUrl.trim()
-    .replace(Regex("\\{\\{\\s*[^}]+\\s*\\}\\}@"), "")
+    .replace(AUTHENTICATION_PREFIX_REGEX, "")
     .also {
       Log.d("BasicAuthInterceptor", "URL is $it")
     }

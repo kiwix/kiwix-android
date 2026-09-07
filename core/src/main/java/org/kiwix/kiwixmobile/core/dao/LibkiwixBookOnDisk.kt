@@ -48,6 +48,9 @@ import javax.inject.Inject
 import javax.inject.Named
 import javax.inject.Singleton
 
+// Compiled once instead of on every book checked against the trash folder.
+private val TRASH_FOLDER_REGEX = Regex("/\\.Trash/")
+
 @Singleton
 class LibkiwixBookOnDisk @Inject constructor(
   @param:Named(LOCAL_BOOKS_LIBRARY) private val library: Library,
@@ -223,7 +226,7 @@ class LibkiwixBookOnDisk @Inject constructor(
 
   // Check if any existing ZIM file showing on the library screen which is inside the trash folder.
   private suspend fun isInTrashFolder(filePath: String) =
-    Regex("/\\.Trash/").containsMatchIn(filePath)
+    TRASH_FOLDER_REGEX.containsMatchIn(filePath)
 
   suspend fun delete(books: List<LibkiwixBook>) {
     runCatching {

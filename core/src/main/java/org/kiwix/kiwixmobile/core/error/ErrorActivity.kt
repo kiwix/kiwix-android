@@ -38,7 +38,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.first
@@ -205,10 +204,12 @@ open class ErrorActivity : BaseActivity() {
   private suspend fun startValidatingZIMFiles() {
     val zimBooks = withContext(ioDispatcher) { libkiwixBookOnDisk.getBooks() }
     showValidationDialog.value = true
-    CoroutineScope(ioDispatcher).launch {
-      val isBrandedApp = kiwixDataStore.isBrandedApp.first()
-      validateZimViewModel.startValidation(zimBooks, isBrandedApp)
-    }
+    // This function already runs on lifecycleScope (see sendDetailsOnMail()); calling
+    // startValidation() directly instead of launching it on an ad-hoc untracked scope
+    // means it's cancelled automatically along with everything else when the Activity
+    // is destroyed.
+    val isBrandedApp = kiwixDataStore.isBrandedApp.first()
+    validateZimViewModel.startValidation(zimBooks, isBrandedApp)
   }
 
   /**

@@ -48,7 +48,6 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.rememberNavController
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainCoroutineDispatcher
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -197,8 +196,10 @@ class KiwixMainActivity : CoreMainActivity() {
       migrateInternalToPublicAppDirectory()
       migratedToPerAppLanguage()
     }
-    // run the migration on background thread to avoid any UI related issues.
-    CoroutineScope(ioDispatcher).launch {
+    // Run the migration on a background thread to avoid any UI related issues, but still
+    // on lifecycleScope (not an ad-hoc untracked scope) so it's cancelled automatically
+    // if the Activity is destroyed mid-migration.
+    lifecycleScope.launch(ioDispatcher) {
       objectBoxDataMigrationHandler.migrate()
     }
   }
