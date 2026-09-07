@@ -161,12 +161,6 @@ class LibkiwixBookOnDisk @Inject constructor(
     }
   }
 
-  /**
-   * Handles an item that was moved into a watched directory. A moved-in directory is
-   * guaranteed to already be fully written (unlike CREATE), so it's safe to start
-   * watching it and immediately scan it for ZIM files to add, covering the case
-   * where a whole folder of books is moved in at once.
-   */
   private suspend fun handleMovedIn(file: File) {
     if (file.isDirectory) {
       file.walkTopDown().filter(File::isDirectory).forEach(::watchDirectory)
