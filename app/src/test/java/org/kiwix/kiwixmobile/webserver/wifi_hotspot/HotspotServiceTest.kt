@@ -18,12 +18,15 @@
 
 package org.kiwix.kiwixmobile.webserver.wifi_hotspot
 
+import android.widget.Toast
 import io.mockk.clearAllMocks
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.mockkStatic
 import io.mockk.spyk
+import io.mockk.unmockkStatic
 import io.mockk.verify
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -34,13 +37,16 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
+import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.data.DataSource
 import org.kiwix.kiwixmobile.core.entity.LibkiwixBook
 import org.kiwix.kiwixmobile.core.utils.ServerUtils
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListItem.BookOnDisk
 import org.kiwix.kiwixmobile.webserver.WebServerHelper
 import org.kiwix.kiwixmobile.webserver.ZimHostCallbacks
+import org.kiwix.sharedFunctions.MainDispatcherRule
 
 /**
  * Covers HotspotService.resyncServerWithHostedBooks() - the handler that reacts to
@@ -49,9 +55,14 @@ import org.kiwix.kiwixmobile.webserver.ZimHostCallbacks
  */
 @OptIn(ExperimentalCoroutinesApi::class)
 class HotspotServiceTest {
+  @JvmField
+  @Rule
+  val mainDispatcherRule = MainDispatcherRule()
+
   private val webServerHelper: WebServerHelper = mockk(relaxed = true)
   private val dataSource: DataSource = mockk()
   private val zimHostCallbacks: ZimHostCallbacks = mockk(relaxed = true)
+  private val toast: Toast = mockk(relaxed = true)
 
   private lateinit var hotspotService: HotspotService
 
@@ -61,10 +72,13 @@ class HotspotServiceTest {
   @Before
   fun setUp() {
     clearAllMocks()
+    mockkStatic(Toast::class)
+    every { Toast.makeText(any(), any<Int>(), any()) } returns toast
     hotspotService = spyk(HotspotService())
     hotspotService.webServerHelper = webServerHelper
     hotspotService.dataSource = dataSource
     hotspotService.ioDispatcher = Dispatchers.Unconfined
+    hotspotService.mainDispatcher = Dispatchers.Main
     hotspotService.serviceScope = CoroutineScope(SupervisorJob() + Dispatchers.Unconfined)
     hotspotService.registerCallBack(zimHostCallbacks)
     every { hotspotService.startForeground(any(), any()) } returns Unit
@@ -77,6 +91,7 @@ class HotspotServiceTest {
   fun tearDown() {
     ServerUtils.isServerStarted = false
     hotspotService.serviceScope.cancel()
+    unmockkStatic(Toast::class)
   }
 
   @Test
@@ -121,6 +136,9 @@ class HotspotServiceTest {
     }
     verify(exactly = 1) { zimHostCallbacks.onServerStarted("192.168.0.1:8080") }
     verify(exactly = 0) { webServerHelper.stopAndroidWebServer() }
+    verify(exactly = 0) {
+      Toast.makeText(any(), R.string.server_stopped_all_books_deleted_toast_message, any())
+    }
   }
 
   @Test
@@ -135,5 +153,13 @@ class HotspotServiceTest {
       coVerify(exactly = 0) { webServerHelper.startServerHelper(any(), any()) }
       verify(exactly = 1) { webServerHelper.stopAndroidWebServer() }
       verify(exactly = 1) { zimHostCallbacks.onServerStopped() }
+      verify(exactly = 1) {
+        Toast.makeText(
+          hotspotService,
+          R.string.server_stopped_all_books_deleted_toast_message,
+          Toast.LENGTH_LONG
+        )
+      }
+      verify(exactly = 1) { toast.show() }
     }
 }

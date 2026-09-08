@@ -19,16 +19,20 @@
 package org.kiwix.kiwixmobile.core.utils
 
 import android.content.Context
+import android.content.ContextWrapper
 import io.mockk.clearMocks
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.mockkConstructor
+import io.mockk.unmockkConstructor
 import io.mockk.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.RegisterExtension
@@ -49,6 +53,8 @@ class StorageDeviceProviderTest {
 
   private val externalFilesDir =
     File("/storage/emulated/0/Android/data/org.kiwix.kiwixmobile/files")
+  private val externalMediaDir =
+    File("/storage/emulated/0/Android/media/org.kiwix.kiwixmobile")
   private val filesDir = File("/data/user/0/org.kiwix.kiwixmobile/files")
   private val cacheDir = File("/data/user/0/org.kiwix.kiwixmobile/cache")
   private val selectedStoragePath = "/storage/emulated/0/Kiwix"
@@ -56,13 +62,19 @@ class StorageDeviceProviderTest {
   @BeforeEach
   fun setUp() {
     clearMocks(context, kiwixDataStore)
-    every { context.getExternalFilesDirs("") } returns arrayOf(externalFilesDir)
+    mockkConstructor(ContextWrapper::class)
     every { context.getExternalFilesDirs(null) } returns arrayOf(externalFilesDir)
+    every { anyConstructed<ContextWrapper>().externalMediaDirs } returns arrayOf(externalMediaDir)
     every { context.filesDir } returns filesDir
     coEvery { kiwixDataStore.selectedStorage } returns flowOf(selectedStoragePath)
 
     storageDeviceProvider =
       StorageDeviceProvider(context, kiwixDataStore, mainDispatcherRule.dispatcher)
+  }
+
+  @AfterEach
+  fun tearDown() {
+    unmockkConstructor(ContextWrapper::class)
   }
 
   @Test
@@ -71,19 +83,31 @@ class StorageDeviceProviderTest {
 
     assertThat(dirs.map { it.absolutePath }).containsExactlyInAnyOrder(
       externalFilesDir.absolutePath,
+      externalMediaDir.absolutePath,
       filesDir.absolutePath,
       File(selectedStoragePath).absolutePath
     )
   }
 
   @Test
+  fun `getAppSpecificDirs includes the external media directory`() = runTest {
+    val dirs = storageDeviceProvider.getAppSpecificDirs()
+
+    assertThat(dirs.map { it.absolutePath }).contains(externalMediaDir.absolutePath)
+  }
+
+  @Test
   fun `getAppSpecificDirs dedupes directories that resolve to the same path`() = runTest {
-    every { context.getExternalFilesDirs(null) } returns arrayOf(filesDir)
+    every { context.getExternalFilesDirs(null) } returns arrayOf(externalFilesDir, filesDir)
+    every {
+      anyConstructed<ContextWrapper>().externalMediaDirs
+    } returns arrayOf(externalMediaDir, filesDir)
 
     val dirs = storageDeviceProvider.getAppSpecificDirs()
 
     assertThat(dirs.map { it.absolutePath }).containsExactlyInAnyOrder(
       externalFilesDir.absolutePath,
+      externalMediaDir.absolutePath,
       filesDir.absolutePath,
       File(selectedStoragePath).absolutePath
     )
@@ -97,6 +121,7 @@ class StorageDeviceProviderTest {
 
     assertThat(dirs.map { it.absolutePath }).containsExactlyInAnyOrder(
       externalFilesDir.absolutePath,
+      externalMediaDir.absolutePath,
       filesDir.absolutePath
     )
   }
@@ -114,7 +139,7 @@ class StorageDeviceProviderTest {
       storageDeviceProvider.getAppSpecificDirs()
       storageDeviceProvider.getAppSpecificDirs()
 
-      verify(exactly = 1) { context.getExternalFilesDirs("") }
+      verify(exactly = 1) { context.getExternalFilesDirs(null) }
       coVerify(exactly = 2) { kiwixDataStore.selectedStorage }
     }
 

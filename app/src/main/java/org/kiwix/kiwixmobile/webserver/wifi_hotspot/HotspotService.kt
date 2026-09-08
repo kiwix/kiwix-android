@@ -114,6 +114,13 @@ class HotspotService :
     if (remainingPaths.size == currentlyHostedPaths.size) return
 
     if (remainingPaths.isEmpty()) {
+      withContext(mainDispatcher) {
+        Toast.makeText(
+          this@HotspotService,
+          R.string.server_stopped_all_books_deleted_toast_message,
+          Toast.LENGTH_LONG
+        ).show()
+      }
       stopHotspotAndDismissNotification()
     } else {
       startServerAndNotify(

@@ -19,6 +19,7 @@
 package org.kiwix.kiwixmobile.core.utils
 
 import android.content.Context
+import android.content.ContextWrapper
 import dagger.hilt.android.qualifiers.ApplicationContext
 import eu.mhutti1.utils.storage.StorageDevice
 import eu.mhutti1.utils.storage.StorageDeviceUtils
@@ -59,15 +60,16 @@ class StorageDeviceProvider @Inject constructor(
     }
 
   /**
-   * Returns the app-specific directories across internal and external storage,
-   * caching the result for performance.
+   * Returns the app-specific directories across internal storage, the external
+   * "files" directory (Android/data) and the external "media" directory
+   * (Android/media), caching the result for performance.
    */
   suspend fun getAppSpecificDirs(): List<File> =
     mutex.withLock {
       val staticDirs = staticAppSpecificDirsCache ?: withContext(ioDispatcher) {
         val dirs = mutableListOf<File>()
-        context.getExternalFilesDirs("")?.filterNotNull()?.let { dirs.addAll(it) }
         context.getExternalFilesDirs(null)?.filterNotNull()?.let { dirs.addAll(it) }
+        ContextWrapper(context).externalMediaDirs?.filterNotNull()?.let { dirs.addAll(it) }
         context.filesDir?.let { dirs.add(it) }
         dirs
       }.also { staticAppSpecificDirsCache = it }
