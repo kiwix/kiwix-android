@@ -28,11 +28,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Assert
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.junit.jupiter.api.Assertions
-import org.junit.jupiter.api.Assertions.assertEquals
 import org.kiwix.kiwixmobile.core.entity.LibkiwixBook
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.RETRY_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
@@ -316,11 +315,11 @@ class FileUtilsInstrumentationTest {
         )
       )
     dummyUrlArray.forEach {
-      Assertions.assertEquals(
+      Assert.assertEquals(
         FileUtils.getSafeFileNameAndSourceFromUrlOrSrc(it.url, it.src)?.first,
         it.expectedFileName
       )
-      Assertions.assertEquals(
+      Assert.assertEquals(
         FileUtils.getSafeFileNameAndSourceFromUrlOrSrc(it.url, it.src)?.second,
         it.expectedUrl
       )
@@ -334,9 +333,9 @@ class FileUtilsInstrumentationTest {
 
     val result = FileUtils.decodeBase64DataUri(base64Png)
 
-    Assertions.assertNotNull(result)
-    Assertions.assertEquals("png", result!!.first)
-    Assertions.assertTrue(result.second.isNotEmpty())
+    Assert.assertNotNull(result)
+    Assert.assertEquals("png", result!!.first)
+    Assert.assertTrue(result.second.isNotEmpty())
   }
 
   @Test
@@ -444,7 +443,7 @@ class FileUtilsInstrumentationTest {
       runBlocking {
         dummyUriData.forEach { dummyUrlData ->
           dummyUrlData.uri?.let { uri ->
-            Assertions.assertEquals(
+            Assert.assertEquals(
               dummyUrlData.expectedFileName,
               FileUtils.getLocalFilePathByUri(context, uri, Dispatchers.IO)
             )
@@ -488,7 +487,7 @@ class FileUtilsInstrumentationTest {
 
       dummyDownloadUriData.forEach { dummyUrlData ->
         dummyUrlData.uri?.let { uri ->
-          Assertions.assertEquals(
+          Assert.assertEquals(
             FileUtils.extractDocumentId(uri, DocumentResolverWrapper()),
             dummyUrlData.expectedFileName
           )
