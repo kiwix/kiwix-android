@@ -21,10 +21,10 @@ import android.os.Build
 import androidx.compose.ui.test.junit4.accessibility.enableAccessibilityChecks
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.test.filters.LargeTest
-import leakcanary.LeakAssertions
-import org.junit.Before
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
+import leakcanary.LeakAssertions
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.kiwix.kiwixmobile.BaseActivityTest
@@ -38,6 +38,7 @@ import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.testutils.RetryRule
 import org.kiwix.kiwixmobile.testutils.TestUtils
 import org.kiwix.kiwixmobile.testutils.TestUtils.waitUntilTimeout
+import org.kiwix.kiwixmobile.ui.KiwixDestination
 import org.kiwix.kiwixmobile.utils.StandardActions
 
 @LargeTest
@@ -70,8 +71,11 @@ class LanguageScreenTest : BaseActivityTest() {
   @Test
   fun testLanguageScreen() {
     StandardActions.closeDrawer(kiwixMainActivity as CoreMainActivity) // close the drawer if open before running the test cases.
+    activityScenario.onActivity {
+      kiwixMainActivity = it
+      it.navigate(KiwixDestination.Downloads.route)
+    }
     downloadRobot {
-      clickDownloadOnBottomNav(composeTestRule)
       waitForDataToLoad(composeTestRule = composeTestRule)
     }
     language {
