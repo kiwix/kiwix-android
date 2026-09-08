@@ -38,9 +38,9 @@ import org.kiwix.kiwixmobile.core.zim_manager.Language
 import javax.inject.Inject
 
 class LanguageRepositoryImpl @Inject constructor(
-  @OPDSKiwixService private val kiwixService: KiwixService,
+  @param:OPDSKiwixService private val kiwixService: KiwixService,
   private val kiwixDataStore: KiwixDataStore,
-  @IoDispatcher private val ioDispatcher: CoroutineDispatcher
+  @param:IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : LanguageRepository {
   override fun fetchLanguages(): Flow<List<Language>> = flow {
     val feed = kiwixService.getLanguages()

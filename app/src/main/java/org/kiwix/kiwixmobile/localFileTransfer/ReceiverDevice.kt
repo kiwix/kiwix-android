@@ -62,8 +62,8 @@ internal class ReceiverDevice(
                   Log.d(TAG, "Sender device connected for ${fileItem.fileName}")
                   publishProgress(fileItemIndex, FileItem.FileStatus.SENDING)
                   val clientNoteFileLocation = File(zimStorageRootPath + fileItem.fileName)
-                  val dirs = File(clientNoteFileLocation.parent)
-                  if (!dirs.exists() && !dirs.mkdirs()) {
+                  val dirs = clientNoteFileLocation.parentFile
+                  if (dirs != null && !dirs.exists() && !dirs.mkdirs()) {
                     Log.d(TAG, "ERROR: Required parent directories couldn't be created")
                     isTransferErrorFree = false
                   }
