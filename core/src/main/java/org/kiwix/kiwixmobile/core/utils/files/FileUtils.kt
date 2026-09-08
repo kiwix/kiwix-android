@@ -316,6 +316,21 @@ object FileUtils {
   }
 
   /**
+   * Whether this (canonical) path actually resolves under [volume], rather than merely
+   * sharing its string prefix.
+   *
+   * A plain `path.startsWith(volume)` would let a sibling path bypass the check - e.g.
+   * volume "/storage/emulated/0" would wrongly accept "/storage/emulated/0-evil/x.zim",
+   * since that string does start with the volume's path. Volumes are also inconsistent
+   * about trailing separators (see [getStoragePath]), so normalize both sides before
+   * requiring either an exact match or a match up to a path-separator boundary.
+   */
+  private fun String.isUnderStorageVolume(volume: String): Boolean {
+    val normalizedVolume = volume.trimEnd(File.separatorChar)
+    return this == normalizedVolume || this.startsWith(normalizedVolume + File.separatorChar)
+  }
+
+  /**
    * Determines the appropriate storage path for a given volume.
    *
    * This method retrieves the storage path based on the Android version:
@@ -409,7 +424,7 @@ object FileUtils {
         val extractedPath = "$uri".substringAfter("/root")
         val canonicalPath = runCatching { File(extractedPath).canonicalPath }.getOrNull()
         canonicalPath?.takeIf { path ->
-          getStorageVolumesList(context).any { volume -> path.startsWith(volume) } &&
+          getStorageVolumesList(context).any { volume -> path.isUnderStorageVolume(volume) } &&
             File(path).isFileExist(ioDispatcher)
         }
       }

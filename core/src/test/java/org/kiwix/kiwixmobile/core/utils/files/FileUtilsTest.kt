@@ -292,6 +292,21 @@ class FileUtilsTest {
     assertNull(FileUtils.getLocalFilePathByUri(mockContext, mockUri, testDispatcher))
   }
 
+  @Test
+  fun getLocalFilePathByUri_whenRootUriOnlySharesVolumeStringPrefix_returnsNull() = runTest {
+    // "/storage/emulated/0-evil" starts with the volume "/storage/emulated/0" as a string,
+    // but is a sibling path, not a path under that volume - it must still be rejected.
+    val mockContext = mockk<Context>()
+    val mockUri = mockk<Uri>()
+    every { mockUri.scheme } returns "content"
+    every { mockUri.toString() } returns "content://com.example/root/storage/emulated/0-evil/test.zim"
+    mockkStatic(DocumentsContract::class)
+    every { DocumentsContract.isDocumentUri(mockContext, mockUri) } returns false
+    mockStorageVolumes(mockContext, File("/storage/emulated/0"))
+    coEvery { any<File>().isFileExist(testDispatcher) } returns true
+    assertNull(FileUtils.getLocalFilePathByUri(mockContext, mockUri, testDispatcher))
+  }
+
   // ======== extractDocumentId ========
 
   @Test
