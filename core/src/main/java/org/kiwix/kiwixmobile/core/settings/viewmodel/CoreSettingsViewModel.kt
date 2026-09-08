@@ -96,7 +96,12 @@ abstract class CoreSettingsViewModel(
     val shouldShowPrefWifiOnlyPreference: Boolean = false,
     val versionInformation: String = "",
     val permissionItem: Pair<Boolean, String> = false to "",
-    val shouldShowRatingCategory: Boolean = false
+    val shouldShowRatingCategory: Boolean = false,
+    // The Wikipedia-link/web-search-intent manifest entries only exist in the
+    // main `app` module (see AndroidManifest.xml), so custom/branded apps built
+    // from this same Compose settings screen must not offer these toggles.
+    val shouldShowSupportedExternalLinksPreference: Boolean = false,
+    val shouldShowWebSearchIntentPreference: Boolean = false
   )
 
   abstract suspend fun setStorage()
@@ -105,6 +110,8 @@ abstract class CoreSettingsViewModel(
   abstract suspend fun showPermissionItem()
   abstract suspend fun showLanguageCategory()
   abstract suspend fun showRatingCategory()
+  abstract suspend fun showSupportedExternalLinksPreference()
+  abstract suspend fun showWebSearchIntentPreference()
 
   protected val settingsUiState = MutableStateFlow(SettingsUiState())
   val uiState: StateFlow<SettingsUiState> = settingsUiState.asStateFlow()
@@ -119,6 +126,8 @@ abstract class CoreSettingsViewModel(
     showPermissionItem()
     showLanguageCategory()
     showRatingCategory()
+    showSupportedExternalLinksPreference()
+    showWebSearchIntentPreference()
     setVersionCodeInformation()
   }
 
@@ -169,6 +178,21 @@ abstract class CoreSettingsViewModel(
       initialValue = true
     )
 
+  val supportedExternalLinksOpenInApp: StateFlow<Boolean> =
+    kiwixDataStore.supportedExternalLinksOpenInApp
+      .stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.Eagerly,
+        initialValue = false
+      )
+
+  val enableWebSearchIntent: StateFlow<Boolean> = kiwixDataStore.enableWebSearchIntent
+    .stateIn(
+      scope = viewModelScope,
+      started = SharingStarted.Eagerly,
+      initialValue = false
+    )
+
   fun sendAction(action: Action) =
     viewModelScope.launch {
       _actions.emit(action)
@@ -215,6 +239,18 @@ abstract class CoreSettingsViewModel(
   fun setWifiOnly(wifiOnly: Boolean) {
     viewModelScope.launch {
       kiwixDataStore.setWifiOnly(wifiOnly)
+    }
+  }
+
+  fun setSupportedExternalLinksOpenInApp(enabled: Boolean) {
+    viewModelScope.launch {
+      kiwixDataStore.setSupportedExternalLinksOpenInApp(enabled)
+    }
+  }
+
+  fun setEnableWebSearchIntent(enabled: Boolean) {
+    viewModelScope.launch {
+      kiwixDataStore.setEnableWebSearchIntent(enabled)
     }
   }
 

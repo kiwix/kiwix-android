@@ -220,6 +220,28 @@ class KiwixDataStoreTest {
   }
 
   @Test
+  fun `supportedExternalLinksOpenInApp returns false by default`() = runTest {
+    assertThat(kiwixDataStore.supportedExternalLinksOpenInApp.first()).isFalse()
+  }
+
+  @Test
+  fun `setSupportedExternalLinksOpenInApp can enable the preference`() = runTest {
+    kiwixDataStore.setSupportedExternalLinksOpenInApp(true)
+    assertThat(kiwixDataStore.supportedExternalLinksOpenInApp.first()).isTrue()
+  }
+
+  @Test
+  fun `enableWebSearchIntent returns false by default`() = runTest {
+    assertThat(kiwixDataStore.enableWebSearchIntent.first()).isFalse()
+  }
+
+  @Test
+  fun `setEnableWebSearchIntent can enable the preference`() = runTest {
+    kiwixDataStore.setEnableWebSearchIntent(true)
+    assertThat(kiwixDataStore.enableWebSearchIntent.first()).isTrue()
+  }
+
+  @Test
   fun `showIntro returns true by default`() = runTest {
     assertThat(kiwixDataStore.showIntro.first()).isTrue()
   }
