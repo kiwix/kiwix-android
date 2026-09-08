@@ -126,11 +126,6 @@ class DownloadServiceTest : BaseActivityTest() {
     }
   }
 
-  @After
-  fun finish() {
-    TestUtils.deleteTemporaryFilesOfTestCases(context)
-  }
-
   private fun assetDownloadService(isRunning: Boolean) {
     // press the home button so that application goes into background
     InstrumentationRegistry.getInstrumentation().uiAutomation.performGlobalAction(
@@ -142,6 +137,12 @@ class DownloadServiceTest : BaseActivityTest() {
       DownloadMonitorService.isDownloadMonitorServiceRunning == isRunning
     }
     composeTestRule.waitUntilTimeout(3000)
+  }
+
+  @After
+  fun finish() {
+    IdlingRegistry.getInstance().unregister(getInstance())
+    TestUtils.deleteTemporaryFilesOfTestCases(context)
   }
 
   companion object {
