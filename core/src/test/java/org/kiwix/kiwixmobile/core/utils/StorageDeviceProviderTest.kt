@@ -140,6 +140,7 @@ class StorageDeviceProviderTest {
       storageDeviceProvider.getAppSpecificDirs()
 
       verify(exactly = 1) { context.getExternalFilesDirs(null) }
+      verify(exactly = 1) { anyConstructed<ContextWrapper>().externalMediaDirs }
       coVerify(exactly = 2) { kiwixDataStore.selectedStorage }
     }
 

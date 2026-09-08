@@ -96,7 +96,10 @@ class LibkiwixBookOnDisk @Inject constructor(
   private val fileObservers = ConcurrentHashMap<String, FileObserver>()
 
   private val fileSystemEventFlow =
-    MutableSharedFlow<suspend () -> Unit>(extraBufferCapacity = Int.MAX_VALUE)
+    MutableSharedFlow<suspend () -> Unit>(
+      extraBufferCapacity = FILE_SYSTEM_EVENT_BUFFER_CAPACITY,
+      onBufferOverflow = BufferOverflow.DROP_OLDEST
+    )
 
   init {
     CoroutineScope(ioDispatcher).launch {
@@ -422,5 +425,9 @@ class LibkiwixBookOnDisk @Inject constructor(
 
   private suspend fun updateLocalBooksFlow() {
     localBooksFlow.emit(getBooksList())
+  }
+
+  companion object {
+    private const val FILE_SYSTEM_EVENT_BUFFER_CAPACITY = 64
   }
 }

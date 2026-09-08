@@ -62,7 +62,10 @@ class StorageDeviceProvider @Inject constructor(
   /**
    * Returns the app-specific directories across internal storage, the external
    * "files" directory (Android/data) and the external "media" directory
-   * (Android/media), caching the result for performance.
+   * (Android/media), plus the user-selected storage path
+   * (`kiwixDataStore.selectedStorage`) when one is set. The OS-provided
+   * directories are cached for performance, while the selected storage path
+   * is re-read on every call so a newly chosen path is reflected immediately.
    */
   suspend fun getAppSpecificDirs(): List<File> =
     mutex.withLock {
