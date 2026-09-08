@@ -88,8 +88,10 @@ class KiwixSettingsScreenTest : BaseActivityTest() {
       toggleOpenNewTabInBackground(composeTestRule)
       toggleExternalLinkWarningPref(composeTestRule)
       toggleWifiDownloadsOnlyPref(composeTestRule)
-      clickExternalStoragePreference(composeTestRule)
-      assertExternalStorageSelected(composeTestRule)
+      if (hasExternalStorageDevice(composeTestRule)) {
+        clickExternalStoragePreference(composeTestRule)
+        assertExternalStorageSelected(composeTestRule)
+      }
       clickInternalStoragePreference(composeTestRule)
       assertInternalStorageSelected(composeTestRule)
       clickClearHistoryPreference(composeTestRule)
