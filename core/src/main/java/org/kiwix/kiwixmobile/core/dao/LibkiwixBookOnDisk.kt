@@ -95,9 +95,17 @@ class LibkiwixBookOnDisk @Inject constructor(
 
   private val fileObservers = ConcurrentHashMap<String, FileObserver>()
 
+  private val fileSystemEventFlow =
+    MutableSharedFlow<suspend () -> Unit>(extraBufferCapacity = Int.MAX_VALUE)
+
   init {
     CoroutineScope(ioDispatcher).launch {
       runCatching { registerFileObservers() }.onFailure { it.printStackTrace() }
+      fileSystemEventFlow.collect { event ->
+        runCatching {
+          event.invoke()
+        }.onFailure { it.printStackTrace() }
+      }
     }
   }
 
@@ -147,19 +155,17 @@ class LibkiwixBookOnDisk @Inject constructor(
   }
 
   private fun handleFileSystemEvent(watchDir: File, path: String, event: Int) {
-    val file = File(watchDir, path)
-    CoroutineScope(ioDispatcher).launch {
-      runCatching {
-        when (event) {
-          FileObserver.CREATE -> if (file.isDirectory) watchDirectory(file)
-          FileObserver.MOVED_TO -> handleMovedIn(file)
-          FileObserver.CLOSE_WRITE -> addZimFileIfValid(file)
-          FileObserver.DELETE, FileObserver.MOVED_FROM -> {
-            unwatchDirectory(file)
-            if (isZimFile(path)) deleteByPath(file.canonicalPath)
-          }
+    fileSystemEventFlow.tryEmit {
+      val file = File(watchDir, path)
+      when (event) {
+        FileObserver.CREATE -> if (file.isDirectory) watchDirectory(file)
+        FileObserver.MOVED_TO -> handleMovedIn(file)
+        FileObserver.CLOSE_WRITE -> addZimFileIfValid(file)
+        FileObserver.DELETE, FileObserver.MOVED_FROM -> {
+          unwatchDirectory(file)
+          if (isZimFile(path)) deleteByPath(file.canonicalPath)
         }
-      }.onFailure { it.printStackTrace() }
+      }
     }
   }
 
