@@ -77,28 +77,32 @@ class NavigationHistoryRobot : BaseRobot() {
   }
 
   fun clickOnAndroidArticle(composeTestRule: ComposeContentTestRule) {
-    composeTestRule.waitForIdle()
-    pauseForBetterTestPerformance(composeTestRule)
-    onWebView()
-      .withElement(
-        findElement(
-          Locator.XPATH,
-          "//*[contains(text(), 'Android_(operating_system)')]"
+    testFlakyView({
+      composeTestRule.waitForIdle()
+      pauseForBetterTestPerformance(composeTestRule)
+      onWebView()
+        .withElement(
+          findElement(
+            Locator.XPATH,
+            "//*[contains(text(), 'Android_(operating_system)')]"
+          )
         )
-      )
-      .perform(webClick())
+        .perform(webClick())
+    })
   }
 
   fun assertZimFileLoaded(composeTestRule: ComposeContentTestRule) {
-    composeTestRule.waitForIdle()
-    pauseForBetterTestPerformance(composeTestRule)
-    onWebView()
-      .withElement(
-        findElement(
-          Locator.XPATH,
-          "//*[contains(text(), 'Android_(operating_system)')]"
+    testFlakyView({
+      composeTestRule.waitForIdle()
+      pauseForBetterTestPerformance(composeTestRule)
+      onWebView()
+        .withElement(
+          findElement(
+            Locator.XPATH,
+            "//*[contains(text(), 'Android_(operating_system)')]"
+          )
         )
-      )
+    })
   }
 
   fun longClickOnBackwardButton(composeTestRule: ComposeContentTestRule) {

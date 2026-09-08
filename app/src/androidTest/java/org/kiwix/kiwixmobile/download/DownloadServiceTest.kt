@@ -31,11 +31,11 @@ import androidx.test.espresso.IdlingPolicies
 import androidx.test.espresso.IdlingRegistry
 import androidx.test.filters.LargeTest
 import androidx.test.platform.app.InstrumentationRegistry
+import dagger.hilt.android.testing.HiltAndroidRule
+import dagger.hilt.android.testing.HiltAndroidTest
 import org.junit.After
 import org.junit.Before
 import org.junit.BeforeClass
-import dagger.hilt.android.testing.HiltAndroidRule
-import dagger.hilt.android.testing.HiltAndroidTest
 import org.junit.Rule
 import org.junit.Test
 import org.kiwix.kiwixmobile.BaseActivityTest
@@ -126,22 +126,24 @@ class DownloadServiceTest : BaseActivityTest() {
     }
   }
 
-  @After
-  fun finish() {
-    TestUtils.deleteTemporaryFilesOfTestCases(context)
-  }
-
   private fun assetDownloadService(isRunning: Boolean) {
     // press the home button so that application goes into background
     InstrumentationRegistry.getInstrumentation().uiAutomation.performGlobalAction(
       AccessibilityService.GLOBAL_ACTION_HOME
     )
+
     // Poll instead of a fixed sleep - a wait that's enough on one API level/device
     // isn't guaranteed enough on a slower one.
     composeTestRule.waitUntil(timeoutMillis = TestUtils.TEST_PAUSE_MS_FOR_DOWNLOAD_TEST) {
       DownloadMonitorService.isDownloadMonitorServiceRunning == isRunning
     }
     composeTestRule.waitUntilTimeout(3000)
+  }
+
+  @After
+  fun finish() {
+    IdlingRegistry.getInstance().unregister(getInstance())
+    TestUtils.deleteTemporaryFilesOfTestCases(context)
   }
 
   companion object {

@@ -83,8 +83,11 @@ class InitialDownloadTest : BaseActivityTest() {
       waitUntilZimFilesRefreshing(composeTestRule)
       deleteZimIfExists(composeTestRule)
     }
+    activityScenario.onActivity {
+      kiwixMainActivity = it
+      it.navigate(KiwixDestination.Downloads.route)
+    }
     downloadRobot {
-      clickDownloadOnBottomNav(composeTestRule)
       waitForDataToLoad(composeTestRule = composeTestRule)
       stopDownloadIfAlreadyStarted(composeTestRule, kiwixMainActivity)
       searchD3JsDocsFile(composeTestRule)
