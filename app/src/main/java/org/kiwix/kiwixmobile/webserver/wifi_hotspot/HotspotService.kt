@@ -40,7 +40,6 @@ import org.kiwix.kiwixmobile.core.di.MainDispatcher
 import org.kiwix.kiwixmobile.core.extensions.registerReceiver
 import org.kiwix.kiwixmobile.core.utils.ServerUtils
 import org.kiwix.kiwixmobile.core.utils.ServerUtils.serverAddress
-import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListItem.BookOnDisk
 import org.kiwix.kiwixmobile.webserver.RESTART_SERVER
 import org.kiwix.kiwixmobile.webserver.SELECTED_ZIM_PATHS_KEY
@@ -70,9 +69,6 @@ class HotspotService :
 
   @set:Inject
   var dataSource: DataSource? = null
-
-  @set:Inject
-  var kiwixDataStore: KiwixDataStore? = null
 
   @Inject
   @IoDispatcher
@@ -107,16 +103,15 @@ class HotspotService :
 
   internal suspend fun resyncServerWithRemainingBooks() {
     val dataSource = dataSource
-    val kiwixDataStore = kiwixDataStore
-    if (!ServerUtils.isServerStarted || dataSource == null || kiwixDataStore == null) return
+    if (!ServerUtils.isServerStarted || dataSource == null) return
 
-    val hostedBookIds = kiwixDataStore.hostedBookIds.first()
-    val remainingPaths = dataSource.getLanguageCategorizedBooks().first()
+    val existingPaths = dataSource.getLanguageCategorizedBooks().first()
       .filterIsInstance<BookOnDisk>()
-      .filter { it.book.id in hostedBookIds }
       .map { it.zimReaderSource.toDatabase() }
+      .toSet()
+    val remainingPaths = currentlyHostedPaths.filter { it in existingPaths }
 
-    if (remainingPaths.toSet() == currentlyHostedPaths.toSet()) return
+    if (remainingPaths.size == currentlyHostedPaths.size) return
 
     if (remainingPaths.isEmpty()) {
       stopHotspotAndDismissNotification()

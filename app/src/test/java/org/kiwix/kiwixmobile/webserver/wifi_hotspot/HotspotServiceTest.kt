@@ -38,7 +38,6 @@ import org.junit.Test
 import org.kiwix.kiwixmobile.core.data.DataSource
 import org.kiwix.kiwixmobile.core.entity.LibkiwixBook
 import org.kiwix.kiwixmobile.core.utils.ServerUtils
-import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListItem.BookOnDisk
 import org.kiwix.kiwixmobile.webserver.WebServerHelper
 import org.kiwix.kiwixmobile.webserver.ZimHostCallbacks
@@ -52,7 +51,6 @@ import org.kiwix.kiwixmobile.webserver.ZimHostCallbacks
 class HotspotServiceTest {
   private val webServerHelper: WebServerHelper = mockk(relaxed = true)
   private val dataSource: DataSource = mockk()
-  private val kiwixDataStore: KiwixDataStore = mockk()
   private val zimHostCallbacks: ZimHostCallbacks = mockk(relaxed = true)
 
   private lateinit var hotspotService: HotspotService
@@ -66,7 +64,6 @@ class HotspotServiceTest {
     hotspotService = spyk(HotspotService())
     hotspotService.webServerHelper = webServerHelper
     hotspotService.dataSource = dataSource
-    hotspotService.kiwixDataStore = kiwixDataStore
     hotspotService.ioDispatcher = Dispatchers.Unconfined
     hotspotService.serviceScope = CoroutineScope(SupervisorJob() + Dispatchers.Unconfined)
     hotspotService.registerCallBack(zimHostCallbacks)
@@ -96,7 +93,6 @@ class HotspotServiceTest {
   fun `resync when the removed book was not hosted leaves the server untouched`() = runTest {
     ServerUtils.isServerStarted = true
     hotspotService.currentlyHostedPaths = listOf("/path1")
-    every { kiwixDataStore.hostedBookIds } returns flowOf(setOf("id1"))
     every { dataSource.getLanguageCategorizedBooks() } returns flowOf(
       listOf(bookOnDisk("id1", "/path1"))
     )
@@ -111,7 +107,6 @@ class HotspotServiceTest {
   fun `resync when a hosted book was removed restarts with the remaining paths`() = runTest {
     ServerUtils.isServerStarted = true
     hotspotService.currentlyHostedPaths = listOf("/path1", "/path2")
-    every { kiwixDataStore.hostedBookIds } returns flowOf(setOf("id1", "id2"))
     every { dataSource.getLanguageCategorizedBooks() } returns flowOf(
       listOf(bookOnDisk("id1", "/path1"))
     )
@@ -133,7 +128,6 @@ class HotspotServiceTest {
     runTest {
       ServerUtils.isServerStarted = true
       hotspotService.currentlyHostedPaths = listOf("/path1")
-      every { kiwixDataStore.hostedBookIds } returns flowOf(setOf("id1"))
       every { dataSource.getLanguageCategorizedBooks() } returns flowOf(emptyList())
 
       hotspotService.resyncServerWithRemainingBooks()

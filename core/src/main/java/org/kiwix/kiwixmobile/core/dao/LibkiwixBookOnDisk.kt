@@ -56,6 +56,7 @@ import java.io.File
 import java.util.concurrent.ConcurrentHashMap
 import javax.inject.Inject
 import javax.inject.Named
+import javax.inject.Provider
 import javax.inject.Singleton
 
 @Suppress("LongParameterList")
@@ -66,6 +67,7 @@ class LibkiwixBookOnDisk @Inject constructor(
   private val kiwixDataStore: KiwixDataStore,
   private val storageDeviceProvider: StorageDeviceProvider,
   private val zimFileReaderFactory: ZimFileReader.Factory,
+  private val downloadRoomDaoProvider: Provider<DownloadRoomDao>,
   @param:IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) {
   private val initMutex = Mutex()
@@ -174,8 +176,20 @@ class LibkiwixBookOnDisk @Inject constructor(
     FileUtils.isValidZimFile(name) || FileUtils.isSplittedZimFile(name)
 
   private suspend fun addZimFileIfValid(file: File) {
-    if (isZimFile(file.name)) addBookFromFile(file)
+    if (isZimFile(file.name) && !isBeingDownloaded(file)) addBookFromFile(file)
   }
+
+  /**
+   * CLOSE_WRITE fires every time a file descriptor open for writing on this file is
+   * closed, not only once the file is complete. Fetch closes/reopens the destination
+   * file across pauses, retries and network changes while a download is still in
+   * progress, so we'd otherwise try to parse a half-written ZIM header here. Downloads
+   * are already added to the library once they truly finish (see
+   * DownloadRoomDao.moveCompletedToBooksOnDiskDao), so it's safe to just skip files that
+   * still have a matching in-flight download entity.
+   */
+  private fun isBeingDownloaded(file: File): Boolean =
+    downloadRoomDaoProvider.get().getEntityForFileName(file.name) != null
 
   private suspend fun addBookFromFile(file: File) {
     if (!file.isFileExist(ioDispatcher) || !file.isFile) return
