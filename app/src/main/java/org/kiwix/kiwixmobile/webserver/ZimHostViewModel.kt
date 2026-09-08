@@ -26,7 +26,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -66,7 +65,6 @@ import org.kiwix.kiwixmobile.webserver.ZimHostViewModel.Event.StartServer
 import org.kiwix.kiwixmobile.webserver.ZimHostViewModel.Event.StopServer
 import javax.inject.Inject
 
-@OptIn(FlowPreview::class)
 @Suppress("LongParameterList")
 @HiltViewModel
 class ZimHostViewModel @Inject constructor(

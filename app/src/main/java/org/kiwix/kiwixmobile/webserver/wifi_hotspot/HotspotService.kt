@@ -116,7 +116,7 @@ class HotspotService :
       .filter { it.book.id in hostedBookIds }
       .map { it.zimReaderSource.toDatabase() }
 
-    if (remainingPaths == currentlyHostedPaths) return
+    if (remainingPaths.toSet() == currentlyHostedPaths.toSet()) return
 
     if (remainingPaths.isEmpty()) {
       stopHotspotAndDismissNotification()

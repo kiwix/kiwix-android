@@ -41,7 +41,7 @@ class StorageDeviceProvider @Inject constructor(
 ) {
   private val mutex = Mutex()
   private var writableStorage: List<StorageDevice>? = null
-  private var appSpecificDirsCache: List<File>? = null
+  private var staticAppSpecificDirsCache: List<File>? = null
 
   /**
    * Returns the writable storage devices, caching the result for the lifetime of the app process.
@@ -64,22 +64,22 @@ class StorageDeviceProvider @Inject constructor(
    */
   suspend fun getAppSpecificDirs(): List<File> =
     mutex.withLock {
-      appSpecificDirsCache ?: withContext(ioDispatcher) {
+      val staticDirs = staticAppSpecificDirsCache ?: withContext(ioDispatcher) {
         val dirs = mutableListOf<File>()
         context.getExternalFilesDirs("")?.filterNotNull()?.let { dirs.addAll(it) }
         context.getExternalFilesDirs(null)?.filterNotNull()?.let { dirs.addAll(it) }
         context.filesDir?.let { dirs.add(it) }
-        context.cacheDir?.let { dirs.add(it) }
+        dirs
+      }.also { staticAppSpecificDirsCache = it }
 
-        val selectedStoragePath = runCatching {
-          kiwixDataStore.selectedStorage.first()
-        }.getOrDefault("")
+      val selectedStoragePath = runCatching {
+        kiwixDataStore.selectedStorage.first()
+      }.getOrDefault("")
 
-        if (selectedStoragePath.isNotEmpty()) {
-          dirs.add(File(selectedStoragePath))
-        }
-
-        dirs.distinctBy { it.absolutePath }
-      }.also { appSpecificDirsCache = it }
+      val dirs = staticDirs.toMutableList()
+      if (selectedStoragePath.isNotEmpty()) {
+        dirs.add(File(selectedStoragePath))
+      }
+      dirs.distinctBy { it.absolutePath }
     }
 }
