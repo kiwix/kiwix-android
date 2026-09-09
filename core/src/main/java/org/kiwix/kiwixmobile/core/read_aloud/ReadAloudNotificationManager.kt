@@ -124,7 +124,7 @@ class ReadAloudNotificationManager @Inject constructor(
       .setWhen(System.currentTimeMillis())
       .addAction(
         R.drawable.ic_replay_10,
-        "-10s",
+        context.getString(R.string.tts_rewind_10_seconds),
         rewindReadAloud
       ).addAction(
         getPauseOrResumeIcon(isPauseTTS),
@@ -132,7 +132,7 @@ class ReadAloudNotificationManager @Inject constructor(
         pauseOrResumeReadAloud
       ).addAction(
         R.drawable.ic_forward_10,
-        "+10s",
+        context.getString(R.string.tts_forward_10_seconds),
         forwardReadAloud
       ).addAction(
         R.drawable.ic_baseline_stop,

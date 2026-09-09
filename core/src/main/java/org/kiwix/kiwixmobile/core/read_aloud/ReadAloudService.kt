@@ -18,14 +18,13 @@
 
 package org.kiwix.kiwixmobile.core.read_aloud
 
+import android.content.Intent
 import android.graphics.Bitmap.CompressFormat.PNG
 import android.graphics.BitmapFactory
-import android.content.Intent
 import android.os.Binder
 import android.os.IBinder
 import android.os.Looper
 import androidx.annotation.OptIn
-import androidx.media3.common.MediaItem
 import androidx.media3.common.MediaMetadata
 import androidx.media3.common.Player
 import androidx.media3.common.SimpleBasePlayer
@@ -33,14 +32,15 @@ import androidx.media3.common.util.UnstableApi
 import androidx.media3.session.CommandButton
 import androidx.media3.session.MediaSession
 import androidx.media3.session.MediaSessionService
+import com.google.common.util.concurrent.Futures
+import com.google.common.util.concurrent.ListenableFuture
 import dagger.hilt.android.AndroidEntryPoint
 import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.utils.TAG_KIWIX
+import org.kiwix.kiwixmobile.core.utils.files.Log
 import java.io.ByteArrayOutputStream
 import java.lang.ref.WeakReference
 import javax.inject.Inject
-
-import com.google.common.util.concurrent.Futures
-import com.google.common.util.concurrent.ListenableFuture
 
 @AndroidEntryPoint
 @OptIn(UnstableApi::class)
@@ -61,26 +61,31 @@ class ReadAloudService : MediaSessionService() {
 
       val rewindButton = CommandButton.Builder(CommandButton.ICON_PREVIOUS)
         .setPlayerCommand(Player.COMMAND_SEEK_BACK)
-        .setDisplayName("-10s")
-        .setIconResId(R.drawable.ic_replay_10)
+        .setDisplayName(getString(R.string.tts_rewind_10_seconds))
+        .setCustomIconResId(R.drawable.ic_replay_10)
         .build()
 
       val forwardButton = CommandButton.Builder(CommandButton.ICON_NEXT)
         .setPlayerCommand(Player.COMMAND_SEEK_FORWARD)
-        .setDisplayName("+10s")
-        .setIconResId(R.drawable.ic_forward_10)
+        .setDisplayName(getString(R.string.tts_forward_10_seconds))
+        .setCustomIconResId(R.drawable.ic_forward_10)
         .build()
 
       val stopButton = CommandButton.Builder(CommandButton.ICON_STOP)
         .setPlayerCommand(Player.COMMAND_STOP)
         .setDisplayName(getString(R.string.stop))
-        .setIconResId(R.drawable.ic_baseline_stop)
+        .setCustomIconResId(R.drawable.ic_baseline_stop)
         .build()
 
       mediaSession = MediaSession.Builder(this, player)
         .setCustomLayout(listOf(rewindButton, forwardButton, stopButton))
         .build()
-    }.onFailure { it.printStackTrace() }
+    }.onFailure {
+      Log.e(TAG_KIWIX, "Failed to set up MediaSession for read-aloud. Original exception = $it")
+      ttsPlayer = null
+      mediaSession = null
+      stopSelf()
+    }
   }
 
   override fun onGetSession(controllerInfo: MediaSession.ControllerInfo): MediaSession? =

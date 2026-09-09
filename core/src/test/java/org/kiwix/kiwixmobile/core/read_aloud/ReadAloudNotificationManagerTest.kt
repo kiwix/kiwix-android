@@ -244,9 +244,9 @@ class ReadAloudNotificationManagerTest {
 
     val actions = notification.actions
 
-    assertThat(actions[0].title).isEqualTo("-10s")
+    assertThat(actions[0].title).isEqualTo(context.getString(R.string.tts_rewind_10_seconds))
     assertThat(actions[1].title).isEqualTo(context.getString(R.string.tts_pause))
-    assertThat(actions[2].title).isEqualTo("+10s")
+    assertThat(actions[2].title).isEqualTo(context.getString(R.string.tts_forward_10_seconds))
     assertThat(actions[3].title).isEqualTo(context.getString(R.string.stop))
   }
 }

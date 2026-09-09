@@ -55,6 +55,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.isActive
@@ -394,7 +395,7 @@ abstract class CoreReaderViewModel(
         }
       },
       viewModelScope.launch {
-        kiwixDataStore.ttsSpeed.collect { speed ->
+        kiwixDataStore.ttsSpeed.distinctUntilChanged().collect { speed ->
           updateState {
             copy(ttsControlsItem = ttsControlsItem.copy(ttsSpeed = speed))
           }
@@ -402,7 +403,7 @@ abstract class CoreReaderViewModel(
         }
       },
       viewModelScope.launch {
-        kiwixDataStore.selectedTtsVoice.collect { voiceName ->
+        kiwixDataStore.selectedTtsVoice.distinctUntilChanged().collect { voiceName ->
           updateState {
             copy(ttsControlsItem = ttsControlsItem.copy(selectedVoiceName = voiceName))
           }

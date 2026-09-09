@@ -65,10 +65,6 @@ import org.robolectric.annotation.Config
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [Build.VERSION_CODES.R])
 class ReaderScreenComposablesTest {
-  companion object {
-    private const val TEST_TTS_SPEED = 1.5f
-  }
-
   @Rule
   @JvmField
   val composeTestRule = createComposeRule()

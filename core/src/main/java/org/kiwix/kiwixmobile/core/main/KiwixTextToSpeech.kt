@@ -252,19 +252,21 @@ class KiwixTextToSpeech internal constructor(
         return
       }
       val availability = tts.isLanguageAvailable(locale)
-      if (availability == LANG_MISSING_DATA ||
-        getFeatures(tts).contains(Engine.KEY_FEATURE_NOT_INSTALLED)
-      ) {
-        // Show download dialog so user can install the missing voice pack
-        showTtsLanguageDownloadDialog.invoke()
-      } else if (availability == LANG_NOT_SUPPORTED) {
+      if (availability == LANG_NOT_SUPPORTED) {
         Log.d(
           TAG_KIWIX,
           "TextToSpeech: language not supported: ${zimReaderContainer.language}"
         )
         context.toast(R.string.tts_lang_not_supported, Toast.LENGTH_LONG)
+        return
+      }
+      tts.language = locale
+      if (availability == LANG_MISSING_DATA ||
+        getFeatures(tts).contains(Engine.KEY_FEATURE_NOT_INSTALLED)
+      ) {
+        // Show download dialog so user can install the missing voice pack
+        showTtsLanguageDownloadDialog.invoke()
       } else {
-        tts.language = locale
         if (requestAudioFocus()) {
           initWebView(webView)
           loadURL(webView)
@@ -272,10 +274,6 @@ class KiwixTextToSpeech internal constructor(
       }
     }
   }
-
-  private fun isMissingOrUnsupportedLanguage(languageAvailabilityResult: Int): Boolean =
-    languageAvailabilityResult == LANG_MISSING_DATA ||
-      languageAvailabilityResult == LANG_NOT_SUPPORTED
 
   private fun getFeatures(tts: TextToSpeech?): Set<String> = tts?.voice?.features.orEmpty()
 
@@ -424,9 +422,14 @@ class KiwixTextToSpeech internal constructor(
 
     @JvmField var paused = true
 
+    private fun currentDisplayIndex(): Int {
+      val raw = if (paused) currentPiece.get() else currentPiece.get() - 1
+      return raw.coerceIn(0, (pieces.size - 1).coerceAtLeast(0))
+    }
+
     val currentPositionMs: Long
       get() {
-        val index = (currentPiece.get() - 1).coerceIn(0, (pieces.size - 1).coerceAtLeast(0))
+        val index = currentDisplayIndex()
         if (index < 0 || index >= pieceStartOffsetsMs.size) return 0L
         val baseOffset = pieceStartOffsetsMs[index]
         val elapsedInPiece = if (!paused && currentUtteranceStartMs > 0) {
@@ -451,7 +454,7 @@ class KiwixTextToSpeech internal constructor(
     }
 
     fun rewind10s() {
-      val currentIndex = (currentPiece.get() - 1).coerceIn(0, (pieces.size - 1).coerceAtLeast(0))
+      val currentIndex = currentDisplayIndex()
       val clampedTarget = (currentPositionMs - 10000L).coerceAtLeast(0L)
       var targetIndex = 0
       for (i in pieceStartOffsetsMs.indices) {
@@ -468,7 +471,7 @@ class KiwixTextToSpeech internal constructor(
     }
 
     fun forward10s() {
-      val currentIndex = (currentPiece.get() - 1).coerceIn(0, (pieces.size - 1).coerceAtLeast(0))
+      val currentIndex = currentDisplayIndex()
       val clampedTarget = (currentPositionMs + 10000L).coerceAtMost(totalDurationMs)
       var targetIndex = currentIndex
       for (i in pieceStartOffsetsMs.indices) {
@@ -514,16 +517,16 @@ class KiwixTextToSpeech internal constructor(
         Bundle().apply {
           putString(Engine.KEY_PARAM_UTTERANCE_ID, "kiwixLastMessage")
         }
-      if (currentPiece.get() < pieces.size) {
-        tts.speak(
-          pieces[currentPiece.getAndIncrement()],
-          TextToSpeech.QUEUE_FLUSH,
-          bundle,
-          bundle.getString(Engine.KEY_PARAM_UTTERANCE_ID)
-        )
-      } else {
+      if (currentPiece.get() >= pieces.size) {
         stop()
+        return
       }
+      tts.speak(
+        pieces[currentPiece.getAndIncrement()],
+        TextToSpeech.QUEUE_FLUSH,
+        bundle,
+        bundle.getString(Engine.KEY_PARAM_UTTERANCE_ID)
+      )
       tts.setOnUtteranceProgressListener(
         object : UtteranceProgressListener() {
           @SuppressWarnings("EmptyFunctionBlock")

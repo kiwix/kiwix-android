@@ -19,7 +19,6 @@
 package org.kiwix.kiwixmobile.core.main.reader
 
 import android.view.View
-import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.TtsControlsItem
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.widget.FrameLayout
@@ -43,7 +42,6 @@ import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.gestures.detectVerticalDragGestures
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.ui.unit.DpSize
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
@@ -129,11 +127,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.compose.ui.zIndex
-import kotlin.math.roundToInt
 import androidx.navigation.NavHostController
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -145,11 +143,15 @@ import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderAction
 import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderAction.BackToTopButtonClick
 import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderAction.BookmarkClicked
 import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderAction.BookmarkLongClicked
+import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderAction.ChangeTtsSpeed
 import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderAction.CloseAllTabs
 import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderAction.CloseTab
 import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderAction.CloseTocDrawer
+import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderAction.DismissTtsControlsOverlay
+import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderAction.DismissVoiceSelectionDialog
 import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderAction.DonateButtonClick
 import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderAction.DonateLaterButtonClick
+import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderAction.ForwardTts10s
 import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderAction.HomeClicked
 import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderAction.NextClicked
 import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderAction.NextLongClicked
@@ -157,20 +159,17 @@ import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderAction.O
 import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderAction.OpenSearch
 import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderAction.OpenTocDrawer
 import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderAction.PauseTts
-import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderAction.ChangeTtsSpeed
-import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderAction.RewindTts10s
-import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderAction.ForwardTts10s
-import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderAction.SeekTts
-import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderAction.ShowVoiceSelectionDialog
-import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderAction.DismissVoiceSelectionDialog
-import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderAction.SelectTtsVoice
-import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderAction.ShowTtsControlsOverlay
-import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderAction.DismissTtsControlsOverlay
 import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderAction.PreviousClicked
 import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderAction.PreviousLongClicked
+import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderAction.RewindTts10s
+import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderAction.SeekTts
 import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderAction.SelectTab
+import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderAction.SelectTtsVoice
+import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderAction.ShowTtsControlsOverlay
+import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderAction.ShowVoiceSelectionDialog
 import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderAction.StopTts
 import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderUiState
+import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.TtsControlsItem
 import org.kiwix.kiwixmobile.core.main.reader.helper.TabsManager
 import org.kiwix.kiwixmobile.core.ui.components.ContentLoadingProgressBar
 import org.kiwix.kiwixmobile.core.ui.components.FindInPageAppBar
@@ -215,11 +214,12 @@ import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TWENTY_FOUR_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TWENTY_TWO_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TWO_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.ZERO_DP
-import kotlin.math.abs
-import java.util.Locale
 import org.kiwix.kiwixmobile.core.utils.HUNDERED
 import org.kiwix.kiwixmobile.core.utils.StyleUtils.fromHtml
 import org.kiwix.kiwixmobile.core.utils.ZERO
+import java.util.Locale
+import kotlin.math.abs
+import kotlin.math.roundToInt
 
 const val TAB_SWITCHER_VIEW_TESTING_TAG = "tabSwitcherViewTestingTag"
 const val READER_SCREEN_TESTING_TAG = "readerScreenTestingTag"
@@ -888,7 +888,7 @@ private fun TtsControlButtonsRow(
       ) {
         Icon(
           painter = painterResource(id = R.drawable.ic_replay_10),
-          contentDescription = "-10s",
+          contentDescription = stringResource(R.string.tts_rewind_10_seconds),
           tint = MaterialTheme.colorScheme.onSurface,
           modifier = Modifier.size(TWENTY_FOUR_DP)
         )
@@ -934,7 +934,7 @@ private fun TtsControlButtonsRow(
       ) {
         Icon(
           painter = painterResource(id = R.drawable.ic_forward_10),
-          contentDescription = "+10s",
+          contentDescription = stringResource(R.string.tts_forward_10_seconds),
           tint = MaterialTheme.colorScheme.onSurface,
           modifier = Modifier.size(TWENTY_FOUR_DP)
         )

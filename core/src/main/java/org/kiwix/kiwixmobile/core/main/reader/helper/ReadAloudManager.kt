@@ -107,15 +107,26 @@ class ReadAloudManager @Inject constructor(
     }
   }
 
+  private var isPausedDueToAudioFocusLoss = false
+
   private val audioFocusChangedListener = OnAudioFocusChangeListener { focusChange: Int ->
     val tts = tts ?: return@OnAudioFocusChangeListener
     Log.d(TAG_KIWIX, "Focus change: $focusChange")
     when (focusChange) {
-      AudioManager.AUDIOFOCUS_LOSS,
+      AudioManager.AUDIOFOCUS_LOSS -> {
+        if (tts.currentTTSTask != null) {
+          isPausedDueToAudioFocusLoss = false
+          tts.stop()
+          dispatchState(SpeakingEnded)
+          setActionAndStartTTSService(ACTION_STOP_TTS)
+        }
+      }
+
       AudioManager.AUDIOFOCUS_LOSS_TRANSIENT,
       AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK -> {
         val task = tts.currentTTSTask
         if (task != null && !task.paused) {
+          isPausedDueToAudioFocusLoss = true
           tts.pauseOrResume()
           dispatchState(AudioFocusLoss)
           setActionAndStartTTSService(ACTION_PAUSE_OR_RESUME_TTS, true)
@@ -124,7 +135,8 @@ class ReadAloudManager @Inject constructor(
 
       AudioManager.AUDIOFOCUS_GAIN -> {
         val task = tts.currentTTSTask
-        if (task != null && task.paused) {
+        if (isPausedDueToAudioFocusLoss && task != null && task.paused) {
+          isPausedDueToAudioFocusLoss = false
           tts.pauseOrResume()
           dispatchState(AudioFocusGain)
           setActionAndStartTTSService(ACTION_PAUSE_OR_RESUME_TTS, false)
@@ -143,7 +155,6 @@ class ReadAloudManager @Inject constructor(
         zimReaderContainer,
         kiwixDataStore
       )
-    initializeTTS(false)
   }
 
   fun initializeTTS(isReadSelection: Boolean) {
@@ -198,6 +209,7 @@ class ReadAloudManager @Inject constructor(
   }
 
   fun pauseTts() {
+    isPausedDueToAudioFocusLoss = false
     val tts = requireTts()
     val task = tts.currentTTSTask
     if (task == null) {
@@ -240,6 +252,7 @@ class ReadAloudManager @Inject constructor(
     get() = tts?.totalDurationMs ?: 0L
 
   fun stopReadAloud() {
+    isPausedDueToAudioFocusLoss = false
     val tts = requireTts()
     tts.currentTTSTask?.let {
       tts.stop()
