@@ -16,7 +16,7 @@ This is the Android version of Kiwix, with [support versions ranging from 7.1 to
 [![CodeFactor](https://www.codefactor.io/repository/github/kiwix/kiwix-android/badge)](https://www.codefactor.io/repository/github/kiwix/kiwix-android)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![Public Chat](https://img.shields.io/badge/public-chat-green)](https://chat.kiwix.org)
-[![Slack](https://img.shields.io/badge/Slack-chat-E01E5A)](https://kiwixoffline.slack.com)
+[![Slack](https://img.shields.io/badge/Slack-chat-E01E5A)](https://slack.kiwix.org)
 
 ## Important Notes
 
@@ -118,8 +118,8 @@ Before contributing check out the [CONTRIBUTION](https://github.com/kiwix/kiwix-
 ## Communication
 
 * [Email](mailto:contact+android@kiwix.org)
-* [Slack](https://kiwixoffline.slack.com): #android
-  channel [Get an invite](https://join.slack.com/t/kiwixoffline/shared_invite/zt-19s7tsi68-xlgHdmDr5c6MJ7uFmJuBkg)
+* [Slack](https://slack.kiwix.org): #android
+  channel [Get an invite](https://slack-invite.kiwix.org)
 
 For more information, please refer to
 [https://wiki.kiwix.org/wiki/Communication](https://wiki.kiwix.org/wiki/Communication).
