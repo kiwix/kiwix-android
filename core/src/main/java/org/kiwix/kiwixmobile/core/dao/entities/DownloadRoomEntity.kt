@@ -133,5 +133,6 @@ class PauseReasonConverter {
 enum class PauseReason {
   NONE,
   USER,
-  SERVICE
+  SERVICE,
+  NETWORK
 }

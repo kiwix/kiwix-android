@@ -29,7 +29,6 @@ import android.net.ConnectivityManager
 import android.net.Network
 import android.net.NetworkCapabilities
 import android.net.NetworkRequest
-import android.os.Build
 import android.os.IBinder
 import androidx.core.app.NotificationCompat
 import com.tonyodev.fetch2.Download
@@ -82,6 +81,7 @@ private val NETWORK_RELATED_ERRORS = setOf(
 @AndroidEntryPoint
 class DownloadMonitorService : Service() {
   private val taskFlow = MutableSharedFlow<suspend () -> Unit>(extraBufferCapacity = Int.MAX_VALUE)
+  private var isNetworkAvailable = true
 
   @Inject
   @IoDispatcher
@@ -110,43 +110,49 @@ class DownloadMonitorService : Service() {
 
   private val networkCallback = object : ConnectivityManager.NetworkCallback() {
     override fun onAvailable(network: Network) {
+      isNetworkAvailable = true
       resumeQueuedDownloadsOnNetworkAvailable()
     }
 
     override fun onLost(network: Network) {
+      isNetworkAvailable = false
       fetch.getDownloadsWithStatus(Status.DOWNLOADING) { activeDownloads ->
         activeDownloads.forEach { download ->
           taskFlow.tryEmit {
-            fetchDownloadNotificationManager.showDownloadPauseNotification(
-              fetch,
-              download,
-              isOffline = true
-            )
+            downloadRoomDao.getEntityForDownloadId(download.id.toLong())?.let {
+              downloadRoomDao.updateDownloadItem(
+                it.copy(pauseReason = PauseReason.NETWORK, status = Status.PAUSED)
+              )
+            }
           }
+
+          // Explicitly pause to notify Fetch that there is no connection to avoid network-related errors.
+          fetch.pause(download.id)
         }
       }
     }
   }
 
   /**
-   * Resumes all downloads that are currently in the QUEUED state
-   * when network connectivity becomes available.
+   * Resumes all downloads that were paused due to network loss.
    *
-   * It ensures that any downloads paused due to lack of connectivity
-   * are resumed automatically once the network is restored.
+   * Downloads in [PauseReason.NETWORK] state were explicitly paused by us in [onLost].
+   * We resume them here and reset their [PauseReason] to [PauseReason.NONE].
    */
   private fun resumeQueuedDownloadsOnNetworkAvailable() {
     scope?.launch {
-      fetch.getDownloadsWithStatus(listOf(Status.QUEUED, Status.FAILED)) { downloadsToResume ->
-        downloadsToResume.forEach { download ->
-          when (download.status) {
-            Status.FAILED if download.error in NETWORK_RELATED_ERRORS ->
-              fetch.retry(download.id)
-
-            Status.QUEUED -> fetch.resume(download.id)
-            else -> {}
-          }
-        }
+      // Resume downloads we explicitly paused in onLost.
+      downloadRoomDao.getDownloadsPausedByNetwork().forEach { entity ->
+        fetch.resume(entity.downloadId.toInt())
+        downloadRoomDao.updateDownloadItem(
+          entity.copy(pauseReason = PauseReason.NONE, status = Status.QUEUED)
+        )
+      }
+      // Retry downloads that Fetch moved to FAILED before onLost could pause them
+      fetch.getDownloadsWithStatus(Status.FAILED) { failed ->
+        failed
+          .filter { it.error in NETWORK_RELATED_ERRORS }
+          .forEach { fetch.retry(it.id) }
       }
     }
   }
@@ -429,6 +435,19 @@ class DownloadMonitorService : Service() {
     }
 
     override fun onResumed(download: Download) {
+
+      // Don't download if no internet connection is available.
+      if (!isNetworkAvailable) {
+        taskFlow.tryEmit {
+          downloadRoomDao.getEntityForDownloadId(download.id.toLong())?.let {
+            downloadRoomDao.updateDownloadItem(
+              it.copy(pauseReason = PauseReason.NETWORK, status = Status.PAUSED)
+            )
+          }
+        }
+        fetch.pause(download.id)
+        return
+      }
       update(download)
     }
 
@@ -468,10 +487,15 @@ class DownloadMonitorService : Service() {
         }
 
         if (download.isPaused()) {
+
+          // Checks if pause reason is NETWORK or User initiated
+          val isOffline =
+            downloadRoomDao.getEntityForDownloadId(download.id.toLong())?.pauseReason == PauseReason.NETWORK
+
           fetchDownloadNotificationManager.showDownloadPauseNotification(
             fetch,
             download,
-            isOffline = false
+            isOffline = isOffline
           )
         }
 
@@ -492,7 +516,7 @@ class DownloadMonitorService : Service() {
   private fun stopForegroundServiceIfNoActiveDownloads(fetch: Fetch) {
     taskFlow.tryEmit {
       fetch.getDownloadsWithStatus(
-        listOf(Status.NONE, Status.ADDED, Status.QUEUED, Status.DOWNLOADING)
+        listOf(Status.NONE, Status.ADDED, Status.QUEUED, Status.DOWNLOADING, Status.PAUSED)
       ) { activeDownloads ->
         if (activeDownloads.isEmpty()) {
           stopForegroundServiceForDownloads()
