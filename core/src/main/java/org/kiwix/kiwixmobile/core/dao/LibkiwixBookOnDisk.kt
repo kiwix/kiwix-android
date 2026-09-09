@@ -24,6 +24,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.BufferOverflow
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -32,6 +33,7 @@ import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapLatest
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
@@ -56,6 +58,7 @@ import java.io.File
 import java.util.concurrent.ConcurrentHashMap
 import javax.inject.Inject
 import javax.inject.Named
+import javax.inject.Provider
 import javax.inject.Singleton
 
 @Suppress("LongParameterList")
@@ -66,6 +69,7 @@ class LibkiwixBookOnDisk @Inject constructor(
   private val kiwixDataStore: KiwixDataStore,
   private val storageDeviceProvider: StorageDeviceProvider,
   private val zimFileReaderFactory: ZimFileReader.Factory,
+  private val downloadRoomDaoProvider: Provider<DownloadRoomDao>,
   @param:IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) {
   private val initMutex = Mutex()
@@ -93,9 +97,20 @@ class LibkiwixBookOnDisk @Inject constructor(
 
   private val fileObservers = ConcurrentHashMap<String, FileObserver>()
 
+  private val fileSystemEventChannel =
+    Channel<suspend () -> Unit>(
+      capacity = FILE_SYSTEM_EVENT_BUFFER_CAPACITY,
+      onBufferOverflow = BufferOverflow.DROP_OLDEST
+    )
+
   init {
     CoroutineScope(ioDispatcher).launch {
       runCatching { registerFileObservers() }.onFailure { it.printStackTrace() }
+      fileSystemEventChannel.receiveAsFlow().collect { event ->
+        runCatching {
+          event.invoke()
+        }.onFailure { it.printStackTrace() }
+      }
     }
   }
 
@@ -145,19 +160,17 @@ class LibkiwixBookOnDisk @Inject constructor(
   }
 
   private fun handleFileSystemEvent(watchDir: File, path: String, event: Int) {
-    val file = File(watchDir, path)
-    CoroutineScope(ioDispatcher).launch {
-      runCatching {
-        when (event) {
-          FileObserver.CREATE -> if (file.isDirectory) watchDirectory(file)
-          FileObserver.MOVED_TO -> handleMovedIn(file)
-          FileObserver.CLOSE_WRITE -> addZimFileIfValid(file)
-          FileObserver.DELETE, FileObserver.MOVED_FROM -> {
-            unwatchDirectory(file)
-            if (isZimFile(path)) deleteByPath(file.canonicalPath)
-          }
+    fileSystemEventChannel.trySend {
+      val file = File(watchDir, path)
+      when (event) {
+        FileObserver.CREATE -> if (file.isDirectory) watchDirectory(file)
+        FileObserver.MOVED_TO -> handleMovedIn(file)
+        FileObserver.CLOSE_WRITE -> addZimFileIfValid(file)
+        FileObserver.DELETE, FileObserver.MOVED_FROM -> {
+          unwatchDirectory(file)
+          if (isZimFile(path)) deleteByPath(file.canonicalPath)
         }
-      }.onFailure { it.printStackTrace() }
+      }
     }
   }
 
@@ -174,8 +187,11 @@ class LibkiwixBookOnDisk @Inject constructor(
     FileUtils.isValidZimFile(name) || FileUtils.isSplittedZimFile(name)
 
   private suspend fun addZimFileIfValid(file: File) {
-    if (isZimFile(file.name)) addBookFromFile(file)
+    if (isZimFile(file.name) && !isBeingDownloaded(file)) addBookFromFile(file)
   }
+
+  private fun isBeingDownloaded(file: File): Boolean =
+    downloadRoomDaoProvider.get().getActiveDownloadForFileName(file.name) != null
 
   private suspend fun addBookFromFile(file: File) {
     if (!file.isFileExist(ioDispatcher) || !file.isFile) return
@@ -402,5 +418,9 @@ class LibkiwixBookOnDisk @Inject constructor(
 
   private suspend fun updateLocalBooksFlow() {
     localBooksFlow.emit(getBooksList())
+  }
+
+  companion object {
+    private const val FILE_SYSTEM_EVENT_BUFFER_CAPACITY = 64
   }
 }

@@ -110,6 +110,21 @@ abstract class DownloadRoomDao {
   )
   abstract fun getEntityForFileName(fileName: String): DownloadRoomEntity?
 
+  @Query(
+    "SELECT * FROM DownloadRoomEntity WHERE " +
+      "file LIKE '%/' || :fileName COLLATE NOCASE AND status IN (:activeStatuses) LIMIT 1"
+  )
+  abstract fun getActiveDownloadForFileName(
+    fileName: String,
+    activeStatuses: List<Status> = listOf(
+      Status.NONE,
+      Status.ADDED,
+      Status.QUEUED,
+      Status.DOWNLOADING,
+      Status.PAUSED
+    )
+  ): DownloadRoomEntity?
+
   @Insert
   abstract fun saveDownload(downloadRoomEntity: DownloadRoomEntity)
 

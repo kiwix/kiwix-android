@@ -20,6 +20,7 @@ package org.kiwix.kiwixmobile.page.bookmarks
 
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
+import io.mockk.mockk
 import io.objectbox.BoxStore
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
@@ -29,6 +30,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.kiwix.kiwixmobile.BaseActivityTest
+import org.kiwix.kiwixmobile.core.dao.DownloadRoomDao
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookOnDisk
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookmarks
 import org.kiwix.kiwixmobile.core.page.bookmark.models.LibkiwixBookmarkItem
@@ -41,6 +43,7 @@ import org.kiwix.kiwixmobile.testutils.RetryRule
 import org.kiwix.libkiwix.Library
 import org.kiwix.libkiwix.Manager
 import java.io.File
+import javax.inject.Provider
 
 @HiltAndroidTest
 class ImportBookmarkTest : BaseActivityTest() {
@@ -115,6 +118,7 @@ class ImportBookmarkTest : BaseActivityTest() {
         kiwixDataStore,
         storageDeviceProvider,
         zimFileReaderFactory,
+        Provider<DownloadRoomDao> { mockk(relaxed = true) },
         Dispatchers.IO
       )
     libkiwixBookmarks =
