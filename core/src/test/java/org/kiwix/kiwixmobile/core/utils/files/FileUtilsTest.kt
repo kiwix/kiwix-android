@@ -38,14 +38,19 @@ import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.RegisterExtension
+import org.junit.jupiter.api.io.TempDir
 import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.entity.LibkiwixBook
 import org.kiwix.kiwixmobile.core.extensions.deleteFile
 import org.kiwix.kiwixmobile.core.extensions.isFileExist
 import org.kiwix.sharedFunctions.MainDispatcherRule
 import java.io.File
+import java.io.FileInputStream
 
 class FileUtilsTest {
+  @TempDir
+  lateinit var tempDir: File
+
   @RegisterExtension
   @JvmField
   val mainDispatcherRule = MainDispatcherRule()
@@ -354,4 +359,22 @@ class FileUtilsTest {
       FileUtils.getSafeFileNameAndSourceFromUrlOrSrc("https://kiwix.org/file:name.epub", null)
     assertEquals("filename.epub", result?.first)
   }
+
+  // ======== isFileDescriptorCanOpenWithLibkiwix ========
+
+  @Test
+  fun isFileDescriptorCanOpenWithLibkiwix_whenFileDescriptorIsNull_returnsFalse() {
+    assertFalse(FileUtils.isFileDescriptorCanOpenWithLibkiwix(null))
+  }
+
+  @Test
+  fun isFileDescriptorCanOpenWithLibkiwix_whenFileDescriptorIsClosed_returnsFalse() {
+    val file = File(tempDir, "closed.zim").apply { writeBytes(byteArrayOf(1)) }
+    val fd = FileInputStream(file).use { it.fd }
+    assertFalse(FileUtils.isFileDescriptorCanOpenWithLibkiwix(fd))
+  }
+
+  // The valid-fd success path goes through ParcelFileDescriptor.dup(), a real Android/JNI
+  // call not available under a plain JVM unit test (requires Robolectric or a device/emulator
+  // run). Covered on-device the same way as the dup()-based fix in kiwix/java-libkiwix#151.
 }
