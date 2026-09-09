@@ -133,6 +133,11 @@ abstract class DownloadRoomDao {
     reason: PauseReason = PauseReason.SERVICE
   ): List<DownloadRoomEntity>
 
+  @Query("SELECT * FROM DownloadRoomEntity WHERE pauseReason = :reason")
+  abstract fun getDownloadsPausedByNetwork(
+    reason: PauseReason = PauseReason.NETWORK
+  ): List<DownloadRoomEntity>
+
   suspend fun getOngoingDownloads(): List<DownloadModel> = allDownloads().first()
     .filter {
       it.state == Status.QUEUED ||
