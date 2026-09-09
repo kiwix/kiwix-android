@@ -359,7 +359,7 @@ internal class CoreReaderViewModelTest {
 
         slot.captured.invoke(ReadAloudManager.TtsState.AudioFocusGain)
 
-        assertThat(viewModel.uiState.value.pauseTtsButtonText).isEqualTo("Pause")
+        assertThat(viewModel.uiState.value.ttsControlsItem.contentDescription).isEqualTo("Pause")
       }
 
       @Test
@@ -369,7 +369,7 @@ internal class CoreReaderViewModelTest {
 
         slot.captured.invoke(ReadAloudManager.TtsState.AudioFocusLoss)
 
-        assertThat(viewModel.uiState.value.pauseTtsButtonText).isEqualTo("Resume")
+        assertThat(viewModel.uiState.value.ttsControlsItem.contentDescription).isEqualTo("Resume")
       }
 
       @Test
@@ -381,7 +381,7 @@ internal class CoreReaderViewModelTest {
         slot.captured.invoke(ReadAloudManager.TtsState.SpeakingEnded)
 
         verify { readerMenuState.onTextToSpeechStopped() }
-        assertThat(viewModel.uiState.value.showTtsControls).isFalse()
+        assertThat(viewModel.uiState.value.ttsControlsItem.showTtsControlsOverlay).isFalse()
       }
 
       @Test
@@ -393,7 +393,7 @@ internal class CoreReaderViewModelTest {
         slot.captured.invoke(ReadAloudManager.TtsState.SpeakingStarted)
 
         verify { readerMenuState.onTextToSpeechStarted() }
-        assertThat(viewModel.uiState.value.showTtsControls).isTrue()
+        assertThat(viewModel.uiState.value.ttsControlsItem.showTtsControlsOverlay).isTrue()
       }
 
       @Test
@@ -423,7 +423,7 @@ internal class CoreReaderViewModelTest {
 
         slot.captured.invoke(ReadAloudManager.TtsState.TtsPaused)
 
-        assertThat(viewModel.uiState.value.pauseTtsButtonText).isEqualTo("Resume")
+        assertThat(viewModel.uiState.value.ttsControlsItem.contentDescription).isEqualTo("Resume")
       }
 
       @Test
@@ -433,7 +433,7 @@ internal class CoreReaderViewModelTest {
 
         slot.captured.invoke(ReadAloudManager.TtsState.TtsResumed)
 
-        assertThat(viewModel.uiState.value.pauseTtsButtonText).isEqualTo("Pause")
+        assertThat(viewModel.uiState.value.ttsControlsItem.contentDescription).isEqualTo("Pause")
       }
 
       @Test
@@ -1331,7 +1331,9 @@ internal class CoreReaderViewModelTest {
 
       coEvery { readAloudManager.stopReadAloud() } just Runs
 
-      viewModel.updateUiStateForTest { copy(showTtsControls = true) }
+      viewModel.updateUiStateForTest {
+        copy(ttsControlsItem = ttsControlsItem.copy(isTtsPlaying = true))
+      }
       viewModel.onReadAloudMenuClicked()
       advanceUntilIdle()
       coVerify { readAloudManager.stopReadAloud() }
@@ -1340,17 +1342,17 @@ internal class CoreReaderViewModelTest {
     @Test
     fun onReadAloudMenuClicked_whenTtsControlsHidden_startsReadAloudFlow() = runTest {
       coEvery { kiwixPermissionChecker.hasNotificationPermission() } returns true
-      every { context.getString(string.tts_pause) } returns "Pause"
 
       every { readAloudManager.isTtsInitialed() } returns false
       every { readAloudManager.initializeTTS(false) } just Runs
 
-      viewModel.updateUiStateForTest { copy(showTtsControls = false) }
+      viewModel.updateUiStateForTest {
+        copy(ttsControlsItem = ttsControlsItem.copy(isTtsPlaying = false))
+      }
       viewModel.onReadAloudMenuClicked()
       advanceUntilIdle()
 
       verify { readAloudManager.initializeTTS(false) }
-      assertThat(viewModel.uiState.value.pauseTtsButtonText).isEqualTo("Pause")
     }
   }
 
@@ -1752,7 +1754,7 @@ internal class CoreReaderViewModelTest {
         every { mockWebView.scrollY } returns 250
         viewModel.updateUiStateForTest {
           copy(
-            showTtsControls = false,
+            ttsControlsItem = ttsControlsItem.copy(isTtsPlaying = false),
             showBackToTopButton = false
           )
         }
@@ -1782,7 +1784,12 @@ internal class CoreReaderViewModelTest {
       every { kiwixDataStore.backToTop } returns flowOf(true)
       every { mockWebView.scrollY } returns 150
 
-      viewModel.updateUiStateForTest { copy(showTtsControls = false, showBackToTopButton = true) }
+      viewModel.updateUiStateForTest {
+        copy(
+          ttsControlsItem = ttsControlsItem.copy(isTtsPlaying = false),
+          showBackToTopButton = true
+        )
+      }
 
       viewModel.webViewPageChanged(1, 10)
 
