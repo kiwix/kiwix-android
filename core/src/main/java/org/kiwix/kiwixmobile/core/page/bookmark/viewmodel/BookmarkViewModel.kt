@@ -18,10 +18,11 @@
 
 package org.kiwix.kiwixmobile.core.page.bookmark.viewmodel
 
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookmarks
 import org.kiwix.kiwixmobile.core.di.IoDispatcher
 import org.kiwix.kiwixmobile.core.page.bookmark.models.LibkiwixBookmarkItem
@@ -46,10 +47,18 @@ class BookmarkViewModel @Inject constructor(
     zimReaderContainer,
     ioDispatcher
   ) {
-  override fun initialState(): BookmarkState {
-    val showAll = runBlocking { kiwixDataStore.showBookmarksOfAllBooks.first() }
-    return BookmarkState(emptyList(), showAll, zimReaderContainer.id)
+  init {
+    // Seed initialState() with a synchronous default (no runBlocking on the caller's
+    // thread, which is main during ViewModel construction) and apply the real,
+    // DataStore-backed value once it's loaded.
+    viewModelScope.launch {
+      val showAll = kiwixDataStore.showBookmarksOfAllBooks.first()
+      updateState { it.copy(showAll = showAll) }
+    }
   }
+
+  override fun initialState(): BookmarkState =
+    BookmarkState(emptyList(), showAll = false, zimReaderContainer.id)
 
   override fun updatePagesBasedOnFilter(
     state: BookmarkState,

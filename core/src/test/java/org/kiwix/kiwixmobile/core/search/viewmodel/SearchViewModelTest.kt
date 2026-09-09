@@ -119,7 +119,10 @@ internal class SearchViewModelTest {
       val searchTerm1 = "query1"
       val searchTerm2 = "query2"
       val searchTerm3 = "query3"
-      val suggestionSearch: SuggestionSearch = mockk()
+      // relaxed: SuggestionSearch.dispose() is a native (JNI) method - a non-relaxed
+      // `every { ... }` stub would invoke it for real during recording and crash
+      // with UnsatisfiedLinkError in this plain-JVM test environment.
+      val suggestionSearch: SuggestionSearch = mockk(relaxed = true)
 
       viewModel.uiState.test {
         skipItems(1)
@@ -140,7 +143,10 @@ internal class SearchViewModelTest {
       val searchTerm1 = "query1"
       val searchTerm2 = "query2"
       val searchTerm3 = "query3"
-      val suggestionSearch: SuggestionSearch = mockk()
+      // relaxed: SuggestionSearch.dispose() is a native (JNI) method - a non-relaxed
+      // `every { ... }` stub would invoke it for real during recording and crash
+      // with UnsatisfiedLinkError in this plain-JVM test environment.
+      val suggestionSearch: SuggestionSearch = mockk(relaxed = true)
 
       viewModel.uiState.test {
         skipItems(1)
@@ -196,7 +202,10 @@ internal class SearchViewModelTest {
       runTest {
         val searchTerm = "searchTerm"
         val searchOrigin = FromWebView
-        val suggestionSearch: SuggestionSearch = mockk()
+        // relaxed: SuggestionSearch.dispose() is a native (JNI) method - a non-relaxed
+        // `every { ... }` stub would invoke it for real during recording and crash
+        // with UnsatisfiedLinkError in this plain-JVM test environment.
+        val suggestionSearch: SuggestionSearch = mockk(relaxed = true)
         viewModel.uiState.test {
           skipItems(1)
 
@@ -208,9 +217,10 @@ internal class SearchViewModelTest {
           )
           advanceUntilIdle()
 
-          skipItems(1)
-
-          val item = awaitItem()
+          // Use the most recent item rather than a fixed skipItems()/awaitItem() count -
+          // seeding the debounced query (see emissionOf()) emits one extra intermediate
+          // uiState update whose exact position isn't the point of this assertion.
+          val item = expectMostRecentItem()
           assertThat(item.searchState.searchTerm).isEqualTo(searchTerm)
           assertThat(item.searchState.recentResults).isEqualTo(listOf(RecentSearchListItem("", "")))
           assertThat(item.searchState.searchOrigin).isEqualTo(searchOrigin)
@@ -263,6 +273,11 @@ internal class SearchViewModelTest {
       coEvery {
         searchResultGenerator.generateSearchResults(searchTerm, zimFileReader)
       } returns suggestionSearch
+      // Also seed the debounced query, not just the raw Filter action - otherwise the
+      // still-"" debounced flow's own stale default fires later (once its debounce
+      // delay elapses under advanceUntilIdle()) and reverts filter back to "", which
+      // superseded the real SuggestionSearch and (correctly) disposed it.
+      viewModel.onSearchValueChanged(searchTerm)
       viewModel.actions.tryEmit(Filter(searchTerm))
       recentsFromDb.tryEmit(databaseResults)
       viewModel.actions.tryEmit(ScreenWasStartedFrom(searchOrigin))
