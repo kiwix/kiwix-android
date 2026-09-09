@@ -40,6 +40,9 @@ import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.iSO3ToLocale
 import org.kiwix.kiwixmobile.core.utils.TAG_KIWIX
 import org.kiwix.kiwixmobile.core.utils.files.Log
+import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.runBlocking
 import java.util.concurrent.atomic.AtomicInteger
 
 /**
@@ -55,7 +58,8 @@ class KiwixTextToSpeech internal constructor(
   private val onInitSucceedListener: OnInitSucceedListener,
   val onSpeakingListener: OnSpeakingListener,
   private var onAudioFocusChangeListener: OnAudioFocusChangeListener? = null,
-  private val zimReaderContainer: ZimReaderContainer
+  private val zimReaderContainer: ZimReaderContainer,
+  private val kiwixDataStore: KiwixDataStore
 ) {
   private var focusRequest: AudioFocusRequest? = null
   private val focusLock: Any = Any()
@@ -63,6 +67,20 @@ class KiwixTextToSpeech internal constructor(
 
   @JvmField var currentTTSTask: TTSTask? = null
   private lateinit var tts: TextToSpeech
+
+  var speechRate: Float = 1.0f
+    set(value) {
+      field = value
+      if (isInitialized) {
+        tts.setSpeechRate(value)
+        currentTTSTask?.let { task ->
+          if (!task.paused) {
+            task.pause()
+            task.start()
+          }
+        }
+      }
+    }
 
   /**
    * Initializes the TextToSpeech object.
@@ -75,6 +93,10 @@ class KiwixTextToSpeech internal constructor(
         if (status == TextToSpeech.SUCCESS) {
           Log.d(TAG_KIWIX, "TextToSpeech was initialized successfully.")
           isInitialized = true
+          runCatching {
+            val rate = runBlocking { kiwixDataStore.ttsSpeed.first() }
+            speechRate = rate
+          }.onFailure { it.printStackTrace() }
           onInitSucceedListener.onInitSucceed()
         } else {
           Log.e(TAG_KIWIX, "Initialization of TextToSpeech Failed!")
@@ -266,7 +288,9 @@ class KiwixTextToSpeech internal constructor(
     @JvmField var paused = true
     fun pause() {
       paused = true
-      currentPiece.decrementAndGet()
+      if (currentPiece.get() > 0) {
+        currentPiece.decrementAndGet()
+      }
       tts.setOnUtteranceProgressListener(null)
       tts.stop()
     }

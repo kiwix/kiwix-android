@@ -42,11 +42,13 @@ import org.kiwix.kiwixmobile.core.read_aloud.ReadAloudService.Companion.ACTION_S
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.utils.TAG_KIWIX
 import org.kiwix.kiwixmobile.core.utils.files.Log
+import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import javax.inject.Inject
 
 class ReadAloudManager @Inject constructor(
   @param:ApplicationContext private val context: Context,
-  private val zimReaderContainer: ZimReaderContainer
+  private val zimReaderContainer: ZimReaderContainer,
+  private val kiwixDataStore: KiwixDataStore
 ) {
   sealed interface TtsState {
     data object StartReadSelection : TtsState
@@ -133,7 +135,8 @@ class ReadAloudManager @Inject constructor(
         initListener,
         speakingListener,
         audioFocusChangedListener,
-        zimReaderContainer
+        zimReaderContainer,
+        kiwixDataStore
       )
   }
 
