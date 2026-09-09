@@ -44,6 +44,7 @@ import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.utils.TAG_KIWIX
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.files.Log
+import java.util.concurrent.atomic.AtomicBoolean
 import javax.inject.Inject
 
 class ReadAloudManager @Inject constructor(
@@ -70,6 +71,11 @@ class ReadAloudManager @Inject constructor(
   private var isReadSelection = false
   var currentTtsIndex: Int = 0
     private set
+
+  // AtomicBoolean, not a plain @Volatile boolean: a racing stop (onCleared, another
+  // thread) could otherwise land between a start's read and write and get undone,
+  // leaving the flag false while the service is actually running.
+  private val isServiceRunning = AtomicBoolean(false)
 
   fun setTtsStateCallback(callback: (TtsState) -> Unit) {
     ttsStateCallback = callback
@@ -181,6 +187,11 @@ class ReadAloudManager @Inject constructor(
   }
 
   private fun setActionAndStartTTSService(action: String, isPauseTTS: Boolean = false) {
+    if (action == ACTION_STOP_TTS) {
+      if (!isServiceRunning.compareAndSet(true, false)) return
+    } else {
+      isServiceRunning.set(true)
+    }
     context.startService(
       createReadAloudIntent(action, isPauseTTS)
     )
