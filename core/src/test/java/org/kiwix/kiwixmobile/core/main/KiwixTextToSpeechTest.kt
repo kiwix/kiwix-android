@@ -44,6 +44,7 @@ import org.junit.runner.RunWith
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
+import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore.Companion.DEFAULT_TTS_SPEED
 import kotlinx.coroutines.flow.flowOf
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.Shadows.shadowOf
@@ -54,6 +55,11 @@ import org.robolectric.shadows.ShadowToast
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [Build.VERSION_CODES.R])
 class KiwixTextToSpeechTest {
+  companion object {
+    private const val TEST_TTS_SPEED_2_0 = 2.0f
+    private const val TEST_TTS_SPEED_1_5 = 1.5f
+  }
+
   private val initListener: KiwixTextToSpeech.OnInitSucceedListener = mockk(relaxed = true)
   private val speakingListener: KiwixTextToSpeech.OnSpeakingListener = mockk(relaxed = true)
   private val focusListener: AudioManager.OnAudioFocusChangeListener = mockk(relaxed = true)
@@ -69,7 +75,7 @@ class KiwixTextToSpeechTest {
   fun setUp() {
     clearAllMocks()
     ShadowToast.reset()
-    every { kiwixDataStore.ttsSpeed } returns flowOf(1.0f)
+    every { kiwixDataStore.ttsSpeed } returns flowOf(DEFAULT_TTS_SPEED)
     context = spyk(ApplicationProvider.getApplicationContext())
     audioManager = mockk(relaxed = true)
     every { context.getSystemService(Context.AUDIO_SERVICE) } returns audioManager
@@ -499,10 +505,10 @@ class KiwixTextToSpeechTest {
     kiwixTts.isInitialized = true
     every { tts.setSpeechRate(any()) } returns TextToSpeech.SUCCESS
 
-    kiwixTts.speechRate = 1.5f
+    kiwixTts.speechRate = TEST_TTS_SPEED_1_5
 
-    verify { tts.setSpeechRate(1.5f) }
-    assertThat(kiwixTts.speechRate).isEqualTo(1.5f)
+    verify { tts.setSpeechRate(TEST_TTS_SPEED_1_5) }
+    assertThat(kiwixTts.speechRate).isEqualTo(TEST_TTS_SPEED_1_5)
   }
 
   @Test
@@ -510,23 +516,23 @@ class KiwixTextToSpeechTest {
     injectMockTts()
     kiwixTts.isInitialized = false
 
-    kiwixTts.speechRate = 1.5f
+    kiwixTts.speechRate = TEST_TTS_SPEED_1_5
 
     verify(exactly = 0) { tts.setSpeechRate(any()) }
-    assertThat(kiwixTts.speechRate).isEqualTo(1.5f)
+    assertThat(kiwixTts.speechRate).isEqualTo(TEST_TTS_SPEED_1_5)
   }
 
   @Test
   fun `initializeTTS success sets speech rate from datastore`() {
-    every { kiwixDataStore.ttsSpeed } returns flowOf(2.0f)
+    every { kiwixDataStore.ttsSpeed } returns flowOf(TEST_TTS_SPEED_2_0)
     val listener = initializeTtsAndGetListener()
     injectMockTts()
     every { tts.setSpeechRate(any()) } returns TextToSpeech.SUCCESS
 
     listener.onInit(TextToSpeech.SUCCESS)
 
-    assertThat(kiwixTts.speechRate).isEqualTo(2.0f)
-    verify { tts.setSpeechRate(2.0f) }
+    assertThat(kiwixTts.speechRate).isEqualTo(TEST_TTS_SPEED_2_0)
+    verify { tts.setSpeechRate(TEST_TTS_SPEED_2_0) }
   }
 
   @Test
@@ -538,7 +544,7 @@ class KiwixTextToSpeechTest {
     kiwixTts.currentTTSTask = task
     every { tts.setSpeechRate(any()) } returns TextToSpeech.SUCCESS
 
-    kiwixTts.speechRate = 1.5f
+    kiwixTts.speechRate = TEST_TTS_SPEED_1_5
 
     verify(exactly = 1) { task.pause() }
     verify(exactly = 1) { task.start() }
@@ -551,9 +557,9 @@ class KiwixTextToSpeechTest {
     kiwixTts.currentTTSTask = null
     every { tts.setSpeechRate(any()) } returns TextToSpeech.SUCCESS
 
-    kiwixTts.speechRate = 1.5f
+    kiwixTts.speechRate = TEST_TTS_SPEED_1_5
 
-    assertThat(kiwixTts.speechRate).isEqualTo(1.5f)
+    assertThat(kiwixTts.speechRate).isEqualTo(TEST_TTS_SPEED_1_5)
   }
 
   @Test
@@ -565,7 +571,7 @@ class KiwixTextToSpeechTest {
     kiwixTts.currentTTSTask = task
     every { tts.setSpeechRate(any()) } returns TextToSpeech.SUCCESS
 
-    kiwixTts.speechRate = 1.5f
+    kiwixTts.speechRate = TEST_TTS_SPEED_1_5
 
     verify(exactly = 0) { task.pause() }
     verify(exactly = 0) { task.start() }

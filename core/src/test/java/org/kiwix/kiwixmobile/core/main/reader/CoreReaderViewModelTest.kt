@@ -131,6 +131,10 @@ internal class CoreReaderViewModelTest {
   private val donationDialogHandler = mockk<DonationDialogHandler>()
   private val findInPageManager = mockk<FindInPageManager>(relaxed = true)
 
+  companion object {
+    private const val TEST_TTS_SPEED = 1.25f
+  }
+
   @RegisterExtension
   @JvmField
   val mainDispatcherRule = MainDispatcherRule()
@@ -1071,9 +1075,9 @@ internal class CoreReaderViewModelTest {
 
     @Test
     fun `ChangeTtsSpeed action should save speed to kiwixDataStore`() = runTest {
-      viewModel.onAction(ReaderAction.ChangeTtsSpeed(1.25f))
+      viewModel.onAction(ReaderAction.ChangeTtsSpeed(TEST_TTS_SPEED))
       advanceUntilIdle()
-      coVerify { kiwixDataStore.setTtsSpeed(1.25f) }
+      coVerify { kiwixDataStore.setTtsSpeed(TEST_TTS_SPEED) }
     }
   }
 

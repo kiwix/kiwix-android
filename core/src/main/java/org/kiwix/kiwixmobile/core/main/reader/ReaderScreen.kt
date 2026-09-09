@@ -178,6 +178,7 @@ import org.kiwix.kiwixmobile.core.utils.ComposeDimens.READER_BOTTOM_APP_BAR_BUTT
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.READER_BOTTOM_APP_BAR_DISABLE_BUTTON_ALPHA
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.READER_BOTTOM_APP_BAR_LAYOUT_HEIGHT
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SEARCH_PLACEHOLDER_TEXT_SIZE
+import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SIXTEEN_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TEN_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.THREE_DP
@@ -201,6 +202,7 @@ const val READER_BOTTOM_BAR_HOME_BUTTON_TESTING_TAG = "readerBottomBarHomeButton
 const val READER_BOTTOM_BAR_TABLE_CONTENT_BUTTON_TESTING_TAG =
   "readerBottomBarTableContentButtonTestingTag"
 const val TTS_CONTROL_STOP_BUTTON_TESTING_TAG = "ttsControlStopButtonTestingTag"
+const val TTS_CONTROL_SPEED_BUTTON_TESTING_TAG = "ttsControlSpeedButtonTestingTag"
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Suppress("ComposableLambdaParameterNaming", "LongMethod", "LongParameterList")
@@ -600,7 +602,6 @@ private fun NoBookOpenView(
 }
 
 @Composable
-@Suppress("LongMethod")
 private fun TtsControls(state: ReaderUiState, onReaderAction: (ReaderAction) -> Unit) {
   if (state.showTtsControls) {
     Row {
@@ -616,36 +617,11 @@ private fun TtsControls(state: ReaderUiState, onReaderAction: (ReaderAction) -> 
         )
       }
       Spacer(modifier = Modifier.width(FOUR_DP))
-      var expanded by remember { mutableStateOf(false) }
-      Box(modifier = Modifier.weight(1f)) {
-        Button(
-          onClick = { expanded = true },
-          modifier = Modifier
-            .fillMaxWidth()
-            .alpha(TTS_BUTTONS_CONTROL_ALPHA)
-        ) {
-          Text(
-            text = state.ttsSpeedText.uppercase(),
-            fontWeight = FontWeight.Bold
-          )
-        }
-        DropdownMenu(
-          expanded = expanded,
-          onDismissRequest = { expanded = false }
-        ) {
-          @Suppress("MagicNumber")
-          val speeds = listOf(0.5f, 0.75f, 1.0f, 1.25f, 1.5f, 1.75f, 2.0f, 2.5f)
-          speeds.forEach { speed ->
-            DropdownMenuItem(
-              text = { Text("${speed}X") },
-              onClick = {
-                expanded = false
-                onReaderAction(ChangeTtsSpeed(speed))
-              }
-            )
-          }
-        }
-      }
+      TtsSpeedButton(
+        ttsSpeedText = state.ttsSpeedText,
+        onSpeedSelected = { onReaderAction(ChangeTtsSpeed(it)) },
+        modifier = Modifier.weight(1f)
+      )
       Spacer(modifier = Modifier.width(FOUR_DP))
       Button(
         onClick = { onReaderAction(StopTts) },
@@ -657,6 +633,44 @@ private fun TtsControls(state: ReaderUiState, onReaderAction: (ReaderAction) -> 
         Text(
           text = stringResource(R.string.stop).uppercase(),
           fontWeight = FontWeight.Bold
+        )
+      }
+    }
+  }
+}
+
+@Composable
+private fun TtsSpeedButton(
+  ttsSpeedText: String,
+  onSpeedSelected: (Float) -> Unit,
+  modifier: Modifier = Modifier
+) {
+  var expanded by remember { mutableStateOf(false) }
+  Box(modifier = modifier) {
+    Button(
+      onClick = { expanded = true },
+      modifier = Modifier
+        .fillMaxWidth()
+        .alpha(TTS_BUTTONS_CONTROL_ALPHA)
+        .semantics { testTag = TTS_CONTROL_SPEED_BUTTON_TESTING_TAG }
+    ) {
+      Text(
+        text = ttsSpeedText.uppercase(),
+        fontWeight = FontWeight.Bold
+      )
+    }
+    DropdownMenu(
+      expanded = expanded,
+      onDismissRequest = { expanded = false }
+    ) {
+      KiwixDataStore.SUPPORTED_TTS_SPEEDS.forEach { speed ->
+        DropdownMenuItem(
+          text = { Text("${speed}X") },
+          modifier = Modifier.semantics { testTag = "TTS_SPEED_OPTION_${speed}X" },
+          onClick = {
+            expanded = false
+            onSpeedSelected(speed)
+          }
         )
       }
     }
