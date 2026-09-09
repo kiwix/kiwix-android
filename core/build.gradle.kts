@@ -55,4 +55,6 @@ dependencies {
   implementation(Libs.zxing)
   implementation(Libs.CORE_SPLASH_SCREEN)
   implementation(Libs.PLAYSTORE_REVIEW_KTX)
+  implementation(Libs.MEDIA3_SESSION)
+  implementation(Libs.MEDIA3_COMMON)
 }

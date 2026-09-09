@@ -23,14 +23,15 @@ import android.widget.FrameLayout
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.remember
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.click
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.longClick
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
-import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performTouchInput
 import androidx.navigation.compose.rememberNavController
 import io.mockk.every
@@ -639,262 +640,6 @@ class ReaderScreenComposablesTest {
   }
 
   @Test
-  fun ttsSpeedBottomSheet_selectPreset_triggersCallback() {
-    var action: ReaderAction? = null
-    composeTestRule.setContent {
-      TtsSpeedBottomSheetContent(
-        currentSpeed = 1.0f,
-        onSpeedChanged = { action = ReaderAction.ChangeTtsSpeed(it) }
-      )
-    }
-    composeTestRule.waitForIdle()
-
-    composeTestRule
-      .onNodeWithText("1.5")
-      .performClick()
-    composeTestRule.waitForIdle()
-
-    assertEquals(ReaderAction.ChangeTtsSpeed(TEST_TTS_SPEED), action)
-  }
-
-  @Test
-  fun ttsSpeedBottomSheet_selectHalfSpeedPreset_triggersCallback() {
-    var action: ReaderAction? = null
-    composeTestRule.setContent {
-      TtsSpeedBottomSheetContent(
-        currentSpeed = 1.0f,
-        onSpeedChanged = { action = ReaderAction.ChangeTtsSpeed(it) }
-      )
-    }
-    composeTestRule.waitForIdle()
-
-    composeTestRule
-      .onNodeWithText("0.5")
-      .performClick()
-    composeTestRule.waitForIdle()
-
-    assertEquals(ReaderAction.ChangeTtsSpeed(0.5f), action)
-  }
-
-  @Test
-  fun ttsSpeedBottomSheet_selectQuarterSpeedPreset_triggersCallback() {
-    var action: ReaderAction? = null
-    composeTestRule.setContent {
-      TtsSpeedBottomSheetContent(
-        currentSpeed = 1.0f,
-        onSpeedChanged = { action = ReaderAction.ChangeTtsSpeed(it) }
-      )
-    }
-    composeTestRule.waitForIdle()
-
-    composeTestRule
-      .onNodeWithText("0.75")
-      .performClick()
-    composeTestRule.waitForIdle()
-
-    assertEquals(ReaderAction.ChangeTtsSpeed(0.75f), action)
-  }
-
-  @Test
-  fun ttsSpeedBottomSheet_selectOneAndQuarterPreset_triggersCallback() {
-    var action: ReaderAction? = null
-    composeTestRule.setContent {
-      TtsSpeedBottomSheetContent(
-        currentSpeed = 1.0f,
-        onSpeedChanged = { action = ReaderAction.ChangeTtsSpeed(it) }
-      )
-    }
-    composeTestRule.waitForIdle()
-
-    composeTestRule
-      .onNodeWithText("1.25")
-      .performClick()
-    composeTestRule.waitForIdle()
-
-    assertEquals(ReaderAction.ChangeTtsSpeed(1.25f), action)
-  }
-
-  @Test
-  fun ttsSpeedBottomSheet_selectDoubleSpeedPreset_triggersCallback() {
-    var action: ReaderAction? = null
-    composeTestRule.setContent {
-      TtsSpeedBottomSheetContent(
-        currentSpeed = 1.0f,
-        onSpeedChanged = { action = ReaderAction.ChangeTtsSpeed(it) }
-      )
-    }
-    composeTestRule.waitForIdle()
-
-    composeTestRule
-      .onNodeWithText("2.0")
-      .performScrollTo()
-      .performClick()
-    composeTestRule.waitForIdle()
-
-    assertEquals(ReaderAction.ChangeTtsSpeed(2.0f), action)
-  }
-
-  @Test
-  fun ttsSpeedBottomSheet_selectMaxSpeedPreset_triggersCallback() {
-    var action: ReaderAction? = null
-    composeTestRule.setContent {
-      TtsSpeedBottomSheetContent(
-        currentSpeed = 1.0f,
-        onSpeedChanged = { action = ReaderAction.ChangeTtsSpeed(it) }
-      )
-    }
-    composeTestRule.waitForIdle()
-
-    composeTestRule
-      .onNodeWithText("2.5")
-      .performScrollTo()
-      .performClick()
-    composeTestRule.waitForIdle()
-
-    assertEquals(ReaderAction.ChangeTtsSpeed(2.5f), action)
-  }
-
-  @Test
-  fun ttsSpeedBottomSheet_decrementButton_triggersSpeedChange() {
-    var action: ReaderAction? = null
-    composeTestRule.setContent {
-      TtsSpeedBottomSheetContent(
-        currentSpeed = 1.0f,
-        onSpeedChanged = { action = ReaderAction.ChangeTtsSpeed(it) }
-      )
-    }
-    composeTestRule.waitForIdle()
-
-    composeTestRule
-      .onNodeWithTag(TTS_SPEED_DECREMENT_BUTTON_TESTING_TAG)
-      .performClick()
-    composeTestRule.waitForIdle()
-
-    assertEquals(ReaderAction.ChangeTtsSpeed(0.95f), action)
-  }
-
-  @Test
-  fun ttsSpeedBottomSheet_incrementButton_triggersSpeedChange() {
-    var action: ReaderAction? = null
-    composeTestRule.setContent {
-      TtsSpeedBottomSheetContent(
-        currentSpeed = 1.0f,
-        onSpeedChanged = { action = ReaderAction.ChangeTtsSpeed(it) }
-      )
-    }
-    composeTestRule.waitForIdle()
-
-    composeTestRule
-      .onNodeWithTag(TTS_SPEED_INCREMENT_BUTTON_TESTING_TAG)
-      .performClick()
-    composeTestRule.waitForIdle()
-
-    assertEquals(ReaderAction.ChangeTtsSpeed(1.05f), action)
-  }
-
-  @Test
-  fun ttsSpeedBottomSheet_decrementAtMinSpeed_clampedToMinimum() {
-    var lastSpeed: Float? = null
-    composeTestRule.setContent {
-      TtsSpeedBottomSheetContent(
-        currentSpeed = 0.5f,
-        onSpeedChanged = { lastSpeed = it }
-      )
-    }
-    composeTestRule.waitForIdle()
-
-    composeTestRule
-      .onNodeWithTag(TTS_SPEED_DECREMENT_BUTTON_TESTING_TAG)
-      .performClick()
-    composeTestRule.waitForIdle()
-
-    assertEquals(0.5f, lastSpeed)
-  }
-
-  @Test
-  fun ttsSpeedBottomSheet_incrementAtMaxSpeed_clampedToMaximum() {
-    var lastSpeed: Float? = null
-    composeTestRule.setContent {
-      TtsSpeedBottomSheetContent(
-        currentSpeed = 2.5f,
-        onSpeedChanged = { lastSpeed = it }
-      )
-    }
-    composeTestRule.waitForIdle()
-
-    composeTestRule
-      .onNodeWithTag(TTS_SPEED_INCREMENT_BUTTON_TESTING_TAG)
-      .performClick()
-    composeTestRule.waitForIdle()
-
-    assertEquals(2.5f, lastSpeed)
-  }
-
-  @Test
-  fun ttsSpeedBottomSheet_headerDisplaysFormattedSpeed() {
-    composeTestRule.setContent {
-      TtsSpeedBottomSheetContent(
-        currentSpeed = 1.25f,
-        onSpeedChanged = {}
-      )
-    }
-    composeTestRule.waitForIdle()
-
-    composeTestRule
-      .onNodeWithText("1.25x")
-      .assertIsDisplayed()
-  }
-
-  @Test
-  fun ttsSpeedBottomSheet_sliderIsDisplayed() {
-    composeTestRule.setContent {
-      TtsSpeedBottomSheetContent(
-        currentSpeed = 1.0f,
-        onSpeedChanged = {}
-      )
-    }
-    composeTestRule.waitForIdle()
-
-    composeTestRule
-      .onNodeWithTag(TTS_SPEED_SLIDER_TESTING_TAG)
-      .assertIsDisplayed()
-  }
-
-  @Test
-  fun ttsSpeedBottomSheet_normalLabelShownUnderDefaultPreset() {
-    composeTestRule.setContent {
-      TtsSpeedBottomSheetContent(
-        currentSpeed = 1.0f,
-        onSpeedChanged = {}
-      )
-    }
-    composeTestRule.waitForIdle()
-
-    composeTestRule
-      .onNodeWithText(context.getString(R.string.tts_normal_speed))
-      .assertIsDisplayed()
-  }
-
-  @Test
-  fun ttsSpeedBottomSheet_allSevenPresetsDisplayed() {
-    composeTestRule.setContent {
-      TtsSpeedBottomSheetContent(
-        currentSpeed = 1.0f,
-        onSpeedChanged = {}
-      )
-    }
-    composeTestRule.waitForIdle()
-
-    composeTestRule.onNodeWithText("0.5").assertExists()
-    composeTestRule.onNodeWithText("0.75").assertExists()
-    composeTestRule.onNodeWithText("1.0").assertExists()
-    composeTestRule.onNodeWithText("1.25").assertExists()
-    composeTestRule.onNodeWithText("1.5").assertExists()
-    composeTestRule.onNodeWithText("2.0").assertExists()
-    composeTestRule.onNodeWithText("2.5").assertExists()
-  }
-
-  @Test
   fun readerScreen_ttsSpeedButton_displaysFormattedSpeed() {
     val state = createTestState(
       ttsControlsItem = CoreReaderViewModel.TtsControlsItem(
@@ -906,44 +651,205 @@ class ReaderScreenComposablesTest {
     composeTestRule.waitForIdle()
 
     composeTestRule
-      .onNodeWithText("1.50x")
+      .onNodeWithText("1.5x")
       .assertIsDisplayed()
   }
 
   @Test
-  fun ttsSpeedBottomSheet_decrementAndIncrementButtons_displayed() {
-    composeTestRule.setContent {
-      TtsSpeedBottomSheetContent(
-        currentSpeed = 1.0f,
-        onSpeedChanged = {}
-      )
-    }
-    composeTestRule.waitForIdle()
-
-    composeTestRule
-      .onNodeWithTag(TTS_SPEED_DECREMENT_BUTTON_TESTING_TAG)
-      .assertIsDisplayed()
-    composeTestRule
-      .onNodeWithTag(TTS_SPEED_INCREMENT_BUTTON_TESTING_TAG)
-      .assertIsDisplayed()
-  }
-
-  @Test
-  fun ttsSpeedBottomSheet_selectNormalPreset_triggersCallback() {
+  fun readerScreen_ttsSpeedButton_click_cyclesToNextSpeed() {
     var action: ReaderAction? = null
-    composeTestRule.setContent {
-      TtsSpeedBottomSheetContent(
-        currentSpeed = 1.5f,
-        onSpeedChanged = { action = ReaderAction.ChangeTtsSpeed(it) }
+    val state = createTestState(
+      ttsControlsItem = CoreReaderViewModel.TtsControlsItem(
+        isTtsPlaying = true,
+        ttsSpeed = 1.0f
       )
-    }
+    )
+    renderReaderScreen(state, onReaderAction = { action = it })
     composeTestRule.waitForIdle()
 
     composeTestRule
-      .onNodeWithText("1.0")
+      .onNodeWithTag(TTS_CONTROL_SPEED_BUTTON_TESTING_TAG)
       .performClick()
     composeTestRule.waitForIdle()
 
-    assertEquals(ReaderAction.ChangeTtsSpeed(1.0f), action)
+    assertEquals(ReaderAction.ChangeTtsSpeed(1.25f), action)
+  }
+
+  @Test
+  fun readerScreen_ttsPlayPauseButton_triggersCallback() {
+    var action: ReaderAction? = null
+    val state = createTestState(
+      ttsControlsItem = CoreReaderViewModel.TtsControlsItem(
+        isTtsPlaying = true,
+        isTtsPaused = false
+      )
+    )
+    renderReaderScreen(state, onReaderAction = { action = it })
+    composeTestRule.waitForIdle()
+
+    composeTestRule
+      .onNodeWithTag(TTS_CONTROL_PLAY_PAUSE_BUTTON_TESTING_TAG)
+      .performClick()
+    composeTestRule.waitForIdle()
+
+    assertEquals(ReaderAction.PauseTts, action)
+  }
+
+  @Test
+  fun readerScreen_ttsStopButton_triggersCallback() {
+    var action: ReaderAction? = null
+    val state = createTestState(
+      ttsControlsItem = CoreReaderViewModel.TtsControlsItem(
+        isTtsPlaying = true
+      )
+    )
+    renderReaderScreen(state, onReaderAction = { action = it })
+    composeTestRule.waitForIdle()
+
+    composeTestRule
+      .onNodeWithTag(TTS_CONTROL_STOP_BUTTON_TESTING_TAG)
+      .performClick()
+    composeTestRule.waitForIdle()
+
+    assertEquals(ReaderAction.StopTts, action)
+  }
+
+  @Test
+  fun readerScreen_ttsRewind10Button_triggersCallback() {
+    var action: ReaderAction? = null
+    val state = createTestState(
+      ttsControlsItem = CoreReaderViewModel.TtsControlsItem(
+        isTtsPlaying = true
+      )
+    )
+    renderReaderScreen(state, onReaderAction = { action = it })
+    composeTestRule.waitForIdle()
+
+    composeTestRule
+      .onNodeWithTag(TTS_CONTROL_REWIND_10_BUTTON_TESTING_TAG)
+      .performClick()
+    composeTestRule.waitForIdle()
+
+    assertEquals(ReaderAction.RewindTts10s, action)
+  }
+
+  @Test
+  fun readerScreen_ttsForward10Button_triggersCallback() {
+    var action: ReaderAction? = null
+    val state = createTestState(
+      ttsControlsItem = CoreReaderViewModel.TtsControlsItem(
+        isTtsPlaying = true
+      )
+    )
+    renderReaderScreen(state, onReaderAction = { action = it })
+    composeTestRule.waitForIdle()
+
+    composeTestRule
+      .onNodeWithTag(TTS_CONTROL_FORWARD_10_BUTTON_TESTING_TAG)
+      .performClick()
+    composeTestRule.waitForIdle()
+
+    assertEquals(ReaderAction.ForwardTts10s, action)
+  }
+
+  @Test
+  fun readerScreen_ttsVoiceButton_triggersCallback() {
+    var action: ReaderAction? = null
+    val state = createTestState(
+      ttsControlsItem = CoreReaderViewModel.TtsControlsItem(
+        isTtsPlaying = true
+      )
+    )
+    renderReaderScreen(state, onReaderAction = { action = it })
+    composeTestRule.waitForIdle()
+
+    composeTestRule
+      .onNodeWithTag(TTS_CONTROL_VOICE_BUTTON_TESTING_TAG)
+      .performClick()
+    composeTestRule.waitForIdle()
+
+    assertEquals(ReaderAction.ShowVoiceSelectionDialog, action)
+  }
+
+  @Test
+  fun readerScreen_ttsVoiceSelectionDialog_displaysVoicesAndSelectsVoice() {
+    var action: ReaderAction? = null
+    val state = createTestState(
+      ttsControlsItem = CoreReaderViewModel.TtsControlsItem(
+        isTtsPlaying = true,
+        showVoiceSelectionDialog = true,
+        availableVoices = listOf("en-us-x-sfg#female_1", "en-us-x-sfg#male_1")
+      )
+    )
+    renderReaderScreen(state, onReaderAction = { action = it })
+    composeTestRule.waitForIdle()
+
+    composeTestRule
+      .onNodeWithTag(TTS_VOICE_SELECTION_DIALOG_TESTING_TAG)
+      .assertIsDisplayed()
+
+    composeTestRule
+      .onNodeWithText("Voice 1")
+      .assertIsDisplayed()
+      .performClick()
+    composeTestRule.waitForIdle()
+
+    assertEquals(ReaderAction.SelectTtsVoice("en-us-x-sfg#female_1"), action)
+  }
+
+  @Test
+  fun readerScreen_ttsControlsOverlay_clickOutside_dismissesOverlay() {
+    var action: ReaderAction? = null
+    val state = createTestState(
+      ttsControlsItem = CoreReaderViewModel.TtsControlsItem(
+        isTtsPlaying = true,
+        showTtsControlsOverlay = true
+      )
+    )
+    renderReaderScreen(state, onReaderAction = { action = it })
+    composeTestRule.waitForIdle()
+
+    composeTestRule
+      .onNodeWithTag(TTS_CONTROLS_OVERLAY_DISMISS_TESTING_TAG)
+      .performTouchInput { click(Offset(0f, 0f)) }
+    composeTestRule.waitForIdle()
+
+    assertEquals(ReaderAction.DismissTtsControlsOverlay, action)
+  }
+
+  @Test
+  fun readerScreen_ttsFloatingSpeakerButton_visibleWhenOverlayDismissed() {
+    val state = createTestState(
+      ttsControlsItem = CoreReaderViewModel.TtsControlsItem(
+        isTtsPlaying = true,
+        showTtsControlsOverlay = false
+      )
+    )
+    renderReaderScreen(state)
+    composeTestRule.waitForIdle()
+
+    composeTestRule
+      .onNodeWithTag(TTS_FLOATING_SPEAKER_BUTTON_TESTING_TAG)
+      .assertIsDisplayed()
+  }
+
+  @Test
+  fun readerScreen_ttsFloatingSpeakerButton_click_showsOverlay() {
+    var action: ReaderAction? = null
+    val state = createTestState(
+      ttsControlsItem = CoreReaderViewModel.TtsControlsItem(
+        isTtsPlaying = true,
+        showTtsControlsOverlay = false
+      )
+    )
+    renderReaderScreen(state, onReaderAction = { action = it })
+    composeTestRule.waitForIdle()
+
+    composeTestRule
+      .onNodeWithTag(TTS_FLOATING_SPEAKER_BUTTON_TESTING_TAG)
+      .performClick()
+    composeTestRule.waitForIdle()
+
+    assertEquals(ReaderAction.ShowTtsControlsOverlay, action)
   }
 }

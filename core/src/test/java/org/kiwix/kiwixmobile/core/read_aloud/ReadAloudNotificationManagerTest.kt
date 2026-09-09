@@ -36,6 +36,7 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 import org.kiwix.kiwixmobile.core.read_aloud.ReadAloudNotificationManager.Companion.READ_ALOUD_NOTIFICATION_ID
@@ -50,6 +51,7 @@ import org.robolectric.Shadows.shadowOf
 class ReadAloudNotificationManagerTest {
   private lateinit var context: Context
   private lateinit var notificationManager: NotificationManager
+  private lateinit var zimReaderContainer: ZimReaderContainer
   private lateinit var readAloudNotificationManager: ReadAloudNotificationManager
 
   @Before
@@ -57,7 +59,14 @@ class ReadAloudNotificationManagerTest {
     clearAllMocks()
     context = ApplicationProvider.getApplicationContext()
     notificationManager = mockk(relaxed = true)
-    readAloudNotificationManager = ReadAloudNotificationManager(notificationManager, context)
+    zimReaderContainer = mockk(relaxed = true)
+    every { zimReaderContainer.zimFileTitle } returns null
+    every { zimReaderContainer.name } returns null
+    readAloudNotificationManager = ReadAloudNotificationManager(
+      notificationManager,
+      context,
+      zimReaderContainer
+    )
   }
 
   private fun buildNotification(isPaused: Boolean): Notification =
@@ -69,7 +78,7 @@ class ReadAloudNotificationManagerTest {
 
     val pauseOrResumeAction = notification.actions[1]
 
-    assertThat(notification.actions).hasSize(2)
+    assertThat(notification.actions).hasSize(4)
     assertThat(pauseOrResumeAction.title)
       .isEqualTo(context.getString(R.string.tts_pause))
     assertThat(pauseOrResumeAction.icon)
@@ -82,7 +91,7 @@ class ReadAloudNotificationManagerTest {
 
     val pauseOrResumeAction = notification.actions[1]
 
-    assertThat(notification.actions).hasSize(2)
+    assertThat(notification.actions).hasSize(4)
     assertThat(pauseOrResumeAction.title)
       .isEqualTo(context.getString(R.string.tts_resume))
     assertThat(pauseOrResumeAction.icon)
@@ -90,12 +99,12 @@ class ReadAloudNotificationManagerTest {
   }
 
   @Test
-  fun `includes stop action as first button`() {
+  fun `includes stop action as last button`() {
     val notification = buildNotification(false)
     val actions = notification.actions
-    val stopAction = actions[0]
+    val stopAction = actions[3]
 
-    assertThat(actions).hasSize(2)
+    assertThat(actions).hasSize(4)
     assertThat(stopAction.title)
       .isEqualTo(context.getString(R.string.stop))
     assertThat(stopAction.icon)
@@ -103,10 +112,10 @@ class ReadAloudNotificationManagerTest {
   }
 
   @Test
-  fun `has exactly two actions in the notification`() {
+  fun `has exactly four actions in the notification`() {
     val notification = buildNotification(false)
 
-    assertThat(notification.actions).hasSize(2)
+    assertThat(notification.actions).hasSize(4)
   }
 
   @Test
@@ -119,6 +128,16 @@ class ReadAloudNotificationManagerTest {
     assertThat(contentTitle).isEqualTo(context.getString(R.string.menu_read_aloud))
     assertThat(contentText).isEqualTo(context.getString(R.string.read_aloud_running))
     assertThat(notification.contentIntent).isNull()
+  }
+
+  @Test
+  fun `sets ZIM file title as notification title when available`() {
+    every { zimReaderContainer.zimFileTitle } returns "Wikipedia (English)"
+    val notification = buildNotification(false)
+    val extras = notification.extras
+    val contentTitle = extras.getString(Notification.EXTRA_TITLE)
+
+    assertThat(contentTitle).isEqualTo("Wikipedia (English)")
   }
 
   @Test
@@ -162,10 +181,30 @@ class ReadAloudNotificationManagerTest {
   fun `stop action sends correct intent`() {
     val notification = buildNotification(false)
 
-    val stopAction = notification.actions[0]
+    val stopAction = notification.actions[3]
     val intent = shadowOf(stopAction.actionIntent).savedIntent
     assertThat(intent.action)
       .isEqualTo(ACTION_STOP_TTS)
+  }
+
+  @Test
+  fun `rewind action sends correct intent`() {
+    val notification = buildNotification(false)
+
+    val rewindAction = notification.actions[0]
+    val intent = shadowOf(rewindAction.actionIntent).savedIntent
+    assertThat(intent.action)
+      .isEqualTo(ReadAloudService.ACTION_REWIND_10)
+  }
+
+  @Test
+  fun `forward action sends correct intent`() {
+    val notification = buildNotification(false)
+
+    val forwardAction = notification.actions[2]
+    val intent = shadowOf(forwardAction.actionIntent).savedIntent
+    assertThat(intent.action)
+      .isEqualTo(ReadAloudService.ACTION_FORWARD_10)
   }
 
   @Test
@@ -200,14 +239,14 @@ class ReadAloudNotificationManagerTest {
   }
 
   @Test
-  fun `actions are ordered as stop then pause or resume`() {
+  fun `actions are ordered as rewind, pause or resume, forward, stop`() {
     val notification = buildNotification(false)
 
     val actions = notification.actions
 
-    assertThat(actions[0].title)
-      .isEqualTo(context.getString(R.string.stop))
-    assertThat(actions[1].title)
-      .isEqualTo(context.getString(R.string.tts_pause))
+    assertThat(actions[0].title).isEqualTo("-10s")
+    assertThat(actions[1].title).isEqualTo(context.getString(R.string.tts_pause))
+    assertThat(actions[2].title).isEqualTo("+10s")
+    assertThat(actions[3].title).isEqualTo(context.getString(R.string.stop))
   }
 }

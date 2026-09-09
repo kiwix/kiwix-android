@@ -303,7 +303,6 @@ class ReaderMenuState(
       menuItems += ActionMenuItem(
         contentDescription = if (isReadingAloud) R.string.menu_read_aloud_stop else R.string.menu_read_aloud,
         onClick = {
-          isReadingAloud = !isReadingAloud
           menuClickListener.onReadAloudMenuClicked()
         },
         testingTag = READ_ALOUD_MENU_ITEM_TESTING_TAG,
