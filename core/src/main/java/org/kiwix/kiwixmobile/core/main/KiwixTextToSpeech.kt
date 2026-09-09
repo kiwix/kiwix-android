@@ -80,8 +80,9 @@ class KiwixTextToSpeech internal constructor(
       field = value
       if (isInitialized) {
         tts.setSpeechRate(value)
+        // Android's TTS engine only applies a new rate to the NEXT speak() call, so replay the
+        // in-flight sentence to actually hear (and display) the new speed immediately.
         currentTTSTask?.let { task ->
-          task.recalculateDurations()
           if (!task.paused) {
             task.pause()
             task.start()
@@ -393,27 +394,19 @@ class KiwixTextToSpeech internal constructor(
   @Suppress("MagicNumber")
   inner class TTSTask(val pieces: List<String>) {
     private val currentPiece = AtomicInteger(0)
-    private val basePieceDurationsMs: LongArray = LongArray(pieces.size) { i ->
+
+    private val pieceDurationsMs: LongArray = LongArray(pieces.size) { i ->
       (pieces[i].length * 65L).coerceIn(1500L, 8000L)
     }
-    private val pieceDurationsMs: LongArray = LongArray(pieces.size)
     private val pieceStartOffsetsMs: LongArray = LongArray(pieces.size)
 
-    var totalDurationMs: Long = 0L
-      private set
+    val totalDurationMs: Long
 
     init {
-      recalculateDurations()
-    }
-
-    fun recalculateDurations() {
-      val rate = speechRate.coerceAtLeast(0.1f)
       var acc = 0L
       for (i in pieces.indices) {
-        val duration = (basePieceDurationsMs[i] / rate).toLong()
-        pieceDurationsMs[i] = duration
         pieceStartOffsetsMs[i] = acc
-        acc += duration
+        acc += pieceDurationsMs[i]
       }
       totalDurationMs = acc
     }
@@ -433,7 +426,9 @@ class KiwixTextToSpeech internal constructor(
         if (index < 0 || index >= pieceStartOffsetsMs.size) return 0L
         val baseOffset = pieceStartOffsetsMs[index]
         val elapsedInPiece = if (!paused && currentUtteranceStartMs > 0) {
-          (System.currentTimeMillis() - currentUtteranceStartMs).coerceAtLeast(0L)
+          val realElapsedMs = (System.currentTimeMillis() - currentUtteranceStartMs)
+            .coerceAtLeast(0L)
+          (realElapsedMs * speechRate).toLong()
         } else {
           0L
         }

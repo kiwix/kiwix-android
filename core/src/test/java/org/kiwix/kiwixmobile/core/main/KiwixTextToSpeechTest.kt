@@ -60,6 +60,7 @@ class KiwixTextToSpeechTest {
   companion object {
     private const val TEST_TTS_SPEED_2_0 = 2.0f
     private const val TEST_TTS_SPEED_1_5 = 1.5f
+    private const val ELAPSED_MS_FOR_RATE_TEST = 1000L
   }
 
   private val initListener: KiwixTextToSpeech.OnInitSucceedListener = mockk(relaxed = true)
@@ -578,5 +579,35 @@ class KiwixTextToSpeechTest {
 
     verify(exactly = 0) { task.pause() }
     verify(exactly = 0) { task.start() }
+  }
+
+  @Test
+  fun `currentPositionMs advances faster at a higher speech rate`() {
+    injectMockTts()
+    val task = kiwixTts.TTSTask(listOf("Hello world this is a test sentence for timing"))
+    task.paused = false
+    val startField = task.javaClass.getDeclaredField("currentUtteranceStartMs")
+    startField.isAccessible = true
+
+    kiwixTts.speechRate = DEFAULT_TTS_SPEED
+    startField.setLong(task, System.currentTimeMillis() - ELAPSED_MS_FOR_RATE_TEST)
+    val positionAt1x = task.currentPositionMs
+
+    kiwixTts.speechRate = TEST_TTS_SPEED_2_0
+    startField.setLong(task, System.currentTimeMillis() - ELAPSED_MS_FOR_RATE_TEST)
+    val positionAt2x = task.currentPositionMs
+
+    assertThat(positionAt2x).isGreaterThan(positionAt1x)
+  }
+
+  @Test
+  fun `totalDurationMs is unaffected by speech rate changes`() {
+    injectMockTts()
+    val task = kiwixTts.TTSTask(listOf("Hello world", "Second piece of text"))
+    val totalBefore = task.totalDurationMs
+
+    kiwixTts.speechRate = TEST_TTS_SPEED_2_0
+
+    assertThat(task.totalDurationMs).isEqualTo(totalBefore)
   }
 }
