@@ -24,6 +24,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.BufferOverflow
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -32,6 +33,7 @@ import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapLatest
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
@@ -95,16 +97,16 @@ class LibkiwixBookOnDisk @Inject constructor(
 
   private val fileObservers = ConcurrentHashMap<String, FileObserver>()
 
-  private val fileSystemEventFlow =
-    MutableSharedFlow<suspend () -> Unit>(
-      extraBufferCapacity = FILE_SYSTEM_EVENT_BUFFER_CAPACITY,
+  private val fileSystemEventChannel =
+    Channel<suspend () -> Unit>(
+      capacity = FILE_SYSTEM_EVENT_BUFFER_CAPACITY,
       onBufferOverflow = BufferOverflow.DROP_OLDEST
     )
 
   init {
     CoroutineScope(ioDispatcher).launch {
       runCatching { registerFileObservers() }.onFailure { it.printStackTrace() }
-      fileSystemEventFlow.collect { event ->
+      fileSystemEventChannel.receiveAsFlow().collect { event ->
         runCatching {
           event.invoke()
         }.onFailure { it.printStackTrace() }
@@ -158,7 +160,7 @@ class LibkiwixBookOnDisk @Inject constructor(
   }
 
   private fun handleFileSystemEvent(watchDir: File, path: String, event: Int) {
-    fileSystemEventFlow.tryEmit {
+    fileSystemEventChannel.trySend {
       val file = File(watchDir, path)
       when (event) {
         FileObserver.CREATE -> if (file.isDirectory) watchDirectory(file)
@@ -188,17 +190,8 @@ class LibkiwixBookOnDisk @Inject constructor(
     if (isZimFile(file.name) && !isBeingDownloaded(file)) addBookFromFile(file)
   }
 
-  /**
-   * CLOSE_WRITE fires every time a file descriptor open for writing on this file is
-   * closed, not only once the file is complete. Fetch closes/reopens the destination
-   * file across pauses, retries and network changes while a download is still in
-   * progress, so we'd otherwise try to parse a half-written ZIM header here. Downloads
-   * are already added to the library once they truly finish (see
-   * DownloadRoomDao.moveCompletedToBooksOnDiskDao), so it's safe to just skip files that
-   * still have a matching in-flight download entity.
-   */
   private fun isBeingDownloaded(file: File): Boolean =
-    downloadRoomDaoProvider.get().getEntityForFileName(file.name) != null
+    downloadRoomDaoProvider.get().getActiveDownloadForFileName(file.name) != null
 
   private suspend fun addBookFromFile(file: File) {
     if (!file.isFileExist(ioDispatcher) || !file.isFile) return
