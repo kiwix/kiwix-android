@@ -179,6 +179,7 @@ internal class CoreSettingsViewModelTest {
     // // Stub all KiwixDataStore Flow properties needed during ViewModel construction
     every { kiwixDataStore.appTheme } returns flowOf(ThemeConfig.Theme.SYSTEM)
     every { kiwixDataStore.backToTop } returns flowOf(false)
+    every { kiwixDataStore.articlePagination } returns flowOf(false)
     every { kiwixDataStore.externalLinkPopup } returns flowOf(true)
     every { kiwixDataStore.textZoom } returns flowOf(DEFAULT_ZOOM)
     every { kiwixDataStore.openNewTabInBackground } returns flowOf(false)
@@ -323,6 +324,23 @@ internal class CoreSettingsViewModelTest {
       coVerify {
         kiwixDataStore.setPrefBackToTop(true)
         kiwixDataStore.setPrefBackToTop(false)
+      }
+    }
+
+    @Test
+    fun `setArticlePagination delegates to kiwixDataStore`() = runTest {
+      coEvery { kiwixDataStore.setArticlePagination(any()) } just Runs
+      viewModel.setArticlePagination(true)
+      advanceUntilIdle()
+      coVerify { kiwixDataStore.setArticlePagination(true) }
+
+      // Toggles values
+      viewModel.setArticlePagination(true)
+      viewModel.setArticlePagination(false)
+      advanceUntilIdle()
+      coVerify {
+        kiwixDataStore.setArticlePagination(true)
+        kiwixDataStore.setArticlePagination(false)
       }
     }
 
@@ -501,6 +519,33 @@ internal class CoreSettingsViewModelTest {
       createViewModel()
 
       viewModel.backToTopEnabled.test {
+        // Assert initial item
+        assertFalse(awaitItem())
+        flow.emit(true)
+        assertTrue(awaitItem())
+        flow.emit(false)
+        assertFalse(awaitItem())
+        cancelAndIgnoreRemainingEvents()
+      }
+    }
+
+    @Test
+    fun `articlePaginationEnabled uses default when flow is empty`() = runTest {
+      every { kiwixDataStore.articlePagination } returns emptyFlow()
+
+      createViewModel()
+
+      assertFalse(viewModel.articlePaginationEnabled.value)
+    }
+
+    @Test
+    fun `articlePaginationEnabled emits values from datastore`() = runTest {
+      val flow = MutableStateFlow(false)
+      every { kiwixDataStore.articlePagination } returns flow
+
+      createViewModel()
+
+      viewModel.articlePaginationEnabled.test {
         // Assert initial item
         assertFalse(awaitItem())
         flow.emit(true)

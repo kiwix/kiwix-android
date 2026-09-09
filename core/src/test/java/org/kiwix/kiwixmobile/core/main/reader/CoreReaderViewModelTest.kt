@@ -152,6 +152,7 @@ internal class CoreReaderViewModelTest {
 
     every { kiwixPermissionChecker.isAndroid13orAbove() } returns false
     every { kiwixDataStore.backToTop } returns flowOf(false)
+    every { kiwixDataStore.articlePagination } returns flowOf(false)
     every { kiwixDataStore.appName } returns flowOf("Kiwix")
     every { readerIntentManager.events } returns MutableSharedFlow()
     every { bookmarkManager.bookmarkState } returns MutableStateFlow(BookmarkManager.BookmarkState())
@@ -181,7 +182,6 @@ internal class CoreReaderViewModelTest {
       findInPageManager,
       mainDispatcherRule.mainDispatcher
     )
-  }
 
   @AfterEach
   fun tearDown() {
@@ -1738,6 +1738,71 @@ internal class CoreReaderViewModelTest {
 
       advanceUntilIdle()
       assertThat(viewModel.uiState.value.showBackToTopButton).isFalse()
+    }
+
+    @Test
+    fun `webViewPageChanged does not touch pagination state when pagination is disabled`() =
+      runTest {
+        viewModel.webViewPageChanged(page = 5, maxPages = 20)
+        advanceUntilIdle()
+
+        assertThat(viewModel.uiState.value.paginationPageLabel).isEmpty()
+      }
+
+    @Test
+    fun `webViewPageChanged updates the pagination label and button state when enabled`() =
+      runTest {
+        every { kiwixDataStore.articlePagination } returns MutableStateFlow(true)
+
+        viewModel.webViewPageChanged(page = 5, maxPages = 20)
+        advanceUntilIdle()
+
+        val state = viewModel.uiState.value
+        assertThat(state.paginationPageLabel).isEqualTo("6/21")
+        assertThat(state.isPaginationUpEnabled).isTrue()
+        assertThat(state.isPaginationDownEnabled).isTrue()
+      }
+
+    @Test
+    fun `webViewPageChanged disables up button on the first page`() = runTest {
+      every { kiwixDataStore.articlePagination } returns MutableStateFlow(true)
+
+      viewModel.webViewPageChanged(page = 0, maxPages = 5)
+      advanceUntilIdle()
+
+      val state = viewModel.uiState.value
+      assertThat(state.isPaginationUpEnabled).isFalse()
+      assertThat(state.isPaginationDownEnabled).isTrue()
+    }
+
+    @Test
+    fun `webViewPageChanged disables down button on the last page`() = runTest {
+      every { kiwixDataStore.articlePagination } returns MutableStateFlow(true)
+
+      viewModel.webViewPageChanged(page = 5, maxPages = 5)
+      advanceUntilIdle()
+
+      val state = viewModel.uiState.value
+      assertThat(state.isPaginationUpEnabled).isTrue()
+      assertThat(state.isPaginationDownEnabled).isFalse()
+    }
+
+    @Test
+    fun `onPaginationDownClicked scrolls the current webView down by one viewport`() = runTest {
+      every { mockWebView.height } returns 800
+      viewModel.onPaginationDownClicked()
+      advanceUntilIdle()
+
+      verify { mockWebView.scrollBy(0, 800) }
+    }
+
+    @Test
+    fun `onPaginationUpClicked scrolls the current webView up by one viewport`() = runTest {
+      every { mockWebView.height } returns 800
+      viewModel.onPaginationUpClicked()
+      advanceUntilIdle()
+
+      verify { mockWebView.scrollBy(0, -800) }
     }
   }
 
