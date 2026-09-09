@@ -27,7 +27,6 @@ import android.view.Menu
 import android.view.ViewGroup
 import android.webkit.WebView
 import android.widget.FrameLayout
-import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -172,6 +171,13 @@ abstract class CoreReaderViewModel(
     val isBookmarked: Boolean = false
   )
 
+  data class TtsControlsItem(
+    val isTtsPlaying: Boolean = false,
+    val isTtsPaused: Boolean = false,
+    val ttsSpeed: Float = KiwixDataStore.DEFAULT_TTS_SPEED,
+    val contentDescription: String = ""
+  )
+
   data class ReaderUiState(
     val appName: String = "",
     val title: String = "",
@@ -181,7 +187,7 @@ abstract class CoreReaderViewModel(
     val videoView: FrameLayout? = null,
     val shouldShowFullScreen: Boolean = false,
     val showBackToTopButton: Boolean = false,
-    val showTtsControls: Boolean = false,
+    val ttsControlsItem: TtsControlsItem = TtsControlsItem(),
     val showTabSwitcher: Boolean = false,
     val showBottomBar: Boolean = true,
     val bookmarkButtonItem: BookmarkButtonItem = BookmarkButtonItem(
@@ -192,13 +198,11 @@ abstract class CoreReaderViewModel(
     val searchPlaceHolderItemForBrandedApps: Boolean = false,
     val isPreviousPageButtonEnable: Boolean = false,
     val isNextPageButtonEnable: Boolean = false,
-    val pauseTtsButtonText: String = "",
     val isTocButtonEnable: Boolean = false,
     val showTableOfContentDrawer: Boolean = false,
     val tableOfContentTitle: String = "",
     val documentSections: List<DocumentSection> = emptyList(),
     val showDonationPopup: Boolean = false,
-    val ttsSpeedText: String = "1.0X",
     val findInPageUiState: FindInPageManager.FindInPageUiState = FindInPageManager.FindInPageUiState()
   )
 
@@ -307,23 +311,30 @@ abstract class CoreReaderViewModel(
   private fun setTtsCallback() {
     readAloudManager.setTtsStateCallback { state ->
       when (state) {
-        AudioFocusGain -> updateTtsPausedButtonText(string.tts_pause)
-        AudioFocusLoss -> updateTtsPausedButtonText(string.tts_resume)
+        AudioFocusGain -> updateTtsIcon(isTtsPaused = false)
+        AudioFocusLoss -> updateTtsIcon(isTtsPaused = true)
         SpeakingEnded -> onReadAloudSpeakEnded()
         SpeakingStarted -> onReadAloudSpeakStarted()
         StartReadAloud -> startReadAloud()
         StartReadSelection -> startReadSelection()
-        TtsPaused -> updateTtsPausedButtonText(string.tts_resume)
-        TtsResumed -> updateTtsPausedButtonText(string.tts_pause)
+        TtsPaused -> updateTtsIcon(isTtsPaused = true)
+        TtsResumed -> updateTtsIcon(isTtsPaused = false)
         ShowTTSLanguageDownloadDialog -> emitEffect(ReaderEffect.ShowTTSLanguageDialog)
       }
     }
   }
 
-  private fun updateTtsPausedButtonText(
-    @StringRes string: Int
-  ) {
-    updateState { copy(pauseTtsButtonText = context.getString(string)) }
+  private fun updateTtsIcon(isTtsPaused: Boolean) {
+    updateState {
+      copy(
+        ttsControlsItem = ttsControlsItem.copy(
+          isTtsPaused = isTtsPaused,
+          contentDescription = context.getString(
+            if (isTtsPaused) string.tts_resume else string.tts_pause
+          )
+        )
+      )
+    }
   }
 
   private fun observeBookmarkState() = viewModelScope.launch {
@@ -353,7 +364,9 @@ abstract class CoreReaderViewModel(
       },
       viewModelScope.launch {
         kiwixDataStore.ttsSpeed.collect { speed ->
-          updateState { copy(ttsSpeedText = "${speed}X") }
+          updateState {
+            copy(ttsControlsItem = ttsControlsItem.copy(ttsSpeed = speed))
+          }
           readAloudManager.tts?.speechRate = speed
         }
       }
@@ -387,8 +400,11 @@ abstract class CoreReaderViewModel(
   private fun onReadAloudSpeakStarted() {
     updateState {
       copy(
-        showTtsControls = true,
-        pauseTtsButtonText = context.getString(string.tts_pause)
+        ttsControlsItem = ttsControlsItem.copy(
+          isTtsPlaying = true,
+          isTtsPaused = false,
+          contentDescription = context.getString(string.tts_pause)
+        )
       )
     }
     readerMenuState?.onTextToSpeechStarted()
@@ -398,8 +414,11 @@ abstract class CoreReaderViewModel(
     readerMenuState?.onTextToSpeechStopped()
     updateState {
       copy(
-        showTtsControls = false,
-        pauseTtsButtonText = context.getString(string.tts_pause)
+        ttsControlsItem = ttsControlsItem.copy(
+          isTtsPlaying = false,
+          isTtsPaused = false,
+          contentDescription = context.getString(string.tts_pause)
+        )
       )
     }
   }
@@ -646,7 +665,7 @@ abstract class CoreReaderViewModel(
         emitEffect(ReaderEffect.RequestNotificationPermission)
         return@launchInViewModelScope
       }
-      if (uiState.value.showTtsControls) {
+      if (uiState.value.ttsControlsItem.isTtsPlaying) {
         stopReadAloud()
         return@launchInViewModelScope
       }
@@ -672,7 +691,7 @@ abstract class CoreReaderViewModel(
       hideBackToTopButton()
     }
 
-    updateTtsPausedButtonText(string.tts_pause)
+    updateTtsIcon(isTtsPaused = false)
     if (readAloudManager.isTtsInitialed()) {
       startReadAloud()
     } else {
@@ -883,7 +902,7 @@ abstract class CoreReaderViewModel(
     launchInMainScope {
       if (!isBackToTopEnabled()) return@launchInMainScope
       val scrollY = getCurrentWebView().scrollY
-      if (scrollY > 200 && !uiState.value.showTtsControls) {
+      if (scrollY > 200 && !uiState.value.ttsControlsItem.isTtsPlaying) {
         showBackToTopButton()
         restartHideBackToTopTimer()
       } else {
