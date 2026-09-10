@@ -273,7 +273,7 @@ class ZimFileReader(
   @Suppress("UnreachableCode", "NestedBlockDepth", "ReturnCount")
   private suspend fun loadContent(uri: String, extension: String): InputStream? {
     val item = getItem(uri)
-    if (compressedExtensions.any { it != extension }) {
+    if (extension !in compressedExtensions) {
       item?.itemSize()?.let {
         // Check if the item size exceeds 1 MB
         if (it / KB > 1024) {
@@ -495,7 +495,7 @@ val String.decodeUrl: String
 
 // Truncate mime-type (everything after the first space and semi-colon(if exists)
 val String.truncateMimeType: String
-  get() = replace("^([^ ]+).*$", "$1").substringBefore(";")
+  get() = substringBefore(' ').substringBefore(';')
 
 // Encode question mark with %3F after getting url from checkUrl() method
 // for issue https://github.com/kiwix/kiwix-android/issues/2671
