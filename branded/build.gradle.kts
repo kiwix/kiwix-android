@@ -78,8 +78,8 @@ dependencies {
 fun ApplicationProductFlavor.createDownloadTask(
   file: File,
   brandedApp: BrandedApp
-): TaskProvider<Task> {
-  return tasks.register(
+): TaskProvider<Task> =
+  tasks.register(
     "download${
       name.replaceFirstChar {
         if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else "$it"
@@ -106,21 +106,21 @@ fun ApplicationProductFlavor.createDownloadTask(
       }
     }
   }
-}
 
 fun fetchRequest(urlString: String): Request {
   val url = urlString.replace("\"", "")
   return if (url.isAuthenticationUrl) {
-    Request.Builder()
+    Request
+      .Builder()
       .url(URI.create(url.removeAuthenticationFromUrl).toURL())
       .header(
         "Authorization",
         "Basic " +
           Base64.getEncoder().encodeToString(System.getenv(url.secretKey).toByteArray())
-      )
-      .build()
+      ).build()
   } else {
-    Request.Builder()
+    Request
+      .Builder()
       .url(URI.create(url).toURL())
       .build()
   }
@@ -178,8 +178,8 @@ fun writeZimFileDataInChunk(
 fun ApplicationProductFlavor.createDownloadTaskForPlayAssetDelivery(
   file: File,
   brandedApp: BrandedApp
-): TaskProvider<Task> {
-  return tasks.register(
+): TaskProvider<Task> =
+  tasks.register(
     "download${
       name.replaceFirstChar {
         if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else "$it"
@@ -205,7 +205,6 @@ fun ApplicationProductFlavor.createDownloadTaskForPlayAssetDelivery(
       }
     }
   }
-}
 
 val String.decodeUrl: String
   get() = URLDecoder.decode(this, "UTF-8")
@@ -214,7 +213,8 @@ val String.isAuthenticationUrl: Boolean
 
 val String.secretKey: String
   get() =
-    decodeUrl.substringAfter("{{", "")
+    decodeUrl
+      .substringAfter("{{", "")
       .substringBefore("}}", "")
       .trim()
 
@@ -279,10 +279,13 @@ afterEvaluate {
     it.dependsOn.add(tasks.getByName("download${flavorName}Zim"))
     it.dependsOn.add(tasks.getByName("assemble${flavorName}Release"))
   }
-  tasks.filter { it.name.contains("ReleaseBundleWithPlayAssetDelivery") }
+  tasks
+    .filter { it.name.contains("ReleaseBundleWithPlayAssetDelivery") }
     .forEach { releaseBundleWithPlayAssetDeliveryTask ->
       val flavorName =
-        releaseBundleWithPlayAssetDeliveryTask.name.substringAfter("publish")
+        releaseBundleWithPlayAssetDeliveryTask
+          .name
+          .substringAfter("publish")
           .substringBefore("ReleaseBundleWithPlayAssetDelivery")
       val downloadAndPutAssetTask = tasks.getByName("download${flavorName}ZimAndPutInAssetFolder")
       val bundleReleaseTask = tasks.getByName("bundle${flavorName}Release")

@@ -139,7 +139,7 @@ open class CoreWebViewClient(
   }
 
   override fun onRenderProcessGone(view: WebView?, detail: RenderProcessGoneDetail?): Boolean {
-    Log.e(TAG_KIWIX, "There is an error in rendering the webView: ${detail.toString()}")
+    Log.e(TAG_KIWIX, "There is an error in rendering the webView: $detail")
     view?.destroy()
     return true
   }

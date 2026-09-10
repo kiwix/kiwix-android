@@ -222,7 +222,6 @@ internal class CoreReaderViewModelTest {
       fun observeSettings_whenBackToTopIsFalse_hidesBackToTopButton() = runTest {
         every { kiwixDataStore.backToTop } returns flowOf(false)
 
-
         viewModel.updateUiStateForTest { copy(showBackToTopButton = true) }
 
         viewModel.initialize(coreMainActivity, alertDialogShower)
@@ -2176,7 +2175,9 @@ internal class CoreReaderViewModelTest {
       mockkStatic("org.kiwix.kiwixmobile.core.extensions.ContextExtensionsKt")
       every { context.navigateToAppSettings() } just Runs
 
-      every { context.getString(org.kiwix.kiwixmobile.core.R.string.request_storage) } returns "To access offline content we need access to your storage"
+      every {
+        context.getString(org.kiwix.kiwixmobile.core.R.string.request_storage)
+      } returns "To access offline content we need access to your storage"
       every { context.getString(org.kiwix.kiwixmobile.core.R.string.menu_settings) } returns "Settings"
 
       viewModel.effects.test {
@@ -2796,7 +2797,6 @@ internal class CoreReaderViewModelTest {
       every { readAloudManager.isTtsInitialed() } returns true
       coEvery { readAloudManager.readSelection(mockWebView) } just Runs
 
-
       viewModel.configureWebViewSelectionHandler(menu)
 
       val result = listenerSlot.captured.onMenuItemClick(menuItem)
@@ -2897,7 +2897,7 @@ internal class CoreReaderViewModelTest {
       }
 
     @Test
-    fun whenNavigationDrawerIsOpenFalseAndShowTableOfContentDrawer_emitsReaderActionCloseTocDrawerAndBackPressActivityExtensionsSuperShouldNotCall() =
+    fun whenNavigationDrawerIsOpenFalseAndShowTableOfContentDrawer_closesTocDrawerAndBackPressActivityExtensionsSuperShouldNotCall() =
       runTest {
         val viewModel = spyk(viewModel)
         viewModel.updateUiStateForTest { copy(showTableOfContentDrawer = true) }

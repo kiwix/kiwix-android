@@ -205,7 +205,8 @@ private fun CategoryItemRow(
       }
     )
     Text(
-      text = category.category.ifEmpty { context.getString(R.string.all_categories) }
+      text = category.category
+        .ifEmpty { context.getString(R.string.all_categories) }
         .toSentenceCaseCategory(),
       style = MaterialTheme.typography.bodyLarge
     )

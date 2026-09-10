@@ -34,8 +34,7 @@ import org.junit.runner.Description
 @OptIn(ExperimentalCoroutinesApi::class)
 class MainDispatcherRule(
   val dispatcher: TestDispatcher = StandardTestDispatcher()
-) :
-  TestWatcher(), BeforeEachCallback, AfterEachCallback {
+) : TestWatcher(), BeforeEachCallback, AfterEachCallback {
   val mainDispatcher: MainCoroutineDispatcher
     get() = Dispatchers.Main
 
