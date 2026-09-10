@@ -52,6 +52,7 @@ object ComposeDimens {
   val EIGHT_DP = 8.dp
   val SEVEN_DP = 7.dp
   val SIX_DP = 6.dp
+  val FOURTEEN_DP = 14.dp
   val FIVE_DP = 5.dp
   val FOUR_DP = 4.dp
   val THREE_DP = 3.dp
@@ -63,6 +64,9 @@ object ComposeDimens {
   val SIXTY_FOUR_DP = 64.dp
   val ONE_HUNDRED_FIFTY = 150.dp
   val TWENTY_TWO_DP = 22.dp
+  val TWENTY_EIGHT_DP = 28.dp
+  val FORTY_EIGHT_DP = 48.dp
+  val FIFTY_SIX_DP = 56.dp
 
   // Font Sizes
   val TWENTY_FOUR_SP = 24.sp

@@ -43,6 +43,11 @@ import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.runner.RunWith
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils
+import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
+import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore.Companion.DEFAULT_TTS_SPEED
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.flowOf
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.Shadows.shadowOf
 import org.robolectric.annotation.Config
@@ -52,10 +57,17 @@ import org.robolectric.shadows.ShadowToast
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [Build.VERSION_CODES.R])
 class KiwixTextToSpeechTest {
+  companion object {
+    private const val TEST_TTS_SPEED_2_0 = 2.0f
+    private const val TEST_TTS_SPEED_1_5 = 1.5f
+    private const val ELAPSED_MS_FOR_RATE_TEST = 1000L
+  }
+
   private val initListener: KiwixTextToSpeech.OnInitSucceedListener = mockk(relaxed = true)
   private val speakingListener: KiwixTextToSpeech.OnSpeakingListener = mockk(relaxed = true)
   private val focusListener: AudioManager.OnAudioFocusChangeListener = mockk(relaxed = true)
   private val zimReaderContainer: ZimReaderContainer = mockk(relaxed = true)
+  private val kiwixDataStore: KiwixDataStore = mockk(relaxed = true)
   private val webView: WebView = mockk(relaxed = true)
   private val tts: TextToSpeech = mockk(relaxed = true)
   private lateinit var context: Context
@@ -66,6 +78,7 @@ class KiwixTextToSpeechTest {
   fun setUp() {
     clearAllMocks()
     ShadowToast.reset()
+    every { kiwixDataStore.ttsSpeed } returns flowOf(DEFAULT_TTS_SPEED)
     context = spyk(ApplicationProvider.getApplicationContext())
     audioManager = mockk(relaxed = true)
     every { context.getSystemService(Context.AUDIO_SERVICE) } returns audioManager
@@ -74,7 +87,9 @@ class KiwixTextToSpeechTest {
       initListener,
       speakingListener,
       focusListener,
-      zimReaderContainer
+      zimReaderContainer,
+      kiwixDataStore,
+      CoroutineScope(Dispatchers.Unconfined)
     )
   }
 
@@ -338,7 +353,8 @@ class KiwixTextToSpeechTest {
       initListener,
       speakingListener,
       focusListener,
-      zimReaderContainer
+      zimReaderContainer,
+      kiwixDataStore
     )
     injectMockTts()
     every { tts.isSpeaking } returns false
@@ -485,5 +501,113 @@ class KiwixTextToSpeechTest {
 
     verify(exactly = 0) { speakingListener.onSpeakingStarted() }
     assertThat(kiwixTts.currentTTSTask).isNull()
+  }
+
+  @Test
+  fun `setting speechRate when initialized sets it on textToSpeech`() {
+    injectMockTts()
+    kiwixTts.isInitialized = true
+    every { tts.setSpeechRate(any()) } returns TextToSpeech.SUCCESS
+
+    kiwixTts.speechRate = TEST_TTS_SPEED_1_5
+
+    verify { tts.setSpeechRate(TEST_TTS_SPEED_1_5) }
+    assertThat(kiwixTts.speechRate).isEqualTo(TEST_TTS_SPEED_1_5)
+  }
+
+  @Test
+  fun `setting speechRate when not initialized does not set it on textToSpeech`() {
+    injectMockTts()
+    kiwixTts.isInitialized = false
+
+    kiwixTts.speechRate = TEST_TTS_SPEED_1_5
+
+    verify(exactly = 0) { tts.setSpeechRate(any()) }
+    assertThat(kiwixTts.speechRate).isEqualTo(TEST_TTS_SPEED_1_5)
+  }
+
+  @Test
+  fun `initializeTTS success sets speech rate from datastore`() {
+    every { kiwixDataStore.ttsSpeed } returns flowOf(TEST_TTS_SPEED_2_0)
+    val listener = initializeTtsAndGetListener()
+    injectMockTts()
+    every { tts.setSpeechRate(any()) } returns TextToSpeech.SUCCESS
+
+    listener.onInit(TextToSpeech.SUCCESS)
+
+    assertThat(kiwixTts.speechRate).isEqualTo(TEST_TTS_SPEED_2_0)
+    verify { tts.setSpeechRate(TEST_TTS_SPEED_2_0) }
+  }
+
+  @Test
+  fun `setting speechRate when speaking pauses and resumes the active task`() {
+    injectMockTts()
+    kiwixTts.isInitialized = true
+    val task = spyk(kiwixTts.TTSTask(listOf("Hello", "World")))
+    task.paused = false
+    kiwixTts.currentTTSTask = task
+    every { tts.setSpeechRate(any()) } returns TextToSpeech.SUCCESS
+
+    kiwixTts.speechRate = TEST_TTS_SPEED_1_5
+
+    verify(exactly = 1) { task.pause() }
+    verify(exactly = 1) { task.start() }
+  }
+
+  @Test
+  fun `setting speechRate when stopped does not pause or resume any task`() {
+    injectMockTts()
+    kiwixTts.isInitialized = true
+    kiwixTts.currentTTSTask = null
+    every { tts.setSpeechRate(any()) } returns TextToSpeech.SUCCESS
+
+    kiwixTts.speechRate = TEST_TTS_SPEED_1_5
+
+    assertThat(kiwixTts.speechRate).isEqualTo(TEST_TTS_SPEED_1_5)
+  }
+
+  @Test
+  fun `setting speechRate when task is paused does not pause or resume the task`() {
+    injectMockTts()
+    kiwixTts.isInitialized = true
+    val task = spyk(kiwixTts.TTSTask(listOf("Hello")))
+    task.paused = true
+    kiwixTts.currentTTSTask = task
+    every { tts.setSpeechRate(any()) } returns TextToSpeech.SUCCESS
+
+    kiwixTts.speechRate = TEST_TTS_SPEED_1_5
+
+    verify(exactly = 0) { task.pause() }
+    verify(exactly = 0) { task.start() }
+  }
+
+  @Test
+  fun `currentPositionMs advances faster at a higher speech rate`() {
+    injectMockTts()
+    val task = kiwixTts.TTSTask(listOf("Hello world this is a test sentence for timing"))
+    task.paused = false
+    val startField = task.javaClass.getDeclaredField("currentUtteranceStartMs")
+    startField.isAccessible = true
+
+    kiwixTts.speechRate = DEFAULT_TTS_SPEED
+    startField.setLong(task, System.currentTimeMillis() - ELAPSED_MS_FOR_RATE_TEST)
+    val positionAt1x = task.currentPositionMs
+
+    kiwixTts.speechRate = TEST_TTS_SPEED_2_0
+    startField.setLong(task, System.currentTimeMillis() - ELAPSED_MS_FOR_RATE_TEST)
+    val positionAt2x = task.currentPositionMs
+
+    assertThat(positionAt2x).isGreaterThan(positionAt1x)
+  }
+
+  @Test
+  fun `totalDurationMs is unaffected by speech rate changes`() {
+    injectMockTts()
+    val task = kiwixTts.TTSTask(listOf("Hello world", "Second piece of text"))
+    val totalBefore = task.totalDurationMs
+
+    kiwixTts.speechRate = TEST_TTS_SPEED_2_0
+
+    assertThat(task.totalDurationMs).isEqualTo(totalBefore)
   }
 }

@@ -123,7 +123,7 @@ fun ReaderScreenRoute(
     viewModel.updateTitle()
     LanguageUtils(activity).changeFont(activity, viewModel.kiwixDataStore)
   }
-  BindReadAloudService(activity, viewModel, uiState.showTtsControls)
+  BindReadAloudService(activity, viewModel, uiState.ttsControlsItem.isTtsPlaying)
   RegisterWebViewSelectionListener(activity, viewModel)
   CollectEffect(
     viewModel,

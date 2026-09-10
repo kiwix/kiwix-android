@@ -841,4 +841,64 @@ class KiwixDataStoreTest {
     kiwixDataStore.setRateAppPromptShown()
     assertThat(kiwixDataStore.rateAppPromptShown.first()).isTrue()
   }
+
+  @Test
+  fun `ttsSpeed returns DEFAULT_TTS_SPEED by default`() = runTest {
+    kiwixDataStore.ttsSpeed.test {
+      assertThat(awaitItem()).isEqualTo(KiwixDataStore.DEFAULT_TTS_SPEED)
+      cancelAndIgnoreRemainingEvents()
+    }
+  }
+
+  @Test
+  fun `setTtsSpeed persists the given value`() = runTest {
+    kiwixDataStore.setTtsSpeed(TEST_TTS_SPEED)
+    kiwixDataStore.ttsSpeed.test {
+      assertThat(awaitItem()).isEqualTo(TEST_TTS_SPEED)
+      cancelAndIgnoreRemainingEvents()
+    }
+  }
+
+  @Test
+  fun `selectedTtsVoice returns null by default`() = runTest {
+    kiwixDataStore.selectedTtsVoice.test {
+      assertThat(awaitItem()).isNull()
+      cancelAndIgnoreRemainingEvents()
+    }
+  }
+
+  @Test
+  fun `setSelectedTtsVoice persists the given value`() = runTest {
+    kiwixDataStore.setSelectedTtsVoice(TEST_TTS_VOICE)
+    kiwixDataStore.selectedTtsVoice.test {
+      assertThat(awaitItem()).isEqualTo(TEST_TTS_VOICE)
+      cancelAndIgnoreRemainingEvents()
+    }
+  }
+
+  @Test
+  fun `setSelectedTtsVoice overwrites a previously persisted value`() = runTest {
+    kiwixDataStore.setSelectedTtsVoice(TEST_TTS_VOICE)
+    kiwixDataStore.setSelectedTtsVoice(OTHER_TEST_TTS_VOICE)
+    kiwixDataStore.selectedTtsVoice.test {
+      assertThat(awaitItem()).isEqualTo(OTHER_TEST_TTS_VOICE)
+      cancelAndIgnoreRemainingEvents()
+    }
+  }
+
+  @Test
+  fun `setSelectedTtsVoice with null removes a previously persisted value`() = runTest {
+    kiwixDataStore.setSelectedTtsVoice(TEST_TTS_VOICE)
+    kiwixDataStore.setSelectedTtsVoice(null)
+    kiwixDataStore.selectedTtsVoice.test {
+      assertThat(awaitItem()).isNull()
+      cancelAndIgnoreRemainingEvents()
+    }
+  }
+
+  companion object {
+    private const val TEST_TTS_SPEED = 1.5f
+    private const val TEST_TTS_VOICE = "en-us-x-sfg-local"
+    private const val OTHER_TEST_TTS_VOICE = "en-us-x-tpf-local"
+  }
 }

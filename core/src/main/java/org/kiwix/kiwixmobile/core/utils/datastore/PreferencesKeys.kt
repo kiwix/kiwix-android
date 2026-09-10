@@ -19,12 +19,15 @@
 package org.kiwix.kiwixmobile.core.utils.datastore
 
 import androidx.datastore.preferences.core.booleanPreferencesKey
+import androidx.datastore.preferences.core.floatPreferencesKey
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.core.stringSetPreferencesKey
 
 object PreferencesKeys {
+  val PREF_TTS_SPEED = floatPreferencesKey(KiwixDataStore.PREF_TTS_SPEED)
+  val PREF_SELECTED_TTS_VOICE = stringPreferencesKey(KiwixDataStore.PREF_SELECTED_TTS_VOICE)
   val TEXT_ZOOM = intPreferencesKey(KiwixDataStore.TEXT_ZOOM)
   val TAG_CURRENT_FILE = stringPreferencesKey(org.kiwix.kiwixmobile.core.utils.TAG_CURRENT_FILE)
   val TAG_CURRENT_TAB = intPreferencesKey(org.kiwix.kiwixmobile.core.utils.TAG_CURRENT_TAB)

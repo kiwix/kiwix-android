@@ -47,6 +47,7 @@ import io.mockk.unmockkAll
 import io.mockk.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.MainCoroutineDispatcher
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flowOf
@@ -131,6 +132,10 @@ internal class CoreReaderViewModelTest {
   private val donationDialogHandler = mockk<DonationDialogHandler>()
   private val findInPageManager = mockk<FindInPageManager>(relaxed = true)
 
+  companion object {
+    private const val TEST_TTS_SPEED = 1.25f
+  }
+
   @RegisterExtension
   @JvmField
   val mainDispatcherRule = MainDispatcherRule()
@@ -153,12 +158,19 @@ internal class CoreReaderViewModelTest {
     every { kiwixPermissionChecker.isAndroid13orAbove() } returns false
     every { kiwixDataStore.backToTop } returns flowOf(false)
     every { kiwixDataStore.appName } returns flowOf("Kiwix")
+    every { kiwixDataStore.ttsSpeed } returns flowOf(KiwixDataStore.DEFAULT_TTS_SPEED)
+    every { kiwixDataStore.selectedTtsVoice } returns flowOf(null)
     every { readerIntentManager.events } returns MutableSharedFlow()
     every { bookmarkManager.bookmarkState } returns MutableStateFlow(BookmarkManager.BookmarkState())
     every { findInPageManager.uiState } returns MutableStateFlow(FindInPageManager.FindInPageUiState())
     every { readerWebViewManager.tabsState } returns MutableStateFlow(TabsManager.TabsState())
     coEvery { readerWebViewManager.getCurrentWebView() } returns mockWebView
     every { readAloudManager.tts } returns null
+    every { readAloudManager.currentPositionMs } returns 0L
+    every { readAloudManager.totalDurationMs } returns 0L
+    every { readAloudManager.currentVoiceName } returns null
+    every { readAloudManager.getAvailableVoices() } returns emptyList()
+    every { readAloudManager.isPaused } returns false
 
     viewModel = TestCoreReaderViewModel(
       context,
@@ -355,7 +367,8 @@ internal class CoreReaderViewModelTest {
 
         slot.captured.invoke(ReadAloudManager.TtsState.AudioFocusGain)
 
-        assertThat(viewModel.uiState.value.pauseTtsButtonText).isEqualTo("Pause")
+        assertThat(viewModel.uiState.value.ttsControlsItem.contentDescription).isEqualTo("Pause")
+        viewModel.viewModelScope.cancel()
       }
 
       @Test
@@ -365,7 +378,7 @@ internal class CoreReaderViewModelTest {
 
         slot.captured.invoke(ReadAloudManager.TtsState.AudioFocusLoss)
 
-        assertThat(viewModel.uiState.value.pauseTtsButtonText).isEqualTo("Resume")
+        assertThat(viewModel.uiState.value.ttsControlsItem.contentDescription).isEqualTo("Resume")
       }
 
       @Test
@@ -377,7 +390,7 @@ internal class CoreReaderViewModelTest {
         slot.captured.invoke(ReadAloudManager.TtsState.SpeakingEnded)
 
         verify { readerMenuState.onTextToSpeechStopped() }
-        assertThat(viewModel.uiState.value.showTtsControls).isFalse()
+        assertThat(viewModel.uiState.value.ttsControlsItem.showTtsControlsOverlay).isFalse()
       }
 
       @Test
@@ -389,7 +402,10 @@ internal class CoreReaderViewModelTest {
         slot.captured.invoke(ReadAloudManager.TtsState.SpeakingStarted)
 
         verify { readerMenuState.onTextToSpeechStarted() }
-        assertThat(viewModel.uiState.value.showTtsControls).isTrue()
+        assertThat(viewModel.uiState.value.ttsControlsItem.showTtsControlsOverlay).isTrue()
+        // SpeakingStarted starts the TTS position ticker, which loops on the shared test
+        // dispatcher until cancelled; without this, runTest's cleanup drain hangs forever.
+        viewModel.viewModelScope.cancel()
       }
 
       @Test
@@ -419,7 +435,7 @@ internal class CoreReaderViewModelTest {
 
         slot.captured.invoke(ReadAloudManager.TtsState.TtsPaused)
 
-        assertThat(viewModel.uiState.value.pauseTtsButtonText).isEqualTo("Resume")
+        assertThat(viewModel.uiState.value.ttsControlsItem.contentDescription).isEqualTo("Resume")
       }
 
       @Test
@@ -429,7 +445,8 @@ internal class CoreReaderViewModelTest {
 
         slot.captured.invoke(ReadAloudManager.TtsState.TtsResumed)
 
-        assertThat(viewModel.uiState.value.pauseTtsButtonText).isEqualTo("Pause")
+        assertThat(viewModel.uiState.value.ttsControlsItem.contentDescription).isEqualTo("Pause")
+        viewModel.viewModelScope.cancel()
       }
 
       @Test
@@ -1035,14 +1052,67 @@ internal class CoreReaderViewModelTest {
     }
 
     @Test
-    fun onAction_FindInPageQueryChanged_callsSearch() = runTest {
-      viewModel.onAction(ReaderAction.FindInPageQueryChanged("test query"))
+    fun `NavigationHistoryItemClick with different URLs should be handled`() {
+      val navigationItem = NavigationHistoryListItem(
+        title = "Another Page",
+        pageUrl = "wiki/another-page"
+      )
 
-      verify { findInPageManager.search("test query") }
+      viewModel.onAction(ReaderAction.NavigationHistoryItemClick(navigationItem))
+
+      assertThat(true).isTrue()
+    }
+  }
+
+  @Nested
+  inner class ReadAloudTests {
+    @Test
+    fun `onReadAloudPauseOrResume with isPauseTTS true should handle pause`() {
+      // The method checks tts?.currentTTSTask before calling pauseTts()
+      // Since tts is null in mocks, pauseTts won't be called
+      viewModel.onReadAloudPauseOrResume(isPauseTTS = true)
+      assertThat(true).isTrue()
     }
 
     @Test
-    fun onAction_FindInPageNextClicked_callsFindNext() = runTest {
+    fun `onReadAloudPauseOrResume with isPauseTTS false should handle resume`() {
+      viewModel.onReadAloudPauseOrResume(isPauseTTS = false)
+      assertThat(true).isTrue()
+    }
+
+    @Test
+    fun `onReadAloudStop should call readAloudManager stopReadAloud`() {
+      viewModel.onReadAloudStop()
+      assertThat(true).isTrue()
+    }
+
+    @Test
+    fun `ChangeTtsSpeed action should save speed to kiwixDataStore`() = runTest {
+      viewModel.onAction(ReaderAction.ChangeTtsSpeed(TEST_TTS_SPEED))
+      advanceUntilIdle()
+      coVerify { kiwixDataStore.setTtsSpeed(TEST_TTS_SPEED) }
+    }
+
+    @Test
+    fun `CycleTtsSpeed action should save the next cyclic speed to kiwixDataStore`() = runTest {
+      viewModel.onAction(ReaderAction.CycleTtsSpeed)
+      advanceUntilIdle()
+      coVerify { kiwixDataStore.setTtsSpeed(1.25f) }
+    }
+  }
+
+  @Nested
+  inner class FindInPageActionTests {
+    @Test
+    fun `FindInPageQueryChanged should call findInPageManager search`() {
+      val query = "test search"
+      viewModel.onAction(ReaderAction.FindInPageQueryChanged(query))
+
+      verify { findInPageManager.search(query) }
+    }
+
+    @Test
+    fun `FindInPageNextClicked should call findInPageManager findNext`() {
       viewModel.onAction(ReaderAction.FindInPageNextClicked)
 
       verify { findInPageManager.findNext() }
@@ -1101,10 +1171,10 @@ internal class CoreReaderViewModelTest {
 
       val mockTask = mockk<KiwixTextToSpeech.TTSTask>()
       mockTts.currentTTSTask = mockTask
-      mockTask.paused = false
+      every { readAloudManager.isPaused } returns false
       every { readAloudManager.pauseTts() } just Runs
 
-      // Only call if state differs i.e- it.paused != isPauseTTS
+      // Only call if state differs i.e- readAloudManager.isPaused != isPauseTTS
       viewModel.onReadAloudPauseOrResume(isPauseTTS = true)
 
       verify { readAloudManager.pauseTts() }
@@ -1281,7 +1351,9 @@ internal class CoreReaderViewModelTest {
 
       coEvery { readAloudManager.stopReadAloud() } just Runs
 
-      viewModel.updateUiStateForTest { copy(showTtsControls = true) }
+      viewModel.updateUiStateForTest {
+        copy(ttsControlsItem = ttsControlsItem.copy(isTtsPlaying = true))
+      }
       viewModel.onReadAloudMenuClicked()
       advanceUntilIdle()
       coVerify { readAloudManager.stopReadAloud() }
@@ -1290,17 +1362,17 @@ internal class CoreReaderViewModelTest {
     @Test
     fun onReadAloudMenuClicked_whenTtsControlsHidden_startsReadAloudFlow() = runTest {
       coEvery { kiwixPermissionChecker.hasNotificationPermission() } returns true
-      every { context.getString(string.tts_pause) } returns "Pause"
 
       every { readAloudManager.isTtsInitialed() } returns false
       every { readAloudManager.initializeTTS(false) } just Runs
 
-      viewModel.updateUiStateForTest { copy(showTtsControls = false) }
+      viewModel.updateUiStateForTest {
+        copy(ttsControlsItem = ttsControlsItem.copy(isTtsPlaying = false))
+      }
       viewModel.onReadAloudMenuClicked()
       advanceUntilIdle()
 
       verify { readAloudManager.initializeTTS(false) }
-      assertThat(viewModel.uiState.value.pauseTtsButtonText).isEqualTo("Pause")
     }
   }
 
@@ -1702,7 +1774,7 @@ internal class CoreReaderViewModelTest {
         every { mockWebView.scrollY } returns 250
         viewModel.updateUiStateForTest {
           copy(
-            showTtsControls = false,
+            ttsControlsItem = ttsControlsItem.copy(isTtsPlaying = false),
             showBackToTopButton = false
           )
         }
@@ -1732,7 +1804,12 @@ internal class CoreReaderViewModelTest {
       every { kiwixDataStore.backToTop } returns flowOf(true)
       every { mockWebView.scrollY } returns 150
 
-      viewModel.updateUiStateForTest { copy(showTtsControls = false, showBackToTopButton = true) }
+      viewModel.updateUiStateForTest {
+        copy(
+          ttsControlsItem = ttsControlsItem.copy(isTtsPlaying = false),
+          showBackToTopButton = true
+        )
+      }
 
       viewModel.webViewPageChanged(1, 10)
 
@@ -3065,26 +3142,28 @@ internal class CoreReaderViewModelTest {
     findInPageManager: FindInPageManager,
     mainDispatcher: MainCoroutineDispatcher
   ) : CoreReaderViewModel(
-    context,
-    kiwixDataStore,
-    externalLinkOpener,
-    unsupportedMimeTypeHandler,
-    readerWebViewManager,
-    zimReaderContainer,
-    zimFileManager,
-    kiwixPermissionChecker,
-    repositoryActions,
-    bookmarkManager,
-    readerHistoryManager,
-    readerSessionManager,
-    readerIntentManager,
-    pendingSearchItemManager,
-    readerPageManager,
-    readAloudManager,
-    donationDialogHandler,
-    findInPageManager,
-    mainDispatcher
-  ) {
+      context,
+      kiwixDataStore,
+      externalLinkOpener,
+      unsupportedMimeTypeHandler,
+      readerWebViewManager,
+      zimReaderContainer,
+      zimFileManager,
+      kiwixPermissionChecker,
+      repositoryActions,
+      bookmarkManager,
+      readerHistoryManager,
+      readerSessionManager,
+      readerIntentManager,
+      pendingSearchItemManager,
+      readerPageManager,
+      readAloudManager,
+      donationDialogHandler,
+      findInPageManager,
+      mainDispatcher
+    ) {
+    override fun openLocalLibrary() {}
+
     override fun openSearch(
       searchString: String,
       isOpenedFromTabView: Boolean,

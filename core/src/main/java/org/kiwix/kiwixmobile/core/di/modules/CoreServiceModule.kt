@@ -27,6 +27,7 @@ import dagger.hilt.android.components.ServiceComponent
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.android.scopes.ServiceScoped
 import org.kiwix.kiwixmobile.core.read_aloud.ReadAloudNotificationManager
+import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 
 @InstallIn(ServiceComponent::class)
 @Module
@@ -35,6 +36,8 @@ class CoreServiceModule {
   @ServiceScoped
   fun providesReadAloudNotificationManager(
     notificationManager: NotificationManager,
-    @ApplicationContext context: Context
-  ): ReadAloudNotificationManager = ReadAloudNotificationManager(notificationManager, context)
+    @ApplicationContext context: Context,
+    zimReaderContainer: ZimReaderContainer
+  ): ReadAloudNotificationManager =
+    ReadAloudNotificationManager(notificationManager, context, zimReaderContainer)
 }

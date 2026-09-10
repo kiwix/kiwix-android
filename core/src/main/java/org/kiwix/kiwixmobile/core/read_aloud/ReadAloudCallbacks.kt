@@ -21,4 +21,6 @@ package org.kiwix.kiwixmobile.core.read_aloud
 interface ReadAloudCallbacks {
   fun onReadAloudPauseOrResume(isPauseTTS: Boolean)
   fun onReadAloudStop()
+  fun onReadAloudRewind10s()
+  fun onReadAloudForward10s()
 }
