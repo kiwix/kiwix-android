@@ -217,7 +217,7 @@
   <string name="tag_vid">Video</string>
   <string name="tag_text_only">Nëmmen Text</string>
   <string name="tag_short_text">Kuerzen Text</string>
-  <string name="go_to_settings">Op d’Astellunge vum Hotspot goen</string>
+  <string name="go_to_settings">An d\'Hotspot-Astellunge goen</string>
   <string name="no_results">Keng Resultater</string>
   <string name="no_bookmarks">Keng Lieszeechen!</string>
   <string name="no_history">Keen Historique</string>
@@ -258,7 +258,7 @@
   <string name="open_article">Artikel opmaachen</string>
   <string name="delete_selected_notes">Déi ausgewielten Notize läschen?</string>
   <string name="external_link_copied_message">Externe Link an den Tëschespäicher kopéiert</string>
-  <string name="go_to_settings_label">Op d’Astellunge goen</string>
+  <string name="go_to_settings_label">An d\'Astellunge goen</string>
   <string name="save_or_open_unsupported_files_dialog_title">Dëse Fichier Späicheren oder Opmaachen?</string>
   <string name="save_or_open_unsupported_files_dialog_message">Wann dir „Opmaachen“ wielt, gëtt de Fichier an enger externer Lies-Applikatioun opgemaach.</string>
   <string name="donation_dialog_title">Maacht haut een Don</string>
