@@ -170,6 +170,7 @@ internal class CoreReaderViewModelTest {
     every { readAloudManager.totalDurationMs } returns 0L
     every { readAloudManager.currentVoiceName } returns null
     every { readAloudManager.getAvailableVoices() } returns emptyList()
+    every { readAloudManager.isPaused } returns false
 
     viewModel = TestCoreReaderViewModel(
       context,
@@ -1170,10 +1171,10 @@ internal class CoreReaderViewModelTest {
 
       val mockTask = mockk<KiwixTextToSpeech.TTSTask>()
       mockTts.currentTTSTask = mockTask
-      mockTask.paused = false
+      every { readAloudManager.isPaused } returns false
       every { readAloudManager.pauseTts() } just Runs
 
-      // Only call if state differs i.e- it.paused != isPauseTTS
+      // Only call if state differs i.e- readAloudManager.isPaused != isPauseTTS
       viewModel.onReadAloudPauseOrResume(isPauseTTS = true)
 
       verify { readAloudManager.pauseTts() }
