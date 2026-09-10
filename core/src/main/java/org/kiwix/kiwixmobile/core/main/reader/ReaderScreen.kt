@@ -143,7 +143,6 @@ import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderAction
 import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderAction.BackToTopButtonClick
 import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderAction.BookmarkClicked
 import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderAction.BookmarkLongClicked
-import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderAction.ChangeTtsSpeed
 import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderAction.CloseAllTabs
 import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderAction.CloseTab
 import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderAction.CloseTocDrawer
@@ -218,7 +217,6 @@ import org.kiwix.kiwixmobile.core.utils.HUNDERED
 import org.kiwix.kiwixmobile.core.utils.StyleUtils.fromHtml
 import org.kiwix.kiwixmobile.core.utils.ZERO
 import java.util.Locale
-import kotlin.math.abs
 import kotlin.math.roundToInt
 
 const val TAB_SWITCHER_VIEW_TESTING_TAG = "tabSwitcherViewTestingTag"
@@ -243,9 +241,6 @@ const val TTS_CONTROL_SLIDER_TESTING_TAG = "ttsControlSliderTestingTag"
 const val TTS_VOICE_SELECTION_DIALOG_TESTING_TAG = "ttsVoiceSelectionDialogTestingTag"
 const val TTS_FLOATING_SPEAKER_BUTTON_TESTING_TAG = "ttsFloatingSpeakerButtonTestingTag"
 const val TTS_CONTROLS_OVERLAY_DISMISS_TESTING_TAG = "ttsControlsOverlayDismissTestingTag"
-
-val CYCLIC_TTS_SPEEDS = listOf(1.0f, 1.25f, 1.5f, 1.75f, 2.0f, 2.5f, 0.5f, 0.75f)
-private const val TTS_SPEED_TOLERANCE = 0.01f
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Suppress("ComposableLambdaParameterNaming", "LongMethod", "LongParameterList")
@@ -851,16 +846,7 @@ private fun TtsControlButtonsRow(
     // 1. Speed button (cyclic)
     PlayerTooltip(stringResource(R.string.tts_speech_speed)) {
       Surface(
-        onClick = {
-          val currentIndex =
-            CYCLIC_TTS_SPEEDS.indexOfFirst { abs(it - ttsItem.ttsSpeed) < TTS_SPEED_TOLERANCE }
-          val nextSpeed = if (currentIndex != -1) {
-            CYCLIC_TTS_SPEEDS[(currentIndex + 1) % CYCLIC_TTS_SPEEDS.size]
-          } else {
-            1.0f
-          }
-          onReaderAction(ChangeTtsSpeed(nextSpeed))
-        },
+        onClick = { onReaderAction(ReaderAction.CycleTtsSpeed) },
         shape = CircleShape,
         color = MaterialTheme.colorScheme.surfaceContainerHigh,
         contentColor = MaterialTheme.colorScheme.onSurface,

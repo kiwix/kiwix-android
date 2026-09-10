@@ -1079,6 +1079,13 @@ internal class CoreReaderViewModelTest {
       advanceUntilIdle()
       coVerify { kiwixDataStore.setTtsSpeed(TEST_TTS_SPEED) }
     }
+
+    @Test
+    fun `CycleTtsSpeed action should save the next cyclic speed to kiwixDataStore`() = runTest {
+      viewModel.onAction(ReaderAction.CycleTtsSpeed)
+      advanceUntilIdle()
+      coVerify { kiwixDataStore.setTtsSpeed(1.25f) }
+    }
   }
 
   @Nested

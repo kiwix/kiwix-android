@@ -61,30 +61,6 @@ class KiwixDataStore @Inject constructor(
   @param:ApplicationContext val context: Context,
   @param:IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) {
-  val ttsSpeed: Flow<Float> = context.kiwixDataStore.data.map { prefs ->
-    prefs[PreferencesKeys.PREF_TTS_SPEED] ?: DEFAULT_TTS_SPEED
-  }
-
-  suspend fun setTtsSpeed(value: Float) {
-    context.kiwixDataStore.edit { prefs ->
-      prefs[PreferencesKeys.PREF_TTS_SPEED] = value
-    }
-  }
-
-  val selectedTtsVoice: Flow<String?> = context.kiwixDataStore.data.map { prefs ->
-    prefs[PreferencesKeys.PREF_SELECTED_TTS_VOICE]
-  }
-
-  suspend fun setSelectedTtsVoice(value: String?) {
-    context.kiwixDataStore.edit { prefs ->
-      if (value != null) {
-        prefs[PreferencesKeys.PREF_SELECTED_TTS_VOICE] = value
-      } else {
-        prefs.remove(PreferencesKeys.PREF_SELECTED_TTS_VOICE)
-      }
-    }
-  }
-
   val textZoom: Flow<Int> = context.kiwixDataStore.data.map { prefs ->
     prefs[PreferencesKeys.TEXT_ZOOM] ?: DEFAULT_ZOOM
   }
@@ -687,6 +663,30 @@ class KiwixDataStore @Inject constructor(
   suspend fun setRateAppPromptShown() {
     context.kiwixDataStore.edit { prefs ->
       prefs[PreferencesKeys.RATE_APP_PROMPT_SHOWN] = true
+    }
+  }
+
+  val ttsSpeed: Flow<Float> = context.kiwixDataStore.data.map { prefs ->
+    prefs[PreferencesKeys.PREF_TTS_SPEED] ?: DEFAULT_TTS_SPEED
+  }
+
+  suspend fun setTtsSpeed(value: Float) {
+    context.kiwixDataStore.edit { prefs ->
+      prefs[PreferencesKeys.PREF_TTS_SPEED] = value
+    }
+  }
+
+  val selectedTtsVoice: Flow<String?> = context.kiwixDataStore.data.map { prefs ->
+    prefs[PreferencesKeys.PREF_SELECTED_TTS_VOICE]
+  }
+
+  suspend fun setSelectedTtsVoice(value: String?) {
+    context.kiwixDataStore.edit { prefs ->
+      if (value != null) {
+        prefs[PreferencesKeys.PREF_SELECTED_TTS_VOICE] = value
+      } else {
+        prefs.remove(PreferencesKeys.PREF_SELECTED_TTS_VOICE)
+      }
     }
   }
 

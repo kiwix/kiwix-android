@@ -652,7 +652,7 @@ class ReaderScreenComposablesTest {
   }
 
   @Test
-  fun readerScreen_ttsSpeedButton_click_cyclesToNextSpeed() {
+  fun readerScreen_ttsSpeedButton_click_dispatchesCycleTtsSpeed() {
     var action: ReaderAction? = null
     val state = createTestState(
       ttsControlsItem = CoreReaderViewModel.TtsControlsItem(
@@ -668,7 +668,7 @@ class ReaderScreenComposablesTest {
       .performClick()
     composeTestRule.waitForIdle()
 
-    assertEquals(ReaderAction.ChangeTtsSpeed(1.25f), action)
+    assertEquals(ReaderAction.CycleTtsSpeed, action)
   }
 
   @Test

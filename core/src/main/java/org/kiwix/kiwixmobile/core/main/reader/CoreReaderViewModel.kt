@@ -46,6 +46,7 @@ import androidx.core.net.toUri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavOptions
+import kotlin.math.abs
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.MainCoroutineDispatcher
@@ -232,6 +233,7 @@ abstract class CoreReaderViewModel(
     data object PauseTts : ReaderAction
     data object StopTts : ReaderAction
     data class ChangeTtsSpeed(val speed: Float) : ReaderAction
+    data object CycleTtsSpeed : ReaderAction
     data object RewindTts10s : ReaderAction
     data object ForwardTts10s : ReaderAction
     data class SeekTts(val positionMs: Long) : ReaderAction
@@ -361,6 +363,7 @@ abstract class CoreReaderViewModel(
       copy(
         ttsControlsItem = ttsControlsItem.copy(
           isTtsPaused = isTtsPaused,
+          currentPositionMs = readAloudManager.currentPositionMs,
           contentDescription = context.getString(
             if (isTtsPaused) string.tts_resume else string.tts_pause
           )
@@ -538,6 +541,14 @@ abstract class CoreReaderViewModel(
   }
 
   override fun onReadAloudRewind10s() {
+    rewindTts()
+  }
+
+  override fun onReadAloudForward10s() {
+    forwardTts()
+  }
+
+  private fun rewindTts() {
     readAloudManager.rewind10s()
     updateState {
       copy(
@@ -548,7 +559,7 @@ abstract class CoreReaderViewModel(
     }
   }
 
-  override fun onReadAloudForward10s() {
+  private fun forwardTts() {
     readAloudManager.forward10s()
     updateState {
       copy(
@@ -599,104 +610,20 @@ abstract class CoreReaderViewModel(
       ReaderAction.OpenTocDrawer -> updateState { copy(showTableOfContentDrawer = true) }
       ReaderAction.CloseTocDrawer -> updateState { copy(showTableOfContentDrawer = false) }
       ReaderAction.BackToTopButtonClick -> backToTop()
-      ReaderAction.PauseTts -> {
-        readAloudManager.pauseTts()
-        val isPaused = readAloudManager.tts?.currentTTSTask?.paused ?: false
-        updateState {
-          copy(
-            ttsControlsItem = ttsControlsItem.copy(
-              isTtsPaused = isPaused,
-              currentPositionMs = readAloudManager.currentPositionMs,
-              contentDescription = context.getString(
-                if (isPaused) string.tts_resume else string.tts_pause
-              )
-            )
-          )
-        }
-      }
-
+      ReaderAction.PauseTts -> readAloudManager.pauseTts()
       ReaderAction.StopTts -> launchInViewModelScope { stopReadAloud() }
       is ReaderAction.ChangeTtsSpeed -> changeTtsSpeed(action.speed)
-      ReaderAction.RewindTts10s -> {
-        readAloudManager.rewind10s()
-        updateState {
-          copy(
-            ttsControlsItem = ttsControlsItem.copy(
-              currentPositionMs = readAloudManager.currentPositionMs
-            )
-          )
-        }
-      }
-
-      ReaderAction.ForwardTts10s -> {
-        readAloudManager.forward10s()
-        updateState {
-          copy(
-            ttsControlsItem = ttsControlsItem.copy(
-              currentPositionMs = readAloudManager.currentPositionMs
-            )
-          )
-        }
-      }
-
-      is ReaderAction.SeekTts -> {
-        readAloudManager.seekTo(action.positionMs)
-        updateState {
-          copy(
-            ttsControlsItem = ttsControlsItem.copy(
-              currentPositionMs = action.positionMs
-            )
-          )
-        }
-      }
-
-      ReaderAction.ShowVoiceSelectionDialog -> {
-        val voices = readAloudManager.getAvailableVoices().map { it.name }
-        val currentVoiceName = readAloudManager.currentVoiceName
-          ?: uiState.value.ttsControlsItem.selectedVoiceName
-          ?: voices.firstOrNull()
-        updateState {
-          copy(
-            ttsControlsItem = ttsControlsItem.copy(
-              showVoiceSelectionDialog = true,
-              availableVoices = voices,
-              selectedVoiceName = currentVoiceName
-            )
-          )
-        }
-      }
-
+      ReaderAction.CycleTtsSpeed -> cycleTtsSpeed()
+      ReaderAction.RewindTts10s -> rewindTts()
+      ReaderAction.ForwardTts10s -> forwardTts()
+      is ReaderAction.SeekTts -> seekTts(action.positionMs)
+      ReaderAction.ShowVoiceSelectionDialog -> showVoiceSelectionDialog()
       ReaderAction.DismissVoiceSelectionDialog -> updateState {
         copy(ttsControlsItem = ttsControlsItem.copy(showVoiceSelectionDialog = false))
       }
 
-      is ReaderAction.SelectTtsVoice -> {
-        readAloudManager.setVoiceByName(action.voiceName)
-        updateState {
-          copy(
-            ttsControlsItem = ttsControlsItem.copy(
-              selectedVoiceName = action.voiceName,
-              showVoiceSelectionDialog = false
-            )
-          )
-        }
-      }
-
-      ReaderAction.ShowTtsControlsOverlay -> updateState {
-        val isPaused = readAloudManager.tts?.currentTTSTask?.paused ?: false
-        copy(
-          ttsControlsItem = ttsControlsItem.copy(
-            showTtsControlsOverlay = true,
-            currentPositionMs = readAloudManager.currentPositionMs,
-            totalDurationMs = readAloudManager.totalDurationMs,
-            isTtsPaused = isPaused,
-            contentDescription = context.getString(
-              if (isPaused) string.tts_resume else string.tts_pause
-            )
-          )
-        )
-      }
-
+      is ReaderAction.SelectTtsVoice -> selectTtsVoice(action.voiceName)
+      ReaderAction.ShowTtsControlsOverlay -> showTtsControlsOverlay()
       ReaderAction.DismissTtsControlsOverlay -> updateState {
         copy(ttsControlsItem = ttsControlsItem.copy(showTtsControlsOverlay = false))
       }
@@ -899,6 +826,70 @@ abstract class CoreReaderViewModel(
   private fun changeTtsSpeed(speed: Float) {
     launchInViewModelScope {
       kiwixDataStore.setTtsSpeed(speed)
+    }
+  }
+
+  private fun cycleTtsSpeed() {
+    val currentIndex = CYCLIC_TTS_SPEEDS.indexOfFirst {
+      abs(it - uiState.value.ttsControlsItem.ttsSpeed) < TTS_SPEED_TOLERANCE
+    }
+    val nextSpeed = if (currentIndex != -1) {
+      CYCLIC_TTS_SPEEDS[(currentIndex + 1) % CYCLIC_TTS_SPEEDS.size]
+    } else {
+      KiwixDataStore.DEFAULT_TTS_SPEED
+    }
+    changeTtsSpeed(nextSpeed)
+  }
+
+  private fun seekTts(positionMs: Long) {
+    readAloudManager.seekTo(positionMs)
+    updateState {
+      copy(ttsControlsItem = ttsControlsItem.copy(currentPositionMs = positionMs))
+    }
+  }
+
+  private fun showVoiceSelectionDialog() {
+    val voices = readAloudManager.getAvailableVoices().map { it.name }
+    val currentVoiceName = readAloudManager.currentVoiceName
+      ?: uiState.value.ttsControlsItem.selectedVoiceName
+      ?: voices.firstOrNull()
+    updateState {
+      copy(
+        ttsControlsItem = ttsControlsItem.copy(
+          showVoiceSelectionDialog = true,
+          availableVoices = voices,
+          selectedVoiceName = currentVoiceName
+        )
+      )
+    }
+  }
+
+  private fun selectTtsVoice(voiceName: String) {
+    readAloudManager.setVoiceByName(voiceName)
+    updateState {
+      copy(
+        ttsControlsItem = ttsControlsItem.copy(
+          selectedVoiceName = voiceName,
+          showVoiceSelectionDialog = false
+        )
+      )
+    }
+  }
+
+  private fun showTtsControlsOverlay() {
+    val isPaused = readAloudManager.tts?.currentTTSTask?.paused ?: false
+    updateState {
+      copy(
+        ttsControlsItem = ttsControlsItem.copy(
+          showTtsControlsOverlay = true,
+          currentPositionMs = readAloudManager.currentPositionMs,
+          totalDurationMs = readAloudManager.totalDurationMs,
+          isTtsPaused = isPaused,
+          contentDescription = context.getString(
+            if (isPaused) string.tts_resume else string.tts_pause
+          )
+        )
+      )
     }
   }
 
@@ -2056,6 +2047,8 @@ abstract class CoreReaderViewModel(
 }
 
 private const val TTS_TICKER_INTERVAL_MS = 250L
+private val CYCLIC_TTS_SPEEDS = listOf(1.0f, 1.25f, 1.5f, 1.75f, 2.0f, 2.5f, 0.5f, 0.75f)
+private const val TTS_SPEED_TOLERANCE = 0.01f
 
 enum class RestoreOrigin {
   FromSearchScreen,
