@@ -47,6 +47,7 @@ import io.mockk.unmockkAll
 import io.mockk.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.MainCoroutineDispatcher
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flowOf
@@ -157,12 +158,18 @@ internal class CoreReaderViewModelTest {
     every { kiwixPermissionChecker.isAndroid13orAbove() } returns false
     every { kiwixDataStore.backToTop } returns flowOf(false)
     every { kiwixDataStore.appName } returns flowOf("Kiwix")
+    every { kiwixDataStore.ttsSpeed } returns flowOf(KiwixDataStore.DEFAULT_TTS_SPEED)
+    every { kiwixDataStore.selectedTtsVoice } returns flowOf(null)
     every { readerIntentManager.events } returns MutableSharedFlow()
     every { bookmarkManager.bookmarkState } returns MutableStateFlow(BookmarkManager.BookmarkState())
     every { findInPageManager.uiState } returns MutableStateFlow(FindInPageManager.FindInPageUiState())
     every { readerWebViewManager.tabsState } returns MutableStateFlow(TabsManager.TabsState())
     coEvery { readerWebViewManager.getCurrentWebView() } returns mockWebView
     every { readAloudManager.tts } returns null
+    every { readAloudManager.currentPositionMs } returns 0L
+    every { readAloudManager.totalDurationMs } returns 0L
+    every { readAloudManager.currentVoiceName } returns null
+    every { readAloudManager.getAvailableVoices() } returns emptyList()
 
     viewModel = TestCoreReaderViewModel(
       context,
@@ -360,6 +367,7 @@ internal class CoreReaderViewModelTest {
         slot.captured.invoke(ReadAloudManager.TtsState.AudioFocusGain)
 
         assertThat(viewModel.uiState.value.ttsControlsItem.contentDescription).isEqualTo("Pause")
+        viewModel.viewModelScope.cancel()
       }
 
       @Test
@@ -394,6 +402,9 @@ internal class CoreReaderViewModelTest {
 
         verify { readerMenuState.onTextToSpeechStarted() }
         assertThat(viewModel.uiState.value.ttsControlsItem.showTtsControlsOverlay).isTrue()
+        // SpeakingStarted starts the TTS position ticker, which loops on the shared test
+        // dispatcher until cancelled; without this, runTest's cleanup drain hangs forever.
+        viewModel.viewModelScope.cancel()
       }
 
       @Test
@@ -434,6 +445,7 @@ internal class CoreReaderViewModelTest {
         slot.captured.invoke(ReadAloudManager.TtsState.TtsResumed)
 
         assertThat(viewModel.uiState.value.ttsControlsItem.contentDescription).isEqualTo("Pause")
+        viewModel.viewModelScope.cancel()
       }
 
       @Test
