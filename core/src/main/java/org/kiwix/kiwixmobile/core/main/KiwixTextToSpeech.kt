@@ -396,7 +396,7 @@ class KiwixTextToSpeech internal constructor(
     private val currentPiece = AtomicInteger(0)
 
     private val pieceDurationsMs: LongArray = LongArray(pieces.size) { i ->
-      (pieces[i].length * 65L).coerceIn(1500L, 8000L)
+      (pieces[i].length * 65L).coerceAtLeast(1500L)
     }
     private val pieceStartOffsetsMs: LongArray = LongArray(pieces.size)
 

@@ -117,8 +117,6 @@ class ReadAloudManager @Inject constructor(
         if (tts.currentTTSTask != null) {
           isPausedDueToAudioFocusLoss = false
           tts.stop()
-          dispatchState(SpeakingEnded)
-          setActionAndStartTTSService(ACTION_STOP_TTS)
         }
       }
 
@@ -250,6 +248,9 @@ class ReadAloudManager @Inject constructor(
 
   val totalDurationMs: Long
     get() = tts?.totalDurationMs ?: 0L
+
+  val isPaused: Boolean
+    get() = tts?.currentTTSTask?.paused ?: false
 
   fun stopReadAloud() {
     isPausedDueToAudioFocusLoss = false

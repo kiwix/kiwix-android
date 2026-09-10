@@ -519,7 +519,7 @@ abstract class CoreReaderViewModel(
 
   override fun onReadAloudPauseOrResume(isPauseTTS: Boolean) {
     readAloudManager.tts?.currentTTSTask?.let {
-      if (it.paused != isPauseTTS) {
+      if (readAloudManager.isPaused != isPauseTTS) {
         readAloudManager.pauseTts()
       }
       updateState {
@@ -877,7 +877,7 @@ abstract class CoreReaderViewModel(
   }
 
   private fun showTtsControlsOverlay() {
-    val isPaused = readAloudManager.tts?.currentTTSTask?.paused ?: false
+    val isPaused = readAloudManager.isPaused
     updateState {
       copy(
         ttsControlsItem = ttsControlsItem.copy(
