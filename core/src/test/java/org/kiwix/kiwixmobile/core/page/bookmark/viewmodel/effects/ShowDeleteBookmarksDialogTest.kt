@@ -93,7 +93,8 @@ internal class ShowDeleteBookmarksDialogTest {
               databaseId = UUID.randomUUID().mostSignificantBits and Long.MAX_VALUE,
               zimReaderSource = zimReaderSource
             )
-          )
+          ),
+          isInSelectionState = true
         ),
         libkiwixBookmark,
         this,
