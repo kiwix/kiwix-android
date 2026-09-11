@@ -1406,7 +1406,6 @@ internal class CoreReaderViewModelTest {
 
   @Nested
   inner class OnAddToHomeScreenMenuClicked {
-
     @Test
     fun whenReaderIsNull_doesNotEmitEffect() = runTest {
       every { zimReaderContainer.zimFileReader } returns null
@@ -1785,7 +1784,6 @@ internal class CoreReaderViewModelTest {
 
   @Nested
   inner class ShowOpenInNewTabDialog {
-
     private val redirectedUrl = "${CONTENT_PREFIX}A/United_States"
     private fun setupOpenInNewTabDialog(): CapturingSlot<TabsManager.NewTabConfig> {
       val configSlot = slot<TabsManager.NewTabConfig>()
@@ -1813,7 +1811,6 @@ internal class CoreReaderViewModelTest {
         val configSlot = setupOpenInNewTabDialog()
 
         viewModel.effects.test {
-
           viewModel.showOpenInNewTabDialog(redirectedUrl)
 
           val effect = awaitItem() as CoreReaderViewModel.ReaderEffect.ShowKiwixDialog
@@ -1846,7 +1843,6 @@ internal class CoreReaderViewModelTest {
         val configSlot = setupOpenInNewTabDialog()
 
         viewModel.effects.test {
-
           viewModel.showOpenInNewTabDialog(redirectedUrl)
 
           val effect = awaitItem() as CoreReaderViewModel.ReaderEffect.ShowKiwixDialog
@@ -1875,9 +1871,7 @@ internal class CoreReaderViewModelTest {
           coVerify(exactly = 0) { viewModel.selectTab(any()) }
 
           expectNoEvents()
-
         }
-
       }
 
     @Test
@@ -1891,7 +1885,6 @@ internal class CoreReaderViewModelTest {
         val configSlot = setupOpenInNewTabDialog()
 
         viewModel.effects.test {
-
           viewModel.showOpenInNewTabDialog(redirectedUrl)
 
           val effect = awaitItem() as CoreReaderViewModel.ReaderEffect.ShowKiwixDialog
@@ -1920,15 +1913,12 @@ internal class CoreReaderViewModelTest {
           coVerify { viewModel.selectTab(2 - 1) }
 
           expectNoEvents()
-
         }
-
       }
   }
 
   @Test
   fun openExternalUrl_invokesOpenExternalUrl() = runTest {
-
     val intent = mockk<Intent>()
 
     coEvery { externalLinkOpener.openExternalUrl(intent) } just Runs
@@ -1993,11 +1983,9 @@ internal class CoreReaderViewModelTest {
 
   @Nested
   inner class OnFullScreenVideoToggled {
-
     @Test
     fun whenIsFullScreen_hidesBottomBarAndEmitsDisableLeftSideBarEffect() = runTest {
       viewModel.effects.test {
-
         viewModel.onFullscreenVideoToggled(true)
         advanceUntilIdle()
 
@@ -2012,7 +2000,6 @@ internal class CoreReaderViewModelTest {
     @Test
     fun whenIsNotFullScreen_showsBottomBarAndEmitsEnableLeftSideBarEffect() = runTest {
       viewModel.effects.test {
-
         viewModel.onFullscreenVideoToggled(false)
         advanceUntilIdle()
 
@@ -2027,10 +2014,8 @@ internal class CoreReaderViewModelTest {
 
   @Nested
   inner class OpenZimFile {
-
     @Nested
     inner class IsBrandedAppOrHasExternalStoragePermission {
-
       @Test
       fun whenSuccess_showsZimContent() = runTest {
         val viewModel = spyk(viewModel)
@@ -2064,7 +2049,6 @@ internal class CoreReaderViewModelTest {
         assertThat(viewModel.uiState.value.showTabSwitcher).isFalse()
         verify { viewModel.observeBookmarks(zimFileReader) }
         coVerify { viewModel.updateTitle() }
-
       }
 
       @Test
@@ -2112,12 +2096,10 @@ internal class CoreReaderViewModelTest {
 
     @Test
     fun whenNotAnBrandedAppAndNoReadExternalStoragePermission() = runTest {
-
       coEvery { kiwixPermissionChecker.hasReadExternalStoragePermission() } returns false
       val zimReaderSource = mockk<ZimReaderSource>()
 
       viewModel.effects.test {
-
         viewModel.openZimFile(zimReaderSource)
 
         advanceUntilIdle()
@@ -2125,15 +2107,12 @@ internal class CoreReaderViewModelTest {
         val effect = awaitItem()
 
         assertThat(effect).isEqualTo(ReaderEffect.RequestReadStoragePermission)
-
       }
-
     }
   }
 
   @Nested
   inner class OnReadStoragePermissionResult {
-
     @Test
     fun whenPermissionIsGrantedAndZimReaderSourceIsNotNull_opensZimFile() = runTest {
       val viewModel = spyk(viewModel)
@@ -2197,7 +2176,6 @@ internal class CoreReaderViewModelTest {
 
   @Nested
   inner class OnNotificationPermissionResult {
-
     @Test
     fun whenPermissionIsGranted_callsOnReadAloudMenuClicked() = runTest {
       val viewModel = spyk(viewModel)
@@ -2333,10 +2311,8 @@ internal class CoreReaderViewModelTest {
 
   @Nested
   inner class ManageExternalLaunchAndRestoringViewState {
-
     @Test
     fun whenInvalidState_handleValidSessionRestore() = runTest {
-
       val viewModel = spyk(viewModel)
       coEvery { readerSessionManager.restoreReaderSession() } returns RestoreSessionResult.Invalid
       every { readerIntentManager.consumePendingAction() } returns PendingIntentParser.ReaderIntentAction.None
@@ -2351,7 +2327,6 @@ internal class CoreReaderViewModelTest {
 
     @Test
     fun whenEmptyState_handleInvalidSessionRestore() = runTest {
-
       val viewModel = spyk(viewModel)
       coEvery { readerSessionManager.restoreReaderSession() } returns RestoreSessionResult.Empty
       every { readerIntentManager.consumePendingAction() } returns PendingIntentParser.ReaderIntentAction.None
@@ -2420,7 +2395,6 @@ internal class CoreReaderViewModelTest {
 
     @Nested
     inner class HandlePendingIntent {
-
       @Test
       fun whenActionIsOpenBookmarks_opensBookmarkScreenAndClearsAction() = runTest {
         val viewModel = spyk(viewModel)
@@ -2497,13 +2471,11 @@ internal class CoreReaderViewModelTest {
             searchItemTitle = ""
           )
         }
-
       }
     }
 
     @Nested
     inner class OpenSearchItem {
-
       @Test
       fun whenShouldOpenInNewTabIsTrue_createsNewTab() = runTest {
         val viewModel = spyk(viewModel)
@@ -2645,7 +2617,6 @@ internal class CoreReaderViewModelTest {
         advanceUntilIdle()
 
         coVerify { viewModel.loadUrlWithCurrentWebview("${ZimFileReader.CONTENT_PREFIX}A/kiwix.html") }
-
       }
 
       @Test
@@ -2699,7 +2670,6 @@ internal class CoreReaderViewModelTest {
 
   @Nested
   inner class RestoreTabs {
-
     @Test
     fun stateTabsRestored_selectsTabAndShowWebViewOptions() = runTest {
       val viewModel = spyk(viewModel)
@@ -2744,7 +2714,6 @@ internal class CoreReaderViewModelTest {
       } returns ReaderWebViewManager.RestoreTabsResult.ErrorInRestoringTabs(Exception("Error"))
 
       viewModel.effects.test {
-
         viewModel.restoreTabs(historyItems, 1, onCompleteCallback)
 
         advanceUntilIdle()
@@ -2755,16 +2724,13 @@ internal class CoreReaderViewModelTest {
 
         expectNoEvents()
       }
-
     }
   }
 
   @Nested
   inner class NavigationIconContentDescription {
-
     @Test
     fun whenShowTabSwitcherTrue_returnsSearchOpenInNewTabString() {
-
       viewModel.updateUiStateForTest { copy(showTabSwitcher = true) }
       val result = viewModel.navigationIconContentDescription()
 
@@ -2773,7 +2739,6 @@ internal class CoreReaderViewModelTest {
 
     @Test
     fun whenShowTabSwitcherFalse_returnsOpenDrawer() {
-
       viewModel.updateUiStateForTest { copy(showTabSwitcher = false) }
 
       val result = viewModel.navigationIconContentDescription()
@@ -2809,11 +2774,9 @@ internal class CoreReaderViewModelTest {
 
   @Nested
   inner class OnUserBackPress {
-
     @Test
     fun wheNavigationDrawerIsOpenTrue_closesNavigationAndBackPressActivityExtensionsSuperShouldNotCall() =
       runTest {
-
         every { coreMainActivity.navigationDrawerIsOpen() } returns true
         every { coreMainActivity.closeNavigationDrawer() } just Runs
 
@@ -2822,7 +2785,6 @@ internal class CoreReaderViewModelTest {
         verify { coreMainActivity.closeNavigationDrawer() }
 
         assertThat(result).isEqualTo(BackPressActivityExtensions.Super.ShouldNotCall)
-
       }
 
     @Test
@@ -2837,7 +2799,6 @@ internal class CoreReaderViewModelTest {
 
     @Nested
     inner class ShowTabSwitcher {
-
       @Test
       fun when_navigationDrawerIsOpenFalseAndShowTabSwitcherTrue_selectsCurrentWebViewIndexWhenIndexSmallerThanWebViewListSize() =
         runTest {
@@ -2855,7 +2816,6 @@ internal class CoreReaderViewModelTest {
           coVerify { viewModel.selectTab(1) }
           coVerify { viewModel.hideTabSwitcher() }
           assertThat(result).isEqualTo(BackPressActivityExtensions.Super.ShouldNotCall)
-
         }
 
       @Test
@@ -2875,14 +2835,12 @@ internal class CoreReaderViewModelTest {
           coVerify { viewModel.selectTab(2) } // As webViewListSize - 1
           coVerify { viewModel.hideTabSwitcher() }
           assertThat(result).isEqualTo(BackPressActivityExtensions.Super.ShouldNotCall)
-
         }
     }
 
     @Test
     fun whenNavigationDrawerIsOpenFalseAndFindInPageUiStateIsVisible_closesFindInPageAndCallsBackPressActivityExtensionsSuperShouldCall() =
       runTest {
-
         viewModel.updateUiStateForTest {
           copy(findInPageUiState = FindInPageManager.FindInPageUiState(visible = true))
         }
@@ -2893,7 +2851,6 @@ internal class CoreReaderViewModelTest {
 
         verify { findInPageManager.stop() }
         assertThat(result).isEqualTo(BackPressActivityExtensions.Super.ShouldNotCall)
-
       }
 
     @Test
@@ -2920,7 +2877,6 @@ internal class CoreReaderViewModelTest {
 
         verify { mockWebView.goBack() }
         assertThat(result).isEqualTo(BackPressActivityExtensions.Super.ShouldNotCall)
-
       }
   }
 
@@ -2954,7 +2910,6 @@ internal class CoreReaderViewModelTest {
 
   @Test
   fun navigationIconTint_returnsWhiteColor() {
-
     val color = viewModel.navigationIconTint()
     assertThat(color).isEqualTo(White)
   }
@@ -3007,7 +2962,6 @@ internal class CoreReaderViewModelTest {
   @Test
   fun whenReadAloudManagerTtsNull_updateBottomToolbarVisibilityAndSetsUpTTSAndShowDonationPopUp() =
     runTest {
-
       // Bottom bar visibility depends on TabSwitcher
       viewModel.updateUiStateForTest { copy(showTabSwitcher = true) }
 
@@ -3025,7 +2979,6 @@ internal class CoreReaderViewModelTest {
 
   @Test
   fun onCleared_cleansUpAllResourcesAndManagers() {
-
     every { bookmarkManager.stopObserving() } just Runs
     every { pendingSearchItemManager.consume() } returns mockk()
     every { readAloudManager.stopReadAloudSafely() } just Runs
@@ -3065,26 +3018,26 @@ internal class CoreReaderViewModelTest {
     findInPageManager: FindInPageManager,
     mainDispatcher: MainCoroutineDispatcher
   ) : CoreReaderViewModel(
-    context,
-    kiwixDataStore,
-    externalLinkOpener,
-    unsupportedMimeTypeHandler,
-    readerWebViewManager,
-    zimReaderContainer,
-    zimFileManager,
-    kiwixPermissionChecker,
-    repositoryActions,
-    bookmarkManager,
-    readerHistoryManager,
-    readerSessionManager,
-    readerIntentManager,
-    pendingSearchItemManager,
-    readerPageManager,
-    readAloudManager,
-    donationDialogHandler,
-    findInPageManager,
-    mainDispatcher
-  ) {
+      context,
+      kiwixDataStore,
+      externalLinkOpener,
+      unsupportedMimeTypeHandler,
+      readerWebViewManager,
+      zimReaderContainer,
+      zimFileManager,
+      kiwixPermissionChecker,
+      repositoryActions,
+      bookmarkManager,
+      readerHistoryManager,
+      readerSessionManager,
+      readerIntentManager,
+      pendingSearchItemManager,
+      readerPageManager,
+      readAloudManager,
+      donationDialogHandler,
+      findInPageManager,
+      mainDispatcher
+    ) {
     override fun openSearch(
       searchString: String,
       isOpenedFromTabView: Boolean,
