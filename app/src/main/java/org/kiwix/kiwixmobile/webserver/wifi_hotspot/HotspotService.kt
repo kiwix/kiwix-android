@@ -105,7 +105,9 @@ class HotspotService :
     val dataSource = dataSource
     if (!ServerUtils.isServerStarted || dataSource == null) return
 
-    val existingPaths = dataSource.getLanguageCategorizedBooks().first()
+    val existingPaths = dataSource
+      .getLanguageCategorizedBooks()
+      .first()
       .filterIsInstance<BookOnDisk>()
       .map { it.zimReaderSource.toDatabase() }
       .toSet()
@@ -115,11 +117,12 @@ class HotspotService :
 
     if (remainingPaths.isEmpty()) {
       withContext(mainDispatcher) {
-        Toast.makeText(
-          this@HotspotService,
-          R.string.server_stopped_all_books_deleted_toast_message,
-          Toast.LENGTH_LONG
-        ).show()
+        Toast
+          .makeText(
+            this@HotspotService,
+            R.string.server_stopped_all_books_deleted_toast_message,
+            Toast.LENGTH_LONG
+          ).show()
       }
       stopHotspotAndDismissNotification()
     } else {
@@ -171,11 +174,12 @@ class HotspotService :
       }
 
       ACTION_STOP_SERVER -> {
-        Toast.makeText(
-          this,
-          R.string.server_stopped_successfully_toast_message,
-          Toast.LENGTH_SHORT
-        ).show()
+        Toast
+          .makeText(
+            this,
+            R.string.server_stopped_successfully_toast_message,
+            Toast.LENGTH_SHORT
+          ).show()
         stopHotspotAndDismissNotification()
       }
 
@@ -197,10 +201,12 @@ class HotspotService :
       zimHostCallbacks?.onServerStarted(webServerHelper?.getServerAddress().orEmpty())
       startForegroundNotificationHelper()
       if (!restart) {
-        Toast.makeText(
-          this@HotspotService, R.string.server_started_successfully_toast_message,
-          Toast.LENGTH_SHORT
-        ).show()
+        Toast
+          .makeText(
+            this@HotspotService,
+            R.string.server_started_successfully_toast_message,
+            Toast.LENGTH_SHORT
+          ).show()
       }
     } else {
       onServerFailedToStart(serverStatus?.errorMessage)

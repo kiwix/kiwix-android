@@ -127,10 +127,14 @@ object TestUtils {
 
   @JvmStatic
   fun deleteTemporaryFilesOfTestCases(context: Context) {
-    context.getExternalFilesDirs(null).filterNotNull()
-      .map(::deleteAllFilesInDirectory)
-    ContextWrapper(context).externalMediaDirs.filterNotNull()
-      .map(::deleteAllFilesInDirectory)
+    context
+      .getExternalFilesDirs(null)
+      .filterNotNull()
+      .forEach(::deleteAllFilesInDirectory)
+    ContextWrapper(context)
+      .externalMediaDirs
+      .filterNotNull()
+      .forEach(::deleteAllFilesInDirectory)
   }
 
   private fun deleteAllFilesInDirectory(directory: File) {
@@ -148,7 +152,8 @@ object TestUtils {
   @JvmStatic
   @Singleton
   fun getOkkHttpClientForTesting(): OkHttpClient =
-    OkHttpClient().newBuilder()
+    OkHttpClient()
+      .newBuilder()
       .followRedirects(true)
       .followSslRedirects(true)
       .connectTimeout(CONNECTION_TIMEOUT, TimeUnit.MINUTES)

@@ -125,13 +125,12 @@ class BrandedDownloadViewModel @Inject constructor(
     }
   }
 
-  private suspend fun reduce(action: Action, state: State): State {
-    return when (action) {
+  private suspend fun reduce(action: Action, state: State): State =
+    when (action) {
       is DatabaseEmission -> reduceDatabaseEmission(state, action)
       ClickedRetry,
       ClickedDownload -> state.also { _effects.emit(downloadBranded) }
     }
-  }
 
   private suspend fun reduceDatabaseEmission(state: State, action: DatabaseEmission) =
     when (state) {

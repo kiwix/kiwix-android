@@ -51,17 +51,15 @@ abstract class HelpViewModel : ViewModel() {
   private fun transformToHelpScreenData(
     context: Context,
     rawTitleDescriptionMap: List<Pair<Int, Any>>
-  ): List<HelpScreenItemDataClass> {
-    return rawTitleDescriptionMap.map { (titleResId, description) ->
-      val title = context.getString(titleResId)
-      val descriptionValue = when (description) {
-        is String -> description
-        is Int -> context.resources.getStringArray(description).joinToString(separator = "\n")
-        else -> {
-          throw IllegalArgumentException("Invalid description resource type for title: $titleResId")
-        }
+  ): List<HelpScreenItemDataClass> = rawTitleDescriptionMap.map { (titleResId, description) ->
+    val title = context.getString(titleResId)
+    val descriptionValue = when (description) {
+      is String -> description
+      is Int -> context.resources.getStringArray(description).joinToString(separator = "\n")
+      else -> {
+        throw IllegalArgumentException("Invalid description resource type for title: $titleResId")
       }
-      HelpScreenItemDataClass(title, descriptionValue)
     }
+    HelpScreenItemDataClass(title, descriptionValue)
   }
 }

@@ -72,12 +72,10 @@ open class CoreWebViewClient(
     return true
   }
 
-  private fun convertLegacyUrl(url: String): String {
-    return LEGACY_CONTENT_PREFIXES
-      .firstOrNull(url::startsWith)
-      ?.let { url.replace(it, ZimFileReader.CONTENT_PREFIX) }
-      ?: url
-  }
+  private fun convertLegacyUrl(url: String): String = LEGACY_CONTENT_PREFIXES
+    .firstOrNull(url::startsWith)
+    ?.let { url.replace(it, ZimFileReader.CONTENT_PREFIX) }
+    ?: url
 
   @Suppress("NestedBlockDepth")
   fun handleUnsupportedFiles(url: String): Boolean {
@@ -139,7 +137,7 @@ open class CoreWebViewClient(
   }
 
   override fun onRenderProcessGone(view: WebView?, detail: RenderProcessGoneDetail?): Boolean {
-    Log.e(TAG_KIWIX, "There is an error in rendering the webView: ${detail.toString()}")
+    Log.e(TAG_KIWIX, "There is an error in rendering the webView: $detail")
     view?.destroy()
     return true
   }

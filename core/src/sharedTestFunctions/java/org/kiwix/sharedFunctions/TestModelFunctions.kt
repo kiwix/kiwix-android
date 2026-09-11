@@ -56,8 +56,16 @@ fun downloadModel(
   progress: Int = 1,
   book: LibkiwixBook = libkiwixBook()
 ) = DownloadModel(
-  databaseId, downloadId, file, etaInMilliSeconds, bytesDownloaded, totalSizeOfDownload,
-  status, error, progress, book
+  databaseId,
+  downloadId,
+  file,
+  etaInMilliSeconds,
+  bytesDownloaded,
+  totalSizeOfDownload,
+  status,
+  error,
+  progress,
+  book
 )
 
 fun downloadItem(

@@ -235,8 +235,8 @@ private fun appBarActionMenuList(
   isSearchActive: Boolean,
   onSearchClick: () -> Unit,
   onSaveClick: () -> Unit
-): List<ActionMenuItem> {
-  return listOfNotNull(
+): List<ActionMenuItem> =
+  listOfNotNull(
     when {
       !isSearchActive -> ActionMenuItem(
         icon = IconItem.Drawable(R.drawable.action_search),
@@ -255,4 +255,3 @@ private fun appBarActionMenuList(
       testingTag = SAVE_ICON_TESTING_TAG
     )
   )
-}

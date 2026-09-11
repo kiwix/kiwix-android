@@ -39,8 +39,8 @@ import org.kiwix.kiwixmobile.core.zim_manager.Byte
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.ArticleCount
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListItem.BookOnDisk
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.SelectionMode
-import org.kiwix.kiwixmobile.ui.BookItemScreen.BOOK_ITEM_TESTING_TAG
 import org.kiwix.kiwixmobile.ui.BookItemScreen.BOOK_ITEM_CHECKBOX_TESTING_TAG
+import org.kiwix.kiwixmobile.ui.BookItemScreen.BOOK_ITEM_TESTING_TAG
 import org.kiwix.kiwixmobile.ui.BookItemScreen.OFFLINE_IMAGE_TEST_TAG
 import org.kiwix.sharedFunctions.TestApplication
 import org.robolectric.RobolectricTestRunner
@@ -64,8 +64,8 @@ class BookItemUITest {
     size: String = "1024",
     articleCount: String? = "22",
     isSelected: Boolean = false
-  ): BookOnDisk {
-    return BookOnDisk(
+  ): BookOnDisk =
+    BookOnDisk(
       book = LibkiwixBook(
         _id = "book-id",
         _title = title,
@@ -78,7 +78,6 @@ class BookItemUITest {
       zimReaderSource = ZimReaderSource(File("test.zim")),
       isSelected = isSelected
     )
-  }
 
   private fun bookItem(
     index: Int,
@@ -172,7 +171,8 @@ class BookItemUITest {
       selectionMode = SelectionMode.NORMAL
     )
 
-    composeTestRule.onNodeWithTag(BOOK_ITEM_TESTING_TAG)
+    composeTestRule
+      .onNodeWithTag(BOOK_ITEM_TESTING_TAG)
       .performTouchInput { longClick() }
 
     assertTrue(longClick)
@@ -191,7 +191,8 @@ class BookItemUITest {
       selectionMode = SelectionMode.MULTI
     )
 
-    composeTestRule.onNodeWithTag(BOOK_ITEM_TESTING_TAG)
+    composeTestRule
+      .onNodeWithTag(BOOK_ITEM_TESTING_TAG)
       .performTouchInput {
         longClick()
       }

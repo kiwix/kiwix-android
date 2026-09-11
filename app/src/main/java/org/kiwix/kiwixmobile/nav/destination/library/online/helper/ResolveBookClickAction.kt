@@ -43,8 +43,8 @@ import org.kiwix.kiwixmobile.nav.destination.library.online.helper.ResolveBookCl
 import org.kiwix.kiwixmobile.zimManager.libraryView.AvailableSpaceCalculator
 import org.kiwix.kiwixmobile.zimManager.libraryView.AvailableSpaceCalculator.AvailableSpaceResult.HasAvailableSpaceForBook
 import org.kiwix.kiwixmobile.zimManager.libraryView.AvailableSpaceCalculator.AvailableSpaceResult.NotEnoughSpaceForBook
-import org.kiwix.kiwixmobile.zimManager.libraryView.LibraryListItem.LibraryDownloadItem
 import org.kiwix.kiwixmobile.zimManager.libraryView.LibraryListItem.BookItem
+import org.kiwix.kiwixmobile.zimManager.libraryView.LibraryListItem.LibraryDownloadItem
 import javax.inject.Inject
 
 class ResolveBookClickAction @Inject constructor(
@@ -96,17 +96,16 @@ class ResolveBookClickAction @Inject constructor(
     }
   }
 
-  fun onPauseResumeButtonClick(item: LibraryDownloadItem): LibraryActionResult {
-    return if (!connectivityManager.isNetworkAvailable()) {
+  fun onPauseResumeButtonClick(item: LibraryDownloadItem): LibraryActionResult =
+    if (!connectivityManager.isNetworkAvailable()) {
       NoInternet
     } else {
       val isPaused = item.downloadState == DownloadState.Paused
       PauseResume(item.downloadId, isPaused)
     }
-  }
 
-  fun onStopButtonClick(item: LibraryDownloadItem): LibraryActionResult {
-    return if (item.currentDownloadState == Status.FAILED) {
+  fun onStopButtonClick(item: LibraryDownloadItem): LibraryActionResult =
+    if (item.currentDownloadState == Status.FAILED) {
       when (item.downloadError) {
         Error.UNKNOWN_IO_ERROR,
         Error.CONNECTION_TIMED_OUT,
@@ -123,5 +122,4 @@ class ResolveBookClickAction @Inject constructor(
     } else {
       CancelDownload(item.downloadId)
     }
-  }
 }

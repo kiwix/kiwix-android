@@ -21,6 +21,7 @@ package org.kiwix.kiwixmobile.onlineCategory
 import androidx.compose.ui.test.ComposeTimeoutException
 import androidx.compose.ui.test.assertIsOn
 import androidx.compose.ui.test.filter
+import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.isDisplayed
 import androidx.compose.ui.test.junit4.ComposeContentTestRule
@@ -29,7 +30,6 @@ import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
-import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.performScrollToNode
 import applyWithViewHierarchyPrinting
 import org.kiwix.kiwixmobile.BaseRobot
@@ -59,7 +59,8 @@ class OnlineCategoryRobot : BaseRobot() {
       composeTestRule.waitUntil(
         TestUtils.TEST_PAUSE_MS.toLong()
       ) {
-        composeTestRule.onAllNodesWithTag(TOOLBAR_TITLE_TESTING_TAG)
+        composeTestRule
+          .onAllNodesWithTag(TOOLBAR_TITLE_TESTING_TAG)
           .filter(hasText(context.getString(R.string.select_category)))
           .onFirst()
           .isDisplayed()
@@ -71,9 +72,11 @@ class OnlineCategoryRobot : BaseRobot() {
     composeTestRule: ComposeContentTestRule,
     matchLanguage: String
   ) {
-    composeTestRule.onNodeWithTag(ONLINE_CATEGORY_LIST_TEST_TAG)
+    composeTestRule
+      .onNodeWithTag(ONLINE_CATEGORY_LIST_TEST_TAG)
       .performScrollToNode(hasTestTag("$CATEGORY_ITEM_CHECKBOX_TESTING_TAG$matchLanguage"))
-    composeTestRule.onNodeWithTag("$CATEGORY_ITEM_CHECKBOX_TESTING_TAG$matchLanguage")
+    composeTestRule
+      .onNodeWithTag("$CATEGORY_ITEM_CHECKBOX_TESTING_TAG$matchLanguage")
       .performClick()
   }
 
@@ -90,7 +93,7 @@ class OnlineCategoryRobot : BaseRobot() {
             .isNotEmpty()
         }
         Log.d("CategoryTest", "Category list loaded")
-        return
+        return@waitForCategoryToLoad
       } catch (_: ComposeTimeoutException) {
         Log.d(
           "CategoryTest",
@@ -103,8 +106,7 @@ class OnlineCategoryRobot : BaseRobot() {
       composeTestRule
         .onAllNodesWithContentDescription(
           context.getString(R.string.select_category_content_description)
-        )
-        .fetchSemanticsNodes()
+        ).fetchSemanticsNodes()
         .size
     // throw the exception when there is no more retry left.
     throw AssertionError(

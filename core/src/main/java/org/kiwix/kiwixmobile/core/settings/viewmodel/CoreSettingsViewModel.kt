@@ -174,12 +174,10 @@ abstract class CoreSettingsViewModel(
       _actions.emit(action)
     }
 
-  private fun getLabelFor(theme: ThemeConfig.Theme): String {
-    return when (theme) {
-      ThemeConfig.Theme.DARK -> context.getString(R.string.theme_dark)
-      ThemeConfig.Theme.LIGHT -> context.getString(R.string.theme_light)
-      ThemeConfig.Theme.SYSTEM -> context.getString(R.string.theme_system)
-    }
+  private fun getLabelFor(theme: ThemeConfig.Theme): String = when (theme) {
+    ThemeConfig.Theme.DARK -> context.getString(R.string.theme_dark)
+    ThemeConfig.Theme.LIGHT -> context.getString(R.string.theme_light)
+    ThemeConfig.Theme.SYSTEM -> context.getString(R.string.theme_system)
   }
 
   fun setAppTheme(selectedMode: String) {
@@ -362,14 +360,12 @@ abstract class CoreSettingsViewModel(
     }
   }
 
-  private fun isValidXmlFile(file: File): Boolean {
-    return try {
-      DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(file)
-      true
-    } catch (ignore: Exception) {
-      Log.e("IMPORT_BOOKMARKS", "Invalid XML file", ignore)
-      false
-    }
+  private fun isValidXmlFile(file: File): Boolean = try {
+    DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(file)
+    true
+  } catch (ignore: Exception) {
+    Log.e("IMPORT_BOOKMARKS", "Invalid XML file", ignore)
+    false
   }
 
   private fun createTempFile(inputStream: InputStream?): File {

@@ -323,8 +323,7 @@ private fun OnlineLibraryList(
       val totalBookCount = list.count { it is LibraryListItem.BookItem }
 
       Pair(lastVisibleBookIndex, totalBookCount)
-    }
-      .distinctUntilChanged()
+    }.distinctUntilChanged()
       .debounce(LOAD_MORE_DELAY)
       .collect { (lastVisibleBookIndex, totalBookCount) ->
         if (lastVisibleBookIndex >= totalBookCount.minus(FIVE) && !state.isLoadingMore) {

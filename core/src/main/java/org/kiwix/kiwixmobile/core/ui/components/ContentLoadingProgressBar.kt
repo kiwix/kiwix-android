@@ -31,10 +31,10 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import org.kiwix.kiwixmobile.core.utils.HUNDERED
-import org.kiwix.kiwixmobile.core.utils.ZERO
 import org.kiwix.kiwixmobile.core.ui.theme.DenimBlue400
 import org.kiwix.kiwixmobile.core.ui.theme.MineShaftGray350
+import org.kiwix.kiwixmobile.core.utils.HUNDERED
+import org.kiwix.kiwixmobile.core.utils.ZERO
 
 const val CONTENT_LOADING_PROGRESS_BAR_TESTING_TAG = "contentLoadingProgressBar"
 

@@ -45,8 +45,8 @@ internal class ReceiverDevice(
   @param:IoDispatcher private val ioDispatcher: CoroutineDispatcher,
   @param:MainDispatcher private val mainDispatcher: MainCoroutineDispatcher
 ) {
-  suspend fun receive(): Boolean {
-    return try {
+  suspend fun receive(): Boolean =
+    try {
       withContext(ioDispatcher) {
         ServerSocket(WifiDirectManager.fileTransferPort).use { serverSocket ->
           Log.d(TAG, "Server: Socket opened at " + WifiDirectManager.fileTransferPort)
@@ -54,7 +54,8 @@ internal class ReceiverDevice(
           val fileItems = wifiDirectManager.getFilesForTransfer()
           var isTransferErrorFree = true
           Log.d(TAG, "Expecting " + fileItems.size + " files")
-          fileItems.asSequence()
+          fileItems
+            .asSequence()
             .takeWhile { isActive }
             .forEachIndexed { fileItemIndex, fileItem ->
               try {
@@ -92,7 +93,6 @@ internal class ReceiverDevice(
       }
       false // Returned when an error was encountered during transfer
     }
-  }
 
   private suspend fun publishProgress(
     fileIndex: Int,

@@ -23,13 +23,12 @@ import android.content.Context
 import android.os.Build
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.ui.test.junit4.createComposeRule
-import androidx.hilt.navigation.HiltViewModelFactory
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import androidx.core.os.LocaleListCompat
+import androidx.hilt.navigation.HiltViewModelFactory
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
-import org.kiwix.kiwixmobile.custom.main.CustomDestination
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso.pressBack
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -60,6 +59,7 @@ import org.kiwix.kiwixmobile.core.utils.TestingUtils.COMPOSE_TEST_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.RETRY_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.custom.main.BrandedMainActivity
+import org.kiwix.kiwixmobile.custom.main.CustomDestination
 import org.kiwix.kiwixmobile.custom.testutils.RetryRule
 import org.kiwix.kiwixmobile.custom.testutils.TestUtils
 import org.kiwix.kiwixmobile.custom.testutils.TestUtils.closeSystemDialogs
@@ -286,7 +286,9 @@ class SearchScreenTestForBrandedApp {
     testFlakyView({
       // test with a large ZIM file to properly test the scenario
       downloadingZimFile = getDownloadingZimFileFromDataFolder()
-      getOkkHttpClientForTesting().newCall(downloadRequest(rayCharlesZIMFileUrl)).execute()
+      getOkkHttpClientForTesting()
+        .newCall(downloadRequest(rayCharlesZIMFileUrl))
+        .execute()
         .use { response ->
           if (response.isSuccessful) {
             response.body?.let { responseBody ->
@@ -350,7 +352,8 @@ class SearchScreenTestForBrandedApp {
   }
 
   private fun downloadRequest(zimUrl: String = scientificAllianceZIMUrl) =
-    Request.Builder()
+    Request
+      .Builder()
       .url(URI.create(zimUrl).toURL())
       .build()
 

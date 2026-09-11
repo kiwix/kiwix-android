@@ -23,6 +23,8 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.hilt.navigation.HiltViewModelFactory
 import androidx.lifecycle.ViewModelProvider
 import androidx.test.internal.runner.junit4.statement.UiThreadStatement
+import dagger.hilt.android.testing.HiltAndroidRule
+import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import leakcanary.LeakAssertions
@@ -31,8 +33,6 @@ import okhttp3.ResponseBody
 import org.junit.After
 import org.junit.Assume
 import org.junit.Before
-import dagger.hilt.android.testing.HiltAndroidRule
-import dagger.hilt.android.testing.HiltAndroidTest
 import org.junit.Rule
 import org.junit.Test
 import org.kiwix.kiwixmobile.BaseActivityTest
@@ -320,7 +320,8 @@ class SearchScreenInstrumentTest : BaseActivityTest() {
   }
 
   private fun downloadRequest() =
-    Request.Builder()
+    Request
+      .Builder()
       .url(URI.create(rayCharlesZimFileUrl).toURL())
       .build()
 

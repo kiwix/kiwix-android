@@ -69,15 +69,14 @@ class RoomDowngradeBackupHelperTest {
     }
   }
 
-  private fun createDatabase(): KiwixRoomDatabase {
-    return Room.databaseBuilder(
+  private fun createDatabase(): KiwixRoomDatabase =
+    Room.databaseBuilder(
       context,
       KiwixRoomDatabase::class.java,
       RoomDowngradeBackupHelper.DB_NAME
     )
       .allowMainThreadQueries()
       .build()
-  }
 
   private fun createDatabaseWithVersion(version: Int) {
     SQLiteDatabase.openOrCreateDatabase(

@@ -329,28 +329,26 @@ object FileUtils {
    * @param volume The `StorageVolume` whose path needs to be determined.
    * @return The storage path as a `String`.
    */
-  private fun getStoragePath(context: Context, volume: StorageVolume): String {
-    return when {
-      Build.VERSION.SDK_INT >= Build.VERSION_CODES.R -> {
-        // On Android 11 (API 30) and above, return the storage path directly.
-        "${volume.directory?.path}"
-      }
+  private fun getStoragePath(context: Context, volume: StorageVolume): String = when {
+    Build.VERSION.SDK_INT >= Build.VERSION_CODES.R -> {
+      // On Android 11 (API 30) and above, return the storage path directly.
+      "${volume.directory?.path}"
+    }
 
-      volume.isPrimary -> {
-        // If this is the primary internal storage, return the default external storage directory.
-        "${Environment.getExternalStorageDirectory()}/"
-      }
+    volume.isPrimary -> {
+      // If this is the primary internal storage, return the default external storage directory.
+      "${Environment.getExternalStorageDirectory()}/"
+    }
 
-      else -> {
-        // If this is an external storage device, construct the path using UUID or description.
-        val externalStorageName =
-          volume.uuid?.let { uuid ->
-            "/$uuid/"
-          } ?: "/${volume.getDescription(context)}/"
+    else -> {
+      // If this is an external storage device, construct the path using UUID or description.
+      val externalStorageName =
+        volume.uuid?.let { uuid ->
+          "/$uuid/"
+        } ?: "/${volume.getDescription(context)}/"
 
-        // On Android 10 and below, external storage devices are mounted under `/storage`.
-        "/storage$externalStorageName"
-      }
+      // On Android 10 and below, external storage devices are mounted under `/storage`.
+      "/storage$externalStorageName"
     }
   }
 
@@ -362,10 +360,9 @@ object FileUtils {
       )
     return try {
       cursor =
-        context.contentResolver.query(
-          uri, projection, null, null,
-          null
-        )
+        context
+          .contentResolver
+          .query(uri, projection, null, null, null)
       if (cursor != null && cursor.moveToFirst()) {
         val index = cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DISPLAY_NAME)
         cursor.getString(index)
@@ -397,33 +394,31 @@ object FileUtils {
     context: Context,
     uri: Uri,
     ioDispatcher: CoroutineDispatcher
-  ): String? {
-    return when {
-      // For file managers that provide the full path in the URI (common on devices below Android 11).
-      // This triggers when the user clicks directly on a ZIM file in the file manager, and the file
-      // manager returns the path via its own file provider.
-      "$uri".contains("root") && "$uri".endsWith("zim") -> {
-        "$uri".substringAfter("/root")
-      }
+  ): String? = when {
+    // For file managers that provide the full path in the URI (common on devices below Android 11).
+    // This triggers when the user clicks directly on a ZIM file in the file manager, and the file
+    // manager returns the path via its own file provider.
+    "$uri".contains("root") && "$uri".endsWith("zim") -> {
+      "$uri".substringAfter("/root")
+    }
 
-      // Handles URIs from the download provider, commonly used when files are opened from browsers.
-      // Some browsers return URIs with their DownloadProvider.
-      isDownloadProviderUri(uri) -> {
-        getFullFilePathFromFilePath(
-          context,
-          "$DIRECTORY_DOWNLOADS/${getFileNameFromUri(context, uri)}",
-          ioDispatcher
-        )
-      }
+    // Handles URIs from the download provider, commonly used when files are opened from browsers.
+    // Some browsers return URIs with their DownloadProvider.
+    isDownloadProviderUri(uri) -> {
+      getFullFilePathFromFilePath(
+        context,
+        "$DIRECTORY_DOWNLOADS/${getFileNameFromUri(context, uri)}",
+        ioDispatcher
+      )
+    }
 
-      else -> {
-        // Attempts to retrieve the full path from the URI using a custom method.
-        getFullFilePathFromFilePath(
-          context,
-          getFilePathWithFolderFromUri(uri),
-          ioDispatcher
-        )
-      }
+    else -> {
+      // Attempts to retrieve the full path from the URI using a custom method.
+      getFullFilePathFromFilePath(
+        context,
+        getFilePathWithFolderFromUri(uri),
+        ioDispatcher
+      )
     }
   }
 
@@ -679,10 +674,8 @@ object FileUtils {
       .firstOrNull { it.path.contains(storageName) }
       ?.path?.substringBefore(context.getString(R.string.android_directory_seperator))
 
-  private fun isBase64DataUri(src: String?): Boolean {
-    return src?.startsWith("data:", ignoreCase = true) == true &&
-      src.contains(";base64,", ignoreCase = true)
-  }
+  private fun isBase64DataUri(src: String?): Boolean = src?.startsWith("data:", ignoreCase = true) == true &&
+    src.contains(";base64,", ignoreCase = true)
 
   private fun generateBase64FileName(extension: String): String =
     "image_${System.currentTimeMillis()}.$extension"
@@ -1011,19 +1004,17 @@ object FileUtils {
   }
 
   @JvmStatic
-  fun isFileDescriptorCanOpenWithLibkiwix(fdNumber: Int?): Boolean {
-    return try {
-      // Attempt to create a FileInputStream object using the specified path.
-      // Since libkiwix utilizes this path to create the archive object internally,
-      // it is crucial to verify if we can successfully read the file descriptor (fd)
-      // via the given file path before passing it to libkiwix.
-      // This precaution helps prevent runtime crashes.
-      // For more details, refer to https://github.com/kiwix/kiwix-android/pull/3636.
-      FileInputStream("dev/fd/$fdNumber")
-      true
-    } catch (ignore: Exception) {
-      ignore.printStackTrace()
-      false
-    }
+  fun isFileDescriptorCanOpenWithLibkiwix(fdNumber: Int?): Boolean = try {
+    // Attempt to create a FileInputStream object using the specified path.
+    // Since libkiwix utilizes this path to create the archive object internally,
+    // it is crucial to verify if we can successfully read the file descriptor (fd)
+    // via the given file path before passing it to libkiwix.
+    // This precaution helps prevent runtime crashes.
+    // For more details, refer to https://github.com/kiwix/kiwix-android/pull/3636.
+    FileInputStream("dev/fd/$fdNumber")
+    true
+  } catch (ignore: Exception) {
+    ignore.printStackTrace()
+    false
   }
 }

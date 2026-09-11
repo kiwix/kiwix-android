@@ -102,33 +102,31 @@ class ReaderScreenComposablesTest {
     showDonationPopup: Boolean = false,
     findInPageUiState: FindInPageManager.FindInPageUiState =
       FindInPageManager.FindInPageUiState()
-  ): CoreReaderViewModel.ReaderUiState {
-    return CoreReaderViewModel.ReaderUiState(
-      appName = appName,
-      title = title,
-      loading = loading,
-      progress = progress,
-      tabsState = tabsState,
-      videoView = videoView,
-      shouldShowFullScreen = shouldShowFullScreen,
-      showBackToTopButton = showBackToTopButton,
-      showTtsControls = showTtsControls,
-      showTabSwitcher = showTabSwitcher,
-      showBottomBar = showBottomBar,
-      bookmarkButtonItem = bookmarkButtonItem,
-      showNoBookOpenInReader = showNoBookOpenInReader,
-      searchPlaceHolderItemForBrandedApps = searchPlaceHolderItemForBrandedApps,
-      isPreviousPageButtonEnable = isPreviousPageButtonEnable,
-      isNextPageButtonEnable = isNextPageButtonEnable,
-      pauseTtsButtonText = pauseTtsButtonText,
-      isTocButtonEnable = isTocButtonEnable,
-      showTableOfContentDrawer = showTableOfContentDrawer,
-      tableOfContentTitle = tableOfContentTitle,
-      documentSections = documentSections,
-      showDonationPopup = showDonationPopup,
-      findInPageUiState = findInPageUiState
-    )
-  }
+  ): CoreReaderViewModel.ReaderUiState = CoreReaderViewModel.ReaderUiState(
+    appName = appName,
+    title = title,
+    loading = loading,
+    progress = progress,
+    tabsState = tabsState,
+    videoView = videoView,
+    shouldShowFullScreen = shouldShowFullScreen,
+    showBackToTopButton = showBackToTopButton,
+    showTtsControls = showTtsControls,
+    showTabSwitcher = showTabSwitcher,
+    showBottomBar = showBottomBar,
+    bookmarkButtonItem = bookmarkButtonItem,
+    showNoBookOpenInReader = showNoBookOpenInReader,
+    searchPlaceHolderItemForBrandedApps = searchPlaceHolderItemForBrandedApps,
+    isPreviousPageButtonEnable = isPreviousPageButtonEnable,
+    isNextPageButtonEnable = isNextPageButtonEnable,
+    pauseTtsButtonText = pauseTtsButtonText,
+    isTocButtonEnable = isTocButtonEnable,
+    showTableOfContentDrawer = showTableOfContentDrawer,
+    tableOfContentTitle = tableOfContentTitle,
+    documentSections = documentSections,
+    showDonationPopup = showDonationPopup,
+    findInPageUiState = findInPageUiState
+  )
 
   private fun createTabsState(
     webViews: List<KiwixWebView> = emptyList(),

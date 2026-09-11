@@ -41,8 +41,9 @@ object ServerUtils {
     var ip = ""
     try {
       for (networkInterface in NetworkInterface.getNetworkInterfaces()) {
-        for (inetAddress in networkInterface.inetAddresses)
+        for (inetAddress in networkInterface.inetAddresses) {
           ip += formatLocalAddress(inetAddress)
+        }
       }
       // To remove extra characters from IP for Android Pie
       ip = formatIpForAndroidPie(ip)

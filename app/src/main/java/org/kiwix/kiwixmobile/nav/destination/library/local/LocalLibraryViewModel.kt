@@ -385,15 +385,14 @@ class LocalLibraryViewModel @Inject constructor(
   private fun selectBook(
     it: FileSelectListState,
     bookOnDisk: BookOnDisk
-  ): List<BooksOnDiskListItem> {
-    return it.bookOnDiskListItems.map { listItem ->
+  ): List<BooksOnDiskListItem> =
+    it.bookOnDiskListItems.map { listItem ->
       if (listItem is BookOnDisk && listItem.id == bookOnDisk.id) {
         listItem.copy(isSelected = !listItem.isSelected)
       } else {
         listItem
       }
     }
-  }
 
   private fun noSideEffectSelectBook(bookOnDisk: BookOnDisk): SideEffect<Unit> {
     updateState {
@@ -462,16 +461,14 @@ class LocalLibraryViewModel @Inject constructor(
           }
         }
       )
-    }
-    .onEach {
+    }.onEach {
       updateState { current ->
         current.copy(
           scanning = ScanningState(isScanning = false, progress = MAX_PROGRESS),
           isSwipeRefreshing = false
         )
       }
-    }
-    .filter { it.isNotEmpty() }
+    }.filter { it.isNotEmpty() }
     .map { books -> books.distinctBy { it.id } }
 
   private fun books(): Flow<List<Book>> =
@@ -496,7 +493,8 @@ class LocalLibraryViewModel @Inject constructor(
   ) = booksFromFileSystem.filterNot { idsInDao.contains(it.id) }
 
   private fun updateBookItems() =
-    dataSource.booksOnDiskAsListItems()
+    dataSource
+      .booksOnDiskAsListItems()
       .catch { it.printStackTrace() }
       .onEach { newList ->
         updateState { current ->
@@ -529,12 +527,13 @@ class LocalLibraryViewModel @Inject constructor(
   private fun inheritSelections(
     oldState: FileSelectListState,
     newList: MutableList<BooksOnDiskListItem>
-  ): FileSelectListState {
-    return oldState.copy(
+  ): FileSelectListState =
+    oldState.copy(
       bookOnDiskListItems =
         newList.map { newBookOnDisk ->
           val firstOrNull =
-            oldState.bookOnDiskListItems.filterIsInstance<BookOnDisk>()
+            oldState.bookOnDiskListItems
+              .filterIsInstance<BookOnDisk>()
               .firstOrNull { oldBookOnDisk ->
                 oldBookOnDisk.id == newBookOnDisk.id
               }
@@ -545,7 +544,6 @@ class LocalLibraryViewModel @Inject constructor(
           }
         }
     )
-  }
 
   private fun updateState(transform: (LocalLibraryUiState) -> LocalLibraryUiState) {
     _uiState.value = transform(_uiState.value)
@@ -689,14 +687,13 @@ class LocalLibraryViewModel @Inject constructor(
     }
   }
 
-  fun handleUserBackPressed(): BackPressActivityExtensions.Super {
-    return if (uiState.value.fileSelectListState.selectionMode == MULTI) {
+  fun handleUserBackPressed(): BackPressActivityExtensions.Super =
+    if (uiState.value.fileSelectListState.selectionMode == MULTI) {
       finishMultiModeFinished()
       BackPressActivityExtensions.Super.ShouldNotCall
     } else {
       BackPressActivityExtensions.Super.ShouldCall
     }
-  }
 
   fun filePickerMenuButtonClick(filePickerLauncher: ManagedActivityResultLauncher<Intent, ActivityResult>) {
     viewModelScope.launch {
@@ -833,7 +830,8 @@ class LocalLibraryViewModel @Inject constructor(
   override fun addBookToLibkiwixBookOnDisk(file: File) {
     viewModelScope.launch(ioDispatcher) {
       runCatching {
-        zimReaderFactory.create(ZimReaderSource(file), false)
+        zimReaderFactory
+          .create(ZimReaderSource(file), false)
           ?.let { zimFileReader ->
             val book = Book().apply { update(zimFileReader.jniKiwixReader) }
             repositoryActions.saveBook(book)

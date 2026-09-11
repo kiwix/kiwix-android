@@ -25,9 +25,9 @@ import org.kiwix.kiwixmobile.core.dao.DownloadRoomDao
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadModel
 import org.kiwix.kiwixmobile.core.entity.LibkiwixBook
 import org.kiwix.kiwixmobile.core.settings.StorageCalculator
-import org.kiwix.kiwixmobile.zimManager.libraryView.LibraryListItem.BookItem
 import org.kiwix.kiwixmobile.zimManager.libraryView.AvailableSpaceCalculator.AvailableSpaceResult.HasAvailableSpaceForBook
 import org.kiwix.kiwixmobile.zimManager.libraryView.AvailableSpaceCalculator.AvailableSpaceResult.NotEnoughSpaceForBook
+import org.kiwix.kiwixmobile.zimManager.libraryView.LibraryListItem.BookItem
 import javax.inject.Inject
 
 class AvailableSpaceCalculator @Inject constructor(
@@ -35,7 +35,8 @@ class AvailableSpaceCalculator @Inject constructor(
   val storageCalculator: StorageCalculator
 ) {
   suspend fun hasAvailableSpaceFor(bookItem: BookItem): AvailableSpaceResult {
-    val trueAvailableBytes = downloadRoomDao.allDownloads()
+    val trueAvailableBytes = downloadRoomDao
+      .allDownloads()
       .map { downloads -> downloads.sumOf(DownloadModel::bytesRemaining) }
       .map { bytesToBeDownloaded -> storageCalculator.availableBytes() - bytesToBeDownloaded }
       .first()

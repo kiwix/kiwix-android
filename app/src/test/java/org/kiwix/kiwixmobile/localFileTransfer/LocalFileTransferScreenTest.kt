@@ -31,12 +31,12 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.page.SEARCH_ICON_TESTING_TAG
+import org.kiwix.kiwixmobile.core.ui.components.CONTENT_LOADING_PROGRESS_BAR_TESTING_TAG
 import org.kiwix.kiwixmobile.core.ui.components.SHOWCASE_VIEW_MESSAGE_TESTING_TAG
 import org.kiwix.kiwixmobile.core.ui.components.SHOWCASE_VIEW_NEXT_BUTTON_TESTING_TAG
 import org.kiwix.kiwixmobile.core.ui.models.ActionMenuItem
 import org.kiwix.kiwixmobile.core.ui.models.IconItem
-import org.kiwix.kiwixmobile.core.page.SEARCH_ICON_TESTING_TAG
-import org.kiwix.kiwixmobile.core.ui.components.CONTENT_LOADING_PROGRESS_BAR_TESTING_TAG
 import org.kiwix.sharedFunctions.TestApplication
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
@@ -234,8 +234,7 @@ class LocalFileTransferScreenTest {
     composeTestRule
       .onNodeWithContentDescription(
         context.getString(R.string.status) + "0"
-      )
-      .assertIsDisplayed()
+      ).assertIsDisplayed()
   }
 
   @Test
@@ -246,8 +245,7 @@ class LocalFileTransferScreenTest {
     composeTestRule
       .onNodeWithContentDescription(
         context.getString(R.string.status) + "0"
-      )
-      .assertIsDisplayed()
+      ).assertIsDisplayed()
   }
 
   @Test
@@ -258,8 +256,7 @@ class LocalFileTransferScreenTest {
     composeTestRule
       .onNodeWithContentDescription(
         context.getString(R.string.status) + "0"
-      )
-      .assertIsDisplayed()
+      ).assertIsDisplayed()
   }
 
   @Test
@@ -271,13 +268,11 @@ class LocalFileTransferScreenTest {
     composeTestRule
       .onNodeWithContentDescription(
         context.getString(R.string.status) + "0"
-      )
-      .assertIsDisplayed()
+      ).assertIsDisplayed()
     composeTestRule
       .onNodeWithContentDescription(
         context.getString(R.string.status) + "1"
-      )
-      .assertIsDisplayed()
+      ).assertIsDisplayed()
   }
 
   @Test

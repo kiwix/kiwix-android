@@ -29,12 +29,10 @@ class BookUtils {
 
   // Get the language from the language codes of the parsed xml stream
   @Suppress("MagicNumber")
-  fun getLanguage(languageCode: String?): String {
-    return when {
-      languageCode == null -> ""
-      languageCode.length == 2 -> LanguageContainer(languageCode).languageName
-      languageCode.length == 3 -> localeMap[languageCode]?.displayLanguage.orEmpty()
-      else -> ""
-    }
+  fun getLanguage(languageCode: String?): String = when {
+    languageCode == null -> ""
+    languageCode.length == 2 -> LanguageContainer(languageCode).languageName
+    languageCode.length == 3 -> localeMap[languageCode]?.displayLanguage.orEmpty()
+    else -> ""
   }
 }

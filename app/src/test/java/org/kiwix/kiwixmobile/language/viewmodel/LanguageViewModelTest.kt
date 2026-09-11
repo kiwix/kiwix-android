@@ -73,14 +73,13 @@ class LanguageViewModelTest {
     active: Boolean = true,
     occurrences: Int = 10,
     id: Long = 1
-  ): Language {
-    return Language(
+  ): Language =
+    Language(
       languageCode = code,
       active = active,
       occurrencesOfLanguage = occurrences,
       id = id
     )
-  }
 
   @BeforeEach
   fun init() {

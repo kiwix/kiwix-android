@@ -27,7 +27,6 @@ import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performClick
-import androidx.compose.ui.test.printToLog
 import androidx.compose.ui.test.printToString
 import androidx.test.espresso.web.sugar.Web.onWebView
 import androidx.test.espresso.web.webdriver.DriverAtoms.findElement
@@ -136,8 +135,7 @@ class ReaderRobot : BaseRobot() {
             Locator.XPATH,
             "//*[contains(text(), '$articleTitle')]"
           )
-        )
-        .perform(webClick())
+        ).perform(webClick())
     }, 10)
   }
 
@@ -165,8 +163,10 @@ class ReaderRobot : BaseRobot() {
   fun assertTabsRestored(composeTestRule: ComposeContentTestRule) {
     try {
       composeTestRule.waitUntil(FIFTEEN_SECOND_DELAY) {
-        composeTestRule.onAllNodesWithTag(TABS_SIZE_TEXT_TESTING_TAG, useUnmergedTree = true)
-          .fetchSemanticsNodes().isNotEmpty()
+        composeTestRule
+          .onAllNodesWithTag(TABS_SIZE_TEXT_TESTING_TAG, useUnmergedTree = true)
+          .fetchSemanticsNodes()
+          .isNotEmpty()
       }
     } catch (e: ComposeTimeoutException) {
       Log.e(TAG, "The tab icon is not visible due to scroll. Original exception: $e")
@@ -223,7 +223,8 @@ class ReaderRobot : BaseRobot() {
         // tree so CI logs show exactly what was on screen (e.g. is the toolbar empty, did tab
         // restoration leave the wrong page selected) instead of only the bare timeout.
         Log.e(
-          TAG, "Overflow menu button never appeared. Dumping current UI tree for debugging.\n" +
+          TAG,
+          "Overflow menu button never appeared. Dumping current UI tree for debugging.\n" +
             " ${onRoot().printToString()}"
         )
         throw e
@@ -239,7 +240,8 @@ class ReaderRobot : BaseRobot() {
     composeTestRule.waitUntil(
       TestUtils.TEST_PAUSE_MS.toLong()
     ) {
-      composeTestRule.onNodeWithTag(ALERT_DIALOG_TITLE_TEXT_TESTING_TAG)
+      composeTestRule
+        .onNodeWithTag(ALERT_DIALOG_TITLE_TEXT_TESTING_TAG)
         .isDisplayed()
     }
   }
@@ -260,7 +262,8 @@ class ReaderRobot : BaseRobot() {
       composeTestRule.waitUntil(
         TestUtils.TEST_PAUSE_MS.toLong()
       ) {
-        composeTestRule.onNodeWithTag(TTS_CONTROL_STOP_BUTTON_TESTING_TAG)
+        composeTestRule
+          .onNodeWithTag(TTS_CONTROL_STOP_BUTTON_TESTING_TAG)
           .isDisplayed()
       }
     })

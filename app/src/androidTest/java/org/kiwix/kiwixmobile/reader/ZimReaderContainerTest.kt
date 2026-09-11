@@ -196,14 +196,18 @@ class ZimReaderContainerTest {
 
     // Title lookup
     val title = container.zimFileReader!!
-      .jniKiwixReader.mainEntry.getItem(true).title
+      .jniKiwixReader.mainEntry
+      .getItem(true)
+      .title
 
     val url = container.getPageUrlFromTitle(title)
     assertNotNull(url)
     assertTrue(url!!.isNotBlank())
 
     val mainEntryTitle = container.zimFileReader!!
-      .jniKiwixReader.mainEntry.getItem(true).title
+      .jniKiwixReader.mainEntry
+      .getItem(true)
+      .title
     val result = container.getPageUrlFromTitle(mainEntryTitle)
     assertNotNull(result)
     assertTrue(result!!.isNotBlank())

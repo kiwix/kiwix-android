@@ -95,7 +95,8 @@ class ErrorActivityRobot : BaseRobot() {
   }
 
   fun clickOnSendDetailsButton(composeTestRule: ComposeContentTestRule) {
-    composeTestRule.onNodeWithText(context.getString(R.string.crash_button_confirm).uppercase())
+    composeTestRule
+      .onNodeWithText(context.getString(R.string.crash_button_confirm).uppercase())
       .performClick()
   }
 

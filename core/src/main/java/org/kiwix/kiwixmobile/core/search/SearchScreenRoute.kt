@@ -97,16 +97,14 @@ fun SearchScreenRoute(
   }
 }
 
-private fun buildActionMenuItems(viewModel: SearchViewModel): List<ActionMenuItem> {
-  return listOf(
-    ActionMenuItem(
-      contentDescription = R.string.search_label,
-      icon = IconItem.Drawable(R.drawable.ic_mic_black_24dp),
-      testingTag = VOICE_SEARCH_TESTING_TAG,
-      isEnabled = true,
-      onClick = {
-        viewModel.actions.tryEmit(Action.ReceivedPromptForSpeechInput)
-      }
-    )
+private fun buildActionMenuItems(viewModel: SearchViewModel): List<ActionMenuItem> = listOf(
+  ActionMenuItem(
+    contentDescription = R.string.search_label,
+    icon = IconItem.Drawable(R.drawable.ic_mic_black_24dp),
+    testingTag = VOICE_SEARCH_TESTING_TAG,
+    isEnabled = true,
+    onClick = {
+      viewModel.actions.tryEmit(Action.ReceivedPromptForSpeechInput)
+    }
   )
-}
+)

@@ -26,7 +26,8 @@ import org.kiwix.kiwixmobile.ui.KiwixDestination
 
 object NavigateToDownloads : SideEffect<Unit> {
   override fun invokeWith(activity: AppCompatActivity) {
-    val navOptions = NavOptions.Builder()
+    val navOptions = NavOptions
+      .Builder()
       .setPopUpTo(KiwixDestination.Library.route, inclusive = true)
       .setRestoreState(true)
       .build()

@@ -21,9 +21,9 @@ package org.kiwix.kiwixmobile.core.page.viewmodel.effects
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.ui.unit.dp
 import org.kiwix.kiwixmobile.core.base.SideEffect
+import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.main.note.AddNoteDialogComposable
 import org.kiwix.kiwixmobile.core.main.note.AddNoteDialogConfig
-import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.main.note.AddNoteViewModel
 import org.kiwix.kiwixmobile.core.page.notes.models.NoteListItem
 import org.kiwix.kiwixmobile.core.utils.ZERO

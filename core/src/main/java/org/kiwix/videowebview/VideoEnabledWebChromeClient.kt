@@ -305,12 +305,10 @@ open class VideoEnabledWebChromeClient :
    * @return Returns true if the event was handled, and false if was not (video view is not visible)
    */
   @SuppressWarnings("unused")
-  fun onBackPressed(): Boolean {
-    return if (isVideoFullscreen) {
-      onHideCustomView()
-      true
-    } else {
-      false
-    }
+  fun onBackPressed(): Boolean = if (isVideoFullscreen) {
+    onHideCustomView()
+    true
+  } else {
+    false
   }
 }

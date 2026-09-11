@@ -103,7 +103,8 @@ class SearchRobot : BaseRobot() {
           timeoutMillis = TEST_PAUSE_MS.toLong(),
           condition = {
             onAllNodesWithTag(SEARCH_ITEM_TESTING_TAG)
-              .fetchSemanticsNodes().isNotEmpty()
+              .fetchSemanticsNodes()
+              .isNotEmpty()
           }
         )
         onAllNodesWithTag(SEARCH_ITEM_TESTING_TAG)[0]

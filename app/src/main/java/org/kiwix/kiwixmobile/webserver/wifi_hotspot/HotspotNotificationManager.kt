@@ -82,21 +82,20 @@ class HotspotNotificationManager @Inject constructor(
         stopIntent,
         PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
       )
-    return NotificationCompat.Builder(context, HOTSPOT_SERVICE_CHANNEL_ID)
+    return NotificationCompat
+      .Builder(context, HOTSPOT_SERVICE_CHANNEL_ID)
       .setContentTitle(context.getString(R.string.hotspot_notification_content_title))
       .setContentText(context.getString(R.string.hotspot_running))
       .setContentIntent(contentIntent)
       .apply {
         uri?.let { setLargeIcon(generateQR.createQR(it)) }
-      }
-      .setSmallIcon(R.mipmap.ic_launcher)
+      }.setSmallIcon(R.mipmap.ic_launcher)
       .setWhen(System.currentTimeMillis())
       .addAction(
         R.drawable.ic_close_white_24dp,
         context.getString(R.string.stop),
         stopHotspot
-      )
-      .build()
+      ).build()
   }
 
   fun dismissNotification() {

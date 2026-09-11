@@ -154,22 +154,20 @@ object ShortcutUtils {
     icon: IconCompat,
     shortcutIntent: Intent,
     componentName: ComponentName
-  ): ShortcutInfoCompat? {
-    return try {
-      ShortcutInfoCompat.Builder(context, id)
-        .setActivity(componentName)
-        .setShortLabel(displayTitle)
-        .setLongLabel(displayTitle)
-        .setIcon(icon)
-        .setIntent(shortcutIntent)
-        .build()
-    } catch (
-      @Suppress("TooGenericExceptionCaught")
-      e: Exception
-    ) {
-      Log.e(TAG, "Failed to build ShortcutInfo for $displayTitle", e)
-      null
-    }
+  ): ShortcutInfoCompat? = try {
+    ShortcutInfoCompat.Builder(context, id)
+      .setActivity(componentName)
+      .setShortLabel(displayTitle)
+      .setLongLabel(displayTitle)
+      .setIcon(icon)
+      .setIntent(shortcutIntent)
+      .build()
+  } catch (
+    @Suppress("TooGenericExceptionCaught")
+    e: Exception
+  ) {
+    Log.e(TAG, "Failed to build ShortcutInfo for $displayTitle", e)
+    null
   }
 
   /**
@@ -226,12 +224,11 @@ object ShortcutUtils {
   /**
    * Checks if the current device is a Xiaomi/MIUI device.
    */
-  fun isXiaomiDevice(manufacturer: String = Build.MANUFACTURER): Boolean {
-    return manufacturer.contains("Xiaomi", ignoreCase = true) ||
+  fun isXiaomiDevice(manufacturer: String = Build.MANUFACTURER): Boolean =
+    manufacturer.contains("Xiaomi", ignoreCase = true) ||
       manufacturer.contains("Redmi", ignoreCase = true) ||
       manufacturer.contains("POCO", ignoreCase = true) ||
       manufacturer.contains("Blackshark", ignoreCase = true)
-  }
 
   /**
    * Attempts to open the MIUI-specific "Other permissions" editor.

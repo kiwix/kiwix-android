@@ -18,7 +18,7 @@ dependencies {
   implementation("com.google.devtools.ksp:com.google.devtools.ksp.gradle.plugin:2.3.4")
   implementation("com.google.dagger:hilt-android-gradle-plugin:2.60.1")
   implementation("org.jacoco:org.jacoco.core:0.8.15")
-  implementation("org.jlleitschuh.gradle:ktlint-gradle:12.1.2")
+  implementation("org.jlleitschuh.gradle:ktlint-gradle:14.2.0")
   implementation("com.google.apis:google-api-services-androidpublisher:v3-rev20230406-2.0.0") {
     exclude(group = "com.google.guava", module = "guava")
   }

@@ -30,10 +30,10 @@ import androidx.core.os.LocaleListCompat
 import androidx.navigation.NavOptions
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.platform.app.InstrumentationRegistry
-import kotlinx.coroutines.runBlocking
-import org.junit.Before
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
+import kotlinx.coroutines.runBlocking
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.kiwix.kiwixmobile.BaseActivityTest
@@ -247,7 +247,8 @@ class LibkiwixBookmarkTest : BaseActivityTest() {
     val zimFile = getZimFileFromResourceFolder(context, "testzim.zim")
 
     composeTestRule.runOnUiThread {
-      val navOptions = NavOptions.Builder()
+      val navOptions = NavOptions
+        .Builder()
         .setPopUpTo(KiwixDestination.Reader.route, false)
         .build()
 

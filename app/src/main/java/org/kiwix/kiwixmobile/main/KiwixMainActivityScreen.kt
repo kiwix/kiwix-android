@@ -212,7 +212,8 @@ fun BottomNavigationBar(
         },
         label = { Text(item.title, color = MaterialTheme.colorScheme.onBackground) },
         modifier = Modifier.semantics { testTag = item.testingTag },
-        colors = NavigationBarItemDefaults.colors()
+        colors = NavigationBarItemDefaults
+          .colors()
           .copy(selectedIndicatorColor = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.3f))
       )
     }

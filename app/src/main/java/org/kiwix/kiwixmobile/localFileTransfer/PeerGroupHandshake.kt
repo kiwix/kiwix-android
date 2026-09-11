@@ -18,10 +18,10 @@
 package org.kiwix.kiwixmobile.localFileTransfer
 
 import android.net.wifi.p2p.WifiP2pInfo
-import org.kiwix.kiwixmobile.core.utils.files.Log
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.withContext
+import org.kiwix.kiwixmobile.core.utils.files.Log
 import java.io.InputStream
 import java.io.ObjectInputStream
 import java.io.ObjectOutputStream
@@ -62,8 +62,8 @@ abstract class PeerGroupHandshake(
       }
     }
 
-  private fun writeHandshakeAndExchangeMetaData(): InetAddress? {
-    return try {
+  private fun writeHandshakeAndExchangeMetaData(): InetAddress? =
+    try {
       Socket().use { client ->
         client.reuseAddress = true
         client.connect(
@@ -83,10 +83,9 @@ abstract class PeerGroupHandshake(
       ex.printStackTrace()
       null
     }
-  }
 
-  private fun readHandshakeAndExchangeMetaData(): InetAddress? {
-    return try {
+  private fun readHandshakeAndExchangeMetaData(): InetAddress? =
+    try {
       ServerSocket(PEER_HANDSHAKE_PORT)
         .use { serverSocket ->
           serverSocket.reuseAddress = true
@@ -108,7 +107,6 @@ abstract class PeerGroupHandshake(
       ex.printStackTrace()
       null
     }
-  }
 
   companion object {
     private const val TAG = "PeerGroupHandshake"

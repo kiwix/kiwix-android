@@ -22,9 +22,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flowOn
-import org.kiwix.kiwixmobile.R as AppR
 import org.kiwix.kiwixmobile.core.R
-
 import org.kiwix.kiwixmobile.core.di.IoDispatcher
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadModel
 import org.kiwix.kiwixmobile.core.entity.LibkiwixBook
@@ -37,6 +35,7 @@ import org.kiwix.kiwixmobile.zimManager.libraryView.LibraryListItem.DividerItem
 import org.kiwix.kiwixmobile.zimManager.libraryView.LibraryListItem.LibraryDownloadItem
 import org.kiwix.libkiwix.Book
 import javax.inject.Inject
+import org.kiwix.kiwixmobile.R as AppR
 
 class ObserveOnlineLibraryItems @Inject constructor(
   private val kiwixDataStore: KiwixDataStore,
@@ -50,8 +49,8 @@ class ObserveOnlineLibraryItems @Inject constructor(
     getString: (Int, Array<out Any>) -> String,
     getSimpleString: (Int) -> String,
     getDisplayLanguage: (String) -> String
-  ): Flow<List<LibraryListItem>> {
-    return combine(
+  ): Flow<List<LibraryListItem>> =
+    combine(
       localBooks,
       downloads,
       networkBooks,
@@ -70,7 +69,6 @@ class ObserveOnlineLibraryItems @Inject constructor(
         localizationHelper = LocalizationHelper(getString, getSimpleString, getDisplayLanguage)
       )
     }.flowOn(ioDispatcher)
-  }
 
   private class LocalizationHelper(
     val getString: (Int, Array<out Any>) -> String,
@@ -126,8 +124,14 @@ class ObserveOnlineLibraryItems @Inject constructor(
     selection: Selection,
     localizationHelper: LocalizationHelper
   ): String {
-    val languages = selection.language.split(",").map { it.trim() }.filter { it.isNotEmpty() }
-    val categories = selection.category.split(",").map { it.trim() }.filter { it.isNotEmpty() }
+    val languages = selection.language
+      .split(",")
+      .map { it.trim() }
+      .filter { it.isNotEmpty() }
+    val categories = selection.category
+      .split(",")
+      .map { it.trim() }
+      .filter { it.isNotEmpty() }
 
     val languagePart = when {
       languages.isEmpty() -> localizationHelper.getSimpleString(R.string.all_languages)

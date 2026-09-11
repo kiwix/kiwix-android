@@ -23,9 +23,9 @@ import kotlinx.coroutines.flow.first
 import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.isNetworkAvailable
 import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.isWifi
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
-import org.kiwix.kiwixmobile.nav.destination.library.online.helper.ResolveRefreshLibraryAction.Result.Proceed
 import org.kiwix.kiwixmobile.nav.destination.library.online.helper.ResolveRefreshLibraryAction.Result.NoInternetWithContent
 import org.kiwix.kiwixmobile.nav.destination.library.online.helper.ResolveRefreshLibraryAction.Result.NoInternetWithEmptyContent
+import org.kiwix.kiwixmobile.nav.destination.library.online.helper.ResolveRefreshLibraryAction.Result.Proceed
 import org.kiwix.kiwixmobile.nav.destination.library.online.helper.ResolveRefreshLibraryAction.Result.WifiOnlyBlocked
 import javax.inject.Inject
 
@@ -40,8 +40,8 @@ class ResolveRefreshLibraryAction @Inject constructor(
     object WifiOnlyBlocked : Result()
   }
 
-  suspend operator fun invoke(hasItems: Boolean): Result {
-    return if (!connectivityManager.isNetworkAvailable()) {
+  suspend operator fun invoke(hasItems: Boolean): Result =
+    if (!connectivityManager.isNetworkAvailable()) {
       if (hasItems) {
         NoInternetWithContent
       } else {
@@ -52,5 +52,4 @@ class ResolveRefreshLibraryAction @Inject constructor(
     } else {
       Proceed
     }
-  }
 }

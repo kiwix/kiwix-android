@@ -95,15 +95,13 @@ object RoomDowngradeBackupHelper {
   private fun backupTable(
     db: SQLiteDatabase,
     tableName: String
-  ): List<RowSnapshot> {
-    return try {
-      db.rawQuery("SELECT * FROM $tableName", null).use { cursor ->
-        readAllRows(cursor)
-      }
-    } catch (ignore: Exception) {
-      Log.e(ROOM_DOWNGRADE_HELPER, "Can not make backup of database. original exception = $ignore")
-      emptyList()
+  ): List<RowSnapshot> = try {
+    db.rawQuery("SELECT * FROM $tableName", null).use { cursor ->
+      readAllRows(cursor)
     }
+  } catch (ignore: Exception) {
+    Log.e(ROOM_DOWNGRADE_HELPER, "Can not make backup of database. original exception = $ignore")
+    emptyList()
   }
 
   private fun readAllRows(cursor: Cursor): List<RowSnapshot> {
@@ -148,15 +146,13 @@ object RoomDowngradeBackupHelper {
     return row
   }
 
-  private fun readCursorValue(cursor: Cursor, index: Int): Any? {
-    return when (cursor.getType(index)) {
-      Cursor.FIELD_TYPE_INTEGER -> cursor.getLong(index)
-      Cursor.FIELD_TYPE_FLOAT -> cursor.getDouble(index)
-      Cursor.FIELD_TYPE_STRING -> cursor.getString(index)
-      Cursor.FIELD_TYPE_BLOB -> cursor.getBlob(index)
-      Cursor.FIELD_TYPE_NULL -> null
-      else -> null
-    }
+  private fun readCursorValue(cursor: Cursor, index: Int): Any? = when (cursor.getType(index)) {
+    Cursor.FIELD_TYPE_INTEGER -> cursor.getLong(index)
+    Cursor.FIELD_TYPE_FLOAT -> cursor.getDouble(index)
+    Cursor.FIELD_TYPE_STRING -> cursor.getString(index)
+    Cursor.FIELD_TYPE_BLOB -> cursor.getBlob(index)
+    Cursor.FIELD_TYPE_NULL -> null
+    else -> null
   }
 
   private fun getExistingColumns(

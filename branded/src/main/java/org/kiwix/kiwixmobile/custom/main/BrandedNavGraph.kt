@@ -164,11 +164,10 @@ sealed class CustomDestination(val route: String) {
       searchString: String = "",
       isOpenedFromTabView: Boolean = false,
       isVoice: Boolean = false
-    ): String {
-      return SEARCH_SCREEN +
+    ): String =
+      SEARCH_SCREEN +
         "?$NAV_ARG_SEARCH_STRING=$searchString" +
         "&$TAG_FROM_TAB_SWITCHER=$isOpenedFromTabView" +
         "&$EXTRA_IS_WIDGET_VOICE=$isVoice"
-    }
   }
 }

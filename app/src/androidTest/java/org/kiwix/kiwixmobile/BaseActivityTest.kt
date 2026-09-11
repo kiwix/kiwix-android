@@ -172,8 +172,8 @@ abstract class BaseActivityTest {
    *
    * Sub classes can override this to provide the their own implementation.
    */
-  protected open fun createAccessibilityValidator(): AccessibilityValidator {
-    return AccessibilityValidator()
+  protected open fun createAccessibilityValidator(): AccessibilityValidator =
+    AccessibilityValidator()
       .setRunChecksFromRootView(true)
       .apply {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
@@ -187,7 +187,6 @@ abstract class BaseActivityTest {
           setSuppressingResultMatcher(anyOf(matchesCheck(DuplicateClickableBoundsCheck::class.java)))
         }
       }
-  }
 
   @After
   fun tearDown() {

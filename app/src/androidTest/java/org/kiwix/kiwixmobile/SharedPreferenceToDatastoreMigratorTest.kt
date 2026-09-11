@@ -71,7 +71,8 @@ class SharedPreferenceToDatastoreMigratorTest : BaseActivityTest() {
       KiwixDataStore.PREF_KIWIX_MOBILE,
       Context.MODE_PRIVATE
     )
-    mobilePrefs.edit()
+    mobilePrefs
+      .edit()
       .putString(TAG_CURRENT_FILE, "/sdcard/wiki.zim")
       .putInt(TAG_CURRENT_TAB, 3)
       .apply()
@@ -96,7 +97,8 @@ class SharedPreferenceToDatastoreMigratorTest : BaseActivityTest() {
     val storagePath = "/storage/emulated/0/Kiwix"
 
     val defaultPrefs = PreferenceManager.getDefaultSharedPreferences(context)
-    defaultPrefs.edit()
+    defaultPrefs
+      .edit()
       .putInt(KiwixDataStore.TEXT_ZOOM, 120)
       .putBoolean(KiwixDataStore.PREF_BACK_TO_TOP, true)
       .putBoolean(KiwixDataStore.PREF_NEW_TAB_BACKGROUND, false)

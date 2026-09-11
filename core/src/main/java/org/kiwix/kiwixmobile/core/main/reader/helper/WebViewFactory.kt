@@ -58,17 +58,15 @@ class WebViewFactory @Inject constructor(
     attrs: AttributeSet,
     callback: WebViewCallback,
     videoView: FrameLayout
-  ): KiwixWebView {
-    return KiwixWebView(
-      context,
-      callback,
-      attrs,
-      videoView,
-      CoreWebViewClient(callback, zimReaderContainer),
-      kiwixDataStore,
-      zimReaderContainer,
-      ioDispatcher,
-      mainDispatcher
-    )
-  }
+  ): KiwixWebView = KiwixWebView(
+    context,
+    callback,
+    attrs,
+    videoView,
+    CoreWebViewClient(callback, zimReaderContainer),
+    kiwixDataStore,
+    zimReaderContainer,
+    ioDispatcher,
+    mainDispatcher
+  )
 }

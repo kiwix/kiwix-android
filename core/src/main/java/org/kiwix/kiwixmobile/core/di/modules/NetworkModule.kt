@@ -47,29 +47,25 @@ const val KIWIX_OPDS_LIBRARY_URL = "https://opds.library.kiwix.org/"
 @InstallIn(SingletonComponent::class)
 @Module
 class NetworkModule {
-  @Provides @Singleton fun provideOkHttpClient(): OkHttpClient {
-    return OkHttpClient().newBuilder()
-      .followRedirects(true)
-      .followSslRedirects(true)
-      .connectTimeout(CONNECTION_TIMEOUT, SECONDS)
-      .readTimeout(READ_TIMEOUT, SECONDS)
-      .callTimeout(CALL_TIMEOUT, SECONDS)
-      .addNetworkInterceptor(
-        HttpLoggingInterceptor().apply {
-          level = if (BuildConfig.DEBUG) BASIC else NONE
-        }
-      )
-      .addNetworkInterceptor(UserAgentInterceptor(USER_AGENT))
-      .build()
-  }
+  @Provides @Singleton fun provideOkHttpClient(): OkHttpClient = OkHttpClient().newBuilder()
+    .followRedirects(true)
+    .followSslRedirects(true)
+    .connectTimeout(CONNECTION_TIMEOUT, SECONDS)
+    .readTimeout(READ_TIMEOUT, SECONDS)
+    .callTimeout(CALL_TIMEOUT, SECONDS)
+    .addNetworkInterceptor(
+      HttpLoggingInterceptor().apply {
+        level = if (BuildConfig.DEBUG) BASIC else NONE
+      }
+    )
+    .addNetworkInterceptor(UserAgentInterceptor(USER_AGENT))
+    .build()
 
   @Provides
   @Singleton
-  fun provideXML(): XML {
-    return XML {
-      defaultPolicy {
-        ignoreUnknownChildren()
-      }
+  fun provideXML(): XML = XML {
+    defaultPolicy {
+      ignoreUnknownChildren()
     }
   }
 

@@ -223,13 +223,11 @@ open class ErrorActivity : BaseActivity() {
   private fun createEmailIntents(
     emailIntent: Intent,
     activities: List<ResolveInfo>
-  ): MutableList<Intent> {
-    return activities.map { resolveInfo ->
-      Intent(emailIntent).apply {
-        setPackage(resolveInfo.activityInfo.packageName)
-      }
-    }.toMutableList()
-  }
+  ): MutableList<Intent> = activities.map { resolveInfo ->
+    Intent(emailIntent).apply {
+      setPackage(resolveInfo.activityInfo.packageName)
+    }
+  }.toMutableList()
 
   private val sendEmailLauncher =
     registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
@@ -350,12 +348,10 @@ open class ErrorActivity : BaseActivity() {
   private fun externalFileDetails(): String =
     getExternalFilesDirs(null).joinToString("\n") { it?.path ?: "null" }
 
-  private fun safeContains(extras: Bundle, key: String): Boolean {
-    return try {
-      extras.containsKey(key)
-    } catch (_: RuntimeException) {
-      false
-    }
+  private fun safeContains(extras: Bundle, key: String): Boolean = try {
+    extras.containsKey(key)
+  } catch (_: RuntimeException) {
+    false
   }
 
   protected open val subject: String

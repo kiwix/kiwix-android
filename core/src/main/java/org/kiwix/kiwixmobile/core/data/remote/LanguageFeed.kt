@@ -19,9 +19,9 @@
 package org.kiwix.kiwixmobile.core.data.remote
 
 import kotlinx.serialization.Serializable
-import org.kiwix.kiwixmobile.core.utils.ZERO
 import nl.adaptivity.xmlutil.serialization.XmlElement
 import nl.adaptivity.xmlutil.serialization.XmlSerialName
+import org.kiwix.kiwixmobile.core.utils.ZERO
 
 @Serializable
 @XmlSerialName("feed", namespace = "http://www.w3.org/2005/Atom", prefix = "")

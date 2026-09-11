@@ -147,11 +147,9 @@ private fun ShowDetectingFileSystemUi(
               awaitPointerEvent()
             }
           }
-        }
-        .semantics {
+        }.semantics {
           contentDescription = context.getString(R.string.detecting_file_system)
-        }
-        .testTag(ONLINE_BOOK_OVERLAY_TESTING_TAG)
+        }.testTag(ONLINE_BOOK_OVERLAY_TESTING_TAG)
         .throttledClickable(
           onClick = handleStorageCheckClick,
           onLongClick = handleStorageCheckClick

@@ -46,9 +46,8 @@ class ZimReaderContainer @Inject constructor(
       return
     }
     zimFileReader = withContext(ioDispatcher) {
-      if (zimReaderSource?.exists(ioDispatcher) == true && zimReaderSource.canOpenInLibkiwix(
-          ioDispatcher
-        )
+      if (zimReaderSource?.exists(ioDispatcher) == true &&
+        zimReaderSource.canOpenInLibkiwix(ioDispatcher)
       ) {
         zimFileReaderFactory.create(zimReaderSource, showSearchSuggestionsSpellChecked)
       } else {

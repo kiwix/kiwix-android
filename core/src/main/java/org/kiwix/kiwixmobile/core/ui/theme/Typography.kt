@@ -25,11 +25,11 @@ import org.kiwix.kiwixmobile.core.utils.ComposeDimens.LARGE_BODY_TEXT_SIZE
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.LARGE_HEADLINE_TEXT_SIZE
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.LARGE_LABEL_TEXT_SIZE
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.LARGE_TITLE_TEXT_SIZE
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.MEDIUM_BODY_LETTER_SPACING
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.MEDIUM_BODY_TEXT_SIZE
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.MEDIUM_HEADLINE_TEXT_SIZE
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.MEDIUM_LABEL_TEXT_SIZE
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.MEDIUM_TITLE_TEXT_SIZE
-import org.kiwix.kiwixmobile.core.utils.ComposeDimens.MEDIUM_BODY_LETTER_SPACING
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SMALL_BODY_TEXT_SIZE
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SMALL_HEADLINE_TEXT_SIZE
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SMALL_LABEL_TEXT_SIZE

@@ -40,25 +40,23 @@ class PendingIntentParser @Inject constructor() {
     data object None : ReaderIntentAction
   }
 
-  fun parse(intent: Intent): ReaderIntentAction {
-    return when (intent.action) {
-      Intent.ACTION_PROCESS_TEXT ->
-        OpenSearch(
-          query = intent.getStringExtra(Intent.EXTRA_PROCESS_TEXT).orEmpty(),
-          isVoice = false,
-          isOpenedFromTabView = false
-        )
+  fun parse(intent: Intent): ReaderIntentAction = when (intent.action) {
+    Intent.ACTION_PROCESS_TEXT ->
+      OpenSearch(
+        query = intent.getStringExtra(Intent.EXTRA_PROCESS_TEXT).orEmpty(),
+        isVoice = false,
+        isOpenedFromTabView = false
+      )
 
-      CoreSearchWidget.TEXT_CLICKED -> OpenSearch("", isVoice = false, isOpenedFromTabView = false)
+    CoreSearchWidget.TEXT_CLICKED -> OpenSearch("", isVoice = false, isOpenedFromTabView = false)
 
-      CoreSearchWidget.MIC_CLICKED -> OpenSearch("", true, isOpenedFromTabView = false)
+    CoreSearchWidget.MIC_CLICKED -> OpenSearch("", true, isOpenedFromTabView = false)
 
-      CoreSearchWidget.STAR_CLICKED -> OpenBookmarks
+    CoreSearchWidget.STAR_CLICKED -> OpenBookmarks
 
-      Intent.ACTION_VIEW -> parseActionViewIntent(intent)
+    Intent.ACTION_VIEW -> parseActionViewIntent(intent)
 
-      else -> None
-    }
+    else -> None
   }
 
   @Suppress("ReturnCount")

@@ -297,7 +297,9 @@ class KiwixReaderScreenTest : BaseActivityTest() {
     var downloadingZimFile: File? = null
     testFlakyView({
       downloadingZimFile = getDownloadingZimFile()
-      getOkkHttpClientForTesting().newCall(downloadRequest(rayCharlesZimFileUrl)).execute()
+      getOkkHttpClientForTesting()
+        .newCall(downloadRequest(rayCharlesZimFileUrl))
+        .execute()
         .use { response ->
           if (response.isSuccessful) {
             response.body?.let { responseBody ->
@@ -501,8 +503,7 @@ class KiwixReaderScreenTest : BaseActivityTest() {
   }
 }
 
-fun SemanticsNodeInteraction.getText(): String {
-  return fetchSemanticsNode()
+fun SemanticsNodeInteraction.getText(): String =
+  fetchSemanticsNode()
     .config[SemanticsProperties.Text]
     .joinToString("") { it.text }
-}

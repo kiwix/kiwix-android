@@ -56,8 +56,7 @@ fun LanguageItemRow(
       .height(ComposeDimens.SIXTY_FOUR_DP)
       .semantics {
         contentDescription = context.getString(R.string.select_language_content_description)
-      }
-      .clickable {
+      }.clickable {
         onCheckedChange(item)
       },
     verticalAlignment = Alignment.CenterVertically

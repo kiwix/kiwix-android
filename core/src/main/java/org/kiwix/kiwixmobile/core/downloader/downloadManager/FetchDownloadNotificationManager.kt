@@ -62,13 +62,13 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.runBlocking
 import org.kiwix.kiwixmobile.core.CoreApp
-import org.kiwix.kiwixmobile.core.utils.ACTIVE_DOWNLOAD_GROUP_KEY
-import org.kiwix.kiwixmobile.core.utils.DOWNLOAD_NOTIFICATION_CHANNEL_ID
 import org.kiwix.kiwixmobile.core.Intents
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.dao.DownloadRoomDao
 import org.kiwix.kiwixmobile.core.di.IoDispatcher
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
+import org.kiwix.kiwixmobile.core.utils.ACTIVE_DOWNLOAD_GROUP_KEY
+import org.kiwix.kiwixmobile.core.utils.DOWNLOAD_NOTIFICATION_CHANNEL_ID
 import org.kiwix.kiwixmobile.core.utils.HUNDERED
 import org.kiwix.kiwixmobile.core.utils.ZERO
 import org.kiwix.kiwixmobile.core.zim_manager.Byte
@@ -137,24 +137,22 @@ class FetchDownloadNotificationManager @Inject constructor(
   override fun getSubtitleText(
     context: Context,
     downloadNotification: DownloadNotification
-  ): String {
-    return when {
-      downloadNotification.isCompleted -> context.getString(R.string.complete)
-      downloadNotification.isFailed -> context.getString(R.string.download_failed_state)
-      downloadNotification.isPaused -> buildSubtitle(
-        context.getString(R.string.paused_state),
-        downloadNotification.downloaded,
-        downloadNotification.total
-      )
+  ): String = when {
+    downloadNotification.isCompleted -> context.getString(R.string.complete)
+    downloadNotification.isFailed -> context.getString(R.string.download_failed_state)
+    downloadNotification.isPaused -> buildSubtitle(
+      context.getString(R.string.paused_state),
+      downloadNotification.downloaded,
+      downloadNotification.total
+    )
 
-      downloadNotification.isQueued -> context.getString(R.string.resuming_state)
-      downloadNotification.etaInMilliSeconds < 0 -> context.getString(R.string.downloading_state)
-      else -> buildSubtitle(
-        super.getSubtitleText(context, downloadNotification),
-        downloadNotification.downloaded,
-        downloadNotification.total
-      )
-    }
+    downloadNotification.isQueued -> context.getString(R.string.resuming_state)
+    downloadNotification.etaInMilliSeconds < 0 -> context.getString(R.string.downloading_state)
+    else -> buildSubtitle(
+      super.getSubtitleText(context, downloadNotification),
+      downloadNotification.downloaded,
+      downloadNotification.total
+    )
   }
 
   private fun buildSubtitle(

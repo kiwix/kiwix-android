@@ -18,12 +18,12 @@
 package org.kiwix.kiwixmobile.core.entity
 
 import kotlinx.coroutines.test.runTest
+import nl.adaptivity.xmlutil.serialization.XML
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
-import nl.adaptivity.xmlutil.serialization.XML
 
 @Suppress("MaxLineLength")
 class MetaLinkNetworkEntityTest {

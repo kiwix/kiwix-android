@@ -67,7 +67,8 @@ class ObjectBoxToRoomMigratorTest : BaseActivityTest() {
       it.navigate(KiwixDestination.Library.route)
     }
     kiwixRoomDatabase =
-      Room.inMemoryDatabaseBuilder(context, KiwixRoomDatabase::class.java)
+      Room
+        .inMemoryDatabaseBuilder(context, KiwixRoomDatabase::class.java)
         .allowMainThreadQueries()
         .build()
     val testDir = File(

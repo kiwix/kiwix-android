@@ -68,7 +68,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
 import org.kiwix.kiwixmobile.core.R
-import org.kiwix.kiwixmobile.core.utils.ZERO
 import org.kiwix.kiwixmobile.core.ui.theme.DodgerBlue
 import org.kiwix.kiwixmobile.core.ui.theme.White
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.PULSE_ALPHA
@@ -81,6 +80,7 @@ import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SHOWCASE_VIEW_BACKGROUND_C
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SHOWCASE_VIEW_MESSAGE_TEXT_SIZE
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SHOWCASE_VIEW_NEXT_BUTTON_TEXT_SIZE
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SIXTEEN_DP
+import org.kiwix.kiwixmobile.core.utils.ZERO
 import kotlin.math.max
 import kotlin.math.roundToInt
 

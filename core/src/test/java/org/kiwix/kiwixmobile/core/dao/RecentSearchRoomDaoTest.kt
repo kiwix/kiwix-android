@@ -29,8 +29,8 @@ import org.hamcrest.core.IsEqual.equalTo
 import org.junit.After
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.kiwix.sharedFunctions.TestApplication
 import org.kiwix.kiwixmobile.core.data.KiwixRoomDatabase
+import org.kiwix.sharedFunctions.TestApplication
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 

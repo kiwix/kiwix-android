@@ -21,7 +21,6 @@ package org.kiwix.kiwixmobile.language.viewmodel
 import android.app.Application
 import androidx.annotation.VisibleForTesting
 import androidx.appcompat.app.AppCompatActivity
-import org.kiwix.kiwixmobile.core.utils.LocaleHelper
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -35,13 +34,13 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.SideEffect
-
 import org.kiwix.kiwixmobile.core.extensions.registerReceiver
+import org.kiwix.kiwixmobile.core.utils.LocaleHelper
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.zim_manager.ConnectivityBroadcastReceiver
 import org.kiwix.kiwixmobile.core.zim_manager.Language
-import org.kiwix.kiwixmobile.language.helper.ObserveLanguages
 import org.kiwix.kiwixmobile.language.composables.LanguageListItem.LanguageItem
+import org.kiwix.kiwixmobile.language.helper.ObserveLanguages
 import org.kiwix.kiwixmobile.language.viewmodel.Action.Cancel
 import org.kiwix.kiwixmobile.language.viewmodel.Action.Error
 import org.kiwix.kiwixmobile.language.viewmodel.Action.Filter
@@ -111,16 +110,17 @@ open class LanguageViewModel @Inject constructor(
     }
     val systemLanguageISO2 = systemLanguageLocale.language
 
-    val sortedOthers = otherLanguages.sortedWith(
-      compareByDescending<Language> {
-        it.languageCodeISO2.equals(systemLanguageISO2, ignoreCase = true) ||
-          it.languageCode.equals(systemLanguageISO2, ignoreCase = true) ||
-          it.languageCodeISO2.equals(systemLanguageISO3, ignoreCase = true) ||
-          it.languageCode.equals(systemLanguageISO3, ignoreCase = true)
-      }.thenBy { it.languageLocalized }
-    ).mapIndexed { index, language ->
-      language.copy(id = (index + 1).toLong())
-    }
+    val sortedOthers = otherLanguages
+      .sortedWith(
+        compareByDescending<Language> {
+          it.languageCodeISO2.equals(systemLanguageISO2, ignoreCase = true) ||
+            it.languageCode.equals(systemLanguageISO2, ignoreCase = true) ||
+            it.languageCodeISO2.equals(systemLanguageISO3, ignoreCase = true) ||
+            it.languageCode.equals(systemLanguageISO3, ignoreCase = true)
+        }.thenBy { it.languageLocalized }
+      ).mapIndexed { index, language ->
+        language.copy(id = (index + 1).toLong())
+      }
 
     return if (allLanguagesItem != null) {
       buildList {
@@ -149,8 +149,8 @@ open class LanguageViewModel @Inject constructor(
   private fun reduce(
     action: Action,
     currentState: State
-  ): State {
-    return when (action) {
+  ): State =
+    when (action) {
       is Error -> State.Error(action.errorMessage)
       is UpdateLanguages -> updateLanguages(action, currentState)
       is Filter -> filter(action, currentState)
@@ -158,7 +158,6 @@ open class LanguageViewModel @Inject constructor(
       Save -> saveAction(currentState)
       Cancel -> cancel(currentState)
     }
-  }
 
   private fun cancel(currentState: State): State {
     if (currentState !is Content) return currentState

@@ -35,12 +35,12 @@ import io.mockk.mockkObject
 import io.mockk.slot
 import io.mockk.spyk
 import io.mockk.verify
-import org.kiwix.kiwixmobile.core.R
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Test
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.runner.RunWith
+import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils
 import org.robolectric.RobolectricTestRunner

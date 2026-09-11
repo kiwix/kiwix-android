@@ -19,13 +19,13 @@
 package org.kiwix.kiwixmobile.zimManager.fileselectView.effects
 
 import kotlinx.coroutines.CoroutineDispatcher
-import javax.inject.Inject
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookOnDisk
 import org.kiwix.kiwixmobile.core.di.IoDispatcher
 import org.kiwix.kiwixmobile.core.extensions.isFileExist
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListItem
+import javax.inject.Inject
 
 data class DeleteFilesUseCase @Inject constructor(
   private val libkiwixBookOnDisk: LibkiwixBookOnDisk,
@@ -34,8 +34,8 @@ data class DeleteFilesUseCase @Inject constructor(
 ) {
   suspend operator fun invoke(
     books: List<BooksOnDiskListItem.BookOnDisk>
-  ): Boolean {
-    return books.fold(true) { acc, book ->
+  ): Boolean =
+    books.fold(true) { acc, book ->
       acc &&
         deleteBook(book).also {
           if (it && book.zimReaderSource == zimReaderContainer.zimReaderSource) {
@@ -43,7 +43,6 @@ data class DeleteFilesUseCase @Inject constructor(
           }
         }
     }
-  }
 
   @Suppress("ReturnCount")
   private suspend fun deleteBook(

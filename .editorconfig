@@ -4,7 +4,6 @@ end_of_line=lf
 insert_final_newline=true
 indent_style=space
 indent_size=2
-ktlint_standard_import-ordering = disabled
 ktlint_standard_trailing-comma-on-call-site = disabled
 ktlint_standard_trailing-comma-on-declaration-site = disabled
 ktlint_standard_annotation = disabled
@@ -13,6 +12,9 @@ ktlint_standard_blank-line-before-declaration = disabled
 ktlint_standard_string-template-indent = disabled
 ktlint_standard_multiline-expression-wrapping = disabled
 ktlint_standard_package-name = disabled
+ktlint_standard_chain-method-continuation = disabled
+ktlint_standard_class-signature = disabled
+ktlint_standard_parameter-list-wrapping = disabled
 ktlint_function_naming_ignore_when_annotated_with = Composable
 
 [{*.sht,*.html,*.shtm,*.shtml,*.htm}]

@@ -200,13 +200,12 @@ fun PauseStopButtonsRow(
 }
 
 @Composable
-private fun getPauseResumeButtonIcon(isPaused: Boolean): IconItem {
-  return if (isPaused) {
+private fun getPauseResumeButtonIcon(isPaused: Boolean): IconItem =
+  if (isPaused) {
     IconItem.Drawable(R.drawable.ic_play_24dp)
   } else {
     IconItem.Drawable(R.drawable.ic_pause_24dp)
   }
-}
 
 @Composable
 private fun DownloadStateRow(item: LibraryDownloadItem) {

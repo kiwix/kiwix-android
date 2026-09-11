@@ -19,8 +19,8 @@
 package org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel
 
 import org.kiwix.kiwixmobile.core.zim_manager.Category
-import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.CategoryListItem.HeaderItem
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.CategoryListItem.CategoryItem
+import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.CategoryListItem.HeaderItem
 
 sealed class State {
   data class Error(val errorMessage: String) : State()
@@ -70,13 +70,8 @@ sealed class State {
       internal fun createViewList(
         items: List<Category>,
         filter: String
-      ) = activeItems(
-        items, filter
-      ) +
-        otherItems(
-          items,
-          filter
-        )
+      ) = activeItems(items, filter) +
+        otherItems(items, filter)
 
       private fun activeItems(
         items: List<Category>,
@@ -105,7 +100,8 @@ sealed class State {
         filter: String,
         filterCondition: (Category) -> Boolean,
         headerId: Long
-      ) = items.filter(filterCondition)
+      ) = items
+        .filter(filterCondition)
         .filter { filter.isEmpty() or it.matches(filter) }
         .takeIf { it.isNotEmpty() }
         ?.let { listOf(HeaderItem(headerId)) + it.map { category -> CategoryItem(category) } }

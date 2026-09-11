@@ -44,7 +44,8 @@ class LocalFileTransferViewModel @Inject constructor(
   private val wifiDirectManager: WifiDirectManager,
   private val locationManager: LocationManager,
   private val permissionChecker: KiwixPermissionChecker
-) : ViewModel(), WifiDirectManager.Callbacks {
+) : ViewModel(),
+  WifiDirectManager.Callbacks {
   private val _uiState = MutableStateFlow(LocalFileTransferUiState())
   val uiState: StateFlow<LocalFileTransferUiState> = _uiState.asStateFlow()
 
@@ -145,8 +146,8 @@ class LocalFileTransferViewModel @Inject constructor(
           isProviderEnabled(LocationManager.NETWORK_PROVIDER)
       }
 
-  private fun isProviderEnabled(locationProvider: String): Boolean {
-    return try {
+  private fun isProviderEnabled(locationProvider: String): Boolean =
+    try {
       locationManager.isProviderEnabled(locationProvider)
     } catch (ex: SecurityException) {
       ex.printStackTrace()
@@ -155,7 +156,6 @@ class LocalFileTransferViewModel @Inject constructor(
       ex.printStackTrace()
       false
     }
-  }
 
   private fun requestEnableWifiP2pServices() {
     showDialog(DialogEvent.ShowEnableWifiP2p)

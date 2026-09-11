@@ -375,13 +375,11 @@ class ZimFileReader(
     }
 
   @Throws(IOException::class)
-  private fun loadAssetFromCache(uri: String): FileInputStream {
-    return File(
-      FileUtils.getFileCacheDir(CoreApp.instance),
-      uri.substringAfterLast("/")
-    ).apply { getContent(uri)?.let(::writeBytes) }
-      .inputStream()
-  }
+  private fun loadAssetFromCache(uri: String): FileInputStream = File(
+    FileUtils.getFileCacheDir(CoreApp.instance),
+    uri.substringAfterLast("/")
+  ).apply { getContent(uri)?.let(::writeBytes) }
+    .inputStream()
 
   private fun getContent(url: String) =
     try {

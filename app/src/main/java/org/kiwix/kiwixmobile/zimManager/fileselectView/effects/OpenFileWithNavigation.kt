@@ -48,7 +48,8 @@ data class OpenFileWithNavigation(
           activity.getString(R.string.error_file_not_found, zimReaderSource.toDatabase())
         )
       } else {
-        val navOptions = NavOptions.Builder()
+        val navOptions = NavOptions
+          .Builder()
           .setPopUpTo(KiwixDestination.Reader.route, inclusive = true)
           .build()
         (activity as CoreMainActivity).apply {

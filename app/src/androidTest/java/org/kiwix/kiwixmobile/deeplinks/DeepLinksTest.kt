@@ -33,11 +33,11 @@ import androidx.core.net.toUri
 import androidx.core.os.LocaleListCompat
 import androidx.lifecycle.Lifecycle
 import androidx.test.core.app.ActivityScenario
+import dagger.hilt.android.testing.HiltAndroidRule
+import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Before
-import dagger.hilt.android.testing.HiltAndroidRule
-import dagger.hilt.android.testing.HiltAndroidTest
 import org.junit.Rule
 import org.junit.Test
 import org.junit.jupiter.api.fail
@@ -86,9 +86,10 @@ class DeepLinksTest : BaseActivityTest() {
   fun fileTypeDeepLinkTest() {
     loadZimFileInApplicationAndReturnSchemeTypeUri("file")?.let {
       // Launch the activity to test the deep link
-      ActivityScenario.launch<KiwixMainActivity>(
-        createDeepLinkIntent(it, "application/octet-stream")
-      ).onActivity {}
+      ActivityScenario
+        .launch<KiwixMainActivity>(
+          createDeepLinkIntent(it, "application/octet-stream")
+        ).onActivity {}
       clickOnCopy(composeTestRule)
       navigationHistory {
         checkZimFileLoadedSuccessful(composeTestRule)
@@ -118,9 +119,10 @@ class DeepLinksTest : BaseActivityTest() {
   fun contentTypeDeepLinkTest() {
     loadZimFileInApplicationAndReturnSchemeTypeUri("content")?.let {
       // Launch the activity to test the deep link
-      ActivityScenario.launch<KiwixMainActivity>(
-        createDeepLinkIntent(it, "application/octet-stream")
-      ).onActivity {}
+      ActivityScenario
+        .launch<KiwixMainActivity>(
+          createDeepLinkIntent(it, "application/octet-stream")
+        ).onActivity {}
       clickOnCopy(composeTestRule)
       navigationHistory {
         checkZimFileLoadedSuccessful(composeTestRule)
@@ -156,9 +158,10 @@ class DeepLinksTest : BaseActivityTest() {
       waitUntilZimFilesRefreshing(composeTestRule)
     }
     // it tests the zim deep link e.g. (zim://60094d1e-1c9a-a60b-2011-4fb02f8db6c3/A/Android_(operating_system).html)
-    ActivityScenario.launch<KiwixMainActivity>(
-      createDeepLinkIntent("zim://60094d1e-1c9a-a60b-2011-4fb02f8db6c3/A/Android_(operating_system).html".toUri())
-    ).onActivity {}
+    ActivityScenario
+      .launch<KiwixMainActivity>(
+        createDeepLinkIntent("zim://60094d1e-1c9a-a60b-2011-4fb02f8db6c3/A/Android_(operating_system).html".toUri())
+      ).onActivity {}
     // for a bit to properly handle the deep link.
     composeTestRule.mainClock.advanceTimeBy(OPENING_ZIM_FILE_DELAY + 500)
     composeTestRule.waitForIdle()
@@ -172,9 +175,10 @@ class DeepLinksTest : BaseActivityTest() {
   fun testZimHostDeepLink() {
     // For testing the deep link triggers when user click on notification of the hotspot.
     // it should open the WIFI-Hotspot screen.
-    ActivityScenario.launch<KiwixMainActivity>(
-      createDeepLinkIntent(ZIM_HOST_NAV_DEEP_LINK.toUri())
-    ).onActivity {}
+    ActivityScenario
+      .launch<KiwixMainActivity>(
+        createDeepLinkIntent(ZIM_HOST_NAV_DEEP_LINK.toUri())
+      ).onActivity {}
     // for a bit to properly handle the deep link.
     composeTestRule.mainClock.advanceTimeBy(OPENING_ZIM_FILE_DELAY + 500)
     composeTestRule.waitForIdle()
@@ -222,14 +226,13 @@ class DeepLinksTest : BaseActivityTest() {
   private fun createDeepLinkIntent(
     uri: Uri,
     mimeType: String? = null
-  ): Intent {
-    return Intent(Intent.ACTION_VIEW).apply {
+  ): Intent =
+    Intent(Intent.ACTION_VIEW).apply {
       data = uri
       mimeType?.let { setDataAndType(uri, it) }
       addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
       setPackage(context.packageName)
     }
-  }
 
   @After
   fun finish() {

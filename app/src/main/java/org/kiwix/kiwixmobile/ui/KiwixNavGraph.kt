@@ -153,7 +153,8 @@ fun KiwixNavGraph(
     composable(KiwixDestination.Intro.route) {
       IntroScreenRoute(
         navigateToLibrary = {
-          val navOptions = NavOptions.Builder()
+          val navOptions = NavOptions
+            .Builder()
             .setPopUpTo(KiwixDestination.Intro.route, inclusive = true)
             .build()
           navController.navigate(KiwixDestination.Library.route, navOptions)
@@ -275,22 +276,20 @@ sealed class KiwixDestination(val route: String) {
       searchString: String = "",
       isOpenedFromTabView: Boolean = false,
       isVoice: Boolean = false
-    ): String {
-      return SEARCH_SCREEN +
+    ): String =
+      SEARCH_SCREEN +
         "?$NAV_ARG_SEARCH_STRING=$searchString" +
         "&$TAG_FROM_TAB_SWITCHER=$isOpenedFromTabView" +
         "&$EXTRA_IS_WIDGET_VOICE=$isVoice"
-    }
   }
 
   object LocalFileTransfer : KiwixDestination("$LOCAL_FILE_TRANSFER_SCREEN?$URIS_KEY={$URIS_KEY}") {
-    fun createRoute(uris: String? = null): String {
-      return if (uris != null) {
+    fun createRoute(uris: String? = null): String =
+      if (uris != null) {
         "$LOCAL_FILE_TRANSFER_SCREEN?$URIS_KEY=${Uri.encode(uris)}"
       } else {
         "$LOCAL_FILE_TRANSFER_SCREEN?$URIS_KEY=null"
       }
-    }
   }
 }
 

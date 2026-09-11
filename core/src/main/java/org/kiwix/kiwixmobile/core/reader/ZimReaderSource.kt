@@ -26,9 +26,9 @@ import androidx.core.net.toUri
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import org.kiwix.kiwixmobile.core.CoreApp
-import org.kiwix.kiwixmobile.core.utils.ZERO
 import org.kiwix.kiwixmobile.core.extensions.canReadFile
 import org.kiwix.kiwixmobile.core.extensions.isFileExist
+import org.kiwix.kiwixmobile.core.utils.ZERO
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils.getAssetFileDescriptorFromUri
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils.isFileDescriptorCanOpenWithLibkiwix
 import org.kiwix.libzim.Archive
@@ -138,18 +138,16 @@ class ZimReaderSource(
     }
   }
 
-  fun getUri(activity: AppCompatActivity): Uri? {
-    return when {
-      file != null -> {
-        FileProvider.getUriForFile(
-          activity,
-          "${activity.packageName}.fileprovider",
-          file
-        )
-      }
-
-      else -> uri
+  fun getUri(activity: AppCompatActivity): Uri? = when {
+    file != null -> {
+      FileProvider.getUriForFile(
+        activity,
+        "${activity.packageName}.fileprovider",
+        file
+      )
     }
+
+    else -> uri
   }
 
   override fun hashCode(): Int = when {

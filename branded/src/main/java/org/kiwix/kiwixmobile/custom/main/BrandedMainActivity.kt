@@ -21,7 +21,6 @@ package org.kiwix.kiwixmobile.custom.main
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.compose.setContent
-import dagger.hilt.android.AndroidEntryPoint
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.rememberDrawerState
@@ -34,6 +33,7 @@ import androidx.core.net.toUri
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.rememberNavController
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.R.drawable

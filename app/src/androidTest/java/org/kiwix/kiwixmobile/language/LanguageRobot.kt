@@ -55,7 +55,8 @@ class LanguageRobot : BaseRobot() {
   }
 
   fun clickOnSaveLanguageIcon(composeTestRule: ComposeContentTestRule) {
-    composeTestRule.onNodeWithTag(SAVE_ICON_TESTING_TAG)
+    composeTestRule
+      .onNodeWithTag(SAVE_ICON_TESTING_TAG)
       .performClick()
   }
 
@@ -75,7 +76,8 @@ class LanguageRobot : BaseRobot() {
     composeTestRule: ComposeContentTestRule,
     matchLanguage: String
   ) {
-    composeTestRule.onNodeWithText(matchLanguage)
+    composeTestRule
+      .onNodeWithText(matchLanguage)
       .performClick()
   }
 
@@ -104,8 +106,7 @@ class LanguageRobot : BaseRobot() {
       composeTestRule
         .onAllNodesWithContentDescription(
           context.getString(string.select_language_content_description)
-        )
-        .fetchSemanticsNodes()
+        ).fetchSemanticsNodes()
         .size
     // throw the exception when there is no more retry left.
     throw AssertionError(

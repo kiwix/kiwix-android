@@ -21,9 +21,9 @@ package org.kiwix.kiwixmobile.nav.destination.library
 import androidx.compose.ui.test.junit4.accessibility.enableAccessibilityChecks
 import androidx.compose.ui.test.junit4.createComposeRule
 import com.adevinta.android.barista.interaction.BaristaSleepInteractions
-import org.junit.Before
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.kiwix.kiwixmobile.BaseActivityTest

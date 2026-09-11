@@ -39,7 +39,6 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.core.content.pm.ShortcutInfoCompat
 import androidx.core.content.pm.ShortcutManagerCompat
 import androidx.core.os.LocaleListCompat
-import dagger.hilt.android.AndroidEntryPoint
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.lifecycleScope
@@ -48,6 +47,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.rememberNavController
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainCoroutineDispatcher
 import kotlinx.coroutines.delay
@@ -237,7 +237,8 @@ class KiwixMainActivity : CoreMainActivity() {
   private suspend fun migrateInternalToPublicAppDirectory() {
     if (!kiwixDataStore.isAppDirectoryMigrated.first()) {
       val storagePath =
-        storageDeviceProvider.getWritableStorage()
+        storageDeviceProvider
+          .getWritableStorage()
           .getOrNull(kiwixDataStore.selectedStoragePosition.first())
           ?.name
       storagePath?.let {
@@ -456,7 +457,8 @@ class KiwixMainActivity : CoreMainActivity() {
   private fun dynamicShortcutList(): List<ShortcutInfoCompat> {
     // Create a shortcut for opening the "New tab"
     val newTabShortcut =
-      ShortcutInfoCompat.Builder(this, NEW_TAB_SHORTCUT_ID)
+      ShortcutInfoCompat
+        .Builder(this, NEW_TAB_SHORTCUT_ID)
         .setShortLabel(getString(string.new_tab_shortcut_label))
         .setLongLabel(getString(string.new_tab_shortcut_label))
         .setIcon(createShortcutIcon(drawable.ic_add_blue_24dp))
@@ -465,12 +467,12 @@ class KiwixMainActivity : CoreMainActivity() {
           Intent(this, KiwixMainActivity::class.java).apply {
             action = ACTION_NEW_TAB
           }
-        )
-        .build()
+        ).build()
 
     // create a shortCut for opening the online screen.
     val getContentShortcut =
-      ShortcutInfoCompat.Builder(this, GET_CONTENT_SHORTCUT_ID)
+      ShortcutInfoCompat
+        .Builder(this, GET_CONTENT_SHORTCUT_ID)
         .setShortLabel(getString(string.get_content_shortcut_label))
         .setLongLabel(getString(string.get_content_shortcut_label))
         .setIcon(createShortcutIcon(drawable.ic_file_download_blue_24dp))
@@ -479,8 +481,7 @@ class KiwixMainActivity : CoreMainActivity() {
           Intent(this, KiwixMainActivity::class.java).apply {
             action = ACTION_GET_CONTENT
           }
-        )
-        .build()
+        ).build()
 
     return listOf(newTabShortcut, getContentShortcut)
   }

@@ -38,12 +38,12 @@ import kotlinx.coroutines.withContext
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.di.IoDispatcher
 import org.kiwix.kiwixmobile.core.main.note.AddNoteViewModel.AddNoteEffect.DismissDialog
+import org.kiwix.kiwixmobile.core.main.note.AddNoteViewModel.AddNoteEffect.ReadPermissionRequiredDialog
 import org.kiwix.kiwixmobile.core.main.note.AddNoteViewModel.AddNoteEffect.RequestStoragePermission
 import org.kiwix.kiwixmobile.core.main.note.AddNoteViewModel.AddNoteEffect.ShareNote
 import org.kiwix.kiwixmobile.core.main.note.AddNoteViewModel.AddNoteEffect.ShowDiscardConfirmationDialog
 import org.kiwix.kiwixmobile.core.main.note.AddNoteViewModel.AddNoteEffect.ShowToast
 import org.kiwix.kiwixmobile.core.main.note.AddNoteViewModel.AddNoteEffect.ShowUndoDeleteSnackbar
-import org.kiwix.kiwixmobile.core.main.note.AddNoteViewModel.AddNoteEffect.ReadPermissionRequiredDialog
 import org.kiwix.kiwixmobile.core.main.note.helper.NoteMetadata
 import org.kiwix.kiwixmobile.core.main.note.helper.NoteMetadataFactory
 import org.kiwix.kiwixmobile.core.main.note.repository.NoteRepository

@@ -21,8 +21,8 @@ package org.kiwix.kiwixmobile.data.remote
 import androidx.core.net.toUri
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
-import org.kiwix.kiwixmobile.core.di.IoDispatcher
 import org.kiwix.kiwixmobile.core.data.remote.KiwixService.Companion.OPDS_LIBRARY_ENDPOINT
+import org.kiwix.kiwixmobile.core.di.IoDispatcher
 import org.kiwix.kiwixmobile.core.entity.LibkiwixBook
 import org.kiwix.kiwixmobile.core.utils.ZERO
 import org.kiwix.libkiwix.Library
@@ -80,7 +80,8 @@ class OnlineLibraryManager @Inject constructor(
     category: String? = null
   ): String {
     val cleanBaseUrl = if (baseUrl.endsWith("/")) baseUrl else "$baseUrl/"
-    val builder = "$cleanBaseUrl$OPDS_LIBRARY_ENDPOINT".toUri()
+    val builder = "$cleanBaseUrl$OPDS_LIBRARY_ENDPOINT"
+      .toUri()
       .buildUpon()
       .appendQueryParameter("start", "$start")
       .appendQueryParameter("count", "$count")

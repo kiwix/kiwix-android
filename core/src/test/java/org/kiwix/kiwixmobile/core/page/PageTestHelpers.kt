@@ -46,21 +46,19 @@ fun historyItem(
   zimId: String = "zimId",
   historyUrl: String = "historyUrl",
   zimReaderSource: ZimReaderSource
-): HistoryListItem.HistoryItem {
-  return HistoryListItem.HistoryItem(
-    2,
-    zimId,
-    "zimName",
-    zimReaderSource,
-    "favicon",
-    historyUrl,
-    historyTitle,
-    dateString,
-    100,
-    isSelected,
-    id
-  )
-}
+): HistoryListItem.HistoryItem = HistoryListItem.HistoryItem(
+  2,
+  zimId,
+  "zimName",
+  zimReaderSource,
+  "favicon",
+  historyUrl,
+  historyTitle,
+  dateString,
+  100,
+  isSelected,
+  id
+)
 
 fun historyState(
   historyItems: List<HistoryListItem.HistoryItem> = listOf(),
@@ -84,18 +82,16 @@ fun bookmark(
   zimReaderSource: ZimReaderSource,
   bookmarkUrl: String = "bookmarkUrl",
   favicon: String = "favicon"
-): BookmarkItem {
-  return BookmarkItem(
-    id = id,
-    zimId = zimId,
-    zimName = zimName,
-    zimReaderSource = zimReaderSource,
-    bookmarkUrl = bookmarkUrl,
-    title = bookmarkTitle,
-    isSelected = isSelected,
-    favicon = favicon
-  )
-}
+): BookmarkItem = BookmarkItem(
+  id = id,
+  zimId = zimId,
+  zimName = zimName,
+  zimReaderSource = zimReaderSource,
+  bookmarkUrl = bookmarkUrl,
+  title = bookmarkTitle,
+  isSelected = isSelected,
+  favicon = favicon
+)
 
 fun libkiwixBookmarkItem(
   databaseId: Long = 0L,
@@ -107,21 +103,19 @@ fun libkiwixBookmarkItem(
   zimReaderSource: ZimReaderSource,
   bookmarkUrl: String = "bookmarkUrl",
   favicon: String = "favicon"
-): LibkiwixBookmarkItem {
-  return LibkiwixBookmarkItem(
-    databaseId = databaseId,
-    id = id,
-    zimId = zimId,
-    zimName = zimName,
-    zimFilePath = zimReaderSource.toDatabase(),
-    zimReaderSource = null,
-    bookmarkUrl = bookmarkUrl,
-    title = bookmarkTitle,
-    isSelected = isSelected,
-    favicon = favicon,
-    libKiwixBook = null
-  )
-}
+): LibkiwixBookmarkItem = LibkiwixBookmarkItem(
+  databaseId = databaseId,
+  id = id,
+  zimId = zimId,
+  zimName = zimName,
+  zimFilePath = zimReaderSource.toDatabase(),
+  zimReaderSource = null,
+  bookmarkUrl = bookmarkUrl,
+  title = bookmarkTitle,
+  isSelected = isSelected,
+  favicon = favicon,
+  libKiwixBook = null
+)
 
 fun note(
   zimId: String = "id",
@@ -131,17 +125,15 @@ fun note(
   noteFilePath: String = "",
   zimReaderSource: ZimReaderSource,
   favicon: String = ""
-): NoteListItem {
-  return NoteListItem(
-    zimId = zimId,
-    zimUrl = zimUrl,
-    title = title,
-    url = url,
-    noteFilePath = noteFilePath,
-    zimReaderSource = zimReaderSource,
-    favicon = favicon
-  )
-}
+): NoteListItem = NoteListItem(
+  zimId = zimId,
+  zimUrl = zimUrl,
+  title = title,
+  url = url,
+  noteFilePath = noteFilePath,
+  zimReaderSource = zimReaderSource,
+  favicon = favicon
+)
 
 fun bookmarkState(
   bookmarks: List<LibkiwixBookmarkItem> = emptyList(),

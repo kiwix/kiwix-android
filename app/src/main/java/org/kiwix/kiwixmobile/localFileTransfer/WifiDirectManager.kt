@@ -338,14 +338,13 @@ class WifiDirectManager @Inject constructor(
     }
   }
 
-  fun getErrorMessage(reason: Int): String {
-    return when (reason) {
+  fun getErrorMessage(reason: Int): String =
+    when (reason) {
       WifiP2pManager.ERROR -> "Internal error"
       WifiP2pManager.BUSY -> "Framework busy, unable to service request"
       WifiP2pManager.P2P_UNSUPPORTED -> "P2P unsupported on this device"
       else -> "Unknown error code - $reason"
     }
-  }
 
   private fun onFileTransferAsyncTaskComplete(wereAllFilesTransferred: Boolean) {
     if (wereAllFilesTransferred) {
