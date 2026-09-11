@@ -184,6 +184,7 @@ class AppConfigurer {
         exclude(module = "xpp3")
       }
       androidTestUtil(Libs.orchestrator)
+      androidTestUtil(Libs.test_services)
       androidTestCompileOnly(Libs.javax_annotation_api)
       androidTestImplementation(Libs.HILT_ANDROID_TESTING)
       kspAndroidTest(Libs.HILT_ANDROID_COMPILER)

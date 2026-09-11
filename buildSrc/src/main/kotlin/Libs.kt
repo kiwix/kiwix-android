@@ -122,6 +122,15 @@ object Libs {
     "androidx.test:orchestrator:" + Versions.androidx_test_orchestrator
 
   /**
+   * Orchestrator shells out to ShellMain, which lives in this APK, not orchestrator's
+   * own - without it installed on-device, orchestrator aborts with
+   * ClassNotFoundException: androidx.test.services.shellexecutor.ShellMain.
+   * https://developer.android.com/training/testing/instrumented-tests/androidx-test-libraries/runner
+   */
+  const val test_services: String =
+    "androidx.test.services:test-services:" + Versions.androidx_test_services
+
+  /**
    * https://developer.android.com/testing
    */
   const val androidx_test_rules: String = "androidx.test:rules:" + Versions.androidx_test_core
