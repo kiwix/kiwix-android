@@ -128,14 +128,14 @@ class FileOperationHandlerImpl @Inject constructor(
     if (!DocumentsContract.isDocumentUri(context, uri)) return false
 
     val flags =
-      contentResolver.query(
-        uri,
-        arrayOf(DocumentsContract.Document.COLUMN_FLAGS),
-        null,
-        null,
-        null
-      )
-        ?.use { cursor ->
+      contentResolver
+        .query(
+          uri,
+          arrayOf(DocumentsContract.Document.COLUMN_FLAGS),
+          null,
+          null,
+          null
+        )?.use { cursor ->
           if (cursor.moveToFirst()) cursor.getInt(ZERO) else ZERO
         } ?: ZERO
 

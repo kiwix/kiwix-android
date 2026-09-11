@@ -130,7 +130,9 @@ class DownloadServiceTestForBrandedApps {
       testFlakyView({
         // test with a large ZIM file to properly test the scenario
         downloadingZimFile = getDownloadingZimFileFromDataFolder()
-        getOkkHttpClientForTesting().newCall(downloadRequest()).execute()
+        getOkkHttpClientForTesting()
+          .newCall(downloadRequest())
+          .execute()
           .use { response ->
             if (response.isSuccessful) {
               response.body?.let { responseBody ->
@@ -182,7 +184,8 @@ class DownloadServiceTestForBrandedApps {
   }
 
   private fun downloadRequest() =
-    Request.Builder()
+    Request
+      .Builder()
       .url(URI.create(rayCharlesZIMFileUrl).toURL())
       .build()
 

@@ -462,16 +462,14 @@ class LocalLibraryViewModel @Inject constructor(
           }
         }
       )
-    }
-    .onEach {
+    }.onEach {
       updateState { current ->
         current.copy(
           scanning = ScanningState(isScanning = false, progress = MAX_PROGRESS),
           isSwipeRefreshing = false
         )
       }
-    }
-    .filter { it.isNotEmpty() }
+    }.filter { it.isNotEmpty() }
     .map { books -> books.distinctBy { it.id } }
 
   private fun books(): Flow<List<Book>> =
@@ -496,7 +494,8 @@ class LocalLibraryViewModel @Inject constructor(
   ) = booksFromFileSystem.filterNot { idsInDao.contains(it.id) }
 
   private fun updateBookItems() =
-    dataSource.booksOnDiskAsListItems()
+    dataSource
+      .booksOnDiskAsListItems()
       .catch { it.printStackTrace() }
       .onEach { newList ->
         updateState { current ->
@@ -534,7 +533,8 @@ class LocalLibraryViewModel @Inject constructor(
       bookOnDiskListItems =
         newList.map { newBookOnDisk ->
           val firstOrNull =
-            oldState.bookOnDiskListItems.filterIsInstance<BookOnDisk>()
+            oldState.bookOnDiskListItems
+              .filterIsInstance<BookOnDisk>()
               .firstOrNull { oldBookOnDisk ->
                 oldBookOnDisk.id == newBookOnDisk.id
               }
@@ -833,7 +833,8 @@ class LocalLibraryViewModel @Inject constructor(
   override fun addBookToLibkiwixBookOnDisk(file: File) {
     viewModelScope.launch(ioDispatcher) {
       runCatching {
-        zimReaderFactory.create(ZimReaderSource(file), false)
+        zimReaderFactory
+          .create(ZimReaderSource(file), false)
           ?.let { zimFileReader ->
             val book = Book().apply { update(zimFileReader.jniKiwixReader) }
             repositoryActions.saveBook(book)
@@ -866,5 +867,6 @@ class LocalLibraryViewModel @Inject constructor(
   private suspend fun shouldShowFileSystemDialog(): Boolean =
     !kiwixDataStore.isScanFileSystemDialogShown.first() &&
       !BuildConfig.IS_PLAYSTORE &&
-      uiState.value.fileSelectListState.bookOnDiskListItems.isEmpty()
+      uiState.value.fileSelectListState.bookOnDiskListItems
+        .isEmpty()
 }

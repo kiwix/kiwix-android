@@ -23,13 +23,13 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.core.net.toUri
 import androidx.navigation.NavOptions
 import androidx.test.internal.runner.junit4.statement.UiThreadStatement
+import dagger.hilt.android.testing.HiltAndroidRule
+import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Assert
 import org.junit.Before
-import dagger.hilt.android.testing.HiltAndroidRule
-import dagger.hilt.android.testing.HiltAndroidTest
 import org.junit.Rule
 import org.junit.Test
 import org.junit.jupiter.api.fail
@@ -84,7 +84,8 @@ class ZimFileReaderWithSplittedZimFileTest : BaseActivityTest() {
     composeTestRule.waitForIdle()
     createAndGetSplitedZimFile()?.let {
       UiThreadStatement.runOnUiThread {
-        val navOptions = NavOptions.Builder()
+        val navOptions = NavOptions
+          .Builder()
           .setPopUpTo(KiwixDestination.Reader.route, false)
           .build()
         kiwixMainActivity.apply {

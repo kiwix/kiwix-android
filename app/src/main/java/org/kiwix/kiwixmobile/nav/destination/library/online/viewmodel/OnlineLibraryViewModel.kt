@@ -29,7 +29,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import eu.mhutti1.utils.storage.StorageDevice
-import org.kiwix.kiwixmobile.core.utils.LocaleHelper
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.Job
@@ -65,6 +64,7 @@ import org.kiwix.kiwixmobile.core.utils.BookUtils
 import org.kiwix.kiwixmobile.core.utils.EXTERNAL_SELECT_POSITION
 import org.kiwix.kiwixmobile.core.utils.INTERNAL_SELECT_POSITION
 import org.kiwix.kiwixmobile.core.utils.KiwixPermissionChecker
+import org.kiwix.kiwixmobile.core.utils.LocaleHelper
 import org.kiwix.kiwixmobile.core.utils.StorageDeviceProvider
 import org.kiwix.kiwixmobile.core.utils.ZERO
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
@@ -334,8 +334,7 @@ class OnlineLibraryViewModel @Inject constructor(
       uiState.map { it.searchQuery }.distinctUntilChanged().debounce(500)
     ) { category, language, searchQuery ->
       OnlineLibraryRequest(searchQuery, category, language, false, ZERO)
-    }
-      .onEach { updateOnlineLibraryFilters(it) }
+    }.onEach { updateOnlineLibraryFilters(it) }
       .flowOn(ioDispatcher)
       .launchIn(viewModelScope)
 

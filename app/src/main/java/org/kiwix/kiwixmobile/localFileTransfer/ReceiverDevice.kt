@@ -54,7 +54,8 @@ internal class ReceiverDevice(
           val fileItems = wifiDirectManager.getFilesForTransfer()
           var isTransferErrorFree = true
           Log.d(TAG, "Expecting " + fileItems.size + " files")
-          fileItems.asSequence()
+          fileItems
+            .asSequence()
             .takeWhile { isActive }
             .forEachIndexed { fileItemIndex, fileItem ->
               try {

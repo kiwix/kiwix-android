@@ -443,8 +443,7 @@ class DownloadBookItemUITest {
         hasContentDescription(
           runningItem.readableEta.toString() + runningItem.hashCode()
         )
-      )
-      .assertIsDisplayed()
+      ).assertIsDisplayed()
 
     val pausedItem = runningItem.copy(
       downloadState = DownloadState.Paused

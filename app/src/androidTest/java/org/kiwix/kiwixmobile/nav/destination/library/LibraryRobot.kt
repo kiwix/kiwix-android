@@ -129,7 +129,8 @@ class LibraryRobot : BaseRobot() {
       composeTestRule.waitUntil(TEST_PAUSE_MS_FOR_DOWNLOAD_TEST) {
         composeTestRule.onNodeWithTag(CONTENT_LOADING_PROGRESS_BAR_TESTING_TAG).isNotDisplayed()
       }
-      composeTestRule.onNodeWithTag(CONTENT_LOADING_PROGRESS_BAR_TESTING_TAG)
+      composeTestRule
+        .onNodeWithTag(CONTENT_LOADING_PROGRESS_BAR_TESTING_TAG)
         .assertIsNotDisplayed()
     })
   }

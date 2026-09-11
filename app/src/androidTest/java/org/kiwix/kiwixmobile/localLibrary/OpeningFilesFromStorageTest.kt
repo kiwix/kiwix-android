@@ -36,12 +36,12 @@ import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.intent.Intents
 import androidx.test.espresso.intent.Intents.intending
 import androidx.test.espresso.intent.matcher.IntentMatchers.hasAction
+import dagger.hilt.android.testing.HiltAndroidRule
+import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Before
-import dagger.hilt.android.testing.HiltAndroidRule
-import dagger.hilt.android.testing.HiltAndroidTest
 import org.junit.Rule
 import org.junit.Test
 import org.junit.jupiter.api.fail
@@ -176,9 +176,10 @@ class OpeningFilesFromStorageTest : BaseActivityTest() {
 
   private fun testCopyMoveDialogShowing(uri: Uri) {
     updateKiwixDataStore { setShowStorageSelectionDialogOnCopyMove(true) }
-    ActivityScenario.launch<KiwixMainActivity>(
-      createDeepLinkIntent(uri)
-    ).onActivity {}
+    ActivityScenario
+      .launch<KiwixMainActivity>(
+        createDeepLinkIntent(uri)
+      ).onActivity {}
     copyMoveFileHandler {
       assertCopyMoveDialogNotDisplayed(composeTestRule)
     }

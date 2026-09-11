@@ -23,10 +23,10 @@ import androidx.compose.ui.test.junit4.accessibility.enableAccessibilityChecks
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.core.net.toUri
 import androidx.navigation.NavOptions
-import org.junit.After
-import org.junit.Before
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
+import org.junit.After
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.kiwix.kiwixmobile.BaseActivityTest
@@ -83,7 +83,8 @@ class NavigationHistoryTest : BaseActivityTest() {
       composeTestRule.apply {
         waitForIdle()
         runOnUiThread {
-          val navOptions = NavOptions.Builder()
+          val navOptions = NavOptions
+            .Builder()
             .setPopUpTo(KiwixDestination.Reader.route, false)
             .build()
           kiwixMainActivity.apply {

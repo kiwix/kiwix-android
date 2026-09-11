@@ -19,6 +19,7 @@
 package org.kiwix.kiwixmobile.core.page.bookmark.viewmodel
 
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
@@ -32,7 +33,6 @@ import org.kiwix.kiwixmobile.core.page.viewmodel.PageViewModel
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import javax.inject.Inject
-import kotlinx.coroutines.CoroutineDispatcher
 
 @HiltViewModel
 class BookmarkViewModel @Inject constructor(

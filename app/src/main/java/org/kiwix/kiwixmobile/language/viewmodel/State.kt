@@ -105,7 +105,8 @@ sealed class State {
         filter: String,
         filterCondition: (Language) -> Boolean,
         headerId: Long
-      ) = items.filter(filterCondition)
+      ) = items
+        .filter(filterCondition)
         .filter { filter.isEmpty() or it.matches(filter) }
         .takeIf { it.isNotEmpty() }
         ?.let { listOf(HeaderItem(headerId)) + it.map { language -> LanguageItem(language) } }

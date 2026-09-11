@@ -126,7 +126,8 @@ class ZimHostViewModelTest {
     viewModel.loadBooks()
     advanceUntilIdle()
 
-    val books = viewModel.uiState.value.books.filterIsInstance<BookOnDisk>()
+    val books = viewModel.uiState.value.books
+      .filterIsInstance<BookOnDisk>()
     assertTrue("Expected books list to be non-empty", books.isNotEmpty())
     assertTrue(
       "Initially all books should be selected when no host IDs",
@@ -152,7 +153,8 @@ class ZimHostViewModelTest {
     viewModel.loadBooks()
     advanceUntilIdle()
 
-    val books = viewModel.uiState.value.books.filterIsInstance<BookOnDisk>()
+    val books = viewModel.uiState.value.books
+      .filterIsInstance<BookOnDisk>()
     assertTrue(books.find { it.book.id == "id1" }!!.isSelected)
     assertFalse(books.find { it.book.id == "id2" }!!.isSelected)
   }
@@ -170,7 +172,8 @@ class ZimHostViewModelTest {
     viewModel.loadBooks()
     advanceUntilIdle()
 
-    val books = viewModel.uiState.value.books.filterIsInstance<BookOnDisk>()
+    val books = viewModel.uiState.value.books
+      .filterIsInstance<BookOnDisk>()
     assertTrue(books.find { it.book.title == "Kotlin" }!!.isSelected)
   }
 
@@ -373,13 +376,17 @@ class ZimHostViewModelTest {
     viewModel.loadBooks()
     advanceUntilIdle()
 
-    val initialBook = viewModel.uiState.value.books.filterIsInstance<BookOnDisk>().first()
+    val initialBook = viewModel.uiState.value.books
+      .filterIsInstance<BookOnDisk>()
+      .first()
     assertFalse("Initially book should be unselected", initialBook.isSelected)
 
     viewModel.onBookSelected(book)
     advanceUntilIdle()
 
-    val updatedBook = viewModel.uiState.value.books.filterIsInstance<BookOnDisk>().first()
+    val updatedBook = viewModel.uiState.value.books
+      .filterIsInstance<BookOnDisk>()
+      .first()
     assertTrue("Book should be selected after toggle", updatedBook.isSelected)
   }
 

@@ -92,8 +92,7 @@ fun BookItem(
               onLongClick?.invoke(bookOnDisk)
             }
           }
-        )
-        .testTag(BOOK_ITEM_TESTING_TAG),
+        ).testTag(BOOK_ITEM_TESTING_TAG),
       shape = MaterialTheme.shapes.extraSmall,
       elevation = CardDefaults.elevatedCardElevation(),
       colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainer)

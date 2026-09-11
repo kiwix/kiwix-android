@@ -4,7 +4,6 @@ end_of_line=lf
 insert_final_newline=true
 indent_style=space
 indent_size=2
-ktlint_standard_import-ordering = disabled
 ktlint_standard_trailing-comma-on-call-site = disabled
 ktlint_standard_trailing-comma-on-declaration-site = disabled
 ktlint_standard_annotation = disabled
@@ -21,7 +20,6 @@ ktlint_standard_parameter-list-wrapping = disabled
 ktlint_standard_wrapping = disabled
 ktlint_standard_function-literal = disabled
 ktlint_standard_condition-wrapping = disabled
-ktlint_standard_multiline-loop = disabled
 ktlint_standard_binary-expression-wrapping = disabled
 ktlint_function_naming_ignore_when_annotated_with = Composable
 

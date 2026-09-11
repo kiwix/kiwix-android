@@ -215,8 +215,7 @@ class OnlineCategoryDialogScreenTest {
       .onNodeWithTag(
         "${CATEGORY_ITEM_CHECKBOX_TESTING_TAG}science",
         useUnmergedTree = true
-      )
-      .assertIsOff()
+      ).assertIsOff()
   }
 
   @Test

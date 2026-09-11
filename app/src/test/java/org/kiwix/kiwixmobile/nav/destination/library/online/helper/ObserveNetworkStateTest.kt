@@ -26,16 +26,16 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.test.runTest
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.assertj.core.api.Assertions.assertThat
 import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.isWifi
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.zim_manager.NetworkState
-import org.kiwix.kiwixmobile.nav.destination.library.online.helper.ObserveNetworkState.Result.WifiAvailable
-import org.kiwix.kiwixmobile.nav.destination.library.online.helper.ObserveNetworkState.Result.ShowWifiOnlyMessage
 import org.kiwix.kiwixmobile.nav.destination.library.online.helper.ObserveNetworkState.Result.MobileInternet
 import org.kiwix.kiwixmobile.nav.destination.library.online.helper.ObserveNetworkState.Result.ShowNoInternetSnackBar
+import org.kiwix.kiwixmobile.nav.destination.library.online.helper.ObserveNetworkState.Result.ShowWifiOnlyMessage
+import org.kiwix.kiwixmobile.nav.destination.library.online.helper.ObserveNetworkState.Result.WifiAvailable
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class ObserveNetworkStateTest {

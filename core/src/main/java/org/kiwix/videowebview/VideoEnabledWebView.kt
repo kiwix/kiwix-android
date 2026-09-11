@@ -22,9 +22,9 @@ import android.content.Context
 import android.os.Handler
 import android.os.Looper
 import android.util.AttributeSet
-import org.kiwix.kiwixmobile.core.utils.files.Log
 import android.webkit.WebChromeClient
 import android.webkit.WebView
+import org.kiwix.kiwixmobile.core.utils.files.Log
 
 /**
  * This class serves as a WebView to be used in conjunction with a VideoEnabledWebChromeClient.

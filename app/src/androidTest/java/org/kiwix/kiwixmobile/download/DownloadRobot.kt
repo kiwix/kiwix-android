@@ -89,8 +89,10 @@ class DownloadRobot : BaseRobot() {
     repeat(maxRetries) { attempt ->
       try {
         composeTestRule.waitUntil(TestUtils.TEST_PAUSE_MS_FOR_DOWNLOAD_TEST) {
-          composeTestRule.onAllNodesWithTag(ONLINE_BOOK_ITEM_TESTING_TAG)
-            .fetchSemanticsNodes().isNotEmpty()
+          composeTestRule
+            .onAllNodesWithTag(ONLINE_BOOK_ITEM_TESTING_TAG)
+            .fetchSemanticsNodes()
+            .isNotEmpty()
         }
         Log.d(KIWIX_DOWNLOAD_TEST, "Online library loaded")
         return@waitForDataToLoad
@@ -202,7 +204,8 @@ class DownloadRobot : BaseRobot() {
       composeTestRule.apply {
         waitUntil(TestUtils.TEST_PAUSE_MS_FOR_DOWNLOAD_TEST) {
           onAllNodesWithTag(DOWNLOADING_STOP_BUTTON_TESTING_TAG)
-            .fetchSemanticsNodes().isNotEmpty()
+            .fetchSemanticsNodes()
+            .isNotEmpty()
         }
       }
     })
@@ -213,7 +216,8 @@ class DownloadRobot : BaseRobot() {
       runCatching {
         waitUntil(TestUtils.TEST_PAUSE_MS_FOR_DOWNLOAD_TEST) {
           onAllNodesWithTag(DOWNLOADING_PAUSE_BUTTON_TESTING_TAG)
-            .fetchSemanticsNodes().isNotEmpty()
+            .fetchSemanticsNodes()
+            .isNotEmpty()
         }
         onAllNodesWithTag(DOWNLOADING_PAUSE_BUTTON_TESTING_TAG).onFirst().performClick()
       }.onFailure {
@@ -268,7 +272,8 @@ class DownloadRobot : BaseRobot() {
           } else {
             // Check if text is NOT pauseState
             try {
-              onAllNodesWithTag(DOWNLOADING_STATE_TEXT_TESTING_TAG).onFirst()
+              onAllNodesWithTag(DOWNLOADING_STATE_TEXT_TESTING_TAG)
+                .onFirst()
                 .assertTextEquals(pauseState)
               false // Still paused
             } catch (_: AssertionError) {
@@ -400,7 +405,8 @@ class DownloadRobot : BaseRobot() {
     testFlakyView({
       composeTestRule.apply {
         waitUntil(TestUtils.TEST_PAUSE_MS.toLong()) {
-          onAllNodesWithTag(ALERT_DIALOG_CONFIRM_BUTTON_TESTING_TAG).fetchSemanticsNodes()
+          onAllNodesWithTag(ALERT_DIALOG_CONFIRM_BUTTON_TESTING_TAG)
+            .fetchSemanticsNodes()
             .isNotEmpty()
         }
         onNodeWithTag(ALERT_DIALOG_CONFIRM_BUTTON_TESTING_TAG).performClick()
@@ -430,7 +436,8 @@ class DownloadRobot : BaseRobot() {
     composeTestRule.apply {
       waitUntil(TestUtils.TEST_PAUSE_MS_FOR_DOWNLOAD_TEST) {
         onAllNodesWithTag(DOWNLOADING_STOP_BUTTON_TESTING_TAG)
-          .fetchSemanticsNodes().isNotEmpty()
+          .fetchSemanticsNodes()
+          .isNotEmpty()
       }
       onAllNodesWithTag(DOWNLOADING_STOP_BUTTON_TESTING_TAG).onFirst().performClick()
       waitForIdle()

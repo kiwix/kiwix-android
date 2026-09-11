@@ -180,7 +180,8 @@ class BookmarksRobot : BaseRobot() {
       waitForIdle()
       bookmarkList.forEachIndexed { index, libkiwixBookmarkItem ->
         testFlakyView({
-          composeTestRule.onNodeWithTag(PAGE_LIST_TEST_TAG)
+          composeTestRule
+            .onNodeWithTag(PAGE_LIST_TEST_TAG)
             .performScrollToNode(hasText(libkiwixBookmarkItem.title))
           composeTestRule.onNodeWithText(libkiwixBookmarkItem.title).assertExists()
         })
@@ -196,7 +197,8 @@ class BookmarksRobot : BaseRobot() {
       }
     }
     testFlakyView({
-      Web.onWebView()
+      Web
+        .onWebView()
         .withElement(
           DriverAtoms.findElement(
             Locator.XPATH,
@@ -236,8 +238,7 @@ class BookmarksRobot : BaseRobot() {
               Locator.XPATH,
               "//*[contains(text(), 'Android_(operating_system)')]"
             )
-          )
-          .perform(webClick())
+          ).perform(webClick())
       }
     })
   }

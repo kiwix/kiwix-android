@@ -41,8 +41,8 @@ import org.kiwix.kiwixmobile.core.utils.files.Log
 import org.kiwix.kiwixmobile.testutils.TestUtils
 import org.kiwix.kiwixmobile.testutils.TestUtils.refresh
 import org.kiwix.kiwixmobile.testutils.TestUtils.testFlakyView
-import org.kiwix.kiwixmobile.ui.BookItemScreen.BOOK_ITEM_TESTING_TAG
 import org.kiwix.kiwixmobile.ui.BookItemScreen.BOOK_ITEM_CHECKBOX_TESTING_TAG
+import org.kiwix.kiwixmobile.ui.BookItemScreen.BOOK_ITEM_TESTING_TAG
 import org.kiwix.kiwixmobile.utils.StandardActions.openDrawer
 
 fun zimHost(func: ZimHostRobot.() -> Unit) = ZimHostRobot().applyWithViewHierarchyPrinting(func)
@@ -98,11 +98,13 @@ class ZimHostRobot : BaseRobot() {
   fun startServer(composeTestRule: ComposeContentTestRule) {
     // stop the server if it is already running.
     stopServerIfAlreadyStarted(composeTestRule)
-    composeTestRule.onNodeWithTag(START_SERVER_BUTTON_TESTING_TAG)
+    composeTestRule
+      .onNodeWithTag(START_SERVER_BUTTON_TESTING_TAG)
       .performClick()
     assetWifiDialogDisplayed(composeTestRule)
     testFlakyView({
-      composeTestRule.onNodeWithTag(ALERT_DIALOG_NATURAL_BUTTON_TESTING_TAG)
+      composeTestRule
+        .onNodeWithTag(ALERT_DIALOG_NATURAL_BUTTON_TESTING_TAG)
         .performClick()
     })
   }
@@ -164,17 +166,20 @@ class ZimHostRobot : BaseRobot() {
 
   private fun selectZimFile(position: Int, composeTestRule: ComposeContentTestRule) {
     try {
-      composeTestRule.onNodeWithTag("$BOOK_ITEM_CHECKBOX_TESTING_TAG$position")
+      composeTestRule
+        .onNodeWithTag("$BOOK_ITEM_CHECKBOX_TESTING_TAG$position")
         .assertIsOn()
     } catch (_: AssertionError) {
-      composeTestRule.onNodeWithTag("$BOOK_ITEM_CHECKBOX_TESTING_TAG$position")
+      composeTestRule
+        .onNodeWithTag("$BOOK_ITEM_CHECKBOX_TESTING_TAG$position")
         .performClick()
     }
   }
 
   fun assertItemHostedOnServer(itemCount: Int, composeTestRule: ComposeContentTestRule) {
     for (i in 0 until itemCount) {
-      composeTestRule.onNodeWithTag("$BOOK_ITEM_CHECKBOX_TESTING_TAG${i + 1}")
+      composeTestRule
+        .onNodeWithTag("$BOOK_ITEM_CHECKBOX_TESTING_TAG${i + 1}")
         .assertIsOn()
     }
   }

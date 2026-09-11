@@ -37,11 +37,11 @@ import androidx.test.espresso.web.webdriver.Locator
 import com.adevinta.android.barista.interaction.BaristaSleepInteractions
 import org.kiwix.kiwixmobile.BaseRobot
 import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.main.CoreMainActivity
+import org.kiwix.kiwixmobile.core.main.LEFT_DRAWER_NOTES_ITEM_TESTING_TAG
 import org.kiwix.kiwixmobile.core.main.note.ADD_NOTE_DIALOG_CLOSE_IMAGE_BUTTON_TESTING_TAG
 import org.kiwix.kiwixmobile.core.main.note.ADD_NOTE_TEXT_FILED_TESTING_TAG
-import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.main.note.DELETE_MENU_BUTTON_TESTING_TAG
-import org.kiwix.kiwixmobile.core.main.LEFT_DRAWER_NOTES_ITEM_TESTING_TAG
 import org.kiwix.kiwixmobile.core.main.note.SAVE_MENU_BUTTON_TESTING_TAG
 import org.kiwix.kiwixmobile.core.main.reader.READER_BOTTOM_BAR_PREVIOUS_SCREEN_BUTTON_TESTING_TAG
 import org.kiwix.kiwixmobile.core.main.reader.TAKE_NOTE_MENU_ITEM_TESTING_TAG
@@ -68,7 +68,8 @@ class NoteRobot : BaseRobot() {
   fun assertToolbarExist(composeTestRule: ComposeContentTestRule) {
     testFlakyView({
       composeTestRule.waitForIdle()
-      composeTestRule.onNodeWithTag(TOOLBAR_TITLE_TESTING_TAG)
+      composeTestRule
+        .onNodeWithTag(TOOLBAR_TITLE_TESTING_TAG)
         .assertTextEquals(context.getString(R.string.pref_notes))
     })
   }
@@ -98,7 +99,8 @@ class NoteRobot : BaseRobot() {
       composeTestRule.waitUntil(
         TestUtils.TEST_PAUSE_MS.toLong()
       ) {
-        composeTestRule.onAllNodesWithTag(TOOLBAR_TITLE_TESTING_TAG)
+        composeTestRule
+          .onAllNodesWithTag(TOOLBAR_TITLE_TESTING_TAG)
           .filter(hasText(context.getString(R.string.note)))
           .onFirst()
           .isDisplayed()
@@ -110,14 +112,16 @@ class NoteRobot : BaseRobot() {
     testFlakyView({
       composeTestRule.waitForIdle()
       // Click on the TextField to focus it
-      composeTestRule.onNodeWithTag(ADD_NOTE_TEXT_FILED_TESTING_TAG)
+      composeTestRule
+        .onNodeWithTag(ADD_NOTE_TEXT_FILED_TESTING_TAG)
         .assertExists("TextField not found in dialog")
         .performClick()
         .performTextReplacement(noteText)
 
       composeTestRule.waitForIdle()
 
-      composeTestRule.onNodeWithTag(ADD_NOTE_TEXT_FILED_TESTING_TAG)
+      composeTestRule
+        .onNodeWithTag(ADD_NOTE_TEXT_FILED_TESTING_TAG)
         .assertTextContains(noteText, substring = true)
 
       // Close the keyboard after typing
@@ -128,7 +132,8 @@ class NoteRobot : BaseRobot() {
   fun saveNote(composeTestRule: ComposeContentTestRule) {
     testFlakyView({
       composeTestRule.waitForIdle()
-      composeTestRule.onNodeWithTag(SAVE_MENU_BUTTON_TESTING_TAG)
+      composeTestRule
+        .onNodeWithTag(SAVE_MENU_BUTTON_TESTING_TAG)
         .performClick()
     })
   }
@@ -173,7 +178,8 @@ class NoteRobot : BaseRobot() {
       // Use assertTextContains instead of assertTextEquals because Material3
       // TextField includes placeholder text in the semantic Text property,
       // causing assertTextEquals to fail with combined [placeholder, editableText].
-      composeTestRule.onNodeWithTag(ADD_NOTE_TEXT_FILED_TESTING_TAG)
+      composeTestRule
+        .onNodeWithTag(ADD_NOTE_TEXT_FILED_TESTING_TAG)
         .assertTextContains(noteText)
     })
   }
@@ -198,7 +204,8 @@ class NoteRobot : BaseRobot() {
   fun clickOnDeleteIcon(composeTestRule: ComposeContentTestRule) {
     testFlakyView({
       composeTestRule.waitForIdle()
-      composeTestRule.onNodeWithTag(DELETE_MENU_BUTTON_TESTING_TAG)
+      composeTestRule
+        .onNodeWithTag(DELETE_MENU_BUTTON_TESTING_TAG)
         .performClick()
     })
   }
@@ -266,8 +273,7 @@ class NoteRobot : BaseRobot() {
               Locator.XPATH,
               "//*[contains(text(), 'Android_(operating_system)')]"
             )
-          )
-          .perform(webClick())
+          ).perform(webClick())
       }
     })
   }

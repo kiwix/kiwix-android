@@ -19,9 +19,9 @@ package org.kiwix.kiwixmobile.core
 
 import android.content.Context
 import dagger.hilt.android.qualifiers.ApplicationContext
-import org.kiwix.libkiwix.JNIKiwix
 import org.kiwix.kiwixmobile.core.utils.TAG_KIWIX
 import org.kiwix.kiwixmobile.core.utils.files.Log
+import org.kiwix.libkiwix.JNIKiwix
 import java.io.File
 import java.io.FileOutputStream
 import javax.inject.Inject

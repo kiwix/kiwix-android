@@ -220,8 +220,7 @@ class LanguageScreenUITest {
     composeTestRule
       .onNodeWithContentDescription(
         context.getString(R.string.searchview_description_clear)
-      )
-      .performClick()
+      ).performClick()
     assertTrue("onClearClick callback should be triggered", cleared)
   }
 
@@ -239,8 +238,7 @@ class LanguageScreenUITest {
     composeTestRule
       .onNodeWithContentDescription(
         context.getString(R.string.select_language_content_description)
-      )
-      .assertDoesNotExist()
+      ).assertDoesNotExist()
   }
 
   @Test
@@ -257,8 +255,7 @@ class LanguageScreenUITest {
     composeTestRule
       .onNodeWithContentDescription(
         context.getString(R.string.select_language_content_description)
-      )
-      .assertDoesNotExist()
+      ).assertDoesNotExist()
   }
 
   @Test
@@ -326,8 +323,7 @@ class LanguageScreenUITest {
     composeTestRule
       .onNodeWithContentDescription(
         context.getString(R.string.select_language_content_description)
-      )
-      .assertDoesNotExist()
+      ).assertDoesNotExist()
   }
 
   @Test
@@ -337,8 +333,7 @@ class LanguageScreenUITest {
     composeTestRule
       .onNodeWithContentDescription(
         context.getString(R.string.select_language_content_description)
-      )
-      .assertIsDisplayed()
+      ).assertIsDisplayed()
   }
 
   @Test
@@ -396,8 +391,7 @@ class LanguageScreenUITest {
     composeTestRule
       .onNodeWithContentDescription(
         context.getString(R.string.select_language_content_description)
-      )
-      .performClick()
+      ).performClick()
     assertTrue("selectLanguageItem callback should be triggered", selectedItem != null)
   }
 
@@ -417,7 +411,6 @@ class LanguageScreenUITest {
     composeTestRule
       .onNodeWithContentDescription(
         context.getString(R.string.select_language_content_description)
-      )
-      .assertDoesNotExist()
+      ).assertDoesNotExist()
   }
 }

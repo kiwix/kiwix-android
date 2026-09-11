@@ -172,7 +172,8 @@ class ImportBookmarkTest : BaseActivityTest() {
   private suspend fun clearBookmarks() {
     // delete bookmarks for testing other edge cases
     libkiwixBookmarks.deleteBookmarks(
-      libkiwixBookmarks.bookmarks()
+      libkiwixBookmarks
+        .bookmarks()
         .first() as List<LibkiwixBookmarkItem>
     )
   }

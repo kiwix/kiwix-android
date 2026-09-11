@@ -19,9 +19,9 @@
 package org.kiwix.kiwixmobile.migration.data
 
 import io.objectbox.Box
-import kotlinx.coroutines.CoroutineDispatcher
 import io.objectbox.BoxStore
 import io.objectbox.kotlin.boxFor
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock

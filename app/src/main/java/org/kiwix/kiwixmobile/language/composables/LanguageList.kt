@@ -83,8 +83,7 @@ fun LanguageList(
             .semantics {
               contentDescription =
                 context.getString(R.string.select_language_content_description)
-            }
-            .clickable {
+            }.clickable {
               selectLanguageItem(item)
             },
           item = item,

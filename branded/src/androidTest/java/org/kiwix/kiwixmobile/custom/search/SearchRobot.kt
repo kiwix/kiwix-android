@@ -80,7 +80,8 @@ class SearchRobot {
         timeoutMillis = TEST_PAUSE_MS.toLong(),
         condition = {
           onAllNodesWithTag(SEARCH_ITEM_TESTING_TAG)
-            .fetchSemanticsNodes().isNotEmpty()
+            .fetchSemanticsNodes()
+            .isNotEmpty()
         }
       )
       onAllNodesWithTag(SEARCH_ITEM_TESTING_TAG)[0]
@@ -136,7 +137,8 @@ class SearchRobot {
 
   fun assertArticleLoaded() {
     testFlakyView({
-      Web.onWebView()
+      Web
+        .onWebView()
         .withElement(
           DriverAtoms.findElement(
             Locator.XPATH,

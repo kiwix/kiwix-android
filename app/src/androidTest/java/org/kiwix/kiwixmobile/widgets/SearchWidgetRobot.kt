@@ -159,9 +159,10 @@ class SearchWidgetRobot : BaseRobot() {
     var attempts = 0
     while (attempts < retryCount) {
       try {
-        uiDevice.findObject(
-          By.res("${kiwixMainActivity.packageName}:id/$elementId")
-        ).click()
+        uiDevice
+          .findObject(
+            By.res("${kiwixMainActivity.packageName}:id/$elementId")
+          ).click()
         return
       } catch (_: UiObjectNotFoundException) {
         attempts++

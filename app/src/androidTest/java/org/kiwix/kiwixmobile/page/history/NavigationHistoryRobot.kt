@@ -86,8 +86,7 @@ class NavigationHistoryRobot : BaseRobot() {
             Locator.XPATH,
             "//*[contains(text(), 'Android_(operating_system)')]"
           )
-        )
-        .perform(webClick())
+        ).perform(webClick())
     })
   }
 
@@ -187,8 +186,7 @@ class NavigationHistoryRobot : BaseRobot() {
       .onNode(
         hasTestTag(ALERT_DIALOG_TITLE_TEXT_TESTING_TAG) and
           hasText(context.getString(R.string.clear_all_history_dialog_title), ignoreCase = true)
-      )
-      .assertIsDisplayed()
+      ).assertIsDisplayed()
   }
 
   private fun pauseForBetterTestPerformance(composeTestRule: ComposeContentTestRule) {

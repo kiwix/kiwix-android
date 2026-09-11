@@ -35,11 +35,11 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.kiwix.kiwixmobile.core.R
-import org.kiwix.kiwixmobile.custom.R.string
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadItem
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadState
 import org.kiwix.kiwixmobile.core.downloader.model.Seconds
 import org.kiwix.kiwixmobile.core.ui.components.CONTENT_LOADING_PROGRESS_BAR_TESTING_TAG
+import org.kiwix.kiwixmobile.custom.R.string
 import org.kiwix.kiwixmobile.custom.download.BrandedDownloadScreen
 import org.kiwix.kiwixmobile.custom.download.BrandedDownloadScreenTags
 import org.kiwix.kiwixmobile.custom.download.State

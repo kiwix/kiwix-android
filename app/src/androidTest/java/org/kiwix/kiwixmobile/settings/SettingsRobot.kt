@@ -19,6 +19,7 @@
 package org.kiwix.kiwixmobile.settings
 
 import androidx.compose.ui.semantics.SemanticsProperties
+import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsSelected
 import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.filter
@@ -31,10 +32,9 @@ import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performScrollToNode
-import androidx.compose.ui.test.assertIsDisplayed
-import org.junit.jupiter.api.fail
 import androidx.test.core.app.ActivityScenario
 import applyWithViewHierarchyPrinting
+import org.junit.jupiter.api.fail
 import org.kiwix.kiwixmobile.BaseRobot
 import org.kiwix.kiwixmobile.R.string
 import org.kiwix.kiwixmobile.core.R
@@ -75,7 +75,8 @@ class SettingsRobot : BaseRobot() {
   private fun clickSwitchPreference(title: String, composeTestRule: ComposeContentTestRule) {
     composeTestRule.apply {
       waitForIdle()
-      composeTestRule.onNodeWithTag(SETTINGS_LIST_TESTING_TAG)
+      composeTestRule
+        .onNodeWithTag(SETTINGS_LIST_TESTING_TAG)
         .performScrollToNode(
           hasTestTag(SWITCH_PREFERENCE_TESTING_TAG) and hasContentDescription(title)
         )
@@ -225,7 +226,8 @@ class SettingsRobot : BaseRobot() {
     testFlakyView({
       composeTestRule.apply {
         waitForIdle()
-        composeTestRule.onNodeWithTag(SETTINGS_LIST_TESTING_TAG)
+        composeTestRule
+          .onNodeWithTag(SETTINGS_LIST_TESTING_TAG)
           .performScrollToNode(
             hasTestTag(PREFERENCE_ITEM_TESTING_TAG + title)
           )
@@ -264,7 +266,8 @@ class SettingsRobot : BaseRobot() {
   fun assertZoomTextViewPresent(composeTestRule: ComposeContentTestRule) {
     composeTestRule.apply {
       waitForIdle()
-      composeTestRule.onNodeWithTag(SETTINGS_LIST_TESTING_TAG)
+      composeTestRule
+        .onNodeWithTag(SETTINGS_LIST_TESTING_TAG)
         .performScrollToNode(
           hasTestTag(SEEKBAR_PREFERENCE_TESTING_TAG) and hasContentDescription(context.getString(R.string.pref_text_zoom_title))
         )
@@ -286,7 +289,8 @@ class SettingsRobot : BaseRobot() {
       waitForIdle()
       val title =
         context.getString(R.string.pref_rate_app_title, context.getString(string.app_name))
-      composeTestRule.onNodeWithTag(SETTINGS_LIST_TESTING_TAG)
+      composeTestRule
+        .onNodeWithTag(SETTINGS_LIST_TESTING_TAG)
         .performScrollToNode(
           hasTestTag(PREFERENCE_ITEM_TESTING_TAG + title)
         )
@@ -319,7 +323,8 @@ class SettingsRobot : BaseRobot() {
       val title =
         context.getString(R.string.pref_rate_app_title, context.getString(string.app_name))
       try {
-        composeTestRule.onNodeWithTag(SETTINGS_LIST_TESTING_TAG)
+        composeTestRule
+          .onNodeWithTag(SETTINGS_LIST_TESTING_TAG)
           .performScrollToNode(
             hasTestTag(PREFERENCE_ITEM_TESTING_TAG + title)
           )

@@ -250,7 +250,8 @@ class ZimHostViewModel @Inject constructor(
       .toCollection(ArrayList())
 
   private suspend fun saveHostedBooks(booksList: List<BooksOnDiskListItem>) {
-    val hostedBooks = booksList.asSequence()
+    val hostedBooks = booksList
+      .asSequence()
       .filterIsInstance<BookOnDisk>()
       .filter(BookOnDisk::isSelected)
       .map { it.book.id }

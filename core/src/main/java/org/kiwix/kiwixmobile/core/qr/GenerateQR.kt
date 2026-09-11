@@ -21,12 +21,12 @@ package org.kiwix.kiwixmobile.core.qr
 import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import android.graphics.Color
+import androidx.core.graphics.createBitmap
+import androidx.core.graphics.set
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.EncodeHintType
 import com.google.zxing.qrcode.QRCodeWriter
 import javax.inject.Inject
-import androidx.core.graphics.createBitmap
-import androidx.core.graphics.set
 
 /**
  * Utility class to generate QR codes.

@@ -153,7 +153,8 @@ fun KiwixNavGraph(
     composable(KiwixDestination.Intro.route) {
       IntroScreenRoute(
         navigateToLibrary = {
-          val navOptions = NavOptions.Builder()
+          val navOptions = NavOptions
+            .Builder()
             .setPopUpTo(KiwixDestination.Intro.route, inclusive = true)
             .build()
           navController.navigate(KiwixDestination.Library.route, navOptions)

@@ -18,9 +18,9 @@
 package org.kiwix.kiwixmobile.core.downloader.model
 
 import android.net.Uri
-import org.kiwix.kiwixmobile.core.utils.StorageUtils
 import androidx.core.net.toUri
 import kotlinx.coroutines.flow.first
+import org.kiwix.kiwixmobile.core.utils.StorageUtils
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 
 data class DownloadRequest(val urlString: String) {

@@ -135,8 +135,7 @@ class ReaderRobot : BaseRobot() {
             Locator.XPATH,
             "//*[contains(text(), '$articleTitle')]"
           )
-        )
-        .perform(webClick())
+        ).perform(webClick())
     }, 10)
   }
 
@@ -164,8 +163,10 @@ class ReaderRobot : BaseRobot() {
   fun assertTabsRestored(composeTestRule: ComposeContentTestRule) {
     try {
       composeTestRule.waitUntil(FIFTEEN_SECOND_DELAY) {
-        composeTestRule.onAllNodesWithTag(TABS_SIZE_TEXT_TESTING_TAG, useUnmergedTree = true)
-          .fetchSemanticsNodes().isNotEmpty()
+        composeTestRule
+          .onAllNodesWithTag(TABS_SIZE_TEXT_TESTING_TAG, useUnmergedTree = true)
+          .fetchSemanticsNodes()
+          .isNotEmpty()
       }
     } catch (e: ComposeTimeoutException) {
       Log.e(TAG, "The tab icon is not visible due to scroll. Original exception: $e")
@@ -238,7 +239,8 @@ class ReaderRobot : BaseRobot() {
     composeTestRule.waitUntil(
       TestUtils.TEST_PAUSE_MS.toLong()
     ) {
-      composeTestRule.onNodeWithTag(ALERT_DIALOG_TITLE_TEXT_TESTING_TAG)
+      composeTestRule
+        .onNodeWithTag(ALERT_DIALOG_TITLE_TEXT_TESTING_TAG)
         .isDisplayed()
     }
   }
@@ -259,7 +261,8 @@ class ReaderRobot : BaseRobot() {
       composeTestRule.waitUntil(
         TestUtils.TEST_PAUSE_MS.toLong()
       ) {
-        composeTestRule.onNodeWithTag(TTS_CONTROL_STOP_BUTTON_TESTING_TAG)
+        composeTestRule
+          .onNodeWithTag(TTS_CONTROL_STOP_BUTTON_TESTING_TAG)
           .isDisplayed()
       }
     })

@@ -144,7 +144,8 @@ class CopyMoveFileHandlerRobot : BaseRobot() {
     testFlakyView({
       composeTestRule.waitUntilTimeout()
       composeTestRule.mainClock.advanceTimeByFrame()
-      Web.onWebView()
+      Web
+        .onWebView()
         .withElement(
           DriverAtoms.findElement(
             Locator.XPATH,

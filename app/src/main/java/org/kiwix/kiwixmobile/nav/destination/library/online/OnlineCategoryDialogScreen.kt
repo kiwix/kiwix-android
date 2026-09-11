@@ -55,12 +55,12 @@ import org.kiwix.kiwixmobile.core.utils.ComposeDimens
 import org.kiwix.kiwixmobile.language.LoadingScreen
 import org.kiwix.kiwixmobile.language.SAVE_ICON_TESTING_TAG
 import org.kiwix.kiwixmobile.language.ShowErrorMessage
-import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.CategoryViewModel.Action
-import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.CategoryViewModel.Action.Select
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.CategoryListItem
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.CategoryListItem.CategoryItem
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.CategoryListItem.HeaderItem
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.CategoryViewModel
+import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.CategoryViewModel.Action
+import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.CategoryViewModel.Action.Select
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.State
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.State.Content
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.State.Error
@@ -152,8 +152,7 @@ private fun CategoryList(
             .semantics {
               contentDescription =
                 context.getString(R.string.select_category_content_description)
-            }
-            .clickable {
+            }.clickable {
               selectCategoryItem(item)
             },
           item = item,

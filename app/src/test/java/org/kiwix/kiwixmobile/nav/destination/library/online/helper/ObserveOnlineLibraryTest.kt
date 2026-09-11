@@ -19,8 +19,6 @@
 package org.kiwix.kiwixmobile.nav.destination.library.online.helper
 
 import android.net.ConnectivityManager
-import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.isNetworkAvailable
-import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.isWifi
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
@@ -42,6 +40,8 @@ import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.isNetworkAvailable
+import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.isWifi
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.nav.destination.library.online.repository.OnlineLibraryRepository
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.OnlineLibraryViewModel.OnlineLibraryRequest

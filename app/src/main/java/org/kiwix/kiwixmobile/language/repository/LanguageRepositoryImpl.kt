@@ -26,8 +26,8 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.retry
 import org.kiwix.kiwixmobile.core.data.remote.KiwixService
-import org.kiwix.kiwixmobile.core.di.OPDSKiwixService
 import org.kiwix.kiwixmobile.core.di.IoDispatcher
+import org.kiwix.kiwixmobile.core.di.OPDSKiwixService
 import org.kiwix.kiwixmobile.core.ui.components.ONE
 import org.kiwix.kiwixmobile.core.utils.FIVE
 import org.kiwix.kiwixmobile.core.utils.TAG_KIWIX
@@ -44,7 +44,8 @@ class LanguageRepositoryImpl @Inject constructor(
 ) : LanguageRepository {
   override fun fetchLanguages(): Flow<List<Language>> = flow {
     val feed = kiwixService.getLanguages()
-    val selectedLanguagesSet = kiwixDataStore.selectedOnlineContentLanguage.first()
+    val selectedLanguagesSet = kiwixDataStore.selectedOnlineContentLanguage
+      .first()
       .split(",")
       .asSequence()
       .filter { it.isNotEmpty() }

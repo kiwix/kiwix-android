@@ -22,6 +22,7 @@ import androidx.test.filters.SmallTest
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.withTimeout
+import nl.adaptivity.xmlutil.serialization.XML
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import okhttp3.logging.HttpLoggingInterceptor.Level.BASIC
@@ -44,7 +45,6 @@ import org.kiwix.kiwixmobile.testutils.RetryRule
 import org.kiwix.sharedFunctions.TEST_PORT
 import java.net.InetAddress
 import java.util.concurrent.TimeUnit.SECONDS
-import nl.adaptivity.xmlutil.serialization.XML
 
 /**
  * Created by mhutti1 on 14/04/17.
@@ -65,7 +65,8 @@ class NetworkTest {
     mockWebServer = MockWebServer()
     mockWebServer.start(InetAddress.getByName("127.0.0.1"), TEST_PORT)
     kiwixService = KiwixService.ServiceCreator.newHackListService(
-      OkHttpClient().newBuilder()
+      OkHttpClient()
+        .newBuilder()
         .connectTimeout(TEST_TIMEOUT, SECONDS)
         .readTimeout(TEST_TIMEOUT, SECONDS)
         .callTimeout(TEST_TIMEOUT, SECONDS)
@@ -88,7 +89,10 @@ class NetworkTest {
   }
 
   private fun getResourceAsString(name: String): String =
-    javaClass.classLoader!!.getResourceAsStream(name)!!.bufferedReader().readText()
+    javaClass.classLoader!!
+      .getResourceAsStream(name)!!
+      .bufferedReader()
+      .readText()
 
   @Test
   fun testNetworkSuccess() = runTest {
