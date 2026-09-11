@@ -31,8 +31,6 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.SnackbarResult
 import androidx.lifecycle.viewModelScope
-import org.kiwix.kiwixmobile.core.R
-import org.kiwix.kiwixmobile.core.ui.models.IconItem
 import app.cash.turbine.test
 import io.mockk.CapturingSlot
 import io.mockk.Runs
@@ -2766,11 +2764,11 @@ internal class CoreReaderViewModelTest {
   @Nested
   inner class NavigationIconContentDescription {
     @Test
-    fun whenShowTabSwitcherTrue_returnsSearchOpenInNewTabString() {
+    fun whenShowTabSwitcherTrue_returnsBackButtonContentDescription() {
       viewModel.updateUiStateForTest { copy(showTabSwitcher = true) }
       val result = viewModel.navigationIconContentDescription()
 
-      assertThat(result).isEqualTo(string.search_open_in_new_tab)
+      assertThat(result).isEqualTo(string.toolbar_back_button_content_description)
     }
 
     @Test
@@ -2953,17 +2951,16 @@ internal class CoreReaderViewModelTest {
   @Nested
   inner class NavigationIconClick {
     @Test
-    fun whenShowTabSwitcherTrue_triggersOnHomeMenuClickedAndDoesNothing() = runTest {
+    fun whenShowTabSwitcherTrue_hidesTabSwitcherAndDoesNothing() = runTest {
       val viewModel = spyk(viewModel)
-
-      every { viewModel.onHomeMenuClicked() } just Runs
+      coEvery { viewModel.hideTabSwitcher() } just Runs
 
       viewModel.updateUiStateForTest { copy(showTabSwitcher = true) }
       viewModel.effects.test {
         viewModel.navigationIconClick(true)
+        advanceUntilIdle()
 
-        verify { viewModel.onHomeMenuClicked() }
-
+        coVerify { viewModel.hideTabSwitcher() }
         expectNoEvents() // No other effects are emitted
       }
     }

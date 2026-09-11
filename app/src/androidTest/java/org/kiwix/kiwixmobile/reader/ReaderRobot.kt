@@ -99,9 +99,9 @@ class ReaderRobot : BaseRobot() {
   fun clickOnClosedAllTabsButton(composeTestRule: ComposeContentTestRule) {
     composeTestRule.apply {
       waitUntilTimeout()
+      onNodeWithTag(OVERFLOW_MENU_BUTTON_TESTING_TAG).performClick()
+      waitUntilTimeout()
       testFlakyView({
-        onNodeWithTag(OVERFLOW_MENU_BUTTON_TESTING_TAG).performClick()
-        waitUntilTimeout()
         onNodeWithTag(CLOSE_ALL_TABS_MENU_ITEM_TESTING_TAG).performClick()
       })
     }
@@ -129,7 +129,7 @@ class ReaderRobot : BaseRobot() {
   fun assertTabRestored(composeTestRule: ComposeContentTestRule) {
     composeTestRule.apply {
       waitUntilTimeout()
-      onAllNodesWithTag(TAB_TITLE_TESTING_TAG)[0].assertTextEquals("Test Zim")
+      onAllNodesWithTag(TAB_TITLE_TESTING_TAG, useUnmergedTree = true)[0].assertTextEquals("Test Zim")
     }
   }
 

@@ -34,6 +34,7 @@ import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -46,7 +47,6 @@ import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -74,7 +74,6 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LocalContentColor
@@ -102,13 +101,13 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.asImageBitmap
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.hideFromAccessibility
 import androidx.compose.ui.semantics.selected
@@ -121,7 +120,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.compose.ui.zIndex
 import androidx.navigation.NavHostController
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.BackPressActivityExtensions
@@ -131,12 +129,12 @@ import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderAction
 import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderAction.BackToTopButtonClick
 import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderAction.BookmarkClicked
 import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderAction.BookmarkLongClicked
-import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderAction.NewTab
 import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderAction.CloseTab
 import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderAction.CloseTocDrawer
 import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderAction.DonateButtonClick
 import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderAction.DonateLaterButtonClick
 import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderAction.HomeClicked
+import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderAction.NewTab
 import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderAction.NextClicked
 import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderAction.NextLongClicked
 import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderAction.OpenLibrary
@@ -800,7 +798,7 @@ fun TabSwitcherView(
     ) {
       itemsIndexed(tabsState.webViews, key = { _, item -> item.hashCode() }) { index, webView ->
         val context = LocalContext.current
-        val title = remember(webView) {
+        val title = remember(webView, webView.title) {
           webView.title?.fromHtml()?.toString()
             ?: context.getString(R.string.menu_home)
         }
@@ -815,7 +813,7 @@ fun TabSwitcherView(
         )
       }
     }
-    LaunchedEffect(Unit) {
+    LaunchedEffect(tabsState.selectedIndex) {
       if (tabsState.selectedIndex in tabsState.webViews.indices) {
         state.animateScrollToItem(tabsState.selectedIndex)
       }
@@ -861,7 +859,6 @@ fun TabItemView(
     modifier = modifier
       .fillMaxWidth()
       .aspectRatio(TAB_CARD_ASPECT_RATIO)
-      .semantics { hideFromAccessibility() }
   ) {
     Column(
       modifier = Modifier
@@ -924,7 +921,9 @@ private fun TabFaviconOrBadge(
   webView: KiwixWebView,
   title: String
 ) {
-  val favicon = remember(webView) { webView.favicon ?: webView.zimFavicon }
+  val favicon = remember(webView, webView.favicon, webView.zimFavicon) {
+    webView.favicon ?: webView.zimFavicon
+  }
   if (favicon != null) {
     Image(
       bitmap = favicon.asImageBitmap(),
@@ -941,7 +940,8 @@ private fun TabFaviconOrBadge(
       modifier = Modifier
         .size(TAB_FAVICON_SIZE)
         .clip(RoundedCornerShape(TAB_BADGE_CORNER_RADIUS))
-        .background(MaterialTheme.colorScheme.primary),
+        .background(MaterialTheme.colorScheme.primary)
+        .clearAndSetSemantics { },
       contentAlignment = Alignment.Center
     ) {
       Text(
