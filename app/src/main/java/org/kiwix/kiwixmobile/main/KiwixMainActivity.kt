@@ -85,11 +85,11 @@ import org.kiwix.kiwixmobile.core.reader.ZimFileReader.Companion.CONTENT_PREFIX
 import org.kiwix.kiwixmobile.core.utils.HUNDERED
 import org.kiwix.kiwixmobile.core.utils.StorageDeviceProvider
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogHost
+import org.kiwix.kiwixmobile.nav.destination.library.local.ExternalZimIntentHandler
 import org.kiwix.kiwixmobile.ui.KiwixDestination
 import javax.inject.Inject
 
 const val ACTION_GET_CONTENT = "GET_CONTENT"
-const val OPENING_ZIM_FILE_DELAY = 300L
 const val GET_CONTENT_SHORTCUT_ID = "get_content_shortcut"
 
 @AndroidEntryPoint
@@ -108,6 +108,9 @@ class KiwixMainActivity : CoreMainActivity() {
   @Inject
   @MainDispatcher
   lateinit var mainDispatcher: MainCoroutineDispatcher
+
+  @Inject
+  lateinit var externalZimIntentHandler: ExternalZimIntentHandler
   override val appName: String by lazy { getString(R.string.app_name) }
 
   override val bookmarksScreenRoute: String = KiwixDestination.Bookmarks.route
@@ -263,6 +266,7 @@ class KiwixMainActivity : CoreMainActivity() {
         kiwixDataStore.setIsPlayStoreBuild(BuildConfig.IS_PLAYSTORE)
       }
     }
+    externalZimIntentHandler.handlePendingUri(this, lifecycleScope)
   }
 
   private fun isIntroScreenNotVisible(): Boolean =
@@ -294,10 +298,12 @@ class KiwixMainActivity : CoreMainActivity() {
       when (it.scheme) {
         "file",
         "content" -> {
-          lifecycleScope.launch(mainDispatcher) {
-            delay(OPENING_ZIM_FILE_DELAY)
-            openLocalLibraryWithZimFilePath("$it")
-            clearIntentDataAndAction()
+          intent.let { nonNullIntent ->
+            externalZimIntentHandler.handleIntent(
+              activity = this,
+              intent = nonNullIntent,
+              coroutineScope = lifecycleScope
+            )
           }
         }
 
@@ -308,7 +314,6 @@ class KiwixMainActivity : CoreMainActivity() {
             return toast(R.string.cannot_open_file)
           }
           lifecycleScope.launch {
-            delay(OPENING_ZIM_FILE_DELAY)
             val book = libkiwixBookOnDisk.bookById(zimId)
               ?: return@launch toast(R.string.cannot_open_file)
             openPage("$CONTENT_PREFIX$page", book.zimReaderSource)
@@ -328,21 +333,14 @@ class KiwixMainActivity : CoreMainActivity() {
   private fun handleShortcutIntent(intent: Intent?) {
     val zimFileUri = intent?.getStringExtra(ZIM_FILE_URI_KEY) ?: return
     val pageUrl = intent.getStringExtra(PAGE_URL_KEY)
-    lifecycleScope.launch {
-      delay(OPENING_ZIM_FILE_DELAY)
-      openZimFromFilePath(zimFileUri, pageUrl)
-    }
+    openZimFromFilePath(zimFileUri, pageUrl)
   }
 
-  private fun clearIntentDataAndAction() {
+  fun clearIntentDataAndAction() {
     // if used once then clear it to avoid affecting any other functionality
     // of the application.
     intent.action = null
     intent.data = null
-  }
-
-  private fun openLocalLibraryWithZimFilePath(path: String) {
-    navigate(KiwixDestination.Library.createRoute(zimFileUri = path))
   }
 
   private fun handleNotificationIntent(intent: Intent?) {
@@ -355,7 +353,6 @@ class KiwixMainActivity : CoreMainActivity() {
       notificationManager.cancel(notificationId)
     }
     lifecycleScope.launch {
-      delay(OPENING_ZIM_FILE_DELAY)
       libkiwixBookOnDisk.bookMatching(openFileTitle)?.let { bookOnDiskEntity ->
         openZimFromFilePath(bookOnDiskEntity.zimReaderSource.toDatabase())
       }
