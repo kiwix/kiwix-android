@@ -43,6 +43,7 @@ import org.kiwix.kiwixmobile.core.page.bookmark.models.BookmarkItem
 import org.kiwix.kiwixmobile.core.page.bookmark.models.LibkiwixBookmarkItem
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.HILT_RULE_ORDER
+import org.kiwix.kiwixmobile.core.utils.TestingUtils.RETRY_RULE_ORDER
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListItem
 import org.kiwix.kiwixmobile.migration.data.ObjectBoxToLibkiwixMigrator
 import org.kiwix.kiwixmobile.migration.entities.BookOnDiskEntity
@@ -118,7 +119,7 @@ class ObjectBoxToLibkiwixMigratorTest : BaseActivityTest() {
     )
   }
 
-  @Rule
+  @Rule(order = RETRY_RULE_ORDER)
   @JvmField
   var retryRule = RetryRule()
 
