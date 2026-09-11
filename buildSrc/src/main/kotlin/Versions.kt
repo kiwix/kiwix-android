@@ -33,6 +33,7 @@ object Versions {
   const val androidx_test: String = "1.7.0"
   const val androidx_test_core: String = "1.7.0"
   const val androidx_test_orchestrator: String = "1.6.1"
+  const val androidx_test_services: String = "1.6.0"
 
   const val io_objectbox: String = "4.1.0"
 
