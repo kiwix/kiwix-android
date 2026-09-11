@@ -179,6 +179,7 @@ internal class CoreSettingsViewModelTest {
     // // Stub all KiwixDataStore Flow properties needed during ViewModel construction
     every { kiwixDataStore.appTheme } returns flowOf(ThemeConfig.Theme.SYSTEM)
     every { kiwixDataStore.backToTop } returns flowOf(false)
+    every { kiwixDataStore.disableAnimations } returns flowOf(false)
     every { kiwixDataStore.externalLinkPopup } returns flowOf(true)
     every { kiwixDataStore.textZoom } returns flowOf(DEFAULT_ZOOM)
     every { kiwixDataStore.openNewTabInBackground } returns flowOf(false)
@@ -323,6 +324,23 @@ internal class CoreSettingsViewModelTest {
       coVerify {
         kiwixDataStore.setPrefBackToTop(true)
         kiwixDataStore.setPrefBackToTop(false)
+      }
+    }
+
+    @Test
+    fun `setDisableAnimations delegates to kiwixDataStore`() = runTest {
+      coEvery { kiwixDataStore.setDisableAnimations(any()) } just Runs
+      viewModel.setDisableAnimations(true)
+      advanceUntilIdle()
+      coVerify { kiwixDataStore.setDisableAnimations(true) }
+
+      // Toggles values
+      viewModel.setDisableAnimations(true)
+      viewModel.setDisableAnimations(false)
+      advanceUntilIdle()
+      coVerify {
+        kiwixDataStore.setDisableAnimations(true)
+        kiwixDataStore.setDisableAnimations(false)
       }
     }
 
@@ -501,6 +519,33 @@ internal class CoreSettingsViewModelTest {
       createViewModel()
 
       viewModel.backToTopEnabled.test {
+        // Assert initial item
+        assertFalse(awaitItem())
+        flow.emit(true)
+        assertTrue(awaitItem())
+        flow.emit(false)
+        assertFalse(awaitItem())
+        cancelAndIgnoreRemainingEvents()
+      }
+    }
+
+    @Test
+    fun `disableAnimationsEnabled uses default when flow is empty`() = runTest {
+      every { kiwixDataStore.disableAnimations } returns emptyFlow()
+
+      createViewModel()
+
+      assertFalse(viewModel.disableAnimationsEnabled.value)
+    }
+
+    @Test
+    fun `disableAnimationsEnabled emits values from datastore`() = runTest {
+      val flow = MutableStateFlow(false)
+      every { kiwixDataStore.disableAnimations } returns flow
+
+      createViewModel()
+
+      viewModel.disableAnimationsEnabled.test {
         // Assert initial item
         assertFalse(awaitItem())
         flow.emit(true)
