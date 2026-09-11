@@ -130,6 +130,12 @@ class SettingsRobot : BaseRobot() {
     }
   }
 
+  fun hasExternalStorageDevice(composeTestRule: ComposeContentTestRule): Boolean {
+    composeTestRule.waitForIdle()
+    return composeTestRule.onAllNodesWithTag(STORAGE_DEVICE_ITEM_TESTING_TAG, true)
+      .fetchSemanticsNodes().size > 1
+  }
+
   fun clickInternalStoragePreference(composeTestRule: ComposeContentTestRule) {
     clickOnStorageItem(0, composeTestRule)
   }
