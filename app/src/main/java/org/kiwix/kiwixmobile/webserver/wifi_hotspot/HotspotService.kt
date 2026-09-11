@@ -203,7 +203,8 @@ class HotspotService :
       if (!restart) {
         Toast
           .makeText(
-            this@HotspotService, R.string.server_started_successfully_toast_message,
+            this@HotspotService,
+            R.string.server_started_successfully_toast_message,
             Toast.LENGTH_SHORT
           ).show()
       }

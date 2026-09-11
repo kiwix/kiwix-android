@@ -360,10 +360,9 @@ object FileUtils {
       )
     return try {
       cursor =
-        context.contentResolver.query(
-          uri, projection, null, null,
-          null
-        )
+        context
+          .contentResolver
+          .query(uri, projection, null, null, null)
       if (cursor != null && cursor.moveToFirst()) {
         val index = cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DISPLAY_NAME)
         cursor.getString(index)

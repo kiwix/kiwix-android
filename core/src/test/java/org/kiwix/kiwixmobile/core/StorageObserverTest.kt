@@ -106,17 +106,23 @@ class StorageObserverTest {
   fun `zim files are read by the file reader`() = runTest {
     val expectedBook =
       libkiwixBook(
-        "id", "title", "1", "favicon", "creator", "publisher", "date",
-        "description", "language", nativeBook = libkiwixBook
+        "id",
+        "title",
+        "1",
+        "favicon",
+        "creator",
+        "publisher",
+        "date",
+        "description",
+        "language",
+        nativeBook = libkiwixBook
       )
     withNoFiltering()
     every { zimFileReader.toBook() } returns expectedBook
     every { zimFileReader.zimReaderSource } returns zimReaderSource
     booksOnFileSystem().test {
       assertThat(awaitItem()).isEqualTo(
-        listOfNotNull<Book>(
-          expectedBook.nativeBook
-        )
+        listOfNotNull(expectedBook.nativeBook)
       )
       awaitComplete()
     }

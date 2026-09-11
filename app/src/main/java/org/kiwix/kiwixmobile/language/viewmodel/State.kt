@@ -70,13 +70,8 @@ sealed class State {
       internal fun createViewList(
         items: List<Language>,
         filter: String
-      ) = activeItems(
-        items, filter
-      ) +
-        otherItems(
-          items,
-          filter
-        )
+      ) = activeItems(items, filter) +
+        otherItems(items, filter)
 
       private fun activeItems(
         items: List<Language>,

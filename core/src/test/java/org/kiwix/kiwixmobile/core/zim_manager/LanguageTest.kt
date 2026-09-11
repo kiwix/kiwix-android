@@ -47,9 +47,7 @@ class LanguageTest {
     fun `is equal when language and active are equal`() {
       assertThat(
         language(language = "lang", isActive = true) ==
-          language(
-            language = "lang", isActive = true
-          )
+          language(language = "lang", isActive = true)
       ).isTrue()
     }
   }

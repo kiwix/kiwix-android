@@ -105,7 +105,8 @@ object TestUtils {
 
   @JvmStatic fun hasStoragePermission() =
     Build.VERSION.SDK_INT > Build.VERSION_CODES.M &&
-      hasReadExternalStoragePermission() && hasWriteExternalStoragePermission()
+      hasReadExternalStoragePermission() &&
+      hasWriteExternalStoragePermission()
 
   @JvmStatic fun allowStoragePermissionsIfNeeded() {
     if (!hasStoragePermission()) {
