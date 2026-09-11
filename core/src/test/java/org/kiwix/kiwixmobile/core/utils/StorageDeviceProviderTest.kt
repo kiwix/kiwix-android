@@ -164,4 +164,67 @@ class StorageDeviceProviderTest {
         File(selectedStoragePath).absolutePath
       )
     }
+
+  @Test
+  fun `getAppSpecificPublicDirs returns the external media directory`() = runTest {
+    val dirs = storageDeviceProvider.getAppSpecificPublicDirs()
+
+    assertThat(dirs.map { it.absolutePath }).containsExactly(externalMediaDir.absolutePath)
+  }
+
+  @Test
+  fun `getAppSpecificPublicDirs returns a media directory per storage volume`() = runTest {
+    val sdCardMediaDir =
+      File("/storage/1234-5678/Android/media/org.kiwix.kiwixmobile")
+    every {
+      anyConstructed<ContextWrapper>().externalMediaDirs
+    } returns arrayOf(externalMediaDir, sdCardMediaDir)
+
+    val dirs = storageDeviceProvider.getAppSpecificPublicDirs()
+
+    assertThat(dirs.map { it.absolutePath }).containsExactlyInAnyOrder(
+      externalMediaDir.absolutePath,
+      sdCardMediaDir.absolutePath
+    )
+  }
+
+  @Test
+  fun `getAppSpecificPublicDirs dedupes directories that resolve to the same path`() = runTest {
+    every {
+      anyConstructed<ContextWrapper>().externalMediaDirs
+    } returns arrayOf(externalMediaDir, externalMediaDir)
+
+    val dirs = storageDeviceProvider.getAppSpecificPublicDirs()
+
+    assertThat(dirs.map { it.absolutePath }).containsExactly(externalMediaDir.absolutePath)
+  }
+
+  @Test
+  fun `getAppSpecificPublicDirs excludes internal storage and the private external files dir`() =
+    runTest {
+      val dirs = storageDeviceProvider.getAppSpecificPublicDirs()
+
+      assertThat(dirs.map { it.absolutePath }).doesNotContain(
+        externalFilesDir.absolutePath,
+        filesDir.absolutePath,
+        cacheDir.absolutePath
+      )
+    }
+
+  @Test
+  fun `getAppSpecificPublicDirs does not include the selected storage path`() = runTest {
+    val dirs = storageDeviceProvider.getAppSpecificPublicDirs()
+
+    assertThat(dirs.map { it.absolutePath }).doesNotContain(
+      File(selectedStoragePath).absolutePath
+    )
+  }
+
+  @Test
+  fun `getAppSpecificPublicDirs caches the static dirs across multiple calls`() = runTest {
+    storageDeviceProvider.getAppSpecificPublicDirs()
+    storageDeviceProvider.getAppSpecificPublicDirs()
+
+    verify(exactly = 1) { anyConstructed<ContextWrapper>().externalMediaDirs }
+  }
 }

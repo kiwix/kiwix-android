@@ -36,6 +36,7 @@ import io.mockk.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.TestScope
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterEach
@@ -87,7 +88,8 @@ class ProcessSelectedZimFilesForPlayStoreTest {
       activity,
       copyMoveFileHandler,
       storageCalculator,
-      storageDeviceProvider
+      storageDeviceProvider,
+      UnconfinedTestDispatcher(testScope.testScheduler)
     )
 
     processSelectedZimFiles.init(
@@ -124,16 +126,10 @@ class ProcessSelectedZimFilesForPlayStoreTest {
   @Test
   fun `insufficient storage and clicking change storage shows storage selection dialog`() =
     testScope.runTest {
+      // The space check itself now lives in CopyMoveFileHandler, which reports back via
+      // the FileCopyMoveCallback. Here we verify this class reacts to that callback by
+      // showing a snackbar that lets the user change storage.
       mockkStatic("org.kiwix.kiwixmobile.core.extensions.SnackbarHostStateExtensionKt")
-      val uri = mockk<Uri>()
-      val documentFile = mockk<DocumentFile>()
-
-      every { uri.scheme } returns "content"
-      every { DocumentFile.fromSingleUri(any(), uri) } returns documentFile
-      every { documentFile.length() } returns 1000L
-      every { documentFile.name } returns "test.file"
-
-      coEvery { storageCalculator.availableBytes(any()) } returns 500L
 
       every { activity.getString(R.string.move_no_space) } returns "Not enough space"
       every { activity.getString(R.string.space_available) } returns "Available"
@@ -149,7 +145,7 @@ class ProcessSelectedZimFilesForPlayStoreTest {
           any()
         )
       } just Runs
-      processSelectedZimFiles.processSelectedFiles(listOf(uri))
+      processSelectedZimFiles.insufficientSpaceInStorage(500L)
       advanceUntilIdle()
       verify(exactly = 0) {
         selectedZimFileCallback.showStorageSelectionDialog(any())
@@ -393,8 +389,8 @@ class ProcessSelectedZimFilesForPlayStoreTest {
       testFile.writeBytes(ByteArray(100))
 
       try {
-        // Point selectedStorage to the temp directory
-        every { kiwixDataStore.selectedStorage } returns flowOf(appDir.absolutePath)
+        // Point the app-specific directories lookup to the temp directory
+        coEvery { storageDeviceProvider.getAppSpecificPublicDirs() } returns listOf(appDir)
 
         val uri = createValidUri(fileSize = 100L)
 
@@ -423,15 +419,17 @@ class ProcessSelectedZimFilesForPlayStoreTest {
   fun `processSelectedFiles should skip space check when file already in app directory`() =
     testScope.runTest {
       // Create a real temp directory with a file of size 1000 bytes
-      val appDir = File(System.getProperty("java.io.tmpdir"), "kiwix_test_space_${System.nanoTime()}")
+      val appDir =
+        File(System.getProperty("java.io.tmpdir"), "kiwix_test_space_${System.nanoTime()}")
       appDir.mkdirs()
       val testFile = File(appDir, "test.zim")
       testFile.writeBytes(ByteArray(1000))
 
       try {
-        every { kiwixDataStore.selectedStorage } returns flowOf(appDir.absolutePath)
-        // File size = 1000, available space = 500 (insufficient for copy)
-        // But since file is already in app dir, space check should be skipped
+        coEvery { storageDeviceProvider.getAppSpecificPublicDirs() } returns listOf(appDir)
+        // File size = 1000, available space = 500 (insufficient for a copy/move).
+        // Since the file is already in an app-specific directory, it should open
+        // directly without ever going through the copy/move (and space check) flow.
         val uri = createValidUri(fileSize = 1000L, availableSpace = 500L)
 
         processSelectedZimFiles.processSelectedFiles(listOf(uri))
@@ -460,13 +458,14 @@ class ProcessSelectedZimFilesForPlayStoreTest {
   @Test
   fun `getExistingFileInAppDirectory returns null when sizes differ`() =
     testScope.runTest {
-      val appDir = File(System.getProperty("java.io.tmpdir"), "kiwix_test_diff_${System.nanoTime()}")
+      val appDir =
+        File(System.getProperty("java.io.tmpdir"), "kiwix_test_diff_${System.nanoTime()}")
       appDir.mkdirs()
       val testFile = File(appDir, "test.zim")
       testFile.writeBytes(ByteArray(100))
 
       try {
-        every { kiwixDataStore.selectedStorage } returns flowOf(appDir.absolutePath)
+        coEvery { storageDeviceProvider.getAppSpecificPublicDirs() } returns listOf(appDir)
 
         val documentFile = mockk<DocumentFile>()
         every { documentFile.name } returns "test.zim"
@@ -491,13 +490,14 @@ class ProcessSelectedZimFilesForPlayStoreTest {
   @Test
   fun `getExistingFileInAppDirectory returns file when file exists with matching size`() =
     testScope.runTest {
-      val appDir = File(System.getProperty("java.io.tmpdir"), "kiwix_test_match_${System.nanoTime()}")
+      val appDir =
+        File(System.getProperty("java.io.tmpdir"), "kiwix_test_match_${System.nanoTime()}")
       appDir.mkdirs()
       val testFile = File(appDir, "test.zim")
       testFile.writeBytes(ByteArray(100))
 
       try {
-        every { kiwixDataStore.selectedStorage } returns flowOf(appDir.absolutePath)
+        coEvery { storageDeviceProvider.getAppSpecificPublicDirs() } returns listOf(appDir)
 
         val documentFile = mockk<DocumentFile>()
         every { documentFile.name } returns "test.zim"

@@ -43,6 +43,7 @@ class StorageDeviceProvider @Inject constructor(
   private val mutex = Mutex()
   private var writableStorage: List<StorageDevice>? = null
   private var staticAppSpecificDirsCache: List<File>? = null
+  private var staticAppSpecificPublicDirsCache: List<File>? = null
 
   /**
    * Returns the writable storage devices, caching the result for the lifetime of the app process.
@@ -86,5 +87,20 @@ class StorageDeviceProvider @Inject constructor(
         dirs.add(File(selectedStoragePath))
       }
       dirs.distinctBy { it.absolutePath }
+    }
+
+  /**
+   * Returns only the *public* app-specific directories — the external "media"
+   * directory (Android/media/<package>) on every storage volume (internal
+   * and any SD card).
+   */
+  suspend fun getAppSpecificPublicDirs(): List<File> =
+    mutex.withLock {
+      val staticDirs = staticAppSpecificPublicDirsCache ?: withContext(ioDispatcher) {
+        val dirs = mutableListOf<File>()
+        ContextWrapper(context).externalMediaDirs?.filterNotNull()?.let { dirs.addAll(it) }
+        dirs
+      }.also { staticAppSpecificPublicDirsCache = it }
+      staticDirs.distinctBy { it.absolutePath }
     }
 }
