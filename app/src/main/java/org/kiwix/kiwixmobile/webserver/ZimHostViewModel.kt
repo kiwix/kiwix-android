@@ -142,8 +142,8 @@ class ZimHostViewModel @Inject constructor(
     hostedIds: Set<String>,
     isBrandedApp: Boolean,
     zimFileReader: ZimFileReader?
-  ): List<BooksOnDiskListItem> {
-    return if (isBrandedApp && zimFileReader != null) {
+  ): List<BooksOnDiskListItem> =
+    if (isBrandedApp && zimFileReader != null) {
       bookItems.mapNotNull { item ->
         if (item is BookOnDisk) {
           BookOnDisk(zimFileReader, isSelected = true)
@@ -160,13 +160,12 @@ class ZimHostViewModel @Inject constructor(
         }
       }
     }
-  }
 
   private fun shouldSelectBook(
     book: BookOnDisk,
     previouslyHostedBookIds: Set<String>
-  ): Boolean {
-    return when {
+  ): Boolean =
+    when {
       // Hosted books are now saved using the unique book ID.
       previouslyHostedBookIds.contains(book.book.id) -> true
       // Backward compatibility: for users who have not been migrated to the new logic yet,
@@ -176,7 +175,6 @@ class ZimHostViewModel @Inject constructor(
       previouslyHostedBookIds.isEmpty() -> true
       else -> false
     }
-  }
 
   fun startServerButtonClick() {
     viewModelScope.launch {

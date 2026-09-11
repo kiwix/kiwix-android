@@ -138,18 +138,16 @@ class ZimReaderSource(
     }
   }
 
-  fun getUri(activity: AppCompatActivity): Uri? {
-    return when {
-      file != null -> {
-        FileProvider.getUriForFile(
-          activity,
-          "${activity.packageName}.fileprovider",
-          file
-        )
-      }
-
-      else -> uri
+  fun getUri(activity: AppCompatActivity): Uri? = when {
+    file != null -> {
+      FileProvider.getUriForFile(
+        activity,
+        "${activity.packageName}.fileprovider",
+        file
+      )
     }
+
+    else -> uri
   }
 
   override fun hashCode(): Int = when {

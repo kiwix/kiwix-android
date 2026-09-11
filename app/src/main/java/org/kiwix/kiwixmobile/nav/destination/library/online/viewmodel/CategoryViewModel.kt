@@ -108,8 +108,8 @@ open class CategoryViewModel @Inject constructor(
     }
   }
 
-  private fun reduce(action: Action, currentState: State): State {
-    return when (action) {
+  private fun reduce(action: Action, currentState: State): State =
+    when (action) {
       is Action.Error -> State.Error(action.errorMessage)
       is Action.UpdateCategory -> updateCategory(action, currentState)
       is Action.Filter -> filter(action, currentState)
@@ -119,7 +119,6 @@ open class CategoryViewModel @Inject constructor(
       Action.SelectAll -> selectAll(currentState)
       Action.Cancel -> cancel(currentState)
     }
-  }
 
   private fun updateCategory(action: Action.UpdateCategory, currentState: State): State =
     if (currentState == State.Loading) State.Content(action.categories) else currentState

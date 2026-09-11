@@ -43,11 +43,9 @@ class LanguageUtils(private val context: Context) {
   private fun languageContainersFrom(languageCodes: List<String>) =
     sortWithCollator(languageCodes.map(::LanguageContainer).toMutableList())
 
-  private fun languageCodesFromAssets(): List<String> {
-    return FileUtils.readLocalesFromAssets(context)
-      .filter(String::isNotEmpty)
-      .map { locale -> locale.trim { it <= ' ' } }
-  }
+  private fun languageCodesFromAssets(): List<String> = FileUtils.readLocalesFromAssets(context)
+    .filter(String::isNotEmpty)
+    .map { locale -> locale.trim { it <= ' ' } }
 
   private fun sortWithCollator(
     languageCodesFromAssets: MutableList<LanguageContainer>

@@ -316,8 +316,8 @@ private fun handleBackPress(
   activity: KiwixMainActivity,
   isSearchActive: Boolean,
   closeSearch: () -> Unit
-): BackPressActivityExtensions.Super {
-  return if (activity.navigationDrawerIsOpen()) {
+): BackPressActivityExtensions.Super =
+  if (activity.navigationDrawerIsOpen()) {
     activity.closeNavigationDrawer()
     BackPressActivityExtensions.Super.ShouldNotCall
   } else {
@@ -333,7 +333,6 @@ private fun handleBackPress(
       BackPressActivityExtensions.Super.ShouldCall
     }
   }
-}
 
 @Composable
 private fun ShowCategoryDialog(

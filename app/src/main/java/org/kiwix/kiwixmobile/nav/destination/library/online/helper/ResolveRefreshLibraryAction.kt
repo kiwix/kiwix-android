@@ -40,8 +40,8 @@ class ResolveRefreshLibraryAction @Inject constructor(
     object WifiOnlyBlocked : Result()
   }
 
-  suspend operator fun invoke(hasItems: Boolean): Result {
-    return if (!connectivityManager.isNetworkAvailable()) {
+  suspend operator fun invoke(hasItems: Boolean): Result =
+    if (!connectivityManager.isNetworkAvailable()) {
       if (hasItems) {
         NoInternetWithContent
       } else {
@@ -52,5 +52,4 @@ class ResolveRefreshLibraryAction @Inject constructor(
     } else {
       Proceed
     }
-  }
 }

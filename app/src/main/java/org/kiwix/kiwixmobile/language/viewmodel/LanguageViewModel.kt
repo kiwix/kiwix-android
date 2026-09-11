@@ -149,8 +149,8 @@ open class LanguageViewModel @Inject constructor(
   private fun reduce(
     action: Action,
     currentState: State
-  ): State {
-    return when (action) {
+  ): State =
+    when (action) {
       is Error -> State.Error(action.errorMessage)
       is UpdateLanguages -> updateLanguages(action, currentState)
       is Filter -> filter(action, currentState)
@@ -158,7 +158,6 @@ open class LanguageViewModel @Inject constructor(
       Save -> saveAction(currentState)
       Cancel -> cancel(currentState)
     }
-  }
 
   private fun cancel(currentState: State): State {
     if (currentState !is Content) return currentState

@@ -385,15 +385,14 @@ class LocalLibraryViewModel @Inject constructor(
   private fun selectBook(
     it: FileSelectListState,
     bookOnDisk: BookOnDisk
-  ): List<BooksOnDiskListItem> {
-    return it.bookOnDiskListItems.map { listItem ->
+  ): List<BooksOnDiskListItem> =
+    it.bookOnDiskListItems.map { listItem ->
       if (listItem is BookOnDisk && listItem.id == bookOnDisk.id) {
         listItem.copy(isSelected = !listItem.isSelected)
       } else {
         listItem
       }
     }
-  }
 
   private fun noSideEffectSelectBook(bookOnDisk: BookOnDisk): SideEffect<Unit> {
     updateState {
@@ -528,8 +527,8 @@ class LocalLibraryViewModel @Inject constructor(
   private fun inheritSelections(
     oldState: FileSelectListState,
     newList: MutableList<BooksOnDiskListItem>
-  ): FileSelectListState {
-    return oldState.copy(
+  ): FileSelectListState =
+    oldState.copy(
       bookOnDiskListItems =
         newList.map { newBookOnDisk ->
           val firstOrNull =
@@ -545,7 +544,6 @@ class LocalLibraryViewModel @Inject constructor(
           }
         }
     )
-  }
 
   private fun updateState(transform: (LocalLibraryUiState) -> LocalLibraryUiState) {
     _uiState.value = transform(_uiState.value)
@@ -689,14 +687,13 @@ class LocalLibraryViewModel @Inject constructor(
     }
   }
 
-  fun handleUserBackPressed(): BackPressActivityExtensions.Super {
-    return if (uiState.value.fileSelectListState.selectionMode == MULTI) {
+  fun handleUserBackPressed(): BackPressActivityExtensions.Super =
+    if (uiState.value.fileSelectListState.selectionMode == MULTI) {
       finishMultiModeFinished()
       BackPressActivityExtensions.Super.ShouldNotCall
     } else {
       BackPressActivityExtensions.Super.ShouldCall
     }
-  }
 
   fun filePickerMenuButtonClick(filePickerLauncher: ManagedActivityResultLauncher<Intent, ActivityResult>) {
     viewModelScope.launch {
@@ -867,6 +864,5 @@ class LocalLibraryViewModel @Inject constructor(
   private suspend fun shouldShowFileSystemDialog(): Boolean =
     !kiwixDataStore.isScanFileSystemDialogShown.first() &&
       !BuildConfig.IS_PLAYSTORE &&
-      uiState.value.fileSelectListState.bookOnDiskListItems
-        .isEmpty()
+      uiState.value.fileSelectListState.bookOnDiskListItems.isEmpty()
 }

@@ -40,12 +40,11 @@ class HotspotStateReceiverTest {
     receiver = HotspotStateReceiver(callback)
   }
 
-  private fun createIntent(state: Int): Intent {
-    return mockk {
+  private fun createIntent(state: Int): Intent =
+    mockk {
       every { action } returns ACTION_WIFI_AP_STATE
       every { getIntExtra(EXTRA_WIFI_AP_STATE, -1) } returns state
     }
-  }
 
   @Test
   fun `when hotspot state is disabled then callback is invoked`() {

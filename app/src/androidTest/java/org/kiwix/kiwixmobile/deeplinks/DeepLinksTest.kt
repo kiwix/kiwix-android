@@ -226,14 +226,13 @@ class DeepLinksTest : BaseActivityTest() {
   private fun createDeepLinkIntent(
     uri: Uri,
     mimeType: String? = null
-  ): Intent {
-    return Intent(Intent.ACTION_VIEW).apply {
+  ): Intent =
+    Intent(Intent.ACTION_VIEW).apply {
       data = uri
       mimeType?.let { setDataAndType(uri, it) }
       addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
       setPackage(context.packageName)
     }
-  }
 
   @After
   fun finish() {

@@ -34,8 +34,8 @@ data class DeleteFilesUseCase @Inject constructor(
 ) {
   suspend operator fun invoke(
     books: List<BooksOnDiskListItem.BookOnDisk>
-  ): Boolean {
-    return books.fold(true) { acc, book ->
+  ): Boolean =
+    books.fold(true) { acc, book ->
       acc &&
         deleteBook(book).also {
           if (it && book.zimReaderSource == zimReaderContainer.zimReaderSource) {
@@ -43,7 +43,6 @@ data class DeleteFilesUseCase @Inject constructor(
           }
         }
     }
-  }
 
   @Suppress("ReturnCount")
   private suspend fun deleteBook(

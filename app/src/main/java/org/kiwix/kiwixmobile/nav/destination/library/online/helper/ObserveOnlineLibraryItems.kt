@@ -49,8 +49,8 @@ class ObserveOnlineLibraryItems @Inject constructor(
     getString: (Int, Array<out Any>) -> String,
     getSimpleString: (Int) -> String,
     getDisplayLanguage: (String) -> String
-  ): Flow<List<LibraryListItem>> {
-    return combine(
+  ): Flow<List<LibraryListItem>> =
+    combine(
       localBooks,
       downloads,
       networkBooks,
@@ -69,7 +69,6 @@ class ObserveOnlineLibraryItems @Inject constructor(
         localizationHelper = LocalizationHelper(getString, getSimpleString, getDisplayLanguage)
       )
     }.flowOn(ioDispatcher)
-  }
 
   private class LocalizationHelper(
     val getString: (Int, Array<out Any>) -> String,

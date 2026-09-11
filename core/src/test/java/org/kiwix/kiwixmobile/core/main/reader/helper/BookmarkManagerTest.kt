@@ -299,9 +299,7 @@ class BookmarkManagerTest {
     }
   }
 
-  private fun mockZimReader(): ZimFileReader {
-    return mockk<ZimFileReader>(relaxed = true).apply {
-      every { jniKiwixReader } returns mockk(relaxed = true)
-    }
+  private fun mockZimReader(): ZimFileReader = mockk<ZimFileReader>(relaxed = true).apply {
+    every { jniKiwixReader } returns mockk(relaxed = true)
   }
 }

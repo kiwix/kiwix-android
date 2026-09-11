@@ -380,12 +380,10 @@ private fun getFormattedDateLabel(dateString: String): String {
   }
 }
 
-private fun parseDateSafely(dateString: String): LocalDate? {
-  return try {
-    LocalDate.parse(dateString, DateTimeFormatter.ofPattern("d MMM yyyy"))
-  } catch (_: DateTimeParseException) {
-    null
-  }
+private fun parseDateSafely(dateString: String): LocalDate? = try {
+  LocalDate.parse(dateString, DateTimeFormatter.ofPattern("d MMM yyyy"))
+} catch (_: DateTimeParseException) {
+  null
 }
 
 /**
@@ -451,18 +449,16 @@ private fun searchBarIfActive(
   searchText: String,
   onSearchTextChange: (String) -> Unit,
   onClearSearch: () -> Unit,
-): (@Composable () -> Unit)? {
-  return if (isSearchBarActive && !isInSelectionMode) {
-    {
-      KiwixSearchView(
-        placeholder = searchQueryHint,
-        value = searchText,
-        searchViewTextFiledTestTag = "",
-        onValueChange = onSearchTextChange,
-        onClearClick = onClearSearch
-      )
-    }
-  } else {
-    null
+): (@Composable () -> Unit)? = if (isSearchBarActive && !isInSelectionMode) {
+  {
+    KiwixSearchView(
+      placeholder = searchQueryHint,
+      value = searchText,
+      searchViewTextFiledTestTag = "",
+      onValueChange = onSearchTextChange,
+      onClearClick = onClearSearch
+    )
   }
+} else {
+  null
 }

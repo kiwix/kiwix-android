@@ -64,8 +64,8 @@ class BookItemUITest {
     size: String = "1024",
     articleCount: String? = "22",
     isSelected: Boolean = false
-  ): BookOnDisk {
-    return BookOnDisk(
+  ): BookOnDisk =
+    BookOnDisk(
       book = LibkiwixBook(
         _id = "book-id",
         _title = title,
@@ -78,7 +78,6 @@ class BookItemUITest {
       zimReaderSource = ZimReaderSource(File("test.zim")),
       isSelected = isSelected
     )
-  }
 
   private fun bookItem(
     index: Int,

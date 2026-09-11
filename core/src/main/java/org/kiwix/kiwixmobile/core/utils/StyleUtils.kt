@@ -43,12 +43,10 @@ object StyleUtils {
     return Xml.asAttributeSet(parser)
   }
 
-  @JvmStatic fun String?.fromHtml(): Spanned {
-    return (this.orEmpty()).let {
-      Html.fromHtml(
-        this,
-        Html.FROM_HTML_MODE_LEGACY
-      )
-    }
+  @JvmStatic fun String?.fromHtml(): Spanned = (this.orEmpty()).let {
+    Html.fromHtml(
+      this,
+      Html.FROM_HTML_MODE_LEGACY
+    )
   }
 }

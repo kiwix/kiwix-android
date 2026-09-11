@@ -72,12 +72,10 @@ open class CoreWebViewClient(
     return true
   }
 
-  private fun convertLegacyUrl(url: String): String {
-    return LEGACY_CONTENT_PREFIXES
-      .firstOrNull(url::startsWith)
-      ?.let { url.replace(it, ZimFileReader.CONTENT_PREFIX) }
-      ?: url
-  }
+  private fun convertLegacyUrl(url: String): String = LEGACY_CONTENT_PREFIXES
+    .firstOrNull(url::startsWith)
+    ?.let { url.replace(it, ZimFileReader.CONTENT_PREFIX) }
+    ?: url
 
   @Suppress("NestedBlockDepth")
   fun handleUnsupportedFiles(url: String): Boolean {

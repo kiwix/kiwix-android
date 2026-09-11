@@ -223,7 +223,8 @@ class ReaderRobot : BaseRobot() {
         // tree so CI logs show exactly what was on screen (e.g. is the toolbar empty, did tab
         // restoration leave the wrong page selected) instead of only the bare timeout.
         Log.e(
-          TAG, "Overflow menu button never appeared. Dumping current UI tree for debugging.\n" +
+          TAG,
+          "Overflow menu button never appeared. Dumping current UI tree for debugging.\n" +
             " ${onRoot().printToString()}"
         )
         throw e

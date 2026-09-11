@@ -63,9 +63,8 @@ class FileSelectListStateTest {
     assertThat(state.selectionMode).isEqualTo(NORMAL)
   }
 
-  private fun mockBook(isSelected: Boolean): BookOnDisk {
-    return mockk<BookOnDisk> {
+  private fun mockBook(isSelected: Boolean): BookOnDisk =
+    mockk<BookOnDisk> {
       every { this@mockk.isSelected } returns isSelected
     }
-  }
 }

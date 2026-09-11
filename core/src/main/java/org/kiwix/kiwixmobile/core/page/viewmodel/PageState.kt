@@ -37,24 +37,22 @@ abstract class PageState<T : Page> {
   abstract val currentZimId: String?
   abstract val searchTerm: String
 
-  fun getItemsAfterToggleSelectionOfItem(page: Page): List<T> {
-    return pageItems.map {
-      // check if the current item is `LibkiwixBookmarkItem` because we have not saving
-      // the bookmarks in database so it does not have any unique value so to get the
-      // selected items we check for url since url is unique for every bookmark.
-      val currentItemIdentifier = if (it is LibkiwixBookmarkItem) it.url else it.id
-      val pageIdentifier = if (it is LibkiwixBookmarkItem) page.url else page.id
-      if (currentItemIdentifier == pageIdentifier) {
-        when (it) {
-          is LibkiwixBookmarkItem -> it.copy(isSelected = !it.isSelected) as T
-          is HistoryItem -> it.copy(isSelected = !it.isSelected) as T
-          is NoteListItem -> it.copy(isSelected = !it.isSelected) as T
-          // For test cases only.
-          else -> it.apply { isSelected = !isSelected }
-        }
-      } else {
-        it
+  fun getItemsAfterToggleSelectionOfItem(page: Page): List<T> = pageItems.map {
+    // check if the current item is `LibkiwixBookmarkItem` because we have not saving
+    // the bookmarks in database so it does not have any unique value so to get the
+    // selected items we check for url since url is unique for every bookmark.
+    val currentItemIdentifier = if (it is LibkiwixBookmarkItem) it.url else it.id
+    val pageIdentifier = if (it is LibkiwixBookmarkItem) page.url else page.id
+    if (currentItemIdentifier == pageIdentifier) {
+      when (it) {
+        is LibkiwixBookmarkItem -> it.copy(isSelected = !it.isSelected) as T
+        is HistoryItem -> it.copy(isSelected = !it.isSelected) as T
+        is NoteListItem -> it.copy(isSelected = !it.isSelected) as T
+        // For test cases only.
+        else -> it.apply { isSelected = !isSelected }
       }
+    } else {
+      it
     }
   }
 

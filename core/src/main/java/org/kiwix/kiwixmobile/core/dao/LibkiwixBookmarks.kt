@@ -410,8 +410,8 @@ class LibkiwixBookmarks @Inject constructor(
       }
   }
 
-  private suspend fun getZimFileReaderFromBookmark(bookmarkItem: LibkiwixBookmarkItem): ZimFileReader? {
-    return if (kiwixDataStore.isBrandedApp.first()) {
+  private suspend fun getZimFileReaderFromBookmark(bookmarkItem: LibkiwixBookmarkItem): ZimFileReader? =
+    if (kiwixDataStore.isBrandedApp.first()) {
       // in custom apps we are using the assetFileDescriptor so we do not have the filePath
       // and in custom apps there is only a single zim file so we are directly
       // getting the zimFileReader object.
@@ -428,7 +428,6 @@ class LibkiwixBookmarks @Inject constructor(
         }
       }
     }
-  }
 
   private suspend fun isBookMarkExist(libkiwixBookmarkItem: LibkiwixBookmarkItem): Boolean =
     getBookmarksList()

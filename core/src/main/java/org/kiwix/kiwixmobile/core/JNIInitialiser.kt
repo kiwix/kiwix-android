@@ -34,28 +34,26 @@ class JNIInitialiser @Inject constructor(
     loadICUData(context)?.let(jniKiwix::setDataDirectory)
   }
 
-  private fun loadICUData(context: Context): String? {
-    return try {
-      val icuDir = File(context.filesDir, "icu")
-      if (!icuDir.exists()) {
-        icuDir.mkdirs()
-      }
-      val icuFileNames = context.assets.list("icu").orEmpty()
-      for (icuFileName in icuFileNames) {
-        val icuDataFile = File(icuDir, icuFileName)
-        if (!icuDataFile.exists()) {
-          FileOutputStream(icuDataFile).use { outputStream ->
-            context.assets.open("icu/$icuFileName").use { inputStream ->
-              inputStream.copyTo(outputStream, 1024)
-            }
+  private fun loadICUData(context: Context): String? = try {
+    val icuDir = File(context.filesDir, "icu")
+    if (!icuDir.exists()) {
+      icuDir.mkdirs()
+    }
+    val icuFileNames = context.assets.list("icu").orEmpty()
+    for (icuFileName in icuFileNames) {
+      val icuDataFile = File(icuDir, icuFileName)
+      if (!icuDataFile.exists()) {
+        FileOutputStream(icuDataFile).use { outputStream ->
+          context.assets.open("icu/$icuFileName").use { inputStream ->
+            inputStream.copyTo(outputStream, 1024)
           }
         }
       }
-      icuDir.absolutePath
-    } catch (e: Exception) {
-      Log.w(TAG_KIWIX, "Error copying icu data file", e)
-      // TODO Consider surfacing to user
-      null
     }
+    icuDir.absolutePath
+  } catch (e: Exception) {
+    Log.w(TAG_KIWIX, "Error copying icu data file", e)
+    // TODO Consider surfacing to user
+    null
   }
 }

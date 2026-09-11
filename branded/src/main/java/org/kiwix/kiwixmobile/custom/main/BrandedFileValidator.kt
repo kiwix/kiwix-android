@@ -56,15 +56,14 @@ class BrandedFileValidator @Inject constructor(
     zimFiles: List<File> = zimFiles(),
     assetFileDescriptorList: List<AssetFileDescriptor> =
       getAssetFileDescriptorListFromPlayAssetDelivery()
-  ): ValidationState {
-    return when {
+  ): ValidationState =
+    when {
       assetFileDescriptorList.isNotEmpty() -> HasFile(null, assetFileDescriptorList)
       obbFiles.isNotEmpty() && zimFiles().isNotEmpty() -> HasBothFiles(obbFiles[0], zimFiles[0])
       obbFiles.isNotEmpty() -> HasFile(obbFiles[0])
       zimFiles.isNotEmpty() -> HasFile(zimFiles[0])
       else -> HasNothing
     }
-  }
 
   @Suppress("MagicNumber")
   fun getAssetFileDescriptorListFromPlayAssetDelivery(): List<AssetFileDescriptor> {

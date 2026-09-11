@@ -503,8 +503,7 @@ class KiwixReaderScreenTest : BaseActivityTest() {
   }
 }
 
-fun SemanticsNodeInteraction.getText(): String {
-  return fetchSemanticsNode()
+fun SemanticsNodeInteraction.getText(): String =
+  fetchSemanticsNode()
     .config[SemanticsProperties.Text]
     .joinToString("") { it.text }
-}

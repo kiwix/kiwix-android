@@ -137,24 +137,22 @@ class FetchDownloadNotificationManager @Inject constructor(
   override fun getSubtitleText(
     context: Context,
     downloadNotification: DownloadNotification
-  ): String {
-    return when {
-      downloadNotification.isCompleted -> context.getString(R.string.complete)
-      downloadNotification.isFailed -> context.getString(R.string.download_failed_state)
-      downloadNotification.isPaused -> buildSubtitle(
-        context.getString(R.string.paused_state),
-        downloadNotification.downloaded,
-        downloadNotification.total
-      )
+  ): String = when {
+    downloadNotification.isCompleted -> context.getString(R.string.complete)
+    downloadNotification.isFailed -> context.getString(R.string.download_failed_state)
+    downloadNotification.isPaused -> buildSubtitle(
+      context.getString(R.string.paused_state),
+      downloadNotification.downloaded,
+      downloadNotification.total
+    )
 
-      downloadNotification.isQueued -> context.getString(R.string.resuming_state)
-      downloadNotification.etaInMilliSeconds < 0 -> context.getString(R.string.downloading_state)
-      else -> buildSubtitle(
-        super.getSubtitleText(context, downloadNotification),
-        downloadNotification.downloaded,
-        downloadNotification.total
-      )
-    }
+    downloadNotification.isQueued -> context.getString(R.string.resuming_state)
+    downloadNotification.etaInMilliSeconds < 0 -> context.getString(R.string.downloading_state)
+    else -> buildSubtitle(
+      super.getSubtitleText(context, downloadNotification),
+      downloadNotification.downloaded,
+      downloadNotification.total
+    )
   }
 
   private fun buildSubtitle(
