@@ -72,7 +72,14 @@ class ResolveBookClickAction @Inject constructor(
     item: BookItem,
     storageDeviceCount: Int
   ): LibraryActionResult {
-    return if (!permissionChecker.hasNotificationPermission()) {
+    return if (
+      !permissionChecker.hasNotificationPermission() &&
+      !kiwixDataStore.hasSeenNotificationPermissionDeniedInfo.first()
+    ) {
+      // POST_NOTIFICATIONS only gates whether a notification can be *shown* - the
+      // foreground service backing downloads runs regardless. Once the user has been
+      // told that (see OnlineLibraryViewModel.onNotificationPermissionResult), a denied
+      // permission no longer blocks downloads on every subsequent attempt.
       RequestNotificationPermission
     } else if (!connectivityManager.isNetworkAvailable()) {
       NoInternet
