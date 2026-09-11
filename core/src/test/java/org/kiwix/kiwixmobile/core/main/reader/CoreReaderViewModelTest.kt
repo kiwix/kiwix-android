@@ -27,6 +27,7 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.SnackbarResult
 import androidx.lifecycle.viewModelScope
@@ -1065,20 +1066,53 @@ internal class CoreReaderViewModelTest {
   @Nested
   inner class NavigationIcon {
     @Test
-    fun navigationIcon_whenShowTabSwitcher_returnsAddIcon() {
-      viewModel.updateUiStateForTest { copy(showTabSwitcher = true) }
+    fun `navigationIcon should return valid icon`() {
       val icon = viewModel.navigationIcon()
-
-      assertThat(icon).isEqualTo(IconItem.Drawable(R.drawable.ic_round_add_white_36dp))
+      assertThat(icon).isNotNull()
     }
 
     @Test
-    fun navigationIcon_whenTabSwitcherIsHidden_returnsMenuVector() {
-      viewModel.updateUiStateForTest { copy(showTabSwitcher = false) }
-
+    fun `navigationIcon should return back arrow icon when tab switcher is open`() {
+      viewModel.updateState { copy(showTabSwitcher = true) }
       val icon = viewModel.navigationIcon()
+      assertThat(icon).isEqualTo(IconItem.Vector(Icons.AutoMirrored.Filled.ArrowBack))
+    }
 
+    @Test
+    fun `navigationIcon should return menu icon when tab switcher is closed`() {
+      viewModel.updateState { copy(showTabSwitcher = false) }
+      val icon = viewModel.navigationIcon()
       assertThat(icon).isEqualTo(IconItem.Vector(Icons.Filled.Menu))
+    }
+
+    @Test
+    fun `navigationIconContentDescription should return back description when tab switcher is open`() {
+      viewModel.updateState { copy(showTabSwitcher = true) }
+      assertThat(viewModel.navigationIconContentDescription())
+        .isEqualTo(R.string.toolbar_back_button_content_description)
+    }
+
+    @Test
+    fun `navigationIconContentDescription should return open drawer description when tab switcher is closed`() {
+      viewModel.updateState { copy(showTabSwitcher = false) }
+      assertThat(viewModel.navigationIconContentDescription())
+        .isEqualTo(R.string.open_drawer)
+    }
+
+    @Test
+    fun `navigationIconClick should hide tab switcher when tab switcher is open`() = runTest {
+      viewModel = spyk(viewModel)
+      viewModel.updateState { copy(showTabSwitcher = true) }
+      viewModel.navigationIconClick(isNavigationDrawerOpen = false)
+      advanceUntilIdle()
+      assertThat(viewModel.uiState.value.showTabSwitcher).isFalse()
+    }
+
+    @Test
+    fun `onAction with NewTab should invoke onHomeMenuClicked`() = runTest {
+      viewModel = spyk(viewModel)
+      viewModel.onAction(ReaderAction.NewTab)
+      verify { viewModel.onHomeMenuClicked() }
     }
   }
 
@@ -2730,11 +2764,11 @@ internal class CoreReaderViewModelTest {
   @Nested
   inner class NavigationIconContentDescription {
     @Test
-    fun whenShowTabSwitcherTrue_returnsSearchOpenInNewTabString() {
+    fun whenShowTabSwitcherTrue_returnsBackButtonContentDescription() {
       viewModel.updateUiStateForTest { copy(showTabSwitcher = true) }
       val result = viewModel.navigationIconContentDescription()
 
-      assertThat(result).isEqualTo(string.search_open_in_new_tab)
+      assertThat(result).isEqualTo(string.toolbar_back_button_content_description)
     }
 
     @Test
@@ -2917,17 +2951,16 @@ internal class CoreReaderViewModelTest {
   @Nested
   inner class NavigationIconClick {
     @Test
-    fun whenShowTabSwitcherTrue_triggersOnHomeMenuClickedAndDoesNothing() = runTest {
+    fun whenShowTabSwitcherTrue_hidesTabSwitcherAndDoesNothing() = runTest {
       val viewModel = spyk(viewModel)
-
-      every { viewModel.onHomeMenuClicked() } just Runs
+      coEvery { viewModel.hideTabSwitcher() } just Runs
 
       viewModel.updateUiStateForTest { copy(showTabSwitcher = true) }
       viewModel.effects.test {
         viewModel.navigationIconClick(true)
+        advanceUntilIdle()
 
-        verify { viewModel.onHomeMenuClicked() }
-
+        coVerify { viewModel.hideTabSwitcher() }
         expectNoEvents() // No other effects are emitted
       }
     }

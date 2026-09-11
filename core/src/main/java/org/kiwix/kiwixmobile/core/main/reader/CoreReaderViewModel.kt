@@ -32,6 +32,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.SnackbarDuration
@@ -214,6 +215,7 @@ abstract class CoreReaderViewModel(
     data object OpenTocDrawer : ReaderAction
     data object CloseTocDrawer : ReaderAction
     data object CloseAllTabs : ReaderAction
+    data object NewTab : ReaderAction
     data class SelectTab(val position: Int) : ReaderAction
     data class CloseTab(val position: Int) : ReaderAction
     data object PauseTts : ReaderAction
@@ -450,6 +452,7 @@ abstract class CoreReaderViewModel(
       ReaderAction.BookmarkClicked -> onBookmarkButtonClicked()
       ReaderAction.BookmarkLongClicked -> openBookmarkScreen()
       ReaderAction.CloseAllTabs -> closeAllTabs()
+      ReaderAction.NewTab -> onHomeMenuClicked()
       ReaderAction.HomeClicked -> launchInMainScope { openMainPage() }
       ReaderAction.NextClicked -> goForward()
       ReaderAction.NextLongClicked -> showBackwordForwardHistory(true)
@@ -517,7 +520,7 @@ abstract class CoreReaderViewModel(
     // Do nothing here.
   }
 
-  protected fun updateState(transform: ReaderUiState.() -> ReaderUiState) {
+  open fun updateState(transform: ReaderUiState.() -> ReaderUiState) {
     _uiState.update(transform)
   }
 
@@ -550,8 +553,8 @@ abstract class CoreReaderViewModel(
    * WARNING: If modifying this method, ensure thorough testing with custom apps
    * to verify proper functionality.
    */
-  open fun navigationIcon() = if (uiState.value.showTabSwitcher) {
-    IconItem.Drawable(R.drawable.ic_round_add_white_36dp)
+  open fun navigationIcon(): IconItem = if (uiState.value.showTabSwitcher) {
+    IconItem.Vector(Icons.AutoMirrored.Filled.ArrowBack)
   } else {
     IconItem.Vector(Icons.Filled.Menu)
   }
@@ -1685,12 +1688,14 @@ abstract class CoreReaderViewModel(
 
   /**
    * Handles clicks on the navigation icon.
-   * - If the tab switcher is active, triggers the home menu action.
+   * - If the tab switcher is active, exits the tab switcher.
    * - Otherwise, toggles the navigation drawer: opens it if closed, closes it if open.
    */
   open fun navigationIconClick(isNavigationDrawerOpen: Boolean) {
     if (uiState.value.showTabSwitcher) {
-      onHomeMenuClicked()
+      launchInViewModelScope {
+        hideTabSwitcher()
+      }
       return
     }
 
@@ -1704,10 +1709,14 @@ abstract class CoreReaderViewModel(
 
   fun navigationIconContentDescription() =
     if (uiState.value.showTabSwitcher) {
-      string.search_open_in_new_tab
+      string.toolbar_back_button_content_description
     } else {
       string.open_drawer
     }
+
+  override fun onCloseAllTabsClicked() {
+    closeAllTabs()
+  }
 
   /**
    * Creates the main menu for the reader.

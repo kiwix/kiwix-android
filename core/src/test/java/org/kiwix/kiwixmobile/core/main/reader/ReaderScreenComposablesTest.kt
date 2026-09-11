@@ -430,16 +430,16 @@ class ReaderScreenComposablesTest {
   }
 
   @Test
-  fun readerScreen_tabSwitcher_closeAllTabButton_displaysWhenTabSwitcherShown() {
+  fun readerScreen_tabSwitcher_newTabButton_displaysWhenTabSwitcherShown() {
     renderReaderScreen(createTestState(showTabSwitcher = true))
     composeTestRule.waitForIdle()
     composeTestRule
-      .onNodeWithTag(CLOSE_ALL_TABS_BUTTON_TESTING_TAG)
+      .onNodeWithTag(NEW_TAB_BUTTON_TESTING_TAG)
       .assertIsDisplayed()
   }
 
   @Test
-  fun readerScreen_tabSwitcher_closeAllTabButton_triggersCallback() {
+  fun readerScreen_tabSwitcher_newTabButton_triggersCallback() {
     var action: ReaderAction? = null
     renderReaderScreen(
       createTestState(showTabSwitcher = true),
@@ -447,9 +447,9 @@ class ReaderScreenComposablesTest {
     )
     composeTestRule.waitForIdle()
     composeTestRule
-      .onNodeWithTag(CLOSE_ALL_TABS_BUTTON_TESTING_TAG)
+      .onNodeWithTag(NEW_TAB_BUTTON_TESTING_TAG)
       .performClick()
-    assertEquals(ReaderAction.CloseAllTabs, action)
+    assertEquals(ReaderAction.NewTab, action)
   }
 
   @Test
@@ -604,5 +604,62 @@ class ReaderScreenComposablesTest {
       )
       .performClick()
     assertEquals(ReaderAction.CloseTab(0), action)
+  }
+
+  @Test
+  fun readerScreen_tabSwitcher_selectTab_triggersCallback() {
+    var action: ReaderAction? = null
+    val webView = mockk<KiwixWebView>(relaxed = true)
+    every { webView.title } returns "Article One"
+    every { webView.parent } returns null
+    every { webView.layoutParams } returns FrameLayout.LayoutParams(
+      FrameLayout.LayoutParams.MATCH_PARENT,
+      FrameLayout.LayoutParams.MATCH_PARENT
+    )
+
+    val state = createTestState(
+      showTabSwitcher = true,
+      tabsState = TabsManager.TabsState(listOf(webView))
+    )
+    renderReaderScreen(state, onReaderAction = { action = it })
+    composeTestRule.waitForIdle()
+
+    composeTestRule
+      .onNodeWithText("Article One", useUnmergedTree = true)
+      .performClick()
+    assertEquals(ReaderAction.SelectTab(0), action)
+  }
+
+  @Test
+  fun readerScreen_tabSwitcher_rendersMultipleTabs() {
+    val webView1 = mockk<KiwixWebView>(relaxed = true)
+    every { webView1.title } returns "Tab 1 Title"
+    every { webView1.parent } returns null
+    every { webView1.layoutParams } returns FrameLayout.LayoutParams(
+      FrameLayout.LayoutParams.MATCH_PARENT,
+      FrameLayout.LayoutParams.MATCH_PARENT
+    )
+
+    val webView2 = mockk<KiwixWebView>(relaxed = true)
+    every { webView2.title } returns "Tab 2 Title"
+    every { webView2.parent } returns null
+    every { webView2.layoutParams } returns FrameLayout.LayoutParams(
+      FrameLayout.LayoutParams.MATCH_PARENT,
+      FrameLayout.LayoutParams.MATCH_PARENT
+    )
+
+    val state = createTestState(
+      showTabSwitcher = true,
+      tabsState = TabsManager.TabsState(listOf(webView1, webView2))
+    )
+    renderReaderScreen(state)
+    composeTestRule.waitForIdle()
+
+    composeTestRule
+      .onNodeWithText("Tab 1 Title", useUnmergedTree = true)
+      .assertIsDisplayed()
+    composeTestRule
+      .onNodeWithText("Tab 2 Title", useUnmergedTree = true)
+      .assertIsDisplayed()
   }
 }

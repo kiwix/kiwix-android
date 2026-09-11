@@ -481,4 +481,36 @@ internal class ReaderMenuStateTest {
     state.showTabSwitcherOptions()
     assertThat(state.menuItems.any { it.testingTag == ADD_TO_HOME_SCREEN_MENU_ITEM_TESTING_TAG }).isFalse()
   }
+
+  // Close all tabs menu item tests
+
+  @Test
+  internal fun `close all tabs menu item is visible in tab switcher mode when webViewCount greater than 0`() {
+    readerMenuState.updateTabIcon(1)
+    readerMenuState.showTabSwitcherOptions()
+    assertThat(hasMenuItem(CLOSE_ALL_TABS_MENU_ITEM_TESTING_TAG)).isTrue()
+  }
+
+  @Test
+  internal fun `close all tabs menu item is in overflow menu`() {
+    readerMenuState.updateTabIcon(1)
+    readerMenuState.showTabSwitcherOptions()
+    assertThat(findMenuItem(CLOSE_ALL_TABS_MENU_ITEM_TESTING_TAG).isInOverflow).isTrue()
+  }
+
+  @Test
+  internal fun `close all tabs menu item click invokes onCloseAllTabsClicked`() {
+    readerMenuState.updateTabIcon(1)
+    readerMenuState.showTabSwitcherOptions()
+    findMenuItem(CLOSE_ALL_TABS_MENU_ITEM_TESTING_TAG).onClick()
+    verify { menuClickListener.onCloseAllTabsClicked() }
+  }
+
+  @Test
+  internal fun `close all tabs menu item is hidden when exiting tab switcher mode`() {
+    readerMenuState.updateTabIcon(1)
+    readerMenuState.showTabSwitcherOptions()
+    readerMenuState.hideTabSwitcher()
+    assertThat(hasMenuItem(CLOSE_ALL_TABS_MENU_ITEM_TESTING_TAG)).isFalse()
+  }
 }
