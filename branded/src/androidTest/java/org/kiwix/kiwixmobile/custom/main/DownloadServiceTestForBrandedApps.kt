@@ -39,10 +39,10 @@ import kotlinx.coroutines.launch
 import okhttp3.Request
 import okhttp3.ResponseBody
 import org.junit.After
+import org.junit.Assert
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.junit.jupiter.api.Assertions
 import org.junit.runner.RunWith
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.DownloadMonitorService
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.COMPOSE_TEST_RULE_ORDER
@@ -157,7 +157,7 @@ class DownloadServiceTestForBrandedApps {
       // wait for 5 seconds to check the downloadMonitorService is started or not.
       composeTestRule.waitUntilTimeout(FIVE_SECONDS.toLong())
       // Check the download service is not running.
-      Assertions.assertEquals(false, DownloadMonitorService.isDownloadMonitorServiceRunning)
+      Assert.assertEquals(false, DownloadMonitorService.isDownloadMonitorServiceRunning)
     }
   }
 
