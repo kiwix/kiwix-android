@@ -18,6 +18,8 @@
 
 package org.kiwix.kiwixmobile.main
 
+import android.Manifest.permission.READ_EXTERNAL_STORAGE
+import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
 import android.app.NotificationManager
 import android.content.Intent
 import android.os.Bundle
@@ -47,6 +49,8 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.rememberNavController
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainCoroutineDispatcher
@@ -69,6 +73,7 @@ import org.kiwix.kiwixmobile.core.downloader.downloadManager.DOWNLOAD_NOTIFICATI
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.DOWNLOAD_NOTIFICATION_TITLE
 import org.kiwix.kiwixmobile.core.downloader.downloadManager.DOWNLOAD_TIMEOUT_RESUME_INTENT
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.setNavigationResultOnCurrent
+import org.kiwix.kiwixmobile.core.extensions.handlePermissionRequest
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.extensions.update
 import org.kiwix.kiwixmobile.core.main.ACTION_NEW_TAB
@@ -88,6 +93,7 @@ import org.kiwix.kiwixmobile.core.utils.dialog.DialogHost
 import org.kiwix.kiwixmobile.nav.destination.library.local.ExternalZimIntentHandler
 import org.kiwix.kiwixmobile.ui.KiwixDestination
 import javax.inject.Inject
+import kotlin.time.Duration.Companion.milliseconds
 
 const val ACTION_GET_CONTENT = "GET_CONTENT"
 const val GET_CONTENT_SHORTCUT_ID = "get_content_shortcut"
@@ -136,13 +142,26 @@ class KiwixMainActivity : CoreMainActivity() {
     }
   private val pendingIntentFlow = MutableStateFlow<Intent?>(null)
 
-  @OptIn(ExperimentalMaterial3Api::class)
+  @Suppress("LongMethod")
+  @OptIn(ExperimentalMaterial3Api::class, ExperimentalPermissionsApi::class)
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContent {
       val pendingIntent by pendingIntentFlow.collectAsState()
       snackBarHostState = remember { SnackbarHostState() }
       navController = rememberNavController()
+      val readWritePermission =
+        rememberMultiplePermissionsState(listOf(READ_EXTERNAL_STORAGE, WRITE_EXTERNAL_STORAGE))
+      LaunchedEffect(Unit) {
+        externalZimIntentHandler.init(this@KiwixMainActivity, lifecycleScope)
+        externalZimIntentHandler.requestReadWritePermission.collect {
+          toast(string.request_storage)
+          readWritePermission.handlePermissionRequest(
+            onGranted = { externalZimIntentHandler.handlePendingUri() },
+            onRationale = externalZimIntentHandler::onReadWriteRationalPermission
+          )
+        }
+      }
       leftDrawerState = rememberDrawerState(DrawerValue.Closed)
       uiCoroutineScope = rememberCoroutineScope()
       bottomAppBarScrollBehaviour = BottomAppBarDefaults.exitAlwaysScrollBehavior()
@@ -181,7 +200,7 @@ class KiwixMainActivity : CoreMainActivity() {
           .collectLatest { intent ->
             lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
               // Wait until Compose view hierarchy is ready
-              delay(HUNDERED.toLong())
+              delay(HUNDERED.toLong().milliseconds)
               handleAllIntents(intent)
               pendingIntentFlow.value = null
             }
@@ -267,7 +286,6 @@ class KiwixMainActivity : CoreMainActivity() {
         kiwixDataStore.setIsPlayStoreBuild(BuildConfig.IS_PLAYSTORE)
       }
     }
-    externalZimIntentHandler.handlePendingUri(this, lifecycleScope)
   }
 
   private fun isIntroScreenNotVisible(): Boolean =
@@ -299,20 +317,14 @@ class KiwixMainActivity : CoreMainActivity() {
       when (it.scheme) {
         "file",
         "content" -> {
-          intent.let { nonNullIntent ->
-            externalZimIntentHandler.handleIntent(
-              activity = this,
-              intent = nonNullIntent,
-              coroutineScope = lifecycleScope
-            )
-          }
+          externalZimIntentHandler.handleIntent(intent)
         }
 
         "zim" -> {
           val zimId = it.host
           val page = it.encodedPath?.removePrefix("/")
           if (zimId.isNullOrEmpty() || page.isNullOrEmpty()) {
-            return toast(R.string.cannot_open_file)
+            return@handleZimFileIntent toast(R.string.cannot_open_file)
           }
           lifecycleScope.launch {
             val book = libkiwixBookOnDisk.bookById(zimId)

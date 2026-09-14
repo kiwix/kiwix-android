@@ -57,6 +57,7 @@ import org.kiwix.kiwixmobile.core.utils.files.FileUtils.getSDCardOrUSBMainPathFo
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils.getSdCardOrUSBMainPathForAndroid9AndBelow
 import java.io.BufferedReader
 import java.io.File
+import java.io.FileInputStream
 import java.io.FileNotFoundException
 import java.io.IOException
 
@@ -988,7 +989,7 @@ object FileUtils {
       val assetFileDescriptor = context.contentResolver.openAssetFileDescriptor(uri, "r")
       // Verify whether libkiwix can successfully open this file descriptor or not.
       return if (
-        isFileDescriptorCanOpenWithLibkiwix(assetFileDescriptor)
+        isFileDescriptorCanOpenWithLibkiwix(assetFileDescriptor?.parcelFileDescriptor?.fd)
       ) {
         assetFileDescriptor?.let(::listOf)
       } else {
@@ -1006,25 +1007,18 @@ object FileUtils {
   }
 
   @JvmStatic
-  fun isFileDescriptorCanOpenWithLibkiwix(assetFileDescriptor: AssetFileDescriptor?): Boolean {
-    if (assetFileDescriptor == null) return false
-    // Attempt to create a FileInputStream object using the specified path.
-    // Since libkiwix utilizes this path to create the archive object internally,
-    // it is crucial to verify if we can successfully read the file descriptor (fd)
-    // via the given file path before passing it to libkiwix.
-    // This precaution helps prevent runtime crashes.
-    // For more details, refer to https://github.com/kiwix/kiwix-android/pull/3636.
-    return try {
-      val fdInput = org.kiwix.libzim.FdInput(
-        assetFileDescriptor.fileDescriptor,
-        assetFileDescriptor.startOffset,
-        assetFileDescriptor.length
-      )
-      org.kiwix.libzim.Archive(fdInput)
+  fun isFileDescriptorCanOpenWithLibkiwix(fdNumber: Int?): Boolean =
+    try {
+      // Attempt to create a FileInputStream object using the specified path.
+      // Since libkiwix utilizes this path to create the archive object internally,
+      // it is crucial to verify if we can successfully read the file descriptor (fd)
+      // via the given file path before passing it to libkiwix.
+      // This precaution helps prevent runtime crashes.
+      // For more details, refer to https://github.com/kiwix/kiwix-android/pull/3636.
+      FileInputStream("dev/fd/$fdNumber")
       true
     } catch (ignore: Exception) {
       ignore.printStackTrace()
       false
     }
-  }
 }
