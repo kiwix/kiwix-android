@@ -53,9 +53,10 @@ import org.kiwix.kiwixmobile.core.extensions.deleteFile
 import org.kiwix.kiwixmobile.core.extensions.isFileExist
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.utils.TAG_KIWIX
+import org.kiwix.kiwixmobile.core.utils.files.FileUtils.getSDCardOrUSBMainPathForAndroid10AndAbove
+import org.kiwix.kiwixmobile.core.utils.files.FileUtils.getSdCardOrUSBMainPathForAndroid9AndBelow
 import java.io.BufferedReader
 import java.io.File
-import java.io.FileInputStream
 import java.io.FileNotFoundException
 import java.io.IOException
 
@@ -674,8 +675,9 @@ object FileUtils {
       .firstOrNull { it.path.contains(storageName) }
       ?.path?.substringBefore(context.getString(R.string.android_directory_seperator))
 
-  private fun isBase64DataUri(src: String?): Boolean = src?.startsWith("data:", ignoreCase = true) == true &&
-    src.contains(";base64,", ignoreCase = true)
+  private fun isBase64DataUri(src: String?): Boolean =
+    src?.startsWith("data:", ignoreCase = true) == true &&
+      src.contains(";base64,", ignoreCase = true)
 
   private fun generateBase64FileName(extension: String): String =
     "image_${System.currentTimeMillis()}.$extension"
@@ -986,7 +988,7 @@ object FileUtils {
       val assetFileDescriptor = context.contentResolver.openAssetFileDescriptor(uri, "r")
       // Verify whether libkiwix can successfully open this file descriptor or not.
       return if (
-        isFileDescriptorCanOpenWithLibkiwix(assetFileDescriptor?.parcelFileDescriptor?.fd)
+        isFileDescriptorCanOpenWithLibkiwix(assetFileDescriptor)
       ) {
         assetFileDescriptor?.let(::listOf)
       } else {
@@ -1004,17 +1006,25 @@ object FileUtils {
   }
 
   @JvmStatic
-  fun isFileDescriptorCanOpenWithLibkiwix(fdNumber: Int?): Boolean = try {
+  fun isFileDescriptorCanOpenWithLibkiwix(assetFileDescriptor: AssetFileDescriptor?): Boolean {
+    if (assetFileDescriptor == null) return false
     // Attempt to create a FileInputStream object using the specified path.
     // Since libkiwix utilizes this path to create the archive object internally,
     // it is crucial to verify if we can successfully read the file descriptor (fd)
     // via the given file path before passing it to libkiwix.
     // This precaution helps prevent runtime crashes.
     // For more details, refer to https://github.com/kiwix/kiwix-android/pull/3636.
-    FileInputStream("dev/fd/$fdNumber")
-    true
-  } catch (ignore: Exception) {
-    ignore.printStackTrace()
-    false
+    return try {
+      val fdInput = org.kiwix.libzim.FdInput(
+        assetFileDescriptor.fileDescriptor,
+        assetFileDescriptor.startOffset,
+        assetFileDescriptor.length
+      )
+      org.kiwix.libzim.Archive(fdInput)
+      true
+    } catch (ignore: Exception) {
+      ignore.printStackTrace()
+      false
+    }
   }
 }
