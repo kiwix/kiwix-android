@@ -45,7 +45,8 @@ import okhttp3.Request
 import okhttp3.ResponseBody
 import org.hamcrest.Matchers.anyOf
 import org.junit.After
-import org.junit.Assert
+import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertTrue
 import org.junit.Assume
 import org.junit.Before
 import org.junit.Rule
@@ -362,10 +363,10 @@ class KiwixReaderScreenTest : BaseActivityTest() {
     }
     val savedFile = waitForDownloadedImageFile()
 
-    Assert.assertNotNull(savedFile)
-    Assert.assertTrue(savedFile.exists())
-    Assert.assertTrue(savedFile.length() > 0)
-    Assert.assertTrue(savedFile.extension == "png")
+    assertNotNull(savedFile)
+    assertTrue(savedFile.exists())
+    assertTrue(savedFile.length() > 0)
+    assertTrue(savedFile.extension == "png")
   }
 
   private fun waitForDownloadedImageFile(): File {

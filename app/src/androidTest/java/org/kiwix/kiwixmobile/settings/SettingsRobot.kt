@@ -34,7 +34,6 @@ import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performScrollToNode
 import androidx.test.core.app.ActivityScenario
 import applyWithViewHierarchyPrinting
-import org.junit.jupiter.api.fail
 import org.kiwix.kiwixmobile.BaseRobot
 import org.kiwix.kiwixmobile.R.string
 import org.kiwix.kiwixmobile.core.R
@@ -328,9 +327,7 @@ class SettingsRobot : BaseRobot() {
           .performScrollToNode(
             hasTestTag(PREFERENCE_ITEM_TESTING_TAG + title)
           )
-        fail {
-          "Rate App item is showing in \"Standalone\" version."
-        }
+        throw RuntimeException("Rate App item is showing in \"Standalone\" version.")
       } catch (_: AssertionError) {
         // If it throws the error, that means it does not exist on the screen.
       }
