@@ -28,10 +28,14 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.slot
 import io.mockk.verify
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -55,6 +59,7 @@ class DownloadManagerRequesterTest {
   private lateinit var requester: DownloadManagerRequester
   private lateinit var mainActivity: CoreMainActivity
   private lateinit var downloadMonitorServiceManager: DownloadMonitorServiceManager
+  private lateinit var applicationScope: CoroutineScope
 
   @RegisterExtension
   @JvmField
@@ -68,8 +73,14 @@ class DownloadManagerRequesterTest {
     mainActivity = mockk(relaxed = true)
     context = mockk(relaxed = true)
     downloadMonitorServiceManager = mockk(relaxed = true)
+    applicationScope = CoroutineScope(SupervisorJob() + mainDispatcherRule.dispatcher)
     every { kiwixDataStore.selectedStorage } returns flowOf("/storage/emulated/0")
     every { kiwixDataStore.wifiOnly } returns flowOf(false)
+  }
+
+  @AfterEach
+  fun tearDown() {
+    applicationScope.cancel()
   }
 
   private fun createRequester() {
@@ -78,7 +89,7 @@ class DownloadManagerRequesterTest {
       kiwixDataStore,
       downloadRoomDao,
       downloadMonitorServiceManager,
-      mainDispatcherRule.dispatcher
+      applicationScope
     )
   }
 
@@ -119,6 +130,30 @@ class DownloadManagerRequesterTest {
     requester.cancel(downloadId)
     advanceUntilIdle()
     verify { downloadRoomDao.deleteDownloadByDownloadId(downloadId) }
+  }
+
+  @OptIn(ExperimentalCoroutinesApi::class)
+  @Test
+  fun `cancel should not update Room DB after application scope is cancelled`() = runTest {
+    createRequester()
+    val downloadId = 42L
+    val errorCallbackSlot = slot<Func<Error>>()
+    every {
+      fetch.delete(
+        id = downloadId.toInt(),
+        func = null,
+        func2 = capture(errorCallbackSlot)
+      )
+    } answers {
+      errorCallbackSlot.captured.call(Error.REQUEST_DOES_NOT_EXIST)
+      fetch
+    }
+    applicationScope.cancel()
+
+    requester.cancel(downloadId)
+    advanceUntilIdle()
+
+    verify(exactly = 0) { downloadRoomDao.deleteDownloadByDownloadId(downloadId) }
   }
 
   @OptIn(ExperimentalCoroutinesApi::class)

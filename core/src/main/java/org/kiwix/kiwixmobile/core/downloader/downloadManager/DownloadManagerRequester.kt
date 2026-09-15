@@ -22,12 +22,11 @@ import com.tonyodev.fetch2.Fetch
 import com.tonyodev.fetch2.NetworkType.ALL
 import com.tonyodev.fetch2.NetworkType.WIFI_ONLY
 import com.tonyodev.fetch2.Request
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.dao.DownloadRoomDao
-import org.kiwix.kiwixmobile.core.di.IoDispatcher
+import org.kiwix.kiwixmobile.core.di.ApplicationScope
 import org.kiwix.kiwixmobile.core.downloader.DownloadRequester
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadRequest
 import org.kiwix.kiwixmobile.core.utils.AUTO_RETRY_MAX_ATTEMPTS
@@ -39,7 +38,7 @@ class DownloadManagerRequester @Inject constructor(
   private val kiwixDataStore: KiwixDataStore,
   private val downloadRoomDao: DownloadRoomDao,
   private val downloadMonitorServiceManager: DownloadMonitorServiceManager,
-  @param:IoDispatcher private val ioDispatcher: CoroutineDispatcher
+  @param:ApplicationScope private val applicationScope: CoroutineScope
 ) : DownloadRequester {
   override suspend fun enqueue(downloadRequest: DownloadRequest): Long {
     val request = downloadRequest.toFetchRequest(kiwixDataStore)
@@ -52,7 +51,7 @@ class DownloadManagerRequester @Inject constructor(
       id = downloadId.toInt(),
       func = null,
       func2 = {
-        CoroutineScope(ioDispatcher).launch {
+        applicationScope.launch {
           downloadRoomDao.deleteDownloadByDownloadId(downloadId)
         }
       }
@@ -83,7 +82,7 @@ class DownloadManagerRequester @Inject constructor(
   }
 
   private fun reEnqueueStaleDownload(downloadId: Long) {
-    CoroutineScope(ioDispatcher).launch {
+    applicationScope.launch {
       downloadRoomDao.getEntityForDownloadId(downloadId)?.let { staleEntity ->
         staleEntity.url?.let { url ->
           downloadRoomDao.deleteDownloadByDownloadId(downloadId)

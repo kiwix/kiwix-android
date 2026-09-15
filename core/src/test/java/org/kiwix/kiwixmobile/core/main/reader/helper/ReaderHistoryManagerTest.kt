@@ -36,13 +36,17 @@ import org.junit.jupiter.api.Assertions.assertTrue
 import org.kiwix.kiwixmobile.core.main.MainRepositoryActions
 import org.kiwix.kiwixmobile.core.page.history.models.HistoryListItem
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
+import java.text.SimpleDateFormat
+import java.util.Date
 import java.util.Locale
+import java.util.concurrent.Executors
 
 class ReaderHistoryManagerTest {
   private val context = mockk<Context>(relaxed = true)
   private val repository = mockk<MainRepositoryActions>(relaxed = true)
 
   private lateinit var readerHistoryManager: ReaderHistoryManager
+  private var currentLocale = Locale.US
 
   @Before
   fun setup() {
@@ -52,7 +56,7 @@ class ReaderHistoryManagerTest {
     every { context.resources } returns resources
     every { resources.configuration } returns configuration
     every { configuration.locales } returns locales
-    every { locales[0] } returns Locale.US
+    every { locales[0] } answers { currentLocale }
 
     readerHistoryManager = ReaderHistoryManager(
       context = context,
@@ -132,4 +136,36 @@ class ReaderHistoryManagerTest {
     assertTrue(history.timeStamp > 0)
     assertFalse(history.dateString.isBlank())
   }
+
+  @Test
+  fun `formatDate should reflect locale changes`() {
+    val timestamp = 1_768_478_400_000L
+
+    val usDate = readerHistoryManager.formatDate(timestamp)
+    currentLocale = Locale.FRANCE
+    val frenchDate = readerHistoryManager.formatDate(timestamp)
+
+    assertEquals(formatDate(timestamp, Locale.US), usDate)
+    assertEquals(formatDate(timestamp, Locale.FRANCE), frenchDate)
+  }
+
+  @Test
+  fun `formatDate should be thread safe`() {
+    val timestamp = 1_768_478_400_000L
+    val expectedDate = formatDate(timestamp, Locale.US)
+    val executor = Executors.newFixedThreadPool(8)
+
+    try {
+      val results = List(100) {
+        executor.submit<String> { readerHistoryManager.formatDate(timestamp) }
+      }.map { it.get() }
+
+      assertTrue(results.all { it == expectedDate })
+    } finally {
+      executor.shutdownNow()
+    }
+  }
+
+  private fun formatDate(timestamp: Long, locale: Locale) =
+    SimpleDateFormat("d MMM yyyy", locale).format(Date(timestamp))
 }

@@ -26,12 +26,17 @@ import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.getCurrentLocale
 import java.text.SimpleDateFormat
 import java.util.Date
+import java.util.Locale
 import javax.inject.Inject
 
 class ReaderHistoryManager @Inject constructor(
   @param:ApplicationContext private val context: Context,
   private val mainRepositoryActions: MainRepositoryActions
 ) {
+  private val dateFormatterLock = Any()
+  private var dateFormatterLocale: Locale? = null
+  private var dateFormatter: SimpleDateFormat? = null
+
   suspend fun saveHistory(
     url: String?,
     title: String?,
@@ -53,6 +58,12 @@ class ReaderHistoryManager @Inject constructor(
     mainRepositoryActions.saveHistory(history)
   }
 
-  private fun formatDate(timestamp: Long): String =
-    SimpleDateFormat("d MMM yyyy", getCurrentLocale(context)).format(Date(timestamp))
+  internal fun formatDate(timestamp: Long): String = synchronized(dateFormatterLock) {
+    val currentLocale = getCurrentLocale(context)
+    if (dateFormatter == null || dateFormatterLocale != currentLocale) {
+      dateFormatterLocale = currentLocale
+      dateFormatter = SimpleDateFormat("d MMM yyyy", currentLocale)
+    }
+    checkNotNull(dateFormatter).format(Date(timestamp))
+  }
 }

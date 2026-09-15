@@ -39,6 +39,7 @@ import com.google.android.apps.common.testing.accessibility.framework.checks.Tou
 import com.google.android.apps.common.testing.accessibility.framework.integrations.espresso.AccessibilityValidator
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainCoroutineDispatcher
 import leakcanary.LeakAssertions
 import okhttp3.Request
@@ -351,8 +352,8 @@ class KiwixReaderScreenTest : BaseActivityTest() {
       }
     }
     val saveHandler = KiwixWebView.SaveHandler(
+      CoroutineScope(mainDispatcher),
       zimReaderContainer,
-      mainDispatcher,
       ioDispatcher
     )
 

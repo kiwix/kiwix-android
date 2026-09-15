@@ -23,14 +23,25 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainCoroutineDispatcher
+import kotlinx.coroutines.SupervisorJob
+import org.kiwix.kiwixmobile.core.di.ApplicationScope
 import org.kiwix.kiwixmobile.core.di.IoDispatcher
 import org.kiwix.kiwixmobile.core.di.MainDispatcher
+import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)
 @Module
 class CoroutineModule {
+  @Provides
+  @Singleton
+  @ApplicationScope
+  fun provideApplicationScope(
+    @IoDispatcher ioDispatcher: CoroutineDispatcher
+  ): CoroutineScope = CoroutineScope(SupervisorJob() + ioDispatcher)
+
   @Provides
   @IoDispatcher
   @Suppress("InjectDispatcher")

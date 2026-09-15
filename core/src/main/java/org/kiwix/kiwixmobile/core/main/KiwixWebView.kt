@@ -33,6 +33,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.MainCoroutineDispatcher
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -67,6 +68,7 @@ open class KiwixWebView constructor(
 ) : VideoEnabledWebView(context, attrs) {
   private var kiwixWebChromeClient: KiwixWebChromeClient? = null
   private var textZoomJob: Job? = null
+  private val webViewScope = CoroutineScope(SupervisorJob() + mainDispatcher)
 
   init {
     if (BuildConfig.DEBUG) {
@@ -122,7 +124,7 @@ open class KiwixWebView constructor(
       val saveMenu =
         menu.add(0, 1, 0, resources.getString(R.string.save_media))
       saveMenu.setOnMenuItemClickListener {
-        val msg = SaveHandler(zimReaderContainer, mainDispatcher, ioDispatcher).obtainMessage()
+        val msg = SaveHandler(webViewScope, zimReaderContainer, ioDispatcher).obtainMessage()
         requestFocusNodeHref(msg)
         true
       }
@@ -135,7 +137,7 @@ open class KiwixWebView constructor(
     textZoomJob?.cancel()
     textZoomJob = kiwixDataStore.textZoom
       .onEach { settings.textZoom = it }
-      .launchIn(CoroutineScope(SupervisorJob() + mainDispatcher))
+      .launchIn(webViewScope)
   }
 
   override fun onDetachedFromWindow() {
@@ -159,6 +161,7 @@ open class KiwixWebView constructor(
    */
   @SuppressLint("MissingOnRenderProcessGone")
   fun dispose() {
+    webViewScope.cancel()
     // Remove javascript interfaces to break reference chains from JavascriptInjector
     removeJavascriptInterface("tts")
     removeJavascriptInterface("DocumentParser")
@@ -172,8 +175,8 @@ open class KiwixWebView constructor(
   }
 
   class SaveHandler(
+    private val scope: CoroutineScope,
     private val zimReaderContainer: ZimReaderContainer,
-    private val mainDispatcher: MainCoroutineDispatcher,
     private val ioDispatcher: CoroutineDispatcher
   ) : Handler(Looper.getMainLooper()) {
     override fun handleMessage(msg: Message) {
@@ -184,46 +187,46 @@ open class KiwixWebView constructor(
 
       val appContext = ContextCompat.getContextForLanguage(instance)
 
-      CoroutineScope(ioDispatcher).launch {
-        val result = FileUtils.downloadFileFromUrl(
-          context = appContext,
-          url = url,
-          src = src,
-          zimReaderContainer = zimReaderContainer
-        )
+      scope.launch {
+        val result = withContext(ioDispatcher) {
+          FileUtils.downloadFileFromUrl(
+            context = appContext,
+            url = url,
+            src = src,
+            zimReaderContainer = zimReaderContainer
+          )
+        }
 
-        withContext(mainDispatcher) {
-          when (result) {
-            is SaveResult.MediaSaved -> {
-              appContext.toast(
-                appContext.getString(
-                  R.string.save_media_saved,
-                  result.displayName
-                )
+        when (result) {
+          is SaveResult.MediaSaved -> {
+            appContext.toast(
+              appContext.getString(
+                R.string.save_media_saved,
+                result.displayName
               )
-            }
+            )
+          }
 
-            is SaveResult.FileSaved -> {
-              appContext.toast(
-                appContext.getString(
-                  R.string.save_media_saved,
-                  result.file.absolutePath
-                )
+          is SaveResult.FileSaved -> {
+            appContext.toast(
+              appContext.getString(
+                R.string.save_media_saved,
+                result.file.absolutePath
               )
-            }
+            )
+          }
 
-            is SaveResult.InvalidSource -> {
-              appContext.toast(
-                appContext.getString(
-                  R.string.invalid_media_source,
-                )
+          is SaveResult.InvalidSource -> {
+            appContext.toast(
+              appContext.getString(
+                R.string.invalid_media_source,
               )
-            }
+            )
+          }
 
-            is SaveResult.Error -> {
-              Log.e("MEDIA_SAVE", result.message, result.throwable)
-              appContext.toast(R.string.save_media_error)
-            }
+          is SaveResult.Error -> {
+            Log.e("MEDIA_SAVE", result.message, result.throwable)
+            appContext.toast(R.string.save_media_error)
           }
         }
       }
