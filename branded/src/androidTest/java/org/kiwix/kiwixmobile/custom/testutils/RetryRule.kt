@@ -21,11 +21,10 @@ package org.kiwix.kiwixmobile.custom.testutils
 import org.junit.rules.TestRule
 import org.junit.runner.Description
 import org.junit.runners.model.Statement
+import org.kiwix.kiwixmobile.core.utils.TestingUtils.RETRY_COUNT_FOR_FLAKY_TEST
 import java.util.Objects
 
 class RetryRule : TestRule {
-  val retryCountForFlakyTest = 3
-
   override fun apply(base: Statement, description: Description): Statement =
     statement(base, description)
 
@@ -34,7 +33,7 @@ class RetryRule : TestRule {
       @Throws(Throwable::class)
       override fun evaluate() {
         var caughtThrowable: Throwable? = null
-        for (i in 0 until retryCountForFlakyTest) {
+        for (i in 0 until RETRY_COUNT_FOR_FLAKY_TEST) {
           try {
             base.evaluate()
             return
@@ -45,7 +44,7 @@ class RetryRule : TestRule {
         }
         System.err.println(
           description.displayName + ": Giving up after " +
-            retryCountForFlakyTest + " failures."
+            RETRY_COUNT_FOR_FLAKY_TEST + " failures."
         )
         throw Objects.requireNonNull(caughtThrowable!!)
       }

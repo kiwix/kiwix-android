@@ -21,7 +21,7 @@ package org.kiwix.kiwixmobile.testutils
 import org.junit.rules.TestRule
 import org.junit.runner.Description
 import org.junit.runners.model.Statement
-import org.kiwix.kiwixmobile.testutils.TestUtils.RETRY_COUNT_FOR_FLAKY_TEST
+import org.kiwix.kiwixmobile.core.utils.TestingUtils.RETRY_COUNT_FOR_FLAKY_TEST
 import java.util.Objects
 
 class RetryRule : TestRule {

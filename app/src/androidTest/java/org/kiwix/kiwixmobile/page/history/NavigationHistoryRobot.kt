@@ -56,6 +56,7 @@ fun navigationHistory(func: NavigationHistoryRobot.() -> Unit) =
 class NavigationHistoryRobot : BaseRobot() {
   fun checkZimFileLoadedSuccessful(composeTestRule: ComposeContentTestRule) {
     composeTestRule.apply {
+      waitForIdle()
       waitUntilTimeout()
       onNodeWithTag(READER_SCREEN_TESTING_TAG).assertExists()
     }
@@ -78,8 +79,8 @@ class NavigationHistoryRobot : BaseRobot() {
 
   fun clickOnAndroidArticle(composeTestRule: ComposeContentTestRule) {
     testFlakyView({
-      composeTestRule.waitForIdle()
       pauseForBetterTestPerformance(composeTestRule)
+      composeTestRule.waitForIdle()
       onWebView()
         .withElement(
           findElement(
@@ -92,8 +93,8 @@ class NavigationHistoryRobot : BaseRobot() {
 
   fun assertZimFileLoaded(composeTestRule: ComposeContentTestRule) {
     testFlakyView({
-      composeTestRule.waitForIdle()
       pauseForBetterTestPerformance(composeTestRule)
+      composeTestRule.waitForIdle()
       onWebView()
         .withElement(
           findElement(
@@ -190,7 +191,7 @@ class NavigationHistoryRobot : BaseRobot() {
   }
 
   private fun pauseForBetterTestPerformance(composeTestRule: ComposeContentTestRule) {
-    composeTestRule.waitUntilTimeout(TestUtils.TEST_PAUSE_MS_FOR_SEARCH_TEST.toLong())
+    composeTestRule.waitUntilTimeout(TestUtils.TEST_PAUSE_MS.toLong())
   }
 
   fun clickOnReaderScreen(composeTestRule: ComposeContentTestRule) {

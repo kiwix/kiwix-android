@@ -89,6 +89,7 @@ class DeepLinksTest : BaseActivityTest() {
         .launch<KiwixMainActivity>(
           createDeepLinkIntent(it, "application/octet-stream")
         ).onActivity {}
+      composeTestRule.mainClock.advanceTimeBy(500)
       clickOnCopy(composeTestRule)
       navigationHistory {
         checkZimFileLoadedSuccessful(composeTestRule)
@@ -105,6 +106,7 @@ class DeepLinksTest : BaseActivityTest() {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
       testFlakyView({
         composeTestRule.apply {
+          waitForIdle()
           waitUntil(TEST_PAUSE_MS_FOR_DOWNLOAD_TEST) {
             onNodeWithTag(ALERT_DIALOG_CONFIRM_BUTTON_TESTING_TAG).isDisplayed()
           }
@@ -122,6 +124,7 @@ class DeepLinksTest : BaseActivityTest() {
         .launch<KiwixMainActivity>(
           createDeepLinkIntent(it, "application/octet-stream")
         ).onActivity {}
+      composeTestRule.mainClock.advanceTimeBy(500)
       clickOnCopy(composeTestRule)
       navigationHistory {
         checkZimFileLoadedSuccessful(composeTestRule)

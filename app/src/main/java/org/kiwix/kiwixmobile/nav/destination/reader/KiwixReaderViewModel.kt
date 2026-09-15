@@ -244,6 +244,7 @@ class KiwixReaderViewModel @Inject constructor(
             ReaderEffect.ShowSnackbar(context.getString(string.zim_not_opened))
           )
           exitBook() // hide the options for zim file to avoid unexpected UI behavior
+          onComplete()
         }
       }
 
