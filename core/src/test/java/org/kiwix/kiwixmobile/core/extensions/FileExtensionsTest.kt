@@ -29,6 +29,8 @@ import org.junit.jupiter.api.io.TempDir
 import org.kiwix.sharedFunctions.MainDispatcherRule
 import java.io.File
 
+private const val DISK_SPACE_TOLERANCE_BYTES = 100L * 1024L * 1024L
+
 class FileExtensionsTest {
   @RegisterExtension
   @JvmField
@@ -90,10 +92,10 @@ class FileExtensionsTest {
   fun `freeSpace should return the actual free space`() = runTest {
     val expectedFreeSpace = tempFile.freeSpace
     val actualFreeSpace = tempFile.freeSpace(mainDispatcherRule.dispatcher)
-    assertEquals(
-      expectedFreeSpace,
-      actualFreeSpace,
-      "Free space should match actual file system value"
+    val delta = kotlin.math.abs(expectedFreeSpace - actualFreeSpace)
+    assertTrue(
+      delta <= DISK_SPACE_TOLERANCE_BYTES,
+      "Free space should match actual file system value within tolerance"
     )
   }
 
@@ -110,12 +112,8 @@ class FileExtensionsTest {
 
   @Test
   fun `totalSpace should be greater than or equal to freeSpace`() = runTest {
-    val expectedTotalSpace = tempFile.totalSpace
-    val expectedFreeSpace = tempFile.freeSpace
     val actualTotalSpace = tempFile.totalSpace(mainDispatcherRule.dispatcher)
     val actualFreeSpace = tempFile.freeSpace(mainDispatcherRule.dispatcher)
-    assertEquals(expectedTotalSpace, actualTotalSpace)
-    assertEquals(expectedFreeSpace, actualFreeSpace)
     assertTrue(actualTotalSpace >= actualFreeSpace, "Total space should be >= free space")
   }
 

@@ -19,10 +19,13 @@ package org.kiwix.kiwixmobile.core.main
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.os.Handler
 import android.os.Looper
 import android.os.Message
 import android.util.AttributeSet
+import android.util.Base64
 import android.view.ContextMenu
 import android.view.ViewGroup
 import android.webkit.WebView
@@ -67,6 +70,17 @@ open class KiwixWebView constructor(
 ) : VideoEnabledWebView(context, attrs) {
   private var kiwixWebChromeClient: KiwixWebChromeClient? = null
   private var textZoomJob: Job? = null
+  private var cachedZimFavicon: Bitmap? = null
+
+  val zimFavicon: Bitmap?
+    get() = cachedZimFavicon ?: runCatching {
+      zimReaderContainer.favicon?.let { faviconBase64 ->
+        val decodedString = Base64.decode(faviconBase64, Base64.DEFAULT)
+        BitmapFactory.decodeByteArray(decodedString, 0, decodedString.size).also {
+          cachedZimFavicon = it
+        }
+      }
+    }.getOrNull()
 
   init {
     if (BuildConfig.DEBUG) {

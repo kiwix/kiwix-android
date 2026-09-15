@@ -58,6 +58,7 @@ const val TAB_MENU_ITEM_TESTING_TAG = "tabMenuItemTestingTag"
 const val TABS_SIZE_TEXT_TESTING_TAG = "tabsSizeTextTestingTag"
 const val ADD_TO_HOME_SCREEN_MENU_ITEM_TESTING_TAG = "addToHomeScreenMenuItemTestingTag"
 const val FIND_IN_PAGE_MENU_ITEM_TESTING_TAG = "findInPageTestingTag"
+const val CLOSE_ALL_TABS_MENU_ITEM_TESTING_TAG = "closeAllTabsMenuItemTestingTag"
 
 @Stable
 class ReaderMenuState(
@@ -78,6 +79,7 @@ class ReaderMenuState(
     fun onSearchMenuClickedMenuClicked()
     fun onAddToHomeScreenMenuClicked()
     fun onFindInPageMenuClicked()
+    fun onCloseAllTabsClicked()
   }
 
   val menuItems = mutableStateListOf<ActionMenuItem>()
@@ -91,6 +93,7 @@ class ReaderMenuState(
     put(MenuItemType.ReadAloud, true)
     put(MenuItemType.AddToHomeScreen, true)
     put(MenuItemType.FindInPage, true)
+    put(MenuItemType.CloseAllTabs, false)
   }
 
   private var isReadingAloud by mutableStateOf(false)
@@ -109,6 +112,7 @@ class ReaderMenuState(
 
   fun showWebViewOptions(valid: Boolean) {
     urlIsValid = valid
+    menuItemVisibility[MenuItemType.CloseAllTabs] = false
     setVisibility(
       urlIsValid,
       MenuItemType.RandomPage,
@@ -166,6 +170,10 @@ class ReaderMenuState(
 
   fun showTabSwitcherOptions() {
     setVisibility(
+      true,
+      MenuItemType.CloseAllTabs
+    )
+    setVisibility(
       false,
       MenuItemType.RandomPage,
       MenuItemType.ReadAloud,
@@ -177,6 +185,10 @@ class ReaderMenuState(
   }
 
   fun hideTabSwitcher() {
+    setVisibility(
+      false,
+      MenuItemType.CloseAllTabs
+    )
     updateMenuItems()
   }
 
@@ -186,6 +198,7 @@ class ReaderMenuState(
     addTabMenuItem()
     addAddToHomeScreenMenuItem()
     addReaderMenuItems()
+    addCloseAllTabsMenuItem()
   }
 
   private fun addSearchMenuItem() {
@@ -311,6 +324,17 @@ class ReaderMenuState(
     }
   }
 
+  private fun addCloseAllTabsMenuItem() {
+    if (menuItemVisibility[MenuItemType.CloseAllTabs] == true && webViewCount > 0) {
+      menuItems += ActionMenuItem(
+        contentDescription = R.string.close_all_tabs,
+        onClick = { menuClickListener.onCloseAllTabsClicked() },
+        testingTag = CLOSE_ALL_TABS_MENU_ITEM_TESTING_TAG,
+        isInOverflow = true
+      )
+    }
+  }
+
   private fun setVisibility(visible: Boolean, vararg types: MenuItemType) {
     types.forEach {
       if (it == MenuItemType.Search && disableSearch) {
@@ -331,5 +355,6 @@ enum class MenuItemType {
   RandomPage,
   ReadAloud,
   AddToHomeScreen,
-  FindInPage
+  FindInPage,
+  CloseAllTabs
 }
