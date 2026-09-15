@@ -84,7 +84,8 @@ class ObjectBoxToLibkiwixMigratorTest : BaseActivityTest() {
   private val expectedTitle = "Installing"
   private val expectedBookmarkUrl = "https://alpine_linux/InstallingPage"
   private val expectedFavicon = ""
-  private val bookmarkEntity: BookmarkEntity by lazy {
+
+  private fun newBookmarkEntity(): BookmarkEntity =
     BookmarkEntity(
       0,
       expectedZimId,
@@ -95,9 +96,8 @@ class ObjectBoxToLibkiwixMigratorTest : BaseActivityTest() {
       expectedTitle,
       expectedFavicon
     )
-  }
 
-  private val bookOnDiskEntity: BookOnDiskEntity by lazy {
+  private fun newBookOnDiskEntity(): BookOnDiskEntity =
     BookOnDiskEntity(
       id = 0,
       file = zimFile,
@@ -116,7 +116,6 @@ class ObjectBoxToLibkiwixMigratorTest : BaseActivityTest() {
       name = expectedZimName,
       favIcon = ""
     )
-  }
 
   @Rule
   @JvmField
@@ -173,7 +172,7 @@ class ObjectBoxToLibkiwixMigratorTest : BaseActivityTest() {
   @Test
   fun testSingleDataMigration(): Unit =
     runBlocking {
-      bookmarkBox.put(bookmarkEntity)
+      bookmarkBox.put(newBookmarkEntity())
       // migrate data into room libkiwix.
       objectBoxToLibkiwixMigrator.migrateBookMarks(bookmarkBox)
       // check if data successfully migrated to libkiwix.
@@ -192,7 +191,7 @@ class ObjectBoxToLibkiwixMigratorTest : BaseActivityTest() {
   fun migrateBookOnDisk_ShouldInsertDataInLibkiwix(): Unit =
     runBlocking {
       // test with single entity
-      bookOnDiskBox.put(bookOnDiskEntity)
+      bookOnDiskBox.put(newBookOnDiskEntity())
       // migrate data into libkiwix
       objectBoxToLibkiwixMigrator.migrateLocalBooks(bookOnDiskBox)
       // check if data successfully migrated to libkiwix.
@@ -245,7 +244,7 @@ class ObjectBoxToLibkiwixMigratorTest : BaseActivityTest() {
         favIcon = ""
       )
       bookOnDiskBox.put(thirdEntity)
-      bookOnDiskBox.put(bookOnDiskEntity)
+      bookOnDiskBox.put(newBookOnDiskEntity())
       // Migrate data into libkiwix
       objectBoxToLibkiwixMigrator.migrateLocalBooks(bookOnDiskBox)
       actualDataAfterMigration =
@@ -350,7 +349,7 @@ class ObjectBoxToLibkiwixMigratorTest : BaseActivityTest() {
           libKiwixBook = libkiwixBook
         )
       )
-      bookmarkBox.put(bookmarkEntity)
+      bookmarkBox.put(newBookmarkEntity())
       // Migrate data into libkiwix
       objectBoxToLibkiwixMigrator.migrateBookMarks(bookmarkBox)
       val actualDataAfterMigration =

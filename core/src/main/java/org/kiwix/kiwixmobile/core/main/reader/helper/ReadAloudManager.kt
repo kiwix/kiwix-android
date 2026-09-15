@@ -181,6 +181,10 @@ class ReadAloudManager @Inject constructor(
   }
 
   private fun setActionAndStartTTSService(action: String, isPauseTTS: Boolean = false) {
+    // ReadAloudService was never started, so there is nothing to stop - sending
+    // ACTION_STOP_TTS here would only create the service to immediately stop it again.
+    // See #5106 for more details.
+    if (action == ACTION_STOP_TTS && !ReadAloudService.isReadAloudServiceRunning) return
     context.startService(
       createReadAloudIntent(action, isPauseTTS)
     )
