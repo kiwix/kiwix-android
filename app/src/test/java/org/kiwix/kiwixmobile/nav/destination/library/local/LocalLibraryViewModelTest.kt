@@ -15,6 +15,7 @@ import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
+import io.mockk.unmockkStatic
 import io.mockk.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
@@ -121,6 +122,7 @@ class LocalLibraryViewModelTest {
   fun tearDown() {
     viewModel.onClearedExposed()
     clearAllMocks()
+    unmockkStatic(Uri::class)
   }
 
   private fun createViewModel(): LocalLibraryViewModel {
@@ -289,7 +291,7 @@ class LocalLibraryViewModelTest {
       viewModel.localLibraryUiActions.emit(
         LocalLibraryViewModel.LocalLibraryUiActions.RequestSelect(bookOnDisk)
       )
-      assertTrue(awaitItem() is None)
+      assertTrue(awaitItem() === None)
       cancelAndIgnoreRemainingEvents()
     }
   }
@@ -298,14 +300,14 @@ class LocalLibraryViewModelTest {
   fun `RequestMultiSelection emits None side effect`() = testActionSideEffect(
     LocalLibraryViewModel.LocalLibraryUiActions.RequestMultiSelection(mockk(relaxed = true))
   ) {
-    assertTrue(it is None)
+    assertTrue(it === None)
   }
 
   @Test
   fun `MultiModeFinished clears selections and returns None`() = runTest {
     viewModel.sideEffects.test {
       viewModel.localLibraryUiActions.emit(LocalLibraryViewModel.LocalLibraryUiActions.MultiModeFinished)
-      assertTrue(awaitItem() is None)
+      assertTrue(awaitItem() === None)
       cancelAndIgnoreRemainingEvents()
     }
   }
@@ -336,7 +338,7 @@ class LocalLibraryViewModelTest {
     testActionSideEffect(
       LocalLibraryViewModel.LocalLibraryUiActions.UserClickedDownloadBooksButton
     ) {
-      assertTrue(it is NavigateToDownloads)
+      assertTrue(it === NavigateToDownloads)
     }
 
   @Test
@@ -393,7 +395,7 @@ class LocalLibraryViewModelTest {
     every { kiwixPermissionChecker.isAndroid13orAbove() } returns false
     viewModel.sideEffects.test {
       viewModel.localLibraryUiActions.emit(LocalLibraryViewModel.LocalLibraryUiActions.ManageFilesPermissionDialog)
-      assertTrue(awaitItem() is None)
+      assertTrue(awaitItem() === None)
       cancelAndIgnoreRemainingEvents()
     }
   }
@@ -494,7 +496,7 @@ class LocalLibraryViewModelTest {
     val bookOnDisk = mockk<BookOnDisk>(relaxed = true)
     viewModel.sideEffects.test {
       viewModel.onMultiSelect(bookOnDisk)
-      assertTrue(awaitItem() is None)
+      assertTrue(awaitItem() === None)
       cancelAndIgnoreRemainingEvents()
     }
   }
@@ -615,7 +617,7 @@ class LocalLibraryViewModelTest {
   fun `onDownloadButtonClick emits NavigateToDownloads`() = runTest {
     viewModel.sideEffects.test {
       viewModel.onDownloadButtonClick()
-      assertTrue(awaitItem() is NavigateToDownloads)
+      assertTrue(awaitItem() === NavigateToDownloads)
       cancelAndIgnoreRemainingEvents()
     }
   }

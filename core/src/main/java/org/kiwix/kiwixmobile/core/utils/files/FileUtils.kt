@@ -53,8 +53,6 @@ import org.kiwix.kiwixmobile.core.extensions.deleteFile
 import org.kiwix.kiwixmobile.core.extensions.isFileExist
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.utils.TAG_KIWIX
-import org.kiwix.kiwixmobile.core.utils.files.FileUtils.getSDCardOrUSBMainPathForAndroid10AndAbove
-import org.kiwix.kiwixmobile.core.utils.files.FileUtils.getSdCardOrUSBMainPathForAndroid9AndBelow
 import java.io.BufferedReader
 import java.io.File
 import java.io.FileInputStream
