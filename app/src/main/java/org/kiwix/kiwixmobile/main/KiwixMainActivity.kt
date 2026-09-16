@@ -288,6 +288,11 @@ class KiwixMainActivity : CoreMainActivity() {
     }
   }
 
+  override fun onResume() {
+    super.onResume()
+    externalZimIntentHandler.resumePendingImport()
+  }
+
   private fun isIntroScreenNotVisible(): Boolean =
     isIntroScreenVisible.also {
       isIntroScreenVisible = true

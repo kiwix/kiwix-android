@@ -235,6 +235,55 @@ class ExternalZimIntentHandlerTest {
   }
 
   @Test
+  fun `resumePendingImport does nothing when there is no pending uri`() = runTest {
+    handler.init(activity, this)
+
+    handler.resumePendingImport()
+    advanceUntilIdle()
+
+    coVerify(exactly = 0) { processSelectedZimFilesForStandalone.processSelectedFiles(any()) }
+  }
+
+  @Test
+  fun `resumePendingImport does not re-prompt when permission is still missing`() =
+    runTest {
+      coEvery { kiwixPermissionChecker.hasWriteExternalStoragePermission() } returns false
+      handler.init(activity, this)
+      var emitCount = 0
+      val collectJob = launch { handler.requestReadWritePermission.collect { emitCount++ } }
+
+      handler.handleIntent(intent)
+      advanceUntilIdle()
+      assertThat(emitCount).isEqualTo(1)
+
+      // Permission is still missing on resume (e.g. user returned without granting it).
+      handler.resumePendingImport()
+      advanceUntilIdle()
+
+      // Must not re-emit the permission request, otherwise the rationale/permission
+      // dialog would keep reappearing on every resume.
+      assertThat(emitCount).isEqualTo(1)
+      coVerify(exactly = 0) { processSelectedZimFilesForStandalone.processSelectedFiles(any()) }
+      collectJob.cancel()
+    }
+
+  @Test
+  fun `resumePendingImport silently resumes once permission is granted`() = runTest {
+    coEvery { kiwixPermissionChecker.hasWriteExternalStoragePermission() } returns false
+    handler.init(activity, this)
+
+    handler.handleIntent(intent)
+    advanceUntilIdle()
+    coVerify(exactly = 0) { processSelectedZimFilesForStandalone.processSelectedFiles(any()) }
+
+    coEvery { kiwixPermissionChecker.hasWriteExternalStoragePermission() } returns true
+    handler.resumePendingImport()
+    advanceUntilIdle()
+
+    coVerify { processSelectedZimFilesForStandalone.processSelectedFiles(listOf(uri)) }
+  }
+
+  @Test
   fun `navigateToReaderScreen opens the reader and saves the book`() = runTest {
     val file = File("/storage/test.zim")
     val zimFileReader: ZimFileReader = mockk(relaxed = true)

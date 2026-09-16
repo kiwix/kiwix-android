@@ -95,6 +95,25 @@ class ExternalZimIntentHandler @Inject constructor(
     checkPermissionsAndProceed(uri)
   }
 
+  // Unlike handlePendingUri, never re-prompts for a still-missing permission, otherwise the
+  // permission/rationale dialog would keep reappearing on every activity resume.
+  fun resumePendingImport() {
+    val uri = pendingUri ?: return
+    requireLifecycleScope().launch {
+      if (hasRequiredStoragePermissions()) {
+        pendingUri = null
+        importZim(uri)
+      }
+    }
+  }
+
+  private suspend fun hasRequiredStoragePermissions(): Boolean =
+    kiwixPermissionChecker.hasWriteExternalStoragePermission() &&
+      (
+        !kiwixPermissionChecker.isAndroid11OrAbove() ||
+          kiwixPermissionChecker.isManageExternalStoragePermissionGranted()
+      )
+
   fun onReadWriteRationalPermission() {
     val activity = requireMainActivity()
     ReadPermissionRequiredDialog(activity.alertDialogShower).invokeWith(activity)
