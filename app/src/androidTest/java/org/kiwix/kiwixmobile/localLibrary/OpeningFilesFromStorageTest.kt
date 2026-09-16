@@ -86,6 +86,7 @@ class OpeningFilesFromStorageTest : BaseActivityTest() {
   @Test
   fun testOpeningFileWithFilePicker() {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+      composeTestRule.waitForIdle()
       activityScenario.onActivity {
         it.navigate(KiwixDestination.Library.route)
       }
@@ -128,6 +129,7 @@ class OpeningFilesFromStorageTest : BaseActivityTest() {
   @Test
   fun testOpeningFileFromFileManager() {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+      composeTestRule.waitForIdle()
       activityScenario.onActivity {
         it.navigate(KiwixDestination.Library.route)
       }
