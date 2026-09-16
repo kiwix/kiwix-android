@@ -2,6 +2,7 @@ package org.kiwix.kiwixmobile.nav.destination.library.local
 
 import android.app.Application
 import android.content.Intent
+import android.net.Uri
 import android.widget.Toast
 import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.result.ActivityResult
@@ -14,6 +15,7 @@ import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
+import io.mockk.unmockkStatic
 import io.mockk.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
@@ -86,6 +88,17 @@ class LocalLibraryViewModelTest {
 
   @BeforeEach
   fun setUp() {
+    mockkStatic(Uri::class)
+    every { Uri.parse(any()) } answers {
+      val mockUri = mockk<Uri>(relaxed = true)
+      every { mockUri.scheme } returns "content"
+      every { mockUri.toString() } returns firstArg()
+      mockUri
+    }
+
+    val contentResolverMock = mockk<android.content.ContentResolver>(relaxed = true)
+    every { application.contentResolver } returns contentResolverMock
+
     every { dataSource.booksOnDiskAsListItems() } returns flowOf(emptyList())
     every { libkiwixBookOnDisk.books() } returns flowOf(emptyList())
     coEvery { storageObserver.getBooksOnFileSystem(any()) } returns flowOf(emptyList())
@@ -109,6 +122,7 @@ class LocalLibraryViewModelTest {
   fun tearDown() {
     viewModel.onClearedExposed()
     clearAllMocks()
+    unmockkStatic(Uri::class)
   }
 
   private fun createViewModel(): LocalLibraryViewModel {
@@ -277,7 +291,7 @@ class LocalLibraryViewModelTest {
       viewModel.localLibraryUiActions.emit(
         LocalLibraryViewModel.LocalLibraryUiActions.RequestSelect(bookOnDisk)
       )
-      assertTrue(awaitItem() is None)
+      assertTrue(awaitItem() === None)
       cancelAndIgnoreRemainingEvents()
     }
   }
@@ -286,14 +300,14 @@ class LocalLibraryViewModelTest {
   fun `RequestMultiSelection emits None side effect`() = testActionSideEffect(
     LocalLibraryViewModel.LocalLibraryUiActions.RequestMultiSelection(mockk(relaxed = true))
   ) {
-    assertTrue(it is None)
+    assertTrue(it === None)
   }
 
   @Test
   fun `MultiModeFinished clears selections and returns None`() = runTest {
     viewModel.sideEffects.test {
       viewModel.localLibraryUiActions.emit(LocalLibraryViewModel.LocalLibraryUiActions.MultiModeFinished)
-      assertTrue(awaitItem() is None)
+      assertTrue(awaitItem() === None)
       cancelAndIgnoreRemainingEvents()
     }
   }
@@ -324,7 +338,7 @@ class LocalLibraryViewModelTest {
     testActionSideEffect(
       LocalLibraryViewModel.LocalLibraryUiActions.UserClickedDownloadBooksButton
     ) {
-      assertTrue(it is NavigateToDownloads)
+      assertTrue(it === NavigateToDownloads)
     }
 
   @Test
@@ -381,7 +395,7 @@ class LocalLibraryViewModelTest {
     every { kiwixPermissionChecker.isAndroid13orAbove() } returns false
     viewModel.sideEffects.test {
       viewModel.localLibraryUiActions.emit(LocalLibraryViewModel.LocalLibraryUiActions.ManageFilesPermissionDialog)
-      assertTrue(awaitItem() is None)
+      assertTrue(awaitItem() === None)
       cancelAndIgnoreRemainingEvents()
     }
   }
@@ -482,7 +496,7 @@ class LocalLibraryViewModelTest {
     val bookOnDisk = mockk<BookOnDisk>(relaxed = true)
     viewModel.sideEffects.test {
       viewModel.onMultiSelect(bookOnDisk)
-      assertTrue(awaitItem() is None)
+      assertTrue(awaitItem() === None)
       cancelAndIgnoreRemainingEvents()
     }
   }
@@ -603,7 +617,7 @@ class LocalLibraryViewModelTest {
   fun `onDownloadButtonClick emits NavigateToDownloads`() = runTest {
     viewModel.sideEffects.test {
       viewModel.onDownloadButtonClick()
-      assertTrue(awaitItem() is NavigateToDownloads)
+      assertTrue(awaitItem() === NavigateToDownloads)
       cancelAndIgnoreRemainingEvents()
     }
   }
@@ -696,7 +710,7 @@ class LocalLibraryViewModelTest {
   }
 
   @Test
-  fun `processZimFileArguments does nothing when uri is empty`() = runTest {
+  fun `processSelectedZimFiles does nothing when intent is null`() = runTest {
     clearMocks(
       processSelectedZimFilesForStandalone,
       processSelectedZimFilesForPlayStore,
@@ -704,7 +718,7 @@ class LocalLibraryViewModelTest {
       recordedCalls = true
     )
     viewModel.localLibraryUiActions.test {
-      viewModel.processZimFileArguments("")
+      viewModel.processSelectedZimFiles(null)
 
       advanceUntilIdle()
 
@@ -721,50 +735,7 @@ class LocalLibraryViewModelTest {
   }
 
   @Test
-  fun `processZimFileArguments requests permission when write permission denied`() = runTest {
-    coEvery {
-      kiwixPermissionChecker.hasWriteExternalStoragePermission()
-    } returns false
-
-    viewModel.localLibraryUiActions.test {
-      viewModel.processZimFileArguments("content://test.zim")
-
-      val action = awaitItem()
-
-      assertThat(action)
-        .isInstanceOf(
-          LocalLibraryViewModel.LocalLibraryUiActions.RequestReadWritePermission::class.java
-        )
-
-      cancelAndIgnoreRemainingEvents()
-    }
-  }
-
-  @Test
-  fun `processZimFileArguments shows manage files dialog when manage storage permission denied`() =
-    runTest {
-      coEvery {
-        kiwixPermissionChecker.hasWriteExternalStoragePermission()
-      } returns true
-
-      coEvery {
-        kiwixPermissionChecker.isManageExternalStoragePermissionGranted()
-      } returns false
-
-      viewModel.localLibraryUiActions.test {
-        viewModel.processZimFileArguments("content://test.zim")
-
-        assertThat(awaitItem())
-          .isEqualTo(
-            LocalLibraryViewModel.LocalLibraryUiActions.ManageFilesPermissionDialog
-          )
-
-        cancelAndIgnoreRemainingEvents()
-      }
-    }
-
-  @Test
-  fun `processZimFileArguments processes files using standalone processor`() = runTest {
+  fun `processSelectedZimFiles processes files using standalone processor`() = runTest {
     coEvery {
       kiwixPermissionChecker.hasWriteExternalStoragePermission()
     } returns true
@@ -777,7 +748,11 @@ class LocalLibraryViewModelTest {
       processSelectedZimFilesForStandalone.canHandleUris()
     } returns true
 
-    viewModel.processZimFileArguments("content://test.zim")
+    val intent = mockk<Intent>(relaxed = true)
+    every { intent.clipData } returns null
+    every { intent.data } returns android.net.Uri.parse("content://test.zim")
+
+    viewModel.processSelectedZimFiles(intent)
 
     advanceUntilIdle()
 
@@ -791,7 +766,7 @@ class LocalLibraryViewModelTest {
   }
 
   @Test
-  fun `processZimFileArguments processes files using playstore processor`() = runTest {
+  fun `processSelectedZimFiles processes files using playstore processor`() = runTest {
     coEvery {
       kiwixPermissionChecker.hasWriteExternalStoragePermission()
     } returns true
@@ -808,7 +783,11 @@ class LocalLibraryViewModelTest {
       processSelectedZimFilesForPlayStore.canHandleUris()
     } returns true
 
-    viewModel.processZimFileArguments("content://test.zim")
+    val intent = mockk<Intent>(relaxed = true)
+    every { intent.clipData } returns null
+    every { intent.data } returns android.net.Uri.parse("content://test.zim")
+
+    viewModel.processSelectedZimFiles(intent)
 
     advanceUntilIdle()
 
@@ -822,7 +801,7 @@ class LocalLibraryViewModelTest {
   }
 
   @Test
-  fun `processZimFileArguments does nothing when no processor can handle files`() = runTest {
+  fun `processSelectedZimFiles does nothing when no processor can handle files`() = runTest {
     clearMocks(
       processSelectedZimFilesForStandalone,
       processSelectedZimFilesForPlayStore,
@@ -845,7 +824,11 @@ class LocalLibraryViewModelTest {
       processSelectedZimFilesForPlayStore.canHandleUris()
     } returns false
 
-    viewModel.processZimFileArguments("content://test.zim")
+    val intent = mockk<Intent>(relaxed = true)
+    every { intent.clipData } returns null
+    every { intent.data } returns android.net.Uri.parse("content://test.zim")
+
+    viewModel.processSelectedZimFiles(intent)
 
     advanceUntilIdle()
 

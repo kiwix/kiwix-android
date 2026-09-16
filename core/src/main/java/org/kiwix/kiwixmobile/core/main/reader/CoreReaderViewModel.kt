@@ -1737,6 +1737,7 @@ abstract class CoreReaderViewModel(
       is ReaderWebViewManager.RestoreTabsResult.ErrorInRestoringTabs -> {
         Log.w(TAG_KIWIX, "Kiwix shared preferences corrupted", result.throwable)
         emitEffect(ReaderEffect.ShowToast(context.getString(string.could_not_restore_tabs)))
+        onComplete.invoke()
       }
     }
   }
