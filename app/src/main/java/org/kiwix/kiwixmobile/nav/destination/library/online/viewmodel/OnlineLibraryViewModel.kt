@@ -283,9 +283,9 @@ class OnlineLibraryViewModel @Inject constructor(
   }
 
   private fun getString(resId: Int, vararg args: Any): String =
-    LocaleHelper.getLocalizedString(context, kiwixDataStore, resId, *args)
+    if (args.isEmpty()) context.getString(resId) else context.getString(resId, *args)
 
-  private fun getDisplayLanguage(languageCode: String): String {
+  private suspend fun getDisplayLanguage(languageCode: String): String {
     val mappedLocale = bookUtils.localeMap[languageCode] ?: languageCode.convertToLocal()
     return mappedLocale.getDisplayLanguage(LocaleHelper.getAppLocale(context, kiwixDataStore))
   }
@@ -294,8 +294,12 @@ class OnlineLibraryViewModel @Inject constructor(
     localBooks = books(),
     downloads = downloadDao.downloads(),
     networkBooks = networkBooks,
-    getString = { resId, args -> getString(resId, *args) },
-    getSimpleString = { resId -> getString(resId) },
+    getString = { resId, args ->
+      LocaleHelper.getLocalizedString(context, kiwixDataStore, resId, *args)
+    },
+    getSimpleString = { resId ->
+      LocaleHelper.getLocalizedString(context, kiwixDataStore, resId)
+    },
     getDisplayLanguage = { langCode -> getDisplayLanguage(langCode) }
   ).onEach {
     updateLibraryItems(it)

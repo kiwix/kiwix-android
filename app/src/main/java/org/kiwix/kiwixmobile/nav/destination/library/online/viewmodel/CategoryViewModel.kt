@@ -82,7 +82,7 @@ open class CategoryViewModel @Inject constructor(
     }
   }
 
-  private fun getString(resId: Int, vararg args: Any): String =
+  private suspend fun getString(resId: Int, vararg args: Any): String =
     LocaleHelper.getLocalizedString(context, kiwixDataStore, resId, *args)
 
   private fun observeActions() =

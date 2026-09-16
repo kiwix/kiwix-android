@@ -80,15 +80,15 @@ class ObserveOnlineLibraryItemsTest {
 
   private val fsState = CanWrite4GbFile
 
-  private val getString: (Int, Array<out Any>) -> String = { _, args ->
+  private val getString: suspend (Int, Array<out Any>) -> String = { _, args ->
     "Your language: ${args[0]}"
   }
 
-  private val getSimpleString: (Int) -> String = {
+  private val getSimpleString: suspend (Int) -> String = {
     "All languages"
   }
 
-  private val getDisplayLanguage: (String) -> String = { langCode ->
+  private val getDisplayLanguage: suspend (String) -> String = { langCode ->
     if (langCode == "en") "English" else langCode
   }
 

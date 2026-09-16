@@ -22,18 +22,17 @@ import android.content.Context
 import android.content.res.Configuration
 import androidx.appcompat.app.AppCompatDelegate
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.runBlocking
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import java.util.Locale
 
 object LocaleHelper {
   @JvmStatic
-  fun getAppLocale(context: Context, kiwixDataStore: KiwixDataStore): Locale =
+  suspend fun getAppLocale(context: Context, kiwixDataStore: KiwixDataStore): Locale =
     if (!AppCompatDelegate.getApplicationLocales().isEmpty) {
       AppCompatDelegate.getApplicationLocales()[0] ?: getSystemLocale(context)
     } else {
       val pref = try {
-        runBlocking { kiwixDataStore.prefLanguage.first() }
+        kiwixDataStore.prefLanguage.first()
       } catch (_: Exception) {
         ""
       }
@@ -51,7 +50,7 @@ object LocaleHelper {
   }
 
   @JvmStatic
-  fun getLocalizedString(
+  suspend fun getLocalizedString(
     context: Context,
     kiwixDataStore: KiwixDataStore,
     resId: Int,

@@ -46,9 +46,9 @@ class ObserveOnlineLibraryItems @Inject constructor(
     localBooks: Flow<List<Book>>,
     downloads: Flow<List<DownloadModel>>,
     networkBooks: Flow<List<LibkiwixBook>>,
-    getString: (Int, Array<out Any>) -> String,
-    getSimpleString: (Int) -> String,
-    getDisplayLanguage: (String) -> String
+    getString: suspend (Int, Array<out Any>) -> String,
+    getSimpleString: suspend (Int) -> String,
+    getDisplayLanguage: suspend (String) -> String
   ): Flow<List<LibraryListItem>> =
     combine(
       localBooks,
@@ -71,14 +71,14 @@ class ObserveOnlineLibraryItems @Inject constructor(
     }.flowOn(ioDispatcher)
 
   private class LocalizationHelper(
-    val getString: (Int, Array<out Any>) -> String,
-    val getSimpleString: (Int) -> String,
-    val getDisplayLanguage: (String) -> String
+    val getString: suspend (Int, Array<out Any>) -> String,
+    val getSimpleString: suspend (Int) -> String,
+    val getDisplayLanguage: suspend (String) -> String
   )
 
   private data class Selection(val language: String, val category: String)
 
-  private fun observeLibraryItems(
+  private suspend fun observeLibraryItems(
     booksOnFileSystem: List<Book>,
     activeDownloads: List<DownloadModel>,
     remoteBooks: List<LibkiwixBook>,
@@ -120,7 +120,7 @@ class ObserveOnlineLibraryItems @Inject constructor(
     }
   }
 
-  private fun buildSectionTitle(
+  private suspend fun buildSectionTitle(
     selection: Selection,
     localizationHelper: LocalizationHelper
   ): String {
@@ -136,9 +136,8 @@ class ObserveOnlineLibraryItems @Inject constructor(
     val languagePart = when {
       languages.isEmpty() -> localizationHelper.getSimpleString(R.string.all_languages)
       languages.size > 1 -> {
-        val joined = languages.joinToString(", ") {
-          localizationHelper.getDisplayLanguage(it)
-        }
+        val mappedLanguages = languages.map { localizationHelper.getDisplayLanguage(it) }
+        val joined = mappedLanguages.joinToString(", ")
         "${localizationHelper.getSimpleString(R.string.your_languages)} $joined"
       }
 
