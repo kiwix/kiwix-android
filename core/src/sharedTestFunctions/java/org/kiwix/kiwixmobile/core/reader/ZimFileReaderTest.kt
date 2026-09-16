@@ -30,8 +30,13 @@ class ZimFileReaderTest {
 
   @Test
   fun checkMimeTypeWithSpecialCharacters() {
+    // This test previously pinned a bug: truncateMimeType used String.replace() with a
+    // regex-pattern string, which does a literal (non-regex) substring replacement - it
+    // happened to match this exact input and silently mangled it into "text/css$1". The
+    // input contains a literal space (inside "[^ ]"), so truncation now correctly stops
+    // there, same as it would for any real "type/subtype extra-junk" mimetype. See #5070.
     val mimeTypeCss = "text/css^([^ ]+).*\$"
-    assertEquals("text/css$1", mimeTypeCss.truncateMimeType)
+    assertEquals("text/css^([^", mimeTypeCss.truncateMimeType)
   }
 
   @Test
