@@ -72,9 +72,7 @@ class ErrorActivityTest : BaseActivityTest() {
     }
     getZimFileFromResourceFolder(context, "testzim.zim")
     library {
-      refreshList(composeTestRule)
-      waitUntilZimFilesRefreshing(composeTestRule)
-      assertLibraryListDisplayed(composeTestRule)
+      refreshUntilLibraryListDisplayed(composeTestRule)
     }
     activityScenario.onActivity {
       it.navigate(KiwixDestination.Help.route)

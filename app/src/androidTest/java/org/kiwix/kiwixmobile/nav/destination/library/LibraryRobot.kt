@@ -67,6 +67,7 @@ class LibraryRobot : BaseRobot() {
   fun assertGetZimNearbyDeviceDisplayed(composeTestRule: ComposeContentTestRule) {
     testFlakyView({
       composeTestRule.apply {
+        waitForIdle()
         waitUntil(TEST_PAUSE_MS_FOR_DOWNLOAD_TEST) {
           onNodeWithTag(LOCAL_FILE_TRANSFER_MENU_BUTTON_TESTING_TAG).isDisplayed()
         }
@@ -96,6 +97,17 @@ class LibraryRobot : BaseRobot() {
         }
         onNodeWithTag(BOOK_LIST_TESTING_TAG).assertIsDisplayed()
       }
+    })
+  }
+
+  fun refreshUntilLibraryListDisplayed(composeTestRule: ComposeContentTestRule) {
+    testFlakyView({
+      composeTestRule.refresh()
+      waitUntilZimFilesRefreshing(composeTestRule)
+      composeTestRule.waitUntil(TEST_PAUSE_MS_FOR_DOWNLOAD_TEST) {
+        composeTestRule.onNodeWithTag(BOOK_LIST_TESTING_TAG).isDisplayed()
+      }
+      composeTestRule.onNodeWithTag(BOOK_LIST_TESTING_TAG).assertIsDisplayed()
     })
   }
 
