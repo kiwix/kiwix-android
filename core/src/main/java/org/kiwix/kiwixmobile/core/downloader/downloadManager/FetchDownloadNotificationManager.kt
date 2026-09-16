@@ -136,8 +136,8 @@ class FetchDownloadNotificationManager @Inject constructor(
   override fun getSubtitleText(
     context: Context,
     downloadNotification: DownloadNotification
-  ): String {
-    return when {
+  ): String =
+    when {
       downloadNotification.isCompleted -> context.getString(R.string.complete)
       downloadNotification.isFailed -> context.getString(R.string.download_failed_state)
       downloadNotification.isQueued -> buildSubtitle(
@@ -159,7 +159,6 @@ class FetchDownloadNotificationManager @Inject constructor(
         downloadNotification.total
       )
     }
-  }
 
   private fun buildSubtitle(
     mainText: String,

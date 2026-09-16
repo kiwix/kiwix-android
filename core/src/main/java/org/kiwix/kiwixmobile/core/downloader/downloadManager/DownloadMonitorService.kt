@@ -435,7 +435,6 @@ class DownloadMonitorService : Service() {
     }
 
     override fun onResumed(download: Download) {
-
       // Don't download if no internet connection is available.
       if (!isNetworkAvailable) {
         taskFlow.tryEmit {
@@ -487,7 +486,6 @@ class DownloadMonitorService : Service() {
         }
 
         if (download.isPaused()) {
-
           // Checks if pause reason is NETWORK or User initiated
           val isOffline =
             downloadRoomDao.getEntityForDownloadId(download.id.toLong())?.pauseReason == PauseReason.NETWORK
