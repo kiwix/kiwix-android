@@ -146,9 +146,11 @@ class DeepLinksTest : BaseActivityTest() {
           AppCompatDelegate.setApplicationLocales(LocaleListCompat.forLanguageTags("en"))
         }
       }
+    composeTestRule.waitForIdle()
     activityScenario.onActivity {
       it.navigate(KiwixDestination.Library.route)
     }
+    composeTestRule.waitForIdle()
     library {
       refreshList(composeTestRule)
       waitUntilZimFilesRefreshing(composeTestRule)
