@@ -62,6 +62,7 @@ class ErrorActivityTest : BaseActivityTest() {
 
   @Test
   fun verifyErrorActivity() {
+    composeTestRule.waitForIdle()
     activityScenario.onActivity {
       it.navigate(KiwixDestination.Library.route)
     }

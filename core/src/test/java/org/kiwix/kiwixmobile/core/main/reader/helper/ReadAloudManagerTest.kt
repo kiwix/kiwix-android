@@ -60,6 +60,7 @@ class ReadAloudManagerTest {
     context = ApplicationProvider.getApplicationContext()
     readAloudManager = ReadAloudManager(context, zimReaderContainer, kiwixDataStore)
     readAloudManager.tts = tts
+    ReadAloudService.isReadAloudServiceRunning = false
   }
 
   @Test
@@ -107,7 +108,8 @@ class ReadAloudManagerTest {
   }
 
   @Test
-  fun `pauseTts stops TTS when no task exists`() {
+  fun `pauseTts stops TTS when no task exists and service is running`() {
+    ReadAloudService.isReadAloudServiceRunning = true
     tts.currentTTSTask = null
 
     readAloudManager.pauseTts()
@@ -131,7 +133,25 @@ class ReadAloudManagerTest {
   }
 
   @Test
+  fun `pauseTts does not start service when TTS was never started`() {
+    tts.currentTTSTask = null
+
+    readAloudManager.pauseTts()
+
+    verify(exactly = 1) {
+      tts.stop()
+    }
+
+    val intent = shadowOf(
+      ApplicationProvider.getApplicationContext<Application>()
+    ).nextStartedService
+
+    assertEquals(null, intent)
+  }
+
+  @Test
   fun `stopReadAloud starts stop service`() {
+    ReadAloudService.isReadAloudServiceRunning = true
     val task = tts.TTSTask(listOf("Hello"))
     tts.currentTTSTask = task
 
@@ -156,7 +176,26 @@ class ReadAloudManagerTest {
   }
 
   @Test
+  fun `stopReadAloud does not start service when TTS was never started`() {
+    val task = tts.TTSTask(listOf("Hello"))
+    tts.currentTTSTask = task
+
+    readAloudManager.stopReadAloud()
+
+    verify(exactly = 1) {
+      tts.stop()
+    }
+
+    val intent = shadowOf(
+      ApplicationProvider.getApplicationContext<Application>()
+    ).nextStartedService
+
+    assertEquals(null, intent)
+  }
+
+  @Test
   fun `stopReadAloudSafely shuts down TTS and starts stop service`() {
+    ReadAloudService.isReadAloudServiceRunning = true
     every { tts.shutdown() } returns Unit
 
     readAloudManager.stopReadAloudSafely()
@@ -177,6 +216,25 @@ class ReadAloudManagerTest {
         true
       )
     )
+
+    assertEquals(null, readAloudManager.tts)
+  }
+
+  @Test
+  fun `stopReadAloudSafely does not start service when TTS was never started`() {
+    every { tts.shutdown() } returns Unit
+
+    readAloudManager.stopReadAloudSafely()
+
+    verify {
+      tts.shutdown()
+    }
+
+    val intent = shadowOf(
+      ApplicationProvider.getApplicationContext<Application>()
+    ).nextStartedService
+
+    assertEquals(null, intent)
 
     assertEquals(null, readAloudManager.tts)
   }

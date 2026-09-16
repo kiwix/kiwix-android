@@ -102,6 +102,7 @@ class LibraryRobot : BaseRobot() {
 
   fun refreshUntilLibraryListDisplayed(composeTestRule: ComposeContentTestRule) {
     testFlakyView({
+      composeTestRule.waitForIdle()
       composeTestRule.refresh()
       waitUntilZimFilesRefreshing(composeTestRule)
       composeTestRule.waitUntil(TEST_PAUSE_MS_FOR_DOWNLOAD_TEST) {

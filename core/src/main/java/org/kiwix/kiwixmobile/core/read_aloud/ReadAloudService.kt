@@ -55,6 +55,7 @@ class ReadAloudService : MediaSessionService() {
 
   override fun onCreate() {
     super.onCreate()
+    isReadAloudServiceRunning = true
     runCatching {
       val player = TtsSimplePlayer()
       ttsPlayer = player
@@ -85,6 +86,7 @@ class ReadAloudService : MediaSessionService() {
       ttsPlayer = null
       mediaSession = null
       stopSelf()
+      isReadAloudServiceRunning = false
     }
   }
 
@@ -119,6 +121,7 @@ class ReadAloudService : MediaSessionService() {
     readAloudNotificationManager?.dismissNotification()
     stopForeground(STOP_FOREGROUND_REMOVE)
     stopSelf()
+    isReadAloudServiceRunning = false
   }
 
   private fun startForegroundNotificationHelper(isPauseTTS: Boolean) {
@@ -242,5 +245,7 @@ class ReadAloudService : MediaSessionService() {
     const val ACTION_FORWARD_10 = "ACTION_FORWARD_10"
     const val IS_TTS_PAUSE_OR_RESUME = "IS_TTS_PAUSE_OR_RESUME"
     const val SEEK_INCREMENT_MS = 10000L
+
+    @JvmField var isReadAloudServiceRunning = false
   }
 }
