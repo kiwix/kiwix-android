@@ -35,10 +35,10 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
-import org.junit.After
-import org.junit.Before
-import org.junit.Rule
-import org.junit.Test
+import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.RegisterExtension
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.data.DataSource
 import org.kiwix.kiwixmobile.core.entity.LibkiwixBook
@@ -56,7 +56,7 @@ import org.kiwix.sharedFunctions.MainDispatcherRule
 @OptIn(ExperimentalCoroutinesApi::class)
 class HotspotServiceTest {
   @JvmField
-  @Rule
+  @RegisterExtension
   val mainDispatcherRule = MainDispatcherRule()
 
   private val webServerHelper: WebServerHelper = mockk(relaxed = true)
@@ -69,7 +69,7 @@ class HotspotServiceTest {
   private fun bookOnDisk(id: String, path: String) =
     BookOnDisk(LibkiwixBook(_id = id, _path = path))
 
-  @Before
+  @BeforeEach
   fun setUp() {
     clearAllMocks()
     mockkStatic(Toast::class)
@@ -87,7 +87,7 @@ class HotspotServiceTest {
     ServerUtils.isServerStarted = false
   }
 
-  @After
+  @AfterEach
   fun tearDown() {
     ServerUtils.isServerStarted = false
     hotspotService.serviceScope.cancel()

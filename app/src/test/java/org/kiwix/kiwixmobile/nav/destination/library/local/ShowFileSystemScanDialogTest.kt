@@ -20,6 +20,7 @@ package org.kiwix.kiwixmobile.nav.destination.library.local
 
 import androidx.appcompat.app.AppCompatActivity
 import io.mockk.Runs
+import io.mockk.clearAllMocks
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
@@ -31,8 +32,8 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
-import org.junit.Before
-import org.junit.Test
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.RegisterExtension
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
@@ -50,8 +51,9 @@ class ShowFileSystemScanDialogTest {
   val mainDispatcherRule = MainDispatcherRule()
   private lateinit var testScope: TestScope
 
-  @Before
+  @BeforeEach
   fun setup() {
+    clearAllMocks()
     testScope = TestScope(mainDispatcherRule.dispatcher)
   }
 

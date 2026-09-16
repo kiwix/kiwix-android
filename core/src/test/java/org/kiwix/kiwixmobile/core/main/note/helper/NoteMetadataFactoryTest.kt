@@ -24,9 +24,9 @@ import io.mockk.mockk
 import io.mockk.mockkObject
 import io.mockk.unmockkAll
 import io.mockk.unmockkObject
-import org.junit.After
-import org.junit.Before
-import org.junit.Test
+import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
@@ -41,7 +41,7 @@ class NoteMetadataFactoryTest {
   private lateinit var factory: NoteMetadataFactory
   private lateinit var zimReaderContainer: ZimReaderContainer
 
-  @Before
+  @BeforeEach
   fun setUp() {
     context = mockk(relaxed = true)
     zimReaderContainer = mockk(relaxed = true)
@@ -51,7 +51,7 @@ class NoteMetadataFactoryTest {
     factory = NoteMetadataFactory(context)
   }
 
-  @After
+  @AfterEach
   fun tearDown() {
     unmockkObject(StorageUtils)
     unmockkAll()
