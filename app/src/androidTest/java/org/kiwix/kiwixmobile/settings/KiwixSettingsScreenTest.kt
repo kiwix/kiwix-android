@@ -74,6 +74,7 @@ class KiwixSettingsScreenTest : BaseActivityTest() {
     }
     StandardActions.openDrawer(kiwixMainActivity as CoreMainActivity)
     StandardActions.enterSettings(composeTestRule)
+    composeTestRule.waitForIdle()
   }
 
   @Test

@@ -138,12 +138,20 @@ class SettingsRobot : BaseRobot() {
   }
 
   private fun clickOnStorageItem(position: Int, composeTestRule: ComposeContentTestRule) {
-    composeTestRule.apply {
-      waitForIdle()
-      onAllNodesWithTag(STORAGE_DEVICE_ITEM_TESTING_TAG, true)[position]
-        .performScrollTo()
-      onAllNodesWithTag(STORAGE_DEVICE_ITEM_TESTING_TAG, true)[position].performClick()
-    }
+    testFlakyView({
+      composeTestRule.apply {
+        waitForIdle()
+        // Storage items are populated from an IO-thread scan, so they can take a
+        // moment to appear on CI; wait until this position actually exists.
+        waitUntil(TEST_PAUSE_MS_FOR_DOWNLOAD_TEST) {
+          onAllNodesWithTag(STORAGE_DEVICE_ITEM_TESTING_TAG, true)
+            .fetchSemanticsNodes().size > position
+        }
+        onAllNodesWithTag(STORAGE_DEVICE_ITEM_TESTING_TAG, true)[position]
+          .performScrollTo()
+        onAllNodesWithTag(STORAGE_DEVICE_ITEM_TESTING_TAG, true)[position].performClick()
+      }
+    })
   }
 
   fun assertInternalStorageSelected(composeTestRule: ComposeContentTestRule) {

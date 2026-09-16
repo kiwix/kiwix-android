@@ -22,6 +22,7 @@ import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.main.LEFT_DRAWER_SETTINGS_ITEM_TESTING_TAG
+import org.kiwix.kiwixmobile.testutils.TestUtils.testFlakyView
 import org.kiwix.kiwixmobile.testutils.TestUtils.waitUntilTimeout
 
 /**
@@ -29,10 +30,12 @@ import org.kiwix.kiwixmobile.testutils.TestUtils.waitUntilTimeout
  */
 object StandardActions {
   fun enterSettings(composeContentTest: ComposeContentTestRule) {
-    composeContentTest.apply {
-      waitUntilTimeout()
-      onNodeWithTag(LEFT_DRAWER_SETTINGS_ITEM_TESTING_TAG).performClick()
-    }
+    testFlakyView({
+      composeContentTest.apply {
+        waitUntilTimeout()
+        onNodeWithTag(LEFT_DRAWER_SETTINGS_ITEM_TESTING_TAG).performClick()
+      }
+    })
   }
 
   fun openDrawer(coreMainActivity: CoreMainActivity) {
