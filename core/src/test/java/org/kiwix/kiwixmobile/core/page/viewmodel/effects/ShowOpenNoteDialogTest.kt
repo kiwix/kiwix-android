@@ -23,8 +23,8 @@ import io.mockk.mockk
 import io.mockk.slot
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableSharedFlow
-import org.junit.Before
-import org.junit.Test
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.main.note.AddNoteViewModel
@@ -41,7 +41,7 @@ class ShowOpenNoteDialogTest {
   private lateinit var addNoteViewModel: AddNoteViewModel
   private lateinit var activity: CoreMainActivity
 
-  @Before
+  @BeforeEach
   fun setup() {
     zimReaderContainer = mockk()
     dialogShower = mockk(relaxed = true)

@@ -33,10 +33,10 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
-import org.junit.After
-import org.junit.Before
-import org.junit.Rule
-import org.junit.Test
+import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.RegisterExtension
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.extensions.isFileExist
 import org.kiwix.kiwixmobile.core.extensions.toast
@@ -48,7 +48,7 @@ import java.io.File
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class UnsupportedMimeTypeHandlerTest {
-  @Rule
+  @RegisterExtension
   @JvmField
   val mainDispatcherRule = MainDispatcherRule()
   private val testDispatcher = mainDispatcherRule.dispatcher
@@ -65,7 +65,7 @@ class UnsupportedMimeTypeHandlerTest {
   private val openAction = slot<() -> Unit>()
   private val saveAction = slot<() -> Unit>()
 
-  @Before
+  @BeforeEach
   fun setup() {
     mockkObject(FileUtils)
 
@@ -82,7 +82,7 @@ class UnsupportedMimeTypeHandlerTest {
     handler.intent = mockk(relaxed = true)
   }
 
-  @After
+  @AfterEach
   fun tearDown() = unmockkAll()
 
   private fun TestScope.showDialogWith(result: SaveResult) {

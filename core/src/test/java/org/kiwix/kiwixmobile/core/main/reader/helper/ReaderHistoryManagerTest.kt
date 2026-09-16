@@ -22,14 +22,15 @@ import android.content.Context
 import android.content.res.Configuration
 import android.content.res.Resources
 import android.os.LocaleList
+import io.mockk.clearAllMocks
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.slot
 import kotlinx.coroutines.test.runTest
-import org.junit.Before
-import org.junit.Test
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
@@ -44,8 +45,9 @@ class ReaderHistoryManagerTest {
 
   private lateinit var readerHistoryManager: ReaderHistoryManager
 
-  @Before
+  @BeforeEach
   fun setup() {
+    clearAllMocks()
     val resources = mockk<Resources>()
     val configuration = mockk<Configuration>()
     val locales = mockk<LocaleList>()

@@ -19,7 +19,8 @@
 package org.kiwix.kiwixmobile.core.utils
 
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.Test
+import org.junit.jupiter.api.Assertions.assertThrows
+import org.junit.jupiter.api.Test
 
 internal class ServerUtilsTest {
   @Test
@@ -47,8 +48,10 @@ internal class ServerUtilsTest {
     ).isEqualTo("192.168.232.2")
   }
 
-  @Test(expected = IllegalArgumentException::class)
+  @Test
   internal fun `formatIpForAndroidPie should throw invalid argument exception on invalid ip`() {
-    ServerUtils.formatIpForAndroidPie("invalid ip")
+    assertThrows(IllegalArgumentException::class.java) {
+      ServerUtils.formatIpForAndroidPie("invalid ip")
+    }
   }
 }

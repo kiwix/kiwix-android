@@ -24,16 +24,16 @@ import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.Before
-import org.junit.Rule
-import org.junit.Test
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.RegisterExtension
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.sharedFunctions.MainDispatcherRule
 
 class ZimFileManagerTest {
-  @Rule
+  @RegisterExtension
   @JvmField
   val mainDispatcherRule = MainDispatcherRule()
   private val testDispatcher = mainDispatcherRule.dispatcher
@@ -42,7 +42,7 @@ class ZimFileManagerTest {
   private val zimReaderContainer = mockk<ZimReaderContainer>(relaxed = true)
   private val zimReader = mockk<ZimFileReader>(relaxed = true)
 
-  @Before
+  @BeforeEach
   fun setup() {
     manager = ZimFileManager(zimReaderContainer, testDispatcher)
   }
