@@ -115,6 +115,7 @@ import org.kiwix.kiwixmobile.zimManager.libraryView.LibraryListItem.LibraryDownl
 import org.kiwix.libkiwix.Book
 import javax.inject.Inject
 import javax.inject.Provider
+import kotlin.time.Duration.Companion.milliseconds
 
 /**
  * ViewModel for the OnlineLibraryRoute composable.
@@ -331,7 +332,7 @@ class OnlineLibraryViewModel @Inject constructor(
     combine(
       kiwixDataStore.selectedOnlineContentCategory,
       kiwixDataStore.selectedOnlineContentLanguage,
-      uiState.map { it.searchQuery }.distinctUntilChanged().debounce(500)
+      uiState.map { it.searchQuery }.distinctUntilChanged().debounce(500.milliseconds)
     ) { category, language, searchQuery ->
       OnlineLibraryRequest(searchQuery, category, language, false, ZERO)
     }.onEach { updateOnlineLibraryFilters(it) }
@@ -805,15 +806,17 @@ class OnlineLibraryViewModel @Inject constructor(
     super.onCleared()
   }
 
-  fun onNotificationPermissionResult(isGranted: Boolean, activity: KiwixMainActivity) {
+  fun onNotificationPermissionResult(isGranted: Boolean) {
     if (isGranted) {
       downloadBookItem?.let { onBookItemClick(it) }
       return
     }
-    if (!permissionChecker.shouldShowRationale(activity, POST_NOTIFICATIONS)) {
+    viewModelScope.launch {
+      kiwixDataStore.setHasSeenNotificationPermissionDeniedInfo()
       emitDialog(
-        KiwixDialog.NotificationPermissionDialog,
-        positiveAction = ::onNavigateToAppSettingsClicked
+        KiwixDialog.NotificationPermissionDeniedInfoDialog,
+        positiveAction = { downloadBookItem?.let { onBookItemClick(it) } },
+        negativeAction = ::onNavigateToAppSettingsClicked
       )
     }
   }

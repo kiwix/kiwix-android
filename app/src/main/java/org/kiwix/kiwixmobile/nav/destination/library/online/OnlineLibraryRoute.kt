@@ -88,7 +88,7 @@ fun OnlineLibraryRoute(
   val uiState by onlineLibraryViewModel.uiState.collectAsStateWithLifecycle()
   val notificationPermission = if (onlineLibraryViewModel.isAndroid13OrAbove) {
     rememberPermissionState(POST_NOTIFICATIONS) {
-      onlineLibraryViewModel.onNotificationPermissionResult(it, activity)
+      onlineLibraryViewModel.onNotificationPermissionResult(it)
     }
   } else {
     null

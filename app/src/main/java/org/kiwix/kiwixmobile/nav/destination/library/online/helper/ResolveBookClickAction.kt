@@ -71,15 +71,19 @@ class ResolveBookClickAction @Inject constructor(
   suspend fun onBookItemClick(
     item: BookItem,
     storageDeviceCount: Int
-  ): LibraryActionResult {
-    return if (!permissionChecker.hasNotificationPermission()) {
+  ): LibraryActionResult =
+    if (
+      !permissionChecker.hasNotificationPermission() &&
+      !kiwixDataStore.hasSeenNotificationPermissionDeniedInfo.first()
+    ) {
+      // Do not request notification permission if the user has already denied the permission.
       RequestNotificationPermission
     } else if (!connectivityManager.isNetworkAvailable()) {
       NoInternet
     } else if (kiwixDataStore.wifiOnly.first() && !connectivityManager.isWifi()) {
       ShowWifiOnlyDialog
     } else if (!permissionChecker.hasWriteExternalStoragePermission()) {
-      return RequestStoragePermission
+      RequestStoragePermission
     } else if (kiwixDataStore.showStorageOption.first()) {
       if (storageDeviceCount > ONE) {
         ShowStorageSelection
@@ -94,7 +98,6 @@ class ResolveBookClickAction @Inject constructor(
         is NotEnoughSpaceForBook -> NotEnoughSpace(result.availableSpace)
       }
     }
-  }
 
   fun onPauseResumeButtonClick(item: LibraryDownloadItem): LibraryActionResult =
     if (!connectivityManager.isNetworkAvailable()) {
