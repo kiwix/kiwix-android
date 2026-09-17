@@ -105,6 +105,14 @@ sealed class KiwixDialog(
     android.R.string.cancel
   )
 
+  object NotificationPermissionDeniedInfoDialog : KiwixDialog(
+    null,
+    R.string.notification_permission_denied_download_info,
+    android.R.string.ok,
+    R.string.go_to_settings_label,
+    cancelable = false
+  )
+
   object EnableWifiP2pServices : KiwixDialog(
     null,
     R.string.request_enable_wifi,

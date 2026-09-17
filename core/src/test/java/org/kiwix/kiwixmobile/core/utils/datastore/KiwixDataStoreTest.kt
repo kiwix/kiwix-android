@@ -238,6 +238,17 @@ class KiwixDataStoreTest {
   }
 
   @Test
+  fun `hasSeenNotificationPermissionDeniedInfo returns false by default`() = runTest {
+    assertThat(kiwixDataStore.hasSeenNotificationPermissionDeniedInfo.first()).isFalse()
+  }
+
+  @Test
+  fun `setHasSeenNotificationPermissionDeniedInfo marks info as seen`() = runTest {
+    kiwixDataStore.setHasSeenNotificationPermissionDeniedInfo()
+    assertThat(kiwixDataStore.hasSeenNotificationPermissionDeniedInfo.first()).isTrue()
+  }
+
+  @Test
   fun `showShowCaseToUser returns true by default`() = runTest {
     assertThat(kiwixDataStore.showShowCaseToUser.first()).isTrue()
   }

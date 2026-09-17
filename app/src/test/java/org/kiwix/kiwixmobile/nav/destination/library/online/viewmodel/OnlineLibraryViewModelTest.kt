@@ -100,6 +100,7 @@ import org.kiwix.kiwixmobile.zimManager.libraryView.AvailableSpaceCalculator
 import org.kiwix.kiwixmobile.zimManager.libraryView.LibraryListItem
 import org.kiwix.sharedFunctions.MainDispatcherRule
 import javax.inject.Provider
+import kotlin.time.Duration.Companion.milliseconds
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class OnlineLibraryViewModelTest {
@@ -225,7 +226,7 @@ class OnlineLibraryViewModelTest {
         viewModel.refreshScreen(true)
         advanceUntilIdle()
         val dialog = awaitItem() as ShowDialog
-        assertTrue(dialog.dialog is KiwixDialog.YesNoDialog.WifiOnly)
+        assertTrue(dialog.dialog === KiwixDialog.YesNoDialog.WifiOnly)
         cancelAndIgnoreRemainingEvents()
       }
     }
@@ -322,7 +323,7 @@ class OnlineLibraryViewModelTest {
           val dialog = awaitItem() as ShowDialog
           assertTrue(dialog.dialog == KiwixDialog.ManageExternalFilesPermissionDialog)
           dialog.positiveAction.invoke()
-          assertTrue(awaitItem() is NavigateToSettings)
+          assertTrue(awaitItem() === NavigateToSettings)
           cancelAndIgnoreRemainingEvents()
         }
       }
@@ -338,7 +339,7 @@ class OnlineLibraryViewModelTest {
         advanceUntilIdle()
 
         val dialog = awaitItem() as ShowDialog
-        assertTrue(dialog.dialog is KiwixDialog.YesNoDialog.WifiOnly)
+        assertTrue(dialog.dialog === KiwixDialog.YesNoDialog.WifiOnly)
         cancelAndIgnoreRemainingEvents()
       }
     }
@@ -422,7 +423,7 @@ class OnlineLibraryViewModelTest {
         viewModel.onStopButtonClick(item)
 
         val event = awaitItem() as OnlineLibraryViewModel.UiEvent.ShowDialog
-        assertTrue(event.dialog is KiwixDialog.YesNoDialog.StopDownload)
+        assertTrue(event.dialog === KiwixDialog.YesNoDialog.StopDownload)
         event.positiveAction.invoke()
         advanceUntilIdle()
         verify { downloader.cancelDownload(1) }
@@ -479,7 +480,7 @@ class OnlineLibraryViewModelTest {
     @Test
     fun `loadInitialLibrary when no items are available`() = runTest {
       val spyVm = spyk(viewModel)
-      delay(600)
+      delay(600.milliseconds)
       advanceUntilIdle()
       clearMocks(spyVm, answers = false, recordedCalls = true)
       spyVm.setUiStateForTest(viewModel.uiState.value.copy(items = emptyList()))
@@ -493,7 +494,7 @@ class OnlineLibraryViewModelTest {
     @Test
     fun `loadInitialLibrary when items are available`() = runTest {
       val spyVm = spyk(viewModel)
-      delay(600)
+      delay(600.milliseconds)
       advanceUntilIdle()
       clearMocks(spyVm, answers = false, recordedCalls = true)
       spyVm.setUiStateForTest(viewModel.uiState.value.copy(items = listOf(mockk())))
@@ -585,7 +586,7 @@ class OnlineLibraryViewModelTest {
         assertFalse(state.isLoadingMore)
 
         val dialog = awaitItem() as ShowDialog
-        assertTrue(dialog.dialog is KiwixDialog.YesNoDialog.WifiOnly)
+        assertTrue(dialog.dialog === KiwixDialog.YesNoDialog.WifiOnly)
         cancelAndIgnoreRemainingEvents()
       }
     }
@@ -661,7 +662,7 @@ class OnlineLibraryViewModelTest {
         val result = viewModel.networkBooks.first()
         assertEquals(books, result)
 
-        assertTrue(awaitItem() is OnlineLibraryViewModel.UiEvent.ScrollToTop)
+        assertTrue(awaitItem() === OnlineLibraryViewModel.UiEvent.ScrollToTop)
         cancelAndIgnoreRemainingEvents()
       }
     }
@@ -781,51 +782,51 @@ class OnlineLibraryViewModelTest {
     @Test
     fun `when permission granted then retries book click`() = runTest {
       val item = mockk<LibraryListItem.BookItem>(relaxed = true)
-      val activity = mockk<KiwixMainActivity>(relaxed = true)
 
       viewModel.downloadBookItem = item
 
       val spyVm = spyk(viewModel)
       every { spyVm.onBookItemClick(item) } just Runs
 
-      spyVm.onNotificationPermissionResult(true, activity)
+      spyVm.onNotificationPermissionResult(true)
 
       verify { spyVm.onBookItemClick(item) }
     }
 
     @Test
-    fun `when denied and should not show rationale then shows settings dialog`() = runTest {
-      val activity = mockk<KiwixMainActivity>(relaxed = true)
+    fun `when denied shows the denied-info dialog once and retries the download on ok`() =
+      runTest {
+        val item = mockk<LibraryListItem.BookItem>(relaxed = true)
+        viewModel.downloadBookItem = item
 
-      every {
-        permissionChecker.shouldShowRationale(activity, POST_NOTIFICATIONS)
-      } returns false
+        val spyVm = spyk(viewModel)
+        every { spyVm.onBookItemClick(item) } just Runs
 
-      viewModel.uiEvents.test {
-        viewModel.onNotificationPermissionResult(false, activity)
+        spyVm.uiEvents.test {
+          spyVm.onNotificationPermissionResult(false)
 
-        val event = awaitItem() as ShowDialog
-        assertTrue(event.dialog is KiwixDialog.NotificationPermissionDialog)
-        event.positiveAction.invoke()
+          val event = awaitItem() as ShowDialog
+          assertTrue(event.dialog === KiwixDialog.NotificationPermissionDeniedInfoDialog)
+          event.positiveAction.invoke()
 
-        val next = awaitItem()
-        assertTrue(next is NavigateToAppSettings)
-        cancelAndIgnoreRemainingEvents()
+          cancelAndIgnoreRemainingEvents()
+        }
+
+        coVerify { kiwixDataStore.setHasSeenNotificationPermissionDeniedInfo() }
+        verify { spyVm.onBookItemClick(item) }
       }
-    }
 
     @Test
-    fun `when denied and should show rationale then does nothing`() = runTest {
-      val activity = mockk<KiwixMainActivity>(relaxed = true)
-
-      every {
-        permissionChecker.shouldShowRationale(activity, POST_NOTIFICATIONS)
-      } returns true
-
+    fun `when denied then dismiss button navigates to app settings`() = runTest {
       viewModel.uiEvents.test {
-        viewModel.onNotificationPermissionResult(false, activity)
+        viewModel.onNotificationPermissionResult(false)
 
-        expectNoEvents()
+        val event = awaitItem() as ShowDialog
+        assertTrue(event.dialog === KiwixDialog.NotificationPermissionDeniedInfoDialog)
+        event.negativeAction.invoke()
+
+        val next = awaitItem()
+        assertTrue(next === NavigateToAppSettings)
         cancelAndIgnoreRemainingEvents()
       }
     }
@@ -860,7 +861,7 @@ class OnlineLibraryViewModelTest {
         viewModel.onStoragePermissionResult(false, activity)
 
         val event = awaitItem() as ShowDialog
-        assertTrue(event.dialog is KiwixDialog.WriteStoragePermissionRationale)
+        assertTrue(event.dialog === KiwixDialog.WriteStoragePermissionRationale)
         event.positiveAction.invoke()
 
         val next = awaitItem()
@@ -881,12 +882,12 @@ class OnlineLibraryViewModelTest {
         viewModel.onStoragePermissionResult(false, activity)
 
         val event = awaitItem() as ShowDialog
-        assertTrue(event.dialog is KiwixDialog.WriteStoragePermissionRationale)
+        assertTrue(event.dialog === KiwixDialog.WriteStoragePermissionRationale)
 
         event.positiveAction.invoke()
 
         val next = awaitItem()
-        assertTrue(next is NavigateToAppSettings)
+        assertTrue(next === NavigateToAppSettings)
         cancelAndIgnoreRemainingEvents()
       }
     }
