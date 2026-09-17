@@ -136,29 +136,28 @@ class FetchDownloadNotificationManager @Inject constructor(
   override fun getSubtitleText(
     context: Context,
     downloadNotification: DownloadNotification
-  ): String =
-    when {
-      downloadNotification.isCompleted -> context.getString(R.string.complete)
-      downloadNotification.isFailed -> context.getString(R.string.download_failed_state)
-      downloadNotification.isQueued -> buildSubtitle(
-        context.getString(R.string.resuming_state),
-        downloadNotification.downloaded,
-        downloadNotification.total
-      )
+  ): String = when {
+    downloadNotification.isCompleted -> context.getString(R.string.complete)
+    downloadNotification.isFailed -> context.getString(R.string.download_failed_state)
+    downloadNotification.isQueued -> buildSubtitle(
+      context.getString(R.string.resuming_state),
+      downloadNotification.downloaded,
+      downloadNotification.total
+    )
 
-      downloadNotification.isPaused -> buildSubtitle(
-        context.getString(R.string.paused_state),
-        downloadNotification.downloaded,
-        downloadNotification.total
-      )
+    downloadNotification.isPaused -> buildSubtitle(
+      context.getString(R.string.paused_state),
+      downloadNotification.downloaded,
+      downloadNotification.total
+    )
 
-      downloadNotification.etaInMilliSeconds < 0 -> context.getString(R.string.downloading_state)
-      else -> buildSubtitle(
-        super.getSubtitleText(context, downloadNotification),
-        downloadNotification.downloaded,
-        downloadNotification.total
-      )
-    }
+    downloadNotification.etaInMilliSeconds < 0 -> context.getString(R.string.downloading_state)
+    else -> buildSubtitle(
+      super.getSubtitleText(context, downloadNotification),
+      downloadNotification.downloaded,
+      downloadNotification.total
+    )
+  }
 
   private fun buildSubtitle(
     mainText: String,
@@ -223,13 +222,14 @@ class FetchDownloadNotificationManager @Inject constructor(
       downloadNotification.isDownloading ->
         notificationBuilder.setTimeoutAfter(getNotificationTimeOutMillis())
           .addAction(
-            drawable.fetch_notification_cancel,
-            context.getString(R.string.cancel),
-            getActionPendingIntent(downloadNotification, DownloadNotification.ActionType.DELETE)
-          ).addAction(
             drawable.fetch_notification_pause,
             context.getString(R.string.notification_pause_button_text),
             getActionPendingIntent(downloadNotification, DownloadNotification.ActionType.PAUSE)
+          )
+          .addAction(
+            drawable.fetch_notification_cancel,
+            context.getString(R.string.cancel),
+            getActionPendingIntent(downloadNotification, DownloadNotification.ActionType.DELETE)
           )
 
       downloadNotification.isPaused ->
@@ -255,6 +255,17 @@ class FetchDownloadNotificationManager @Inject constructor(
 
       else -> notificationBuilder.setTimeoutAfter(DEFAULT_NOTIFICATION_TIMEOUT_AFTER_RESET)
     }
+    notificationCustomisation(downloadNotification, notificationBuilder, context)
+    // Remove the already shown notification if any, because fetch now pushes a
+    // download complete notification.
+    removeNotificationIfAlreadyShowingForCompletedDownload(downloadNotification)
+  }
+
+  private fun notificationCustomisation(
+    downloadNotification: DownloadNotification,
+    notificationBuilder: NotificationCompat.Builder,
+    context: Context
+  ) {
     if (downloadNotification.isCompleted) {
       notificationBuilder.setContentIntent(
         getOpenActionPendingIntent(context, downloadNotification)
@@ -265,9 +276,6 @@ class FetchDownloadNotificationManager @Inject constructor(
         getOpenActionPendingIntent(context, downloadNotification)
       )
     }
-    // Remove the already shown notification if any, because fetch now pushes a
-    // download complete notification.
-    removeNotificationIfAlreadyShowingForCompletedDownload(downloadNotification)
   }
 
   /**
@@ -289,7 +297,7 @@ class FetchDownloadNotificationManager @Inject constructor(
     }
   }
 
-  fun getOpenActionPendingIntent(
+  private fun getOpenActionPendingIntent(
     context: Context,
     downloadNotification: DownloadNotification
   ): PendingIntent =
@@ -368,31 +376,22 @@ class FetchDownloadNotificationManager @Inject constructor(
         .setGroupSummary(false)
         .setOnlyAlertOnce(true)
         .setProgress(HUNDERED, download.progress, false)
-      if (isOffline) {
-        builder
-          .addAction(
-            drawable.fetch_notification_pause,
-            context.getString(R.string.notification_pause_button_text),
+      builder
+        .addAction(
+          drawable.fetch_notification_resume,
+          context.getString(R.string.notification_resume_button_text),
+          if (isOffline) {
+            // To disable the resume action when offline.
             null
-          )
-          .addAction(
-            drawable.fetch_notification_cancel,
-            context.getString(R.string.cancel),
-            getActionPendingIntent(fetch, download, DownloadNotification.ActionType.DELETE)
-          )
-      } else {
-        builder
-          .addAction(
-            drawable.fetch_notification_cancel,
-            context.getString(R.string.cancel),
-            getActionPendingIntent(fetch, download, DownloadNotification.ActionType.DELETE)
-          )
-          .addAction(
-            drawable.fetch_notification_resume,
-            context.getString(R.string.notification_resume_button_text),
+          } else {
             getActionPendingIntent(fetch, download, DownloadNotification.ActionType.RESUME)
-          )
-      }
+          }
+        )
+        .addAction(
+          drawable.fetch_notification_cancel,
+          context.getString(R.string.cancel),
+          getActionPendingIntent(fetch, download, DownloadNotification.ActionType.DELETE)
+        )
       return@getPauseNotification builder.build()
     }
   }

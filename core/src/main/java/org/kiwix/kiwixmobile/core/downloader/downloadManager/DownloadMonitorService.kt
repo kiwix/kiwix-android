@@ -116,18 +116,20 @@ class DownloadMonitorService : Service() {
 
     override fun onLost(network: Network) {
       isNetworkAvailable = false
-      fetch.getDownloadsWithStatus(Status.DOWNLOADING) { activeDownloads ->
-        activeDownloads.forEach { download ->
-          taskFlow.tryEmit {
-            downloadRoomDao.getEntityForDownloadId(download.id.toLong())?.let {
-              downloadRoomDao.updateDownloadItem(
-                it.copy(pauseReason = PauseReason.NETWORK, status = Status.PAUSED)
-              )
+      taskFlow.tryEmit {
+        fetch.getDownloadsWithStatus(Status.DOWNLOADING) { activeDownloads ->
+          activeDownloads.forEach { download ->
+            taskFlow.tryEmit {
+              downloadRoomDao.getEntityForDownloadId(download.id.toLong())?.let {
+                downloadRoomDao.updateDownloadItem(
+                  it.copy(pauseReason = PauseReason.NETWORK, status = Status.PAUSED)
+                )
+              }
             }
-          }
 
-          // Explicitly pause to notify Fetch that there is no connection to avoid network-related errors.
-          fetch.pause(download.id)
+            // Explicitly pause to notify Fetch that there is no connection to avoid network-related errors.
+            fetch.pause(download.id)
+          }
         }
       }
     }
@@ -140,7 +142,7 @@ class DownloadMonitorService : Service() {
    * We resume them here and reset their [PauseReason] to [PauseReason.NONE].
    */
   private fun resumeQueuedDownloadsOnNetworkAvailable() {
-    scope?.launch {
+    taskFlow.tryEmit {
       // Resume downloads we explicitly paused in onLost.
       downloadRoomDao.getDownloadsPausedByNetwork().forEach { entity ->
         fetch.resume(entity.downloadId.toInt())
@@ -393,16 +395,11 @@ class DownloadMonitorService : Service() {
     }
 
     override fun onError(download: Download, error: Error, throwable: Throwable?) {
-      if (error in NETWORK_RELATED_ERRORS) {
-        taskFlow.tryEmit {
-          fetchDownloadNotificationManager.showDownloadPauseNotification(
-            fetch,
-            download,
-            isOffline = true
-          )
-        }
+      val isInternetConnectionError = error in NETWORK_RELATED_ERRORS
+      if (isInternetConnectionError) {
+        showDownloadPauseNotification(download, true)
       }
-      update(download)
+      update(download, !isInternetConnectionError)
     }
 
     override fun onPaused(download: Download) {
@@ -419,13 +416,7 @@ class DownloadMonitorService : Service() {
 
     override fun onQueued(download: Download, waitingOnNetwork: Boolean) {
       if (waitingOnNetwork) {
-        taskFlow.tryEmit {
-          fetchDownloadNotificationManager.showDownloadPauseNotification(
-            fetch,
-            download,
-            isOffline = true
-          )
-        }
+        showDownloadPauseNotification(download, true)
       }
       update(download)
     }
@@ -459,13 +450,7 @@ class DownloadMonitorService : Service() {
     }
 
     override fun onWaitingNetwork(download: Download) {
-      taskFlow.tryEmit {
-        fetchDownloadNotificationManager.showDownloadPauseNotification(
-          fetch,
-          download,
-          isOffline = true
-        )
-      }
+      showDownloadPauseNotification(download, true)
       update(download)
     }
 
@@ -489,12 +474,7 @@ class DownloadMonitorService : Service() {
           // Checks if pause reason is NETWORK or User initiated
           val isOffline =
             downloadRoomDao.getEntityForDownloadId(download.id.toLong())?.pauseReason == PauseReason.NETWORK
-
-          fetchDownloadNotificationManager.showDownloadPauseNotification(
-            fetch,
-            download,
-            isOffline = isOffline
-          )
+          showDownloadPauseNotification(download, isOffline)
         }
 
         if (updateForeGroundService) {
@@ -507,6 +487,16 @@ class DownloadMonitorService : Service() {
       taskFlow.tryEmit {
         downloadRoomDao.delete(download)
         stopForegroundServiceIfNoActiveDownloads(fetch)
+      }
+    }
+
+    private fun showDownloadPauseNotification(download: Download, isOffline: Boolean) {
+      taskFlow.tryEmit {
+        fetchDownloadNotificationManager.showDownloadPauseNotification(
+          fetch,
+          download,
+          isOffline = isOffline
+        )
       }
     }
   }
