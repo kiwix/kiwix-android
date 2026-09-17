@@ -282,9 +282,6 @@ class OnlineLibraryViewModel @Inject constructor(
     }
   }
 
-  private fun getString(resId: Int, vararg args: Any): String =
-    if (args.isEmpty()) context.getString(resId) else context.getString(resId, *args)
-
   private suspend fun getDisplayLanguage(languageCode: String): String {
     val mappedLocale = bookUtils.localeMap[languageCode] ?: languageCode.convertToLocal()
     return mappedLocale.getDisplayLanguage(LocaleHelper.getAppLocale(context, kiwixDataStore))
@@ -294,12 +291,8 @@ class OnlineLibraryViewModel @Inject constructor(
     localBooks = books(),
     downloads = downloadDao.downloads(),
     networkBooks = networkBooks,
-    getString = { resId, args ->
-      LocaleHelper.getLocalizedString(context, kiwixDataStore, resId, *args)
-    },
-    getSimpleString = { resId ->
-      LocaleHelper.getLocalizedString(context, kiwixDataStore, resId)
-    },
+    getString = { resId, args -> context.getString(resId, *args) },
+    getSimpleString = { resId -> context.getString(resId) },
     getDisplayLanguage = { langCode -> getDisplayLanguage(langCode) }
   ).onEach {
     updateLibraryItems(it)
@@ -322,9 +315,9 @@ class OnlineLibraryViewModel @Inject constructor(
   private fun noContentMessageWhenItemsComesFromOnlineSource(items: List<LibraryListItem>): String =
     when {
       items.isEmpty() -> if (connectivityManager.isNetworkAvailable()) {
-        getString(R.string.no_items_msg)
+        context.getString(R.string.no_items_msg)
       } else {
-        getString(R.string.no_network_connection)
+        context.getString(R.string.no_network_connection)
       }
 
       else -> ""
@@ -368,7 +361,7 @@ class OnlineLibraryViewModel @Inject constructor(
       ObserveNetworkState.Result.ShowWifiOnlyMessage -> {
         _uiState.update {
           it.copy(
-            noContentMessage = getString(R.string.swipe_down_for_library),
+            noContentMessage = context.getString(R.string.swipe_down_for_library),
             showNoContent = true,
             showScanningProgressBar = false
           )
@@ -379,7 +372,7 @@ class OnlineLibraryViewModel @Inject constructor(
         if (uiState.value.items.isEmpty()) {
           _uiState.update {
             it.copy(
-              noContentMessage = getString(R.string.no_network_connection),
+              noContentMessage = context.getString(R.string.no_network_connection),
               showNoContent = true,
               isRefreshing = false,
               showScanningProgressBar = false
@@ -399,7 +392,7 @@ class OnlineLibraryViewModel @Inject constructor(
           _uiState.update {
             it.copy(
               showScanningProgressBar = true,
-              scanningProgressBarMessage = getString(R.string.reaching_remote_library),
+              scanningProgressBarMessage = context.getString(R.string.reaching_remote_library),
               noContentMessage = "",
               showNoContent = false,
               isRefreshing = false
@@ -493,10 +486,10 @@ class OnlineLibraryViewModel @Inject constructor(
         }
       },
       negativeAction = {
-        emitToast(getString(R.string.denied_internet_permission_message))
+        emitToast(context.getString(R.string.denied_internet_permission_message))
         _uiState.update {
           it.copy(
-            noContentMessage = getString(R.string.swipe_down_for_library),
+            noContentMessage = context.getString(R.string.swipe_down_for_library),
             showNoContent = true
           )
         }
@@ -509,7 +502,7 @@ class OnlineLibraryViewModel @Inject constructor(
       it.copy(
         showScanningProgressBar = !isLoadMore,
         isLoadingMore = isLoadMore,
-        scanningProgressBarMessage = getString(messageResId),
+        scanningProgressBarMessage = context.getString(messageResId),
         noContentMessage = ""
       )
     }
@@ -535,8 +528,8 @@ class OnlineLibraryViewModel @Inject constructor(
   private fun emitNoInternetSnackbar() {
     sendUiEvent(
       UiEvent.ShowSnackbar(
-        message = getString(R.string.no_network_connection),
-        actionLabel = getString(R.string.menu_settings),
+        message = context.getString(R.string.no_network_connection),
+        actionLabel = context.getString(R.string.menu_settings),
         actionIntent = Intent(Settings.ACTION_WIFI_SETTINGS)
       )
     )
@@ -549,10 +542,10 @@ class OnlineLibraryViewModel @Inject constructor(
     sendUiEvent(
       ShowNoSpaceSnackbar(
         message = """
-            ${getString(R.string.download_no_space)}
-            ${getString(R.string.space_available)} $availableSpace
+            ${context.getString(R.string.download_no_space)}
+            ${context.getString(R.string.space_available)} $availableSpace
         """.trimIndent(),
-        actionLabel = getString(R.string.change_storage),
+        actionLabel = context.getString(R.string.change_storage),
         onAction = onStorageSelect
       )
     )
@@ -714,7 +707,7 @@ class OnlineLibraryViewModel @Inject constructor(
                 noContentMessage = "",
                 showNoContent = false,
                 showScanningProgressBar = true,
-                scanningProgressBarMessage = getString(R.string.reaching_remote_library)
+                scanningProgressBarMessage = context.getString(R.string.reaching_remote_library)
               )
             }
           }
@@ -724,11 +717,11 @@ class OnlineLibraryViewModel @Inject constructor(
         NoInternetWithEmptyContent -> {
           _uiState.update {
             it.copy(
-              noContentMessage = getString(R.string.no_network_connection),
+              noContentMessage = context.getString(R.string.no_network_connection),
               showNoContent = true,
               isRefreshing = false,
               showScanningProgressBar = false,
-              scanningProgressBarMessage = getString(R.string.reaching_remote_library)
+              scanningProgressBarMessage = context.getString(R.string.reaching_remote_library)
             )
           }
         }

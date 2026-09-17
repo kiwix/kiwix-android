@@ -89,15 +89,4 @@ class LocaleHelperTest {
 
     assertEquals(Locale.ENGLISH.language, locale.language)
   }
-
-  @Test
-  fun `getLocalizedString returns fallback string when configuration context fails`() = runTest {
-    every { kiwixDataStore.prefLanguage } returns flowOf("en")
-    every { context.createConfigurationContext(any()) } throws RuntimeException("Failed")
-    every { context.getString(123) } returns "Fallback String"
-
-    val result = LocaleHelper.getLocalizedString(context, kiwixDataStore, 123)
-
-    assertEquals("Fallback String", result)
-  }
 }

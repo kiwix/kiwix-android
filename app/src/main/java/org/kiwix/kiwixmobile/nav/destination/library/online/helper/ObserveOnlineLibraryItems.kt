@@ -46,8 +46,8 @@ class ObserveOnlineLibraryItems @Inject constructor(
     localBooks: Flow<List<Book>>,
     downloads: Flow<List<DownloadModel>>,
     networkBooks: Flow<List<LibkiwixBook>>,
-    getString: suspend (Int, Array<out Any>) -> String,
-    getSimpleString: suspend (Int) -> String,
+    getString: (Int, Array<out Any>) -> String,
+    getSimpleString: (Int) -> String,
     getDisplayLanguage: suspend (String) -> String
   ): Flow<List<LibraryListItem>> =
     combine(
@@ -71,8 +71,8 @@ class ObserveOnlineLibraryItems @Inject constructor(
     }.flowOn(ioDispatcher)
 
   private class LocalizationHelper(
-    val getString: suspend (Int, Array<out Any>) -> String,
-    val getSimpleString: suspend (Int) -> String,
+    val getString: (Int, Array<out Any>) -> String,
+    val getSimpleString: (Int) -> String,
     val getDisplayLanguage: suspend (String) -> String
   )
 
