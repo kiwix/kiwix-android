@@ -73,6 +73,7 @@
   <string name="server_failed_toast_message">未能启动服务器。</string>
   <string name="server_started_successfully_toast_message">成功启动服务器。</string>
   <string name="server_stopped_successfully_toast_message">成功停止服务器。</string>
+  <string name="server_stopped_all_books_deleted_toast_message">服务器已停止：所有共享书籍已删除。</string>
   <string name="hotspot_turned_on">热点已开启</string>
   <string name="hotspot_details_message">以下是您本地热点的详细信息。\nSSID : %1$s \n密码 : %2$s</string>
   <string name="server_textview_default_message">选择您想要在服务器上共享的文件</string>
@@ -199,6 +200,14 @@
   <string name="delete_zim_failed">对不起，我们无法删除一些文件。您应尝试改用文件管理器。</string>
   <string name="tts_pause">暂停</string>
   <string name="tts_resume">恢复</string>
+  <string name="tts_increase_speed">提高速度</string>
+  <string name="tts_decrease_speed">降低速度</string>
+  <string name="tts_normal_speed">正常</string>
+  <string name="tts_speech_speed">语速</string>
+  <string name="tts_rewind_10_seconds">倒回10秒</string>
+  <string name="tts_forward_10_seconds">快进10秒</string>
+  <string name="tts_select_voice">选择语音</string>
+  <string name="tts_controls">TTS控制</string>
   <string name="stop">停止</string>
   <string name="notification_pause_button_text">暂停</string>
   <string name="notification_resume_button_text">恢复</string>

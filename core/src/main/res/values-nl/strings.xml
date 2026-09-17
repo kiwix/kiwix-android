@@ -49,6 +49,7 @@
   <string name="server_failed_toast_message">Kan de server niet starten.</string>
   <string name="server_started_successfully_toast_message">De server is gestart.</string>
   <string name="server_stopped_successfully_toast_message">De server is gestopt.</string>
+  <string name="server_stopped_all_books_deleted_toast_message">Server is gestopt: alle gehoste boeken zijn verwijderd.</string>
   <string name="hotspot_turned_on">Hotspot ingeschakeld</string>
   <string name="hotspot_details_message">Hieronder staan de gegevens van uw lokale hotspot. \nSSID: %1$s \nWachtwoord: %2$s</string>
   <string name="server_textview_default_message">Kies de bestanden die u op de server wilt onderbrengen</string>
@@ -175,6 +176,14 @@
   <string name="delete_zim_failed">Sommige bestanden konden niet worden verwijderd. Probeer een bestandsbeheerprogramma te gebruiken.</string>
   <string name="tts_pause">pauzeren</string>
   <string name="tts_resume">hervatten</string>
+  <string name="tts_increase_speed">Snelheid verhogen</string>
+  <string name="tts_decrease_speed">Snelheid verlagen</string>
+  <string name="tts_normal_speed">Normaal</string>
+  <string name="tts_speech_speed">Spraaksnelheid</string>
+  <string name="tts_rewind_10_seconds">10 seconden terug</string>
+  <string name="tts_forward_10_seconds">10 seconden vooruit</string>
+  <string name="tts_select_voice">Stem selecteren</string>
+  <string name="tts_controls">TTS-besturingselementen</string>
   <string name="stop">stoppen</string>
   <string name="notification_pause_button_text">Pauzeren</string>
   <string name="notification_resume_button_text">Hervatten</string>

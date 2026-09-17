@@ -61,6 +61,7 @@
   <string name="pref_free_storage">%s باقی</string>
   <string name="tts_pause">اجھکو</string>
   <string name="tts_resume">ولدا شروع کرو</string>
+  <string name="tts_normal_speed">عام</string>
   <string name="stop">اختتام</string>
   <string name="notification_pause_button_text">اجھکو</string>
   <string name="notification_resume_button_text">ولدا شروع کرو</string>
