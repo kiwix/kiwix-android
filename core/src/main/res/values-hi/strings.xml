@@ -168,6 +168,7 @@
   <string name="delete_zim_failed">क्षमा करें हम कुछ फ़ाइलों को हटाने में असमर्थ थे।  आपको इसके बजाय फ़ाइल प्रबंधक का उपयोग करने का प्रयास करना चाहिए।</string>
   <string name="tts_pause">रुका</string>
   <string name="tts_resume">फिर से शुरू करना</string>
+  <string name="tts_normal_speed">सामान्य</string>
   <string name="stop">रोकें</string>
   <string name="notification_pause_button_text">विराम</string>
   <string name="notification_resume_button_text">पुनः प्रारम्भ करें</string>

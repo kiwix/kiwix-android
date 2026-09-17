@@ -21,4 +21,11 @@
   <string name="other_categories">다른 분류:</string>
   <string name="all_categories">모든 분류</string>
   <string name="select_category_content_description">이 분류를 선택하면 해당 언어로 다운로드할 수 있는 책이 맨 위에 우선적으로 표시됩니다.</string>
+  <string name="save_categories">분류 저장</string>
+  <string name="your_selected_categories">선택된 분류:</string>
+  <plurals name="and_more">
+    <item quantity="other">그리고 %d개 더</item>
+  </plurals>
+  <string name="your_categories">선택된 분류:</string>
+  <string name="your_category">선택된 분류: %s</string>
 </resources>

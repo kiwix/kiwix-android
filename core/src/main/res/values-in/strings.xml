@@ -113,7 +113,7 @@
   <string name="cancel">Batalkan</string>
   <string name="delete_specific_search_toast">Penelusuran terkini dihapus</string>
   <string name="hint_contents_drawer_message">Anda bisa menggulir ke kiri untuk melihat isi artikel ini</string>
-  <string name="got_it">Paham</string>
+  <string name="got_it">Mengerti</string>
   <string name="did_you_know">Tahukah Anda?</string>
   <string name="undo">Batalkan</string>
   <string name="tab_closed">Tab ditutup</string>
@@ -215,7 +215,7 @@
   <string name="get_content_shortcut_label">Ambil konten</string>
   <string name="fav_icon">Favicon</string>
   <string name="articleCount">%s artikel</string>
-  <string name="get_started">Mulai</string>
+  <string name="get_started">Memulai</string>
   <string name="download_books">Unduh buku-buku</string>
   <string name="humankind_knowledge">Humankind’s knowledge, on your phone.</string>
   <string name="welcome_to_the_family">Selamat datang di keluarga</string>
