@@ -19,9 +19,10 @@
 package org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel
 
 import android.app.Application
-import android.os.Build
+import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -42,7 +43,7 @@ import org.kiwix.kiwixmobile.R.string
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.zim_manager.Category
-import org.kiwix.kiwixmobile.core.zim_manager.ConnectivityBroadcastReceiver
+import org.kiwix.kiwixmobile.core.zim_manager.ConnectivityObserver
 import org.kiwix.kiwixmobile.core.zim_manager.NetworkState
 import org.kiwix.kiwixmobile.nav.destination.library.online.helper.ObserveCategories
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.CategoryViewModel.Action
@@ -56,7 +57,7 @@ class CategoryViewModelTest {
   private val application: Application = mockk(relaxed = true)
   private val kiwixDataStore: KiwixDataStore = mockk()
   private val observeCategories: ObserveCategories = mockk()
-  private val connectivityBroadcastReceiver: ConnectivityBroadcastReceiver = mockk()
+  private val connectivityObserver: ConnectivityObserver = mockk()
 
   @RegisterExtension
   @JvmField
@@ -83,8 +84,9 @@ class CategoryViewModelTest {
       application.getString(string.no_category_available)
     } returns "No categories"
 
-    every { connectivityBroadcastReceiver.action } returns "test"
-    every { connectivityBroadcastReceiver.networkStates } returns networkStates
+    every { connectivityObserver.register() } just Runs
+    every { connectivityObserver.unregister() } just Runs
+    every { connectivityObserver.networkStates } returns networkStates
     every { kiwixDataStore.selectedOnlineContentCategory } returns flowOf("")
   }
 
@@ -94,7 +96,7 @@ class CategoryViewModelTest {
         application,
         kiwixDataStore,
         observeCategories,
-        connectivityBroadcastReceiver
+        connectivityObserver
       ).apply {
         setOnDismissCallback { }
       }
@@ -103,29 +105,21 @@ class CategoryViewModelTest {
   @Nested
   inner class Init {
     @Test
-    fun registersReceiver_invokesOnInit() = runTest {
+    fun registersConnectivityObserver_invokesOnInit() = runTest {
       coEvery { observeCategories(any(), any()) } returns ObserveCategories.Result.Success(emptyList())
       createViewModel()
-      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-        verify {
-          application.registerReceiver(connectivityBroadcastReceiver, any(), any())
-        }
-      } else {
-        @Suppress("UnspecifiedRegisterReceiverFlag")
-        verify {
-          application.registerReceiver(connectivityBroadcastReceiver, any())
-        }
+      verify {
+        connectivityObserver.register()
       }
     }
 
     @Test
-    fun whenOnClearInvoked_UnregistersBroadcastReceiver() {
+    fun whenOnClearInvoked_UnregistersConnectivityObserver() {
       coEvery { observeCategories(any(), any()) } returns ObserveCategories.Result.Success(emptyList())
       createViewModel()
-      every { application.unregisterReceiver(any()) } returns mockk()
       categoryViewModel.onClearedExposed()
       verify {
-        application.unregisterReceiver(connectivityBroadcastReceiver)
+        connectivityObserver.unregister()
       }
     }
 

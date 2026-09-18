@@ -19,8 +19,10 @@
 package org.kiwix.kiwixmobile.language.viewmodel
 
 import android.app.Application
+import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -38,7 +40,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.RegisterExtension
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
-import org.kiwix.kiwixmobile.core.zim_manager.ConnectivityBroadcastReceiver
+import org.kiwix.kiwixmobile.core.zim_manager.ConnectivityObserver
 import org.kiwix.kiwixmobile.core.zim_manager.Language
 import org.kiwix.kiwixmobile.core.zim_manager.NetworkState
 import org.kiwix.kiwixmobile.language.composables.LanguageListItem
@@ -54,7 +56,7 @@ class LanguageViewModelTest {
   private val application: Application = mockk(relaxed = true)
   private val kiwixDataStore: KiwixDataStore = mockk()
   private val observeLanguages: ObserveLanguages = mockk()
-  private val connectivityBroadcastReceiver: ConnectivityBroadcastReceiver = mockk()
+  private val connectivityObserver: ConnectivityObserver = mockk()
   private val networkStates = MutableStateFlow(NetworkState.NOT_CONNECTED)
   private lateinit var languageViewModel: LanguageViewModel
 
@@ -64,7 +66,7 @@ class LanguageViewModelTest {
         application,
         kiwixDataStore,
         observeLanguages,
-        connectivityBroadcastReceiver
+        connectivityObserver
       )
   }
 
@@ -83,20 +85,20 @@ class LanguageViewModelTest {
 
   @BeforeEach
   fun init() {
-    every { connectivityBroadcastReceiver.action } returns "test"
-    every { connectivityBroadcastReceiver.networkStates } returns networkStates
+    every { connectivityObserver.register() } just Runs
+    every { connectivityObserver.unregister() } just Runs
+    every { connectivityObserver.networkStates } returns networkStates
     every { kiwixDataStore.prefLanguage } returns MutableStateFlow("")
     every { kiwixDataStore.selectedOnlineContentLanguage } returns MutableStateFlow("eng")
   }
 
   @Test
-  fun `unregisters broadcastReceiver in onCleared`() {
+  fun `unregisters connectivity callback in onCleared`() {
     coEvery { observeLanguages(any(), any()) } returns ObserveLanguages.Result.Success(emptyList())
     createViewModel()
-    every { application.unregisterReceiver(any()) } returns mockk()
     languageViewModel.onClearedExposed()
     verify {
-      application.unregisterReceiver(connectivityBroadcastReceiver)
+      connectivityObserver.unregister()
     }
   }
 

@@ -31,7 +31,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
-import org.kiwix.kiwixmobile.core.zim_manager.ConnectivityBroadcastReceiver
+import org.kiwix.kiwixmobile.core.zim_manager.ConnectivityObserver
 import org.kiwix.kiwixmobile.core.zim_manager.Language
 import org.kiwix.kiwixmobile.core.zim_manager.NetworkState
 import org.kiwix.kiwixmobile.language.repository.LanguageRepository
@@ -40,7 +40,7 @@ import org.kiwix.kiwixmobile.language.repository.LanguageRepository
 class ObserveLanguagesTest {
   private val repository: LanguageRepository = mockk()
   private val kiwixDataStore: KiwixDataStore = mockk()
-  private val connectivityBroadcastReceiver: ConnectivityBroadcastReceiver = mockk()
+  private val connectivityObserver: ConnectivityObserver = mockk()
   private val networkStates = MutableStateFlow(NetworkState.CONNECTED)
 
   private lateinit var observeLanguages: ObserveLanguages
@@ -48,8 +48,8 @@ class ObserveLanguagesTest {
   @BeforeEach
   fun setup() {
     clearAllMocks()
-    every { connectivityBroadcastReceiver.networkStates } returns networkStates
-    observeLanguages = ObserveLanguages(repository, kiwixDataStore, connectivityBroadcastReceiver)
+    every { connectivityObserver.networkStates } returns networkStates
+    observeLanguages = ObserveLanguages(repository, kiwixDataStore, connectivityObserver)
   }
 
   @Test

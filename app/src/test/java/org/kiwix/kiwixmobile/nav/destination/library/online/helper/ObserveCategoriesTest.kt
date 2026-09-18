@@ -32,7 +32,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.zim_manager.Category
-import org.kiwix.kiwixmobile.core.zim_manager.ConnectivityBroadcastReceiver
+import org.kiwix.kiwixmobile.core.zim_manager.ConnectivityObserver
 import org.kiwix.kiwixmobile.core.zim_manager.NetworkState
 import org.kiwix.kiwixmobile.nav.destination.library.online.repository.CategoryRepository
 
@@ -40,7 +40,7 @@ import org.kiwix.kiwixmobile.nav.destination.library.online.repository.CategoryR
 class ObserveCategoriesTest {
   private val repository: CategoryRepository = mockk()
   private val kiwixDataStore: KiwixDataStore = mockk()
-  private val connectivityBroadcastReceiver: ConnectivityBroadcastReceiver = mockk()
+  private val connectivityObserver: ConnectivityObserver = mockk()
   private val networkStates = MutableStateFlow(NetworkState.CONNECTED)
 
   private lateinit var observeCategories: ObserveCategories
@@ -48,8 +48,8 @@ class ObserveCategoriesTest {
   @BeforeEach
   fun setup() {
     clearAllMocks()
-    every { connectivityBroadcastReceiver.networkStates } returns networkStates
-    observeCategories = ObserveCategories(repository, kiwixDataStore, connectivityBroadcastReceiver)
+    every { connectivityObserver.networkStates } returns networkStates
+    observeCategories = ObserveCategories(repository, kiwixDataStore, connectivityObserver)
   }
 
   @Test
