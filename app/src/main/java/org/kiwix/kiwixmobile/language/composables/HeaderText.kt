@@ -23,7 +23,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
@@ -34,25 +33,28 @@ const val LANGUAGE_HEADER_TESTING_TAG = "languageHeaderTestingTag"
 
 @Composable
 fun HeaderText(
-  modifier: Modifier,
+  modifier: Modifier = Modifier,
   item: LanguageListItem.HeaderItem
 ) {
-  val context = LocalContext.current
-  Text(
-    text = when (item.id) {
-      LanguageListItem.HeaderItem.SELECTED -> stringResource(
-        R.string.your_language,
-        context.getString(R.string.empty_string)
-      )
+  val title = stringResource(
+    if (item.id == LanguageListItem.HeaderItem.SELECTED) {
+      R.string.your_languages
+    } else {
+      R.string.other_languages
+    }
+  ).trimEnd(':', ' ', '：')
 
-      LanguageListItem.HeaderItem.OTHER -> stringResource(R.string.other_languages)
-      else -> ""
-    },
+  Text(
+    text = title,
     modifier = modifier
-      .padding(horizontal = ComposeDimens.SIXTEEN_DP, vertical = ComposeDimens.EIGHT_DP)
+      .padding(
+        start = ComposeDimens.SIXTEEN_DP,
+        end = ComposeDimens.SIXTEEN_DP,
+        top = ComposeDimens.SIXTEEN_DP,
+        bottom = ComposeDimens.EIGHT_DP
+      )
       .semantics { testTag = "$LANGUAGE_HEADER_TESTING_TAG${item.id}" },
-    fontSize = ComposeDimens.FOURTEEN_SP,
-    style = MaterialTheme.typography.headlineMedium,
+    style = MaterialTheme.typography.titleMedium,
     color = MaterialTheme.colorScheme.onSurfaceVariant
   )
 }

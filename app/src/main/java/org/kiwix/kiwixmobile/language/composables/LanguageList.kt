@@ -19,20 +19,13 @@
 package org.kiwix.kiwixmobile.language.composables
 
 import android.content.Context
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.semantics.contentDescription
-import androidx.compose.ui.semantics.semantics
-import org.kiwix.kiwixmobile.core.R
-import org.kiwix.kiwixmobile.core.utils.ComposeDimens
 import org.kiwix.kiwixmobile.language.composables.LanguageListItem.HeaderItem
 import org.kiwix.kiwixmobile.language.composables.LanguageListItem.LanguageItem
 import org.kiwix.kiwixmobile.language.viewmodel.State
@@ -44,6 +37,8 @@ fun LanguageList(
   context: Context,
   listState: LazyListState,
   selectLanguageItem: (LanguageItem) -> Unit,
+  onMoveUp: (LanguageItem) -> Unit = {},
+  onMoveDown: (LanguageItem) -> Unit = {}
 ) {
   val viewItem = (state as Content).viewItems
 
@@ -58,15 +53,15 @@ fun LanguageList(
   LazyColumn(
     state = listState
   ) {
-    items(
+    itemsIndexed(
       items = viewItem,
-      key = { item ->
+      key = { _, item ->
         when (item) {
           is HeaderItem -> "header_${item.id}"
           is LanguageItem -> "language_${item.language.id}"
         }
       }
-    ) { item ->
+    ) { index, item ->
       when (item) {
         is HeaderItem -> HeaderText(
           item = item,
@@ -74,21 +69,20 @@ fun LanguageList(
             .animateItem()
         )
 
-        is LanguageItem -> LanguageItemRow(
-          context = context,
-          modifier = Modifier
-            .animateItem()
-            .fillMaxWidth()
-            .height(ComposeDimens.SIXTY_FOUR_DP)
-            .semantics {
-              contentDescription =
-                context.getString(R.string.select_language_content_description)
-            }.clickable {
-              selectLanguageItem(item)
-            },
-          item = item,
-          onCheckedChange = { selectLanguageItem(it) }
-        )
+        is LanguageItem -> {
+          val isFirst = index == 0 || viewItem.getOrNull(index - 1) is HeaderItem
+          val isLast = index == viewItem.lastIndex || viewItem.getOrNull(index + 1) is HeaderItem
+          LanguageItemRow(
+            context = context,
+            modifier = Modifier.animateItem(),
+            item = item,
+            isFirst = isFirst,
+            isLast = isLast,
+            onItemClick = { selectLanguageItem(it) },
+            onMoveUp = onMoveUp,
+            onMoveDown = onMoveDown
+          )
+        }
       }
     }
   }

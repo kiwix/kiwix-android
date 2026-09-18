@@ -19,6 +19,8 @@
 package org.kiwix.kiwixmobile.language.viewmodel
 
 import android.app.Application
+import android.content.res.Configuration
+import android.os.LocaleList
 import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.every
@@ -47,6 +49,7 @@ import org.kiwix.kiwixmobile.language.composables.LanguageListItem
 import org.kiwix.kiwixmobile.language.helper.ObserveLanguages
 import org.kiwix.kiwixmobile.language.viewmodel.State.Loading
 import org.kiwix.sharedFunctions.MainDispatcherRule
+import java.util.Locale
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class LanguageViewModelTest {
@@ -90,6 +93,9 @@ class LanguageViewModelTest {
     every { connectivityObserver.networkStates } returns networkStates
     every { kiwixDataStore.prefLanguage } returns MutableStateFlow("")
     every { kiwixDataStore.selectedOnlineContentLanguage } returns MutableStateFlow("eng")
+    val configuration = Configuration()
+    configuration.setLocales(LocaleList(Locale.ENGLISH))
+    every { application.resources.configuration } returns configuration
   }
 
   @Test
@@ -118,6 +124,32 @@ class LanguageViewModelTest {
 
       val expected = State.Content(listOf(english))
       assertEquals(expected, languageViewModel.state.value)
+    }
+
+    @Test
+    fun whenSelectedOnlineContentLanguageIsEmpty_selectsDefaultAppLanguage() = runTest {
+      every { kiwixDataStore.selectedOnlineContentLanguage } returns MutableStateFlow("")
+      val allLanguages =
+        Language(
+          id = 0L,
+          active = false,
+          occurencesOfLanguage = 100,
+          language = "All",
+          languageLocalized = "All",
+          languageCode = "",
+          languageCodeISO2 = ""
+        )
+      val english = Language("eng", active = false, occurrencesOfLanguage = 50, id = 1)
+      val french = Language("fra", active = false, occurrencesOfLanguage = 30, id = 2)
+      coEvery { observeLanguages(any(), any()) } returns ObserveLanguages.Result.Success(listOf(allLanguages, english, french))
+
+      createViewModel()
+      advanceUntilIdle()
+
+      val content = languageViewModel.state.value as State.Content
+      val activeLanguages = content.items.filter { it.active }
+      assertThat(activeLanguages).hasSize(1)
+      assertThat(activeLanguages.first().languageCode).isEqualTo("eng")
     }
 
     @Test
@@ -365,6 +397,54 @@ class LanguageViewModelTest {
     }
 
     @Nested
+    inner class ActionMoveUp {
+      @Test
+      fun whenStateContent_movesLanguageUp() = runTest {
+        coEvery { observeLanguages(any(), any()) } returns ObserveLanguages.Result.Success(emptyList())
+        createViewModel()
+        advanceUntilIdle()
+        val lang1 = createLanguage(code = "deu", active = true, id = 1)
+        val lang2 = createLanguage(code = "ita", active = true, id = 2)
+        languageViewModel.state.value = State.Content(
+          listOf(lang1, lang2),
+          selectedLanguageOrder = listOf("deu", "ita")
+        )
+
+        languageViewModel.actions.emit(
+          Action.MoveUp(LanguageListItem.LanguageItem(lang2))
+        )
+        advanceUntilIdle()
+
+        val content = languageViewModel.state.value as State.Content
+        assertThat(content.selectedLanguageOrder).containsExactly("ita", "deu")
+      }
+    }
+
+    @Nested
+    inner class ActionMoveDown {
+      @Test
+      fun whenStateContent_movesLanguageDown() = runTest {
+        coEvery { observeLanguages(any(), any()) } returns ObserveLanguages.Result.Success(emptyList())
+        createViewModel()
+        advanceUntilIdle()
+        val lang1 = createLanguage(code = "deu", active = true, id = 1)
+        val lang2 = createLanguage(code = "ita", active = true, id = 2)
+        languageViewModel.state.value = State.Content(
+          listOf(lang1, lang2),
+          selectedLanguageOrder = listOf("deu", "ita")
+        )
+
+        languageViewModel.actions.emit(
+          Action.MoveDown(LanguageListItem.LanguageItem(lang1))
+        )
+        advanceUntilIdle()
+
+        val content = languageViewModel.state.value as State.Content
+        assertThat(content.selectedLanguageOrder).containsExactly("ita", "deu")
+      }
+    }
+
+    @Nested
     inner class ActionCancel {
       @Test
       fun whenStateNotContent_returnsCurrentState() = runTest {
@@ -459,6 +539,33 @@ class LanguageViewModelTest {
         assertThat(sideEffect).isInstanceOf(SaveLanguagesAndFinish::class.java)
         val saveEffect = sideEffect as SaveLanguagesAndFinish
         assertThat(saveEffect.languages.map { it.languageCode }).containsExactly("eng")
+
+        collectJob.cancel()
+      }
+
+      @Test
+      fun whenStateContent_savesLanguagesInSelectedOrder() = runTest {
+        coEvery { observeLanguages(any(), any()) } returns ObserveLanguages.Result.Success(emptyList())
+        createViewModel()
+        advanceUntilIdle()
+        val german = createLanguage(code = "deu", active = true, id = 1)
+        val italian = createLanguage(code = "ita", active = true, id = 2)
+        val content = State.Content(
+          listOf(german, italian),
+          selectedLanguageOrder = listOf("ita", "deu")
+        )
+        languageViewModel.state.value = content
+
+        var sideEffect: SideEffect<*>? = null
+        val collectJob = launch(UnconfinedTestDispatcher(testScheduler)) {
+          languageViewModel.effects.collect { sideEffect = it }
+        }
+
+        languageViewModel.actions.emit(Action.Save)
+        advanceUntilIdle()
+
+        val saveEffect = sideEffect as SaveLanguagesAndFinish
+        assertThat(saveEffect.languages.map { it.languageCode }).containsExactly("ita", "deu")
 
         collectJob.cancel()
       }

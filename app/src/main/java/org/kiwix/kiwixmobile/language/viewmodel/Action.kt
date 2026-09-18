@@ -22,9 +22,15 @@ import org.kiwix.kiwixmobile.core.zim_manager.Language
 import org.kiwix.kiwixmobile.language.composables.LanguageListItem.LanguageItem
 
 sealed class Action {
-  data class UpdateLanguages(val languages: List<Language>) : Action()
+  data class UpdateLanguages(
+    val languages: List<Language>,
+    val initialSelectedOrder: List<String> = emptyList()
+  ) : Action()
   data class Filter(val filter: String) : Action()
   data class Select(val language: LanguageItem) : Action()
+  data class MoveUp(val language: LanguageItem) : Action()
+  data class MoveDown(val language: LanguageItem) : Action()
+  data class Reorder(val fromIndex: Int, val toIndex: Int) : Action()
   data class Error(val errorMessage: String) : Action()
   object Save : Action()
   object Cancel : Action()

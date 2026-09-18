@@ -28,6 +28,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
@@ -44,6 +45,9 @@ import org.kiwix.kiwixmobile.language.helper.ObserveLanguages
 import org.kiwix.kiwixmobile.language.viewmodel.Action.Cancel
 import org.kiwix.kiwixmobile.language.viewmodel.Action.Error
 import org.kiwix.kiwixmobile.language.viewmodel.Action.Filter
+import org.kiwix.kiwixmobile.language.viewmodel.Action.MoveDown
+import org.kiwix.kiwixmobile.language.viewmodel.Action.MoveUp
+import org.kiwix.kiwixmobile.language.viewmodel.Action.Reorder
 import org.kiwix.kiwixmobile.language.viewmodel.Action.Save
 import org.kiwix.kiwixmobile.language.viewmodel.Action.Select
 import org.kiwix.kiwixmobile.language.viewmodel.Action.UpdateLanguages
@@ -90,7 +94,17 @@ open class LanguageViewModel @Inject constructor(
     ) {
       is ObserveLanguages.Result.Success -> {
         val sortedLanguages = sortLanguages(result.languages)
-        actions.emit(UpdateLanguages(sortedLanguages))
+        val savedLangPref = kiwixDataStore.selectedOnlineContentLanguage.first()
+        val initialOrder =
+          if (savedLangPref.isEmpty() || savedLangPref.equals("all", ignoreCase = true)) {
+            sortedLanguages.filter { it.active && it.languageCode.isNotEmpty() }.map { it.languageCode }
+          } else {
+            savedLangPref
+              .split(",")
+              .map { it.trim() }
+              .filter { it.isNotEmpty() && !it.equals("all", ignoreCase = true) }
+          }
+        actions.emit(UpdateLanguages(sortedLanguages, initialOrder))
       }
 
       is ObserveLanguages.Result.Error ->
@@ -99,11 +113,7 @@ open class LanguageViewModel @Inject constructor(
   }
 
   private suspend fun sortLanguages(languages: List<Language>): List<Language> {
-    val allLanguagesItem = languages.firstOrNull { it.id == 0L || it.languageCode.isEmpty() }
-    val otherLanguages = languages.filter { it.id != 0L && it.languageCode.isNotEmpty() }
-
     val systemLanguageLocale = LocaleHelper.getAppLocale(context, kiwixDataStore)
-
     val systemLanguageISO3 = try {
       systemLanguageLocale.isO3Language
     } catch (_: Exception) {
@@ -111,26 +121,60 @@ open class LanguageViewModel @Inject constructor(
     }
     val systemLanguageISO2 = systemLanguageLocale.language
 
-    val sortedOthers = otherLanguages
-      .sortedWith(
-        compareByDescending<Language> {
-          it.languageCodeISO2.equals(systemLanguageISO2, ignoreCase = true) ||
-            it.languageCode.equals(systemLanguageISO2, ignoreCase = true) ||
-            it.languageCodeISO2.equals(systemLanguageISO3, ignoreCase = true) ||
-            it.languageCode.equals(systemLanguageISO3, ignoreCase = true)
-        }.thenBy { it.languageLocalized }
-      ).mapIndexed { index, language ->
+    val savedLangPref = kiwixDataStore.selectedOnlineContentLanguage.first()
+    val isExplicitAll = savedLangPref.equals("all", ignoreCase = true)
+    val savedLanguagesSet = if (savedLangPref.isNotEmpty() && !isExplicitAll) {
+      savedLangPref.split(",").map { it.trim() }.filter { it.isNotEmpty() }.toSet()
+    } else {
+      emptySet()
+    }
+    val isDefault = savedLangPref.isEmpty() || isExplicitAll
+
+    return languages.map { lang ->
+      lang.copy(
+        active = isLanguageActive(
+          lang,
+          savedLanguagesSet,
+          isDefault,
+          systemLanguageISO3,
+          systemLanguageISO2
+        )
+      )
+    }.sortedBy { it.languageLocalized }
+      .mapIndexed { index, language ->
         language.copy(id = (index + 1).toLong())
       }
+  }
 
-    return if (allLanguagesItem != null) {
-      buildList {
-        add(allLanguagesItem)
-        addAll(sortedOthers)
-      }
-    } else {
-      sortedOthers
-    }
+  private fun isLanguageActive(
+    lang: Language,
+    savedLanguagesSet: Set<String>,
+    isDefault: Boolean,
+    systemLanguageISO3: String,
+    systemLanguageISO2: String
+  ): Boolean = when {
+    savedLanguagesSet.isNotEmpty() -> lang.languageCode in savedLanguagesSet
+    isDefault -> matchesSystemLanguage(lang, systemLanguageISO3, systemLanguageISO2)
+    else -> false
+  }
+
+  private fun matchesSystemLanguage(
+    lang: Language,
+    iso3: String,
+    iso2: String
+  ): Boolean {
+    if (lang.languageCode.isBlank()) return false
+    val matchesIso3 = iso3.isNotBlank() &&
+      (
+        lang.languageCode.equals(iso3, ignoreCase = true) ||
+          lang.languageCodeISO2.equals(iso3, ignoreCase = true)
+      )
+    val matchesIso2 = iso2.isNotBlank() &&
+      (
+        lang.languageCode.equals(iso2, ignoreCase = true) ||
+          lang.languageCodeISO2.equals(iso2, ignoreCase = true)
+      )
+    return matchesIso3 || matchesIso2
   }
 
   @VisibleForTesting
@@ -156,9 +200,21 @@ open class LanguageViewModel @Inject constructor(
       is UpdateLanguages -> updateLanguages(action, currentState)
       is Filter -> filter(action, currentState)
       is Select -> select(action, currentState)
+      is MoveUp -> moveUp(action, currentState)
+      is MoveDown -> moveDown(action, currentState)
+      is Reorder -> reorder(action, currentState)
       Save -> saveAction(currentState)
       Cancel -> cancel(currentState)
     }
+
+  private fun moveUp(action: MoveUp, currentState: State): State =
+    if (currentState is Content) currentState.moveUp(action.language) else currentState
+
+  private fun moveDown(action: MoveDown, currentState: State): State =
+    if (currentState is Content) currentState.moveDown(action.language) else currentState
+
+  private fun reorder(action: Reorder, currentState: State): State =
+    if (currentState is Content) currentState.reorder(action.fromIndex, action.toIndex) else currentState
 
   private fun cancel(currentState: State): State {
     if (currentState !is Content) return currentState
@@ -171,7 +227,21 @@ open class LanguageViewModel @Inject constructor(
   }
 
   private fun updateLanguages(action: UpdateLanguages, currentState: State): State =
-    if (currentState === Loading) Content(action.languages) else currentState
+    if (currentState === Loading) {
+      val activeLanguages = action.languages.filter { it.active && it.languageCode.isNotEmpty() }
+      val order = if (action.initialSelectedOrder.isNotEmpty()) {
+        val activeCodes = activeLanguages.map { it.languageCode }.toSet()
+        val validInitial = action.initialSelectedOrder.filter { it in activeCodes }
+        val remaining =
+          activeLanguages.filter { it.languageCode !in validInitial }.map { it.languageCode }
+        validInitial + remaining
+      } else {
+        activeLanguages.map { it.languageCode }
+      }
+      Content(action.languages, selectedLanguageOrder = order)
+    } else {
+      currentState
+    }
 
   private fun filter(action: Filter, currentState: State): State =
     if (currentState is Content) filterContent(action.filter, currentState) else currentState
@@ -183,10 +253,15 @@ open class LanguageViewModel @Inject constructor(
     if (currentState is Content) save(currentState) else currentState
 
   private fun save(currentState: Content): State {
-    val selectedLanguages = currentState.items.filter { it.active }
+    val activeLanguages = currentState.items.filter { it.active }
+    val orderMap =
+      currentState.selectedLanguageOrder.withIndex().associate { it.value to it.index }
+    val sortedSelectedLanguages = activeLanguages.sortedBy {
+      orderMap[it.languageCode] ?: Int.MAX_VALUE
+    }
     effects.tryEmit(
       SaveLanguagesAndFinish(
-        selectedLanguages,
+        sortedSelectedLanguages,
         kiwixDataStore,
         viewModelScope
       )

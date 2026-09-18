@@ -19,6 +19,7 @@
 package org.kiwix.kiwixmobile.language
 
 import android.annotation.SuppressLint
+import androidx.activity.compose.BackHandler
 import androidx.annotation.VisibleForTesting
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -30,13 +31,13 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -76,9 +77,10 @@ import org.kiwix.kiwixmobile.nav.destination.library.online.NO_CONTENT_VIEW_TEXT
 const val SAVE_ICON_TESTING_TAG = "saveLanguages"
 
 @OptIn(ExperimentalMaterial3Api::class)
+@Suppress("LongMethod")
 @Composable
 internal fun LanguageScreenRoute(
-  navigateBack: () -> Unit,
+  navigateBack: () -> Unit = {},
 ) {
   val languageViewModel: LanguageViewModel = hiltViewModel()
   val state by languageViewModel.state.collectAsStateWithLifecycle()
@@ -89,12 +91,36 @@ internal fun LanguageScreenRoute(
 
   var searchText by rememberSaveable { mutableStateOf("") }
   var isSearchActive by rememberSaveable { mutableStateOf(false) }
+  var isSaving by remember { mutableStateOf(false) }
 
   fun resetSearchState() {
     // clears the search text and resets the filter
     searchText = ""
     languageViewModel.actions.tryEmit(Action.Filter(searchText))
   }
+
+  val saveAndNavigateBack: () -> Unit = {
+    if (!isSaving) {
+      isSaving = true
+      isSearchActive = false
+      if (state is Content) {
+        languageViewModel.actions.tryEmit(Action.Save)
+      } else if (state !is State.Saving) {
+        navigateBack()
+      }
+    }
+  }
+
+  val handleBack: () -> Unit = {
+    if (isSearchActive) {
+      isSearchActive = false
+      resetSearchState()
+    } else {
+      saveAndNavigateBack()
+    }
+  }
+
+  BackHandler(enabled = !isSaving && state !is State.Saving, onBack = handleBack)
 
   KiwixTheme {
     LanguageScreen(
@@ -103,10 +129,7 @@ internal fun LanguageScreenRoute(
       state = state,
       actionMenuItemList = appBarActionMenuList(
         isSearchActive = isSearchActive,
-        onSearchClick = { isSearchActive = true },
-        onSaveClick = {
-          languageViewModel.actions.tryEmit(Action.Save)
-        }
+        onSearchClick = { isSearchActive = true }
       ),
       onClearClick = { resetSearchState() },
       onAppBarValueChange = {
@@ -116,23 +139,16 @@ internal fun LanguageScreenRoute(
       selectLanguageItem = { languageItem ->
         languageViewModel.actions.tryEmit(Action.Select(languageItem))
       },
+      onMoveUp = { languageItem ->
+        languageViewModel.actions.tryEmit(Action.MoveUp(languageItem))
+      },
+      onMoveDown = { languageItem ->
+        languageViewModel.actions.tryEmit(Action.MoveDown(languageItem))
+      },
       navigationIcon = {
         NavigationIcon(
-          iconItem = if (isSearchActive) {
-            IconItem.Vector(Icons.AutoMirrored.Filled.ArrowBack)
-          } else {
-            IconItem.Drawable(
-              R.drawable.ic_close_white_24dp
-            )
-          },
-          onClick = {
-            if (isSearchActive) {
-              isSearchActive = false
-              resetSearchState()
-            } else {
-              navigateBack()
-            }
-          }
+          iconItem = IconItem.Vector(Icons.AutoMirrored.Filled.ArrowBack),
+          onClick = saveAndNavigateBack
         )
       }
     )
@@ -150,6 +166,8 @@ internal fun LanguageScreen(
   state: State,
   actionMenuItemList: List<ActionMenuItem>,
   selectLanguageItem: (item: LanguageListItem.LanguageItem) -> Unit,
+  onMoveUp: (item: LanguageListItem.LanguageItem) -> Unit = {},
+  onMoveDown: (item: LanguageListItem.LanguageItem) -> Unit = {},
   onClearClick: () -> Unit,
   onAppBarValueChange: (String) -> Unit,
   navigationIcon: @Composable () -> Unit
@@ -198,7 +216,9 @@ internal fun LanguageScreen(
             state = state,
             context = context,
             listState = listState,
-            selectLanguageItem = selectLanguageItem
+            selectLanguageItem = selectLanguageItem,
+            onMoveUp = onMoveUp,
+            onMoveDown = onMoveDown
           )
         }
 
@@ -240,25 +260,17 @@ fun LoadingScreen() {
 
 private fun appBarActionMenuList(
   isSearchActive: Boolean,
-  onSearchClick: () -> Unit,
-  onSaveClick: () -> Unit
+  onSearchClick: () -> Unit
 ): List<ActionMenuItem> =
   listOfNotNull(
-    when {
-      !isSearchActive -> ActionMenuItem(
+    if (!isSearchActive) {
+      ActionMenuItem(
         icon = IconItem.Drawable(R.drawable.action_search),
         contentDescription = R.string.search_label,
         onClick = onSearchClick,
         testingTag = SEARCH_ICON_TESTING_TAG
       )
-
-      else -> null // Handle the case when both conditions are false
-    },
-    // Second item: always included
-    ActionMenuItem(
-      icon = IconItem.Vector(Icons.Default.Check),
-      contentDescription = R.string.save_languages,
-      onClick = onSaveClick,
-      testingTag = SAVE_ICON_TESTING_TAG
-    )
+    } else {
+      null
+    }
   )
