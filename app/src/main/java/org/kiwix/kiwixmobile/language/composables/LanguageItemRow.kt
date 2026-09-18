@@ -23,6 +23,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectVerticalDragGestures
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -84,6 +85,7 @@ fun LanguageItemRow(
       Row(
         modifier = Modifier
           .fillMaxWidth()
+          .defaultMinSize(minHeight = ComposeDimens.FIFTY_SIX_DP)
           .clickable { onItemClick(item) }
           .semantics {
             contentDescription = context.getString(R.string.select_language_content_description)
