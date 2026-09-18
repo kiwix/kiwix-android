@@ -129,7 +129,7 @@ open class LanguageViewModel @Inject constructor(
     }
     val isDefault = savedLangPref.isEmpty() || isExplicitAll
 
-    return languages.map { lang ->
+    return languages.filter { it.languageCode.isNotBlank() }.map { lang ->
       lang.copy(
         active = isLanguageActive(
           lang,

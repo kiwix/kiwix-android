@@ -157,6 +157,22 @@ class LanguageViewModelTest {
     }
 
     @Test
+    fun whenObserveLanguagesReturnsBlankLanguageCode_filtersItOut() = runTest {
+      val blankLanguage = createLanguage(code = "")
+      val english = createLanguage()
+      coEvery {
+        observeLanguages(any(), any())
+      } returns ObserveLanguages.Result.Success(listOf(blankLanguage, english))
+
+      createViewModel()
+      advanceUntilIdle()
+
+      val content = languageViewModel.state.value as State.Content
+      assertThat(content.items).hasSize(1)
+      assertThat(content.items.first().languageCode).isEqualTo("eng")
+    }
+
+    @Test
     fun whenObserveLanguagesReturnsError_returnsError() = runTest {
       coEvery {
         observeLanguages(
