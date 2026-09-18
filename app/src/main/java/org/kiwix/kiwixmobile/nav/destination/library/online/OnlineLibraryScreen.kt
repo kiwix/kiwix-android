@@ -33,6 +33,7 @@ import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -49,10 +50,15 @@ import androidx.compose.material3.BottomAppBarScrollBehavior
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.ScrollableTabRow
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Tab
+import androidx.compose.material3.TabRowDefaults
+import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
@@ -67,6 +73,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
@@ -76,6 +83,7 @@ import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.debounce
@@ -102,6 +110,7 @@ import org.kiwix.kiwixmobile.core.utils.ComposeDimens.DOWNLOADING_LIBRARY_PROGRE
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.DOWNLOADING_LIBRARY_PROGRESS_CARD_VIEW_WIDTH
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.EIGHT_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FOUR_DP
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.ONE_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SIXTEEN_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SIX_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.THREE_DP
@@ -120,8 +129,11 @@ const val ONLINE_LIBRARY_SEARCH_VIEW_CLOSE_BUTTON_TESTING_TAG =
 const val NO_CONTENT_VIEW_TEXT_TESTING_TAG = "noContentViewTextTestingTag"
 const val SHOW_FETCHING_LIBRARY_LAYOUT_TESTING_TAG = "showFetchingLibraryLayoutTestingTag"
 const val ONLINE_DIVIDER_ITEM_TEXT_TESTING_TAG = "onlineDividerItemTextTag"
+const val LANGUAGE_TABS_ROW_TESTING_TAG = "languageTabsRowTestingTag"
+const val LANGUAGE_TAB_TESTING_TAG_PREFIX = "languageTabTestingTag_"
 const val LOAD_MORE_DELAY = 150L
 private const val BACK_TO_TOP_ITEM_THRESHOLD = 5
+private val TAB_HEIGHT = 40.dp
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Suppress("ComposableLambdaParameterNaming", "LongParameterList")
@@ -138,6 +150,14 @@ fun OnlineLibraryScreen(
   navigationIcon: @Composable () -> Unit
 ) {
   val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
+  val listStates = remember(uiState.tabs) { mutableMapOf<Int, LazyListState>() }
+  val activeListState = if (uiState.tabs.size <= 1) {
+    listState
+  } else {
+    listStates.getOrPut(uiState.selectedTabIndex) {
+      if (uiState.selectedTabIndex == 0) listState else LazyListState()
+    }
+  }
   Scaffold(
     snackbarHost = { KiwixSnackbarHost(snackbarHostState = snackBarHostState) },
     topBar = {
@@ -151,7 +171,7 @@ fun OnlineLibraryScreen(
     },
     floatingActionButton = {
       OnlineLibraryBackToTopButton(
-        listState = listState,
+        listState = activeListState,
         scrollBehavior = scrollBehavior,
         bottomAppBarScrollBehaviour = bottomAppBarScrollBehaviour
       )
@@ -170,8 +190,69 @@ fun OnlineLibraryScreen(
       paddingValues,
       onUserBackPressed,
       navHostController,
-      listState
+      activeListState
     )
+  }
+}
+
+@Composable
+fun LanguageTabsRow(
+  tabs: List<OnlineLibraryViewModel.LanguageTab>,
+  selectedTabIndex: Int,
+  onTabSelected: (Int) -> Unit,
+  modifier: Modifier = Modifier
+) {
+  val safeIndex = selectedTabIndex.coerceIn(0, (tabs.size - 1).coerceAtLeast(0))
+  Box(modifier = modifier.fillMaxWidth()) {
+    HorizontalDivider(
+      modifier = Modifier
+        .fillMaxWidth()
+        .align(Alignment.BottomCenter),
+      color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f),
+      thickness = ONE_DP
+    )
+    ScrollableTabRow(
+      selectedTabIndex = safeIndex,
+      edgePadding = SIXTEEN_DP,
+      containerColor = Color.Transparent,
+      divider = {},
+      indicator = { tabPositions ->
+        if (safeIndex < tabPositions.size) {
+          TabRowDefaults.SecondaryIndicator(
+            Modifier.tabIndicatorOffset(tabPositions[safeIndex]),
+            color = MaterialTheme.colorScheme.primary
+          )
+        }
+      },
+      modifier = Modifier
+        .fillMaxWidth()
+        .semantics { testTag = LANGUAGE_TABS_ROW_TESTING_TAG }
+    ) {
+      tabs.forEachIndexed { index, tab ->
+        val isSelected = index == safeIndex
+        Tab(
+          selected = isSelected,
+          onClick = { onTabSelected(index) },
+          text = {
+            Text(
+              text = tab.displayName,
+              style = MaterialTheme.typography.labelLarge,
+              fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium,
+              color = if (isSelected) {
+                MaterialTheme.colorScheme.primary
+              } else {
+                MaterialTheme.colorScheme.onSurfaceVariant
+              }
+            )
+          },
+          modifier = Modifier
+            .height(TAB_HEIGHT)
+            .semantics {
+              testTag = "$LANGUAGE_TAB_TESTING_TAG_PREFIX${tab.displayName}"
+            }
+        )
+      }
+    }
   }
 }
 
@@ -185,10 +266,7 @@ private fun OnlineLibraryMainContent(
   navHostController: NavHostController,
   listState: LazyListState
 ) {
-  SwipeRefreshLayout(
-    isRefreshing = uiState.isRefreshing && !uiState.showScanningProgressBar,
-    isEnabled = !uiState.showScanningProgressBar,
-    onRefresh = { onlineLibraryViewModel.refreshScreen(true) },
+  Column(
     modifier = Modifier
       .fillMaxSize()
       .padding(
@@ -198,7 +276,23 @@ private fun OnlineLibraryMainContent(
       )
   ) {
     OnBackPressed(onUserBackPressed, navHostController)
-    OnlineLibraryScreenContent(uiState, listState, onlineLibraryViewModel)
+
+    if (uiState.tabs.size > 1) {
+      LanguageTabsRow(
+        tabs = uiState.tabs,
+        selectedTabIndex = uiState.selectedTabIndex,
+        onTabSelected = onlineLibraryViewModel::selectTab
+      )
+    }
+
+    SwipeRefreshLayout(
+      isRefreshing = uiState.isRefreshing && !uiState.showScanningProgressBar,
+      isEnabled = !uiState.showScanningProgressBar,
+      onRefresh = { onlineLibraryViewModel.refreshScreen(true) },
+      modifier = Modifier.fillMaxSize()
+    ) {
+      OnlineLibraryScreenContent(uiState, listState, onlineLibraryViewModel)
+    }
   }
 }
 
@@ -294,7 +388,12 @@ private fun OnlineLibraryList(
   ) {
     itemsIndexed(state.items) { index, item ->
       when (item) {
-        is DividerItem -> ShowDividerItem(item)
+        is DividerItem -> {
+          if (item.id != Long.MIN_VALUE) {
+            ShowDividerItem(item)
+          }
+        }
+
         is LibraryListItem.BookItem -> OnlineBookItem(
           index = index,
           item = item,
