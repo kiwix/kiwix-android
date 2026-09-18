@@ -130,15 +130,17 @@ sealed class State {
         val activeMap = activeLanguages.associateBy { it.languageCode }
         val orderedActive = selectedLanguageOrder.mapNotNull { activeMap[it] } +
           activeLanguages.filter { it.languageCode !in selectedLanguageOrder }
-        val filtered = orderedActive.filter { filter.isEmpty() || it.matches(filter) }
+        val isSearching = filter.isNotEmpty()
+        val filtered = orderedActive.filter { !isSearching || it.matches(filter) }
         return if (filtered.isNotEmpty()) {
-          listOf(HeaderItem(HeaderItem.SELECTED)) + filtered.mapIndexed { index, language ->
+          listOf(HeaderItem(HeaderItem.SELECTED)) + filtered.map { language ->
+            val unfilteredIndex = orderedActive.indexOf(language)
             LanguageItem(
               language = language,
               isSelectedSection = true,
-              rank = index + 1,
-              canMoveUp = index > 0,
-              canMoveDown = index < filtered.size - 1
+              rank = unfilteredIndex + 1,
+              canMoveUp = !isSearching && unfilteredIndex > 0,
+              canMoveDown = !isSearching && unfilteredIndex < orderedActive.size - 1
             )
           }
         } else {

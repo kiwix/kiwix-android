@@ -46,9 +46,10 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.CustomAccessibilityAction
 import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.customActions
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.unit.dp
@@ -104,9 +105,8 @@ fun LanguageItemRow(
         }
         LanguageTitles(language, context, Modifier.weight(1f))
         Text(
-          text = pluralStringResource(
-            R.plurals.book_count,
-            language.occurencesOfLanguage,
+          text = stringResource(
+            R.string.books_count,
             language.occurencesOfLanguage
           ),
           modifier = Modifier.padding(start = ComposeDimens.EIGHT_DP),
@@ -151,12 +151,23 @@ private fun SelectedLanguageLeading(
   val thresholdPx = with(LocalDensity.current) { ComposeDimens.TWENTY_FOUR_DP.toPx() }
   var dragAccumulator by remember { mutableFloatStateOf(0f) }
 
+  val moveUpLabel = stringResource(R.string.move_up)
+  val moveDownLabel = stringResource(R.string.move_down)
+
   Icon(
     imageVector = Icons.Default.Menu,
     contentDescription = stringResource(R.string.reorder_language),
     tint = MaterialTheme.colorScheme.onSurfaceVariant,
     modifier = Modifier
       .padding(end = ComposeDimens.TWELVE_DP)
+      .reorderAccessibilityActions(
+        canMoveUp = canMoveUp,
+        canMoveDown = canMoveDown,
+        moveUpLabel = moveUpLabel,
+        moveDownLabel = moveDownLabel,
+        onMoveUp = { currentOnMoveUp(item) },
+        onMoveDown = { currentOnMoveDown(item) }
+      )
       .pointerInput(item.id, canMoveUp, canMoveDown) {
         detectVerticalDragGestures(
           onDragEnd = { dragAccumulator = 0f },
@@ -202,6 +213,35 @@ private fun LanguageTitles(
         text = language.languageLocalized,
         style = MaterialTheme.typography.bodyMedium,
         color = MaterialTheme.colorScheme.onSurfaceVariant
+      )
+    }
+  }
+}
+
+@Suppress("LongParameterList")
+private fun Modifier.reorderAccessibilityActions(
+  canMoveUp: Boolean,
+  canMoveDown: Boolean,
+  moveUpLabel: String,
+  moveDownLabel: String,
+  onMoveUp: () -> Unit,
+  onMoveDown: () -> Unit
+): Modifier = semantics {
+  customActions = buildList {
+    if (canMoveUp) {
+      add(
+        CustomAccessibilityAction(moveUpLabel) {
+          onMoveUp()
+          true
+        }
+      )
+    }
+    if (canMoveDown) {
+      add(
+        CustomAccessibilityAction(moveDownLabel) {
+          onMoveDown()
+          true
+        }
       )
     }
   }

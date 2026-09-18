@@ -154,5 +154,30 @@ class StateTest {
       val afterReorder = content.reorder(fromIndex = 2, toIndex = 0)
       assertThat(afterReorder.selectedLanguageOrder).containsExactly("fr", "de", "it")
     }
+
+    @Test
+    fun `disables reordering and keeps unfiltered rank when filter is active`() {
+      val lang1 = language(id = 1L, languageCode = "de", language = "German", isActive = true)
+      val lang2 = language(id = 2L, languageCode = "es", language = "Spanish", isActive = true)
+      val lang3 = language(id = 3L, languageCode = "el", language = "Greek", isActive = true)
+      val content = Content(
+        items = listOf(lang1, lang2, lang3),
+        selectedLanguageOrder = listOf("de", "es", "el")
+      ).updateFilter("G")
+
+      val selectedItems = content.viewItems.filterIsInstance<LanguageItem>()
+      assertThat(selectedItems).hasSize(2)
+      // German (index 0 in full list)
+      assertThat(selectedItems[0].language.languageCode).isEqualTo("de")
+      assertThat(selectedItems[0].rank).isEqualTo(1)
+      assertThat(selectedItems[0].canMoveUp).isFalse()
+      assertThat(selectedItems[0].canMoveDown).isFalse()
+
+      // Greek (index 2 in full list)
+      assertThat(selectedItems[1].language.languageCode).isEqualTo("el")
+      assertThat(selectedItems[1].rank).isEqualTo(3)
+      assertThat(selectedItems[1].canMoveUp).isFalse()
+      assertThat(selectedItems[1].canMoveDown).isFalse()
+    }
   }
 }
