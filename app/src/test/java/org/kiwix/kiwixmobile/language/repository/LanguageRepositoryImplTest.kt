@@ -92,39 +92,40 @@ class LanguageRepositoryImplTest {
   }
 
   @Test
-  fun `fetchLanguages marks app chosen language active when selectedOnlineContentLanguage is empty`() = runTest {
-    val languageFeed = LanguageFeed().apply {
-      entries = listOf(
-        LanguageEntry().apply {
-          languageCode = "eng"
-          count = 10
-        },
-        LanguageEntry().apply {
-          languageCode = "fra"
-          count = 5
-        }
-      )
+  fun `fetchLanguages marks app chosen language active when selectedOnlineContentLanguage is empty`() =
+    runTest {
+      val languageFeed = LanguageFeed().apply {
+        entries = listOf(
+          LanguageEntry().apply {
+            languageCode = "eng"
+            count = 10
+          },
+          LanguageEntry().apply {
+            languageCode = "fra"
+            count = 5
+          }
+        )
+      }
+
+      coEvery { kiwixService.getLanguages() } returns languageFeed
+      every { kiwixDataStore.selectedOnlineContentLanguage } returns flowOf("")
+      every { kiwixDataStore.prefLanguage } returns flowOf("fr")
+
+      val result = repository.fetchLanguages().toList()
+      advanceUntilIdle()
+
+      assertThat(result).hasSize(1)
+      val languages = result[0]
+      assertThat(languages).hasSize(2)
+
+      // First language is eng
+      assertThat(languages[0].languageCode).isEqualTo("eng")
+      assertThat(languages[0].active).isFalse()
+
+      // Second language is fra
+      assertThat(languages[1].languageCode).isEqualTo("fra")
+      assertThat(languages[1].active).isTrue()
     }
-
-    coEvery { kiwixService.getLanguages() } returns languageFeed
-    every { kiwixDataStore.selectedOnlineContentLanguage } returns flowOf("")
-    every { kiwixDataStore.prefLanguage } returns flowOf("fr")
-
-    val result = repository.fetchLanguages().toList()
-    advanceUntilIdle()
-
-    assertThat(result).hasSize(1)
-    val languages = result[0]
-    assertThat(languages).hasSize(2)
-
-    // First language is eng
-    assertThat(languages[0].languageCode).isEqualTo("eng")
-    assertThat(languages[0].active).isFalse()
-
-    // Second language is fra
-    assertThat(languages[1].languageCode).isEqualTo("fra")
-    assertThat(languages[1].active).isTrue()
-  }
 
   @Test
   fun `fetchLanguages emits empty list when feed has no entries`() = runTest {

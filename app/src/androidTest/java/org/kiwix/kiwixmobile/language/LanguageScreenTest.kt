@@ -84,7 +84,9 @@ class LanguageScreenTest : BaseActivityTest() {
       clickOnLanguageIcon(composeTestRule)
       waitForLanguageToLoad(composeTestRule)
       // deselect default English if present so German will be the only selected language
-      if (composeTestRule.onAllNodesWithText(kiwixMainActivity.getString(R.string.all_languages)).fetchSemanticsNodes().isNotEmpty()) {
+      if (composeTestRule.onAllNodesWithText(kiwixMainActivity.getString(R.string.all_languages))
+          .fetchSemanticsNodes().isNotEmpty()
+      ) {
         selectLanguage(
           composeTestRule = composeTestRule,
           matchLanguage = kiwixMainActivity.getString(R.string.all_languages)
@@ -118,7 +120,9 @@ class LanguageScreenTest : BaseActivityTest() {
       clickOnLanguageIcon(composeTestRule)
       waitForLanguageToLoad(composeTestRule)
       // deselect German so Italian will be the only selected language
-      if (composeTestRule.onAllNodesWithText(kiwixMainActivity.getString(R.string.all_languages)).fetchSemanticsNodes().isNotEmpty()) {
+      if (composeTestRule.onAllNodesWithText(kiwixMainActivity.getString(R.string.all_languages))
+          .fetchSemanticsNodes().isNotEmpty()
+      ) {
         selectLanguage(
           composeTestRule = composeTestRule,
           matchLanguage = kiwixMainActivity.getString(R.string.all_languages)

@@ -111,7 +111,11 @@ class LanguageViewModelTest {
     @Test
     fun whenObserveLanguagesReturnsSuccess_returnsContent() = runTest {
       val english = createLanguage()
-      coEvery { observeLanguages(any(), any()) } returns ObserveLanguages.Result.Success(listOf(english))
+      coEvery { observeLanguages(any(), any()) } returns ObserveLanguages.Result.Success(
+        listOf(
+          english
+        )
+      )
 
       createViewModel()
       advanceUntilIdle()
@@ -135,7 +139,13 @@ class LanguageViewModelTest {
         )
       val english = Language("eng", active = false, occurrencesOfLanguage = 50, id = 1)
       val french = Language("fra", active = false, occurrencesOfLanguage = 30, id = 2)
-      coEvery { observeLanguages(any(), any()) } returns ObserveLanguages.Result.Success(listOf(allLanguages, english, french))
+      coEvery { observeLanguages(any(), any()) } returns ObserveLanguages.Result.Success(
+        listOf(
+          allLanguages,
+          english,
+          french
+        )
+      )
 
       createViewModel()
       advanceUntilIdle()
@@ -148,7 +158,12 @@ class LanguageViewModelTest {
 
     @Test
     fun whenObserveLanguagesReturnsError_returnsError() = runTest {
-      coEvery { observeLanguages(any(), any()) } returns ObserveLanguages.Result.Error("No network connection")
+      coEvery {
+        observeLanguages(
+          any(),
+          any()
+        )
+      } returns ObserveLanguages.Result.Error("No network connection")
 
       createViewModel()
       advanceUntilIdle()
@@ -166,7 +181,12 @@ class LanguageViewModelTest {
     inner class ActionError {
       @Test
       fun whenErrorAction_returnsErrorMessage() = runTest {
-        coEvery { observeLanguages(any(), any()) } returns ObserveLanguages.Result.Success(emptyList())
+        coEvery {
+          observeLanguages(
+            any(),
+            any()
+          )
+        } returns ObserveLanguages.Result.Success(emptyList())
         createViewModel()
         advanceUntilIdle()
 
@@ -187,7 +207,12 @@ class LanguageViewModelTest {
     inner class ActionUpdateLanguages {
       @Test
       fun whenStateLoading_returnsContent() = runTest {
-        coEvery { observeLanguages(any(), any()) } returns ObserveLanguages.Result.Success(emptyList())
+        coEvery {
+          observeLanguages(
+            any(),
+            any()
+          )
+        } returns ObserveLanguages.Result.Success(emptyList())
         createViewModel()
         advanceUntilIdle()
         languageViewModel.state.value = Loading
@@ -212,7 +237,12 @@ class LanguageViewModelTest {
 
       @Test
       fun whenStateNotLoading_returnsCurrentState() = runTest {
-        coEvery { observeLanguages(any(), any()) } returns ObserveLanguages.Result.Success(emptyList())
+        coEvery {
+          observeLanguages(
+            any(),
+            any()
+          )
+        } returns ObserveLanguages.Result.Success(emptyList())
         createViewModel()
         advanceUntilIdle()
         languageViewModel.state.value = Loading
@@ -239,7 +269,12 @@ class LanguageViewModelTest {
     inner class ActionFilter {
       @Test
       fun whenStateNotContent_returnsCurrentState() = runTest {
-        coEvery { observeLanguages(any(), any()) } returns ObserveLanguages.Result.Success(emptyList())
+        coEvery {
+          observeLanguages(
+            any(),
+            any()
+          )
+        } returns ObserveLanguages.Result.Success(emptyList())
         createViewModel()
         advanceUntilIdle()
         languageViewModel.state.value = Loading
@@ -258,7 +293,12 @@ class LanguageViewModelTest {
 
       @Test
       fun whenStateContent_returnsFilteredContent() = runTest {
-        coEvery { observeLanguages(any(), any()) } returns ObserveLanguages.Result.Success(emptyList())
+        coEvery {
+          observeLanguages(
+            any(),
+            any()
+          )
+        } returns ObserveLanguages.Result.Success(emptyList())
         createViewModel()
         advanceUntilIdle()
 
@@ -303,7 +343,12 @@ class LanguageViewModelTest {
     inner class ActionSelect {
       @Test
       fun whenStateNotContent_returnsCurrentState() = runTest {
-        coEvery { observeLanguages(any(), any()) } returns ObserveLanguages.Result.Success(emptyList())
+        coEvery {
+          observeLanguages(
+            any(),
+            any()
+          )
+        } returns ObserveLanguages.Result.Success(emptyList())
         createViewModel()
         advanceUntilIdle()
         languageViewModel.state.value = Loading
@@ -326,7 +371,12 @@ class LanguageViewModelTest {
 
       @Test
       fun whenStateContent_updatesSelectedLanguage() = runTest {
-        coEvery { observeLanguages(any(), any()) } returns ObserveLanguages.Result.Success(emptyList())
+        coEvery {
+          observeLanguages(
+            any(),
+            any()
+          )
+        } returns ObserveLanguages.Result.Success(emptyList())
         createViewModel()
         advanceUntilIdle()
         val english =
@@ -378,7 +428,12 @@ class LanguageViewModelTest {
     inner class ActionMoveUp {
       @Test
       fun whenStateContent_movesLanguageUp() = runTest {
-        coEvery { observeLanguages(any(), any()) } returns ObserveLanguages.Result.Success(emptyList())
+        coEvery {
+          observeLanguages(
+            any(),
+            any()
+          )
+        } returns ObserveLanguages.Result.Success(emptyList())
         createViewModel()
         advanceUntilIdle()
         val lang1 = createLanguage(code = "deu", active = true, id = 1)
@@ -402,7 +457,12 @@ class LanguageViewModelTest {
     inner class ActionMoveDown {
       @Test
       fun whenStateContent_movesLanguageDown() = runTest {
-        coEvery { observeLanguages(any(), any()) } returns ObserveLanguages.Result.Success(emptyList())
+        coEvery {
+          observeLanguages(
+            any(),
+            any()
+          )
+        } returns ObserveLanguages.Result.Success(emptyList())
         createViewModel()
         advanceUntilIdle()
         val lang1 = createLanguage(code = "deu", active = true, id = 1)
@@ -426,7 +486,12 @@ class LanguageViewModelTest {
     inner class ActionCancel {
       @Test
       fun whenStateNotContent_returnsCurrentState() = runTest {
-        coEvery { observeLanguages(any(), any()) } returns ObserveLanguages.Result.Success(emptyList())
+        coEvery {
+          observeLanguages(
+            any(),
+            any()
+          )
+        } returns ObserveLanguages.Result.Success(emptyList())
         createViewModel()
         advanceUntilIdle()
         languageViewModel.state.value = Loading
@@ -443,7 +508,12 @@ class LanguageViewModelTest {
 
       @Test
       fun whenStateContent_emitsCancelSideEffect() = runTest {
-        coEvery { observeLanguages(any(), any()) } returns ObserveLanguages.Result.Success(emptyList())
+        coEvery {
+          observeLanguages(
+            any(),
+            any()
+          )
+        } returns ObserveLanguages.Result.Success(emptyList())
         createViewModel()
         advanceUntilIdle()
         languageViewModel.state.value = State.Content(listOf(createLanguage()))
@@ -467,7 +537,12 @@ class LanguageViewModelTest {
     inner class ActionSave {
       @Test
       fun whenStateNotContent_returnsCurrentState() = runTest {
-        coEvery { observeLanguages(any(), any()) } returns ObserveLanguages.Result.Success(emptyList())
+        coEvery {
+          observeLanguages(
+            any(),
+            any()
+          )
+        } returns ObserveLanguages.Result.Success(emptyList())
         createViewModel()
         advanceUntilIdle()
         languageViewModel.state.value = Loading
@@ -484,7 +559,12 @@ class LanguageViewModelTest {
 
       @Test
       fun whenStateContent_returnsSavingAndEmitsSideEffect() = runTest {
-        coEvery { observeLanguages(any(), any()) } returns ObserveLanguages.Result.Success(emptyList())
+        coEvery {
+          observeLanguages(
+            any(),
+            any()
+          )
+        } returns ObserveLanguages.Result.Success(emptyList())
         createViewModel()
         advanceUntilIdle()
         val english = createLanguage(code = "eng", active = true)
@@ -515,7 +595,12 @@ class LanguageViewModelTest {
 
       @Test
       fun whenStateContent_savesLanguagesInSelectedOrder() = runTest {
-        coEvery { observeLanguages(any(), any()) } returns ObserveLanguages.Result.Success(emptyList())
+        coEvery {
+          observeLanguages(
+            any(),
+            any()
+          )
+        } returns ObserveLanguages.Result.Success(emptyList())
         createViewModel()
         advanceUntilIdle()
         val german = createLanguage(code = "deu", active = true, id = 1)
