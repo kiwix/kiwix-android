@@ -137,6 +137,7 @@ import org.kiwix.kiwixmobile.core.utils.titleToUrl
 import org.kiwix.kiwixmobile.core.utils.urlSuffixToParsableUrl
 import java.io.File
 import kotlin.math.abs
+import kotlin.time.Duration.Companion.milliseconds
 
 const val TOC_SHOWING_WAITING_TIME = 500L
 const val SEARCH_ITEM_TITLE_KEY = "searchItemTitle"
@@ -450,7 +451,7 @@ abstract class CoreReaderViewModel(
     ttsPositionJob?.cancel()
     ttsPositionJob = viewModelScope.launch(mainDispatcher) {
       while (isActive) {
-        delay(TTS_TICKER_INTERVAL_MS)
+        delay(TTS_TICKER_INTERVAL_MS.milliseconds)
         if (uiState.value.ttsControlsItem.isTtsPlaying && !uiState.value.ttsControlsItem.isTtsPaused) {
           val currentPos = readAloudManager.currentPositionMs
           val totalDur = readAloudManager.totalDurationMs
@@ -1053,7 +1054,7 @@ abstract class CoreReaderViewModel(
         onClick = {}
       )
     )
-    delay(TOC_SHOWING_WAITING_TIME)
+    delay(TOC_SHOWING_WAITING_TIME.milliseconds)
     onAction(ReaderAction.OpenTocDrawer)
   }
 
@@ -1124,7 +1125,7 @@ abstract class CoreReaderViewModel(
     hideBackToTopJob?.cancel()
 
     hideBackToTopJob = viewModelScope.launch {
-      delay(BACK_TO_TOP_HIDE_DELAY_MS)
+      delay(BACK_TO_TOP_HIDE_DELAY_MS.milliseconds)
       hideBackToTopButton()
     }
   }
@@ -1517,7 +1518,7 @@ abstract class CoreReaderViewModel(
     launchInMainScope {
       // Run safely because it is runs after 300 MS.
       runCatching {
-        delay(OPEN_HOME_SCREEN_DELAY)
+        delay(OPEN_HOME_SCREEN_DELAY.milliseconds)
         if (readerWebViewManager.webViewList().isEmpty()) {
           newMainPageTab()
           hideTabSwitcher()
@@ -1896,7 +1897,7 @@ abstract class CoreReaderViewModel(
    * KiwixReaderViewModel.restoreViewStateOnValidWebViewHistory) to ensure consistent behavior
    * when handling valid webViewHistory scenarios.
    */
-  protected open abstract suspend fun restoreViewStateOnValidWebViewHistory(
+  protected abstract suspend fun restoreViewStateOnValidWebViewHistory(
     webViewHistoryItemList: List<WebViewHistoryItem>,
     currentTab: Int,
     currentZimFile: String?,
