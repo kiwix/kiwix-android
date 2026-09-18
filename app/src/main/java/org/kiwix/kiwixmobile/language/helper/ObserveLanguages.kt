@@ -25,7 +25,9 @@ import org.kiwix.kiwixmobile.core.zim_manager.Language
 import org.kiwix.kiwixmobile.core.zim_manager.NetworkState
 import org.kiwix.kiwixmobile.language.repository.LanguageRepository
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class ObserveLanguages @Inject constructor(
   private val repository: LanguageRepository,
   private val kiwixDataStore: KiwixDataStore,

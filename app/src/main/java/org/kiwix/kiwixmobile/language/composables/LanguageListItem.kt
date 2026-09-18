@@ -34,6 +34,10 @@ sealed class LanguageListItem {
 
   data class LanguageItem(
     val language: Language,
+    val isSelectedSection: Boolean = false,
+    val rank: Int = 0,
+    val canMoveUp: Boolean = false,
+    val canMoveDown: Boolean = false,
     override val id: Long = language.id
   ) : LanguageListItem()
 }

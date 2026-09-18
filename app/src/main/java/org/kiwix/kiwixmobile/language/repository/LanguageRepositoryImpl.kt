@@ -25,16 +25,17 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.retry
+import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.convertToLocal
 import org.kiwix.kiwixmobile.core.data.remote.KiwixService
 import org.kiwix.kiwixmobile.core.di.IoDispatcher
 import org.kiwix.kiwixmobile.core.di.OPDSKiwixService
 import org.kiwix.kiwixmobile.core.ui.components.ONE
 import org.kiwix.kiwixmobile.core.utils.FIVE
 import org.kiwix.kiwixmobile.core.utils.TAG_KIWIX
-import org.kiwix.kiwixmobile.core.utils.ZERO
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.files.Log
 import org.kiwix.kiwixmobile.core.zim_manager.Language
+import java.util.Locale
 import javax.inject.Inject
 
 class LanguageRepositoryImpl @Inject constructor(
@@ -42,18 +43,38 @@ class LanguageRepositoryImpl @Inject constructor(
   private val kiwixDataStore: KiwixDataStore,
   @param:IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : LanguageRepository {
+  private suspend fun getAppChosenLanguageCode(): String {
+    val pref = runCatching { kiwixDataStore.prefLanguage.first() }.getOrDefault("")
+    val locale = if (pref.isNotBlank() && pref != Locale.ROOT.toString() && pref != Locale.ROOT.language) {
+      runCatching { pref.convertToLocal() }.getOrNull()
+    } else {
+      null
+    } ?: Locale.getDefault()
+    return runCatching {
+      locale.isO3Language.ifEmpty { locale.language }
+    }.getOrDefault("")
+  }
+
   override fun fetchLanguages(): Flow<List<Language>> = flow {
     val feed = kiwixService.getLanguages()
-    val selectedLanguagesSet = kiwixDataStore.selectedOnlineContentLanguage
-      .first()
-      .split(",")
-      .asSequence()
-      .filter { it.isNotEmpty() }
-      .toSet()
-    var allBooksCount = ZERO
+    val savedLangPref = kiwixDataStore.selectedOnlineContentLanguage.first()
+    val defaultAppLang = if (savedLangPref.isEmpty() || savedLangPref.equals("all", ignoreCase = true)) {
+      getAppChosenLanguageCode()
+    } else {
+      ""
+    }
+    val selectedLanguagesSet = when {
+      savedLangPref.isNotEmpty() && !savedLangPref.equals("all", ignoreCase = true) ->
+        savedLangPref
+          .split(",")
+          .asSequence()
+          .filter { it.isNotEmpty() }
+          .toSet()
+      defaultAppLang.isNotEmpty() -> setOf(defaultAppLang)
+      else -> emptySet()
+    }
 
     val languages = feed.entries.orEmpty().mapIndexedNotNull { index, entry ->
-      allBooksCount += entry.count
       runCatching {
         Language(
           languageCode = entry.languageCode,
@@ -66,22 +87,7 @@ class LanguageRepositoryImpl @Inject constructor(
       }.getOrNull()
     }
 
-    val languageList =
-      when {
-        languages.isEmpty() -> emptyList()
-        else -> buildList {
-          add(
-            Language(
-              languageCode = "",
-              active = selectedLanguagesSet.isEmpty(),
-              occurrencesOfLanguage = allBooksCount,
-              id = ZERO.toLong()
-            )
-          )
-          addAll(languages)
-        }
-      }
-    emit(languageList)
+    emit(languages)
   }.retry(FIVE.toLong())
     .catch { e ->
       e.printStackTrace()

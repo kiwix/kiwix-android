@@ -21,6 +21,7 @@ package org.kiwix.kiwixmobile.language
 import androidx.compose.ui.test.ComposeTimeoutException
 import androidx.compose.ui.test.junit4.ComposeContentTestRule
 import androidx.compose.ui.test.onAllNodesWithContentDescription
+import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
@@ -30,6 +31,7 @@ import org.kiwix.kiwixmobile.BaseRobot
 import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.page.SEARCH_ICON_TESTING_TAG
 import org.kiwix.kiwixmobile.core.search.SEARCH_FIELD_TESTING_TAG
+import org.kiwix.kiwixmobile.core.ui.components.NAVIGATION_ICON_TESTING_TAG
 import org.kiwix.kiwixmobile.core.utils.files.Log
 import org.kiwix.kiwixmobile.main.BOTTOM_NAV_DOWNLOADS_ITEM_TESTING_TAG
 import org.kiwix.kiwixmobile.nav.destination.library.online.LANGUAGE_MENU_ICON_TESTING_TAG
@@ -55,9 +57,16 @@ class LanguageRobot : BaseRobot() {
   }
 
   fun clickOnSaveLanguageIcon(composeTestRule: ComposeContentTestRule) {
-    composeTestRule
-      .onNodeWithTag(SAVE_ICON_TESTING_TAG)
-      .performClick()
+    if (composeTestRule.onAllNodesWithTag(SAVE_ICON_TESTING_TAG).fetchSemanticsNodes().isNotEmpty()) {
+      composeTestRule
+        .onNodeWithTag(SAVE_ICON_TESTING_TAG)
+        .performClick()
+    } else {
+      composeTestRule
+        .onNodeWithTag(NAVIGATION_ICON_TESTING_TAG)
+        .performClick()
+    }
+    composeTestRule.waitForIdle()
   }
 
   fun clickOnLanguageSearchIcon(composeTestRule: ComposeContentTestRule) {
