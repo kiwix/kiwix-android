@@ -88,7 +88,7 @@ class ObserveOnlineLibraryItemsTest {
     "All languages"
   }
 
-  private val getDisplayLanguage: (String) -> String = { langCode ->
+  private val getDisplayLanguage: suspend (String) -> String = { langCode ->
     if (langCode == "en") "English" else langCode
   }
 

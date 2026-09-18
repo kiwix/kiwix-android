@@ -36,7 +36,6 @@ import org.kiwix.kiwixmobile.R.string
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.extensions.registerReceiver
-import org.kiwix.kiwixmobile.core.utils.LocaleHelper
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.zim_manager.Category
 import org.kiwix.kiwixmobile.core.zim_manager.ConnectivityBroadcastReceiver
@@ -82,9 +81,6 @@ open class CategoryViewModel @Inject constructor(
     }
   }
 
-  private fun getString(resId: Int, vararg args: Any): String =
-    LocaleHelper.getLocalizedString(context, kiwixDataStore, resId, *args)
-
   private fun observeActions() =
     actions
       .map { action -> reduce(action, state.value) }
@@ -96,8 +92,8 @@ open class CategoryViewModel @Inject constructor(
     state.value = State.Loading
     when (
       val result = observeCategories(
-        errorNoCategory = getString(string.no_category_available),
-        errorNoNetwork = getString(R.string.no_network_connection)
+        errorNoCategory = context.getString(string.no_category_available),
+        errorNoNetwork = context.getString(R.string.no_network_connection)
       )
     ) {
       is ObserveCategories.Result.Success ->

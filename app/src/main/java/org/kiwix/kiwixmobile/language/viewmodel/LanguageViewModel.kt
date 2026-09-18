@@ -97,7 +97,7 @@ open class LanguageViewModel @Inject constructor(
     }
   }
 
-  private fun sortLanguages(languages: List<Language>): List<Language> {
+  private suspend fun sortLanguages(languages: List<Language>): List<Language> {
     val allLanguagesItem = languages.firstOrNull { it.id == 0L || it.languageCode.isEmpty() }
     val otherLanguages = languages.filter { it.id != 0L && it.languageCode.isNotEmpty() }
 

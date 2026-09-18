@@ -19,21 +19,19 @@
 package org.kiwix.kiwixmobile.core.utils
 
 import android.content.Context
-import android.content.res.Configuration
 import androidx.appcompat.app.AppCompatDelegate
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.runBlocking
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import java.util.Locale
 
 object LocaleHelper {
   @JvmStatic
-  fun getAppLocale(context: Context, kiwixDataStore: KiwixDataStore): Locale =
+  suspend fun getAppLocale(context: Context, kiwixDataStore: KiwixDataStore): Locale =
     if (!AppCompatDelegate.getApplicationLocales().isEmpty) {
       AppCompatDelegate.getApplicationLocales()[0] ?: getSystemLocale(context)
     } else {
       val pref = try {
-        runBlocking { kiwixDataStore.prefLanguage.first() }
+        kiwixDataStore.prefLanguage.first()
       } catch (_: Exception) {
         ""
       }
@@ -48,27 +46,5 @@ object LocaleHelper {
     context.resources.configuration.locales.get(0)
   } catch (_: Throwable) {
     Locale.getDefault()
-  }
-
-  @JvmStatic
-  fun getLocalizedString(
-    context: Context,
-    kiwixDataStore: KiwixDataStore,
-    resId: Int,
-    vararg args: Any
-  ): String = try {
-    val config = Configuration(context.resources.configuration)
-    config.setLocale(getAppLocale(context, kiwixDataStore))
-    val localizedContext = context.createConfigurationContext(config)
-    if (args.isEmpty()) {
-      localizedContext.getString(resId)
-    } else {
-      localizedContext.getString(
-        resId,
-        *args
-      )
-    }
-  } catch (_: Throwable) {
-    if (args.isEmpty()) context.getString(resId) else context.getString(resId, *args)
   }
 }
