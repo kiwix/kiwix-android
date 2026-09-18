@@ -58,7 +58,6 @@ import org.kiwix.kiwixmobile.core.data.remote.KiwixService.Companion.ITEMS_PER_P
 import org.kiwix.kiwixmobile.core.di.IoDispatcher
 import org.kiwix.kiwixmobile.core.downloader.Downloader
 import org.kiwix.kiwixmobile.core.entity.LibkiwixBook
-import org.kiwix.kiwixmobile.core.extensions.registerReceiver
 import org.kiwix.kiwixmobile.core.ui.components.ONE
 import org.kiwix.kiwixmobile.core.utils.BookUtils
 import org.kiwix.kiwixmobile.core.utils.EXTERNAL_SELECT_POSITION
@@ -70,7 +69,7 @@ import org.kiwix.kiwixmobile.core.utils.ZERO
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
 import org.kiwix.kiwixmobile.core.utils.files.Log
-import org.kiwix.kiwixmobile.core.zim_manager.ConnectivityBroadcastReceiver
+import org.kiwix.kiwixmobile.core.zim_manager.ConnectivityObserver
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.nav.destination.library.StorageSelectDialogConfig
 import org.kiwix.kiwixmobile.nav.destination.library.online.helper.ObserveNetworkState
@@ -132,7 +131,7 @@ class OnlineLibraryViewModel @Inject constructor(
   val availableSpaceCalculator: AvailableSpaceCalculator,
   private val permissionChecker: KiwixPermissionChecker,
   val context: Application,
-  private val connectivityBroadcastReceiver: ConnectivityBroadcastReceiver,
+  private val connectivityObserver: ConnectivityObserver,
   private val connectivityManager: ConnectivityManager,
   private val observeOnlineLibraryItems: ObserveOnlineLibraryItems,
   private val resolveBookClickAction: ResolveBookClickAction,
@@ -260,7 +259,7 @@ class OnlineLibraryViewModel @Inject constructor(
   }
 
   init {
-    context.registerReceiver(connectivityBroadcastReceiver)
+    connectivityObserver.register()
     observeFlows()
   }
 
@@ -350,7 +349,7 @@ class OnlineLibraryViewModel @Inject constructor(
   }
 
   private fun updateNetworkStates() =
-    observeNetworkState(connectivityBroadcastReceiver.networkStates)
+    observeNetworkState(connectivityObserver.networkStates)
       .onEach { handleNetworkState(it) }
       .flowOn(ioDispatcher)
       .launchIn(viewModelScope)
@@ -798,7 +797,7 @@ class OnlineLibraryViewModel @Inject constructor(
       it.cancel()
     }
     coroutineJobs.clear()
-    context.unregisterReceiver(connectivityBroadcastReceiver)
+    connectivityObserver.unregister()
     observeOnlineLibraryItems.dispose()
     super.onCleared()
   }

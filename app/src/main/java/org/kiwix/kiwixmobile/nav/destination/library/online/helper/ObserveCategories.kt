@@ -21,7 +21,7 @@ package org.kiwix.kiwixmobile.nav.destination.library.online.helper
 import kotlinx.coroutines.flow.first
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.zim_manager.Category
-import org.kiwix.kiwixmobile.core.zim_manager.ConnectivityBroadcastReceiver
+import org.kiwix.kiwixmobile.core.zim_manager.ConnectivityObserver
 import org.kiwix.kiwixmobile.core.zim_manager.NetworkState
 import org.kiwix.kiwixmobile.nav.destination.library.online.repository.CategoryRepository
 import javax.inject.Inject
@@ -29,7 +29,7 @@ import javax.inject.Inject
 class ObserveCategories @Inject constructor(
   private val repository: CategoryRepository,
   private val kiwixDataStore: KiwixDataStore,
-  private val connectivityBroadcastReceiver: ConnectivityBroadcastReceiver
+  private val connectivityObserver: ConnectivityObserver
 ) {
   sealed class Result {
     data class Success(val categories: List<Category>) : Result()
@@ -44,12 +44,13 @@ class ObserveCategories @Inject constructor(
   ): Result {
     val cachedCategoryList = kiwixDataStore.cachedOnlineCategoryList.first()
     val isOnline =
-      connectivityBroadcastReceiver.networkStates.value == NetworkState.CONNECTED
+      connectivityObserver.networkStates.value == NetworkState.CONNECTED
 
     return when {
       hasFetched && !cachedCategoryList.isNullOrEmpty() -> {
         Result.Success(cachedCategoryList)
       }
+
       isOnline -> {
         var result: Result? = null
         repository.fetchCategories().collect { categories ->
@@ -63,6 +64,7 @@ class ObserveCategories @Inject constructor(
         }
         result ?: resolveCache(cachedCategoryList, errorNoCategory)
       }
+
       else -> {
         resolveCache(cachedCategoryList, errorNoNetwork)
       }

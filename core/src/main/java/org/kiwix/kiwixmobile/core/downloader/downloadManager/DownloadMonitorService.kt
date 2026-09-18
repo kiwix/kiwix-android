@@ -27,8 +27,6 @@ import android.app.PendingIntent.FLAG_IMMUTABLE
 import android.app.PendingIntent.FLAG_UPDATE_CURRENT
 import android.app.Service
 import android.content.Intent
-import android.net.ConnectivityManager
-import android.net.Network
 import android.os.Build
 import android.os.IBinder
 import androidx.annotation.RequiresApi
@@ -48,6 +46,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -62,6 +61,8 @@ import org.kiwix.kiwixmobile.core.utils.ACTIVE_DOWNLOAD_GROUP_KEY
 import org.kiwix.kiwixmobile.core.utils.DOWNLOAD_NOTIFICATION_CHANNEL_ID
 import org.kiwix.kiwixmobile.core.utils.ZERO
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
+import org.kiwix.kiwixmobile.core.zim_manager.ConnectivityObserver
+import org.kiwix.kiwixmobile.core.zim_manager.NetworkState
 import javax.inject.Inject
 
 const val THIRTY_TREE = 33
@@ -97,20 +98,12 @@ class DownloadMonitorService : Service() {
   lateinit var downloadRoomDao: DownloadRoomDao
 
   @Inject
-  lateinit var connectivityManager: ConnectivityManager
+  lateinit var connectivityObserver: ConnectivityObserver
 
   @Inject
   lateinit var kiwixDataStore: KiwixDataStore
 
-  private val networkCallback = object : ConnectivityManager.NetworkCallback() {
-    override fun onAvailable(network: Network) {
-      resumeQueuedDownloadsOnNetworkAvailable()
-    }
-
-    override fun onLost(network: Network) {
-      // do nothing
-    }
-  }
+  private var networkStateJob: Job? = null
 
   /**
    * Resumes all downloads that are currently in the QUEUED state
@@ -138,15 +131,23 @@ class DownloadMonitorService : Service() {
   }
 
   private fun registerNetworkCallback() {
-    runCatching {
-      connectivityManager.registerDefaultNetworkCallback(networkCallback)
-    }.onFailure { it.printStackTrace() }
+    connectivityObserver.register()
+    networkStateJob = scope?.launch {
+      connectivityObserver.networkStates.collectLatest { state ->
+        when (state) {
+          NetworkState.CONNECTED -> resumeQueuedDownloadsOnNetworkAvailable()
+
+          NetworkState.NOT_CONNECTED -> {
+            // No action needed when the network is lost.
+          }
+        }
+      }
+    }
   }
 
   private fun unregisterNetworkCallback() {
-    runCatching {
-      connectivityManager.unregisterNetworkCallback(networkCallback)
-    }.onFailure { it.printStackTrace() }
+    connectivityObserver.unregister()
+    networkStateJob?.cancel()
   }
 
   private fun setupUpdater() {

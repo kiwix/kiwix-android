@@ -22,7 +22,6 @@ import android.Manifest.permission.POST_NOTIFICATIONS
 import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
 import android.app.Application
 import android.net.ConnectivityManager
-import android.os.Build
 import app.cash.turbine.test
 import io.mockk.Runs
 import io.mockk.clearMocks
@@ -60,7 +59,7 @@ import org.kiwix.kiwixmobile.core.utils.KiwixPermissionChecker
 import org.kiwix.kiwixmobile.core.utils.StorageDeviceProvider
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
-import org.kiwix.kiwixmobile.core.zim_manager.ConnectivityBroadcastReceiver
+import org.kiwix.kiwixmobile.core.zim_manager.ConnectivityObserver
 import org.kiwix.kiwixmobile.core.zim_manager.NetworkState
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.nav.destination.library.online.helper.ObserveNetworkState
@@ -116,7 +115,7 @@ class OnlineLibraryViewModelTest {
   private val availableSpaceCalculator: AvailableSpaceCalculator = mockk(relaxed = true)
   private val permissionChecker: KiwixPermissionChecker = mockk(relaxed = true)
   private val context: Application = mockk(relaxed = true)
-  private val connectivityReceiver: ConnectivityBroadcastReceiver = mockk(relaxed = true)
+  private val connectivityObserver: ConnectivityObserver = mockk(relaxed = true)
   private val connectivityManager: ConnectivityManager = mockk(relaxed = true)
   private val observeItems: ObserveOnlineLibraryItems = mockk(relaxed = true)
   private val resolveClick: ResolveBookClickAction = mockk(relaxed = true)
@@ -128,19 +127,13 @@ class OnlineLibraryViewModelTest {
 
   @BeforeEach
   fun setup() {
-    every { connectivityReceiver.networkStates } returns MutableStateFlow(NetworkState.NOT_CONNECTED)
+    every { connectivityObserver.networkStates } returns MutableStateFlow(NetworkState.NOT_CONNECTED)
     every { observeItems.invoke(any(), any(), any(), any(), any(), any()) } returns emptyFlow()
     every { observeLibrary.invoke(any()) } returns flowOf(mockk(relaxed = true))
     every { observeNetwork.invoke(any()) } returns emptyFlow()
     every { kiwixDataStore.selectedOnlineContentCategory } returns MutableStateFlow("")
     every { kiwixDataStore.selectedOnlineContentLanguage } returns MutableStateFlow("")
     every { permissionChecker.isAndroid13orAbove() } returns true
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-      every { context.registerReceiver(any(), any(), any()) } returns mockk()
-    } else {
-      @Suppress("UnspecifiedRegisterReceiverFlag")
-      every { context.registerReceiver(any(), any()) } returns mockk()
-    }
     every { downloaderProvider.get() } returns downloader
     viewModel = OnlineLibraryViewModel(
       downloaderProvider,
@@ -151,7 +144,7 @@ class OnlineLibraryViewModelTest {
       availableSpaceCalculator,
       permissionChecker,
       context,
-      connectivityReceiver,
+      connectivityObserver,
       connectivityManager,
       observeItems,
       resolveClick,
@@ -172,25 +165,17 @@ class OnlineLibraryViewModelTest {
   @Nested
   inner class Context {
     @Test
-    fun `registers broadcastReceiver in init`() {
-      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-        verify {
-          context.registerReceiver(connectivityReceiver, any(), any())
-        }
-      } else {
-        @Suppress("UnspecifiedRegisterReceiverFlag")
-        verify {
-          context.registerReceiver(connectivityReceiver, any())
-        }
+    fun `registers connectivity callback in init`() {
+      verify {
+        connectivityObserver.register()
       }
     }
 
     @Test
-    fun `unregisters broadcastReceiver in onCleared`() {
-      every { context.unregisterReceiver(any()) } returns mockk()
+    fun `unregisters connectivity callback in onCleared`() {
       viewModel.onClearedExposed()
       verify {
-        context.unregisterReceiver(connectivityReceiver)
+        connectivityObserver.unregister()
       }
     }
   }
@@ -521,7 +506,7 @@ class OnlineLibraryViewModelTest {
         availableSpaceCalculator,
         permissionChecker,
         context,
-        connectivityReceiver,
+        connectivityObserver,
         connectivityManager,
         observeItems,
         resolveClick,
