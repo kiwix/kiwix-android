@@ -170,7 +170,7 @@ open class LanguageViewModel @Inject constructor(
   }
 
   private fun updateLanguages(action: UpdateLanguages, currentState: State): State =
-    if (currentState is Loading) Content(action.languages) else currentState
+    if (currentState === Loading) Content(action.languages) else currentState
 
   private fun filter(action: Filter, currentState: State): State =
     if (currentState is Content) filterContent(action.filter, currentState) else currentState
