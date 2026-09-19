@@ -23,9 +23,9 @@ import app.cash.turbine.test
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.Assertions.assertEquals
 
 class ReaderIntentManagerTest {
   private val parser = mockk<PendingIntentParser>()
