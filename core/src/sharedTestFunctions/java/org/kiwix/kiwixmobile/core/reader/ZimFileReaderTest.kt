@@ -18,8 +18,8 @@
 
 package org.kiwix.kiwixmobile.core.reader
 
-import org.junit.Test
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Test
 
 class ZimFileReaderTest {
   @Test
