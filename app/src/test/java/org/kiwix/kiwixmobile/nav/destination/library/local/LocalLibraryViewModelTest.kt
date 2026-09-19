@@ -126,13 +126,12 @@ class LocalLibraryViewModelTest {
     unmockkStatic(Uri::class)
   }
 
-  private fun createBookOnDisk(id: String = "book1", isSelected: Boolean = false): BookOnDisk {
-    return BookOnDisk(
+  private fun createBookOnDisk(id: String = "book1", isSelected: Boolean = false): BookOnDisk =
+    BookOnDisk(
       book = LibkiwixBook().apply { this.id = id },
       zimReaderSource = mockk(relaxed = true),
       isSelected = isSelected
     )
-  }
 
   private fun createViewModel(): LocalLibraryViewModel {
     val vm = LocalLibraryViewModel(
