@@ -21,6 +21,7 @@ package org.kiwix.kiwixmobile.nav.destination.library.local
 import androidx.appcompat.app.AppCompatActivity
 import io.mockk.CapturingSlot
 import io.mockk.Runs
+import io.mockk.clearAllMocks
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
@@ -32,8 +33,8 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
-import org.junit.Before
-import org.junit.Test
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.RegisterExtension
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
@@ -50,8 +51,9 @@ class ShowFileCopyMoveErrorDialogTest {
   @JvmField
   val mainDispatcherRule = MainDispatcherRule()
 
-  @Before
+  @BeforeEach
   fun setup() {
+    clearAllMocks()
     testScope = TestScope(mainDispatcherRule.dispatcher)
   }
 

@@ -24,19 +24,19 @@ import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
-import junit.framework.TestCase.assertEquals
-import junit.framework.TestCase.assertFalse
-import junit.framework.TestCase.assertTrue
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
-import org.junit.After
-import org.junit.Before
-import org.junit.Rule
-import org.junit.Test
+import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.RegisterExtension
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.data.DataSource
 import org.kiwix.kiwixmobile.core.entity.LibkiwixBook
@@ -56,7 +56,7 @@ import org.kiwix.sharedFunctions.MainDispatcherRule
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class ZimHostViewModelTest {
-  @Rule
+  @RegisterExtension
   @JvmField
   val mainDispatcherRule = MainDispatcherRule()
 
@@ -78,7 +78,7 @@ class ZimHostViewModelTest {
 
   private lateinit var viewModel: ZimHostViewModel
 
-  @Before
+  @BeforeEach
   fun setUp() {
     coEvery { dataSource.getLanguageCategorizedBooks() } returns flowOf(
       listOf(book1, book2)
@@ -113,7 +113,7 @@ class ZimHostViewModelTest {
     )
   }
 
-  @After
+  @AfterEach
   fun tearDown() {
     ServerUtils.isServerStarted = false
   }
@@ -126,12 +126,11 @@ class ZimHostViewModelTest {
     viewModel.loadBooks()
     advanceUntilIdle()
 
-    val books = viewModel.uiState.value.books
-      .filterIsInstance<BookOnDisk>()
-    assertTrue("Expected books list to be non-empty", books.isNotEmpty())
+    val books = viewModel.uiState.value.books.filterIsInstance<BookOnDisk>()
+    assertTrue(books.isNotEmpty(), "Expected books list to be non-empty")
     assertTrue(
-      "Initially all books should be selected when no host IDs",
-      books.all { it.isSelected }
+      books.all { it.isSelected },
+      "Initially all books should be selected when no host IDs"
     )
   }
 
@@ -153,8 +152,7 @@ class ZimHostViewModelTest {
     viewModel.loadBooks()
     advanceUntilIdle()
 
-    val books = viewModel.uiState.value.books
-      .filterIsInstance<BookOnDisk>()
+    val books = viewModel.uiState.value.books.filterIsInstance<BookOnDisk>()
     assertTrue(books.find { it.book.id == "id1" }!!.isSelected)
     assertFalse(books.find { it.book.id == "id2" }!!.isSelected)
   }
@@ -172,8 +170,7 @@ class ZimHostViewModelTest {
     viewModel.loadBooks()
     advanceUntilIdle()
 
-    val books = viewModel.uiState.value.books
-      .filterIsInstance<BookOnDisk>()
+    val books = viewModel.uiState.value.books.filterIsInstance<BookOnDisk>()
     assertTrue(books.find { it.book.title == "Kotlin" }!!.isSelected)
   }
 
@@ -188,7 +185,7 @@ class ZimHostViewModelTest {
     advanceUntilIdle()
 
     val books = viewModel.uiState.value.books
-    assertEquals("Branded app should have only one book", 1, books.size)
+    assertEquals(1, books.size, "Branded app should have only one book")
     assertTrue((books[0] as BookOnDisk).isSelected)
   }
 
@@ -376,18 +373,14 @@ class ZimHostViewModelTest {
     viewModel.loadBooks()
     advanceUntilIdle()
 
-    val initialBook = viewModel.uiState.value.books
-      .filterIsInstance<BookOnDisk>()
-      .first()
-    assertFalse("Initially book should be unselected", initialBook.isSelected)
+    val initialBook = viewModel.uiState.value.books.filterIsInstance<BookOnDisk>().first()
+    assertFalse(initialBook.isSelected, "Initially book should be unselected")
 
     viewModel.onBookSelected(book)
     advanceUntilIdle()
 
-    val updatedBook = viewModel.uiState.value.books
-      .filterIsInstance<BookOnDisk>()
-      .first()
-    assertTrue("Book should be selected after toggle", updatedBook.isSelected)
+    val updatedBook = viewModel.uiState.value.books.filterIsInstance<BookOnDisk>().first()
+    assertTrue(updatedBook.isSelected, "Book should be selected after toggle")
   }
 
   @Test
@@ -507,7 +500,7 @@ class ZimHostViewModelTest {
       advanceUntilIdle()
 
       val event = awaitItem() as Event.StartServer
-      assertFalse("Restart should be false", event.restart)
+      assertFalse(event.restart, "Restart should be false")
       cancelAndIgnoreRemainingEvents()
     }
   }
