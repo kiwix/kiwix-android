@@ -30,11 +30,11 @@ data class SaveLanguagesAndFinish(
   private val lifecycleScope: CoroutineScope
 ) : SideEffect<Unit> {
   override fun invokeWith(activity: AppCompatActivity) {
+    activity.onBackPressedDispatcher.onBackPressed()
     lifecycleScope.launch {
       runCatching {
         val languageCodes = languages.joinToString(",") { it.languageCode }
         kiwixDataStore.setSelectedOnlineContentLanguage(languageCodes)
-        activity.onBackPressedDispatcher.onBackPressed()
       }.onFailure {
         it.printStackTrace()
       }
