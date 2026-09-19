@@ -30,82 +30,142 @@ sealed class State {
   data class Content(
     val items: List<Language>,
     val filter: String = "",
+    val selectedLanguageOrder: List<String> =
+      items.filter { it.active && it.languageCode.isNotEmpty() }.map { it.languageCode },
     val viewItems: List<LanguageListItem> =
       createViewList(
         items,
-        filter
+        filter,
+        selectedLanguageOrder
       )
   ) : State() {
     fun select(languageItem: LanguageItem): Content {
-      val selectedId = languageItem.id
-      val isAllLanguages = selectedId == 0L
+      val target = items.firstOrNull { it.id == languageItem.language.id } ?: languageItem.language
+      val isCurrentlyActive = target.active
+      val targetCode = target.languageCode
       val updatedItems = items.map { item ->
-        when {
-          // Selecting the "All Languages" item
-          isAllLanguages -> {
-            val shouldBeActive = item.id == 0L
-            if (item.active == shouldBeActive) {
-              item
-            } else {
-              item.copy(active = shouldBeActive)
-            }
-          }
-          // Toggling a specific language
-          item.id == selectedId -> item.copy(active = !item.active)
-          // Deselect "All Languages" when a specific language is selected
-          item.id == 0L -> if (item.active) item.copy(active = false) else item
-          else -> item
+        if (item.id == target.id) {
+          item.copy(active = !isCurrentlyActive)
+        } else {
+          item
         }
+      }
+      val updatedOrder = if (!isCurrentlyActive) {
+        if (targetCode.isNotEmpty() && targetCode !in selectedLanguageOrder) {
+          selectedLanguageOrder + targetCode
+        } else {
+          selectedLanguageOrder
+        }
+      } else {
+        selectedLanguageOrder.filter { it != targetCode }
       }
       return Content(
         items = updatedItems,
-        filter = filter
+        filter = filter,
+        selectedLanguageOrder = updatedOrder
+      )
+    }
+
+    fun moveUp(languageItem: LanguageItem): Content {
+      val code = languageItem.language.languageCode
+      val index = selectedLanguageOrder.indexOf(code)
+      if (index <= 0) return this
+      val mutableOrder = selectedLanguageOrder.toMutableList()
+      val temp = mutableOrder[index]
+      mutableOrder[index] = mutableOrder[index - 1]
+      mutableOrder[index - 1] = temp
+      return Content(
+        items = items,
+        filter = filter,
+        selectedLanguageOrder = mutableOrder
+      )
+    }
+
+    fun moveDown(languageItem: LanguageItem): Content {
+      val code = languageItem.language.languageCode
+      val index = selectedLanguageOrder.indexOf(code)
+      if (index < 0 || index >= selectedLanguageOrder.size - 1) return this
+      val mutableOrder = selectedLanguageOrder.toMutableList()
+      val temp = mutableOrder[index]
+      mutableOrder[index] = mutableOrder[index + 1]
+      mutableOrder[index + 1] = temp
+      return Content(
+        items = items,
+        filter = filter,
+        selectedLanguageOrder = mutableOrder
+      )
+    }
+
+    fun reorder(fromIndex: Int, toIndex: Int): Content {
+      if (fromIndex !in selectedLanguageOrder.indices || toIndex !in selectedLanguageOrder.indices) {
+        return this
+      }
+      val mutableOrder = selectedLanguageOrder.toMutableList()
+      val item = mutableOrder.removeAt(fromIndex)
+      mutableOrder.add(toIndex, item)
+      return Content(
+        items = items,
+        filter = filter,
+        selectedLanguageOrder = mutableOrder
       )
     }
 
     fun updateFilter(filter: String) =
-      Content(items, filter)
+      Content(items, filter, selectedLanguageOrder = selectedLanguageOrder)
 
     companion object {
       internal fun createViewList(
         items: List<Language>,
-        filter: String
-      ) = activeItems(items, filter) +
-        otherItems(items, filter)
+        filter: String,
+        selectedLanguageOrder: List<String>
+      ): List<LanguageListItem> =
+        activeItems(items, filter, selectedLanguageOrder) + otherItems(items, filter)
 
       private fun activeItems(
         items: List<Language>,
-        filter: String
-      ) =
-        createLanguageSection(
-          items,
-          filter,
-          Language::active,
-          HeaderItem.SELECTED
-        )
+        filter: String,
+        selectedLanguageOrder: List<String>
+      ): List<LanguageListItem> {
+        val activeLanguages = items.filter { it.active }
+        val activeMap = activeLanguages.associateBy { it.languageCode }
+        val orderedActive = selectedLanguageOrder.mapNotNull { activeMap[it] } +
+          activeLanguages.filter { it.languageCode !in selectedLanguageOrder }
+        val isSearching = filter.isNotEmpty()
+        val filtered = orderedActive.filter { !isSearching || it.matches(filter) }
+        return if (filtered.isNotEmpty()) {
+          listOf(HeaderItem(HeaderItem.SELECTED)) + filtered.map { language ->
+            val unfilteredIndex = orderedActive.indexOf(language)
+            LanguageItem(
+              language = language,
+              isSelectedSection = true,
+              rank = unfilteredIndex + 1,
+              canMoveUp = !isSearching && unfilteredIndex > 0,
+              canMoveDown = !isSearching && unfilteredIndex < orderedActive.size - 1
+            )
+          }
+        } else {
+          emptyList()
+        }
+      }
 
       private fun otherItems(
         items: List<Language>,
         filter: String
-      ) =
-        createLanguageSection(
-          items,
-          filter,
-          { !it.active },
-          HeaderItem.OTHER
-        )
-
-      private fun createLanguageSection(
-        items: List<Language>,
-        filter: String,
-        filterCondition: (Language) -> Boolean,
-        headerId: Long
-      ) = items
-        .filter(filterCondition)
-        .filter { filter.isEmpty() or it.matches(filter) }
-        .takeIf { it.isNotEmpty() }
-        ?.let { listOf(HeaderItem(headerId)) + it.map { language -> LanguageItem(language) } }
-        .orEmpty()
+      ): List<LanguageListItem> {
+        val filtered = items
+          .filter { !it.active }
+          .filter { filter.isEmpty() || it.matches(filter) }
+        return if (filtered.isNotEmpty()) {
+          listOf(HeaderItem(HeaderItem.OTHER)) + filtered.map { language ->
+            LanguageItem(
+              language = language,
+              isSelectedSection = false
+            )
+          }
+        } else {
+          emptyList()
+        }
+      }
     }
   }
 }
