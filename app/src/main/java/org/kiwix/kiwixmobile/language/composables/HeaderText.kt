@@ -33,7 +33,7 @@ const val LANGUAGE_HEADER_TESTING_TAG = "languageHeaderTestingTag"
 
 @Composable
 fun HeaderText(
-  modifier: Modifier = Modifier,
+  modifier: Modifier,
   item: LanguageListItem.HeaderItem
 ) {
   val title = stringResource(
@@ -42,7 +42,7 @@ fun HeaderText(
     } else {
       R.string.other_languages
     }
-  ).trimEnd(':', ' ', '：')
+  )
 
   Text(
     text = title,

@@ -65,6 +65,12 @@ class LanguageRobot : BaseRobot() {
       composeTestRule
         .onNodeWithTag(NAVIGATION_ICON_TESTING_TAG)
         .performClick()
+      composeTestRule.waitForIdle()
+      if (composeTestRule.onAllNodesWithTag(NAVIGATION_ICON_TESTING_TAG).fetchSemanticsNodes().isNotEmpty()) {
+        composeTestRule
+          .onNodeWithTag(NAVIGATION_ICON_TESTING_TAG)
+          .performClick()
+      }
     }
     composeTestRule.waitForIdle()
   }

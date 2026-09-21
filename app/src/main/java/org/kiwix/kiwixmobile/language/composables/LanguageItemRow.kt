@@ -46,6 +46,7 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.CustomAccessibilityAction
 import androidx.compose.ui.semantics.contentDescription
@@ -66,7 +67,7 @@ const val MOVE_DOWN_TESTING_TAG = "moveDownTestingTag"
 @Composable
 fun LanguageItemRow(
   context: Context,
-  modifier: Modifier = Modifier,
+  modifier: Modifier,
   item: LanguageItem,
   isFirst: Boolean = false,
   isLast: Boolean = false,
@@ -105,8 +106,9 @@ fun LanguageItemRow(
         }
         LanguageTitles(language, context, Modifier.weight(1f))
         Text(
-          text = stringResource(
-            R.string.books_count,
+          text = pluralStringResource(
+            R.plurals.book_count,
+            language.occurencesOfLanguage,
             language.occurencesOfLanguage
           ),
           modifier = Modifier.padding(start = ComposeDimens.EIGHT_DP),
@@ -125,18 +127,21 @@ fun LanguageItemRow(
   }
 }
 
-private fun itemShape(isFirst: Boolean, isLast: Boolean): Shape = when {
-  isFirst && isLast -> RoundedCornerShape(ComposeDimens.MEDIUM_ROUND_SHAPE_SIZE)
-  isFirst -> RoundedCornerShape(
-    topStart = ComposeDimens.MEDIUM_ROUND_SHAPE_SIZE,
-    topEnd = ComposeDimens.MEDIUM_ROUND_SHAPE_SIZE
-  )
-  isLast -> RoundedCornerShape(
-    bottomStart = ComposeDimens.MEDIUM_ROUND_SHAPE_SIZE,
-    bottomEnd = ComposeDimens.MEDIUM_ROUND_SHAPE_SIZE
-  )
-  else -> RectangleShape
-}
+private fun itemShape(isFirst: Boolean, isLast: Boolean): Shape =
+  when {
+    isFirst && isLast -> RoundedCornerShape(ComposeDimens.MEDIUM_ROUND_SHAPE_SIZE)
+    isFirst ->
+      RoundedCornerShape(
+        topStart = ComposeDimens.MEDIUM_ROUND_SHAPE_SIZE,
+        topEnd = ComposeDimens.MEDIUM_ROUND_SHAPE_SIZE
+      )
+    isLast ->
+      RoundedCornerShape(
+        bottomStart = ComposeDimens.MEDIUM_ROUND_SHAPE_SIZE,
+        bottomEnd = ComposeDimens.MEDIUM_ROUND_SHAPE_SIZE
+      )
+    else -> RectangleShape
+  }
 
 @Composable
 private fun SelectedLanguageLeading(
@@ -148,6 +153,9 @@ private fun SelectedLanguageLeading(
   val currentOnMoveDown by rememberUpdatedState(onMoveDown)
   val canMoveUp = item.canMoveUp
   val canMoveDown = item.canMoveDown
+  val currentCanMoveUp by rememberUpdatedState(canMoveUp)
+  val currentCanMoveDown by rememberUpdatedState(canMoveDown)
+  val currentItem by rememberUpdatedState(item)
   val thresholdPx = with(LocalDensity.current) { ComposeDimens.TWENTY_FOUR_DP.toPx() }
   var dragAccumulator by remember { mutableFloatStateOf(0f) }
 
@@ -168,18 +176,19 @@ private fun SelectedLanguageLeading(
         onMoveUp = { currentOnMoveUp(item) },
         onMoveDown = { currentOnMoveDown(item) }
       )
-      .pointerInput(item.id, canMoveUp, canMoveDown) {
+      .pointerInput(item.id) {
         detectVerticalDragGestures(
+          onDragStart = { dragAccumulator = 0f },
           onDragEnd = { dragAccumulator = 0f },
           onDragCancel = { dragAccumulator = 0f },
           onVerticalDrag = { change, dragAmount ->
             change.consume()
             dragAccumulator += dragAmount
             if (dragAccumulator <= -thresholdPx) {
-              if (canMoveUp) currentOnMoveUp(item)
+              if (currentCanMoveUp) currentOnMoveUp(currentItem)
               dragAccumulator = 0f
             } else if (dragAccumulator >= thresholdPx) {
-              if (canMoveDown) currentOnMoveDown(item)
+              if (currentCanMoveDown) currentOnMoveDown(currentItem)
               dragAccumulator = 0f
             }
           }

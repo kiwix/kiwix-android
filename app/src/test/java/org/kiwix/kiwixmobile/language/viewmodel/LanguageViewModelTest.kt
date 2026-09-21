@@ -141,7 +141,9 @@ class LanguageViewModelTest {
         )
       val english = Language("eng", active = false, occurrencesOfLanguage = 50, id = 1)
       val french = Language("fra", active = false, occurrencesOfLanguage = 30, id = 2)
-      coEvery { observeLanguages(any(), any()) } returns ObserveLanguages.Result.Success(listOf(allLanguages, english, french))
+      coEvery {
+        observeLanguages(any(), any(), any())
+      } returns ObserveLanguages.Result.Success(listOf(allLanguages, english, french))
 
       createViewModel()
       advanceUntilIdle()
@@ -157,7 +159,7 @@ class LanguageViewModelTest {
       val blankLanguage = createLanguage(code = "")
       val english = createLanguage()
       coEvery {
-        observeLanguages(any(), any())
+        observeLanguages(any(), any(), any())
       } returns ObserveLanguages.Result.Success(listOf(blankLanguage, english))
 
       createViewModel()
@@ -416,7 +418,9 @@ class LanguageViewModelTest {
     inner class ActionMoveUp {
       @Test
       fun whenStateContent_movesLanguageUp() = runTest {
-        coEvery { observeLanguages(any(), any()) } returns ObserveLanguages.Result.Success(emptyList())
+        coEvery {
+          observeLanguages(any(), any(), any())
+        } returns ObserveLanguages.Result.Success(emptyList())
         createViewModel()
         advanceUntilIdle()
         val lang1 = createLanguage(code = "deu", active = true, id = 1)
@@ -440,7 +444,9 @@ class LanguageViewModelTest {
     inner class ActionMoveDown {
       @Test
       fun whenStateContent_movesLanguageDown() = runTest {
-        coEvery { observeLanguages(any(), any()) } returns ObserveLanguages.Result.Success(emptyList())
+        coEvery {
+          observeLanguages(any(), any(), any())
+        } returns ObserveLanguages.Result.Success(emptyList())
         createViewModel()
         advanceUntilIdle()
         val lang1 = createLanguage(code = "deu", active = true, id = 1)
@@ -561,7 +567,9 @@ class LanguageViewModelTest {
 
       @Test
       fun whenStateContent_savesLanguagesInSelectedOrder() = runTest {
-        coEvery { observeLanguages(any(), any()) } returns ObserveLanguages.Result.Success(emptyList())
+        coEvery {
+          observeLanguages(any(), any(), any())
+        } returns ObserveLanguages.Result.Success(emptyList())
         createViewModel()
         advanceUntilIdle()
         val german = createLanguage(code = "deu", active = true, id = 1)

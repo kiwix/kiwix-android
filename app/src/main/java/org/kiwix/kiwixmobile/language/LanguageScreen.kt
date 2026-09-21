@@ -148,7 +148,7 @@ internal fun LanguageScreenRoute(
       navigationIcon = {
         NavigationIcon(
           iconItem = IconItem.Vector(Icons.AutoMirrored.Filled.ArrowBack),
-          onClick = saveAndNavigateBack
+          onClick = handleBack
         )
       }
     )
