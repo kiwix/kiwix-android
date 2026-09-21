@@ -38,6 +38,7 @@ import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.zim_manager.Category
 import org.kiwix.kiwixmobile.core.zim_manager.ConnectivityObserver
+import org.kiwix.kiwixmobile.core.zim_manager.NetworkState
 import org.kiwix.kiwixmobile.nav.destination.library.online.helper.ObserveCategories
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.CategoryListItem.CategoryItem
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.State.Saving
@@ -92,7 +93,8 @@ open class CategoryViewModel @Inject constructor(
     when (
       val result = observeCategories(
         errorNoCategory = context.getString(string.no_category_available),
-        errorNoNetwork = context.getString(R.string.no_network_connection)
+        errorNoNetwork = context.getString(R.string.no_network_connection),
+        isOnline = connectivityObserver.networkStates.value == NetworkState.CONNECTED
       )
     ) {
       is ObserveCategories.Result.Success ->

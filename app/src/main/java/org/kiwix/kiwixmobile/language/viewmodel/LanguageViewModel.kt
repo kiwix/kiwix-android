@@ -38,6 +38,7 @@ import org.kiwix.kiwixmobile.core.utils.LocaleHelper
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.zim_manager.ConnectivityObserver
 import org.kiwix.kiwixmobile.core.zim_manager.Language
+import org.kiwix.kiwixmobile.core.zim_manager.NetworkState
 import org.kiwix.kiwixmobile.language.composables.LanguageListItem.LanguageItem
 import org.kiwix.kiwixmobile.language.helper.ObserveLanguages
 import org.kiwix.kiwixmobile.language.viewmodel.Action.Cancel
@@ -83,7 +84,8 @@ open class LanguageViewModel @Inject constructor(
     when (
       val result = observeLanguages(
         errorNoLanguage = context.getString(R.string.no_language_available),
-        errorNoNetwork = context.getString(R.string.no_network_connection)
+        errorNoNetwork = context.getString(R.string.no_network_connection),
+        isOnline = connectivityObserver.networkStates.value == NetworkState.CONNECTED
       )
     ) {
       is ObserveLanguages.Result.Success -> {
@@ -169,7 +171,7 @@ open class LanguageViewModel @Inject constructor(
   }
 
   private fun updateLanguages(action: UpdateLanguages, currentState: State): State =
-    if (currentState is Loading) Content(action.languages) else currentState
+    if (currentState === Loading) Content(action.languages) else currentState
 
   private fun filter(action: Filter, currentState: State): State =
     if (currentState is Content) filterContent(action.filter, currentState) else currentState

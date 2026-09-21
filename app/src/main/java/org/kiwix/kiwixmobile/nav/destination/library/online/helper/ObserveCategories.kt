@@ -21,15 +21,12 @@ package org.kiwix.kiwixmobile.nav.destination.library.online.helper
 import kotlinx.coroutines.flow.first
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.zim_manager.Category
-import org.kiwix.kiwixmobile.core.zim_manager.ConnectivityObserver
-import org.kiwix.kiwixmobile.core.zim_manager.NetworkState
 import org.kiwix.kiwixmobile.nav.destination.library.online.repository.CategoryRepository
 import javax.inject.Inject
 
 class ObserveCategories @Inject constructor(
   private val repository: CategoryRepository,
-  private val kiwixDataStore: KiwixDataStore,
-  private val connectivityObserver: ConnectivityObserver
+  private val kiwixDataStore: KiwixDataStore
 ) {
   sealed class Result {
     data class Success(val categories: List<Category>) : Result()
@@ -40,11 +37,10 @@ class ObserveCategories @Inject constructor(
 
   suspend operator fun invoke(
     errorNoCategory: String,
-    errorNoNetwork: String
+    errorNoNetwork: String,
+    isOnline: Boolean
   ): Result {
     val cachedCategoryList = kiwixDataStore.cachedOnlineCategoryList.first()
-    val isOnline =
-      connectivityObserver.networkStates.value == NetworkState.CONNECTED
 
     return when {
       hasFetched && !cachedCategoryList.isNullOrEmpty() -> {
