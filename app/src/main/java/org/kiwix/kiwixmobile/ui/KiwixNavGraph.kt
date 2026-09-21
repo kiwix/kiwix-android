@@ -127,8 +127,9 @@ fun KiwixNavGraph(
 
     composable(KiwixDestination.Downloads.route) {
       val activity = LocalActivity.current as KiwixMainActivity
-      val onlineLibraryViewModel: OnlineLibraryViewModel = hiltViewModel()
-      val categoryViewModel: CategoryViewModel = hiltViewModel()
+      val onlineLibraryViewModel: OnlineLibraryViewModel =
+        hiltViewModel(viewModelStoreOwner = activity)
+      val categoryViewModel: CategoryViewModel = hiltViewModel(viewModelStoreOwner = activity)
       OnlineLibraryRoute(
         onlineLibraryViewModel = onlineLibraryViewModel,
         categoryViewModel = categoryViewModel,

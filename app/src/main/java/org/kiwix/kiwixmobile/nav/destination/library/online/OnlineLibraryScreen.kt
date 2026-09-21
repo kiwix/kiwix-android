@@ -112,6 +112,7 @@ import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.OnlineLibr
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.OnlineLibraryViewModel.OnlineLibraryUiState
 import org.kiwix.kiwixmobile.zimManager.libraryView.LibraryListItem
 import org.kiwix.kiwixmobile.zimManager.libraryView.LibraryListItem.DividerItem
+import kotlin.time.Duration.Companion.milliseconds
 
 const val ONLINE_LIBRARY_SEARCH_VIEW_TESTING_TAG = "onlineLibrarySearchViewTestingTag"
 const val ONLINE_LIBRARY_SEARCH_VIEW_CLOSE_BUTTON_TESTING_TAG =
@@ -322,9 +323,9 @@ private fun OnlineLibraryList(
       val lastVisibleBookIndex = visibleBookIndexes.maxOrNull() ?: -1
       val totalBookCount = list.count { it is LibraryListItem.BookItem }
 
-      Pair(lastVisibleBookIndex, totalBookCount)
+      lastVisibleBookIndex to totalBookCount
     }.distinctUntilChanged()
-      .debounce(LOAD_MORE_DELAY)
+      .debounce(LOAD_MORE_DELAY.milliseconds)
       .collect { (lastVisibleBookIndex, totalBookCount) ->
         if (lastVisibleBookIndex >= totalBookCount.minus(FIVE) && !state.isLoadingMore) {
           onlineLibraryViewModel.handleLoadMore(totalBookCount)
