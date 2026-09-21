@@ -49,7 +49,10 @@ import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.compose.currentStateAsState
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.extensions.CollectSideEffectWithActivity
 import org.kiwix.kiwixmobile.core.page.SEARCH_ICON_TESTING_TAG
@@ -223,11 +226,15 @@ fun ShowErrorMessage(errorMessage: String) {
 
 @Composable
 fun LoadingScreen() {
+  val lifecycleOwner = LocalLifecycleOwner.current
+  val lifecycleState by lifecycleOwner.lifecycle.currentStateAsState()
   Box(
     modifier = Modifier.fillMaxSize(),
     contentAlignment = Alignment.Center
   ) {
-    ContentLoadingProgressBar()
+    if (lifecycleState.isAtLeast(Lifecycle.State.RESUMED)) {
+      ContentLoadingProgressBar()
+    }
   }
 }
 
