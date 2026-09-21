@@ -34,11 +34,11 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.SideEffect
-import org.kiwix.kiwixmobile.core.extensions.registerReceiver
 import org.kiwix.kiwixmobile.core.utils.LocaleHelper
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
-import org.kiwix.kiwixmobile.core.zim_manager.ConnectivityBroadcastReceiver
+import org.kiwix.kiwixmobile.core.zim_manager.ConnectivityObserver
 import org.kiwix.kiwixmobile.core.zim_manager.Language
+import org.kiwix.kiwixmobile.core.zim_manager.NetworkState
 import org.kiwix.kiwixmobile.language.composables.LanguageListItem.LanguageItem
 import org.kiwix.kiwixmobile.language.helper.ObserveLanguages
 import org.kiwix.kiwixmobile.language.viewmodel.Action.Cancel
@@ -57,7 +57,7 @@ open class LanguageViewModel @Inject constructor(
   private val context: Application,
   private val kiwixDataStore: KiwixDataStore,
   private val observeLanguages: ObserveLanguages,
-  private val connectivityBroadcastReceiver: ConnectivityBroadcastReceiver
+  private val connectivityObserver: ConnectivityObserver
 ) : ViewModel() {
   val state = MutableStateFlow<State>(Loading)
   val actions = MutableSharedFlow<Action>(extraBufferCapacity = Int.MAX_VALUE)
@@ -65,7 +65,7 @@ open class LanguageViewModel @Inject constructor(
   private val coroutineJobs = mutableListOf<Job>()
 
   init {
-    context.registerReceiver(connectivityBroadcastReceiver)
+    connectivityObserver.register()
     coroutineJobs.apply {
       add(observeActions())
       add(observeLanguages())
@@ -84,7 +84,8 @@ open class LanguageViewModel @Inject constructor(
     when (
       val result = observeLanguages(
         errorNoLanguage = context.getString(R.string.no_language_available),
-        errorNoNetwork = context.getString(R.string.no_network_connection)
+        errorNoNetwork = context.getString(R.string.no_network_connection),
+        isOnline = connectivityObserver.networkStates.value == NetworkState.CONNECTED
       )
     ) {
       is ObserveLanguages.Result.Success -> {
@@ -142,7 +143,7 @@ open class LanguageViewModel @Inject constructor(
       it.cancel()
     }
     coroutineJobs.clear()
-    context.unregisterReceiver(connectivityBroadcastReceiver)
+    connectivityObserver.unregister()
     super.onCleared()
   }
 
@@ -170,7 +171,7 @@ open class LanguageViewModel @Inject constructor(
   }
 
   private fun updateLanguages(action: UpdateLanguages, currentState: State): State =
-    if (currentState is Loading) Content(action.languages) else currentState
+    if (currentState === Loading) Content(action.languages) else currentState
 
   private fun filter(action: Filter, currentState: State): State =
     if (currentState is Content) filterContent(action.filter, currentState) else currentState

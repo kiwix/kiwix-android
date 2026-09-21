@@ -20,16 +20,13 @@ package org.kiwix.kiwixmobile.language.helper
 
 import kotlinx.coroutines.flow.first
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
-import org.kiwix.kiwixmobile.core.zim_manager.ConnectivityBroadcastReceiver
 import org.kiwix.kiwixmobile.core.zim_manager.Language
-import org.kiwix.kiwixmobile.core.zim_manager.NetworkState
 import org.kiwix.kiwixmobile.language.repository.LanguageRepository
 import javax.inject.Inject
 
 class ObserveLanguages @Inject constructor(
   private val repository: LanguageRepository,
-  private val kiwixDataStore: KiwixDataStore,
-  private val connectivityBroadcastReceiver: ConnectivityBroadcastReceiver
+  private val kiwixDataStore: KiwixDataStore
 ) {
   sealed class Result {
     data class Success(val languages: List<Language>) : Result()
@@ -40,11 +37,10 @@ class ObserveLanguages @Inject constructor(
 
   suspend operator fun invoke(
     errorNoLanguage: String,
-    errorNoNetwork: String
+    errorNoNetwork: String,
+    isOnline: Boolean
   ): Result {
     val cachedLanguageList = kiwixDataStore.cachedLanguageList.first()
-    val isOnline =
-      connectivityBroadcastReceiver.networkStates.value == NetworkState.CONNECTED
 
     return when {
       hasFetched && !cachedLanguageList.isNullOrEmpty() -> {

@@ -24,32 +24,26 @@ import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
-import org.kiwix.kiwixmobile.core.zim_manager.ConnectivityBroadcastReceiver
 import org.kiwix.kiwixmobile.core.zim_manager.Language
-import org.kiwix.kiwixmobile.core.zim_manager.NetworkState
 import org.kiwix.kiwixmobile.language.repository.LanguageRepository
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class ObserveLanguagesTest {
   private val repository: LanguageRepository = mockk()
   private val kiwixDataStore: KiwixDataStore = mockk()
-  private val connectivityBroadcastReceiver: ConnectivityBroadcastReceiver = mockk()
-  private val networkStates = MutableStateFlow(NetworkState.CONNECTED)
 
   private lateinit var observeLanguages: ObserveLanguages
 
   @BeforeEach
   fun setup() {
     clearAllMocks()
-    every { connectivityBroadcastReceiver.networkStates } returns networkStates
-    observeLanguages = ObserveLanguages(repository, kiwixDataStore, connectivityBroadcastReceiver)
+    observeLanguages = ObserveLanguages(repository, kiwixDataStore)
   }
 
   @Test
@@ -58,7 +52,7 @@ class ObserveLanguagesTest {
     val cachedLanguages = listOf(Language("eng", true, 10, 1L))
     every { kiwixDataStore.cachedLanguageList } returns flowOf(cachedLanguages)
 
-    val result = observeLanguages("Error No Language", "Error No Network")
+    val result = observeLanguages("Error No Language", "Error No Network", isOnline = true)
 
     assertThat(result).isInstanceOf(ObserveLanguages.Result.Success::class.java)
     assertThat((result as ObserveLanguages.Result.Success).languages).isEqualTo(cachedLanguages)
@@ -66,29 +60,28 @@ class ObserveLanguagesTest {
   }
 
   @Test
-  fun `when online and repository returns languages saves to cache and returns success`() = runTest {
-    networkStates.value = NetworkState.CONNECTED
-    every { kiwixDataStore.cachedLanguageList } returns flowOf(null)
-    val fetchedLanguages = listOf(Language("eng", true, 10, 1L))
-    every { repository.fetchLanguages() } returns flowOf(fetchedLanguages)
-    coEvery { kiwixDataStore.saveLanguageList(any()) } returns Unit
+  fun `when online and repository returns languages saves to cache and returns success`() =
+    runTest {
+      every { kiwixDataStore.cachedLanguageList } returns flowOf(null)
+      val fetchedLanguages = listOf(Language("eng", true, 10, 1L))
+      every { repository.fetchLanguages() } returns flowOf(fetchedLanguages)
+      coEvery { kiwixDataStore.saveLanguageList(any()) } returns Unit
 
-    val result = observeLanguages("Error No Language", "Error No Network")
+      val result = observeLanguages("Error No Language", "Error No Network", isOnline = true)
 
-    assertThat(result).isInstanceOf(ObserveLanguages.Result.Success::class.java)
-    assertThat((result as ObserveLanguages.Result.Success).languages).isEqualTo(fetchedLanguages)
-    assertThat(observeLanguages.hasFetched).isTrue()
-    coVerify(exactly = 1) { kiwixDataStore.saveLanguageList(fetchedLanguages) }
-  }
+      assertThat(result).isInstanceOf(ObserveLanguages.Result.Success::class.java)
+      assertThat((result as ObserveLanguages.Result.Success).languages).isEqualTo(fetchedLanguages)
+      assertThat(observeLanguages.hasFetched).isTrue()
+      coVerify(exactly = 1) { kiwixDataStore.saveLanguageList(fetchedLanguages) }
+    }
 
   @Test
   fun `when online and repository returns empty falls back to cache`() = runTest {
-    networkStates.value = NetworkState.CONNECTED
     val cachedLanguages = listOf(Language("eng", true, 10, 1L))
     every { kiwixDataStore.cachedLanguageList } returns flowOf(cachedLanguages)
     every { repository.fetchLanguages() } returns flowOf(emptyList())
 
-    val result = observeLanguages("Error No Language", "Error No Network")
+    val result = observeLanguages("Error No Language", "Error No Network", isOnline = true)
 
     assertThat(result).isInstanceOf(ObserveLanguages.Result.Success::class.java)
     assertThat((result as ObserveLanguages.Result.Success).languages).isEqualTo(cachedLanguages)
@@ -96,11 +89,10 @@ class ObserveLanguagesTest {
 
   @Test
   fun `when online and repository returns empty and cache is empty returns error`() = runTest {
-    networkStates.value = NetworkState.CONNECTED
     every { kiwixDataStore.cachedLanguageList } returns flowOf(emptyList())
     every { repository.fetchLanguages() } returns flowOf(emptyList())
 
-    val result = observeLanguages("Error No Language", "Error No Network")
+    val result = observeLanguages("Error No Language", "Error No Network", isOnline = true)
 
     assertThat(result).isInstanceOf(ObserveLanguages.Result.Error::class.java)
     assertThat((result as ObserveLanguages.Result.Error).message).isEqualTo("Error No Language")
@@ -108,11 +100,10 @@ class ObserveLanguagesTest {
 
   @Test
   fun `when offline and cache is not empty returns cache success`() = runTest {
-    networkStates.value = NetworkState.NOT_CONNECTED
     val cachedLanguages = listOf(Language("eng", true, 10, 1L))
     every { kiwixDataStore.cachedLanguageList } returns flowOf(cachedLanguages)
 
-    val result = observeLanguages("Error No Language", "Error No Network")
+    val result = observeLanguages("Error No Language", "Error No Network", isOnline = false)
 
     assertThat(result).isInstanceOf(ObserveLanguages.Result.Success::class.java)
     assertThat((result as ObserveLanguages.Result.Success).languages).isEqualTo(cachedLanguages)
@@ -121,10 +112,9 @@ class ObserveLanguagesTest {
 
   @Test
   fun `when offline and cache is empty returns error`() = runTest {
-    networkStates.value = NetworkState.NOT_CONNECTED
     every { kiwixDataStore.cachedLanguageList } returns flowOf(emptyList())
 
-    val result = observeLanguages("Error No Language", "Error No Network")
+    val result = observeLanguages("Error No Language", "Error No Network", isOnline = false)
 
     assertThat(result).isInstanceOf(ObserveLanguages.Result.Error::class.java)
     assertThat((result as ObserveLanguages.Result.Error).message).isEqualTo("Error No Network")

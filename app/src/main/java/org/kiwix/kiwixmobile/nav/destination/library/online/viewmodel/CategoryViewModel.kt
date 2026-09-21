@@ -35,10 +35,10 @@ import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.R.string
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.SideEffect
-import org.kiwix.kiwixmobile.core.extensions.registerReceiver
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.zim_manager.Category
-import org.kiwix.kiwixmobile.core.zim_manager.ConnectivityBroadcastReceiver
+import org.kiwix.kiwixmobile.core.zim_manager.ConnectivityObserver
+import org.kiwix.kiwixmobile.core.zim_manager.NetworkState
 import org.kiwix.kiwixmobile.nav.destination.library.online.helper.ObserveCategories
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.CategoryListItem.CategoryItem
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.State.Saving
@@ -49,7 +49,7 @@ open class CategoryViewModel @Inject constructor(
   private val context: Application,
   private val kiwixDataStore: KiwixDataStore,
   private val observeCategories: ObserveCategories,
-  private val connectivityBroadcastReceiver: ConnectivityBroadcastReceiver
+  private val connectivityObserver: ConnectivityObserver
 ) : ViewModel() {
   sealed class Action {
     data class UpdateCategory(val categories: List<Category>) : Action()
@@ -74,7 +74,7 @@ open class CategoryViewModel @Inject constructor(
   }
 
   init {
-    context.registerReceiver(connectivityBroadcastReceiver)
+    connectivityObserver.register()
     coroutineJobs.apply {
       add(observeActions())
       add(observeCategories())
@@ -93,7 +93,8 @@ open class CategoryViewModel @Inject constructor(
     when (
       val result = observeCategories(
         errorNoCategory = context.getString(string.no_category_available),
-        errorNoNetwork = context.getString(R.string.no_network_connection)
+        errorNoNetwork = context.getString(R.string.no_network_connection),
+        isOnline = connectivityObserver.networkStates.value == NetworkState.CONNECTED
       )
     ) {
       is ObserveCategories.Result.Success ->
@@ -204,7 +205,7 @@ open class CategoryViewModel @Inject constructor(
       it.cancel()
     }
     coroutineJobs.clear()
-    context.unregisterReceiver(connectivityBroadcastReceiver)
+    connectivityObserver.unregister()
     onDismiss = null
     super.onCleared()
   }

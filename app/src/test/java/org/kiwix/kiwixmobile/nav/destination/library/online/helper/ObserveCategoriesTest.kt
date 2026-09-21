@@ -24,7 +24,6 @@ import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.assertj.core.api.Assertions.assertThat
@@ -32,24 +31,19 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.zim_manager.Category
-import org.kiwix.kiwixmobile.core.zim_manager.ConnectivityBroadcastReceiver
-import org.kiwix.kiwixmobile.core.zim_manager.NetworkState
 import org.kiwix.kiwixmobile.nav.destination.library.online.repository.CategoryRepository
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class ObserveCategoriesTest {
   private val repository: CategoryRepository = mockk()
   private val kiwixDataStore: KiwixDataStore = mockk()
-  private val connectivityBroadcastReceiver: ConnectivityBroadcastReceiver = mockk()
-  private val networkStates = MutableStateFlow(NetworkState.CONNECTED)
 
   private lateinit var observeCategories: ObserveCategories
 
   @BeforeEach
   fun setup() {
     clearAllMocks()
-    every { connectivityBroadcastReceiver.networkStates } returns networkStates
-    observeCategories = ObserveCategories(repository, kiwixDataStore, connectivityBroadcastReceiver)
+    observeCategories = ObserveCategories(repository, kiwixDataStore)
   }
 
   @Test
@@ -58,7 +52,7 @@ class ObserveCategoriesTest {
     val cachedCategories = listOf(Category(1L, true, "Wikipedia"))
     every { kiwixDataStore.cachedOnlineCategoryList } returns flowOf(cachedCategories)
 
-    val result = observeCategories("Error No Category", "Error No Network")
+    val result = observeCategories("Error No Category", "Error No Network", isOnline = true)
 
     assertThat(result).isInstanceOf(ObserveCategories.Result.Success::class.java)
     assertThat((result as ObserveCategories.Result.Success).categories).isEqualTo(cachedCategories)
@@ -66,29 +60,30 @@ class ObserveCategoriesTest {
   }
 
   @Test
-  fun `when online and repository returns categories saves to cache and returns success`() = runTest {
-    networkStates.value = NetworkState.CONNECTED
-    every { kiwixDataStore.cachedOnlineCategoryList } returns flowOf(null)
-    val fetchedCategories = listOf(Category(1L, true, "Wikipedia"))
-    every { repository.fetchCategories() } returns flowOf(fetchedCategories)
-    coEvery { kiwixDataStore.saveOnlineCategoryList(any()) } returns Unit
+  fun `when online and repository returns categories saves to cache and returns success`() =
+    runTest {
+      every { kiwixDataStore.cachedOnlineCategoryList } returns flowOf(null)
+      val fetchedCategories = listOf(Category(1L, true, "Wikipedia"))
+      every { repository.fetchCategories() } returns flowOf(fetchedCategories)
+      coEvery { kiwixDataStore.saveOnlineCategoryList(any()) } returns Unit
 
-    val result = observeCategories("Error No Category", "Error No Network")
+      val result = observeCategories("Error No Category", "Error No Network", isOnline = true)
 
-    assertThat(result).isInstanceOf(ObserveCategories.Result.Success::class.java)
-    assertThat((result as ObserveCategories.Result.Success).categories).isEqualTo(fetchedCategories)
-    assertThat(observeCategories.hasFetched).isTrue()
-    coVerify(exactly = 1) { kiwixDataStore.saveOnlineCategoryList(fetchedCategories) }
-  }
+      assertThat(result).isInstanceOf(ObserveCategories.Result.Success::class.java)
+      assertThat((result as ObserveCategories.Result.Success).categories).isEqualTo(
+        fetchedCategories
+      )
+      assertThat(observeCategories.hasFetched).isTrue()
+      coVerify(exactly = 1) { kiwixDataStore.saveOnlineCategoryList(fetchedCategories) }
+    }
 
   @Test
   fun `when online and repository returns empty falls back to cache`() = runTest {
-    networkStates.value = NetworkState.CONNECTED
     val cachedCategories = listOf(Category(1L, true, "Wikipedia"))
     every { kiwixDataStore.cachedOnlineCategoryList } returns flowOf(cachedCategories)
     every { repository.fetchCategories() } returns flowOf(emptyList())
 
-    val result = observeCategories("Error No Category", "Error No Network")
+    val result = observeCategories("Error No Category", "Error No Network", isOnline = true)
 
     assertThat(result).isInstanceOf(ObserveCategories.Result.Success::class.java)
     assertThat((result as ObserveCategories.Result.Success).categories).isEqualTo(cachedCategories)
@@ -96,11 +91,10 @@ class ObserveCategoriesTest {
 
   @Test
   fun `when online and repository returns empty and cache is empty returns error`() = runTest {
-    networkStates.value = NetworkState.CONNECTED
     every { kiwixDataStore.cachedOnlineCategoryList } returns flowOf(emptyList())
     every { repository.fetchCategories() } returns flowOf(emptyList())
 
-    val result = observeCategories("Error No Category", "Error No Network")
+    val result = observeCategories("Error No Category", "Error No Network", isOnline = true)
 
     assertThat(result).isInstanceOf(ObserveCategories.Result.Error::class.java)
     assertThat((result as ObserveCategories.Result.Error).message).isEqualTo("Error No Category")
@@ -108,11 +102,10 @@ class ObserveCategoriesTest {
 
   @Test
   fun `when offline and cache is not empty returns cache success`() = runTest {
-    networkStates.value = NetworkState.NOT_CONNECTED
     val cachedCategories = listOf(Category(1L, true, "Wikipedia"))
     every { kiwixDataStore.cachedOnlineCategoryList } returns flowOf(cachedCategories)
 
-    val result = observeCategories("Error No Category", "Error No Network")
+    val result = observeCategories("Error No Category", "Error No Network", isOnline = false)
 
     assertThat(result).isInstanceOf(ObserveCategories.Result.Success::class.java)
     assertThat((result as ObserveCategories.Result.Success).categories).isEqualTo(cachedCategories)
@@ -121,10 +114,9 @@ class ObserveCategoriesTest {
 
   @Test
   fun `when offline and cache is empty returns error`() = runTest {
-    networkStates.value = NetworkState.NOT_CONNECTED
     every { kiwixDataStore.cachedOnlineCategoryList } returns flowOf(emptyList())
 
-    val result = observeCategories("Error No Category", "Error No Network")
+    val result = observeCategories("Error No Category", "Error No Network", isOnline = false)
 
     assertThat(result).isInstanceOf(ObserveCategories.Result.Error::class.java)
     assertThat((result as ObserveCategories.Result.Error).message).isEqualTo("Error No Network")

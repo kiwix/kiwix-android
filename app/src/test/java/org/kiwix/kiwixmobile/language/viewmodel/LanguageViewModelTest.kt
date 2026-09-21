@@ -19,8 +19,10 @@
 package org.kiwix.kiwixmobile.language.viewmodel
 
 import android.app.Application
+import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -38,7 +40,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.RegisterExtension
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
-import org.kiwix.kiwixmobile.core.zim_manager.ConnectivityBroadcastReceiver
+import org.kiwix.kiwixmobile.core.zim_manager.ConnectivityObserver
 import org.kiwix.kiwixmobile.core.zim_manager.Language
 import org.kiwix.kiwixmobile.core.zim_manager.NetworkState
 import org.kiwix.kiwixmobile.language.composables.LanguageListItem
@@ -54,7 +56,7 @@ class LanguageViewModelTest {
   private val application: Application = mockk(relaxed = true)
   private val kiwixDataStore: KiwixDataStore = mockk()
   private val observeLanguages: ObserveLanguages = mockk()
-  private val connectivityBroadcastReceiver: ConnectivityBroadcastReceiver = mockk()
+  private val connectivityObserver: ConnectivityObserver = mockk()
   private val networkStates = MutableStateFlow(NetworkState.NOT_CONNECTED)
   private lateinit var languageViewModel: LanguageViewModel
 
@@ -64,7 +66,7 @@ class LanguageViewModelTest {
         application,
         kiwixDataStore,
         observeLanguages,
-        connectivityBroadcastReceiver
+        connectivityObserver
       )
   }
 
@@ -83,20 +85,22 @@ class LanguageViewModelTest {
 
   @BeforeEach
   fun init() {
-    every { connectivityBroadcastReceiver.action } returns "test"
-    every { connectivityBroadcastReceiver.networkStates } returns networkStates
+    every { connectivityObserver.register() } just Runs
+    every { connectivityObserver.unregister() } just Runs
+    every { connectivityObserver.networkStates } returns networkStates
     every { kiwixDataStore.prefLanguage } returns MutableStateFlow("")
     every { kiwixDataStore.selectedOnlineContentLanguage } returns MutableStateFlow("eng")
   }
 
   @Test
-  fun `unregisters broadcastReceiver in onCleared`() {
-    coEvery { observeLanguages(any(), any()) } returns ObserveLanguages.Result.Success(emptyList())
+  fun `unregisters connectivity callback in onCleared`() {
+    coEvery {
+      observeLanguages(any(), any(), any())
+    } returns ObserveLanguages.Result.Success(emptyList())
     createViewModel()
-    every { application.unregisterReceiver(any()) } returns mockk()
     languageViewModel.onClearedExposed()
     verify {
-      application.unregisterReceiver(connectivityBroadcastReceiver)
+      connectivityObserver.unregister()
     }
   }
 
@@ -105,7 +109,9 @@ class LanguageViewModelTest {
     @Test
     fun whenObserveLanguagesReturnsSuccess_returnsContent() = runTest {
       val english = createLanguage()
-      coEvery { observeLanguages(any(), any()) } returns ObserveLanguages.Result.Success(listOf(english))
+      coEvery {
+        observeLanguages(any(), any(), any())
+      } returns ObserveLanguages.Result.Success(listOf(english))
 
       createViewModel()
       advanceUntilIdle()
@@ -116,7 +122,9 @@ class LanguageViewModelTest {
 
     @Test
     fun whenObserveLanguagesReturnsError_returnsError() = runTest {
-      coEvery { observeLanguages(any(), any()) } returns ObserveLanguages.Result.Error("No network connection")
+      coEvery {
+        observeLanguages(any(), any(), any())
+      } returns ObserveLanguages.Result.Error("No network connection")
 
       createViewModel()
       advanceUntilIdle()
@@ -134,7 +142,9 @@ class LanguageViewModelTest {
     inner class ActionError {
       @Test
       fun whenErrorAction_returnsErrorMessage() = runTest {
-        coEvery { observeLanguages(any(), any()) } returns ObserveLanguages.Result.Success(emptyList())
+        coEvery {
+          observeLanguages(any(), any(), any())
+        } returns ObserveLanguages.Result.Success(emptyList())
         createViewModel()
         advanceUntilIdle()
 
@@ -155,7 +165,9 @@ class LanguageViewModelTest {
     inner class ActionUpdateLanguages {
       @Test
       fun whenStateLoading_returnsContent() = runTest {
-        coEvery { observeLanguages(any(), any()) } returns ObserveLanguages.Result.Success(emptyList())
+        coEvery {
+          observeLanguages(any(), any(), any())
+        } returns ObserveLanguages.Result.Success(emptyList())
         createViewModel()
         advanceUntilIdle()
         languageViewModel.state.value = Loading
@@ -180,7 +192,9 @@ class LanguageViewModelTest {
 
       @Test
       fun whenStateNotLoading_returnsCurrentState() = runTest {
-        coEvery { observeLanguages(any(), any()) } returns ObserveLanguages.Result.Success(emptyList())
+        coEvery {
+          observeLanguages(any(), any(), any())
+        } returns ObserveLanguages.Result.Success(emptyList())
         createViewModel()
         advanceUntilIdle()
         languageViewModel.state.value = Loading
@@ -207,7 +221,9 @@ class LanguageViewModelTest {
     inner class ActionFilter {
       @Test
       fun whenStateNotContent_returnsCurrentState() = runTest {
-        coEvery { observeLanguages(any(), any()) } returns ObserveLanguages.Result.Success(emptyList())
+        coEvery {
+          observeLanguages(any(), any(), any())
+        } returns ObserveLanguages.Result.Success(emptyList())
         createViewModel()
         advanceUntilIdle()
         languageViewModel.state.value = Loading
@@ -226,7 +242,9 @@ class LanguageViewModelTest {
 
       @Test
       fun whenStateContent_returnsFilteredContent() = runTest {
-        coEvery { observeLanguages(any(), any()) } returns ObserveLanguages.Result.Success(emptyList())
+        coEvery {
+          observeLanguages(any(), any(), any())
+        } returns ObserveLanguages.Result.Success(emptyList())
         createViewModel()
         advanceUntilIdle()
 
@@ -271,7 +289,9 @@ class LanguageViewModelTest {
     inner class ActionSelect {
       @Test
       fun whenStateNotContent_returnsCurrentState() = runTest {
-        coEvery { observeLanguages(any(), any()) } returns ObserveLanguages.Result.Success(emptyList())
+        coEvery {
+          observeLanguages(any(), any(), any())
+        } returns ObserveLanguages.Result.Success(emptyList())
         createViewModel()
         advanceUntilIdle()
         languageViewModel.state.value = Loading
@@ -294,7 +314,9 @@ class LanguageViewModelTest {
 
       @Test
       fun whenStateContent_updatesSelectedLanguage() = runTest {
-        coEvery { observeLanguages(any(), any()) } returns ObserveLanguages.Result.Success(emptyList())
+        coEvery {
+          observeLanguages(any(), any(), any())
+        } returns ObserveLanguages.Result.Success(emptyList())
         createViewModel()
         advanceUntilIdle()
         val english =
@@ -346,7 +368,9 @@ class LanguageViewModelTest {
     inner class ActionCancel {
       @Test
       fun whenStateNotContent_returnsCurrentState() = runTest {
-        coEvery { observeLanguages(any(), any()) } returns ObserveLanguages.Result.Success(emptyList())
+        coEvery {
+          observeLanguages(any(), any(), any())
+        } returns ObserveLanguages.Result.Success(emptyList())
         createViewModel()
         advanceUntilIdle()
         languageViewModel.state.value = Loading
@@ -363,7 +387,9 @@ class LanguageViewModelTest {
 
       @Test
       fun whenStateContent_emitsCancelSideEffect() = runTest {
-        coEvery { observeLanguages(any(), any()) } returns ObserveLanguages.Result.Success(emptyList())
+        coEvery {
+          observeLanguages(any(), any(), any())
+        } returns ObserveLanguages.Result.Success(emptyList())
         createViewModel()
         advanceUntilIdle()
         languageViewModel.state.value = State.Content(listOf(createLanguage()))
@@ -387,7 +413,9 @@ class LanguageViewModelTest {
     inner class ActionSave {
       @Test
       fun whenStateNotContent_returnsCurrentState() = runTest {
-        coEvery { observeLanguages(any(), any()) } returns ObserveLanguages.Result.Success(emptyList())
+        coEvery {
+          observeLanguages(any(), any(), any())
+        } returns ObserveLanguages.Result.Success(emptyList())
         createViewModel()
         advanceUntilIdle()
         languageViewModel.state.value = Loading
@@ -404,7 +432,9 @@ class LanguageViewModelTest {
 
       @Test
       fun whenStateContent_returnsSavingAndEmitsSideEffect() = runTest {
-        coEvery { observeLanguages(any(), any()) } returns ObserveLanguages.Result.Success(emptyList())
+        coEvery {
+          observeLanguages(any(), any(), any())
+        } returns ObserveLanguages.Result.Success(emptyList())
         createViewModel()
         advanceUntilIdle()
         val english = createLanguage(code = "eng", active = true)
@@ -434,26 +464,4 @@ class LanguageViewModelTest {
       }
     }
   }
-}
-
-// TODO ONCE ALL flakyTest{} are eliminated clear this
-inline fun flakyTest(
-  maxRetries: Int = 10,
-  delayMillis: Long = 0,
-  block: () -> Unit
-) {
-  var lastError: Throwable? = null
-
-  repeat(maxRetries) { attempt ->
-    try {
-      block()
-      return
-    } catch (e: Throwable) {
-      lastError = e
-      println("Test attempt ${attempt + 1} failed: ${e.message}")
-      if (delayMillis > 0) Thread.sleep(delayMillis)
-    }
-  }
-
-  throw lastError ?: AssertionError("Test failed after $maxRetries attempts")
 }

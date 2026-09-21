@@ -19,9 +19,10 @@
 package org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel
 
 import android.app.Application
-import android.os.Build
+import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -42,7 +43,7 @@ import org.kiwix.kiwixmobile.R.string
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.zim_manager.Category
-import org.kiwix.kiwixmobile.core.zim_manager.ConnectivityBroadcastReceiver
+import org.kiwix.kiwixmobile.core.zim_manager.ConnectivityObserver
 import org.kiwix.kiwixmobile.core.zim_manager.NetworkState
 import org.kiwix.kiwixmobile.nav.destination.library.online.helper.ObserveCategories
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.CategoryViewModel.Action
@@ -56,7 +57,7 @@ class CategoryViewModelTest {
   private val application: Application = mockk(relaxed = true)
   private val kiwixDataStore: KiwixDataStore = mockk()
   private val observeCategories: ObserveCategories = mockk()
-  private val connectivityBroadcastReceiver: ConnectivityBroadcastReceiver = mockk()
+  private val connectivityObserver: ConnectivityObserver = mockk()
 
   @RegisterExtension
   @JvmField
@@ -83,8 +84,9 @@ class CategoryViewModelTest {
       application.getString(string.no_category_available)
     } returns "No categories"
 
-    every { connectivityBroadcastReceiver.action } returns "test"
-    every { connectivityBroadcastReceiver.networkStates } returns networkStates
+    every { connectivityObserver.register() } just Runs
+    every { connectivityObserver.unregister() } just Runs
+    every { connectivityObserver.networkStates } returns networkStates
     every { kiwixDataStore.selectedOnlineContentCategory } returns flowOf("")
   }
 
@@ -94,7 +96,7 @@ class CategoryViewModelTest {
         application,
         kiwixDataStore,
         observeCategories,
-        connectivityBroadcastReceiver
+        connectivityObserver
       ).apply {
         setOnDismissCallback { }
       }
@@ -103,35 +105,33 @@ class CategoryViewModelTest {
   @Nested
   inner class Init {
     @Test
-    fun registersReceiver_invokesOnInit() = runTest {
-      coEvery { observeCategories(any(), any()) } returns ObserveCategories.Result.Success(emptyList())
+    fun registersConnectivityObserver_invokesOnInit() = runTest {
+      coEvery {
+        observeCategories(any(), any(), any())
+      } returns ObserveCategories.Result.Success(emptyList())
       createViewModel()
-      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-        verify {
-          application.registerReceiver(connectivityBroadcastReceiver, any(), any())
-        }
-      } else {
-        @Suppress("UnspecifiedRegisterReceiverFlag")
-        verify {
-          application.registerReceiver(connectivityBroadcastReceiver, any())
-        }
+      verify {
+        connectivityObserver.register()
       }
     }
 
     @Test
-    fun whenOnClearInvoked_UnregistersBroadcastReceiver() {
-      coEvery { observeCategories(any(), any()) } returns ObserveCategories.Result.Success(emptyList())
+    fun whenOnClearInvoked_UnregistersConnectivityObserver() {
+      coEvery {
+        observeCategories(any(), any(), any())
+      } returns ObserveCategories.Result.Success(emptyList())
       createViewModel()
-      every { application.unregisterReceiver(any()) } returns mockk()
       categoryViewModel.onClearedExposed()
       verify {
-        application.unregisterReceiver(connectivityBroadcastReceiver)
+        connectivityObserver.unregister()
       }
     }
 
     @Test
     fun categoryState_initially_isLoading() = runTest {
-      coEvery { observeCategories(any(), any()) } returns ObserveCategories.Result.Success(emptyList())
+      coEvery {
+        observeCategories(any(), any(), any())
+      } returns ObserveCategories.Result.Success(emptyList())
       createViewModel()
       assertThat(categoryViewModel.state.value).isEqualTo(Loading)
     }
@@ -142,7 +142,9 @@ class CategoryViewModelTest {
     @Test
     fun whenObserveCategoriesReturnsSuccess_emitsContent() = runTest {
       val categoriesList = listOf(createCategory())
-      coEvery { observeCategories(any(), any()) } returns ObserveCategories.Result.Success(categoriesList)
+      coEvery {
+        observeCategories(any(), any(), any())
+      } returns ObserveCategories.Result.Success(categoriesList)
 
       createViewModel()
       advanceUntilIdle()
@@ -155,7 +157,9 @@ class CategoryViewModelTest {
 
     @Test
     fun whenObserveCategoriesReturnsError_emitsError() = runTest {
-      coEvery { observeCategories(any(), any()) } returns ObserveCategories.Result.Error(errorMessage)
+      coEvery {
+        observeCategories(any(), any(), any())
+      } returns ObserveCategories.Result.Error(errorMessage)
 
       createViewModel()
       advanceUntilIdle()
@@ -214,7 +218,13 @@ class CategoryViewModelTest {
       inner class Error {
         @Test
         fun errorAction_emitsErrorMessage() = runTest {
-          coEvery { observeCategories(any(), any()) } returns ObserveCategories.Result.Success(emptyList())
+          coEvery {
+            observeCategories(
+              any(),
+              any(),
+              any()
+            )
+          } returns ObserveCategories.Result.Success(emptyList())
           createViewModel()
           advanceUntilIdle()
 
@@ -233,7 +243,13 @@ class CategoryViewModelTest {
       inner class UpdateCategory {
         @Test
         fun updateCategory_whenLoadingState_emitsContent() = runTest {
-          coEvery { observeCategories(any(), any()) } returns ObserveCategories.Result.Success(emptyList())
+          coEvery {
+            observeCategories(
+              any(),
+              any(),
+              any()
+            )
+          } returns ObserveCategories.Result.Success(emptyList())
           createViewModel()
           advanceUntilIdle()
 
@@ -252,7 +268,13 @@ class CategoryViewModelTest {
 
         @Test
         fun updateCategory_whenNotLoading_emitsCurrentState() = runTest {
-          coEvery { observeCategories(any(), any()) } returns ObserveCategories.Result.Success(emptyList())
+          coEvery {
+            observeCategories(
+              any(),
+              any(),
+              any()
+            )
+          } returns ObserveCategories.Result.Success(emptyList())
           createViewModel()
           advanceUntilIdle()
 
@@ -275,7 +297,13 @@ class CategoryViewModelTest {
       inner class Filter {
         @Test
         fun filter_whenContentState_updatesContent() = runTest {
-          coEvery { observeCategories(any(), any()) } returns ObserveCategories.Result.Success(emptyList())
+          coEvery {
+            observeCategories(
+              any(),
+              any(),
+              any()
+            )
+          } returns ObserveCategories.Result.Success(emptyList())
           createViewModel()
           advanceUntilIdle()
 
@@ -297,7 +325,13 @@ class CategoryViewModelTest {
 
         @Test
         fun filter_whenNotContentState_emitsCurrentState() = runTest {
-          coEvery { observeCategories(any(), any()) } returns ObserveCategories.Result.Success(emptyList())
+          coEvery {
+            observeCategories(
+              any(),
+              any(),
+              any()
+            )
+          } returns ObserveCategories.Result.Success(emptyList())
           createViewModel()
           advanceUntilIdle()
 
@@ -319,7 +353,13 @@ class CategoryViewModelTest {
       inner class Select {
         @Test
         fun select_whenContentState_togglesActiveState() = runTest {
-          coEvery { observeCategories(any(), any()) } returns ObserveCategories.Result.Success(emptyList())
+          coEvery {
+            observeCategories(
+              any(),
+              any(),
+              any()
+            )
+          } returns ObserveCategories.Result.Success(emptyList())
           createViewModel()
           advanceUntilIdle()
 
@@ -340,7 +380,13 @@ class CategoryViewModelTest {
 
         @Test
         fun select_whenNotContentState_emitsCurrentState() = runTest {
-          coEvery { observeCategories(any(), any()) } returns ObserveCategories.Result.Success(emptyList())
+          coEvery {
+            observeCategories(
+              any(),
+              any(),
+              any()
+            )
+          } returns ObserveCategories.Result.Success(emptyList())
           createViewModel()
           advanceUntilIdle()
 
@@ -361,7 +407,13 @@ class CategoryViewModelTest {
       inner class ClearAll {
         @Test
         fun clearAll_whenContentState_clearsAllSelections() = runTest {
-          coEvery { observeCategories(any(), any()) } returns ObserveCategories.Result.Success(emptyList())
+          coEvery {
+            observeCategories(
+              any(),
+              any(),
+              any()
+            )
+          } returns ObserveCategories.Result.Success(emptyList())
           createViewModel()
           advanceUntilIdle()
 
@@ -379,7 +431,13 @@ class CategoryViewModelTest {
 
         @Test
         fun clearAll_whenNotContentState_emitsCurrentState() = runTest {
-          coEvery { observeCategories(any(), any()) } returns ObserveCategories.Result.Success(emptyList())
+          coEvery {
+            observeCategories(
+              any(),
+              any(),
+              any()
+            )
+          } returns ObserveCategories.Result.Success(emptyList())
           createViewModel()
           advanceUntilIdle()
 
@@ -398,7 +456,13 @@ class CategoryViewModelTest {
       inner class SelectAll {
         @Test
         fun selectAll_whenContentState_selectAllSelections() = runTest {
-          coEvery { observeCategories(any(), any()) } returns ObserveCategories.Result.Success(emptyList())
+          coEvery {
+            observeCategories(
+              any(),
+              any(),
+              any()
+            )
+          } returns ObserveCategories.Result.Success(emptyList())
           createViewModel()
           advanceUntilIdle()
 
@@ -416,7 +480,13 @@ class CategoryViewModelTest {
 
         @Test
         fun selectAll_whenNotContentState_emitsCurrentState() = runTest {
-          coEvery { observeCategories(any(), any()) } returns ObserveCategories.Result.Success(emptyList())
+          coEvery {
+            observeCategories(
+              any(),
+              any(),
+              any()
+            )
+          } returns ObserveCategories.Result.Success(emptyList())
           createViewModel()
           advanceUntilIdle()
 
@@ -435,7 +505,13 @@ class CategoryViewModelTest {
       inner class Cancel {
         @Test
         fun cancel_whenContentState_emitsCancelSideEffect() = runTest {
-          coEvery { observeCategories(any(), any()) } returns ObserveCategories.Result.Success(emptyList())
+          coEvery {
+            observeCategories(
+              any(),
+              any(),
+              any()
+            )
+          } returns ObserveCategories.Result.Success(emptyList())
           createViewModel()
           advanceUntilIdle()
 
@@ -457,7 +533,13 @@ class CategoryViewModelTest {
 
         @Test
         fun cancel_whenNotContentState_emitsCurrentState() = runTest {
-          coEvery { observeCategories(any(), any()) } returns ObserveCategories.Result.Success(emptyList())
+          coEvery {
+            observeCategories(
+              any(),
+              any(),
+              any()
+            )
+          } returns ObserveCategories.Result.Success(emptyList())
           createViewModel()
           advanceUntilIdle()
 
@@ -476,7 +558,13 @@ class CategoryViewModelTest {
       inner class Save {
         @Test
         fun save_whenContentState_returnsSavingAndEmitsSideEffect() = runTest {
-          coEvery { observeCategories(any(), any()) } returns ObserveCategories.Result.Success(emptyList())
+          coEvery {
+            observeCategories(
+              any(),
+              any(),
+              any()
+            )
+          } returns ObserveCategories.Result.Success(emptyList())
           createViewModel()
           advanceUntilIdle()
 
@@ -506,7 +594,13 @@ class CategoryViewModelTest {
 
         @Test
         fun save_whenNotContentState_emitsCurrentState() = runTest {
-          coEvery { observeCategories(any(), any()) } returns ObserveCategories.Result.Success(emptyList())
+          coEvery {
+            observeCategories(
+              any(),
+              any(),
+              any()
+            )
+          } returns ObserveCategories.Result.Success(emptyList())
           createViewModel()
           advanceUntilIdle()
 
