@@ -288,6 +288,7 @@ class AllProjectConfigurer {
       testImplementation(Libs.kotlinx_coroutines_test)
       testImplementation(Libs.junit_jupiter)
       testRuntimeOnly(Libs.JUNIT_PLATFORM_LAUNCHER)
+      testRuntimeOnly(Libs.JUNIT_VINTAGE_ENGINE)
       testImplementation(Libs.mockk)
       testImplementation(Libs.assertj_core)
       testImplementation(Libs.testing_ktx)

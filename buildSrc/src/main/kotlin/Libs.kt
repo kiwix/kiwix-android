@@ -199,6 +199,9 @@ object Libs {
 
   const val JUNIT_PLATFORM_LAUNCHER: String = "org.junit.platform:junit-platform-launcher"
 
+  const val JUNIT_VINTAGE_ENGINE: String =
+    "org.junit.vintage:junit-vintage-engine:" + Versions.junit_jupiter
+
   /**
    * https://assertj.github.io/doc/
    */

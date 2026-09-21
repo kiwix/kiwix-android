@@ -12,11 +12,11 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.experimental.runners.Enclosed
-import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.Assumptions.assumeTrue
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.extension.RegisterExtension
+import org.junit.After
+import org.junit.Assume.assumeTrue
+import org.junit.Before
+import org.junit.Rule
+import org.junit.Test
 import org.junit.runner.RunWith
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState.CanWrite4GbFile
@@ -40,7 +40,7 @@ class Fat32CheckerTest {
     protected val fileSystemChecker: FileSystemChecker = mockk()
     protected lateinit var fat32Checker: Fat32Checker
 
-    @RegisterExtension
+    @Rule
     @JvmField
     val mainDispatcherRule = MainDispatcherRule()
 
@@ -49,13 +49,13 @@ class Fat32CheckerTest {
 
     protected lateinit var selectedStorage: MutableStateFlow<String>
 
-    @BeforeEach
+    @Before
     fun setup() {
       assumeTrue(File(pathWithSpace).freeSpace > Fat32Checker.FOUR_GIGABYTES_IN_BYTES)
       assumeTrue(File(pathWithoutSpace).freeSpace == 0L)
     }
 
-    @AfterEach
+    @After
     fun teardown() {
       if (::fat32Checker.isInitialized) fat32Checker.dispose()
       unmockkAll()
