@@ -33,8 +33,6 @@ class ConnectivityObserver @Inject constructor(
   private val _networkStates = MutableStateFlow(connectivityManager.networkState)
   val networkStates: StateFlow<NetworkState> = _networkStates
 
-  private var isRegistered = false
-
   private val networkCallback = object : ConnectivityManager.NetworkCallback() {
     override fun onAvailable(network: Network) {
       _networkStates.tryEmit(connectivityManager.networkState)
@@ -57,20 +55,16 @@ class ConnectivityObserver @Inject constructor(
   }
 
   fun register() {
-    if (isRegistered) return
     val request = NetworkRequest.Builder()
       .addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
       .build()
     connectivityManager.registerNetworkCallback(request, networkCallback)
-    isRegistered = true
     _networkStates.tryEmit(connectivityManager.networkState)
   }
 
   fun unregister() {
-    if (!isRegistered) return
     runCatching {
       connectivityManager.unregisterNetworkCallback(networkCallback)
     }.onFailure { it.printStackTrace() }
-    isRegistered = false
   }
 }

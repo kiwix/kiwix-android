@@ -143,10 +143,9 @@ class ConnectivityObserverTest {
   }
 
   @Test
-  fun `calling register twice only registers once with ConnectivityManager`() {
+  fun `register forwards the request to ConnectivityManager`() {
     val connectivityObserver = ConnectivityObserver(connectivityManager)
 
-    connectivityObserver.register()
     connectivityObserver.register()
 
     verify(exactly = 1) {
@@ -155,25 +154,15 @@ class ConnectivityObserverTest {
   }
 
   @Test
-  fun `calling unregister twice only unregisters once with ConnectivityManager`() {
+  fun `unregister without a matching register does not throw`() {
     val connectivityObserver = ConnectivityObserver(connectivityManager)
+    every {
+      connectivityManager.unregisterNetworkCallback(any<NetworkCallback>())
+    } throws IllegalArgumentException("NetworkCallback was not registered")
 
-    connectivityObserver.register()
-    connectivityObserver.unregister()
     connectivityObserver.unregister()
 
     verify(exactly = 1) {
-      connectivityManager.unregisterNetworkCallback(any<NetworkCallback>())
-    }
-  }
-
-  @Test
-  fun `unregister without a matching register is a no-op`() {
-    val connectivityObserver = ConnectivityObserver(connectivityManager)
-
-    connectivityObserver.unregister()
-
-    verify(exactly = 0) {
       connectivityManager.unregisterNetworkCallback(any<NetworkCallback>())
     }
   }
