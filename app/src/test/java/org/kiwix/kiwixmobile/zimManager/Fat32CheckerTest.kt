@@ -11,12 +11,12 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.experimental.runners.Enclosed
 import org.junit.After
 import org.junit.Assume.assumeTrue
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import org.junit.experimental.runners.Enclosed
 import org.junit.runner.RunWith
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState.CanWrite4GbFile
@@ -45,7 +45,8 @@ class Fat32CheckerTest {
     val mainDispatcherRule = MainDispatcherRule()
 
     protected val pathWithSpace: String = File(System.getProperty("java.io.tmpdir")!!).absolutePath
-    protected val pathWithoutSpace: String = File("/nonexistent_kiwix_test_storage_path").absolutePath
+    protected val pathWithoutSpace: String =
+      File("/nonexistent_kiwix_test_storage_path").absolutePath
 
     protected lateinit var selectedStorage: MutableStateFlow<String>
 
