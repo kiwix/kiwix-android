@@ -18,7 +18,6 @@
 
 package org.kiwix.kiwixmobile.core.main
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column
@@ -35,14 +34,10 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
-import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.ui.components.ONE
-import org.kiwix.kiwixmobile.core.ui.models.IconItem
-import org.kiwix.kiwixmobile.core.ui.models.toPainter
 import org.kiwix.kiwixmobile.core.ui.theme.MineShaftGray350
 import org.kiwix.kiwixmobile.core.ui.theme.MineShaftGray600
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.EIGHT_DP
@@ -59,13 +54,6 @@ fun LeftDrawerMenu(drawerMenuGroupList: List<DrawerMenuGroup>) {
   ) {
     // Make it scrollable when there is no enough space to show all item, e.g., in landscape mode.
     Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
-      // Banner image at the top
-      Image(
-        painter = IconItem.MipmapImage(R.drawable.ic_home_kiwix_banner).toPainter(),
-        contentDescription = null,
-        contentScale = ContentScale.FillWidth,
-        modifier = Modifier.fillMaxWidth()
-      )
       drawerMenuGroupList.forEach {
         DrawerGroup(it.drawerMenuItemList)
       }
