@@ -18,11 +18,14 @@
 
 package org.kiwix.kiwixmobile.core.main
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
@@ -30,18 +33,24 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItem
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
+import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.ui.components.ONE
 import org.kiwix.kiwixmobile.core.ui.theme.MineShaftGray350
 import org.kiwix.kiwixmobile.core.ui.theme.MineShaftGray600
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.EIGHT_DP
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FORTY_EIGHT_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.NAVIGATION_DRAWER_WIDTH
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SIXTEEN_DP
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TWELVE_DP
 
 @Composable
 fun LeftDrawerMenu(drawerMenuGroupList: List<DrawerMenuGroup>) {
@@ -52,8 +61,22 @@ fun LeftDrawerMenu(drawerMenuGroupList: List<DrawerMenuGroup>) {
       .statusBarsPadding(),
     shadowElevation = EIGHT_DP
   ) {
+    val dividerColor = if (isSystemInDarkTheme()) {
+      MineShaftGray600
+    } else {
+      MineShaftGray350
+    }
     // Make it scrollable when there is no enough space to show all item, e.g., in landscape mode.
     Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
+      Image(
+        painter = painterResource(id = R.drawable.ic_kiwix_horizontal_logo),
+        contentDescription = null,
+        colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSurface),
+        modifier = Modifier
+          .padding(start = SIXTEEN_DP, top = TWELVE_DP, bottom = TWELVE_DP)
+          .height(FORTY_EIGHT_DP)
+      )
+      HorizontalDivider(color = dividerColor)
       drawerMenuGroupList.forEach {
         DrawerGroup(it.drawerMenuItemList)
       }
