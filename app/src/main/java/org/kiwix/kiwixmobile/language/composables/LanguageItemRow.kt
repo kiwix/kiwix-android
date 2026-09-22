@@ -20,13 +20,14 @@ package org.kiwix.kiwixmobile.language.composables
 
 import android.content.Context
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectDragGesturesAfterLongPress
 import androidx.compose.foundation.gestures.detectVerticalDragGestures
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.HorizontalDivider
@@ -60,8 +61,6 @@ import org.kiwix.kiwixmobile.core.zim_manager.Language
 import org.kiwix.kiwixmobile.language.composables.LanguageListItem.LanguageItem
 
 const val LANGUAGE_ITEM_RADIO_BUTTON_TESTING_TAG = "languageItemRadioButtonTestingTag"
-const val MOVE_UP_TESTING_TAG = "moveUpTestingTag"
-const val MOVE_DOWN_TESTING_TAG = "moveDownTestingTag"
 
 @Suppress("LongParameterList")
 @Composable
@@ -88,6 +87,7 @@ fun LanguageItemRow(
         modifier = Modifier
           .fillMaxWidth()
           .defaultMinSize(minHeight = ComposeDimens.FIFTY_SIX_DP)
+          .itemReorderDrag(item, onMoveUp, onMoveDown)
           .clickable { onItemClick(item) }
           .semantics {
             contentDescription = context.getString(R.string.select_language_content_description)
@@ -104,7 +104,7 @@ fun LanguageItemRow(
         if (item.isSelectedSection) {
           SelectedLanguageLeading(item, onMoveUp, onMoveDown)
         }
-        LanguageTitles(language, context, Modifier.weight(1f))
+        LanguageTitles(language, Modifier.weight(1f))
         Text(
           text = pluralStringResource(
             R.plurals.book_count,
@@ -127,21 +127,16 @@ fun LanguageItemRow(
   }
 }
 
-private fun itemShape(isFirst: Boolean, isLast: Boolean): Shape =
-  when {
-    isFirst && isLast -> RoundedCornerShape(ComposeDimens.MEDIUM_ROUND_SHAPE_SIZE)
-    isFirst ->
-      RoundedCornerShape(
-        topStart = ComposeDimens.MEDIUM_ROUND_SHAPE_SIZE,
-        topEnd = ComposeDimens.MEDIUM_ROUND_SHAPE_SIZE
-      )
-    isLast ->
-      RoundedCornerShape(
-        bottomStart = ComposeDimens.MEDIUM_ROUND_SHAPE_SIZE,
-        bottomEnd = ComposeDimens.MEDIUM_ROUND_SHAPE_SIZE
-      )
+@Composable
+private fun itemShape(isFirst: Boolean, isLast: Boolean): Shape {
+  val mediumShape = MaterialTheme.shapes.medium
+  return when {
+    isFirst && isLast -> mediumShape
+    isFirst -> mediumShape.copy(bottomStart = CornerSize(0.dp), bottomEnd = CornerSize(0.dp))
+    isLast -> mediumShape.copy(topStart = CornerSize(0.dp), topEnd = CornerSize(0.dp))
     else -> RectangleShape
   }
+}
 
 @Composable
 private fun SelectedLanguageLeading(
@@ -206,12 +201,11 @@ private fun SelectedLanguageLeading(
 @Composable
 private fun LanguageTitles(
   language: Language,
-  context: Context,
   modifier: Modifier = Modifier
 ) {
   Column(modifier = modifier) {
     Text(
-      text = language.language.ifEmpty { context.getString(R.string.all_languages) },
+      text = language.language,
       style = MaterialTheme.typography.bodyLarge,
       color = MaterialTheme.colorScheme.onSurface
     )
@@ -224,6 +218,41 @@ private fun LanguageTitles(
         color = MaterialTheme.colorScheme.onSurfaceVariant
       )
     }
+  }
+}
+
+@Composable
+private fun Modifier.itemReorderDrag(
+  item: LanguageItem,
+  onMoveUp: (LanguageItem) -> Unit,
+  onMoveDown: (LanguageItem) -> Unit
+): Modifier {
+  if (!item.isSelectedSection) return this
+  val currentOnMoveUp by rememberUpdatedState(onMoveUp)
+  val currentOnMoveDown by rememberUpdatedState(onMoveDown)
+  val currentCanMoveUp by rememberUpdatedState(item.canMoveUp)
+  val currentCanMoveDown by rememberUpdatedState(item.canMoveDown)
+  val currentItem by rememberUpdatedState(item)
+  val thresholdPx = with(LocalDensity.current) { ComposeDimens.TWENTY_FOUR_DP.toPx() }
+  var dragAccumulator by remember { mutableFloatStateOf(0f) }
+
+  return pointerInput(item.id) {
+    detectDragGesturesAfterLongPress(
+      onDragStart = { dragAccumulator = 0f },
+      onDragEnd = { dragAccumulator = 0f },
+      onDragCancel = { dragAccumulator = 0f },
+      onDrag = { change, dragAmount ->
+        change.consume()
+        dragAccumulator += dragAmount.y
+        if (dragAccumulator <= -thresholdPx) {
+          if (currentCanMoveUp) currentOnMoveUp(currentItem)
+          dragAccumulator = 0f
+        } else if (dragAccumulator >= thresholdPx) {
+          if (currentCanMoveDown) currentOnMoveDown(currentItem)
+          dragAccumulator = 0f
+        }
+      }
+    )
   }
 }
 

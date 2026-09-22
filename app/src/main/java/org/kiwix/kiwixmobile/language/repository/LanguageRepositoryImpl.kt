@@ -45,11 +45,14 @@ class LanguageRepositoryImpl @Inject constructor(
 ) : LanguageRepository {
   private suspend fun getAppChosenLanguageCode(): String {
     val pref = runCatching { kiwixDataStore.prefLanguage.first() }.getOrDefault("")
-    val locale = if (pref.isNotBlank() && pref != Locale.ROOT.toString() && pref != Locale.ROOT.language) {
-      runCatching { pref.convertToLocal() }.getOrNull()
-    } else {
-      null
-    } ?: Locale.getDefault()
+    val isCustomPref =
+      pref.isNotBlank() && pref != Locale.ROOT.toString() && pref != Locale.ROOT.language
+    val locale =
+      if (isCustomPref) {
+        runCatching { pref.convertToLocal() }.getOrNull()
+      } else {
+        null
+      } ?: Locale.getDefault()
     return runCatching {
       locale.isO3Language.ifEmpty { locale.language }
     }.getOrDefault("")
@@ -58,11 +61,9 @@ class LanguageRepositoryImpl @Inject constructor(
   override fun fetchLanguages(): Flow<List<Language>> = flow {
     val feed = kiwixService.getLanguages()
     val savedLangPref = kiwixDataStore.selectedOnlineContentLanguage.first()
-    val defaultAppLang = if (savedLangPref.isEmpty() || savedLangPref.equals("all", ignoreCase = true)) {
-      getAppChosenLanguageCode()
-    } else {
-      ""
-    }
+    val isDefaultLang =
+      savedLangPref.isEmpty() || savedLangPref.equals("all", ignoreCase = true)
+    val defaultAppLang = if (isDefaultLang) getAppChosenLanguageCode() else ""
     val selectedLanguagesSet = when {
       savedLangPref.isNotEmpty() && !savedLangPref.equals("all", ignoreCase = true) ->
         savedLangPref
@@ -70,6 +71,7 @@ class LanguageRepositoryImpl @Inject constructor(
           .asSequence()
           .filter { it.isNotEmpty() }
           .toSet()
+
       defaultAppLang.isNotEmpty() -> setOf(defaultAppLang)
       else -> emptySet()
     }

@@ -21,8 +21,8 @@ package org.kiwix.kiwixmobile.language
 import android.os.Build
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.Check
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onAllNodesWithContentDescription
@@ -31,6 +31,7 @@ import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
+import androidx.compose.ui.test.performTouchInput
 import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
@@ -46,6 +47,7 @@ import org.kiwix.kiwixmobile.core.ui.models.IconItem
 import org.kiwix.kiwixmobile.core.ui.models.IconItem.Vector
 import org.kiwix.kiwixmobile.core.zim_manager.Language
 import org.kiwix.kiwixmobile.language.composables.LANGUAGE_HEADER_TESTING_TAG
+import org.kiwix.kiwixmobile.language.composables.LANGUAGE_ITEM_RADIO_BUTTON_TESTING_TAG
 import org.kiwix.kiwixmobile.language.composables.LanguageListItem
 import org.kiwix.kiwixmobile.language.viewmodel.State
 import org.kiwix.kiwixmobile.nav.destination.library.online.NO_CONTENT_VIEW_TEXT_TESTING_TAG
@@ -73,13 +75,6 @@ class LanguageScreenUITest {
     id = id
   )
 
-  private fun saveActionMenuItem(onClick: () -> Unit = {}) = ActionMenuItem(
-    icon = IconItem.Vector(Icons.Default.Check),
-    contentDescription = R.string.save_languages,
-    onClick = onClick,
-    testingTag = SAVE_ICON_TESTING_TAG
-  )
-
   private fun searchActionMenuItem(onClick: () -> Unit = {}) = ActionMenuItem(
     icon = IconItem.Drawable(R.drawable.action_search),
     contentDescription = R.string.search_label,
@@ -92,12 +87,13 @@ class LanguageScreenUITest {
     isSearchActive: Boolean = false,
     state: State = State.Loading,
     actionMenuItemList: List<ActionMenuItem> = listOf(
-      searchActionMenuItem(),
-      saveActionMenuItem()
+      searchActionMenuItem()
     ),
     onClearClick: () -> Unit = {},
     onAppBarValueChange: (String) -> Unit = {},
     selectLanguageItem: (LanguageListItem.LanguageItem) -> Unit = {},
+    onMoveUp: (LanguageListItem.LanguageItem) -> Unit = {},
+    onMoveDown: (LanguageListItem.LanguageItem) -> Unit = {},
     navigationIcon: @Composable () -> Unit = {}
   ) {
     composeTestRule.setContent {
@@ -109,6 +105,8 @@ class LanguageScreenUITest {
         onClearClick = onClearClick,
         onAppBarValueChange = onAppBarValueChange,
         selectLanguageItem = selectLanguageItem,
+        onMoveUp = onMoveUp,
+        onMoveDown = onMoveDown,
         navigationIcon = navigationIcon
       )
     }
@@ -120,29 +118,6 @@ class LanguageScreenUITest {
     composeTestRule
       .onNodeWithText(context.getString(R.string.select_language))
       .assertIsDisplayed()
-  }
-
-  @Test
-  fun languageScreen_whenScreenLaunched_saveIconIsDisplayed() {
-    mockLanguageScreen()
-    composeTestRule
-      .onNodeWithTag(SAVE_ICON_TESTING_TAG)
-      .assertIsDisplayed()
-  }
-
-  @Test
-  fun languageScreen_whenSaveIconClicked_callbackIsTriggered() {
-    var clicked = false
-    mockLanguageScreen(
-      actionMenuItemList = listOf(
-        searchActionMenuItem(),
-        saveActionMenuItem { clicked = true }
-      )
-    )
-    composeTestRule
-      .onNodeWithTag(SAVE_ICON_TESTING_TAG)
-      .performClick()
-    assertTrue("Save icon callback should be triggered", clicked)
   }
 
   @Test
@@ -158,8 +133,7 @@ class LanguageScreenUITest {
     var clicked = false
     mockLanguageScreen(
       actionMenuItemList = listOf(
-        searchActionMenuItem { clicked = true },
-        saveActionMenuItem()
+        searchActionMenuItem { clicked = true }
       )
     )
     composeTestRule
@@ -188,7 +162,7 @@ class LanguageScreenUITest {
   fun languageScreen_whenSearchIsActive_searchIconIsHidden() {
     mockLanguageScreen(
       isSearchActive = true,
-      actionMenuItemList = listOf(saveActionMenuItem())
+      actionMenuItemList = emptyList()
     )
     composeTestRule
       .onNodeWithTag(SEARCH_ICON_TESTING_TAG)
@@ -263,7 +237,7 @@ class LanguageScreenUITest {
     var backPressHandled = false
     mockLanguageScreen(
       isSearchActive = true,
-      actionMenuItemList = listOf(saveActionMenuItem()),
+      actionMenuItemList = emptyList(),
       navigationIcon = {
         NavigationIcon(
           iconItem = Vector(Icons.AutoMirrored.Filled.ArrowBack),
@@ -412,5 +386,45 @@ class LanguageScreenUITest {
       .onNodeWithContentDescription(
         context.getString(R.string.select_language_content_description)
       ).assertDoesNotExist()
+  }
+
+  @Test
+  fun languageScreen_whenSelectedItemDraggedDown_moveDownCallbackIsTriggered() {
+    var movedDownItem: LanguageListItem.LanguageItem? = null
+    val lang1 = mockLanguage(languageCode = "en", active = true, id = 1L)
+    val lang2 = mockLanguage(languageCode = "de", active = true, id = 2L)
+    mockLanguageScreen(
+      state = State.Content(listOf(lang1, lang2)),
+      onMoveDown = { movedDownItem = it }
+    )
+    composeTestRule
+      .onNodeWithTag("$LANGUAGE_ITEM_RADIO_BUTTON_TESTING_TAG${lang1.language}")
+      .performTouchInput {
+        down(center)
+        advanceEventTime(viewConfiguration.longPressTimeoutMillis + 100)
+        moveBy(Offset(0f, 200f))
+        up()
+      }
+    assertTrue("onMoveDown should be triggered on long press drag", movedDownItem != null)
+  }
+
+  @Test
+  fun languageScreen_whenSelectedItemDraggedUp_moveUpCallbackIsTriggered() {
+    var movedUpItem: LanguageListItem.LanguageItem? = null
+    val lang1 = mockLanguage(languageCode = "en", active = true, id = 1L)
+    val lang2 = mockLanguage(languageCode = "de", active = true, id = 2L)
+    mockLanguageScreen(
+      state = State.Content(listOf(lang1, lang2)),
+      onMoveUp = { movedUpItem = it }
+    )
+    composeTestRule
+      .onNodeWithTag("$LANGUAGE_ITEM_RADIO_BUTTON_TESTING_TAG${lang2.language}")
+      .performTouchInput {
+        down(center)
+        advanceEventTime(viewConfiguration.longPressTimeoutMillis + 100)
+        moveBy(Offset(0f, -200f))
+        up()
+      }
+    assertTrue("onMoveUp should be triggered on long press drag", movedUpItem != null)
   }
 }
