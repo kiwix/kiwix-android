@@ -42,3 +42,10 @@ dependencies {
   implementation(Libs.objectbox_kotlin)
   api(project(":core"))
 }
+
+// This module has no unit tests of its own; it only inherits `core`'s shared test
+// fixtures (MainDispatcherRule, TestApplication, etc.), none of which declare `@Test`
+// methods, so the JUnit Platform has nothing to discover here.
+tasks.withType<Test>().configureEach {
+  failOnNoDiscoveredTests = false
+}
