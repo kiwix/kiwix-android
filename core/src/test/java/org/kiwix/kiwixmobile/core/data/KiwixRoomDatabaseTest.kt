@@ -30,8 +30,8 @@ import org.hamcrest.core.IsEqual.equalTo
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
-import org.junit.jupiter.api.extension.RegisterExtension
 import org.junit.runner.RunWith
 import org.kiwix.kiwixmobile.core.dao.HistoryRoomDao
 import org.kiwix.kiwixmobile.core.dao.NotesRoomDao
@@ -56,7 +56,7 @@ class KiwixRoomDatabaseTest {
   private lateinit var context: Context
   private lateinit var databaseFile: File
 
-  @RegisterExtension
+  @Rule
   @JvmField
   val mainDispatcherRule = MainDispatcherRule()
 

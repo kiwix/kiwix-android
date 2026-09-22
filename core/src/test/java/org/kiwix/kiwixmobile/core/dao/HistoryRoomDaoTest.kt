@@ -29,8 +29,8 @@ import org.hamcrest.core.IsEqual.equalTo
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
-import org.junit.jupiter.api.extension.RegisterExtension
 import org.junit.runner.RunWith
 import org.kiwix.kiwixmobile.core.data.KiwixRoomDatabase
 import org.kiwix.kiwixmobile.core.data.KiwixRoomDatabaseTest.Companion.getHistoryItem
@@ -43,7 +43,7 @@ import org.robolectric.annotation.Config
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [Build.VERSION_CODES.R], application = TestApplication::class)
 class HistoryRoomDaoTest {
-  @RegisterExtension
+  @Rule
   @JvmField
   val mainDispatcherRule = MainDispatcherRule()
   private lateinit var kiwixRoomDatabase: KiwixRoomDatabase

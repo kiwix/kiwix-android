@@ -42,12 +42,6 @@ import org.kiwix.sharedFunctions.TestApplication
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 
-/**
- * Runs under Robolectric because [ConnectivityObserver.register] builds a real
- * [NetworkRequest] - on the plain unit-test Android stub jar `NetworkRequest.Builder`
- * methods return null instead of running, which masks bugs like requesting the
- * unsupported [NET_CAPABILITY_VALIDATED] capability.
- */
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [Build.VERSION_CODES.TIRAMISU], application = TestApplication::class)
 class ConnectivityObserverTest {
