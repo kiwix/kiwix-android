@@ -22,8 +22,12 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
@@ -31,14 +35,17 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItem
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
+import androidx.compose.ui.text.style.TextOverflow
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.ui.components.ONE
 import org.kiwix.kiwixmobile.core.ui.models.IconItem
@@ -46,10 +53,13 @@ import org.kiwix.kiwixmobile.core.ui.models.toPainter
 import org.kiwix.kiwixmobile.core.ui.theme.MineShaftGray350
 import org.kiwix.kiwixmobile.core.ui.theme.MineShaftGray600
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.EIGHT_DP
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FORTY_EIGHT_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.NAVIGATION_DRAWER_WIDTH
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SIXTEEN_DP
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TWELVE_DP
 
 @Composable
-fun LeftDrawerMenu(drawerMenuGroupList: List<DrawerMenuGroup>) {
+fun LeftDrawerMenu(drawerMenuGroupList: List<DrawerMenuGroup>, appName: String) {
   Surface(
     modifier = Modifier
       .width(NAVIGATION_DRAWER_WIDTH)
@@ -57,31 +67,52 @@ fun LeftDrawerMenu(drawerMenuGroupList: List<DrawerMenuGroup>) {
       .statusBarsPadding(),
     shadowElevation = EIGHT_DP
   ) {
+    val dividerColor = if (isSystemInDarkTheme()) {
+      MineShaftGray600
+    } else {
+      MineShaftGray350
+    }
     // Make it scrollable when there is no enough space to show all item, e.g., in landscape mode.
     Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
-      // Banner image at the top
-      Image(
-        painter = IconItem.MipmapImage(R.drawable.ic_home_kiwix_banner).toPainter(),
-        contentDescription = null,
-        contentScale = ContentScale.FillWidth,
-        modifier = Modifier.fillMaxWidth()
-      )
+      DrawerTopBar(appName = appName)
+      HorizontalDivider(color = dividerColor)
       drawerMenuGroupList.forEach {
-        DrawerGroup(it.drawerMenuItemList)
+        DrawerGroup(it.drawerMenuItemList, dividerColor)
       }
     }
   }
 }
 
 @Composable
-private fun DrawerGroup(items: List<DrawerMenuItem>) {
+private fun DrawerTopBar(appName: String) {
+  Row(
+    modifier = Modifier
+      .fillMaxWidth()
+      .padding(horizontal = SIXTEEN_DP, vertical = TWELVE_DP),
+    verticalAlignment = Alignment.CenterVertically
+  ) {
+    Image(
+      painter = IconItem.MipmapImage(R.mipmap.ic_launcher).toPainter(),
+      contentDescription = null,
+      modifier = Modifier.size(FORTY_EIGHT_DP)
+    )
+    Spacer(modifier = Modifier.width(TWELVE_DP))
+    Text(
+      text = appName,
+      style = MaterialTheme.typography.titleMedium,
+      color = MaterialTheme.colorScheme.onSurface,
+      maxLines = 2,
+      overflow = TextOverflow.Ellipsis
+    )
+  }
+}
+
+@Composable
+private fun DrawerGroup(
+  items: List<DrawerMenuItem>,
+  dividerColor: Color
+) {
   Column {
-    // Add a horizontal divider at end if there are items in a group.
-    val dividerColor = if (isSystemInDarkTheme()) {
-      MineShaftGray600
-    } else {
-      MineShaftGray350
-    }
     val visibleMenuItems = items.filter { it.visible }
     if (visibleMenuItems.size == ONE) {
       HorizontalDivider(color = dividerColor)

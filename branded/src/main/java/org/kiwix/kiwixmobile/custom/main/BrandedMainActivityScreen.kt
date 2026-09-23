@@ -50,7 +50,8 @@ fun BrandedMainActivityScreen(
   leftDrawerState: DrawerState,
   enableLeftDrawer: Boolean,
   customBackHandler: MutableState<(() -> BackPressActivityExtensions.Super)?>,
-  uiCoroutineScope: CoroutineScope
+  uiCoroutineScope: CoroutineScope,
+  appName: String
 ) {
   val navBackStackEntry by navController.currentBackStackEntryAsState()
   val currentRoute = navBackStackEntry?.destination?.route
@@ -66,7 +67,7 @@ fun BrandedMainActivityScreen(
       drawerState = leftDrawerState,
       drawerContent = {
         Column(modifier = Modifier.fillMaxSize()) {
-          LeftDrawerMenu(leftDrawerContent)
+          LeftDrawerMenu(leftDrawerContent, appName)
         }
       },
       gesturesEnabled = enableLeftDrawer &&
