@@ -37,8 +37,8 @@ import org.junit.After
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
-import org.junit.jupiter.api.extension.RegisterExtension
 import org.junit.runner.RunWith
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
@@ -61,7 +61,7 @@ import org.robolectric.shadows.ShadowToast
   application = TestApplication::class
 )
 class ExternalLinkOpenerTest {
-  @RegisterExtension
+  @Rule
   @JvmField
   val mainDispatcherRule = MainDispatcherRule()
   private lateinit var kiwixDataStore: KiwixDataStore

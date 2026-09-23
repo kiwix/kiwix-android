@@ -45,7 +45,8 @@ class Fat32CheckerTest {
     val mainDispatcherRule = MainDispatcherRule()
 
     protected val pathWithSpace: String = File(System.getProperty("java.io.tmpdir")!!).absolutePath
-    protected val pathWithoutSpace: String = File("/nonexistent_kiwix_test_storage_path").absolutePath
+    protected val pathWithoutSpace: String =
+      File("/nonexistent_kiwix_test_storage_path").absolutePath
 
     protected lateinit var selectedStorage: MutableStateFlow<String>
 

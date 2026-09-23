@@ -199,10 +199,7 @@ object Libs {
 
   const val JUNIT_PLATFORM_LAUNCHER: String = "org.junit.platform:junit-platform-launcher"
 
-  /**
-   * https://junit.org/junit5/
-   */
-  const val junit_vintage_engine: String =
+  const val JUNIT_VINTAGE_ENGINE: String =
     "org.junit.vintage:junit-vintage-engine:" + Versions.junit_jupiter
 
   /**

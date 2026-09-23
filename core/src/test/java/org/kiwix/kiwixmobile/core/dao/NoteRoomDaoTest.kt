@@ -31,8 +31,8 @@ import org.hamcrest.core.IsEqual.equalTo
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
-import org.junit.jupiter.api.extension.RegisterExtension
 import org.junit.runner.RunWith
 import org.kiwix.kiwixmobile.core.data.KiwixRoomDatabase
 import org.kiwix.kiwixmobile.core.data.KiwixRoomDatabaseTest.Companion.getNoteListItem
@@ -48,7 +48,7 @@ class NoteRoomDaoTest {
   private lateinit var kiwixRoomDatabase: KiwixRoomDatabase
   private lateinit var notesRoomDao: NotesRoomDao
 
-  @RegisterExtension
+  @Rule
   @JvmField
   val mainDispatcherRule = MainDispatcherRule()
 

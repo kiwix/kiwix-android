@@ -288,6 +288,7 @@ class AllProjectConfigurer {
       testImplementation(Libs.kotlinx_coroutines_test)
       testImplementation(Libs.junit_jupiter)
       testRuntimeOnly(Libs.JUNIT_PLATFORM_LAUNCHER)
+      testRuntimeOnly(Libs.JUNIT_VINTAGE_ENGINE)
       testImplementation(Libs.mockk)
       testImplementation(Libs.assertj_core)
       testImplementation(Libs.testing_ktx)
@@ -347,7 +348,6 @@ class AllProjectConfigurer {
       // Robolectric unit testing
       testImplementation(Libs.robolectric)
       testImplementation(Libs.androidx_test_core)
-      testImplementation(Libs.junit_vintage_engine)
 
       // Dagger Hilt
       implementation(Libs.HILT_NAVIGATION_COMPOSE)

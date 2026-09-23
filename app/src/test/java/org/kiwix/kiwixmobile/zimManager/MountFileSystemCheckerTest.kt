@@ -23,9 +23,9 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.unmockkAll
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.After
-import org.junit.Before
-import org.junit.Test
+import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 import org.kiwix.kiwixmobile.core.zim_manager.MountInfo
 import org.kiwix.kiwixmobile.core.zim_manager.MountPointProducer
 import org.kiwix.kiwixmobile.zimManager.FileSystemCapability.CANNOT_WRITE_4GB
@@ -36,12 +36,12 @@ class MountFileSystemCheckerTest {
   private val mountPointProducer: MountPointProducer = mockk()
   private lateinit var mountFileSystemChecker: MountFileSystemChecker
 
-  @Before
+  @BeforeEach
   fun setup() {
     mountFileSystemChecker = MountFileSystemChecker(mountPointProducer)
   }
 
-  @After
+  @AfterEach
   fun teardown() {
     unmockkAll()
     clearAllMocks()
