@@ -53,12 +53,12 @@ class NetworkModule {
     .connectTimeout(CONNECTION_TIMEOUT, SECONDS)
     .readTimeout(READ_TIMEOUT, SECONDS)
     .callTimeout(CALL_TIMEOUT, SECONDS)
+    .addNetworkInterceptor(UserAgentInterceptor(USER_AGENT))
     .addNetworkInterceptor(
       HttpLoggingInterceptor().apply {
         level = if (BuildConfig.DEBUG) BASIC else NONE
       }
     )
-    .addNetworkInterceptor(UserAgentInterceptor(USER_AGENT))
     .build()
 
   @Provides

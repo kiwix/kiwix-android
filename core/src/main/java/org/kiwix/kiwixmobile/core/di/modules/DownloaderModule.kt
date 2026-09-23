@@ -31,6 +31,7 @@ import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import org.kiwix.kiwixmobile.core.BuildConfig
 import org.kiwix.kiwixmobile.core.data.remote.BasicAuthInterceptor
+import org.kiwix.kiwixmobile.core.data.remote.UserAgentInterceptor
 import org.kiwix.kiwixmobile.core.downloader.DownloadRequester
 import org.kiwix.kiwixmobile.core.downloader.Downloader
 import org.kiwix.kiwixmobile.core.downloader.DownloaderImpl
@@ -86,6 +87,7 @@ abstract class DownloaderModule {
         .connectTimeout(CONNECT_TIME_OUT, TimeUnit.MINUTES)
         .readTimeout(READ_TIME_OUT, TimeUnit.MINUTES)
         .addInterceptor(BasicAuthInterceptor())
+        .addNetworkInterceptor(UserAgentInterceptor(USER_AGENT))
         .followRedirects(true)
         .followSslRedirects(true)
         .build()
