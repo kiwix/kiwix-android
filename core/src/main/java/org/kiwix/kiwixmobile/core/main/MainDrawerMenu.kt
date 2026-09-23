@@ -18,7 +18,6 @@
 
 package org.kiwix.kiwixmobile.core.main
 
-import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -43,7 +42,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
@@ -61,16 +59,7 @@ import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SIXTEEN_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TWELVE_DP
 
 @Composable
-fun LeftDrawerMenu(
-  drawerMenuGroupList: List<DrawerMenuGroup>,
-  appName: String? = null,
-  appIcon: Painter? = null
-) {
-  val resolvedAppName = appName
-    ?: (LocalActivity.current as? CoreMainActivity)?.appName.orEmpty().ifEmpty { "Kiwix" }
-  val resolvedAppIcon = appIcon
-    ?: IconItem.MipmapImage(R.mipmap.ic_launcher).toPainter()
-
+fun LeftDrawerMenu(drawerMenuGroupList: List<DrawerMenuGroup>, appName: String) {
   Surface(
     modifier = Modifier
       .width(NAVIGATION_DRAWER_WIDTH)
@@ -85,31 +74,36 @@ fun LeftDrawerMenu(
     }
     // Make it scrollable when there is no enough space to show all item, e.g., in landscape mode.
     Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
-      Row(
-        modifier = Modifier
-          .fillMaxWidth()
-          .padding(horizontal = SIXTEEN_DP, vertical = TWELVE_DP),
-        verticalAlignment = Alignment.CenterVertically
-      ) {
-        Image(
-          painter = resolvedAppIcon,
-          contentDescription = null,
-          modifier = Modifier.size(FORTY_EIGHT_DP)
-        )
-        Spacer(modifier = Modifier.width(TWELVE_DP))
-        Text(
-          text = resolvedAppName,
-          style = MaterialTheme.typography.titleMedium,
-          color = MaterialTheme.colorScheme.onSurface,
-          maxLines = 2,
-          overflow = TextOverflow.Ellipsis
-        )
-      }
+      DrawerTopBar(appName = appName)
       HorizontalDivider(color = dividerColor)
       drawerMenuGroupList.forEach {
         DrawerGroup(it.drawerMenuItemList, dividerColor)
       }
     }
+  }
+}
+
+@Composable
+private fun DrawerTopBar(appName: String) {
+  Row(
+    modifier = Modifier
+      .fillMaxWidth()
+      .padding(horizontal = SIXTEEN_DP, vertical = TWELVE_DP),
+    verticalAlignment = Alignment.CenterVertically
+  ) {
+    Image(
+      painter = IconItem.MipmapImage(R.mipmap.ic_launcher).toPainter(),
+      contentDescription = null,
+      modifier = Modifier.size(FORTY_EIGHT_DP)
+    )
+    Spacer(modifier = Modifier.width(TWELVE_DP))
+    Text(
+      text = appName,
+      style = MaterialTheme.typography.titleMedium,
+      color = MaterialTheme.colorScheme.onSurface,
+      maxLines = 2,
+      overflow = TextOverflow.Ellipsis
+    )
   }
 }
 

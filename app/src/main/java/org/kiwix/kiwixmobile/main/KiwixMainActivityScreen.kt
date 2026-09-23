@@ -76,7 +76,8 @@ fun KiwixMainActivityScreen(
   enableLeftDrawer: Boolean,
   shouldShowBottomAppBar: Boolean,
   bottomAppBarScrollBehaviour: BottomAppBarScrollBehavior?,
-  snackBarHostState: SnackbarHostState
+  snackBarHostState: SnackbarHostState,
+  appName: String
 ) {
   val navBackStackEntry by navController.currentBackStackEntryAsState()
   val currentRoute = navBackStackEntry?.destination?.route
@@ -87,7 +88,7 @@ fun KiwixMainActivityScreen(
       drawerState = leftDrawerState,
       drawerContent = {
         Column(modifier = Modifier.fillMaxSize()) {
-          LeftDrawerMenu(leftDrawerContent)
+          LeftDrawerMenu(leftDrawerContent, appName)
         }
       },
       gesturesEnabled = enableLeftDrawer &&
