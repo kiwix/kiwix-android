@@ -79,9 +79,7 @@ const val SAVE_ICON_TESTING_TAG = "saveLanguages"
 @OptIn(ExperimentalMaterial3Api::class)
 @Suppress("LongMethod")
 @Composable
-internal fun LanguageScreenRoute(
-  navigateBack: () -> Unit = {},
-) {
+internal fun LanguageScreenRoute(navigateBack: () -> Unit) {
   val languageViewModel: LanguageViewModel = hiltViewModel()
   val state by languageViewModel.state.collectAsStateWithLifecycle()
 
