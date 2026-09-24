@@ -2,10 +2,10 @@
 New Features:
 * Support for Android 16. (@MohitMaliFtechiz https://github.com/kiwix/kiwix-android/pull/4231)
 * Added support for Android's per-app language setting. (@MohitMaliFtechiz https://github.com/kiwix/kiwix-android/pull/4228)
-* Migrated the entire application UI from XML/Fragments to Jetpack Compose. (@MohitMaliFtechiz, @jackq97, @itsPronay, @atharvyadav22, @harshsomankar123-tech https://github.com/kiwix/kiwix-android/issues/4572)
+* Migrated the entire application UI from XML/Fragments to Jetpack Compose. (@MohitMaliFtechiz, @SOUMEN-PAL, @jackq97, @itsPronay, @atharvyadav22, @harshsomankar123-tech https://github.com/kiwix/kiwix-android/issues/4572, https://github.com/kiwix/kiwix-android/issues/2669)
 * Migrated on-disk storage of Books/ZIM files from ObjectBox to libkiwix/Room. (@MohitMaliFtechiz https://github.com/kiwix/kiwix-android/pull/4334, https://github.com/kiwix/kiwix-android/pull/4396)
-* Migrated app preferences from `SharedPreferences` to Jetpack `DataStore`. (@MohitMaliFtechiz https://github.com/kiwix/kiwix-android/pull/4514)
-* Refactored RxJava usage to Kotlin Coroutines throughout the codebase. (@MohitMaliFtechiz, @Abhi-Bohora https://github.com/kiwix/kiwix-android/pull/4301)
+* Migrated app preferences from `SharedPreferences` to Jetpack `DataStore`. (@MohitMaliFtechiz https://github.com/kiwix/kiwix-android/issues/2688)
+* Refactored RxJava usage to Kotlin Coroutines throughout the codebase. (@MohitMaliFtechiz, @Abhi-Bohora https://github.com/kiwix/kiwix-android/issues/4293)
 * Introduced support for the OPDS catalog. (@MohitMaliFtechiz https://github.com/kiwix/kiwix-android/pull/4333)
 * Moved the "FIND in page" to options menu in reader screen. (@MohitMaliFtechiz https://github.com/kiwix/kiwix-android/pull/4844)
 * Added a ZIM file integrity checker. (@MohitMaliFtechiz https://github.com/kiwix/kiwix-android/pull/4509)
@@ -22,9 +22,14 @@ New Features:
 * Added support to share an article as a PDF. (@codiearyan https://github.com/kiwix/kiwix-android/pull/4667)
 * Added "Add to Home Screen" shortcuts support. (@harshsomankar123-tech https://github.com/kiwix/kiwix-android/pull/4827)
 * Redesigned the tab switcher with a vertical grid layout and a new icon. (@harshsomankar123-tech, @triemerge https://github.com/kiwix/kiwix-android/pull/5097, https://github.com/kiwix/kiwix-android/pull/4756)
+* Added a "Scan file system" permission dialog at first launch, an intro screen slide explaining file system auto-detection, and a "swipe down to scan" hint in the local library. (@MohitMaliFtechiz https://github.com/kiwix/kiwix-android/pull/4423)
+* Removed the full-screen mode feature. (@MohitMaliFtechiz https://github.com/kiwix/kiwix-android/pull/4415)
+* Implemented proper dark mode for ZIM content, and removed the custom color inversion. (@MohitMaliFtechiz https://github.com/kiwix/kiwix-android/pull/4429)
+* Removed support for `Zimit1` ZIM files, since they have been superseded by `Zimit2` and are no longer distributed. (@MohitMaliFtechiz https://github.com/kiwix/kiwix-android/pull/4653)
 
 Bug Fixes:
 * Duplicate resume/cancel buttons and duplicate "download completed" notifications. (@MohitMaliFtechiz https://github.com/kiwix/kiwix-android/pull/4239, https://github.com/kiwix/kiwix-android/pull/4240)
+* Download notification did not show the downloaded size and total file size. (@MohitMaliFtechiz https://github.com/kiwix/kiwix-android/pull/4425)
 * Transparent images were not visible in Dark mode. (@MohitMaliFtechiz https://github.com/kiwix/kiwix-android/pull/4255)
 * Background downloading of ZIM files was not working. (@MohitMaliFtechiz https://github.com/kiwix/kiwix-android/pull/4376)
 * `FIND_IN_PAGE` not working after switching to another ZIM file. (@MohitMaliFtechiz https://github.com/kiwix/kiwix-android/pull/4378)
@@ -48,6 +53,7 @@ Bug Fixes:
 * Downloads don't cancel/resume. (@harshsomankar123-tech https://github.com/kiwix/kiwix-android/pull/4693)
 * App bar failed to collapse when ZIM pages used internal scroll containers. (@Piyush-Kumar-Mishra https://github.com/kiwix/kiwix-android/pull/4714)
 * Read Aloud was reading unrelated content. (@harshsomankar123-tech https://github.com/kiwix/kiwix-android/pull/4635)
+* Search was slow and returned no results after typing a few characters on low-memory devices. (@MohitMaliFtechiz https://github.com/kiwix/kiwix-android/pull/4426)
 * Map interaction was difficult and caused jitter. (@MohitMaliFtechiz https://github.com/kiwix/kiwix-android/pull/4795)
 * Diagnostic report was not sent when an email client was installed. (@MohitMaliFtechiz https://github.com/kiwix/kiwix-android/pull/4816)
 * Room threw an error when downgrading the application. (@MohitMaliFtechiz https://github.com/kiwix/kiwix-android/pull/4879)
@@ -83,6 +89,10 @@ Compilation/CI/CD:
 * Gradle build fails on Windows systems. (@MohitMaliFtechiz https://github.com/kiwix/kiwix-android/pull/4745)
 * Upgraded LeakCanary. (@harshsomankar123-tech https://github.com/kiwix/kiwix-android/pull/4636)
 * Broken Play Store publishing. (@MohitMaliFtechiz https://github.com/kiwix/kiwix-android/pull/4605)
+* Removed uploading of unnecessary files in releases. (@MohitMaliFtechiz https://github.com/kiwix/kiwix-android/pull/4227)
+* Using the server address provided by libkiwix. (@MohitMaliFtechiz https://github.com/kiwix/kiwix-android/pull/4487)
+* All details are included in the "Send diagnostic report" for better debugging. (@MohitMaliFtechiz https://github.com/kiwix/kiwix-android/pull/4463)
+* Added a `disable_help_menu` key to `info.json` for branded apps, and reintroduced "Send diagnostic report" in custom apps. (@MohitMaliFtechiz https://github.com/kiwix/kiwix-android/pull/4449)
 + More
 
 3.14.0
