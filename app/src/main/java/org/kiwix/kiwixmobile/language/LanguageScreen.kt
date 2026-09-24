@@ -105,7 +105,7 @@ internal fun LanguageScreenRoute(
       isSearchActive = false
       if (state is Content) {
         languageViewModel.actions.tryEmit(Action.Save)
-      } else if (state !is State.Saving) {
+      } else if (state !== State.Saving) {
         navigateBack()
       }
     }
@@ -120,7 +120,7 @@ internal fun LanguageScreenRoute(
     }
   }
 
-  BackHandler(enabled = !isSaving && state !is State.Saving, onBack = handleBack)
+  BackHandler(enabled = !isSaving && state !== State.Saving, onBack = handleBack)
 
   KiwixTheme {
     LanguageScreen(
