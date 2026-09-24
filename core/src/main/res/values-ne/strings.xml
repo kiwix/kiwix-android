@@ -53,7 +53,7 @@
   <string name="all_history_cleared">सबै इतिहास खाली गरियो</string>
   <string name="pref_clear_all_bookmarks_title">पुस्तक चिनाेहरू हटाउनुहाेस्</string>
   <string name="clear_all_history_dialog_title" fuzzy="true">सबै इतिहास हटाउनुहोस्</string>
-  <string name="delete">मेटाउने</string>
+  <string name="delete">मेटाउनुहोस्</string>
   <string name="cancel">रद्द गर्नुहोस्</string>
   <string name="delete_specific_search_toast">हालको खोज हटाइयो</string>
   <string name="got_it">मैले बुझेँ</string>

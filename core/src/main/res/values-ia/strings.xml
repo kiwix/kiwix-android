@@ -41,6 +41,7 @@
   <string name="server_failed_toast_message">Non poteva initiar le servitor.</string>
   <string name="server_started_successfully_toast_message">Le servitor ha essite initiate.</string>
   <string name="server_stopped_successfully_toast_message">Le servitor ha essite arrestate.</string>
+  <string name="server_stopped_all_books_deleted_toast_message">Le servitor se ha arrestate: tote le libros albergate ha essite delite.</string>
   <string name="hotspot_turned_on">Puncto de accesso activate</string>
   <string name="hotspot_details_message">Ecce le detalios de tu puncto de accesso local. \nSSID: %1$s \nContrasigno: %2$s</string>
   <string name="server_textview_default_message">Selige le files que tu vole albergar sur le servitor</string>
@@ -120,6 +121,9 @@
   <string name="rate_dialog_positive">Evalutar!</string>
   <string name="no_thanks">No, gratias</string>
   <string name="rate_dialog_neutral">Plus tarde</string>
+  <string name="pref_rate_app_title">Evalutar %s</string>
+  <string name="pref_rate_app_summary">Evalutar %s sur Play Store</string>
+  <string name="pref_rating_category_title">Evalutation del app</string>
   <string name="open">Aperir</string>
   <string name="bookmark_removed">Marcapagina removite</string>
   <string name="pref_newtab_background_title">Aperir nove scheda in secunde plano</string>
@@ -164,6 +168,9 @@
   <string name="delete_zim_failed">Alcun files non ha potite esser delite. Tenta usar un gestor de files pro deler los.</string>
   <string name="tts_pause">pausar</string>
   <string name="tts_resume">reprender</string>
+  <string name="tts_increase_speed">Augmentar velocitate</string>
+  <string name="tts_decrease_speed">Diminuer velocitate</string>
+  <string name="tts_normal_speed">Normal</string>
   <string name="stop">stoppar</string>
   <string name="notification_pause_button_text">Pausar</string>
   <string name="notification_resume_button_text">Reprender</string>
@@ -361,7 +368,7 @@
   <string name="swipe_down_for_library">Glissa a basso pro le bibliotheca</string>
   <string name="reaching_remote_library">Accede al bibliotheca distante…</string>
   <string name="parsing_remote_library">Analysa le bibliotheca distante…</string>
-  <string name="starting_downloading_remote_library" fuzzy="true">Comencia a discargar le bibliotheca in linea…</string>
+  <string name="starting_downloading_remote_library">Le bibliotheca in linea se carga</string>
   <string name="no_notes">Necun nota</string>
   <string name="notes_from_all_books">Vider notas de tote le libros</string>
   <string name="search_notes">Cercar notas</string>
