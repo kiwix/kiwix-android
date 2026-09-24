@@ -39,6 +39,7 @@
   <string name="server_failed_toast_message">Не можев да го покренам опслужувачот.</string>
   <string name="server_started_successfully_toast_message">Опслужувачот е успешно покренат.</string>
   <string name="server_stopped_successfully_toast_message">Опслужувачот е успешно запрен.</string>
+  <string name="server_stopped_all_books_deleted_toast_message">Опслужувачот запре: сите вдомени книги се избришани.</string>
   <string name="hotspot_turned_on">Пристапната точка е вклучена</string>
   <string name="hotspot_details_message">Следат поединости за вашата месна точка на пристап. \nSSID : %1$s \nЛозинка : %2$s</string>
   <string name="server_textview_default_message">Изберете ги податотеките што сакате да ги вдомите на опслужувачот</string>
@@ -165,6 +166,14 @@
   <string name="delete_zim_failed">За жал, не можев да избришам извесни податотеки. Пробајте со Управувачот со податотеки.</string>
   <string name="tts_pause">паузирај</string>
   <string name="tts_resume">продолжи</string>
+  <string name="tts_increase_speed">Зголеми брзина</string>
+  <string name="tts_decrease_speed">Намали брзина</string>
+  <string name="tts_normal_speed">Нормално</string>
+  <string name="tts_speech_speed">Брзина на говор</string>
+  <string name="tts_rewind_10_seconds">Назад 10 секунди</string>
+  <string name="tts_forward_10_seconds">Напред 10 секунди</string>
+  <string name="tts_select_voice">Изберете глас</string>
+  <string name="tts_controls">Контроли за TTS</string>
   <string name="stop">запри</string>
   <string name="notification_pause_button_text">Паузирај</string>
   <string name="notification_resume_button_text">Продолжи</string>
@@ -244,6 +253,7 @@
   <string name="running_state">Во тек</string>
   <string name="complete">Завршено</string>
   <string name="paused_state">Паузирано</string>
+  <string name="paused_offline_state">Паузирано (уредот не е на линија)</string>
   <string name="failed_state">Не успеа: %s</string>
   <string name="custom_download_error_message_for_authentication_failed">Не можев да ја преземам ZIM-податотеката. Превоспоставете го прилогот од Play store.</string>
   <string name="save">Зачувај</string>
@@ -383,6 +393,7 @@
   <string name="navigation_history_cleared">Историја на прегледувачки преоди</string>
   <string name="go_to_settings_label">Оди во поставките</string>
   <string name="request_notification_permission_message">За да го извршите ова дејство, дајте им пристап на известувањата</string>
+  <string name="notification_permission_denied_download_info">Дозволата за известување е одбиена, па затоа преземањата ќе продолжат во позадина без известувања за напредокот. Дозволата можете да ја дадете подоцна во секое време, од Поставките.</string>
   <string name="click_nearby_devices_message">Стиснете тука за побарате уреди во близина.</string>
   <string name="your_device_name_message">Тука ќе се појави името на вашиот уред.</string>
   <string name="nearby_devices_list_message">Тука ќе најдете список на уреди во близина. Допрете на име на уред за да отпочне преносот на податотеки.</string>

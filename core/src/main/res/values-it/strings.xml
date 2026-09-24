@@ -11,6 +11,7 @@
 * Fs00
 * G.garatti
 * Gianfranco
+* Matroz
 * Matteocng
 * MohitMali
 * Moliseforever
@@ -255,6 +256,7 @@
   <string name="running_state">In corso</string>
   <string name="complete">Completato</string>
   <string name="paused_state">In pausa</string>
+  <string name="paused_offline_state">Pausa (dispositivo offline)</string>
   <string name="failed_state">Fallito: %s</string>
   <string name="custom_download_error_message_for_authentication_failed">Impossibile scaricare il file ZIM. Per favore, prova a reinstallare l\'applicazione dal Play Store.</string>
   <string name="save">Salva</string>
@@ -391,6 +393,7 @@
   <string name="navigation_history_cleared">Cronologia di navigazione cancellata</string>
   <string name="go_to_settings_label">Vai alle impostazioni</string>
   <string name="request_notification_permission_message">Per eseguire questa azione, concedi l\'accesso alle notifiche</string>
+  <string name="notification_permission_denied_download_info">L\'autorizzazione alle notifiche è stata negata, quindi i download continueranno in background senza notifiche di avanzamento. È possibile concedere l\'autorizzazione in qualsiasi momento successivo dalle Impostazioni per visualizzare l\'avanzamento del download.</string>
   <string name="click_nearby_devices_message">Clicca qui per cercare dispositivi nelle vicinanze.</string>
   <string name="your_device_name_message">Il nome del tuo dispositivo apparirà qui.</string>
   <string name="nearby_devices_list_message">Qui troverai un elenco dei dispositivi nelle vicinanze. Tocca il nome di un dispositivo per avviare il trasferimento file.</string>
