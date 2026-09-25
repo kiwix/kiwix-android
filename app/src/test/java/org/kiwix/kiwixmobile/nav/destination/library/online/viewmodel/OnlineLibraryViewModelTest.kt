@@ -21,7 +21,9 @@ package org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel
 import android.Manifest.permission.POST_NOTIFICATIONS
 import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
 import android.app.Application
+import android.content.res.Configuration
 import android.net.ConnectivityManager
+import android.os.LocaleList
 import app.cash.turbine.test
 import io.mockk.Runs
 import io.mockk.clearMocks
@@ -98,6 +100,7 @@ import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.OnlineLibr
 import org.kiwix.kiwixmobile.zimManager.libraryView.AvailableSpaceCalculator
 import org.kiwix.kiwixmobile.zimManager.libraryView.LibraryListItem
 import org.kiwix.sharedFunctions.MainDispatcherRule
+import java.util.Locale
 import javax.inject.Provider
 import kotlin.time.Duration.Companion.milliseconds
 
@@ -133,6 +136,10 @@ class OnlineLibraryViewModelTest {
     every { observeNetwork.invoke(any()) } returns emptyFlow()
     every { kiwixDataStore.selectedOnlineContentCategory } returns MutableStateFlow("")
     every { kiwixDataStore.selectedOnlineContentLanguage } returns MutableStateFlow("")
+    every { kiwixDataStore.prefLanguage } returns MutableStateFlow("")
+    val configuration = Configuration()
+    configuration.setLocales(LocaleList(Locale.ENGLISH))
+    every { context.resources.configuration } returns configuration
     every { permissionChecker.isAndroid13orAbove() } returns true
     every { downloaderProvider.get() } returns downloader
     viewModel = OnlineLibraryViewModel(
@@ -1073,6 +1080,254 @@ class OnlineLibraryViewModelTest {
       assertThat(final.lang).isEqualTo("l1")
       assertThat(final.page).isEqualTo(3)
       assertThat(final.isLoadMoreItem).isTrue()
+    }
+  }
+
+  @Nested
+  inner class LanguageTabsAndIndependentPagination {
+    @Test
+    fun `when language string is empty createTabs returns app language tab`() = runTest {
+      val tabs = viewModel.createTabs("")
+      assertThat(tabs).hasSize(1)
+      assertThat(tabs.first().languageCode).isNotNull()
+    }
+
+    @Test
+    fun `when language string is empty and app language is set createTabs returns app language tab`() =
+      runTest {
+        every { kiwixDataStore.prefLanguage } returns MutableStateFlow("fr")
+        val tabs = viewModel.createTabs("")
+        assertThat(tabs).hasSize(1)
+        assertThat(tabs.first().languageCode).isEqualTo("fra")
+      }
+
+    @Test
+    fun `when language string is all createTabs returns single all languages tab`() = runTest {
+      val tabs = viewModel.createTabs("all")
+      assertThat(tabs).hasSize(1)
+      assertThat(tabs.first().languageCode).isNull()
+    }
+
+    @Test
+    fun `createTabs preserves order of selected languages`() = runTest {
+      val tabs = viewModel.createTabs("ady,afr,eng")
+      assertThat(tabs).hasSize(3)
+      assertThat(tabs.map { it.languageCode }).containsExactly("ady", "afr", "eng")
+    }
+
+    @Test
+    fun `selectTab restores cached books without emitting new request`() = runTest {
+      val tab1 = OnlineLibraryViewModel.LanguageTab("ady", "ADYGHE")
+      val tab2 = OnlineLibraryViewModel.LanguageTab("afr", "AFRIKAANS")
+      viewModel.setUiStateForTest(
+        viewModel.uiState.value.copy(
+          tabs = listOf(tab1, tab2),
+          selectedTabIndex = 0
+        )
+      )
+      val cachedBooks = listOf(mockk<LibkiwixBook>())
+      viewModel.tabDataMap["afr"] = OnlineLibraryViewModel.TabData(
+        books = cachedBooks,
+        totalPages = 5,
+        currentPage = 2,
+        isLoaded = true
+      )
+
+      viewModel.onlineLibraryRequest.test {
+        viewModel.selectTab(1)
+        expectNoEvents()
+        cancelAndIgnoreRemainingEvents()
+      }
+
+      assertThat(viewModel.uiState.value.selectedTabIndex).isEqualTo(1)
+      assertThat(viewModel.networkBooks.value).isEqualTo(cachedBooks)
+      assertThat(viewModel.totalPages).isEqualTo(5)
+      assertThat(viewModel.currentRequest.page).isEqualTo(2)
+    }
+
+    @Test
+    fun `selectTab emits new request when tab data is not yet loaded`() = runTest {
+      val tab1 = OnlineLibraryViewModel.LanguageTab("ady", "ADYGHE")
+      val tab2 = OnlineLibraryViewModel.LanguageTab("afr", "AFRIKAANS")
+      viewModel.setUiStateForTest(
+        viewModel.uiState.value.copy(
+          tabs = listOf(tab1, tab2),
+          selectedTabIndex = 0
+        )
+      )
+
+      viewModel.onlineLibraryRequest.test {
+        viewModel.selectTab(1)
+        val emittedRequest = awaitItem()
+        assertThat(emittedRequest.lang).isEqualTo("afr")
+        assertThat(emittedRequest.page).isEqualTo(0)
+        cancelAndIgnoreRemainingEvents()
+      }
+
+      assertThat(viewModel.uiState.value.selectedTabIndex).isEqualTo(1)
+    }
+
+    @Test
+    fun `selectTab ignores invalid tab index`() {
+      val tab1 = OnlineLibraryViewModel.LanguageTab("ady", "ADYGHE")
+      viewModel.setUiStateForTest(
+        viewModel.uiState.value.copy(
+          tabs = listOf(tab1),
+          selectedTabIndex = 0
+        )
+      )
+
+      viewModel.selectTab(5)
+      assertThat(viewModel.uiState.value.selectedTabIndex).isEqualTo(0)
+
+      viewModel.selectTab(-1)
+      assertThat(viewModel.uiState.value.selectedTabIndex).isEqualTo(0)
+    }
+
+    @Test
+    fun `independent pagination keeps other tabs untouched when loading more`() = runTest {
+      val tab1 = OnlineLibraryViewModel.LanguageTab("ady", "ADYGHE")
+      val tab2 = OnlineLibraryViewModel.LanguageTab("afr", "AFRIKAANS")
+      viewModel.setUiStateForTest(
+        viewModel.uiState.value.copy(
+          tabs = listOf(tab1, tab2),
+          selectedTabIndex = 0
+        )
+      )
+      val adyBook1 = mockk<LibkiwixBook>()
+      val afrBook1 = mockk<LibkiwixBook>()
+
+      viewModel.tabDataMap["ady"] = OnlineLibraryViewModel.TabData(
+        books = listOf(adyBook1),
+        totalPages = 5,
+        currentPage = 0,
+        isLoaded = true
+      )
+      viewModel.tabDataMap["afr"] = OnlineLibraryViewModel.TabData(
+        books = listOf(afrBook1),
+        totalPages = 3,
+        currentPage = 0,
+        isLoaded = true
+      )
+
+      val adyBook2 = mockk<LibkiwixBook>()
+      val successState = OnlineLibraryViewModel.OnlineLibraryState.Success(
+        books = listOf(adyBook2),
+        totalPages = 5,
+        request = OnlineLibraryViewModel.OnlineLibraryRequest(null, null, "ady", true, 1)
+      )
+      viewModel.handleLibraryState(successState)
+
+      assertThat(viewModel.tabDataMap["ady"]?.books).containsExactly(adyBook1, adyBook2)
+      assertThat(viewModel.tabDataMap["ady"]?.currentPage).isEqualTo(1)
+
+      assertThat(viewModel.tabDataMap["afr"]?.books).containsExactly(afrBook1)
+      assertThat(viewModel.tabDataMap["afr"]?.currentPage).isEqualTo(0)
+    }
+
+    @Test
+    fun `when switching from language to all languages request lang is cleared and progress is dismissed`() =
+      runTest {
+        viewModel.currentRequest = OnlineLibraryViewModel.OnlineLibraryRequest(
+          query = "",
+          category = "",
+          lang = "eng",
+          isLoadMoreItem = false,
+          page = 0
+        )
+        val initialInput = OnlineLibraryViewModel.FiltersInput(
+          category = "",
+          language = "eng",
+          searchQuery = "",
+          cachedCategories = emptyList()
+        )
+        viewModel.handleFiltersChanged(initialInput)
+
+        val allLanguagesInput = OnlineLibraryViewModel.FiltersInput(
+          category = "",
+          language = "all",
+          searchQuery = "",
+          cachedCategories = emptyList()
+        )
+
+        viewModel.onlineLibraryRequest.test {
+          viewModel.handleFiltersChanged(allLanguagesInput)
+          val emittedRequest = awaitItem()
+          assertThat(emittedRequest.lang).isEmpty()
+          cancelAndIgnoreRemainingEvents()
+        }
+
+        assertThat(viewModel.currentRequest.lang).isEmpty()
+
+        val book = mockk<LibkiwixBook>()
+        val successState = OnlineLibraryViewModel.OnlineLibraryState.Success(
+          books = listOf(book),
+          totalPages = 1,
+          request = OnlineLibraryViewModel.OnlineLibraryRequest(null, null, "", false, 0)
+        )
+        viewModel.handleLibraryState(successState)
+
+        assertThat(viewModel.uiState.value.showScanningProgressBar).isFalse()
+        assertThat(viewModel.networkBooks.value).containsExactly(book)
+      }
+  }
+
+  @Nested
+  inner class CategoryFilterChips {
+    @Test
+    fun `onCategoryChipClicked sets filter and clears tab cache`() = runTest {
+      viewModel.tabDataMap["eng"] = OnlineLibraryViewModel.TabData(
+        books = listOf(mockk()),
+        isLoaded = true
+      )
+
+      viewModel.onlineLibraryRequest.test {
+        viewModel.onCategoryChipClicked("phet")
+        val emitted = awaitItem()
+        assertThat(emitted.category).isEqualTo("phet")
+        cancelAndIgnoreRemainingEvents()
+      }
+
+      assertThat(viewModel.uiState.value.selectedCategories).containsExactly("phet")
+      assertThat(viewModel.tabDataMap).isEmpty()
+    }
+
+    @Test
+    fun `onCategoryChipClicked supports selecting multiple categories`() = runTest {
+      viewModel.onCategoryChipClicked("phet")
+      viewModel.onCategoryChipClicked("mooc")
+      assertThat(viewModel.uiState.value.selectedCategories)
+        .containsExactlyInAnyOrder("phet", "mooc")
+    }
+
+    @Test
+    fun `onCategoryChipClicked toggles off when already selected`() = runTest {
+      viewModel.setUiStateForTest(
+        viewModel.uiState.value.copy(selectedCategories = setOf("phet", "mooc"))
+      )
+
+      viewModel.onCategoryChipClicked("phet")
+      assertThat(viewModel.uiState.value.selectedCategories).containsExactly("mooc")
+    }
+
+    @Test
+    fun `categoryChips is empty initially when no categories selected`() = runTest {
+      val input = OnlineLibraryViewModel.FiltersInput("", "", "", emptyList())
+      viewModel.handleFiltersChanged(input)
+      assertThat(viewModel.uiState.value.categoryChips).isEmpty()
+    }
+
+    @Test
+    fun `categoryChips contains selected categories when user selects categories`() = runTest {
+      val input = OnlineLibraryViewModel.FiltersInput(
+        "gutenberg,iFixit,mooc,other,phet",
+        "",
+        "",
+        emptyList()
+      )
+      viewModel.handleFiltersChanged(input)
+      assertThat(viewModel.uiState.value.categoryChips)
+        .containsExactly("gutenberg", "iFixit", "mooc", "other", "phet")
     }
   }
 }

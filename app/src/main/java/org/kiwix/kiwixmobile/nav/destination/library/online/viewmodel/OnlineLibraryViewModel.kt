@@ -69,6 +69,7 @@ import org.kiwix.kiwixmobile.core.utils.ZERO
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
 import org.kiwix.kiwixmobile.core.utils.files.Log
+import org.kiwix.kiwixmobile.core.zim_manager.Category
 import org.kiwix.kiwixmobile.core.zim_manager.ConnectivityObserver
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.nav.destination.library.StorageSelectDialogConfig
@@ -120,7 +121,7 @@ import kotlin.time.Duration.Companion.milliseconds
  * ViewModel for the OnlineLibraryRoute composable.
  * Holds dependencies and business logic, emitting UI events for the composable to handle.
  */
-@Suppress("LongParameterList")
+@Suppress("LongParameterList", "LargeClass")
 @HiltViewModel
 class OnlineLibraryViewModel @Inject constructor(
   private val downloaderProvider: Provider<Downloader>,
@@ -170,6 +171,19 @@ class OnlineLibraryViewModel @Inject constructor(
     data class Parsing(val isLoadMore: Boolean) : OnlineLibraryState()
   }
 
+  data class LanguageTab(
+    val languageCode: String? = null,
+    val displayName: String = ""
+  )
+
+  data class TabData(
+    val books: List<LibkiwixBook> = emptyList(),
+    val totalPages: Int = ZERO,
+    val currentPage: Int = ZERO,
+    val isLoadingMore: Boolean = false,
+    val isLoaded: Boolean = false
+  )
+
   data class OnlineLibraryUiState(
     val items: List<LibraryListItem> = emptyList(),
     val isRefreshing: Boolean = false,
@@ -181,7 +195,11 @@ class OnlineLibraryViewModel @Inject constructor(
     val noContentMessage: String = "",
     val showNoContent: Boolean = false,
     val showStorageSelectDialog: Boolean = false,
-    val showCategoryDialog: Boolean = false
+    val showCategoryDialog: Boolean = false,
+    val tabs: List<LanguageTab> = emptyList(),
+    val selectedTabIndex: Int = 0,
+    val categoryChips: List<String> = emptyList(),
+    val selectedCategories: Set<String> = emptySet()
   )
 
   /**
@@ -281,6 +299,9 @@ class OnlineLibraryViewModel @Inject constructor(
     }
   }
 
+  private fun getString(resId: Int, vararg args: Any): String =
+    context.getString(resId, *args)
+
   private suspend fun getDisplayLanguage(languageCode: String): String {
     val mappedLocale = bookUtils.localeMap[languageCode] ?: languageCode.convertToLocal()
     return mappedLocale.getDisplayLanguage(LocaleHelper.getAppLocale(context, kiwixDataStore))
@@ -322,18 +343,179 @@ class OnlineLibraryViewModel @Inject constructor(
       else -> ""
     }
 
+  internal data class FiltersInput(
+    val category: String,
+    val language: String,
+    val searchQuery: String,
+    val cachedCategories: List<Category>?
+  )
+
+  internal val tabDataMap = mutableMapOf<String, TabData>()
+
+  internal suspend fun getAppChosenLanguageCode(): String {
+    val appLocale = LocaleHelper.getAppLocale(context, kiwixDataStore)
+    return try {
+      appLocale.isO3Language.ifEmpty { appLocale.language }
+    } catch (_: Exception) {
+      appLocale.language
+    }
+  }
+
+  internal suspend fun createTabs(languageString: String): List<LanguageTab> {
+    if (languageString.equals("all", ignoreCase = true)) {
+      return listOf(
+        LanguageTab(
+          languageCode = null,
+          displayName = context.getString(R.string.all_languages).uppercase()
+        )
+      )
+    }
+    val languageCodes = languageString.split(",").map { it.trim() }.filter { it.isNotEmpty() }
+    return if (languageCodes.isEmpty()) {
+      val appLang = getAppChosenLanguageCode()
+      if (appLang.isNotEmpty()) {
+        listOf(
+          LanguageTab(
+            languageCode = appLang,
+            displayName = getDisplayLanguage(appLang).uppercase()
+          )
+        )
+      } else {
+        listOf(
+          LanguageTab(
+            languageCode = null,
+            displayName = context.getString(R.string.all_languages).uppercase()
+          )
+        )
+      }
+    } else {
+      languageCodes.map { code ->
+        LanguageTab(
+          languageCode = code,
+          displayName = getDisplayLanguage(code).uppercase()
+        )
+      }
+    }
+  }
+
   @OptIn(FlowPreview::class)
   @Suppress("MagicNumber")
   private fun observeFilters() =
     combine(
       kiwixDataStore.selectedOnlineContentCategory,
       kiwixDataStore.selectedOnlineContentLanguage,
-      uiState.map { it.searchQuery }.distinctUntilChanged().debounce(500.milliseconds)
-    ) { category, language, searchQuery ->
-      OnlineLibraryRequest(searchQuery, category, language, false, ZERO)
-    }.onEach { updateOnlineLibraryFilters(it) }
+      uiState.map { it.searchQuery }.distinctUntilChanged().debounce(500.milliseconds),
+      kiwixDataStore.cachedOnlineCategoryList,
+      kiwixDataStore.prefLanguage
+    ) { category, language, searchQuery, cachedCategories, _ ->
+      FiltersInput(category, language, searchQuery, cachedCategories)
+    }
+      .onEach { handleFiltersChanged(it) }
       .flowOn(ioDispatcher)
       .launchIn(viewModelScope)
+
+  internal suspend fun handleFiltersChanged(input: FiltersInput) {
+    val categoryChips =
+      input.category.split(",").map { it.trim() }.filter { it.isNotEmpty() }
+    val activeSelectedCategories = uiState.value.selectedCategories.filter { selected ->
+      categoryChips.any { it.equals(selected, ignoreCase = true) }
+    }.toSet()
+
+    val newTabs = createTabs(input.language)
+    val currentTabCode = uiState.value.tabs.getOrNull(uiState.value.selectedTabIndex)?.languageCode
+    val newIndex = newTabs.indexOfFirst { it.languageCode == currentTabCode }.coerceAtLeast(0)
+
+    _uiState.update { current ->
+      current.copy(
+        tabs = newTabs,
+        selectedTabIndex = newIndex,
+        categoryChips = categoryChips,
+        selectedCategories = activeSelectedCategories
+      )
+    }
+
+    val activeLanguage = newTabs.getOrNull(newIndex)?.languageCode.orEmpty()
+    val activeCategory = if (activeSelectedCategories.isNotEmpty()) {
+      activeSelectedCategories.joinToString(",")
+    } else {
+      input.category.takeUnless { it.isBlank() }.orEmpty()
+    }
+
+    val newRequest = OnlineLibraryRequest(
+      input.searchQuery.takeIf { it.isNotBlank() }.orEmpty(),
+      activeCategory,
+      activeLanguage,
+      false,
+      ZERO
+    )
+    if (newRequest.query != currentRequest.query ||
+      newRequest.category != currentRequest.category ||
+      newRequest.lang != currentRequest.lang
+    ) {
+      tabDataMap.clear()
+      updateOnlineLibraryFilters(newRequest)
+    }
+  }
+
+  fun selectTab(index: Int) {
+    if (index !in uiState.value.tabs.indices) return
+    if (index == uiState.value.selectedTabIndex) return
+    _uiState.update { it.copy(selectedTabIndex = index) }
+    val tab = uiState.value.tabs[index]
+    val tabKey = tab.languageCode.orEmpty()
+    val existingData = tabDataMap[tabKey]
+    if (existingData != null && existingData.isLoaded) {
+      currentRequest = currentRequest.copy(
+        lang = tab.languageCode,
+        page = existingData.currentPage,
+        isLoadMoreItem = false
+      )
+      totalPages = existingData.totalPages
+      networkBooks.value = existingData.books
+      _uiState.update {
+        it.copy(
+          isLoadingMore = existingData.isLoadingMore,
+          showNoContent = existingData.books.isEmpty() && !it.showScanningProgressBar,
+          noContentMessage = if (existingData.books.isEmpty()) {
+            noContentMessageWhenItemsComesFromOnlineSource(emptyList())
+          } else {
+            ""
+          }
+        )
+      }
+      if (existingData.books.isEmpty()) {
+        updateLibraryItems(emptyList())
+      }
+    } else {
+      val category = if (uiState.value.selectedCategories.isNotEmpty()) {
+        uiState.value.selectedCategories.joinToString(",")
+      } else {
+        currentRequest.category
+      }
+      val newRequest = currentRequest.copy(
+        lang = tab.languageCode.orEmpty(),
+        category = category,
+        page = ZERO,
+        isLoadMoreItem = false
+      )
+      updateOnlineLibraryFilters(newRequest)
+    }
+  }
+
+  fun onCategoryChipClicked(category: String) {
+    val currentSelected = uiState.value.selectedCategories
+    val isAlreadySelected = currentSelected.any { it.equals(category, ignoreCase = true) }
+    val newSelected = if (isAlreadySelected) {
+      currentSelected.filterNot { it.equals(category, ignoreCase = true) }.toSet()
+    } else {
+      currentSelected + category
+    }
+    _uiState.update { it.copy(selectedCategories = newSelected) }
+    tabDataMap.clear()
+    viewModelScope.launch {
+      updateOnlineLibraryFilters(getOnlineLibraryRequest())
+    }
+  }
 
   internal fun updateOnlineLibraryFilters(newRequest: OnlineLibraryRequest) {
     currentRequest = currentRequest.copy(
@@ -360,7 +542,7 @@ class OnlineLibraryViewModel @Inject constructor(
       ObserveNetworkState.Result.ShowWifiOnlyMessage -> {
         _uiState.update {
           it.copy(
-            noContentMessage = context.getString(R.string.swipe_down_for_library),
+            noContentMessage = getString(R.string.swipe_down_for_library),
             showNoContent = true,
             showScanningProgressBar = false
           )
@@ -371,7 +553,7 @@ class OnlineLibraryViewModel @Inject constructor(
         if (uiState.value.items.isEmpty()) {
           _uiState.update {
             it.copy(
-              noContentMessage = context.getString(R.string.no_network_connection),
+              noContentMessage = getString(R.string.no_network_connection),
               showNoContent = true,
               isRefreshing = false,
               showScanningProgressBar = false
@@ -391,7 +573,7 @@ class OnlineLibraryViewModel @Inject constructor(
           _uiState.update {
             it.copy(
               showScanningProgressBar = true,
-              scanningProgressBarMessage = context.getString(R.string.reaching_remote_library),
+              scanningProgressBarMessage = getString(R.string.reaching_remote_library),
               noContentMessage = "",
               showNoContent = false,
               isRefreshing = false
@@ -447,23 +629,7 @@ class OnlineLibraryViewModel @Inject constructor(
         R.string.parsing_remote_library
       )
 
-      is Success -> {
-        val currentBooks = networkBooks.value
-        totalPages = state.totalPages
-        val request = state.request
-        val newBooks = when {
-          request.isLoadMoreItem -> currentBooks + state.books
-          else -> state.books
-        }
-        networkBooks.emit(newBooks)
-        if (!request.isLoadMoreItem && newBooks.isNotEmpty()) {
-          sendUiEvent(UiEvent.ScrollToTop)
-        }
-        resetDownloadState()
-        if (newBooks.isEmpty()) {
-          updateLibraryItems(emptyList())
-        }
-      }
+      is Success -> handleSuccessState(state)
 
       is OnlineLibraryState.Error -> {
         if (networkBooks.value.isEmpty()) {
@@ -471,6 +637,44 @@ class OnlineLibraryViewModel @Inject constructor(
         }
         resetDownloadState()
       }
+    }
+  }
+
+  private suspend fun handleSuccessState(state: Success) {
+    val request = state.request
+    val tabKey = runCatching { request.lang.orEmpty() }.getOrDefault("")
+    val page = runCatching { request.page }.getOrDefault(ZERO)
+    val isLoadMore = runCatching { request.isLoadMoreItem }.getOrDefault(false)
+    val existingData = tabDataMap[tabKey] ?: TabData(books = networkBooks.value)
+    val updatedBooks = if (isLoadMore) {
+      existingData.books.ifEmpty { networkBooks.value } + state.books
+    } else {
+      state.books
+    }
+    val updatedData = TabData(
+      books = updatedBooks,
+      totalPages = state.totalPages,
+      currentPage = page,
+      isLoadingMore = false,
+      isLoaded = true
+    )
+    tabDataMap[tabKey] = updatedData
+
+    val currentSelectedTab = uiState.value.tabs.getOrNull(uiState.value.selectedTabIndex)
+    val currentTabKey = currentSelectedTab?.languageCode.orEmpty()
+
+    if (tabKey == currentTabKey || currentSelectedTab == null) {
+      totalPages = state.totalPages
+      networkBooks.emit(updatedBooks)
+      if (!isLoadMore && updatedBooks.isNotEmpty()) {
+        sendUiEvent(UiEvent.ScrollToTop)
+      }
+      resetDownloadState()
+      if (updatedBooks.isEmpty()) {
+        updateLibraryItems(emptyList())
+      }
+    } else {
+      resetDownloadState()
     }
   }
 
@@ -485,10 +689,10 @@ class OnlineLibraryViewModel @Inject constructor(
         }
       },
       negativeAction = {
-        emitToast(context.getString(R.string.denied_internet_permission_message))
+        emitToast(getString(R.string.denied_internet_permission_message))
         _uiState.update {
           it.copy(
-            noContentMessage = context.getString(R.string.swipe_down_for_library),
+            noContentMessage = getString(R.string.swipe_down_for_library),
             showNoContent = true
           )
         }
@@ -501,7 +705,7 @@ class OnlineLibraryViewModel @Inject constructor(
       it.copy(
         showScanningProgressBar = !isLoadMore,
         isLoadingMore = isLoadMore,
-        scanningProgressBarMessage = context.getString(messageResId),
+        scanningProgressBarMessage = getString(messageResId),
         noContentMessage = ""
       )
     }
@@ -527,8 +731,8 @@ class OnlineLibraryViewModel @Inject constructor(
   private fun emitNoInternetSnackbar() {
     sendUiEvent(
       UiEvent.ShowSnackbar(
-        message = context.getString(R.string.no_network_connection),
-        actionLabel = context.getString(R.string.menu_settings),
+        message = getString(R.string.no_network_connection),
+        actionLabel = getString(R.string.menu_settings),
         actionIntent = Intent(Settings.ACTION_WIFI_SETTINGS)
       )
     )
@@ -541,10 +745,10 @@ class OnlineLibraryViewModel @Inject constructor(
     sendUiEvent(
       ShowNoSpaceSnackbar(
         message = """
-            ${context.getString(R.string.download_no_space)}
-            ${context.getString(R.string.space_available)} $availableSpace
+            ${getString(R.string.download_no_space)}
+            ${getString(R.string.space_available)} $availableSpace
         """.trimIndent(),
-        actionLabel = context.getString(R.string.change_storage),
+        actionLabel = getString(R.string.change_storage),
         onAction = onStorageSelect
       )
     )
@@ -699,6 +903,7 @@ class OnlineLibraryViewModel @Inject constructor(
     viewModelScope.launch {
       when (refreshLibraryAction(uiState.value.items.isNotEmpty())) {
         Proceed -> {
+          tabDataMap.clear()
           updateOnlineLibraryFilters(getOnlineLibraryRequest())
           if (isExplicitRefresh) {
             _uiState.update {
@@ -706,7 +911,7 @@ class OnlineLibraryViewModel @Inject constructor(
                 noContentMessage = "",
                 showNoContent = false,
                 showScanningProgressBar = true,
-                scanningProgressBarMessage = context.getString(R.string.reaching_remote_library)
+                scanningProgressBarMessage = getString(R.string.reaching_remote_library)
               )
             }
           }
@@ -716,11 +921,11 @@ class OnlineLibraryViewModel @Inject constructor(
         NoInternetWithEmptyContent -> {
           _uiState.update {
             it.copy(
-              noContentMessage = context.getString(R.string.no_network_connection),
+              noContentMessage = getString(R.string.no_network_connection),
               showNoContent = true,
               isRefreshing = false,
               showScanningProgressBar = false,
-              scanningProgressBarMessage = context.getString(R.string.reaching_remote_library)
+              scanningProgressBarMessage = getString(R.string.reaching_remote_library)
             )
           }
         }
@@ -731,26 +936,48 @@ class OnlineLibraryViewModel @Inject constructor(
   }
 
   private suspend fun getOnlineLibraryRequest(): OnlineLibraryRequest {
-    val category =
-      kiwixDataStore.selectedOnlineContentCategory.first().takeUnless { it.isBlank() }
-    val language =
-      kiwixDataStore.selectedOnlineContentLanguage.first().takeUnless { it.isBlank() }
+    val category = if (uiState.value.selectedCategories.isNotEmpty()) {
+      uiState.value.selectedCategories.joinToString(",")
+    } else {
+      kiwixDataStore.selectedOnlineContentCategory.first().takeUnless { it.isBlank() }.orEmpty()
+    }
+    val currentTab = uiState.value.tabs.getOrNull(uiState.value.selectedTabIndex)
+    val configuredLanguage = kiwixDataStore.selectedOnlineContentLanguage.first()
+    val language = currentTab?.languageCode
+      ?: if (configuredLanguage.equals("all", ignoreCase = true)) {
+        ""
+      } else {
+        configuredLanguage.split(",")
+          .map { it.trim() }.firstOrNull { it.isNotBlank() }
+          ?: getAppChosenLanguageCode()
+      }
     return OnlineLibraryRequest(
-      null,
+      uiState.value.searchQuery.takeIf { it.isNotBlank() }.orEmpty(),
       category,
-      language,
+      language.orEmpty(),
       false,
       ZERO
     )
   }
 
   fun handleLoadMore(count: Int) {
+    val currentTab = uiState.value.tabs.getOrNull(uiState.value.selectedTabIndex)
+    val tabKey = currentTab?.languageCode.orEmpty()
+    val existingData = tabDataMap[tabKey]
+    val totalPagesForTab = if (existingData != null && existingData.totalPages > 0) {
+      existingData.totalPages
+    } else {
+      totalPages
+    }
     val currentPage = if (count > ZERO) (count - ONE) / ITEMS_PER_PAGE else ZERO
     val nextPage = currentPage + ONE
-    if (uiState.value.isLoadingMore) return
-    if (nextPage < totalPages) {
+    if (uiState.value.isLoadingMore || existingData?.isLoadingMore == true) return
+    if (nextPage < totalPagesForTab) {
+      existingData?.let { tabDataMap[tabKey] = it.copy(isLoadingMore = true) }
+      _uiState.update { it.copy(isLoadingMore = true) }
       updateOnlineLibraryFilters(
         currentRequest.copy(
+          lang = currentTab?.languageCode,
           page = nextPage,
           isLoadMoreItem = true
         )

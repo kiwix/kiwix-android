@@ -44,10 +44,11 @@ private val DarkColorScheme = darkColorScheme(
   onSurface = White,
   onError = White,
   onTertiary = MineShaftGray500,
-  surfaceContainer = MineShaftGray850,
   surfaceVariant = MineShaftGray850,
   onSurfaceVariant = MineShaftGray350,
   outlineVariant = MineShaftGray700,
+  secondaryContainer = DenimBlue800.copy(alpha = 0.5f),
+  onSecondaryContainer = DenimBlue200
 )
 
 private val LightColorScheme = lightColorScheme(
@@ -66,6 +67,8 @@ private val LightColorScheme = lightColorScheme(
   surfaceVariant = LightGrey,
   onSurfaceVariant = MineShaftGray700,
   outlineVariant = MineShaftGray350,
+  secondaryContainer = DenimBlue200.copy(alpha = 0.35f),
+  onSecondaryContainer = DenimBlue800
 )
 
 @Composable
