@@ -44,7 +44,6 @@ import com.google.accompanist.permissions.MultiplePermissionsState
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import kotlinx.coroutines.flow.filterIsInstance
 import org.kiwix.kiwixmobile.R
-import org.kiwix.kiwixmobile.core.R as CoreR
 import org.kiwix.kiwixmobile.core.R.drawable
 import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.extensions.CollectSideEffectWithActivity
@@ -64,6 +63,7 @@ import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.SelectionMode
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryViewModel.LocalLibraryUiActions.RequestReadWritePermission
 import org.kiwix.kiwixmobile.ui.KiwixDestination
+import org.kiwix.kiwixmobile.core.R as CoreR
 
 const val VALIDATE_ZIM_FILES_MENU_BUTTON_TESTING_TAG = "validateZimFilesMenuButtonTestingTag"
 const val SELECT_ALL_MENU_BUTTON_TESTING_TAG = "selectAllMenuButtonTestingTag"
