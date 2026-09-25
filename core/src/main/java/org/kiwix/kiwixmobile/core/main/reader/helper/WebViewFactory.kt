@@ -19,12 +19,15 @@
 package org.kiwix.kiwixmobile.core.main.reader.helper
 
 import android.content.Context
+import android.content.res.Configuration
 import android.util.AttributeSet
+import android.view.ContextThemeWrapper
 import android.widget.FrameLayout
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.MainCoroutineDispatcher
 import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.ThemeConfig
 import org.kiwix.kiwixmobile.core.di.IoDispatcher
 import org.kiwix.kiwixmobile.core.di.MainDispatcher
 import org.kiwix.kiwixmobile.core.main.CoreWebViewClient
@@ -35,10 +38,12 @@ import org.kiwix.kiwixmobile.core.utils.StyleUtils.getAttributes
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import javax.inject.Inject
 
+@Suppress("LongParameterList")
 class WebViewFactory @Inject constructor(
   @param:ApplicationContext private val context: Context,
   private val zimReaderContainer: ZimReaderContainer,
   private val kiwixDataStore: KiwixDataStore,
+  private val themeConfig: ThemeConfig,
   @param:IoDispatcher private val ioDispatcher: CoroutineDispatcher,
   @param:MainDispatcher private val mainDispatcher: MainCoroutineDispatcher
 ) {
@@ -49,17 +54,17 @@ class WebViewFactory @Inject constructor(
    * @param videoView A frameLayout, in which videos will play.
    * @return The initialized `KiwixWebView` instance.
    */
-  fun create(callback: WebViewCallback, videoView: FrameLayout): KiwixWebView {
+  suspend fun create(callback: WebViewCallback, videoView: FrameLayout): KiwixWebView {
     val attrs = context.getAttributes(R.xml.webview)
     return createWebView(attrs, callback, videoView)
   }
 
-  private fun createWebView(
+  private suspend fun createWebView(
     attrs: AttributeSet,
     callback: WebViewCallback,
     videoView: FrameLayout
   ): KiwixWebView = KiwixWebView(
-    context,
+    themedContextForCurrentTheme(),
     callback,
     attrs,
     videoView,
@@ -69,4 +74,13 @@ class WebViewFactory @Inject constructor(
     ioDispatcher,
     mainDispatcher
   )
+
+  private suspend fun themedContextForCurrentTheme(): Context {
+    val configuration = Configuration(context.resources.configuration).apply {
+      uiMode = (uiMode and Configuration.UI_MODE_NIGHT_MASK.inv()) or
+        if (themeConfig.isDarkTheme()) Configuration.UI_MODE_NIGHT_YES else Configuration.UI_MODE_NIGHT_NO
+    }
+    val configuredContext = context.createConfigurationContext(configuration)
+    return ContextThemeWrapper(configuredContext, R.style.KiwixTheme)
+  }
 }
