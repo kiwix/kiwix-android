@@ -35,9 +35,18 @@ class StateTest {
       assertThat(content.viewItems).isEqualTo(
         listOf(
           HeaderItem(HeaderItem.SELECTED),
-          LanguageItem(language(isActive = true)),
+          LanguageItem(
+            language = language(isActive = true),
+            isSelectedSection = true,
+            rank = 1,
+            canMoveUp = false,
+            canMoveDown = false
+          ),
           HeaderItem(HeaderItem.OTHER),
-          LanguageItem(language())
+          LanguageItem(
+            language = language(),
+            isSelectedSection = false
+          )
         )
       )
     }
@@ -51,15 +60,18 @@ class StateTest {
       assertThat(content.viewItems).isEqualTo(
         listOf(
           HeaderItem(HeaderItem.OTHER),
-          LanguageItem(language(language = "matchesFilter"))
+          LanguageItem(
+            language = language(language = "matchesFilter"),
+            isSelectedSection = false
+          )
         )
       )
     }
 
     @Test
     fun `select updates language items and moves them to selected section`() {
-      val lang1 = language(id = 1L, language = "German", isActive = false)
-      val lang2 = language(id = 2L, language = "Italian", isActive = false)
+      val lang1 = language(id = 1L, languageCode = "de", language = "German", isActive = false)
+      val lang2 = language(id = 2L, languageCode = "it", language = "Italian", isActive = false)
       val content = Content(listOf(lang1, lang2))
 
       val initialOrder = content.viewItems
@@ -71,11 +83,101 @@ class StateTest {
       assertThat(updatedContent.viewItems).isEqualTo(
         listOf(
           HeaderItem(HeaderItem.SELECTED),
-          LanguageItem(lang1.copy(active = true)),
+          LanguageItem(
+            language = lang1.copy(active = true),
+            isSelectedSection = true,
+            rank = 1,
+            canMoveUp = false,
+            canMoveDown = false
+          ),
           HeaderItem(HeaderItem.OTHER),
-          LanguageItem(lang2)
+          LanguageItem(
+            language = lang2,
+            isSelectedSection = false
+          )
         )
       )
+    }
+
+    @Test
+    fun `select preserves order in selectedLanguageOrder`() {
+      val lang1 = language(id = 1L, languageCode = "de", language = "German", isActive = false)
+      val lang2 = language(id = 2L, languageCode = "it", language = "Italian", isActive = false)
+      val content = Content(listOf(lang1, lang2))
+
+      val afterLang2 = content.select(LanguageItem(lang2))
+      assertThat(afterLang2.selectedLanguageOrder).containsExactly("it")
+
+      val afterLang1 = afterLang2.select(LanguageItem(lang1))
+      assertThat(afterLang1.selectedLanguageOrder).containsExactly("it", "de")
+
+      val deselectLang2 = afterLang1.select(LanguageItem(lang2))
+      assertThat(deselectLang2.selectedLanguageOrder).containsExactly("de")
+    }
+
+    @Test
+    fun `moveUp swaps order in selectedLanguageOrder`() {
+      val lang1 = language(id = 1L, languageCode = "de", language = "German", isActive = true)
+      val lang2 = language(id = 2L, languageCode = "it", language = "Italian", isActive = true)
+      val content = Content(
+        items = listOf(lang1, lang2),
+        selectedLanguageOrder = listOf("de", "it")
+      )
+
+      val afterMoveUp = content.moveUp(LanguageItem(lang2))
+      assertThat(afterMoveUp.selectedLanguageOrder).containsExactly("it", "de")
+    }
+
+    @Test
+    fun `moveDown swaps order in selectedLanguageOrder`() {
+      val lang1 = language(id = 1L, languageCode = "de", language = "German", isActive = true)
+      val lang2 = language(id = 2L, languageCode = "it", language = "Italian", isActive = true)
+      val content = Content(
+        items = listOf(lang1, lang2),
+        selectedLanguageOrder = listOf("de", "it")
+      )
+
+      val afterMoveDown = content.moveDown(LanguageItem(lang1))
+      assertThat(afterMoveDown.selectedLanguageOrder).containsExactly("it", "de")
+    }
+
+    @Test
+    fun `reorder moves item to new index in selectedLanguageOrder`() {
+      val lang1 = language(id = 1L, languageCode = "de", language = "German", isActive = true)
+      val lang2 = language(id = 2L, languageCode = "it", language = "Italian", isActive = true)
+      val lang3 = language(id = 3L, languageCode = "fr", language = "French", isActive = true)
+      val content = Content(
+        items = listOf(lang1, lang2, lang3),
+        selectedLanguageOrder = listOf("de", "it", "fr")
+      )
+
+      val afterReorder = content.reorder(fromIndex = 2, toIndex = 0)
+      assertThat(afterReorder.selectedLanguageOrder).containsExactly("fr", "de", "it")
+    }
+
+    @Test
+    fun `disables reordering and keeps unfiltered rank when filter is active`() {
+      val lang1 = language(id = 1L, languageCode = "de", language = "German", isActive = true)
+      val lang2 = language(id = 2L, languageCode = "es", language = "Spanish", isActive = true)
+      val lang3 = language(id = 3L, languageCode = "el", language = "Greek", isActive = true)
+      val content = Content(
+        items = listOf(lang1, lang2, lang3),
+        selectedLanguageOrder = listOf("de", "es", "el")
+      ).updateFilter("G")
+
+      val selectedItems = content.viewItems.filterIsInstance<LanguageItem>()
+      assertThat(selectedItems).hasSize(2)
+      // German (index 0 in full list)
+      assertThat(selectedItems[0].language.languageCode).isEqualTo("de")
+      assertThat(selectedItems[0].rank).isEqualTo(1)
+      assertThat(selectedItems[0].canMoveUp).isFalse()
+      assertThat(selectedItems[0].canMoveDown).isFalse()
+
+      // Greek (index 2 in full list)
+      assertThat(selectedItems[1].language.languageCode).isEqualTo("el")
+      assertThat(selectedItems[1].rank).isEqualTo(3)
+      assertThat(selectedItems[1].canMoveUp).isFalse()
+      assertThat(selectedItems[1].canMoveDown).isFalse()
     }
   }
 }

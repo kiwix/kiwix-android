@@ -21,16 +21,23 @@ package org.kiwix.kiwixmobile.language
 import android.os.Build
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.Check
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.semantics.CustomAccessibilityAction
+import androidx.compose.ui.semantics.SemanticsActions
+import androidx.compose.ui.semantics.getOrNull
+import androidx.compose.ui.test.SemanticsNodeInteraction
+import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onAllNodesWithContentDescription
+import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
+import androidx.compose.ui.test.performTouchInput
 import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
@@ -46,6 +53,7 @@ import org.kiwix.kiwixmobile.core.ui.models.IconItem
 import org.kiwix.kiwixmobile.core.ui.models.IconItem.Vector
 import org.kiwix.kiwixmobile.core.zim_manager.Language
 import org.kiwix.kiwixmobile.language.composables.LANGUAGE_HEADER_TESTING_TAG
+import org.kiwix.kiwixmobile.language.composables.LANGUAGE_ITEM_RADIO_BUTTON_TESTING_TAG
 import org.kiwix.kiwixmobile.language.composables.LanguageListItem
 import org.kiwix.kiwixmobile.language.viewmodel.State
 import org.kiwix.kiwixmobile.nav.destination.library.online.NO_CONTENT_VIEW_TEXT_TESTING_TAG
@@ -65,20 +73,19 @@ class LanguageScreenUITest {
   private fun mockLanguage(
     languageCode: String = "en",
     active: Boolean = false,
-    id: Long = 1L
+    id: Long = 1L,
+    occurrencesOfLanguage: Int = 10
   ) = Language(
     languageCode = languageCode,
     active = active,
-    occurrencesOfLanguage = 10,
+    occurrencesOfLanguage = occurrencesOfLanguage,
     id = id
   )
 
-  private fun saveActionMenuItem(onClick: () -> Unit = {}) = ActionMenuItem(
-    icon = IconItem.Vector(Icons.Default.Check),
-    contentDescription = R.string.save_languages,
-    onClick = onClick,
-    testingTag = SAVE_ICON_TESTING_TAG
-  )
+  private fun customAccessibilityActions(
+    node: SemanticsNodeInteraction
+  ): List<CustomAccessibilityAction> =
+    node.fetchSemanticsNode().config.getOrNull(SemanticsActions.CustomActions).orEmpty()
 
   private fun searchActionMenuItem(onClick: () -> Unit = {}) = ActionMenuItem(
     icon = IconItem.Drawable(R.drawable.action_search),
@@ -92,12 +99,13 @@ class LanguageScreenUITest {
     isSearchActive: Boolean = false,
     state: State = State.Loading,
     actionMenuItemList: List<ActionMenuItem> = listOf(
-      searchActionMenuItem(),
-      saveActionMenuItem()
+      searchActionMenuItem()
     ),
     onClearClick: () -> Unit = {},
     onAppBarValueChange: (String) -> Unit = {},
     selectLanguageItem: (LanguageListItem.LanguageItem) -> Unit = {},
+    onMoveUp: (LanguageListItem.LanguageItem) -> Unit = {},
+    onMoveDown: (LanguageListItem.LanguageItem) -> Unit = {},
     navigationIcon: @Composable () -> Unit = {}
   ) {
     composeTestRule.setContent {
@@ -109,6 +117,8 @@ class LanguageScreenUITest {
         onClearClick = onClearClick,
         onAppBarValueChange = onAppBarValueChange,
         selectLanguageItem = selectLanguageItem,
+        onMoveUp = onMoveUp,
+        onMoveDown = onMoveDown,
         navigationIcon = navigationIcon
       )
     }
@@ -120,29 +130,6 @@ class LanguageScreenUITest {
     composeTestRule
       .onNodeWithText(context.getString(R.string.select_language))
       .assertIsDisplayed()
-  }
-
-  @Test
-  fun languageScreen_whenScreenLaunched_saveIconIsDisplayed() {
-    mockLanguageScreen()
-    composeTestRule
-      .onNodeWithTag(SAVE_ICON_TESTING_TAG)
-      .assertIsDisplayed()
-  }
-
-  @Test
-  fun languageScreen_whenSaveIconClicked_callbackIsTriggered() {
-    var clicked = false
-    mockLanguageScreen(
-      actionMenuItemList = listOf(
-        searchActionMenuItem(),
-        saveActionMenuItem { clicked = true }
-      )
-    )
-    composeTestRule
-      .onNodeWithTag(SAVE_ICON_TESTING_TAG)
-      .performClick()
-    assertTrue("Save icon callback should be triggered", clicked)
   }
 
   @Test
@@ -158,8 +145,7 @@ class LanguageScreenUITest {
     var clicked = false
     mockLanguageScreen(
       actionMenuItemList = listOf(
-        searchActionMenuItem { clicked = true },
-        saveActionMenuItem()
+        searchActionMenuItem { clicked = true }
       )
     )
     composeTestRule
@@ -188,7 +174,7 @@ class LanguageScreenUITest {
   fun languageScreen_whenSearchIsActive_searchIconIsHidden() {
     mockLanguageScreen(
       isSearchActive = true,
-      actionMenuItemList = listOf(saveActionMenuItem())
+      actionMenuItemList = emptyList()
     )
     composeTestRule
       .onNodeWithTag(SEARCH_ICON_TESTING_TAG)
@@ -263,7 +249,7 @@ class LanguageScreenUITest {
     var backPressHandled = false
     mockLanguageScreen(
       isSearchActive = true,
-      actionMenuItemList = listOf(saveActionMenuItem()),
+      actionMenuItemList = emptyList(),
       navigationIcon = {
         NavigationIcon(
           iconItem = Vector(Icons.AutoMirrored.Filled.ArrowBack),
@@ -412,5 +398,298 @@ class LanguageScreenUITest {
       .onNodeWithContentDescription(
         context.getString(R.string.select_language_content_description)
       ).assertDoesNotExist()
+  }
+
+  @Test
+  fun languageScreen_whenSelectedItemDraggedDown_moveDownCallbackIsTriggered() {
+    var movedDownItem: LanguageListItem.LanguageItem? = null
+    val lang1 = mockLanguage(languageCode = "en", active = true, id = 1L)
+    val lang2 = mockLanguage(languageCode = "de", active = true, id = 2L)
+    mockLanguageScreen(
+      state = State.Content(listOf(lang1, lang2)),
+      onMoveDown = { movedDownItem = it }
+    )
+    composeTestRule
+      .onNodeWithTag("$LANGUAGE_ITEM_RADIO_BUTTON_TESTING_TAG${lang1.language}")
+      .performTouchInput {
+        down(center)
+        advanceEventTime(viewConfiguration.longPressTimeoutMillis + 100)
+        moveBy(Offset(0f, 200f))
+        up()
+      }
+    assertTrue("onMoveDown should be triggered on long press drag", movedDownItem != null)
+  }
+
+  @Test
+  fun languageScreen_whenSelectedItemDraggedUp_moveUpCallbackIsTriggered() {
+    var movedUpItem: LanguageListItem.LanguageItem? = null
+    val lang1 = mockLanguage(languageCode = "en", active = true, id = 1L)
+    val lang2 = mockLanguage(languageCode = "de", active = true, id = 2L)
+    mockLanguageScreen(
+      state = State.Content(listOf(lang1, lang2)),
+      onMoveUp = { movedUpItem = it }
+    )
+    composeTestRule
+      .onNodeWithTag("$LANGUAGE_ITEM_RADIO_BUTTON_TESTING_TAG${lang2.language}")
+      .performTouchInput {
+        down(center)
+        advanceEventTime(viewConfiguration.longPressTimeoutMillis + 100)
+        moveBy(Offset(0f, -200f))
+        up()
+      }
+    assertTrue("onMoveUp should be triggered on long press drag", movedUpItem != null)
+  }
+
+  @Test
+  fun languageScreen_whenSelectedItemsDisplayed_rankTextsAreDisplayedInOrder() {
+    val lang1 = mockLanguage(languageCode = "en", active = true, id = 1L)
+    val lang2 = mockLanguage(languageCode = "de", active = true, id = 2L)
+    mockLanguageScreen(state = State.Content(listOf(lang1, lang2)))
+    composeTestRule.onNodeWithText("1.").assertIsDisplayed()
+    composeTestRule.onNodeWithText("2.").assertIsDisplayed()
+  }
+
+  @Test
+  fun languageScreen_whenFirstSelectedItemDraggedUp_moveUpCallbackIsNotTriggered() {
+    var movedUpItem: LanguageListItem.LanguageItem? = null
+    val lang1 = mockLanguage(languageCode = "en", active = true, id = 1L)
+    val lang2 = mockLanguage(languageCode = "de", active = true, id = 2L)
+    mockLanguageScreen(
+      state = State.Content(listOf(lang1, lang2)),
+      onMoveUp = { movedUpItem = it }
+    )
+    composeTestRule
+      .onNodeWithTag("$LANGUAGE_ITEM_RADIO_BUTTON_TESTING_TAG${lang1.language}")
+      .performTouchInput {
+        down(center)
+        advanceEventTime(viewConfiguration.longPressTimeoutMillis + 100)
+        moveBy(Offset(0f, -200f))
+        up()
+      }
+    assertTrue(
+      "onMoveUp should not be triggered for the first selected item",
+      movedUpItem == null
+    )
+  }
+
+  @Test
+  fun languageScreen_whenLastSelectedItemDraggedDown_moveDownCallbackIsNotTriggered() {
+    var movedDownItem: LanguageListItem.LanguageItem? = null
+    val lang1 = mockLanguage(languageCode = "en", active = true, id = 1L)
+    val lang2 = mockLanguage(languageCode = "de", active = true, id = 2L)
+    mockLanguageScreen(
+      state = State.Content(listOf(lang1, lang2)),
+      onMoveDown = { movedDownItem = it }
+    )
+    composeTestRule
+      .onNodeWithTag("$LANGUAGE_ITEM_RADIO_BUTTON_TESTING_TAG${lang2.language}")
+      .performTouchInput {
+        down(center)
+        advanceEventTime(viewConfiguration.longPressTimeoutMillis + 100)
+        moveBy(Offset(0f, 200f))
+        up()
+      }
+    assertTrue(
+      "onMoveDown should not be triggered for the last selected item",
+      movedDownItem == null
+    )
+  }
+
+  @Test
+  fun languageScreen_whenOtherSectionItemLongPressDragged_moveCallbacksAreNotTriggered() {
+    var movedUpItem: LanguageListItem.LanguageItem? = null
+    var movedDownItem: LanguageListItem.LanguageItem? = null
+    val otherLanguage = mockLanguage(languageCode = "en", active = false)
+    mockLanguageScreen(
+      state = State.Content(listOf(otherLanguage)),
+      onMoveUp = { movedUpItem = it },
+      onMoveDown = { movedDownItem = it }
+    )
+    composeTestRule
+      .onNodeWithTag("$LANGUAGE_ITEM_RADIO_BUTTON_TESTING_TAG${otherLanguage.language}")
+      .performTouchInput {
+        down(center)
+        advanceEventTime(viewConfiguration.longPressTimeoutMillis + 100)
+        moveBy(Offset(0f, 200f))
+        up()
+      }
+    assertTrue(
+      "Other-section items should not support reorder drag",
+      movedUpItem == null && movedDownItem == null
+    )
+  }
+
+  @Test
+  fun languageScreen_whenOtherSectionItem_reorderIconAndRankAreNotDisplayed() {
+    val otherLanguage = mockLanguage(languageCode = "en", active = false)
+    mockLanguageScreen(state = State.Content(listOf(otherLanguage)))
+    composeTestRule
+      .onNodeWithContentDescription(context.getString(R.string.reorder_language))
+      .assertDoesNotExist()
+    composeTestRule.onNodeWithText("1.").assertDoesNotExist()
+  }
+
+  @Test
+  fun languageScreen_whenFirstSelectedItem_moveUpActionUnavailableAndMoveDownActionWorks() {
+    var movedDownItem: LanguageListItem.LanguageItem? = null
+    val lang1 = mockLanguage(languageCode = "en", active = true, id = 1L)
+    val lang2 = mockLanguage(languageCode = "de", active = true, id = 2L)
+    mockLanguageScreen(
+      state = State.Content(listOf(lang1, lang2)),
+      onMoveDown = { movedDownItem = it }
+    )
+    val moveUpLabel = context.getString(R.string.move_up)
+    val moveDownLabel = context.getString(R.string.move_down)
+    val actions = customAccessibilityActions(
+      composeTestRule.onAllNodesWithContentDescription(
+        context.getString(R.string.reorder_language)
+      )[0]
+    )
+    assertTrue(
+      "First item should not offer a move up accessibility action",
+      actions.none { it.label == moveUpLabel }
+    )
+    val moveDownAction = actions.first { it.label == moveDownLabel }
+    composeTestRule.runOnIdle { moveDownAction.action() }
+    composeTestRule.waitForIdle()
+    assertTrue(
+      "Invoking the move down accessibility action should trigger onMoveDown",
+      movedDownItem != null
+    )
+  }
+
+  @Test
+  fun languageScreen_whenLastSelectedItem_moveDownActionUnavailableAndMoveUpActionWorks() {
+    var movedUpItem: LanguageListItem.LanguageItem? = null
+    val lang1 = mockLanguage(languageCode = "en", active = true, id = 1L)
+    val lang2 = mockLanguage(languageCode = "de", active = true, id = 2L)
+    mockLanguageScreen(
+      state = State.Content(listOf(lang1, lang2)),
+      onMoveUp = { movedUpItem = it }
+    )
+    val moveUpLabel = context.getString(R.string.move_up)
+    val moveDownLabel = context.getString(R.string.move_down)
+    val actions = customAccessibilityActions(
+      composeTestRule.onAllNodesWithContentDescription(
+        context.getString(R.string.reorder_language)
+      )[1]
+    )
+    assertTrue(
+      "Last item should not offer a move down accessibility action",
+      actions.none { it.label == moveDownLabel }
+    )
+    val moveUpAction = actions.first { it.label == moveUpLabel }
+    composeTestRule.runOnIdle { moveUpAction.action() }
+    composeTestRule.waitForIdle()
+    assertTrue(
+      "Invoking the move up accessibility action should trigger onMoveUp",
+      movedUpItem != null
+    )
+  }
+
+  @Test
+  fun languageScreen_whenSearchFilterActive_reorderActionsAreUnavailable() {
+    val lang1 = Language(
+      id = 1L,
+      active = true,
+      occurencesOfLanguage = 5,
+      language = "English",
+      languageLocalized = "English",
+      languageCode = "en",
+      languageCodeISO2 = "eng"
+    )
+    val lang2 = Language(
+      id = 2L,
+      active = true,
+      occurencesOfLanguage = 5,
+      language = "German",
+      languageLocalized = "Deutsch",
+      languageCode = "de",
+      languageCodeISO2 = "deu"
+    )
+    mockLanguageScreen(state = State.Content(listOf(lang1, lang2), filter = "e"))
+    val actions = customAccessibilityActions(
+      composeTestRule.onAllNodesWithContentDescription(
+        context.getString(R.string.reorder_language)
+      )[1]
+    )
+    assertTrue(
+      "Reorder actions should be unavailable while a search filter is active",
+      actions.isEmpty()
+    )
+  }
+
+  @Test
+  fun languageScreen_whenBookCountIsOne_singularBookCountIsDisplayed() {
+    val language = mockLanguage(languageCode = "en", active = false, occurrencesOfLanguage = 1)
+    mockLanguageScreen(state = State.Content(listOf(language)))
+    val expected = context.resources.getQuantityString(R.plurals.book_count, 1, 1)
+    composeTestRule.onNodeWithText(expected).assertIsDisplayed()
+  }
+
+  @Test
+  fun languageScreen_whenBookCountIsMultiple_pluralBookCountIsDisplayed() {
+    val language = mockLanguage(languageCode = "en", active = false, occurrencesOfLanguage = 5)
+    mockLanguageScreen(state = State.Content(listOf(language)))
+    val expected = context.resources.getQuantityString(R.plurals.book_count, 5, 5)
+    composeTestRule.onNodeWithText(expected).assertIsDisplayed()
+  }
+
+  @Test
+  fun languageScreen_whenLocalizedNameDiffersFromLanguageName_localizedNameIsDisplayed() {
+    val language = Language(
+      id = 1L,
+      active = false,
+      occurencesOfLanguage = 5,
+      language = "German",
+      languageLocalized = "Deutsch",
+      languageCode = "de",
+      languageCodeISO2 = "deu"
+    )
+    mockLanguageScreen(state = State.Content(listOf(language)))
+    composeTestRule.onNodeWithText("German").assertIsDisplayed()
+    composeTestRule.onNodeWithText("Deutsch").assertIsDisplayed()
+  }
+
+  @Test
+  fun languageScreen_whenLocalizedNameEqualsLanguageName_localizedNameIsNotDuplicated() {
+    val language = Language(
+      id = 1L,
+      active = false,
+      occurencesOfLanguage = 5,
+      language = "English",
+      languageLocalized = "English",
+      languageCode = "en",
+      languageCodeISO2 = "eng"
+    )
+    mockLanguageScreen(state = State.Content(listOf(language)))
+    composeTestRule
+      .onAllNodesWithText("English")
+      .assertCountEquals(1)
+  }
+
+  @Test
+  fun languageScreen_whenFilterMatchesLanguage_matchingItemDisplayedAndNonMatchingHidden() {
+    val english = Language(
+      id = 1L,
+      active = false,
+      occurencesOfLanguage = 5,
+      language = "English",
+      languageLocalized = "English",
+      languageCode = "en",
+      languageCodeISO2 = "eng"
+    )
+    val german = Language(
+      id = 2L,
+      active = false,
+      occurencesOfLanguage = 5,
+      language = "German",
+      languageLocalized = "Deutsch",
+      languageCode = "de",
+      languageCodeISO2 = "deu"
+    )
+    mockLanguageScreen(state = State.Content(listOf(english, german), filter = "Ger"))
+    composeTestRule.onNodeWithText("German").assertIsDisplayed()
+    composeTestRule.onNodeWithText("English").assertDoesNotExist()
   }
 }

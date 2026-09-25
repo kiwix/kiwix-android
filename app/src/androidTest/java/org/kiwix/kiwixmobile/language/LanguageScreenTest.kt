@@ -20,6 +20,7 @@ package org.kiwix.kiwixmobile.language
 import android.os.Build
 import androidx.compose.ui.test.junit4.accessibility.enableAccessibilityChecks
 import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.onAllNodesWithText
 import androidx.test.filters.LargeTest
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
@@ -82,10 +83,13 @@ class LanguageScreenTest : BaseActivityTest() {
       // search and de-select if german language already selected
       clickOnLanguageIcon(composeTestRule)
       waitForLanguageToLoad(composeTestRule)
-      selectLanguage(
-        composeTestRule = composeTestRule,
-        matchLanguage = kiwixMainActivity.getString(R.string.all_languages)
-      )
+      // deselect default English if present so German will be the only selected language
+      if (composeTestRule.onAllNodesWithText("English").fetchSemanticsNodes().isNotEmpty()) {
+        selectLanguage(
+          composeTestRule = composeTestRule,
+          matchLanguage = "English"
+        )
+      }
       clickOnLanguageSearchIcon(composeTestRule)
       searchLanguage(
         composeTestRule = composeTestRule,
@@ -108,10 +112,13 @@ class LanguageScreenTest : BaseActivityTest() {
 
       clickOnLanguageIcon(composeTestRule)
       waitForLanguageToLoad(composeTestRule)
-      selectLanguage(
-        composeTestRule = composeTestRule,
-        matchLanguage = kiwixMainActivity.getString(R.string.all_languages)
-      )
+      // deselect German so Italian will be the only selected language
+      if (composeTestRule.onAllNodesWithText("German").fetchSemanticsNodes().isNotEmpty()) {
+        selectLanguage(
+          composeTestRule = composeTestRule,
+          matchLanguage = "German"
+        )
+      }
       clickOnLanguageSearchIcon(composeTestRule)
       searchLanguage(
         composeTestRule = composeTestRule,
