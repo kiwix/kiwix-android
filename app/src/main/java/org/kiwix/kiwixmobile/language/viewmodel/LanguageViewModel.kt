@@ -67,6 +67,17 @@ open class LanguageViewModel @Inject constructor(
   val actions = MutableSharedFlow<Action>(extraBufferCapacity = Int.MAX_VALUE)
   val effects = MutableSharedFlow<SideEffect<*>>(extraBufferCapacity = Int.MAX_VALUE)
   private val coroutineJobs = mutableListOf<Job>()
+  var onFinish: (() -> Unit)? = null
+    private set
+
+  fun setOnFinishCallback(callback: () -> Unit) {
+    onFinish = callback
+  }
+
+  private fun requireOnFinishCallBack() = requireNotNull(onFinish) {
+    "onFinish callback is not set. " +
+      "Set LanguageViewModel.setOnFinishCallback() before using the callback"
+  }
 
   init {
     connectivityObserver.register()
@@ -263,7 +274,8 @@ open class LanguageViewModel @Inject constructor(
       SaveLanguagesAndFinish(
         sortedSelectedLanguages,
         kiwixDataStore,
-        viewModelScope
+        viewModelScope,
+        requireOnFinishCallBack()
       )
     )
     return Saving

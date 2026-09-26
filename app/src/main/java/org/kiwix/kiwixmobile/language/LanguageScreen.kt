@@ -43,7 +43,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
@@ -77,6 +79,7 @@ const val SAVE_ICON_TESTING_TAG = "saveLanguages"
 @Composable
 internal fun LanguageScreenRoute(navigateBack: () -> Unit) {
   val languageViewModel: LanguageViewModel = hiltViewModel()
+  languageViewModel.setOnFinishCallback(navigateBack)
   val state by languageViewModel.state.collectAsStateWithLifecycle()
 
   languageViewModel.effects.CollectSideEffectWithActivity { effect, activity ->
@@ -86,9 +89,13 @@ internal fun LanguageScreenRoute(navigateBack: () -> Unit) {
   var searchText by rememberSaveable { mutableStateOf("") }
   var isSearchActive by rememberSaveable { mutableStateOf(false) }
   var isSaving by remember { mutableStateOf(false) }
+  val keyboardController = LocalSoftwareKeyboardController.current
+  val focusManager = LocalFocusManager.current
 
   fun resetSearchState() {
-    // clears the search text and resets the filter
+    // clears the search text, hides keyboard, and resets the filter
+    keyboardController?.hide()
+    focusManager.clearFocus(force = true)
     searchText = ""
     isSearchActive = false
     languageViewModel.actions.tryEmit(Action.Filter(searchText))
@@ -98,6 +105,8 @@ internal fun LanguageScreenRoute(navigateBack: () -> Unit) {
     if (!isSaving) {
       isSaving = true
       isSearchActive = false
+      keyboardController?.hide()
+      focusManager.clearFocus(force = true)
       if (state is Content) {
         languageViewModel.actions.tryEmit(Action.Save)
       } else if (state !== State.Saving) {
@@ -132,6 +141,8 @@ internal fun LanguageScreenRoute(navigateBack: () -> Unit) {
         languageViewModel.actions.tryEmit(Action.Filter(it.trim()))
       },
       selectLanguageItem = { languageItem ->
+        keyboardController?.hide()
+        focusManager.clearFocus(force = true)
         if (!languageItem.language.active) {
           searchText = ""
           isSearchActive = false

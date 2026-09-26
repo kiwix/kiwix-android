@@ -18,11 +18,9 @@
 
 package org.kiwix.kiwixmobile.language.viewmodel
 
-import androidx.activity.OnBackPressedDispatcher
 import androidx.appcompat.app.AppCompatActivity
 import io.mockk.Runs
 import io.mockk.coEvery
-import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.verify
@@ -39,19 +37,18 @@ class SaveLanguagesAndFinishTest {
     coEvery { kiwixDataStore.setSelectedOnlineContentLanguage(any()) } just Runs
     val activity = mockk<AppCompatActivity>()
     val lifeCycleScope = TestScope(testScheduler)
-    val onBackPressedDispatcher = mockk<OnBackPressedDispatcher>()
-    every { activity.onBackPressedDispatcher } returns onBackPressedDispatcher
-    every { onBackPressedDispatcher.onBackPressed() } answers { }
+    val onFinish = mockk<() -> Unit>(relaxed = true)
     val language = Language(languageCode = "eng", active = true, occurrencesOfLanguage = 1)
     val anotherLanguage = Language(languageCode = "fra", active = true, occurrencesOfLanguage = 1)
     SaveLanguagesAndFinish(
       listOf(language, anotherLanguage),
       kiwixDataStore,
-      lifeCycleScope
+      lifeCycleScope,
+      onFinish
     ).invokeWith(activity)
     testScheduler.advanceUntilIdle()
     coEvery { kiwixDataStore.setSelectedOnlineContentLanguage("eng,fra") }
     testScheduler.advanceUntilIdle()
-    verify { onBackPressedDispatcher.onBackPressed() }
+    verify { onFinish() }
   }
 }

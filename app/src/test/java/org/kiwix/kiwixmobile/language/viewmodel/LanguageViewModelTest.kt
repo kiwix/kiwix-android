@@ -573,6 +573,7 @@ class LanguageViewModelTest {
           }
         }
 
+        languageViewModel.setOnFinishCallback { }
         languageViewModel.actions.emit(Action.Save)
         advanceUntilIdle()
 
@@ -608,6 +609,7 @@ class LanguageViewModelTest {
           languageViewModel.effects.collect { sideEffect = it }
         }
 
+        languageViewModel.setOnFinishCallback { }
         languageViewModel.actions.emit(Action.Save)
         advanceUntilIdle()
 
