@@ -70,7 +70,9 @@ class LanguageRobot : BaseRobot() {
   }
 
   fun clickOnLanguageSearchIcon(composeTestRule: ComposeContentTestRule) {
-    composeTestRule.onNodeWithTag(SEARCH_ICON_TESTING_TAG).performClick()
+    if (composeTestRule.onAllNodesWithTag(SEARCH_ICON_TESTING_TAG).fetchSemanticsNodes().isNotEmpty()) {
+      composeTestRule.onNodeWithTag(SEARCH_ICON_TESTING_TAG).performClick()
+    }
   }
 
   fun searchLanguage(

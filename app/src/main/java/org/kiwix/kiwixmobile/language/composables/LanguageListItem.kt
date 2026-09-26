@@ -32,6 +32,10 @@ sealed class LanguageListItem {
     }
   }
 
+  data object SearchItem : LanguageListItem() {
+    override val id: Long = Long.MIN_VALUE + 1
+  }
+
   data class LanguageItem(
     val language: Language,
     val isSelectedSection: Boolean = false,

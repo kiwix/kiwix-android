@@ -26,14 +26,22 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import org.kiwix.kiwixmobile.language.composables.LanguageListItem.HeaderItem
 import org.kiwix.kiwixmobile.language.composables.LanguageListItem.LanguageItem
+import org.kiwix.kiwixmobile.language.composables.LanguageListItem.SearchItem
 import org.kiwix.kiwixmobile.language.viewmodel.State
 import org.kiwix.kiwixmobile.language.viewmodel.State.Content
 
+@Suppress("LongParameterList")
 @Composable
 fun LanguageList(
   state: State,
   context: Context,
   listState: LazyListState,
+  searchText: String,
+  isSearchActive: Boolean = false,
+  onSearchIconClick: () -> Unit = {},
+  onSearchTextChange: (String) -> Unit,
+  onClearClick: () -> Unit,
+  onCloseSearch: () -> Unit = {},
   selectLanguageItem: (LanguageItem) -> Unit,
   onMoveUp: (LanguageItem) -> Unit = {},
   onMoveDown: (LanguageItem) -> Unit = {}
@@ -48,6 +56,7 @@ fun LanguageList(
       key = { _, item ->
         when (item) {
           is HeaderItem -> "header_${item.id}"
+          is SearchItem -> "search_item"
           is LanguageItem -> "language_${item.language.id}"
         }
       }
@@ -55,13 +64,26 @@ fun LanguageList(
       when (item) {
         is HeaderItem -> HeaderText(
           item = item,
-          modifier = Modifier
-            .animateItem()
+          isSearchActive = isSearchActive,
+          onSearchClick = if (item.id == HeaderItem.OTHER) onSearchIconClick else null,
+          modifier = Modifier.animateItem()
         )
 
+        is SearchItem -> {
+          if (isSearchActive || searchText.isNotEmpty()) {
+            LanguageSearchField(
+              searchText = searchText,
+              onSearchTextChange = onSearchTextChange,
+              onClearClick = onClearClick,
+              onCloseClick = onCloseSearch,
+              modifier = Modifier.animateItem()
+            )
+          }
+        }
+
         is LanguageItem -> {
-          val isFirst = index == 0 || viewItem.getOrNull(index - 1) is HeaderItem
-          val isLast = index == viewItem.lastIndex || viewItem.getOrNull(index + 1) is HeaderItem
+          val isFirst = index == 0 || viewItem.getOrNull(index - 1) !is LanguageItem
+          val isLast = index == viewItem.lastIndex || viewItem.getOrNull(index + 1) !is LanguageItem
           LanguageItemRow(
             context = context,
             modifier = Modifier.animateItem(),
