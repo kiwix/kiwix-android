@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <!--Top level DayNight theme to be used in AndroidManifest.xml-->
   <style name="KiwixTheme" parent="Base.KiwixTheme">
-    <!-- Dark theme customisations here-->
+    <item name="android:isLightTheme" tools:targetApi="q">false</item>
     <item name="colorPrimary">@color/denim_blue200</item>
 
     // keep the "kiwix blue" color of all buttons

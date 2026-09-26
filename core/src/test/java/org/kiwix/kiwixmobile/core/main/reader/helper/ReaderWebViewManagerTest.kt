@@ -77,7 +77,7 @@ class ReaderWebViewManagerTest {
     @Test
     fun `createNewTab creates webview`() = runTest {
       val webView = mockk<KiwixWebView>()
-      every {
+      coEvery {
         webViewFactory.create(callback, frameLayout)
       } returns webView
 
@@ -107,7 +107,7 @@ class ReaderWebViewManagerTest {
     @Test
     fun `createNewTab does not load url when shouldLoadUrl is false`() = runTest {
       val webView = mockk<KiwixWebView>()
-      every { webViewFactory.create(callback, frameLayout) } returns webView
+      coEvery { webViewFactory.create(callback, frameLayout) } returns webView
       readerWebViewManager.createNewTab(
         tabConfig = TabsManager.NewTabConfig(
           url = "url",
@@ -129,7 +129,7 @@ class ReaderWebViewManagerTest {
     @Test
     fun `createNewTab does not select tab when selectTab is false`() = runTest {
       val webView = mockk<KiwixWebView>()
-      every { webViewFactory.create(callback, frameLayout) } returns webView
+      coEvery { webViewFactory.create(callback, frameLayout) } returns webView
       val newTabConfig = TabsManager.NewTabConfig(
         url = "url",
         selectTab = false,
