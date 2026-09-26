@@ -42,9 +42,13 @@ object LocaleHelper {
       }
     }
 
-  private fun getSystemLocale(context: Context): Locale = try {
-    context.resources.configuration.locales.get(0)
+  fun getSystemLocale(context: Context? = null): Locale = try {
+    android.content.res.Resources.getSystem().configuration.locales.get(0)
   } catch (_: Throwable) {
-    Locale.getDefault()
+    try {
+      context?.resources?.configuration?.locales?.get(0) ?: Locale.getDefault()
+    } catch (_: Throwable) {
+      Locale.getDefault()
+    }
   }
 }

@@ -89,4 +89,16 @@ class LocaleHelperTest {
 
     assertEquals(Locale.ENGLISH.language, locale.language)
   }
+
+  @Test
+  fun `getSystemLocale returns non-null locale`() {
+    val locale = LocaleHelper.getSystemLocale(context)
+    org.junit.jupiter.api.Assertions.assertNotNull(locale)
+  }
+
+  @Test
+  fun `getSystemLocale without arguments returns non-null locale`() {
+    val locale = LocaleHelper.getSystemLocale()
+    org.junit.jupiter.api.Assertions.assertNotNull(locale)
+  }
 }
