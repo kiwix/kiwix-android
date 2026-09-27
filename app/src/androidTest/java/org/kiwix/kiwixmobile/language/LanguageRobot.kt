@@ -61,17 +61,20 @@ class LanguageRobot : BaseRobot() {
       .onNodeWithTag(NAVIGATION_ICON_TESTING_TAG)
       .performClick()
     composeTestRule.waitForIdle()
-    if (composeTestRule.onAllNodesWithTag(NAVIGATION_ICON_TESTING_TAG).fetchSemanticsNodes().isNotEmpty()) {
+    if (composeTestRule.onAllNodesWithTag(LANGUAGE_MENU_ICON_TESTING_TAG).fetchSemanticsNodes().isEmpty() &&
+      composeTestRule.onAllNodesWithTag(NAVIGATION_ICON_TESTING_TAG).fetchSemanticsNodes().isNotEmpty()
+    ) {
       composeTestRule
         .onNodeWithTag(NAVIGATION_ICON_TESTING_TAG)
         .performClick()
+      composeTestRule.waitForIdle()
     }
-    composeTestRule.waitForIdle()
   }
 
   fun clickOnLanguageSearchIcon(composeTestRule: ComposeContentTestRule) {
     if (composeTestRule.onAllNodesWithTag(SEARCH_ICON_TESTING_TAG).fetchSemanticsNodes().isNotEmpty()) {
       composeTestRule.onNodeWithTag(SEARCH_ICON_TESTING_TAG).performClick()
+      composeTestRule.waitForIdle()
     }
   }
 
@@ -79,6 +82,7 @@ class LanguageRobot : BaseRobot() {
     composeTestRule: ComposeContentTestRule,
     searchLanguage: String
   ) {
+    clickOnLanguageSearchIcon(composeTestRule)
     val searchField = composeTestRule.onNodeWithTag(SEARCH_FIELD_TESTING_TAG)
     searchField.performTextInput(text = searchLanguage)
   }

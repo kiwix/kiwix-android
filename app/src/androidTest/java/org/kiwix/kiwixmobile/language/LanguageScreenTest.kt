@@ -90,6 +90,7 @@ class LanguageScreenTest : BaseActivityTest() {
           matchLanguage = "English"
         )
       }
+      clickOnLanguageSearchIcon(composeTestRule)
       searchLanguage(
         composeTestRule = composeTestRule,
         searchLanguage = "german"
@@ -118,6 +119,7 @@ class LanguageScreenTest : BaseActivityTest() {
           matchLanguage = "German"
         )
       }
+      clickOnLanguageSearchIcon(composeTestRule)
       searchLanguage(
         composeTestRule = composeTestRule,
         searchLanguage = "italiano"
