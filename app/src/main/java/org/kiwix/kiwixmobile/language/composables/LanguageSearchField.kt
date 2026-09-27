@@ -79,23 +79,23 @@ fun LanguageSearchField(
         end = ComposeDimens.SIXTEEN_DP,
         bottom = ComposeDimens.EIGHT_DP
       )
-      .height(40.dp),
-    shape = RoundedCornerShape(ComposeDimens.TWENTY_DP),
+      .height(ComposeDimens.FORTY_EIGHT_DP),
+    shape = RoundedCornerShape(ComposeDimens.TWENTY_FOUR_DP),
     color = MaterialTheme.colorScheme.surfaceVariant
   ) {
     Row(
       modifier = Modifier
         .fillMaxSize()
-        .padding(horizontal = ComposeDimens.TWELVE_DP),
+        .padding(horizontal = ComposeDimens.FOURTEEN_DP),
       verticalAlignment = Alignment.CenterVertically
     ) {
       Icon(
         imageVector = Icons.Default.Search,
         contentDescription = stringResource(R.string.search_label),
         tint = MaterialTheme.colorScheme.onSurfaceVariant,
-        modifier = Modifier.size(18.dp)
+        modifier = Modifier.size(ComposeDimens.TWENTY_DP)
       )
-      Spacer(modifier = Modifier.width(ComposeDimens.EIGHT_DP))
+      Spacer(modifier = Modifier.width(ComposeDimens.TEN_DP))
       SearchInputBox(
         searchText = searchText,
         onSearchTextChange = onSearchTextChange,
@@ -167,13 +167,13 @@ private fun ClearOrCloseButton(
         onCloseClick()
       }
     },
-    modifier = modifier.size(28.dp)
+    modifier = modifier.size(32.dp)
   ) {
     Icon(
       painter = painterResource(R.drawable.ic_clear_white_24dp),
       contentDescription = stringResource(R.string.searchview_description_clear),
       tint = MaterialTheme.colorScheme.onSurfaceVariant,
-      modifier = Modifier.size(16.dp)
+      modifier = Modifier.size(18.dp)
     )
   }
 }
