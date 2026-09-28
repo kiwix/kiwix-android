@@ -190,6 +190,9 @@ class DownloadTest : BaseActivityTest() {
           }
         }
       }
+      updateKiwixDataStore {
+        setSelectedOnlineContentLanguage("eng")
+      }
       clickDownloadOnBottomNav(composeTestRule)
       waitForDataToLoad(composeTestRule = composeTestRule)
       stopDownloadIfAlreadyStarted(composeTestRule, kiwixMainActivity)
@@ -229,6 +232,9 @@ class DownloadTest : BaseActivityTest() {
             kiwixMainActivity.onBackPressedDispatcher.onBackPressed()
           }
         }
+      }
+      updateKiwixDataStore {
+        setSelectedOnlineContentLanguage("")
       }
     }
   }
