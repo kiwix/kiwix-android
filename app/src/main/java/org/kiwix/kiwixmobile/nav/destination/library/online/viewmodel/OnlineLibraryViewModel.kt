@@ -112,6 +112,7 @@ import org.kiwix.kiwixmobile.zimManager.libraryView.LibraryListItem
 import org.kiwix.kiwixmobile.zimManager.libraryView.LibraryListItem.BookItem
 import org.kiwix.kiwixmobile.zimManager.libraryView.LibraryListItem.LibraryDownloadItem
 import org.kiwix.libkiwix.Book
+import java.util.concurrent.ConcurrentHashMap
 import javax.inject.Inject
 import javax.inject.Provider
 import kotlin.time.Duration.Companion.milliseconds
@@ -346,7 +347,7 @@ class OnlineLibraryViewModel @Inject constructor(
     val searchQuery: String
   )
 
-  internal val tabDataMap = mutableMapOf<String, TabData>()
+  internal val tabDataMap = ConcurrentHashMap<String, TabData>()
 
   internal suspend fun getAppChosenLanguageCode(): String {
     val appLocale = LocaleHelper.getAppLocale(context, kiwixDataStore)
@@ -470,6 +471,8 @@ class OnlineLibraryViewModel @Inject constructor(
         updateLibraryItems(emptyList())
       }
     } else {
+      networkBooks.value = emptyList()
+      updateLibraryItems(emptyList())
       val newRequest = currentRequest.copy(
         lang = tab.languageCode.orEmpty(),
         page = ZERO,
