@@ -1165,6 +1165,7 @@ class OnlineLibraryViewModelTest {
       }
 
       assertThat(viewModel.uiState.value.selectedTabIndex).isEqualTo(1)
+      assertThat(viewModel.networkBooks.value).isEmpty()
     }
 
     @Test

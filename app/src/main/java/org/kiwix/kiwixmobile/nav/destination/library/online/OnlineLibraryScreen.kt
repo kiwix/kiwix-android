@@ -149,14 +149,6 @@ fun OnlineLibraryScreen(
   navigationIcon: @Composable () -> Unit
 ) {
   val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
-  val listStates = remember(uiState.tabs) { mutableMapOf<Int, LazyListState>() }
-  val activeListState = if (uiState.tabs.size <= 1) {
-    listState
-  } else {
-    listStates.getOrPut(uiState.selectedTabIndex) {
-      if (uiState.selectedTabIndex == 0) listState else LazyListState()
-    }
-  }
   Scaffold(
     snackbarHost = { KiwixSnackbarHost(snackbarHostState = snackBarHostState) },
     topBar = {
@@ -170,7 +162,7 @@ fun OnlineLibraryScreen(
     },
     floatingActionButton = {
       OnlineLibraryBackToTopButton(
-        listState = activeListState,
+        listState = listState,
         scrollBehavior = scrollBehavior,
         bottomAppBarScrollBehaviour = bottomAppBarScrollBehaviour
       )
@@ -189,7 +181,7 @@ fun OnlineLibraryScreen(
       paddingValues,
       onUserBackPressed,
       navHostController,
-      activeListState
+      listState
     )
   }
 }
@@ -388,7 +380,7 @@ private fun OnlineLibraryList(
     itemsIndexed(state.items) { index, item ->
       when (item) {
         is DividerItem -> {
-          if (item.id != Long.MIN_VALUE) {
+          if (item.id != Long.MIN_VALUE || state.tabs.size <= 1) {
             ShowDividerItem(item)
           }
         }
