@@ -66,4 +66,22 @@ internal class StringExtensionsTest {
   internal fun `toSlug handles mixed case with special characters`() {
     assertThat("The History of: Art/Music".toSlug()).isEqualTo("the-history-of-artmusic")
   }
+
+  @Test
+  internal fun `removeDiacritics strips accents from latin letters`() {
+    assertThat("Français Español Português Tiếng Việt".removeDiacritics())
+      .isEqualTo("Francais Espanol Portugues Tieng Viet")
+  }
+
+  @Test
+  internal fun `removeDiacritics keeps strings without diacritics unchanged`() {
+    assertThat("English".removeDiacritics()).isEqualTo("English")
+  }
+
+  @Test
+  internal fun `containsIgnoreCaseAndDiacritics ignores case and diacritics on both sides`() {
+    assertThat("Français".containsIgnoreCaseAndDiacritics("FRANCAIS")).isTrue()
+    assertThat("Francais".containsIgnoreCaseAndDiacritics("çais")).isTrue()
+    assertThat("Français".containsIgnoreCaseAndDiacritics("deutsch")).isFalse()
+  }
 }

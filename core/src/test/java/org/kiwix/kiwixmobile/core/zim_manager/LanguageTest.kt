@@ -68,5 +68,22 @@ class LanguageTest {
     fun `matches if languageLocalized contains filter`() {
       assertThat(language(languageLocalized = "Filtermatcher").matches("filter")).isTrue()
     }
+
+    @Test
+    fun `matches if languageLocalized contains filter without its diacritics`() {
+      assertThat(language(languageLocalized = "Français").matches("francais")).isTrue()
+      assertThat(language(languageLocalized = "Español").matches("espanol")).isTrue()
+      assertThat(language(languageLocalized = "Português").matches("portu")).isTrue()
+    }
+
+    @Test
+    fun `matches if filter has diacritics that language does not have`() {
+      assertThat(language(language = "Francais").matches("Français")).isTrue()
+    }
+
+    @Test
+    fun `does not match a different word once diacritics are removed`() {
+      assertThat(language(languageLocalized = "Français").matches("frances")).isFalse()
+    }
   }
 }
