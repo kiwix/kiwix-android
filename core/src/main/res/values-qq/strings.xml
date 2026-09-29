@@ -311,8 +311,8 @@
   <string name="reader">The title of the fragment/place where books are read.</string>
   <string name="no_open_book">Tell the user that they have not opened a book.</string>
   <string name="open_library">{{Doc-important|This means “Open the library”. “Open” is a verb. This doesn’t mean “An open library”.}}\nThe action of opening the library destination, used on a button.</string>
-  <string name="tab_restored">Tell the user that a tab has been restored.</string>
-  <string name="tabs_restored">This is used in the snack bar, to inform users all tabs are restored.</string>
+  <string name="tab_restored">This is used in the toast, to inform users a tab has been restored.</string>
+  <string name="tabs_restored">This is used in the toast, to inform users all tabs are restored.</string>
   <string name="open_drawer">{{Doc-important|This means “Open the drawer”. “Open” is a verb. This doesn’t mean “An open drawer”.}}\nThis is a label text for opening the “Navigation Drawer”.</string>
   <string name="close_drawer">This is a label text for closing the “Navigation Drawer”.</string>
   <string name="how_to_update_content">This message appears in the help screen as an information title to tell users how they can update the content.</string>

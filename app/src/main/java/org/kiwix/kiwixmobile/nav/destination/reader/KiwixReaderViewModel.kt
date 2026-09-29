@@ -241,7 +241,7 @@ class KiwixReaderViewModel @Inject constructor(
           restoreTabs(webViewHistoryItemList, currentTab, onComplete)
         } else {
           emitEffect(
-            ReaderEffect.ShowSnackbar(context.getString(string.zim_not_opened))
+            ReaderEffect.ShowToast(context.getString(string.zim_not_opened))
           )
           exitBook() // hide the options for zim file to avoid unexpected UI behavior
           onComplete()

@@ -1014,8 +1014,8 @@ internal class CoreReaderViewModelTest {
 
           verify { readerWebViewManager.restoreDeletedTab(mockWebView, 1) }
 
-          val snackbar = awaitItem() as CoreReaderViewModel.ReaderEffect.ShowSnackbar
-          assertThat(snackbar.message).isEqualTo("Tab Restored")
+          val toast = awaitItem() as CoreReaderViewModel.ReaderEffect.ShowToast
+          assertThat(toast.message).isEqualTo("Tab Restored")
 
           coVerify { readerWebViewManager.setUpWithTextToSpeech(mockWebView, readAloudManager) }
 
