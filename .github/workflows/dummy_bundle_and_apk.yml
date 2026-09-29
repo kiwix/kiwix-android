@@ -57,6 +57,16 @@ jobs:
         run: |
           ./gradlew assembleRelease --scan
 
+      - name: Generate dummy Standalone APKs
+        env:
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+          KEY_STORE_PASSWORD: ${{ secrets.KEY_STORE_PASSWORD }}
+          KIWIX_ANDROID_RELEASE_DATE: ${{ env.KIWIX_ANDROID_RELEASE_DATE }}
+          APK_BUILD: "true"
+        run: |
+          ./gradlew assembleStandalone --scan
+
 
       - name: Get Bundle and APKs name and path
         id: get-bundle-and-apk-paths
@@ -67,6 +77,8 @@ jobs:
           echo "bundle_name=$BUNDLE_NAME" >> $GITHUB_ENV
           APK_DIR="app/build/outputs/apk/release/"
           echo "apk_dir=$APK_DIR" >> $GITHUB_ENV
+          STANDALONE_APK_DIR="app/build/outputs/apk/standalone/"
+          echo "standalone_apk_dir=$STANDALONE_APK_DIR" >> $GITHUB_ENV
 
       - name: Upload Bundle as an artifact
         uses: actions/upload-artifact@v6
@@ -79,4 +91,10 @@ jobs:
         with:
           name: ReleaseApks
           path: ${{ env.apk_dir }}*.apk
+
+      - name: Upload All Standalone APKs as artifacts
+        uses: actions/upload-artifact@v6
+        with:
+          name: StandaloneApks
+          path: ${{ env.standalone_apk_dir }}*.apk
 
