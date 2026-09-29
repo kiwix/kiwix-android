@@ -18,6 +18,7 @@
 
 package org.kiwix.kiwixmobile.reader
 
+import android.os.Build
 import android.view.View
 import android.webkit.WebView
 import androidx.compose.ui.test.filter
@@ -39,6 +40,7 @@ import org.hamcrest.Matcher
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
+import org.junit.Assume
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -92,31 +94,35 @@ class WebViewDarkModeTest : BaseActivityTest() {
 
   @Test
   fun webViewReflectsThemeSelectedViaSettingsScreen() {
+    Assume.assumeTrue(
+      "Skipping on below API 33",
+      Build.VERSION.SDK_INT > Build.VERSION_CODES.TIRAMISU
+    )
     activityScenario.onActivity {
       kiwixMainActivity = it
       kiwixMainActivity.navigate(KiwixDestination.Library.route)
     }
     composeTestRule.waitForIdle()
-    val zimFile = getZimFileFromResourceFolder(context, "testzim.zim")
+    val zimFile = getZimFileFromResourceFolder(context, "light-dark.zim")
     composeTestRule.runOnUiThread {
       kiwixMainActivity.openZimFromFilePath(zimFile.absolutePath)
     }
     composeTestRule.waitForIdle()
     reader {
-      checkZimFileLoadedSuccessful(composeTestRule, "Android_(operating_system)")
+      checkZimFileLoadedSuccessful(composeTestRule)
     }
 
     selectAppThemeViaSettingsScreen(context.getString(R.string.theme_light))
     returnToReaderScreen()
     reader {
-      checkZimFileLoadedSuccessful(composeTestRule, "Android_(operating_system)")
+      checkZimFileLoadedSuccessful(composeTestRule)
     }
     assertWebViewPrefersColorSchemeDark(expectDark = false)
 
     selectAppThemeViaSettingsScreen(context.getString(R.string.theme_dark))
     returnToReaderScreen()
     reader {
-      checkZimFileLoadedSuccessful(composeTestRule, "Android_(operating_system)")
+      checkZimFileLoadedSuccessful(composeTestRule)
     }
     assertWebViewPrefersColorSchemeDark(expectDark = true)
   }
