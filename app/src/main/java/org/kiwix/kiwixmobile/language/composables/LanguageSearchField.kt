@@ -39,12 +39,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.testTag
@@ -61,15 +57,9 @@ fun LanguageSearchField(
   searchText: String,
   onSearchTextChange: (String) -> Unit,
   onClearClick: () -> Unit,
-  modifier: Modifier = Modifier,
-  onCloseClick: () -> Unit = {}
+  modifier: Modifier = Modifier
 ) {
-  val focusRequester = remember { FocusRequester() }
   val focusManager = LocalFocusManager.current
-
-  LaunchedEffect(Unit) {
-    focusRequester.requestFocus()
-  }
 
   Surface(
     modifier = modifier
@@ -99,16 +89,17 @@ fun LanguageSearchField(
       SearchInputBox(
         searchText = searchText,
         onSearchTextChange = onSearchTextChange,
-        focusRequester = focusRequester,
         onSearch = { focusManager.clearFocus() },
         modifier = Modifier.weight(1f)
       )
-      ClearOrCloseButton(
-        searchText = searchText,
-        onSearchTextChange = onSearchTextChange,
-        onClearClick = onClearClick,
-        onCloseClick = onCloseClick
-      )
+      if (searchText.isNotEmpty()) {
+        ClearButton(
+          onClearClick = {
+            onSearchTextChange("")
+            onClearClick()
+          }
+        )
+      }
     }
   }
 }
@@ -117,7 +108,6 @@ fun LanguageSearchField(
 private fun SearchInputBox(
   searchText: String,
   onSearchTextChange: (String) -> Unit,
-  focusRequester: FocusRequester,
   onSearch: () -> Unit,
   modifier: Modifier = Modifier
 ) {
@@ -137,7 +127,6 @@ private fun SearchInputBox(
       onValueChange = onSearchTextChange,
       modifier = Modifier
         .fillMaxWidth()
-        .focusRequester(focusRequester)
         .testTag(SEARCH_FIELD_TESTING_TAG),
       singleLine = true,
       textStyle = MaterialTheme.typography.bodyMedium.copy(
@@ -151,22 +140,12 @@ private fun SearchInputBox(
 }
 
 @Composable
-private fun ClearOrCloseButton(
-  searchText: String,
-  onSearchTextChange: (String) -> Unit,
+private fun ClearButton(
   onClearClick: () -> Unit,
-  onCloseClick: () -> Unit,
   modifier: Modifier = Modifier
 ) {
   IconButton(
-    onClick = {
-      if (searchText.isNotEmpty()) {
-        onSearchTextChange("")
-        onClearClick()
-      } else {
-        onCloseClick()
-      }
-    },
+    onClick = onClearClick,
     modifier = modifier.size(32.dp)
   ) {
     Icon(

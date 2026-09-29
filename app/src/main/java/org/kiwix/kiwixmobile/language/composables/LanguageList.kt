@@ -37,11 +37,8 @@ fun LanguageList(
   context: Context,
   listState: LazyListState,
   searchText: String,
-  isSearchActive: Boolean = false,
-  onSearchIconClick: () -> Unit = {},
   onSearchTextChange: (String) -> Unit,
   onClearClick: () -> Unit,
-  onCloseSearch: () -> Unit = {},
   selectLanguageItem: (LanguageItem) -> Unit,
   onMoveUp: (LanguageItem) -> Unit = {},
   onMoveDown: (LanguageItem) -> Unit = {}
@@ -64,21 +61,16 @@ fun LanguageList(
       when (item) {
         is HeaderItem -> HeaderText(
           item = item,
-          isSearchActive = isSearchActive,
-          onSearchClick = if (item.id == HeaderItem.OTHER) onSearchIconClick else null,
           modifier = Modifier.animateItem()
         )
 
         is SearchItem -> {
-          if (isSearchActive || searchText.isNotEmpty()) {
-            LanguageSearchField(
-              searchText = searchText,
-              onSearchTextChange = onSearchTextChange,
-              onClearClick = onClearClick,
-              onCloseClick = onCloseSearch,
-              modifier = Modifier.animateItem()
-            )
-          }
+          LanguageSearchField(
+            searchText = searchText,
+            onSearchTextChange = onSearchTextChange,
+            onClearClick = onClearClick,
+            modifier = Modifier.animateItem()
+          )
         }
 
         is LanguageItem -> {

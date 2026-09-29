@@ -21,10 +21,6 @@ package org.kiwix.kiwixmobile.language.composables
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Search
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -34,17 +30,14 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
 import org.kiwix.kiwixmobile.core.R
-import org.kiwix.kiwixmobile.core.page.SEARCH_ICON_TESTING_TAG
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens
 
 const val LANGUAGE_HEADER_TESTING_TAG = "languageHeaderTestingTag"
 
 @Composable
 fun HeaderText(
-  modifier: Modifier = Modifier,
   item: LanguageListItem.HeaderItem,
-  isSearchActive: Boolean = false,
-  onSearchClick: (() -> Unit)? = null
+  modifier: Modifier = Modifier
 ) {
   val title = stringResource(
     if (item.id == LanguageListItem.HeaderItem.SELECTED) {
@@ -59,7 +52,7 @@ fun HeaderText(
       .fillMaxWidth()
       .padding(
         start = ComposeDimens.SIXTEEN_DP,
-        end = if (item.id == LanguageListItem.HeaderItem.OTHER) ComposeDimens.EIGHT_DP else ComposeDimens.SIXTEEN_DP,
+        end = ComposeDimens.SIXTEEN_DP,
         top = ComposeDimens.SIXTEEN_DP,
         bottom = ComposeDimens.EIGHT_DP
       ),
@@ -68,22 +61,10 @@ fun HeaderText(
     Text(
       text = title,
       modifier = Modifier
-        .weight(1f)
+        .fillMaxWidth()
         .semantics { testTag = "$LANGUAGE_HEADER_TESTING_TAG${item.id}" },
       style = MaterialTheme.typography.titleMedium,
       color = MaterialTheme.colorScheme.onSurfaceVariant
     )
-    if (item.id == LanguageListItem.HeaderItem.OTHER && onSearchClick != null && !isSearchActive) {
-      IconButton(
-        onClick = onSearchClick,
-        modifier = Modifier.semantics { testTag = SEARCH_ICON_TESTING_TAG }
-      ) {
-        Icon(
-          imageVector = Icons.Default.Search,
-          contentDescription = stringResource(R.string.search_label),
-          tint = MaterialTheme.colorScheme.onSurfaceVariant
-        )
-      }
-    }
   }
 }

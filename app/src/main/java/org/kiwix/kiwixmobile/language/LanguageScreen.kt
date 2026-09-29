@@ -87,24 +87,20 @@ internal fun LanguageScreenRoute(navigateBack: () -> Unit) {
   }
 
   var searchText by rememberSaveable { mutableStateOf("") }
-  var isSearchActive by rememberSaveable { mutableStateOf(false) }
   var isSaving by remember { mutableStateOf(false) }
   val keyboardController = LocalSoftwareKeyboardController.current
   val focusManager = LocalFocusManager.current
 
   fun resetSearchState() {
-    // clears the search text, hides keyboard, and resets the filter
     keyboardController?.hide()
     focusManager.clearFocus(force = true)
     searchText = ""
-    isSearchActive = false
     languageViewModel.actions.tryEmit(Action.Filter(searchText))
   }
 
   val saveAndNavigateBack: () -> Unit = {
     if (!isSaving) {
       isSaving = true
-      isSearchActive = false
       keyboardController?.hide()
       focusManager.clearFocus(force = true)
       if (state is Content) {
@@ -116,7 +112,7 @@ internal fun LanguageScreenRoute(navigateBack: () -> Unit) {
   }
 
   val handleBack: () -> Unit = {
-    if (isSearchActive) {
+    if (searchText.isNotEmpty()) {
       resetSearchState()
     } else {
       saveAndNavigateBack()
@@ -128,14 +124,11 @@ internal fun LanguageScreenRoute(navigateBack: () -> Unit) {
   KiwixTheme {
     LanguageScreen(
       searchText = searchText,
-      isSearchActive = isSearchActive,
       state = state,
-      onSearchIconClick = { isSearchActive = true },
       onClearClick = {
         searchText = ""
         languageViewModel.actions.tryEmit(Action.Filter(""))
       },
-      onCloseSearch = { resetSearchState() },
       onSearchTextChange = {
         searchText = it
         languageViewModel.actions.tryEmit(Action.Filter(it.trim()))
@@ -145,7 +138,6 @@ internal fun LanguageScreenRoute(navigateBack: () -> Unit) {
         focusManager.clearFocus(force = true)
         if (!languageItem.language.active) {
           searchText = ""
-          isSearchActive = false
         }
         languageViewModel.actions.tryEmit(Action.Select(languageItem))
       },
@@ -158,7 +150,7 @@ internal fun LanguageScreenRoute(navigateBack: () -> Unit) {
       navigationIcon = {
         NavigationIcon(
           iconItem = IconItem.Vector(Icons.AutoMirrored.Filled.ArrowBack),
-          onClick = handleBack
+          onClick = saveAndNavigateBack
         )
       }
     )
@@ -172,14 +164,11 @@ internal fun LanguageScreenRoute(navigateBack: () -> Unit) {
 @Composable
 internal fun LanguageScreen(
   searchText: String = "",
-  isSearchActive: Boolean = false,
   state: State,
   selectLanguageItem: (item: LanguageListItem.LanguageItem) -> Unit,
   onMoveUp: (item: LanguageListItem.LanguageItem) -> Unit = {},
   onMoveDown: (item: LanguageListItem.LanguageItem) -> Unit = {},
-  onSearchIconClick: () -> Unit = {},
   onClearClick: () -> Unit = {},
-  onCloseSearch: () -> Unit = {},
   onSearchTextChange: (String) -> Unit = {},
   navigationIcon: @Composable () -> Unit
 ) {
@@ -214,11 +203,8 @@ internal fun LanguageScreen(
             context = context,
             listState = listState,
             searchText = searchText,
-            isSearchActive = isSearchActive,
-            onSearchIconClick = onSearchIconClick,
             onSearchTextChange = onSearchTextChange,
             onClearClick = onClearClick,
-            onCloseSearch = onCloseSearch,
             selectLanguageItem = selectLanguageItem,
             onMoveUp = onMoveUp,
             onMoveDown = onMoveDown

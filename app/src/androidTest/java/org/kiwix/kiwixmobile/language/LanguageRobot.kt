@@ -82,7 +82,6 @@ class LanguageRobot : BaseRobot() {
     composeTestRule: ComposeContentTestRule,
     searchLanguage: String
   ) {
-    clickOnLanguageSearchIcon(composeTestRule)
     val searchField = composeTestRule.onNodeWithTag(SEARCH_FIELD_TESTING_TAG)
     searchField.performTextInput(text = searchLanguage)
   }
