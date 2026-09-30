@@ -99,7 +99,7 @@
   <string name="pref_permission">{{Identical|Permissions}}</string>
   <string name="pref_import_bookmark_title">In settings, under Bookmarks section. Button for importing bookmarks from a file.</string>
   <string name="export_bookmark_saved">After exporting bookmarks, this is displayed in a toast message.\n%s is the name of the file e.g. bookmark.xml</string>
-  <string name="all_history_cleared">This message appears in the “Android Snackbar” to inform the user when all history is cleared.</string>
+  <string name="all_history_cleared">This message appears in the “Android Toast” to inform the user when all history is cleared.</string>
   <string name="pref_clear_all_bookmarks_title">This is the menu item title, by clicking on the menu item triggers deleting the bookmarks.</string>
   <string name="clear_all_history_dialog_title">This message appears in the “Android Dialog” to take confirmation from the user if he wants to delete the entire history.</string>
   <string name="share">{{Identical|Share}}</string>
@@ -248,9 +248,9 @@
   <string name="note_share_app_chooser_title">It is the title of the share intent dialog when the share menu item is clicked on the note screen.</string>
   <string name="confirmation_alert_dialog_message">It is the alert dialog’s message when a user cancels the note edit screen without saving the changes.</string>
   <string name="delete_notes_confirmation_msg">It is the alert dialog’s title when a user selects the delete all menu item on the note screen.</string>
-  <string name="ext_storage_permission_not_granted">It is the snackbar’s message when a user tries to delete all notes but the app does not have access to storage permission.</string>
-  <string name="notes_deletion_successful">It is the snackbar’s message when a user successfully deletes all notes via the delete all menu item on the note page.</string>
-  <string name="notes_deletion_unsuccessful">It is the snackbar’s message when a user tries to delete all notes but some files could not be deleted.</string>
+  <string name="ext_storage_permission_not_granted">It is the toast’s message when a user tries to delete all notes but the app does not have access to storage permission.</string>
+  <string name="notes_deletion_successful">It is the toast’s message when a user successfully deletes all notes via the delete all menu item on the note page.</string>
+  <string name="notes_deletion_unsuccessful">It is the toast’s message when a user tries to delete all notes but some files could not be deleted.</string>
   <string name="books_count">%d Identical|Book</string>
   <string name="discovery_initiated">It is a toast’s message shown on the file-sharing screen when a user clicks on the search menu item to find nearby devices.</string>
   <string name="discovery_failed">It is a toast’s message shown on the file-sharing screen when finding nearby devices fail to initialize.</string>

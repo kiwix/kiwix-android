@@ -19,7 +19,6 @@
 package org.kiwix.kiwixmobile.core.settings.viewmodel
 
 import eu.mhutti1.utils.storage.StorageDevice
-import kotlinx.coroutines.CoroutineScope
 
 sealed class Action {
   object ClearAllHistory : Action()
@@ -32,5 +31,5 @@ sealed class Action {
   object NavigateToAppSettingsDialog : Action()
   object RateApp : Action()
   data class OnStorageItemClick(val storageDevice: StorageDevice) : Action()
-  data class ShowSnackbar(val message: String, val lifecycleScope: CoroutineScope) : Action()
+  data class ShowToast(val message: String) : Action()
 }

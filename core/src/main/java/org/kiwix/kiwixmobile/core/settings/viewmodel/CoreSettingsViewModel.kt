@@ -55,7 +55,7 @@ import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.settings.StorageCalculator
 import org.kiwix.kiwixmobile.core.settings.viewmodel.Action.ExportBookmarks
 import org.kiwix.kiwixmobile.core.settings.viewmodel.Action.RequestWriteStoragePermission
-import org.kiwix.kiwixmobile.core.settings.viewmodel.Action.ShowSnackbar
+import org.kiwix.kiwixmobile.core.settings.viewmodel.Action.ShowToast
 import org.kiwix.kiwixmobile.core.utils.EXTERNAL_SELECT_POSITION
 import org.kiwix.kiwixmobile.core.utils.INTERNAL_SELECT_POSITION
 import org.kiwix.kiwixmobile.core.utils.KiwixPermissionChecker
@@ -234,9 +234,8 @@ abstract class CoreSettingsViewModel(
         dataSource.clearHistory()
       }.onSuccess {
         sendAction(
-          ShowSnackbar(
-            context.getString(R.string.all_history_cleared),
-            viewModelScope
+          ShowToast(
+            context.getString(R.string.all_history_cleared)
           )
         )
       }.onFailure {
@@ -249,18 +248,16 @@ abstract class CoreSettingsViewModel(
     viewModelScope.launch {
       if (!isExternalStorageWritable()) {
         sendAction(
-          ShowSnackbar(
-            context.getString(R.string.notes_deletion_unsuccessful),
-            viewModelScope
+          ShowToast(
+            context.getString(R.string.notes_deletion_unsuccessful)
           )
         )
         return@launch
       }
       if (!kiwixPermissionChecker.hasWriteExternalStoragePermission()) {
         sendAction(
-          ShowSnackbar(
-            context.getString(R.string.ext_storage_permission_not_granted),
-            viewModelScope
+          ShowToast(
+            context.getString(R.string.ext_storage_permission_not_granted)
           )
         )
         return@launch
@@ -269,17 +266,15 @@ abstract class CoreSettingsViewModel(
         dataSource.clearNotes()
       }.onSuccess {
         sendAction(
-          ShowSnackbar(
-            context.getString(R.string.notes_deletion_successful),
-            viewModelScope
+          ShowToast(
+            context.getString(R.string.notes_deletion_successful)
           )
         )
       }.onFailure {
         Log.e("SettingsPresenter", it.message, it)
         sendAction(
-          ShowSnackbar(
-            context.getString(R.string.notes_deletion_unsuccessful),
-            viewModelScope
+          ShowToast(
+            context.getString(R.string.notes_deletion_unsuccessful)
           )
         )
       }
