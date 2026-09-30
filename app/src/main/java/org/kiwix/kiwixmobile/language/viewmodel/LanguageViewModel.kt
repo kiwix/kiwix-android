@@ -67,8 +67,7 @@ open class LanguageViewModel @Inject constructor(
   val actions = MutableSharedFlow<Action>(extraBufferCapacity = Int.MAX_VALUE)
   val effects = MutableSharedFlow<SideEffect<*>>(extraBufferCapacity = Int.MAX_VALUE)
   private val coroutineJobs = mutableListOf<Job>()
-  var onFinish: (() -> Unit)? = null
-    private set
+  private var onFinish: (() -> Unit)? = null
 
   fun setOnFinishCallback(callback: () -> Unit) {
     onFinish = callback

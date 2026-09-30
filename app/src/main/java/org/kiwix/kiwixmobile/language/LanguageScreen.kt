@@ -136,9 +136,6 @@ internal fun LanguageScreenRoute(navigateBack: () -> Unit) {
       selectLanguageItem = { languageItem ->
         keyboardController?.hide()
         focusManager.clearFocus(force = true)
-        if (!languageItem.language.active) {
-          searchText = ""
-        }
         languageViewModel.actions.tryEmit(Action.Select(languageItem))
       },
       onMoveUp = { languageItem ->

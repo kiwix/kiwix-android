@@ -18,13 +18,11 @@
 
 package org.kiwix.kiwixmobile.language.composables
 
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
@@ -37,7 +35,7 @@ const val LANGUAGE_HEADER_TESTING_TAG = "languageHeaderTestingTag"
 @Composable
 fun HeaderText(
   item: LanguageListItem.HeaderItem,
-  modifier: Modifier = Modifier
+  modifier: Modifier
 ) {
   val title = stringResource(
     if (item.id == LanguageListItem.HeaderItem.SELECTED) {
@@ -47,7 +45,8 @@ fun HeaderText(
     }
   )
 
-  Row(
+  Text(
+    text = title,
     modifier = modifier
       .fillMaxWidth()
       .padding(
@@ -55,16 +54,9 @@ fun HeaderText(
         end = ComposeDimens.SIXTEEN_DP,
         top = ComposeDimens.SIXTEEN_DP,
         bottom = ComposeDimens.EIGHT_DP
-      ),
-    verticalAlignment = Alignment.CenterVertically
-  ) {
-    Text(
-      text = title,
-      modifier = Modifier
-        .fillMaxWidth()
-        .semantics { testTag = "$LANGUAGE_HEADER_TESTING_TAG${item.id}" },
-      style = MaterialTheme.typography.titleMedium,
-      color = MaterialTheme.colorScheme.onSurfaceVariant
-    )
-  }
+      )
+      .semantics { testTag = "$LANGUAGE_HEADER_TESTING_TAG${item.id}" },
+    style = MaterialTheme.typography.titleMedium,
+    color = MaterialTheme.colorScheme.onSurfaceVariant
+  )
 }

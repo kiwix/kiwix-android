@@ -54,7 +54,7 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens
 
-@Suppress("LongMethod")
+@Suppress("LongMethod", "LongParameterList")
 @Composable
 fun KiwixSearchView(
   modifier: Modifier = Modifier,
@@ -62,20 +62,31 @@ fun KiwixSearchView(
   placeholder: String = stringResource(R.string.search_label),
   searchViewTextFiledTestTag: String = "",
   clearButtonTestTag: String = "",
+  textColor: Color = MaterialTheme.colorScheme.onBackground,
+  hintColor: Color = if (isSystemInDarkTheme()) {
+    Color.LightGray
+  } else {
+    Color.DarkGray
+  },
+  tintColor: Color = textColor,
+  cursorColor: Color = textColor,
+  textStyle: TextStyle = TextStyle.Default.copy(
+    fontSize = ComposeDimens.EIGHTEEN_SP,
+    color = textColor
+  ),
+  imeAction: ImeAction = ImeAction.Done,
+  autoFocus: Boolean = true,
   onValueChange: (String) -> Unit,
   onClearClick: () -> Unit,
   onKeyboardSubmitButtonClick: (String) -> Unit = {}
 ) {
-  val hintColor = if (isSystemInDarkTheme()) {
-    Color.LightGray
-  } else {
-    Color.DarkGray
-  }
   val keyboardController = LocalSoftwareKeyboardController.current
   val focusRequester = remember { FocusRequester() }
 
-  LaunchedEffect(focusRequester) {
-    focusRequester.requestFocus()
+  if (autoFocus) {
+    LaunchedEffect(focusRequester) {
+      focusRequester.requestFocus()
+    }
   }
 
   val textFieldValue = rememberTextFieldState()
@@ -122,7 +133,7 @@ fun KiwixSearchView(
             Text(
               text = placeholder,
               color = hintColor,
-              fontSize = ComposeDimens.EIGHTEEN_SP,
+              style = textStyle.copy(color = hintColor),
               maxLines = ONE,
               overflow = Ellipsis
             )
@@ -141,19 +152,16 @@ fun KiwixSearchView(
           ) {
             Icon(
               painter = painterResource(R.drawable.ic_clear_white_24dp),
-              tint = MaterialTheme.colorScheme.onBackground,
+              tint = tintColor,
               contentDescription = stringResource(R.string.searchview_description_clear)
             )
           }
         }
       }
     },
-    cursorBrush = SolidColor(MaterialTheme.colorScheme.onBackground),
-    textStyle = TextStyle.Default.copy(
-      fontSize = ComposeDimens.EIGHTEEN_SP,
-      color = MaterialTheme.colorScheme.onBackground
-    ),
-    keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
+    cursorBrush = SolidColor(cursorColor),
+    textStyle = textStyle,
+    keyboardOptions = KeyboardOptions.Default.copy(imeAction = imeAction),
     onKeyboardAction = {
       keyboardController?.hide()
       onKeyboardSubmitButtonClick(textFieldValue.text.toString())

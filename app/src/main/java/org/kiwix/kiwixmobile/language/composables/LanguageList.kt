@@ -53,7 +53,7 @@ fun LanguageList(
       key = { _, item ->
         when (item) {
           is HeaderItem -> "header_${item.id}"
-          is SearchItem -> "search_item"
+          is SearchItem -> "search_item_${item.id}"
           is LanguageItem -> "language_${item.language.id}"
         }
       }

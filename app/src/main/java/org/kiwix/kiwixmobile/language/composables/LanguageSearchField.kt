@@ -18,7 +18,6 @@
 
 package org.kiwix.kiwixmobile.language.composables
 
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -28,28 +27,20 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.BasicTextField
-import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.unit.dp
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.search.SEARCH_FIELD_TESTING_TAG
+import org.kiwix.kiwixmobile.core.ui.components.KiwixSearchView
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens
 
 @Composable
@@ -76,7 +67,10 @@ fun LanguageSearchField(
     Row(
       modifier = Modifier
         .fillMaxSize()
-        .padding(horizontal = ComposeDimens.FOURTEEN_DP),
+        .padding(
+          start = ComposeDimens.FOURTEEN_DP,
+          end = ComposeDimens.FOUR_DP
+        ),
       verticalAlignment = Alignment.CenterVertically
     ) {
       Icon(
@@ -86,73 +80,25 @@ fun LanguageSearchField(
         modifier = Modifier.size(ComposeDimens.TWENTY_DP)
       )
       Spacer(modifier = Modifier.width(ComposeDimens.TEN_DP))
-      SearchInputBox(
-        searchText = searchText,
-        onSearchTextChange = onSearchTextChange,
-        onSearch = { focusManager.clearFocus() },
-        modifier = Modifier.weight(1f)
-      )
-      if (searchText.isNotEmpty()) {
-        ClearButton(
-          onClearClick = {
-            onSearchTextChange("")
-            onClearClick()
-          }
+      KiwixSearchView(
+        modifier = Modifier.weight(1f),
+        value = searchText,
+        searchViewTextFiledTestTag = SEARCH_FIELD_TESTING_TAG,
+        onValueChange = onSearchTextChange,
+        onClearClick = onClearClick,
+        onKeyboardSubmitButtonClick = { focusManager.clearFocus() },
+        imeAction = ImeAction.Search,
+        autoFocus = false,
+        textColor = MaterialTheme.colorScheme.onSurface,
+        hintColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(
+          alpha = ComposeDimens.DEFAULT_TEXT_ALPHA
+        ),
+        tintColor = MaterialTheme.colorScheme.onSurfaceVariant,
+        cursorColor = MaterialTheme.colorScheme.primary,
+        textStyle = MaterialTheme.typography.bodyMedium.copy(
+          color = MaterialTheme.colorScheme.onSurface
         )
-      }
-    }
-  }
-}
-
-@Composable
-private fun SearchInputBox(
-  searchText: String,
-  onSearchTextChange: (String) -> Unit,
-  onSearch: () -> Unit,
-  modifier: Modifier = Modifier
-) {
-  Box(
-    modifier = modifier,
-    contentAlignment = Alignment.CenterStart
-  ) {
-    if (searchText.isEmpty()) {
-      Text(
-        text = stringResource(R.string.search_label),
-        style = MaterialTheme.typography.bodyMedium,
-        color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = ComposeDimens.DEFAULT_TEXT_ALPHA)
       )
     }
-    BasicTextField(
-      value = searchText,
-      onValueChange = onSearchTextChange,
-      modifier = Modifier
-        .fillMaxWidth()
-        .testTag(SEARCH_FIELD_TESTING_TAG),
-      singleLine = true,
-      textStyle = MaterialTheme.typography.bodyMedium.copy(
-        color = MaterialTheme.colorScheme.onSurface
-      ),
-      cursorBrush = SolidColor(MaterialTheme.colorScheme.primary),
-      keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
-      keyboardActions = KeyboardActions(onSearch = { onSearch() })
-    )
-  }
-}
-
-@Composable
-private fun ClearButton(
-  onClearClick: () -> Unit,
-  modifier: Modifier = Modifier
-) {
-  IconButton(
-    onClick = onClearClick,
-    modifier = modifier.size(32.dp)
-  ) {
-    Icon(
-      painter = painterResource(R.drawable.ic_clear_white_24dp),
-      contentDescription = stringResource(R.string.searchview_description_clear),
-      tint = MaterialTheme.colorScheme.onSurfaceVariant,
-      modifier = Modifier.size(18.dp)
-    )
   }
 }

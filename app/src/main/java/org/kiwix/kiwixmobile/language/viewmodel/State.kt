@@ -62,7 +62,7 @@ sealed class State {
       }
       return Content(
         items = updatedItems,
-        filter = if (!isCurrentlyActive) "" else filter,
+        filter = filter,
         selectedLanguageOrder = updatedOrder
       )
     }

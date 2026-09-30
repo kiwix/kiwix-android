@@ -338,7 +338,7 @@ class LanguageViewModelTest {
     @Nested
     inner class ActionSelect {
       @Test
-      fun whenInactiveLanguageSelected_resetsFilter() = runTest {
+      fun whenInactiveLanguageSelected_preservesFilter() = runTest {
         coEvery {
           observeLanguages(any(), any(), any())
         } returns ObserveLanguages.Result.Success(emptyList())
@@ -357,7 +357,7 @@ class LanguageViewModelTest {
         advanceUntilIdle()
 
         val content = languageViewModel.state.value as State.Content
-        assertEquals("", content.filter)
+        assertEquals("fr", content.filter)
       }
 
       @Test

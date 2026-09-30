@@ -112,11 +112,11 @@ class StateTest {
     }
 
     @Test
-    fun `select inactive language resets filter`() {
+    fun `select inactive language preserves filter`() {
       val lang1 = language(id = 1L, languageCode = "de", language = "German", isActive = false)
       val content = Content(listOf(lang1), filter = "Ger")
       val updated = content.select(LanguageItem(lang1))
-      assertThat(updated.filter).isEmpty()
+      assertThat(updated.filter).isEqualTo("Ger")
     }
 
     @Test
