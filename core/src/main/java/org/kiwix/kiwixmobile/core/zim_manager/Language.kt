@@ -21,6 +21,7 @@ package org.kiwix.kiwixmobile.core.zim_manager
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.convertToLocal
+import org.kiwix.kiwixmobile.core.extensions.containsIgnoreCaseAndDiacritics
 import java.util.Locale
 
 @Parcelize
@@ -65,5 +66,6 @@ data class Language constructor(
   }
 
   fun matches(filter: String) =
-    language.contains(filter, true) or languageLocalized.contains(filter, true)
+    language.containsIgnoreCaseAndDiacritics(filter) or
+      languageLocalized.containsIgnoreCaseAndDiacritics(filter)
 }
