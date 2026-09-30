@@ -103,7 +103,7 @@ class LanguageRobot : BaseRobot() {
             .isNotEmpty()
         }
         Log.d("LanguageTest", "Language list loaded")
-        return
+        return@waitForLanguageToLoad
       } catch (_: ComposeTimeoutException) {
         Log.d(
           "LanguageTest",

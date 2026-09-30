@@ -96,7 +96,7 @@ class WebViewDarkModeTest : BaseActivityTest() {
   fun webViewReflectsThemeSelectedViaSettingsScreen() {
     Assume.assumeTrue(
       "Skipping on below API 33",
-      Build.VERSION.SDK_INT > Build.VERSION_CODES.TIRAMISU
+      Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
     )
     activityScenario.onActivity {
       kiwixMainActivity = it

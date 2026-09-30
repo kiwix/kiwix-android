@@ -70,6 +70,7 @@ import org.kiwix.kiwixmobile.custom.testutils.TestUtils.waitUntilTimeout
 import java.io.File
 import java.io.FileOutputStream
 import java.net.URI
+import kotlin.time.Duration.Companion.milliseconds
 
 @RunWith(AndroidJUnit4::class)
 class SearchScreenTestForBrandedApp {
@@ -209,6 +210,7 @@ class SearchScreenTestForBrandedApp {
   @Test
   fun testConcurrencyOfSearch() =
     runBlocking {
+      Assume.assumeTrue(Build.VERSION.SDK_INT > Build.VERSION_CODES.N_MR1)
       val searchTerms =
         listOf(
           "eilum",
@@ -246,7 +248,7 @@ class SearchScreenTestForBrandedApp {
       openZimFileInReader(zimFile = downloadingZimFile)
       openSearchWithQuery(searchTerms[0])
       // wait for searchFragment become visible on screen.
-      delay(2000)
+      delay(2000.milliseconds)
       val searchBackStackEntry =
         brandedMainActivity.navController.getBackStackEntry(CustomDestination.Search.route)
       val searchViewModel = ViewModelProvider(
@@ -260,19 +262,19 @@ class SearchScreenTestForBrandedApp {
       }
       for (i in 1..100) {
         // this will execute the render method 100 times with 100MS delay.
-        delay(100)
+        delay(100.milliseconds)
         val searchTerm = searchTerms[i % searchTerms.size]
         searchViewModel.actions.tryEmit(Action.Filter(searchTerm))
       }
       for (i in 1..100) {
         // this will execute the render method 100 times with 200MS delay.
-        delay(200)
+        delay(200.milliseconds)
         val searchTerm = searchTerms[i % searchTerms.size]
         searchViewModel.actions.tryEmit(Action.Filter(searchTerm))
       }
       for (i in 1..100) {
         // this will execute the render method 100 times with 200MS delay.
-        delay(300)
+        delay(300.milliseconds)
         val searchTerm = searchTerms[i % searchTerms.size]
         searchViewModel.actions.tryEmit(Action.Filter(searchTerm))
       }
