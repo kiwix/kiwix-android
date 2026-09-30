@@ -3,6 +3,7 @@
 
   <!--Top level theme to be used in AndroidManifest.xml-->
   <style name="KiwixTheme" parent="Base.KiwixTheme">
+    <item name="android:isLightTheme" tools:targetApi="q">true</item>
 
     <!--colorPrimary colors map to components and elements, such as app bars and buttons. -->
     <item name="colorPrimary">@color/denim_blue800</item>
