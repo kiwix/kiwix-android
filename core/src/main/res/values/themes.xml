@@ -18,10 +18,6 @@
     <item name="colorOnPrimary">@color/white</item>
     <item name="colorOnSurface">@color/black</item>
     <item name="colorOnError">@color/alabaster_white</item>
-
-    <item name="textSecondary">@color/mine_shaft_gray850</item>
-    <item name="textTertiary">@color/mine_shaft_gray600</item>
-    <item name="cardViewBackground">@color/alabaster_white</item>
   </style>
 
   <!--Base custom theme which will be shared between both light and dark theme variants-->
@@ -73,7 +69,6 @@
     <item name="materialAlertDialogTheme">@style/ThemeOverlay.MaterialComponents.Dialog.Alert</item>
     <item name="bottomSheetDialogTheme">@style/ThemeOverlay.KiwixTheme.BottomSheetDialog</item>
     <item name="navigationViewStyle">@style/Widget.KiwixTheme.NavigationView</item>
-    <item name="materialCardViewStyle">@style/Widget.KiwixTheme.CardView</item>
     <item name="bottomNavigationStyle">@style/Widget.KiwixTheme.BottomNavigationView</item>
     <item name="bottomAppBarStyle">@style/Widget.KiwixTheme.BottomAppBar</item>
     <item name="toolbarStyle">@style/Widget.KiwixTheme.Toolbar.PrimarySurface</item>
@@ -83,11 +78,6 @@
 
   <style name="Base.MaterialThemeBuilder" parent="Theme.MaterialComponents.DayNight.NoActionBar">
     <item name="android:statusBarColor" tools:ignore="NewApi">@color/black</item>
-    <!-- Increase the default action bar size so that ActionMode has more height.
-         Since we are now using Compose's TopAppBar, changing this will not affect the main UI. -->
-    <item name="actionBarSize">64dp</item>
-    <!-- Apply our custom ActionMode style -->
-    <item name="actionModeStyle">@style/Widget.KiwixTheme.ActionMode</item>
     <item name="windowActionModeOverlay">true</item>
 
     <!--Remap legacy AppCompat attributes to MaterialComponent attributes-->
@@ -97,19 +87,5 @@
 
     <!-- To prevent showing content behind the cutouts -->
     <item name="android:windowLayoutInDisplayCutoutMode" tools:ignore="NewApi">never</item>
-  </style>
-
-  <style name="Widget.KiwixTheme.ActionMode" parent="@style/Widget.AppCompat.ActionMode">
-    <item name="background">@color/cornflower_blue</item>
-    <item name="titleTextStyle">@style/TextAppearance.KiwixTheme.ActionMode.Title</item>
-    <!-- Use a custom back button (white) so it matches our theme -->
-    <item name="closeItemLayout">@layout/action_mode_back_button</item>
-  </style>
-
-  <style name="TextAppearance.KiwixTheme.ActionMode.Title" parent="@style/TextAppearance.AppCompat.Widget.ActionMode.Title">
-    <!-- Set the ActionMode title text color to white -->
-    <item name="android:textColor">@color/white</item>
-    <!-- Set the ActionMode title size in sp to fix the accessibility issue -->
-    <item name="android:textSize">20sp</item>
   </style>
 </resources>

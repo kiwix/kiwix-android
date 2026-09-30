@@ -37,30 +37,10 @@
     <item name="tabTextColor">@color/alabaster_white</item>
   </style>
 
-  <style name="Widget.KiwixTheme.Chip.Choice.Static" parent="Widget.MaterialComponents.Chip.Choice">
-    <item name="android:clickable">false</item>
-    <item name="android:textAlignment" tools:ignore="NewApi">center</item>
-    <item name="android:textColor">?textSecondary</item>
-  </style>
-
 
   <style name="list_item_title" parent="TextAppearance.KiwixTheme.Subtitle1" />
 
   <style name="list_item_body" parent="TextAppearance.KiwixTheme.Subtitle2" />
-
-  <style name="list_item_body.detail">
-    <item name="android:maxLines">1</item>
-    <item name="android:textColor">?textTertiary</item>
-    <item name="android:paddingEnd">5dp</item>
-    <item name="android:ellipsize">end</item>
-    <item name="layout_constrainedWidth">true</item>
-  </style>
-
-  <style name="list_item_body.detail.end">
-    <item name="android:layout_marginEnd">@dimen/activity_horizontal_margin</item>
-
-    <item name="android:gravity">end</item>
-  </style>
 
 
   <style name="switch_style">
@@ -86,10 +66,6 @@
   <style name="ThemeOverlay.KiwixTheme.Switch" parent="ThemeOverlay.AppCompat.Light">
     <item name="colorControlActivated">@color/denim_blue200</item>
     <item name="android:colorForeground">@color/alabaster_white</item>
-  </style>
-
-  <style name="Widget.KiwixTheme.CardView" parent="Widget.MaterialComponents.CardView">
-    <item name="cardBackgroundColor">?cardViewBackground</item>
   </style>
 
   <style name="Widget.KiwixTheme.BottomNavigationView" parent="Widget.MaterialComponents.BottomNavigationView">
