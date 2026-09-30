@@ -427,7 +427,7 @@ private fun LanguageCategory(
     val systemLocale = remember { LocaleHelper.getSystemLocale(context) }
     val uiLocale = context.resources.configuration.locales.get(0) ?: Locale.getDefault()
     val systemLanguageName = systemLocale.getDisplayLanguage(uiLocale).replaceFirstChar {
-      if (it.isLowerCase()) it.titlecase(uiLocale) else it.toString()
+      if (it.isLowerCase()) it.titlecase(uiLocale) else "$it"
     }
     val systemLanguageLabel =
       stringResource(R.string.system_language_with_name, systemLanguageName)

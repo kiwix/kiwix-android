@@ -686,9 +686,9 @@ class SettingsScreenTest {
 
   @Test
   fun settingsScreen_languageCategory_displaysSystemLanguageOption() {
-    val systemLocale = LocaleHelper.getSystemLocale()
+    val systemLocale = LocaleHelper.getSystemLocale(context)
     val systemLanguageName = systemLocale.getDisplayLanguage(systemLocale).replaceFirstChar {
-      if (it.isLowerCase()) it.titlecase(systemLocale) else it.toString()
+      if (it.isLowerCase()) it.titlecase(systemLocale) else "$it"
     }
     val systemLanguageLabel = context.getString(R.string.system_language_with_name, systemLanguageName)
 
@@ -708,9 +708,9 @@ class SettingsScreenTest {
 
   @Test
   fun settingsScreen_languageCategory_selectingLanguageOption_updatesLanguage() {
-    val systemLocale = LocaleHelper.getSystemLocale()
+    val systemLocale = LocaleHelper.getSystemLocale(context)
     val systemLanguageName = systemLocale.getDisplayLanguage(systemLocale).replaceFirstChar {
-      if (it.isLowerCase()) it.titlecase(systemLocale) else it.toString()
+      if (it.isLowerCase()) it.titlecase(systemLocale) else "$it"
     }
     val systemLanguageLabel = context.getString(R.string.system_language_with_name, systemLanguageName)
     val mockViewModel = createMockViewModel(

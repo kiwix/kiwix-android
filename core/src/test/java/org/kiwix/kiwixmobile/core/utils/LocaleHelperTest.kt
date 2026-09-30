@@ -30,6 +30,7 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
@@ -93,12 +94,6 @@ class LocaleHelperTest {
   @Test
   fun `getSystemLocale returns non-null locale`() {
     val locale = LocaleHelper.getSystemLocale(context)
-    org.junit.jupiter.api.Assertions.assertNotNull(locale)
-  }
-
-  @Test
-  fun `getSystemLocale without arguments returns non-null locale`() {
-    val locale = LocaleHelper.getSystemLocale()
-    org.junit.jupiter.api.Assertions.assertNotNull(locale)
+    assertNotNull(locale)
   }
 }
