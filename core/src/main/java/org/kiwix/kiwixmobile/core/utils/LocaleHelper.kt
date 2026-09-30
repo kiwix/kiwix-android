@@ -18,9 +18,11 @@
 
 package org.kiwix.kiwixmobile.core.utils
 
+import android.app.LocaleManager
 import android.content.Context
 import android.content.res.Configuration
 import android.content.res.Resources
+import android.os.Build
 import androidx.appcompat.app.AppCompatDelegate
 import kotlinx.coroutines.flow.first
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
@@ -44,10 +46,16 @@ object LocaleHelper {
       }
     }
 
-  fun getSystemLocale(context: Context): Locale =
-    firstLocaleOrNull(runCatching { Resources.getSystem()?.configuration }.getOrNull())
+  fun getSystemLocale(context: Context): Locale {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+      runCatching {
+        context.getSystemService(LocaleManager::class.java)?.systemLocales?.takeIf { it.size() > 0 }?.get(0)
+      }.getOrNull()?.let { return it }
+    }
+    return firstLocaleOrNull(runCatching { Resources.getSystem()?.configuration }.getOrNull())
       ?: firstLocaleOrNull(runCatching { context.resources?.configuration }.getOrNull())
       ?: Locale.getDefault()
+  }
 
   private fun firstLocaleOrNull(configuration: Configuration?): Locale? =
     configuration?.locales?.takeIf { it.size() > 0 }?.get(0)
