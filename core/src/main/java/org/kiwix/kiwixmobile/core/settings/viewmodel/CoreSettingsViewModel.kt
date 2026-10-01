@@ -29,7 +29,6 @@ import android.webkit.WebView
 import android.widget.Toast
 import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.result.ActivityResult
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -88,7 +87,6 @@ abstract class CoreSettingsViewModel(
 ) : ViewModel() {
   data class SettingsUiState(
     val storageDeviceList: List<StorageDevice> = emptyList(),
-    val snackbarHostState: SnackbarHostState = SnackbarHostState(),
     val isLoadingStorageDetails: Boolean = true,
     val shouldShowLanguageCategory: Boolean = false,
     val shouldShowStorageCategory: Boolean = false,

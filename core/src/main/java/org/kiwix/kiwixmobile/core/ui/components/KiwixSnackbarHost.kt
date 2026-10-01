@@ -20,7 +20,7 @@ package org.kiwix.kiwixmobile.core.ui.components
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Snackbar
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -33,7 +33,6 @@ import org.kiwix.kiwixmobile.core.ui.theme.MineShaftGray850
 import org.kiwix.kiwixmobile.core.ui.theme.MineShaftGray900
 import org.kiwix.kiwixmobile.core.ui.theme.White
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.EIGHT_DP
-import org.kiwix.kiwixmobile.core.utils.ComposeDimens.LARGE_ROUND_SHAPE_SIZE
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SIXTEEN_DP
 
 /**
@@ -56,7 +55,7 @@ fun KiwixSnackbarHost(snackbarHostState: SnackbarHostState) {
     ) { snackbarData ->
       Snackbar(
         snackbarData = snackbarData,
-        shape = RoundedCornerShape(LARGE_ROUND_SHAPE_SIZE),
+        shape = MaterialTheme.shapes.large,
         containerColor = containerColor,
         contentColor = contentColor,
         actionColor = actionColor

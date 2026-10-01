@@ -102,7 +102,6 @@ import org.kiwix.kiwixmobile.core.settings.viewmodel.ZOOM_OFFSET
 import org.kiwix.kiwixmobile.core.settings.viewmodel.ZOOM_SCALE
 import org.kiwix.kiwixmobile.core.ui.components.ContentLoadingProgressBar
 import org.kiwix.kiwixmobile.core.ui.components.KiwixAppBar
-import org.kiwix.kiwixmobile.core.ui.components.KiwixSnackbarHost
 import org.kiwix.kiwixmobile.core.ui.components.NavigationIcon
 import org.kiwix.kiwixmobile.core.ui.components.StorageDeviceItem
 import org.kiwix.kiwixmobile.core.ui.theme.KiwixTheme
@@ -294,7 +293,6 @@ internal fun SettingsScreen(
 ) {
   val uiState by coreSettingsViewModel.uiState.collectAsStateWithLifecycle()
   Scaffold(
-    snackbarHost = { KiwixSnackbarHost(snackbarHostState = uiState.snackbarHostState) },
     topBar = {
       KiwixAppBar(
         title = stringResource(R.string.menu_settings),
