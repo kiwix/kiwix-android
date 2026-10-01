@@ -19,6 +19,7 @@
 package org.kiwix.kiwixmobile.core.main.reader.helper
 
 import android.content.Context
+import androidx.annotation.VisibleForTesting
 import dagger.hilt.android.qualifiers.ApplicationContext
 import org.kiwix.kiwixmobile.core.main.MainRepositoryActions
 import org.kiwix.kiwixmobile.core.page.history.models.HistoryListItem
@@ -26,12 +27,19 @@ import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.getCurrentLocale
 import java.text.SimpleDateFormat
 import java.util.Date
+import java.util.Locale
+import java.util.TimeZone
 import javax.inject.Inject
 
 class ReaderHistoryManager @Inject constructor(
   @param:ApplicationContext private val context: Context,
   private val mainRepositoryActions: MainRepositoryActions
 ) {
+  // SimpleDateFormat is not thread-safe, so these are only accessed while holding the lock.
+  private val dateFormatLock = Any()
+  private var dateFormatLocale: Locale? = null
+  private var dateFormat: SimpleDateFormat? = null
+
   suspend fun saveHistory(
     url: String?,
     title: String?,
@@ -53,6 +61,18 @@ class ReaderHistoryManager @Inject constructor(
     mainRepositoryActions.saveHistory(history)
   }
 
-  private fun formatDate(timestamp: Long): String =
-    SimpleDateFormat("d MMM yyyy", getCurrentLocale(context)).format(Date(timestamp))
+  @VisibleForTesting
+  internal fun formatDate(timestamp: Long): String {
+    val locale = getCurrentLocale(context)
+    synchronized(dateFormatLock) {
+      val format = dateFormat?.takeIf { dateFormatLocale == locale }
+        ?: SimpleDateFormat("d MMM yyyy", locale).also {
+          dateFormat = it
+          dateFormatLocale = locale
+        }
+      // A cached instance keeps the time zone it was created with, so pick up any device change.
+      format.timeZone = TimeZone.getDefault()
+      return format.format(Date(timestamp))
+    }
+  }
 }

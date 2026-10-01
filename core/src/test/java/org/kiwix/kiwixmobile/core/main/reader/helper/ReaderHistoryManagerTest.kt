@@ -29,6 +29,7 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.slot
 import kotlinx.coroutines.test.runTest
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
@@ -38,10 +39,16 @@ import org.kiwix.kiwixmobile.core.main.MainRepositoryActions
 import org.kiwix.kiwixmobile.core.page.history.models.HistoryListItem
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import java.util.Locale
+import java.util.TimeZone
+import java.util.concurrent.Callable
+import java.util.concurrent.Executors
+import java.util.concurrent.TimeUnit
 
 class ReaderHistoryManagerTest {
   private val context = mockk<Context>(relaxed = true)
   private val repository = mockk<MainRepositoryActions>(relaxed = true)
+  private val locales = mockk<LocaleList>()
+  private val defaultTimeZone = TimeZone.getDefault()
 
   private lateinit var readerHistoryManager: ReaderHistoryManager
 
@@ -50,16 +57,21 @@ class ReaderHistoryManagerTest {
     clearAllMocks()
     val resources = mockk<Resources>()
     val configuration = mockk<Configuration>()
-    val locales = mockk<LocaleList>()
     every { context.resources } returns resources
     every { resources.configuration } returns configuration
     every { configuration.locales } returns locales
     every { locales[0] } returns Locale.US
+    TimeZone.setDefault(TimeZone.getTimeZone("UTC"))
 
     readerHistoryManager = ReaderHistoryManager(
       context = context,
       mainRepositoryActions = repository
     )
+  }
+
+  @AfterEach
+  fun tearDown() {
+    TimeZone.setDefault(defaultTimeZone)
   }
 
   @Test
@@ -133,5 +145,53 @@ class ReaderHistoryManagerTest {
 
     assertTrue(history.timeStamp > 0)
     assertFalse(history.dateString.isBlank())
+  }
+
+  @Test
+  fun `formatDate follows a change of app locale`() {
+    assertEquals("2 Oct 2025", readerHistoryManager.formatDate(OCT_2_2025_UTC_MIDNIGHT))
+
+    every { locales[0] } returns Locale.FRANCE
+
+    assertEquals("2 oct. 2025", readerHistoryManager.formatDate(OCT_2_2025_UTC_MIDNIGHT))
+  }
+
+  @Test
+  fun `formatDate follows a change of device time zone`() {
+    assertEquals("2 Oct 2025", readerHistoryManager.formatDate(OCT_2_2025_UTC_MIDNIGHT))
+
+    TimeZone.setDefault(TimeZone.getTimeZone("America/Los_Angeles"))
+
+    assertEquals("1 Oct 2025", readerHistoryManager.formatDate(OCT_2_2025_UTC_MIDNIGHT))
+  }
+
+  @Test
+  fun `formatDate returns correct dates when called concurrently`() {
+    val executor = Executors.newFixedThreadPool(THREAD_COUNT)
+    try {
+      val results = executor.invokeAll(
+        List(THREAD_COUNT * CALLS_PER_THREAD) { index ->
+          val timestamp = if (index % 2 == 0) OCT_2_2025_UTC_MIDNIGHT else MAR_15_2024_UTC_NOON
+          Callable { timestamp to readerHistoryManager.formatDate(timestamp) }
+        },
+        TEST_TIMEOUT_SECONDS,
+        TimeUnit.SECONDS
+      ).map { it.get() }
+
+      results.forEach { (timestamp, dateString) ->
+        val expected = if (timestamp == OCT_2_2025_UTC_MIDNIGHT) "2 Oct 2025" else "15 Mar 2024"
+        assertEquals(expected, dateString)
+      }
+    } finally {
+      executor.shutdownNow()
+    }
+  }
+
+  companion object {
+    private const val OCT_2_2025_UTC_MIDNIGHT = 1_759_363_200_000L
+    private const val MAR_15_2024_UTC_NOON = 1_710_504_000_000L
+    private const val THREAD_COUNT = 8
+    private const val CALLS_PER_THREAD = 500
+    private const val TEST_TIMEOUT_SECONDS = 30L
   }
 }
