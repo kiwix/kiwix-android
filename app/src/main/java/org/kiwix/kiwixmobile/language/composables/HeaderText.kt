@@ -18,6 +18,7 @@
 
 package org.kiwix.kiwixmobile.language.composables
 
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -33,8 +34,8 @@ const val LANGUAGE_HEADER_TESTING_TAG = "languageHeaderTestingTag"
 
 @Composable
 fun HeaderText(
-  modifier: Modifier,
-  item: LanguageListItem.HeaderItem
+  item: LanguageListItem.HeaderItem,
+  modifier: Modifier
 ) {
   val title = stringResource(
     if (item.id == LanguageListItem.HeaderItem.SELECTED) {
@@ -47,6 +48,7 @@ fun HeaderText(
   Text(
     text = title,
     modifier = modifier
+      .fillMaxWidth()
       .padding(
         start = ComposeDimens.SIXTEEN_DP,
         end = ComposeDimens.SIXTEEN_DP,

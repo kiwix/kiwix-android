@@ -23,6 +23,7 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.kiwix.kiwixmobile.language.composables.LanguageListItem.HeaderItem
 import org.kiwix.kiwixmobile.language.composables.LanguageListItem.LanguageItem
+import org.kiwix.kiwixmobile.language.composables.LanguageListItem.SearchItem
 import org.kiwix.kiwixmobile.language.viewmodel.State.Content
 import org.kiwix.sharedFunctions.language
 
@@ -43,6 +44,7 @@ class StateTest {
             canMoveDown = false
           ),
           HeaderItem(HeaderItem.OTHER),
+          SearchItem,
           LanguageItem(
             language = language(),
             isSelectedSection = false
@@ -59,7 +61,16 @@ class StateTest {
         ).updateFilter("matches")
       assertThat(content.viewItems).isEqualTo(
         listOf(
+          HeaderItem(HeaderItem.SELECTED),
+          LanguageItem(
+            language = language(isActive = true),
+            isSelectedSection = true,
+            rank = 1,
+            canMoveUp = false,
+            canMoveDown = false
+          ),
           HeaderItem(HeaderItem.OTHER),
+          SearchItem,
           LanguageItem(
             language = language(language = "matchesFilter"),
             isSelectedSection = false
@@ -75,7 +86,7 @@ class StateTest {
       val content = Content(listOf(lang1, lang2))
 
       val initialOrder = content.viewItems
-      assertThat(initialOrder).hasSize(3) // 1 header (OTHER) + 2 languages
+      assertThat(initialOrder).hasSize(4) // 1 header (OTHER) + 1 search + 2 languages
 
       val selectedLangItem = LanguageItem(lang1)
       val updatedContent = content.select(selectedLangItem)
@@ -91,12 +102,21 @@ class StateTest {
             canMoveDown = false
           ),
           HeaderItem(HeaderItem.OTHER),
+          SearchItem,
           LanguageItem(
             language = lang2,
             isSelectedSection = false
           )
         )
       )
+    }
+
+    @Test
+    fun `select inactive language preserves filter`() {
+      val lang1 = language(id = 1L, languageCode = "de", language = "German", isActive = false)
+      val content = Content(listOf(lang1), filter = "Ger")
+      val updated = content.select(LanguageItem(lang1))
+      assertThat(updated.filter).isEqualTo("Ger")
     }
 
     @Test
@@ -156,7 +176,7 @@ class StateTest {
     }
 
     @Test
-    fun `disables reordering and keeps unfiltered rank when filter is active`() {
+    fun `keeps selected languages intact and reorderable when filter is active`() {
       val lang1 = language(id = 1L, languageCode = "de", language = "German", isActive = true)
       val lang2 = language(id = 2L, languageCode = "es", language = "Spanish", isActive = true)
       val lang3 = language(id = 3L, languageCode = "el", language = "Greek", isActive = true)
@@ -166,18 +186,24 @@ class StateTest {
       ).updateFilter("G")
 
       val selectedItems = content.viewItems.filterIsInstance<LanguageItem>()
-      assertThat(selectedItems).hasSize(2)
+      assertThat(selectedItems).hasSize(3)
       // German (index 0 in full list)
       assertThat(selectedItems[0].language.languageCode).isEqualTo("de")
       assertThat(selectedItems[0].rank).isEqualTo(1)
       assertThat(selectedItems[0].canMoveUp).isFalse()
-      assertThat(selectedItems[0].canMoveDown).isFalse()
+      assertThat(selectedItems[0].canMoveDown).isTrue()
+
+      // Spanish (index 1 in full list)
+      assertThat(selectedItems[1].language.languageCode).isEqualTo("es")
+      assertThat(selectedItems[1].rank).isEqualTo(2)
+      assertThat(selectedItems[1].canMoveUp).isTrue()
+      assertThat(selectedItems[1].canMoveDown).isTrue()
 
       // Greek (index 2 in full list)
-      assertThat(selectedItems[1].language.languageCode).isEqualTo("el")
-      assertThat(selectedItems[1].rank).isEqualTo(3)
-      assertThat(selectedItems[1].canMoveUp).isFalse()
-      assertThat(selectedItems[1].canMoveDown).isFalse()
+      assertThat(selectedItems[2].language.languageCode).isEqualTo("el")
+      assertThat(selectedItems[2].rank).isEqualTo(3)
+      assertThat(selectedItems[2].canMoveUp).isTrue()
+      assertThat(selectedItems[2].canMoveDown).isFalse()
     }
   }
 }

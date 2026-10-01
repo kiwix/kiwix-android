@@ -43,13 +43,10 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.kiwix.kiwixmobile.core.R
-import org.kiwix.kiwixmobile.core.page.SEARCH_ICON_TESTING_TAG
 import org.kiwix.kiwixmobile.core.search.SEARCH_FIELD_TESTING_TAG
 import org.kiwix.kiwixmobile.core.ui.components.CONTENT_LOADING_PROGRESS_BAR_TESTING_TAG
 import org.kiwix.kiwixmobile.core.ui.components.NAVIGATION_ICON_TESTING_TAG
 import org.kiwix.kiwixmobile.core.ui.components.NavigationIcon
-import org.kiwix.kiwixmobile.core.ui.models.ActionMenuItem
-import org.kiwix.kiwixmobile.core.ui.models.IconItem
 import org.kiwix.kiwixmobile.core.ui.models.IconItem.Vector
 import org.kiwix.kiwixmobile.core.zim_manager.Language
 import org.kiwix.kiwixmobile.language.composables.LANGUAGE_HEADER_TESTING_TAG
@@ -87,22 +84,11 @@ class LanguageScreenUITest {
   ): List<CustomAccessibilityAction> =
     node.fetchSemanticsNode().config.getOrNull(SemanticsActions.CustomActions).orEmpty()
 
-  private fun searchActionMenuItem(onClick: () -> Unit = {}) = ActionMenuItem(
-    icon = IconItem.Drawable(R.drawable.action_search),
-    contentDescription = R.string.search_label,
-    onClick = onClick,
-    testingTag = SEARCH_ICON_TESTING_TAG
-  )
-
   private fun mockLanguageScreen(
     searchText: String = "",
-    isSearchActive: Boolean = false,
     state: State = State.Loading,
-    actionMenuItemList: List<ActionMenuItem> = listOf(
-      searchActionMenuItem()
-    ),
     onClearClick: () -> Unit = {},
-    onAppBarValueChange: (String) -> Unit = {},
+    onSearchTextChange: (String) -> Unit = {},
     selectLanguageItem: (LanguageListItem.LanguageItem) -> Unit = {},
     onMoveUp: (LanguageListItem.LanguageItem) -> Unit = {},
     onMoveDown: (LanguageListItem.LanguageItem) -> Unit = {},
@@ -111,11 +97,9 @@ class LanguageScreenUITest {
     composeTestRule.setContent {
       LanguageScreen(
         searchText = searchText,
-        isSearchActive = isSearchActive,
         state = state,
-        actionMenuItemList = actionMenuItemList,
         onClearClick = onClearClick,
-        onAppBarValueChange = onAppBarValueChange,
+        onSearchTextChange = onSearchTextChange,
         selectLanguageItem = selectLanguageItem,
         onMoveUp = onMoveUp,
         onMoveDown = onMoveDown,
@@ -133,60 +117,30 @@ class LanguageScreenUITest {
   }
 
   @Test
-  fun languageScreen_whenSearchNotActive_searchIconIsDisplayed() {
-    mockLanguageScreen(isSearchActive = false)
-    composeTestRule
-      .onNodeWithTag(SEARCH_ICON_TESTING_TAG)
-      .assertIsDisplayed()
-  }
-
-  @Test
-  fun languageScreen_whenSearchIconClicked_callbackIsTriggered() {
-    var clicked = false
-    mockLanguageScreen(
-      actionMenuItemList = listOf(
-        searchActionMenuItem { clicked = true }
-      )
-    )
-    composeTestRule
-      .onNodeWithTag(SEARCH_ICON_TESTING_TAG)
-      .performClick()
-    assertTrue("Search icon callback should be triggered", clicked)
-  }
-
-  @Test
-  fun languageScreen_whenSearchIsActive_searchFieldIsDisplayed() {
-    mockLanguageScreen(isSearchActive = true)
+  fun languageScreen_whenOtherLanguagesExist_searchFieldIsDisplayed() {
+    val language = mockLanguage(languageCode = "en", active = false)
+    mockLanguageScreen(state = State.Content(listOf(language)))
     composeTestRule
       .onNodeWithTag(SEARCH_FIELD_TESTING_TAG)
       .assertIsDisplayed()
   }
 
   @Test
-  fun languageScreen_whenSearchIsNotActive_searchFieldDoesNotExist() {
-    mockLanguageScreen(isSearchActive = false)
+  fun languageScreen_whenNoOtherLanguagesExist_searchFieldDoesNotExist() {
+    val language = mockLanguage(languageCode = "en", active = true)
+    mockLanguageScreen(state = State.Content(listOf(language)))
     composeTestRule
       .onNodeWithTag(SEARCH_FIELD_TESTING_TAG)
       .assertDoesNotExist()
   }
 
   @Test
-  fun languageScreen_whenSearchIsActive_searchIconIsHidden() {
-    mockLanguageScreen(
-      isSearchActive = true,
-      actionMenuItemList = emptyList()
-    )
-    composeTestRule
-      .onNodeWithTag(SEARCH_ICON_TESTING_TAG)
-      .assertDoesNotExist()
-  }
-
-  @Test
-  fun languageScreen_whenUserTypesInSearchField_queryIsDisplayed() {
+  fun languageScreen_whenUserTypesInSearchField_callbackIsTriggered() {
     var query = ""
+    val language = mockLanguage(languageCode = "en", active = false)
     mockLanguageScreen(
-      isSearchActive = true,
-      onAppBarValueChange = { query = it }
+      state = State.Content(listOf(language)),
+      onSearchTextChange = { query = it }
     )
     composeTestRule
       .onNodeWithTag(SEARCH_FIELD_TESTING_TAG)
@@ -198,8 +152,9 @@ class LanguageScreenUITest {
   @Test
   fun languageScreen_whenClearSearchClicked_callbackIsTriggered() {
     var cleared = false
+    val language = mockLanguage(languageCode = "en", active = false)
     mockLanguageScreen(
-      isSearchActive = true,
+      state = State.Content(listOf(language)),
       searchText = "English",
       onClearClick = { cleared = true }
     )
@@ -208,6 +163,19 @@ class LanguageScreenUITest {
         context.getString(R.string.searchview_description_clear)
       ).performClick()
     assertTrue("onClearClick callback should be triggered", cleared)
+  }
+
+  @Test
+  fun languageScreen_whenSearchTextIsEmpty_clearButtonDoesNotExist() {
+    val language = mockLanguage(languageCode = "en", active = false)
+    mockLanguageScreen(
+      state = State.Content(listOf(language)),
+      searchText = ""
+    )
+    composeTestRule
+      .onNodeWithContentDescription(
+        context.getString(R.string.searchview_description_clear)
+      ).assertDoesNotExist()
   }
 
   @Test
@@ -245,35 +213,12 @@ class LanguageScreenUITest {
   }
 
   @Test
-  fun languageScreen_whenBackPressedWhileSearchActive_navigationIconCallbackIsTriggered() {
-    var backPressHandled = false
+  fun languageScreen_whenNavigationIconClicked_callbackIsTriggered() {
+    var navigatedBack = false
     mockLanguageScreen(
-      isSearchActive = true,
-      actionMenuItemList = emptyList(),
       navigationIcon = {
         NavigationIcon(
           iconItem = Vector(Icons.AutoMirrored.Filled.ArrowBack),
-          onClick = { backPressHandled = true }
-        )
-      }
-    )
-    composeTestRule
-      .onNodeWithTag(NAVIGATION_ICON_TESTING_TAG)
-      .performClick()
-    assertTrue(
-      "Navigation icon callback should be triggered when search is active",
-      backPressHandled
-    )
-  }
-
-  @Test
-  fun languageScreen_whenBackPressedWhileSearchNotActive_navigationIconCallbackIsTriggered() {
-    var navigatedBack = false
-    mockLanguageScreen(
-      isSearchActive = false,
-      navigationIcon = {
-        NavigationIcon(
-          iconItem = IconItem.Drawable(R.drawable.ic_close_white_24dp),
           onClick = { navigatedBack = true }
         )
       }
@@ -282,7 +227,7 @@ class LanguageScreenUITest {
       .onNodeWithTag(NAVIGATION_ICON_TESTING_TAG)
       .performClick()
     assertTrue(
-      "navigateBack callback should be triggered when search is not active",
+      "Navigation icon callback should be triggered",
       navigatedBack
     )
   }
@@ -588,7 +533,7 @@ class LanguageScreenUITest {
   }
 
   @Test
-  fun languageScreen_whenSearchFilterActive_reorderActionsAreUnavailable() {
+  fun languageScreen_whenSearchFilterActive_selectedLanguagesReorderActionsAreAvailable() {
     val lang1 = Language(
       id = 1L,
       active = true,
@@ -614,8 +559,8 @@ class LanguageScreenUITest {
       )[1]
     )
     assertTrue(
-      "Reorder actions should be unavailable while a search filter is active",
-      actions.isEmpty()
+      "Reorder actions should remain available while a search filter is active",
+      actions.isNotEmpty()
     )
   }
 
@@ -691,5 +636,30 @@ class LanguageScreenUITest {
     mockLanguageScreen(state = State.Content(listOf(english, german), filter = "Ger"))
     composeTestRule.onNodeWithText("German").assertIsDisplayed()
     composeTestRule.onNodeWithText("English").assertDoesNotExist()
+  }
+
+  @Test
+  fun languageScreen_whenFilterActive_selectedLanguageRemainsDisplayedEvenIfNotMatching() {
+    val english = Language(
+      id = 1L,
+      active = true,
+      occurencesOfLanguage = 5,
+      language = "English",
+      languageLocalized = "English",
+      languageCode = "en",
+      languageCodeISO2 = "eng"
+    )
+    val german = Language(
+      id = 2L,
+      active = false,
+      occurencesOfLanguage = 5,
+      language = "German",
+      languageLocalized = "Deutsch",
+      languageCode = "de",
+      languageCodeISO2 = "deu"
+    )
+    mockLanguageScreen(state = State.Content(listOf(english, german), filter = "Ger"))
+    composeTestRule.onNodeWithText("English").assertIsDisplayed()
+    composeTestRule.onNodeWithText("German").assertIsDisplayed()
   }
 }

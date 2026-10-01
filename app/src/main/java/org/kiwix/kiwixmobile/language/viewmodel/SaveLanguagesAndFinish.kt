@@ -27,14 +27,15 @@ import org.kiwix.kiwixmobile.core.zim_manager.Language
 data class SaveLanguagesAndFinish(
   val languages: List<Language>,
   private val kiwixDataStore: KiwixDataStore,
-  private val lifecycleScope: CoroutineScope
+  private val lifecycleScope: CoroutineScope,
+  private val onFinish: () -> Unit
 ) : SideEffect<Unit> {
   override fun invokeWith(activity: AppCompatActivity) {
     lifecycleScope.launch {
       runCatching {
         val languageCodes = languages.joinToString(",") { it.languageCode }
         kiwixDataStore.setSelectedOnlineContentLanguage(languageCodes)
-        activity.onBackPressedDispatcher.onBackPressed()
+        onFinish()
       }.onFailure {
         it.printStackTrace()
       }

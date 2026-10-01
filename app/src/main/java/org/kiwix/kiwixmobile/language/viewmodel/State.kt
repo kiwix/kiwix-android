@@ -22,6 +22,7 @@ import org.kiwix.kiwixmobile.core.zim_manager.Language
 import org.kiwix.kiwixmobile.language.composables.LanguageListItem
 import org.kiwix.kiwixmobile.language.composables.LanguageListItem.HeaderItem
 import org.kiwix.kiwixmobile.language.composables.LanguageListItem.LanguageItem
+import org.kiwix.kiwixmobile.language.composables.LanguageListItem.SearchItem
 
 sealed class State {
   data class Error(val errorMessage: String) : State()
@@ -119,28 +120,24 @@ sealed class State {
         filter: String,
         selectedLanguageOrder: List<String>
       ): List<LanguageListItem> =
-        activeItems(items, filter, selectedLanguageOrder) + otherItems(items, filter)
+        activeItems(items, selectedLanguageOrder) + otherItems(items, filter)
 
       private fun activeItems(
         items: List<Language>,
-        filter: String,
         selectedLanguageOrder: List<String>
       ): List<LanguageListItem> {
         val activeLanguages = items.filter { it.active }
         val activeMap = activeLanguages.associateBy { it.languageCode }
         val orderedActive = selectedLanguageOrder.mapNotNull { activeMap[it] } +
           activeLanguages.filter { it.languageCode !in selectedLanguageOrder }
-        val isSearching = filter.isNotEmpty()
-        val filtered = orderedActive.filter { !isSearching || it.matches(filter) }
-        return if (filtered.isNotEmpty()) {
-          listOf(HeaderItem(HeaderItem.SELECTED)) + filtered.map { language ->
-            val unfilteredIndex = orderedActive.indexOf(language)
+        return if (orderedActive.isNotEmpty()) {
+          listOf(HeaderItem(HeaderItem.SELECTED)) + orderedActive.mapIndexed { index, language ->
             LanguageItem(
               language = language,
               isSelectedSection = true,
-              rank = unfilteredIndex + 1,
-              canMoveUp = !isSearching && unfilteredIndex > 0,
-              canMoveDown = !isSearching && unfilteredIndex < orderedActive.size - 1
+              rank = index + 1,
+              canMoveUp = index > 0,
+              canMoveDown = index < orderedActive.size - 1
             )
           }
         } else {
@@ -152,18 +149,15 @@ sealed class State {
         items: List<Language>,
         filter: String
       ): List<LanguageListItem> {
-        val filtered = items
-          .filter { !it.active }
-          .filter { filter.isEmpty() || it.matches(filter) }
-        return if (filtered.isNotEmpty()) {
-          listOf(HeaderItem(HeaderItem.OTHER)) + filtered.map { language ->
-            LanguageItem(
-              language = language,
-              isSelectedSection = false
-            )
-          }
-        } else {
-          emptyList()
+        val otherLanguages = items.filter { !it.active }
+        if (otherLanguages.isEmpty()) return emptyList()
+
+        val filtered = otherLanguages.filter { filter.isEmpty() || it.matches(filter) }
+        return listOf(HeaderItem(HeaderItem.OTHER), SearchItem) + filtered.map { language ->
+          LanguageItem(
+            language = language,
+            isSelectedSection = false
+          )
         }
       }
     }

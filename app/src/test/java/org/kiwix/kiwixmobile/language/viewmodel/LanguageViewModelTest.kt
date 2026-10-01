@@ -329,7 +329,7 @@ class LanguageViewModelTest {
         )
 
         assertEquals(
-          2,
+          4,
           content.viewItems.size
         )
       }
@@ -337,6 +337,29 @@ class LanguageViewModelTest {
 
     @Nested
     inner class ActionSelect {
+      @Test
+      fun whenInactiveLanguageSelected_preservesFilter() = runTest {
+        coEvery {
+          observeLanguages(any(), any(), any())
+        } returns ObserveLanguages.Result.Success(emptyList())
+        createViewModel()
+        advanceUntilIdle()
+        val english = createLanguage(code = "eng", active = true)
+        val french = createLanguage(code = "fr", active = false, id = 2)
+
+        languageViewModel.state.value =
+          State.Content(listOf(english, french), filter = "fr")
+
+        languageViewModel.actions.emit(
+          Action.Select(LanguageListItem.LanguageItem(french))
+        )
+
+        advanceUntilIdle()
+
+        val content = languageViewModel.state.value as State.Content
+        assertEquals("fr", content.filter)
+      }
+
       @Test
       fun whenStateNotContent_returnsCurrentState() = runTest {
         coEvery {
@@ -550,6 +573,7 @@ class LanguageViewModelTest {
           }
         }
 
+        languageViewModel.setOnFinishCallback { }
         languageViewModel.actions.emit(Action.Save)
         advanceUntilIdle()
 
@@ -585,6 +609,7 @@ class LanguageViewModelTest {
           languageViewModel.effects.collect { sideEffect = it }
         }
 
+        languageViewModel.setOnFinishCallback { }
         languageViewModel.actions.emit(Action.Save)
         advanceUntilIdle()
 

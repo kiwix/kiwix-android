@@ -61,16 +61,21 @@ class LanguageRobot : BaseRobot() {
       .onNodeWithTag(NAVIGATION_ICON_TESTING_TAG)
       .performClick()
     composeTestRule.waitForIdle()
-    if (composeTestRule.onAllNodesWithTag(NAVIGATION_ICON_TESTING_TAG).fetchSemanticsNodes().isNotEmpty()) {
+    if (composeTestRule.onAllNodesWithTag(LANGUAGE_MENU_ICON_TESTING_TAG).fetchSemanticsNodes().isEmpty() &&
+      composeTestRule.onAllNodesWithTag(NAVIGATION_ICON_TESTING_TAG).fetchSemanticsNodes().isNotEmpty()
+    ) {
       composeTestRule
         .onNodeWithTag(NAVIGATION_ICON_TESTING_TAG)
         .performClick()
+      composeTestRule.waitForIdle()
     }
-    composeTestRule.waitForIdle()
   }
 
   fun clickOnLanguageSearchIcon(composeTestRule: ComposeContentTestRule) {
-    composeTestRule.onNodeWithTag(SEARCH_ICON_TESTING_TAG).performClick()
+    if (composeTestRule.onAllNodesWithTag(SEARCH_ICON_TESTING_TAG).fetchSemanticsNodes().isNotEmpty()) {
+      composeTestRule.onNodeWithTag(SEARCH_ICON_TESTING_TAG).performClick()
+      composeTestRule.waitForIdle()
+    }
   }
 
   fun searchLanguage(
