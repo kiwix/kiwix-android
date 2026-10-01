@@ -117,6 +117,7 @@ import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SIX_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.STORAGE_LOADING_PROGRESS_BAR_SIZE
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TWELVE_DP
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils
+import org.kiwix.kiwixmobile.core.utils.LocaleHelper
 import org.kiwix.kiwixmobile.core.utils.SIX
 import org.kiwix.kiwixmobile.core.utils.ZERO
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
@@ -423,9 +424,17 @@ private fun LanguageCategory(
         else -> "en"
       }
 
+    val systemLocale = remember { LocaleHelper.getSystemLocale(context) }
+    val uiLocale = context.resources.configuration.locales.get(0) ?: Locale.getDefault()
+    val systemLanguageName = systemLocale.getDisplayLanguage(uiLocale).replaceFirstChar {
+      if (it.isLowerCase()) it.titlecase(uiLocale) else "$it"
+    }
+    val systemLanguageLabel =
+      stringResource(R.string.system_language_with_name, systemLanguageName)
+
     val languageDisplayNames = languageCodes.mapIndexed { index, code ->
       if (index == 0) {
-        stringResource(R.string.device_default)
+        systemLanguageLabel
       } else {
         val locale = code.convertToLocal()
         "${locale.displayLanguage} (${locale.getDisplayLanguage(locale)})"
@@ -433,12 +442,12 @@ private fun LanguageCategory(
     }
 
     val selectedIndex = languageCodes.indexOf(selectedCode)
-    SettingsCategory(stringResource(R.string.pref_language_title)) {
+    SettingsCategory(stringResource(R.string.user_interface)) {
       ListPreference(
         titleId = R.string.pref_language_title,
         summary = languageDisplayNames.getOrNull(selectedIndex) ?: selectedCode,
         options = languageDisplayNames,
-        selectedOption = languageDisplayNames[selectedIndex]
+        selectedOption = languageDisplayNames.getOrElse(selectedIndex) { systemLanguageLabel }
       ) { selectedDisplay ->
         val index = languageDisplayNames.indexOf(selectedDisplay)
         val selectedLangCode = languageCodes.getOrNull(index) ?: return@ListPreference

@@ -52,10 +52,12 @@ import org.kiwix.kiwixmobile.core.settings.viewmodel.CoreSettingsViewModel.Setti
 import org.kiwix.kiwixmobile.core.ui.components.NAVIGATION_ICON_TESTING_TAG
 import org.kiwix.kiwixmobile.core.ui.components.NavigationIcon
 import org.kiwix.kiwixmobile.core.ui.components.TOOLBAR_TITLE_TESTING_TAG
+import org.kiwix.kiwixmobile.core.utils.LocaleHelper
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore.Companion.DEFAULT_ZOOM
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
 import org.robolectric.annotation.Config
+import java.util.Locale
 
 /**
  * Behavior-driven UI tests for SettingsScreen.
@@ -662,8 +664,68 @@ class SettingsScreenTest {
       )
     )
     composeTestRule
-      .onNodeWithText(context.getString(R.string.pref_language_title))
+      .onNodeWithText(context.getString(R.string.user_interface))
       .assertDoesNotExist()
+  }
+
+  @Test
+  fun settingsScreen_languageCategory_visibleWhenEnabled() {
+    renderSettingsScreen(
+      createMockViewModel(
+        uiState = SettingsUiState(shouldShowLanguageCategory = true)
+      )
+    )
+    scrollToText(context.getString(R.string.user_interface))
+    composeTestRule
+      .onNodeWithText(context.getString(R.string.user_interface))
+      .assertIsDisplayed()
+    composeTestRule
+      .onNodeWithText(context.getString(R.string.pref_language_title))
+      .assertIsDisplayed()
+  }
+
+  @Test
+  fun settingsScreen_languageCategory_displaysSystemLanguageOption() {
+    val systemLocale = LocaleHelper.getSystemLocale(context)
+    val systemLanguageName = systemLocale.getDisplayLanguage(systemLocale).replaceFirstChar {
+      if (it.isLowerCase()) it.titlecase(systemLocale) else "$it"
+    }
+    val systemLanguageLabel = context.getString(R.string.system_language_with_name, systemLanguageName)
+
+    renderSettingsScreen(
+      createMockViewModel(
+        uiState = SettingsUiState(shouldShowLanguageCategory = true)
+      )
+    )
+    scrollToText(context.getString(R.string.user_interface))
+    composeTestRule
+      .onNodeWithText(context.getString(R.string.pref_language_title))
+      .performClick()
+    composeTestRule
+      .onNodeWithText(systemLanguageLabel)
+      .assertIsDisplayed()
+  }
+
+  @Test
+  fun settingsScreen_languageCategory_selectingLanguageOption_updatesLanguage() {
+    val systemLocale = LocaleHelper.getSystemLocale(context)
+    val systemLanguageName = systemLocale.getDisplayLanguage(systemLocale).replaceFirstChar {
+      if (it.isLowerCase()) it.titlecase(systemLocale) else "$it"
+    }
+    val systemLanguageLabel = context.getString(R.string.system_language_with_name, systemLanguageName)
+    val mockViewModel = createMockViewModel(
+      uiState = SettingsUiState(shouldShowLanguageCategory = true)
+    )
+
+    renderSettingsScreen(mockViewModel)
+    scrollToText(context.getString(R.string.user_interface))
+    composeTestRule
+      .onNodeWithText(context.getString(R.string.pref_language_title))
+      .performClick()
+    composeTestRule
+      .onNodeWithText(systemLanguageLabel)
+      .performClick()
+    verify { mockViewModel.updateAppLanguage(Locale.ROOT.language) }
   }
 
   @Test
