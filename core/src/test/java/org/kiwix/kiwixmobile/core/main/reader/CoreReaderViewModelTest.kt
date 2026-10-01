@@ -166,6 +166,7 @@ internal class CoreReaderViewModelTest {
     every { findInPageManager.uiState } returns MutableStateFlow(FindInPageManager.FindInPageUiState())
     every { readerWebViewManager.tabsState } returns MutableStateFlow(TabsManager.TabsState())
     coEvery { readerWebViewManager.getCurrentWebView() } returns mockWebView
+    coEvery { readerWebViewManager.getCurrentWebViewOrCreateMainPageTab(any()) } returns mockWebView
     every { readAloudManager.tts } returns null
     every { readAloudManager.currentPositionMs } returns 0L
     every { readAloudManager.totalDurationMs } returns 0L
@@ -505,6 +506,7 @@ internal class CoreReaderViewModelTest {
         every { mockWebView.title } returns "Kiwix"
         every { mockWebView.url } returns "https://kiwix.org"
         coEvery { readerWebViewManager.getCurrentWebView() } returns mockWebView
+        coEvery { readerWebViewManager.getCurrentWebViewOrCreateMainPageTab(any()) } returns mockWebView
       }
 
       @Test
@@ -1733,7 +1735,7 @@ internal class CoreReaderViewModelTest {
     viewModel.webViewFailedLoading("")
     advanceUntilIdle()
 
-    coVerify { readerWebViewManager.getCurrentWebView() }
+    coVerify { readerWebViewManager.getCurrentWebViewOrCreateMainPageTab(any()) }
     coVerify { mockWebView.url }
   }
 
@@ -1745,7 +1747,7 @@ internal class CoreReaderViewModelTest {
 
       advanceUntilIdle()
 
-      coVerify { readerWebViewManager.getCurrentWebView() }
+      coVerify { readerWebViewManager.getCurrentWebViewOrCreateMainPageTab(any()) }
       verify { mockWebView.url }
 
       assertThat(viewModel.uiState.value.progress).isEqualTo(22)
@@ -1757,7 +1759,7 @@ internal class CoreReaderViewModelTest {
 
       advanceUntilIdle()
 
-      coVerify { readerWebViewManager.getCurrentWebView() }
+      coVerify { readerWebViewManager.getCurrentWebViewOrCreateMainPageTab(any()) }
       verify { mockWebView.url }
 
       assertThat(viewModel.uiState.value.loading).isFalse()
@@ -2400,7 +2402,7 @@ internal class CoreReaderViewModelTest {
 
     verify { bookmarkManager.observeBookmarks(viewModel.viewModelScope, zimId, any()) }
 
-    verify { readerWebViewManager.getCurrentWebView() }
+    coVerify { readerWebViewManager.getCurrentWebViewOrCreateMainPageTab(any()) }
     verify { mockWebView.url }
 
     /* For failure we catch in Log
@@ -2624,7 +2626,7 @@ internal class CoreReaderViewModelTest {
 
         coVerify {
           readerWebViewManager.newMainPageTab(
-            match { config -> config.url == null }
+            match { config -> config.url == null && !config.shouldLoadUrl }
           )
         }
       }

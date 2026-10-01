@@ -64,6 +64,9 @@ class ReaderWebViewManagerTest {
     clearAllMocks()
     tabsState = MutableStateFlow(TabsManager.TabsState())
     every { tabsManager.tabState } returns tabsState
+    coEvery { readerSessionManager.withTabsMutationLock<Any?>(any()) } coAnswers {
+      firstArg<suspend () -> Any?>().invoke()
+    }
     readerWebViewManager = ReaderWebViewManager(
       tabsManager,
       readerSessionManager,
