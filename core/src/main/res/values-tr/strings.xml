@@ -209,9 +209,9 @@
   <string name="external_link_popup_dialog_title">Harici Bağlantı Giriliyor!</string>
   <string name="external_link_popup_dialog_message">Bir dış bağlantı giriyorsunuz. Bu, veri aktarımı için ilave ücretlendirmeye neden olabilir veya çevrimdışı olduğunuzda çalışmaz. Devam etmek istiyor musunuz?</string>
   <string name="do_not_ask_anymore">Artık sorma</string>
-  <string name="your_languages">Seçilen diller:</string>
+  <string name="your_languages" fuzzy="true">Seçilen diller:</string>
   <string name="your_language">Seçilen dil: %s</string>
-  <string name="other_languages">Diğer diller:</string>
+  <string name="other_languages" fuzzy="true">Diğer diller:</string>
   <string name="downloading">İndiriliyor</string>
   <string name="no_items_msg">Kullanılabilir öğe yok</string>
   <string name="crash_title">Peki… Bu utanç verici.</string>

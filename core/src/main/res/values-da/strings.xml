@@ -197,9 +197,9 @@
   <string name="external_link_popup_dialog_title">Går til eksternt link!</string>
   <string name="external_link_popup_dialog_message">Du er på vej mod en ekstern henvisning. Det kan medføre ekstra omkostninger til dataoverførsel og vil ikke fungere hvis du er offline. Ønsker du at fortsætte?</string>
   <string name="do_not_ask_anymore">Spørg ikke igen</string>
-  <string name="your_languages">Valgte sprog:</string>
+  <string name="your_languages" fuzzy="true">Valgte sprog:</string>
   <string name="your_language">Valgt sprog: %s</string>
-  <string name="other_languages">Andre sprog:</string>
+  <string name="other_languages" fuzzy="true">Andre sprog:</string>
   <string name="downloading">Henter</string>
   <string name="no_items_msg">Ingen emner tilgængelig</string>
   <string name="crash_title">Åh nej. Det her er pinligt</string>

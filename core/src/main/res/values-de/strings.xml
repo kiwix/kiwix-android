@@ -33,6 +33,7 @@
 * Symposiarch
 * ThisCarthing
 * TomatoCake
+* Translatemax
 * Umlaut
 -->
 <resources>
@@ -226,7 +227,10 @@
   <string name="do_not_ask_anymore">Nicht mehr nachfragen</string>
   <string name="your_languages">Ausgewählte Sprachen:</string>
   <string name="your_language">Ausgewählte Sprache: %s</string>
-  <string name="other_languages">Weitere Sprachen:</string>
+  <string name="other_languages">Andere Sprachen</string>
+  <string name="move_up">Nach oben verschieben</string>
+  <string name="move_down">nach unten verschieben</string>
+  <string name="reorder_language">Sprache neu ordnen</string>
   <string name="downloading">Herunterladen</string>
   <string name="no_items_msg">Keine Objekte verfügbar</string>
   <string name="crash_title">Also… Das ist peinlich.</string>

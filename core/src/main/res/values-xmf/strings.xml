@@ -128,8 +128,8 @@
   <string name="time_yesterday">გოღა</string>
   <string name="external_link_popup_dialog_title">გალენური რცხუშ მიშაჸონაფა!</string>
   <string name="do_not_ask_anymore">ანწი ვაბკითხა</string>
-  <string name="your_languages">გიშაგორილი ნინეფი:</string>
-  <string name="other_languages">შხვა ნინეფი:</string>
+  <string name="your_languages" fuzzy="true">გიშაგორილი ნინეფი:</string>
+  <string name="other_languages" fuzzy="true">შხვა ნინეფი:</string>
   <string name="crash_checkbox_language">თქვანი ნინაშ პარამეტრეფი</string>
   <string name="crash_checkbox_zimfiles" fuzzy="true">თქვანი Zim ფაილეფიშ ერკებული</string>
   <string name="crash_checkbox_device">მონწყილობაშ ინფორმაცია</string>

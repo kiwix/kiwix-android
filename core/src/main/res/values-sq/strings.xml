@@ -174,8 +174,8 @@
   <string name="external_link_popup_dialog_title">Po hyhet Në Lidhje të Jashtme!</string>
   <string name="external_link_popup_dialog_message" fuzzy="true">Po hyni në një lidhje të jashtme. Kjo mund të sjellë kosto shtesë për shpërngulje të dhënash ose thjesht mund të mos funksionojë, nëse s’jeni i lidhur në internet. Doni të vazhdohet?</string>
   <string name="do_not_ask_anymore">Mos pyet më</string>
-  <string name="your_languages">Gjuhë të përzgjedhura:</string>
-  <string name="other_languages">Gjuhë të tjera:</string>
+  <string name="your_languages" fuzzy="true">Gjuhë të përzgjedhura:</string>
+  <string name="other_languages" fuzzy="true">Gjuhë të tjera:</string>
   <string name="no_items_msg">S’ka objekte të passhëm</string>
   <string name="crash_title">Hëm… Kjo është turpëruese</string>
   <string name="crash_description" fuzzy="true">Duket se u vithisëm.\n\nA do t’ju prishej punë të na ndihmonit në ndreqjen e këtij problemi duke na dërguar hollësitë vijuese?</string>

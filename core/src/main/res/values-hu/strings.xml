@@ -192,9 +192,9 @@
   <string name="external_link_popup_dialog_title">Külső hivatkozás megnyitása!</string>
   <string name="external_link_popup_dialog_message">Külső hivatkozást próbál megnyitni. Ez további költségekkel járhat az adatátvitel miatt, vagy egyszerűen nem fog működni, ha internet nélkül van. Szeretné folytatni?</string>
   <string name="do_not_ask_anymore">Ne kérdezzen többé</string>
-  <string name="your_languages">Kiválasztott nyelvek:</string>
+  <string name="your_languages" fuzzy="true">Kiválasztott nyelvek:</string>
   <string name="your_language">Kiválasztott nyelv: %s</string>
-  <string name="other_languages">További nyelvek:</string>
+  <string name="other_languages" fuzzy="true">További nyelvek:</string>
   <string name="downloading">Letöltés</string>
   <string name="no_items_msg">Nincsenek elérhető elemek</string>
   <string name="crash_title">Nos… ez kínos!</string>

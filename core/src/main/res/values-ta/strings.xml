@@ -159,8 +159,8 @@
   <string name="external_link_popup_dialog_title">வெளிப்புற இணைப்பில் நுழைகிறது!</string>
   <string name="external_link_popup_dialog_message" fuzzy="true">நீங்கள் வெளிப்புற இணைப்பை உள்ளிடுகிறீர்கள். இது தரவு பரிமாற்றத்திற்கான கூடுதல் செலவுகளுக்கு வழிவகுக்கும் அல்லது நீங்கள்  அணைவரியில் இருக்கும்போது வேலை செய்யாது. நீங்கள் தொடர விரும்புகிறீர்களா?</string>
   <string name="do_not_ask_anymore">இனி கேட்க வேண்டாம்</string>
-  <string name="your_languages">தேர்ந்தெடுக்கப்பட்ட மொழிகள்:</string>
-  <string name="other_languages">பிற மொழிகள்:</string>
+  <string name="your_languages" fuzzy="true">தேர்ந்தெடுக்கப்பட்ட மொழிகள்:</string>
+  <string name="other_languages" fuzzy="true">பிற மொழிகள்:</string>
   <string name="no_items_msg">உருப்படிகள் எதுவும் கிடைக்கவில்லை</string>
   <string name="crash_title">நன்று… இது சங்கடமாக இருக்கிறது</string>
   <string name="crash_description" fuzzy="true">நாங்கள் செயலிழந்ததாகத் தெரிகிறது.! N !! N! பின்வரும் தகவல்களை அனுப்புவதன் மூலம் இந்த சிக்கலை சரிசெய்ய எங்களுக்கு உதவ விரும்புகிறீர்களா?</string>

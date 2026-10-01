@@ -166,8 +166,8 @@
   <string name="time_yesterday">昨日</string>
   <string name="pref_external_link_popup_title">外部リンクを入力したときに警告する</string>
   <string name="do_not_ask_anymore">これ以上聞かないでください</string>
-  <string name="your_languages">選択されている言語</string>
-  <string name="other_languages">その他の言語:</string>
+  <string name="your_languages" fuzzy="true">選択されている言語</string>
+  <string name="other_languages" fuzzy="true">その他の言語:</string>
   <string name="crash_checkbox_language">言語設定</string>
   <string name="crash_checkbox_zimfiles">ZIM ファイルのリスト</string>
   <string name="crash_checkbox_exception">クラッシュの詳細</string>

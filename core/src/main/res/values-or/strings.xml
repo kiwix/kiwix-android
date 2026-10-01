@@ -159,8 +159,8 @@
   <string name="external_link_popup_dialog_title">ବାହ୍ୟ ଲିଙ୍କ୍ ପ୍ରବେଶ କରୁଛି!</string>
   <string name="external_link_popup_dialog_message" fuzzy="true">ଆପଣ ଏକ ବାହ୍ୟ ଲିଙ୍କ୍ ପ୍ରବେଶ କରୁଛନ୍ତି | ଡାଟା ଟ୍ରାନ୍ସଫର ପାଇଁ ଏହା ଅତିରିକ୍ତ ଖର୍ଚ୍ଚର କାରଣ ହୋଇପାରେ କିମ୍ବା ଯେତେବେଳେ ଆପଣ ଅଫଲାଇନ୍ ଥାଆନ୍ତି ସେତେବେଳେ କାମ କରିବ ନାହିଁ | ଆପଣ ଜାରି ରଖିବାକୁ ଚାହୁଁଛନ୍ତି କି?</string>
   <string name="do_not_ask_anymore">ଆଉ ପଚାରନ୍ତୁ ନାହିଁ</string>
-  <string name="your_languages">ମନୋନୀତ ଭାଷା:</string>
-  <string name="other_languages">ଅଲଗା ଭାଷା</string>
+  <string name="your_languages" fuzzy="true">ମନୋନୀତ ଭାଷା:</string>
+  <string name="other_languages" fuzzy="true">ଅଲଗା ଭାଷା</string>
   <string name="no_items_msg">କୌଣସି ସାମଗ୍ରୀ ଉପଲବ୍ଧ ନାହିଁ</string>
   <string name="crash_title">ଆଚ୍ଛା… ଏହା ଲଜ୍ଜାଜନକ ଅଟେ |</string>
   <string name="crash_description" fuzzy="true">ଏହା ଦେଖାଯାଏ ଯେ ଆମେ ଦୁର୍ଘଟଣାଗ୍ରସ୍ତ।! N !! N! ଆପଣ ନିମ୍ନଲିଖିତ ସୂଚନା ପଠାଇ ଏହି ସମସ୍ୟାର ସମାଧାନ କରିବାରେ ସାହାଯ୍ୟ କରିବେ କି?</string>

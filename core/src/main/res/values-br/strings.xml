@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
 * Adriendelucca
+* Ar choler
 * Fohanno
 * Fulup
 * Gwenn-Ael
@@ -142,8 +143,8 @@
   <string name="external_link_popup_dialog_title">Moned d’al liamm diavaez</string>
   <string name="external_link_popup_dialog_message" fuzzy="true">Emaoc’h o tiraez ul liamm diavaez. Gallout a ra degas frejoù ouzhpenn deoc’h evit treuzkas roadennoù pe ne yelo ket en-dro pa viot enlinenn, tra ken. Ha c’hoant ho peus da genderc’hel ?</string>
   <string name="do_not_ask_anymore">Chom hep goulenn ken</string>
-  <string name="your_languages">Yezhoù diuzet</string>
-  <string name="other_languages">Yezhoù all :</string>
+  <string name="your_languages" fuzzy="true">Yezhoù diuzet</string>
+  <string name="other_languages" fuzzy="true">Yezhoù all :</string>
   <string name="no_items_msg">Elfenn ebet da gaout</string>
   <string name="crash_title">Ma… Un tammig diaes omp lakaet</string>
   <string name="crash_description" fuzzy="true">Gallout a rafec’h sikour ac’hanomp da renkañ ar gudenn-mañ en ur gas an titouroù-mañ ?</string>
@@ -175,7 +176,7 @@
   <string name="search_bookmarks">Klask sinedoù</string>
   <string name="switch_tabs">Cheñch ivinell</string>
   <string name="close_all_tabs">Serriñ an holl ivinoù</string>
-  <string name="close_tab">Serriñ ar steudenn</string>
+  <string name="close_tab">Serriñ an ivinell</string>
   <string name="pending_state">O c’hortoz</string>
   <string name="running_state">O pellgargañ</string>
   <string name="complete">Echuiñ</string>

@@ -195,9 +195,9 @@
   <string name="external_link_popup_dialog_title">Ulkoisen linkin syöttäminen!</string>
   <string name="external_link_popup_dialog_message">Olet syöttämässä ulkoista linkkiä. Tämä voi johtaa lisäkustannuksiin tiedonsiirrossa tai se ei yksinkertaisesti toimi offline-tilassa. Haluatko jatkaa?</string>
   <string name="do_not_ask_anymore">Älä kysy enää</string>
-  <string name="your_languages">Valitut kielet:</string>
+  <string name="your_languages" fuzzy="true">Valitut kielet:</string>
   <string name="your_language">Valittu kieli: %s</string>
-  <string name="other_languages">Muut kielet:</string>
+  <string name="other_languages" fuzzy="true">Muut kielet:</string>
   <string name="downloading">Ladataan</string>
   <string name="no_items_msg">Ei kohteita saatavilla</string>
   <string name="crash_title">Jaha… Tämä on noloa</string>

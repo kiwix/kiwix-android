@@ -61,6 +61,7 @@
   <string name="pref_free_storage">%s باقی</string>
   <string name="tts_pause">اجھکو</string>
   <string name="tts_resume">ولدا شروع کرو</string>
+  <string name="tts_normal_speed">عام</string>
   <string name="stop">اختتام</string>
   <string name="notification_pause_button_text">اجھکو</string>
   <string name="notification_resume_button_text">ولدا شروع کرو</string>
@@ -78,8 +79,8 @@
   <string name="time_left">باقی</string>
   <string name="time_today">اڄ</string>
   <string name="time_yesterday">کل</string>
-  <string name="your_languages">چُݨیاں ہویاں زباناں:</string>
-  <string name="other_languages">ٻیاں زباناں:</string>
+  <string name="your_languages" fuzzy="true">چُݨیاں ہویاں زباناں:</string>
+  <string name="other_languages" fuzzy="true">ٻیاں زباناں:</string>
   <string name="downloading">ڈاؤن لوڈ تھیندا پئے</string>
   <string name="crash_checkbox_language">تہاݙی زبان ترتیباں</string>
   <string name="crash_checkbox_device">ڈیوائس تفصیلاں</string>

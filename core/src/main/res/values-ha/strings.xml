@@ -166,9 +166,9 @@
   <string name="external_link_popup_dialog_title">Shigar da Hanyar waje!</string>
   <string name="external_link_popup_dialog_message" fuzzy="true">Kuna shigar da hanyar haɗin waje. Wannan na iya haifar da ƙarin farashi don canja wurin bayanai ko kuma ba zai yi aiki ba lokacin da kuke layi. Kuna so ku ci gaba?</string>
   <string name="do_not_ask_anymore">Kar a sake tambaya</string>
-  <string name="your_languages">Zaɓin harshe</string>
+  <string name="your_languages" fuzzy="true">Zaɓin harshe</string>
   <string name="your_language">Harshen da aka zaɓa: %s</string>
-  <string name="other_languages">Wasu harsuna</string>
+  <string name="other_languages" fuzzy="true">Wasu harsuna</string>
   <string name="no_items_msg">Babu abubuwa da akwai</string>
   <string name="crash_title">To… Wannan Abin Abin kunya ne</string>
   <string name="crash_description" fuzzy="true">Kamar dai mun fadi.\n\nShin kuna son taimaka mana mu gyara wannan matsala ta hanyar aika da bayanai masu zuwa?</string>

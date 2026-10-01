@@ -49,6 +49,7 @@
   <string name="server_failed_toast_message">Kan de server niet starten.</string>
   <string name="server_started_successfully_toast_message">De server is gestart.</string>
   <string name="server_stopped_successfully_toast_message">De server is gestopt.</string>
+  <string name="server_stopped_all_books_deleted_toast_message">Server is gestopt: alle gehoste boeken zijn verwijderd.</string>
   <string name="hotspot_turned_on">Hotspot ingeschakeld</string>
   <string name="hotspot_details_message">Hieronder staan de gegevens van uw lokale hotspot. \nSSID: %1$s \nWachtwoord: %2$s</string>
   <string name="server_textview_default_message">Kies de bestanden die u op de server wilt onderbrengen</string>
@@ -175,6 +176,14 @@
   <string name="delete_zim_failed">Sommige bestanden konden niet worden verwijderd. Probeer een bestandsbeheerprogramma te gebruiken.</string>
   <string name="tts_pause">pauzeren</string>
   <string name="tts_resume">hervatten</string>
+  <string name="tts_increase_speed">Snelheid verhogen</string>
+  <string name="tts_decrease_speed">Snelheid verlagen</string>
+  <string name="tts_normal_speed">Normaal</string>
+  <string name="tts_speech_speed">Spraaksnelheid</string>
+  <string name="tts_rewind_10_seconds">10 seconden terug</string>
+  <string name="tts_forward_10_seconds">10 seconden vooruit</string>
+  <string name="tts_select_voice">Stem selecteren</string>
+  <string name="tts_controls">TTS-besturingselementen</string>
   <string name="stop">stoppen</string>
   <string name="notification_pause_button_text">Pauzeren</string>
   <string name="notification_resume_button_text">Hervatten</string>
@@ -205,9 +214,12 @@
   <string name="external_link_popup_dialog_title">U opent een externe koppeling!</string>
   <string name="external_link_popup_dialog_message">U volgt nu een externe koppeling. Dit kan leiden tot extra kosten voor gegevensoverdracht of werkt gewoon niet als u offline bent.\nWilt u doorgaan?</string>
   <string name="do_not_ask_anymore">Dit niet meer vragen</string>
-  <string name="your_languages">Geselecteerde talen:</string>
+  <string name="your_languages">Geselecteerde talen</string>
   <string name="your_language">Geselecteerde taal: %s</string>
-  <string name="other_languages">Andere talen:</string>
+  <string name="other_languages">Andere talen</string>
+  <string name="move_up">Omhoog verplaatsen</string>
+  <string name="move_down">Omlaag verplaatsen</string>
+  <string name="reorder_language">Taal opnieuw ordenen</string>
   <string name="downloading">Aan het downloaden</string>
   <string name="no_items_msg">Niets beschikbaar</string>
   <string name="crash_title">Ai… dit is nogal pijnlijk</string>
@@ -254,6 +266,7 @@
   <string name="running_state">In behandeling</string>
   <string name="complete">Afgerond</string>
   <string name="paused_state">Gepauzeerd</string>
+  <string name="paused_offline_state">Gepauzeerd (apparaat is offline)</string>
   <string name="failed_state">Mislukt: %s</string>
   <string name="custom_download_error_message_for_authentication_failed">Het ZIM-bestand kon niet worden gedownload. Probeer de toepassing opnieuw te installeren vanuit de Play Store.</string>
   <string name="save">Opslaan</string>
@@ -277,6 +290,10 @@
   <string name="ext_storage_permission_not_granted">Fout: opslagrechten zijn niet verleend</string>
   <string name="notes_deletion_successful">De gehele aantekeningenmap is verwijderd</string>
   <string name="notes_deletion_unsuccessful">Sommige bestanden zijn niet verwijderd</string>
+  <plurals name="book_count">
+    <item quantity="one">%d boek</item>
+    <item quantity="other">%d boeken</item>
+  </plurals>
   <string name="books_count">%d boek(en)</string>
   <string name="discovery_initiated">Ontdekking gestart</string>
   <string name="discovery_failed">Ontdekking mislukt</string>
@@ -393,6 +410,7 @@
   <string name="navigation_history_cleared">Navigatiegeschiedenis gewist</string>
   <string name="go_to_settings_label">Naar de instellingen</string>
   <string name="request_notification_permission_message">Om deze handeling te verrichten moet u toegang tot meldingen verlenen</string>
+  <string name="notification_permission_denied_download_info">De toestemming voor meldingen is geweigerd, waardoor downloads op de achtergrond doorgaan zonder voortgangsmeldingen. U kunt de toestemming later op elk gewenst moment via de instellingen verlenen om de downloadvoortgang te bekijken.</string>
   <string name="click_nearby_devices_message">Klik hier om naar apparaten in de buurt te zoeken.</string>
   <string name="your_device_name_message">De naam van uw apparaat verschijnt hier.</string>
   <string name="nearby_devices_list_message">Hier vindt u een lijst met apparaten in de buurt. Tik op de naam van een apparaat om de bestandsoverdracht te starten.</string>

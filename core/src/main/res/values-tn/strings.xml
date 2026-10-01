@@ -160,8 +160,8 @@
   <string name="external_link_popup_dialog_title">O tsena mo kgolaganyong ye e kwa ntle!</string>
   <string name="external_link_popup_dialog_message" fuzzy="true">O tsena mo kgolaganyong ye e kwa ntle. Sê se ka baka ditshenyegelo tse di oketsegileng tsa data kgotsa go sa bereka fa ose mo maranyaneng. A o batla go tswelela?</string>
   <string name="do_not_ask_anymore">Se tlhole o botsa gotlhêlêlê</string>
-  <string name="your_languages">Diteme tse di tlhophilweng:</string>
-  <string name="other_languages">Diteme tse dingwe:</string>
+  <string name="your_languages" fuzzy="true">Diteme tse di tlhophilweng:</string>
+  <string name="other_languages" fuzzy="true">Diteme tse dingwe:</string>
   <string name="no_items_msg">Ga go na dilo tse di leng teng</string>
   <string name="crash_title">Ee--- Seno se tlhabisa ditlhong</string>
   <string name="crash_description" fuzzy="true">Go lebega ekete re kgautlhane.\nA o ka re thusa go baakanya bothata jo ka romela kitso e e latelang?</string>

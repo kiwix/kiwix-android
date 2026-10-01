@@ -166,8 +166,8 @@
   <string name="external_link_popup_dialog_title">బాహ్య లింక్‌లోకి ప్రవేశిస్తోంది!</string>
   <string name="external_link_popup_dialog_message" fuzzy="true">మీరు బాహ్య లింక్‌ని నమోదు చేస్తున్నారు. ఇది డేటా బదిలీకి అదనపు ఖర్చులకు దారితీయవచ్చు లేదా మీరు ఆఫ్‌లైన్‌లో ఉన్నప్పుడు పని చేయదు. మీరు కొనసాగించాలనుకుంటున్నారా?</string>
   <string name="do_not_ask_anymore">ఇక అడగవద్దు</string>
-  <string name="your_languages">ఎంచుకున్న భాషలు:</string>
-  <string name="other_languages">ఇతర భాషలు:</string>
+  <string name="your_languages" fuzzy="true">ఎంచుకున్న భాషలు:</string>
+  <string name="other_languages" fuzzy="true">ఇతర భాషలు:</string>
   <string name="no_items_msg">ఏ వస్తువులు అందుబాటులో లేవు</string>
   <string name="crash_title">సరే. ఇది సిగ్గుచేటు</string>
   <string name="crash_description" fuzzy="true">మేము క్రాష్ అయినట్లు కనిపిస్తోంది.\n\nక్రింది సమాచారాన్ని పంపడం ద్వారా ఈ సమస్యను పరిష్కరించడంలో మాకు సహాయం చేయడానికి మీరు ఇష్టపడతారా?</string>

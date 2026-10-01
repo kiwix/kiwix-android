@@ -127,8 +127,8 @@
   <string name="time_today">Éñíní</string>
   <string name="time_yesterday">Ónalé</string>
   <string name="do_not_ask_anymore">É kí té néné géñ</string>
-  <string name="your_languages">Amí ichí kù mà kojo</string>
-  <string name="other_languages">Amí ichí ómuné</string>
+  <string name="your_languages" fuzzy="true">Amí ichí kù mà kojo</string>
+  <string name="other_languages" fuzzy="true">Amí ichí ómuné</string>
   <string name="crash_title">Amaa,,, enwn che wn achukata</string>
   <string name="new_tab_shortcut_label">Bie titó</string>
   <string name="get_started">Chané</string>

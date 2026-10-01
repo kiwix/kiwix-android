@@ -171,8 +171,8 @@
   <string name="external_link_popup_dialog_title">Sambani soya kpɛbu!</string>
   <string name="external_link_popup_dialog_message" fuzzy="true">A kpɛri la sambani soli. Ŋɔ ni tooi chɛ ka a niŋ samli pahi bee ka di bi tumda a ka pɔhim zuɣu. A bori ni a tuɣi?</string>
   <string name="do_not_ask_anymore">Di bɔhi pahi yaha</string>
-  <string name="your_languages">Din pii bal’shɛŋa</string>
-  <string name="other_languages">Bal’shɛŋa</string>
+  <string name="your_languages" fuzzy="true">Din pii bal’shɛŋa</string>
+  <string name="other_languages" fuzzy="true">Bal’shɛŋa</string>
   <string name="no_items_msg">Neema ka kani</string>
   <string name="crash_title">Toh… Di maa mali vi pam</string>
   <string name="crash_description" fuzzy="true">Di ŋmanila ti binshaɣu mali la gadama.\n\nDim bɔŋɔ a bɔri ni a sɔŋ ti ka ti bo maliŋ zaŋ ti li? Sabima n zaŋ ti ti</string>

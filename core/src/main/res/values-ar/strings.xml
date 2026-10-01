@@ -214,9 +214,9 @@
   <string name="external_link_popup_dialog_title">الدخول علي رابط خارجي!</string>
   <string name="external_link_popup_dialog_message">أنت تدخل رابطًا خارجيًا. قد يؤدي هذا إلى تكاليف إضافية لنقل البيانات أو لن يعمل ببساطة عندما تكون غير متصل بالإنترنت.\nهل تريد الاستمرار؟</string>
   <string name="do_not_ask_anymore">لا تسأل بعد الآن</string>
-  <string name="your_languages">اللغات المختارة:</string>
+  <string name="your_languages" fuzzy="true">اللغات المختارة:</string>
   <string name="your_language">اللغة المحددة: %s</string>
-  <string name="other_languages">لغات أخرى:</string>
+  <string name="other_languages" fuzzy="true">لغات أخرى:</string>
   <string name="downloading">جاري التحميل</string>
   <string name="no_items_msg">لا توجد عناصر متاحة</string>
   <string name="crash_title">حسنًا.. هذا أمر محرج</string>

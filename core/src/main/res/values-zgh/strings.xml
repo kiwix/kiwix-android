@@ -58,8 +58,8 @@
   <string name="time_today">ⴰⵙⵙⴰ</string>
   <string name="time_yesterday">ⴰⵙⵙⵏⵏⴰⴹ</string>
   <string name="do_not_ask_anymore">ⵓⵙⴰⵔ ⵜⵙⵇⵙⴰⴷ</string>
-  <string name="your_languages">ⵜⵓⵜⵍⴰⵜⵉⵏ ⵉⵜⵜⵓⵙⵜⵢⵏ:</string>
-  <string name="other_languages">ⵜⵓⵜⵍⴰⵢⵉⵏ ⵢⴰⴹⵏⵉⵏ:</string>
+  <string name="your_languages" fuzzy="true">ⵜⵓⵜⵍⴰⵜⵉⵏ ⵉⵜⵜⵓⵙⵜⵢⵏ:</string>
+  <string name="other_languages" fuzzy="true">ⵜⵓⵜⵍⴰⵢⵉⵏ ⵢⴰⴹⵏⵉⵏ:</string>
   <string name="new_tab_shortcut_label">ⴰⵙⴽⵙⵍ ⴰⵎⴰⵢⵏⵓ</string>
   <string name="download_books">ⴰⴳⵎ ⵉⴷⵍⵉⵙⵏ</string>
   <string name="save_languages">ⵃⴹⵓ ⵜⵓⵜⵍⴰⵢⵉⵏ</string>

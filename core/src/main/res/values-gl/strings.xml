@@ -129,7 +129,7 @@
   <string name="external_link_popup_dialog_title">Accedendo á ligazón externa!</string>
   <string name="external_link_popup_dialog_message">Está introducindo unha ligazón externa. Isto pode xerar gastos por transferencia de datos ou simplemente non funcionará cando non teña conexión.\nAínda quere continuar?</string>
   <string name="do_not_ask_anymore">Non preguntar máis</string>
-  <string name="your_languages">Linguas escollidas:</string>
-  <string name="other_languages">Outras linguas:</string>
+  <string name="your_languages" fuzzy="true">Linguas escollidas:</string>
+  <string name="other_languages" fuzzy="true">Outras linguas:</string>
   <string name="no_bookmarks">Non hai marcadores</string>
 </resources>

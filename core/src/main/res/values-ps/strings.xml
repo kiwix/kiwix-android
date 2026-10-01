@@ -166,9 +166,9 @@
   <string name="time_today">نن</string>
   <string name="time_yesterday">پرون</string>
   <string name="do_not_ask_anymore">لطفاً نورې پوښتنې مه کوئ</string>
-  <string name="your_languages">غوره‌شوې ژبې:</string>
+  <string name="your_languages" fuzzy="true">غوره‌شوې ژبې:</string>
   <string name="your_language">غوره‌شوې ژبه: %s</string>
-  <string name="other_languages">نورې ژبې:</string>
+  <string name="other_languages" fuzzy="true">نورې ژبې:</string>
   <string name="downloading">راکښته‌کول</string>
   <string name="no_items_msg">هېڅ توکي شتون نه لري</string>
   <string name="crash_checkbox_language">ستاسو د ژبې اوڼنې</string>
