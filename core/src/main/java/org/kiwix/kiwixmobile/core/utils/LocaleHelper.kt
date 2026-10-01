@@ -49,8 +49,9 @@ object LocaleHelper {
   fun getSystemLocale(context: Context): Locale {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
       runCatching {
-        context.getSystemService(LocaleManager::class.java)?.systemLocales?.takeIf { it.size() > 0 }?.get(0)
-      }.getOrNull()?.let { return it }
+        context.getSystemService(LocaleManager::class.java)?.systemLocales?.takeIf { it.size() > 0 }
+          ?.get(0)
+      }.getOrNull()?.let { return@getSystemLocale it }
     }
     return firstLocaleOrNull(runCatching { Resources.getSystem()?.configuration }.getOrNull())
       ?: firstLocaleOrNull(runCatching { context.resources?.configuration }.getOrNull())
