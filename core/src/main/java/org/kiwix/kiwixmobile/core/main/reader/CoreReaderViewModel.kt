@@ -1499,7 +1499,9 @@ abstract class CoreReaderViewModel(
    */
   private suspend fun openSearchItem(item: SearchItemToOpen) {
     if (item.shouldOpenInNewTab) {
-      newMainPageTab()
+      // Don't load the ZIM's main page into this tab; the actual URL to show is loaded
+      // right below, so loading the main page first would be wasted work.
+      readerWebViewManager.newMainPageTab(newTabConfig(url = null, shouldLoadUrl = false))
     }
     item.pageUrl?.let { loadUrlWithCurrentWebview(it) } ?: run {
       zimReaderContainer.titleToUrl(item.pageTitle)?.apply {
@@ -1512,7 +1514,7 @@ abstract class CoreReaderViewModel(
     readerWebViewManager.newMainPageTab(newTabConfig(url = null))
 
   private suspend fun getCurrentWebView(): KiwixWebView =
-    readerWebViewManager.getCurrentWebView() ?: newMainPageTab()
+    readerWebViewManager.getCurrentWebViewOrCreateMainPageTab { newTabConfig(url = null) }
 
   protected open fun openHomeScreen() {
     launchInMainScope {
