@@ -115,33 +115,37 @@ class BookmarksRobot : BaseRobot() {
   }
 
   fun clickOnSaveBookmarkImage(composeTestRule: ComposeContentTestRule) {
-    composeTestRule.apply {
-      waitForIdle()
-      waitUntilTimeout()
-      waitUntil(TEST_PAUSE_MS_FOR_DOWNLOAD_TEST) {
-        onNodeWithTag(READER_BOTTOM_BAR_BOOKMARK_BUTTON_TESTING_TAG).isDisplayed()
+    testFlakyView({
+      composeTestRule.apply {
+        waitForIdle()
+        waitUntilTimeout()
+        waitUntil(TEST_PAUSE_MS_FOR_DOWNLOAD_TEST) {
+          onNodeWithTag(READER_BOTTOM_BAR_BOOKMARK_BUTTON_TESTING_TAG).isDisplayed()
+        }
+        onNodeWithTag(READER_BOTTOM_BAR_BOOKMARK_BUTTON_TESTING_TAG)
+          .performClick()
       }
-      onNodeWithTag(READER_BOTTOM_BAR_BOOKMARK_BUTTON_TESTING_TAG)
-        .performClick()
-    }
+    })
   }
 
   fun longClickOnSaveBookmarkImage(
     composeTestRule: ComposeContentTestRule,
     timeout: Long = TEST_PAUSE_MS.toLong()
   ) {
-    composeTestRule.apply {
-      waitForIdle()
-      // wait for disappearing the snack-bar after removing the bookmark
-      waitUntilTimeout(timeout)
-      waitUntil(TEST_PAUSE_MS_FOR_DOWNLOAD_TEST) {
-        onNodeWithTag(READER_BOTTOM_BAR_BOOKMARK_BUTTON_TESTING_TAG).isDisplayed()
-      }
-      onNodeWithTag(READER_BOTTOM_BAR_BOOKMARK_BUTTON_TESTING_TAG)
-        .performTouchInput {
-          longClick()
+    testFlakyView({
+      composeTestRule.apply {
+        waitForIdle()
+        // wait for disappearing the snack-bar after removing the bookmark
+        waitUntilTimeout(timeout)
+        waitUntil(TEST_PAUSE_MS_FOR_DOWNLOAD_TEST) {
+          onNodeWithTag(READER_BOTTOM_BAR_BOOKMARK_BUTTON_TESTING_TAG).isDisplayed()
         }
-    }
+        onNodeWithTag(READER_BOTTOM_BAR_BOOKMARK_BUTTON_TESTING_TAG)
+          .performTouchInput {
+            longClick()
+          }
+      }
+    })
   }
 
   fun assertBookmarkSaved(composeTestRule: ComposeContentTestRule) {

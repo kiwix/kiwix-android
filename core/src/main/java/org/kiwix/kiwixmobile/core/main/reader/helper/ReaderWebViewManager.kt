@@ -197,10 +197,9 @@ class ReaderWebViewManager @Inject constructor(
 
   suspend fun getCurrentWebViewOrCreateMainPageTab(
     newTabConfig: suspend () -> TabsManager.NewTabConfig
-  ): KiwixWebView =
-    getCurrentWebView() ?: readerSessionManager.withTabsMutationLock {
-      tabsManager.getCurrentWebView() ?: createAndAddMainPageTab(newTabConfig())
-    }
+  ): KiwixWebView = readerSessionManager.withTabsMutationLock {
+    getCurrentWebView() ?: createAndAddMainPageTab(newTabConfig())
+  }
 
   private suspend fun createAndAddMainPageTab(newTabConfig: TabsManager.NewTabConfig): KiwixWebView {
     val mainPageUrl =

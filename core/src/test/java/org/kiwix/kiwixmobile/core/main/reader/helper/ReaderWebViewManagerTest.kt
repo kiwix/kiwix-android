@@ -30,7 +30,14 @@ import io.mockk.just
 import io.mockk.mockk
 import io.mockk.spyk
 import io.mockk.verify
+import kotlinx.coroutines.CompletableDeferred
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.test.runTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -44,6 +51,7 @@ import org.kiwix.kiwixmobile.core.page.history.models.NavigationHistoryListItem
 import org.kiwix.kiwixmobile.core.page.history.models.WebViewHistoryItem
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.sharedFunctions.MainDispatcherRule
+import kotlin.time.Duration.Companion.milliseconds
 
 class ReaderWebViewManagerTest {
   @RegisterExtension
@@ -318,6 +326,92 @@ class ReaderWebViewManagerTest {
         throwable.message,
         resultt.throwable.message
       )
+    }
+  }
+
+  @Nested
+  inner class GetCurrentWebViewOrCreateMainPageTab {
+    private val realMutex = Mutex()
+
+    @BeforeEach
+    fun useRealMutationLock() {
+      // The default stub (set up in the outer `setup()`) invokes the block directly,
+      // which would hide any real race between concurrent callers. These tests need
+      // `withTabsMutationLock` to actually serialize callers via a real Mutex.
+      coEvery { readerSessionManager.withTabsMutationLock<Any?>(any()) } coAnswers {
+        realMutex.withLock { firstArg<suspend () -> Any?>().invoke() }
+      }
+    }
+
+    private fun newTabConfig() = TabsManager.NewTabConfig(
+      url = null,
+      selectTab = false,
+      callback = mockk(),
+      videoView = mockk(),
+      readAloudManager = mockk(relaxed = true),
+      documentParser = null,
+      selectTabCallback = {}
+    )
+
+    @Test
+    fun `concurrent calls from empty state create exactly one tab`() = runTest {
+      // Spy so the real contentUrl()/Uri parsing (unavailable on the plain JVM) can be
+      // stubbed out, while createAndAddMainPageTab()'s own logic still runs for real.
+      val manager = spyk(readerWebViewManager)
+      every { manager.contentUrl(any()) } returns "content://mainPage"
+      val container = mockk<ZimReaderContainer>()
+      every { readerSessionManager.zimReaderContainer } returns container
+      every { container.mainPage } returns "mainPage"
+      every { container.isRedirect(any()) } returns false
+
+      var currentWebView: KiwixWebView? = null
+      every { tabsManager.getCurrentWebView() } answers { currentWebView }
+      every { tabsManager.addWebView(any(), any()) } answers { currentWebView = firstArg() }
+
+      val createdWebView = mockk<KiwixWebView>(relaxed = true)
+      coEvery { webViewFactory.create(any(), any()) } coAnswers {
+        // Simulate work so the concurrent callers actually overlap while the first
+        // one holds the lock.
+        delay(100.milliseconds)
+        createdWebView
+      }
+
+      val results = (1..5).map {
+        async {
+          manager.getCurrentWebViewOrCreateMainPageTab { newTabConfig() }
+        }
+      }.awaitAll()
+
+      coVerify(exactly = 1) { webViewFactory.create(any(), any()) }
+      assertThat(results).allMatch { it == createdWebView }
+    }
+
+    @Test
+    fun `current tab read waits for an in-progress mutation before choosing the tab`() = runTest {
+      var currentWebView: KiwixWebView? = null
+      every { tabsManager.getCurrentWebView() } answers { currentWebView }
+      val restoredWebView = mockk<KiwixWebView>(relaxed = true)
+
+      val mutationStarted = CompletableDeferred<Unit>()
+      val mutation = launch {
+        readerSessionManager.withTabsMutationLock {
+          mutationStarted.complete(Unit)
+          // Mirrors restoreTabs()/destroyAllTabs() transiently clearing the current
+          // tab before settling on the restored one.
+          currentWebView = null
+          delay(50.milliseconds)
+          currentWebView = restoredWebView
+        }
+      }
+      mutationStarted.await()
+
+      val result = async {
+        readerWebViewManager.getCurrentWebViewOrCreateMainPageTab { newTabConfig() }
+      }
+
+      mutation.join()
+      assertEquals(restoredWebView, result.await())
+      coVerify(exactly = 0) { webViewFactory.create(any(), any()) }
     }
   }
 
