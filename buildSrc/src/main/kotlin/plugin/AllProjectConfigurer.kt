@@ -290,6 +290,7 @@ class AllProjectConfigurer {
       testRuntimeOnly(Libs.JUNIT_PLATFORM_LAUNCHER)
       testRuntimeOnly(Libs.JUNIT_VINTAGE_ENGINE)
       testImplementation(Libs.mockk)
+      testImplementation(Libs.mockwebserver)
       testImplementation(Libs.assertj_core)
       testImplementation(Libs.testing_ktx)
       testImplementation(Libs.core_testing)
