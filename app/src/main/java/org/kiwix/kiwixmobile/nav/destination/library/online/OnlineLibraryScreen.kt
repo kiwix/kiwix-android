@@ -83,7 +83,6 @@ import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.debounce
@@ -109,6 +108,7 @@ import org.kiwix.kiwixmobile.core.utils.ComposeDimens.DOWNLOADING_LIBRARY_PROGRE
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.DOWNLOADING_LIBRARY_PROGRESS_CARD_VIEW_DEFAULT_MARGIN
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.DOWNLOADING_LIBRARY_PROGRESS_CARD_VIEW_WIDTH
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.EIGHT_DP
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FORTY_EIGHT_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FOUR_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.ONE_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SIXTEEN_DP
@@ -133,7 +133,7 @@ const val LANGUAGE_TABS_ROW_TESTING_TAG = "languageTabsRowTestingTag"
 const val LANGUAGE_TAB_TESTING_TAG_PREFIX = "languageTabTestingTag_"
 const val LOAD_MORE_DELAY = 150L
 private const val BACK_TO_TOP_ITEM_THRESHOLD = 5
-private val TAB_HEIGHT = 40.dp
+private val TAB_HEIGHT = FORTY_EIGHT_DP
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Suppress("ComposableLambdaParameterNaming", "LongParameterList")
@@ -269,7 +269,7 @@ private fun OnlineLibraryMainContent(
   ) {
     OnBackPressed(onUserBackPressed, navHostController)
 
-    if (uiState.tabs.size > 1) {
+    if (uiState.tabs.isNotEmpty()) {
       LanguageTabsRow(
         tabs = uiState.tabs,
         selectedTabIndex = uiState.selectedTabIndex,
@@ -381,7 +381,7 @@ private fun OnlineLibraryList(
     itemsIndexed(state.items) { index, item ->
       when (item) {
         is DividerItem -> {
-          if (item.id != Long.MIN_VALUE || state.tabs.size <= 1) {
+          if (item.id != Long.MIN_VALUE) {
             ShowDividerItem(item)
           }
         }

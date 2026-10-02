@@ -482,10 +482,19 @@ class OnlineLibraryScreenTest {
   }
 
   @Test
-  fun `hides language tabs when only one tab exists`() {
+  fun `shows language tabs when single tab exists`() {
     val tabs = listOf(OnlineLibraryViewModel.LanguageTab(null, "ALL"))
 
     renderScreen(createUiState(tabs = tabs))
+
+    composeTestRule
+      .onNodeWithTag(LANGUAGE_TABS_ROW_TESTING_TAG)
+      .assertExists()
+  }
+
+  @Test
+  fun `hides language tabs when tabs are empty`() {
+    renderScreen(createUiState(tabs = emptyList()))
 
     composeTestRule
       .onNodeWithTag(LANGUAGE_TABS_ROW_TESTING_TAG)
