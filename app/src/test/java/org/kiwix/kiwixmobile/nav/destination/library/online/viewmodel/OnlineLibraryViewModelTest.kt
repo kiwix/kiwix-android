@@ -84,6 +84,7 @@ import org.kiwix.kiwixmobile.nav.destination.library.online.helper.ResolveRefres
 import org.kiwix.kiwixmobile.nav.destination.library.online.helper.ResolveRefreshLibraryAction.Result.NoInternetWithEmptyContent
 import org.kiwix.kiwixmobile.nav.destination.library.online.helper.ResolveRefreshLibraryAction.Result.Proceed
 import org.kiwix.kiwixmobile.nav.destination.library.online.helper.ResolveRefreshLibraryAction.Result.WifiOnlyBlocked
+import org.kiwix.kiwixmobile.nav.destination.library.online.usecase.OnlineLibraryTabsUseCase
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.OnlineLibraryViewModel.OnlineLibraryRequest
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.OnlineLibraryViewModel.OnlineLibraryState.Idle
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.OnlineLibraryViewModel.OnlineLibraryState.Loading
@@ -126,6 +127,7 @@ class OnlineLibraryViewModelTest {
   private val refreshAction: ResolveRefreshLibraryAction = mockk(relaxed = true)
   private val observeNetwork: ObserveNetworkState = mockk(relaxed = true)
   private val storageDeviceProvider: StorageDeviceProvider = mockk(relaxed = true)
+  private lateinit var onlineLibraryTabsUseCase: OnlineLibraryTabsUseCase
   private lateinit var viewModel: OnlineLibraryViewModel
 
   @BeforeEach
@@ -142,6 +144,7 @@ class OnlineLibraryViewModelTest {
     every { context.resources.configuration } returns configuration
     every { permissionChecker.isAndroid13orAbove() } returns true
     every { downloaderProvider.get() } returns downloader
+    onlineLibraryTabsUseCase = OnlineLibraryTabsUseCase(context, kiwixDataStore, bookUtils)
     viewModel = OnlineLibraryViewModel(
       downloaderProvider,
       kiwixDataStore,
@@ -159,6 +162,7 @@ class OnlineLibraryViewModelTest {
       refreshAction,
       observeNetwork,
       storageDeviceProvider,
+      onlineLibraryTabsUseCase,
       mainDispatcherRule.dispatcher
     )
     viewModel.networkBooks.tryEmit(emptyList())
@@ -521,6 +525,7 @@ class OnlineLibraryViewModelTest {
         refreshAction,
         observeNetwork,
         storageDeviceProvider,
+        onlineLibraryTabsUseCase,
         mainDispatcherRule.dispatcher
       )
       verify(exactly = 0) { downloaderProvider.get() }
