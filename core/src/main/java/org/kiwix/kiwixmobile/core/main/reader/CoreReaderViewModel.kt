@@ -1489,26 +1489,23 @@ abstract class CoreReaderViewModel(
   }
 
   /**
-   * Opens a search item based on its properties.
-   *
-   * If the item should open in a new tab, a new tab is created.
-   *
-   * The method attempts to load the page URL directly. If the page URL is not available,
-   * it attempts to convert the page title to a URL using the ZIM reader container. The
-   * resulting URL is then loaded in the current web view.
+   * Opens a search item, creating a new tab first if requested, then loads the
+   * resolved destination URL (see [resolveDestinationUrl]) into the current web view.
    */
   private suspend fun openSearchItem(item: SearchItemToOpen) {
     if (item.shouldOpenInNewTab) {
-      // Don't load the ZIM's main page into this tab; the actual URL to show is loaded
-      // right below, so loading the main page first would be wasted work.
+      // Skip loading the ZIM's main page into this tab; the resolved destination URL
+      // is always loaded right below, so loading the main page first would be wasted work.
       readerWebViewManager.newMainPageTab(newTabConfig(url = null, shouldLoadUrl = false))
     }
-    item.pageUrl?.let { loadUrlWithCurrentWebview(it) } ?: run {
-      zimReaderContainer.titleToUrl(item.pageTitle)?.apply {
-        loadUrlWithCurrentWebview(zimReaderContainer.urlSuffixToParsableUrl(this))
-      }
-    }
+    loadUrlWithCurrentWebview(resolveDestinationUrl(item))
   }
+
+  private fun resolveDestinationUrl(item: SearchItemToOpen): String? =
+    item.pageUrl
+      ?: zimReaderContainer.titleToUrl(item.pageTitle)
+        ?.let(zimReaderContainer::urlSuffixToParsableUrl)
+      ?: zimReaderContainer.mainPage?.let(zimReaderContainer::urlSuffixToParsableUrl)
 
   private suspend fun newMainPageTab(): KiwixWebView =
     readerWebViewManager.newMainPageTab(newTabConfig(url = null))

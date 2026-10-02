@@ -2733,7 +2733,7 @@ internal class CoreReaderViewModelTest {
       }
 
       @Test
-      fun whenPageUrlIsNullAndTitleDoesNotResolve_doesNothing() = runTest {
+      fun whenPageUrlIsNullAndTitleDoesNotResolve_loadsMainPage() = runTest {
         val viewModel = spyk(viewModel)
 
         val historyItems = listOf(mockk<WebViewHistoryItem>())
@@ -2764,6 +2764,8 @@ internal class CoreReaderViewModelTest {
         every { pendingSearchItemManager.consume() } returns item
 
         every { zimReaderContainer.titleToUrl("Unknown Title") } returns null
+        every { zimReaderContainer.mainPage } returns "A/main.html"
+        every { zimReaderContainer.isRedirect(any()) } returns false
 
         coEvery { viewModel.loadUrlWithCurrentWebview(any()) } just Runs
         every { zimReaderContainer.zimFileReader } returns null
@@ -2776,7 +2778,7 @@ internal class CoreReaderViewModelTest {
         onCompleteSlot.captured.invoke()
         advanceUntilIdle()
 
-        coVerify(exactly = 0) { viewModel.loadUrlWithCurrentWebview(any()) }
+        coVerify { viewModel.loadUrlWithCurrentWebview("${ZimFileReader.CONTENT_PREFIX}A/main.html") }
       }
     }
   }
@@ -3150,10 +3152,6 @@ internal class CoreReaderViewModelTest {
       findInPageManager,
       mainDispatcher
     ) {
-    var openBookmarkScreenCalled = false
-    fun testUpdateState(transform: ReaderUiState.() -> ReaderUiState) {
-      updateState(transform)
-    }
     override fun openLocalLibrary() {}
     override fun openSearch(
       searchString: String,
