@@ -127,6 +127,8 @@ abstract class BaseActivityTest {
         setIsPlayStoreBuild(true)
         setPrefIsTest(true)
         setIsFirstRun(false)
+        setSelectedOnlineContentLanguage("")
+        setSelectedOnlineContentCategory("")
       }
     }
   }
