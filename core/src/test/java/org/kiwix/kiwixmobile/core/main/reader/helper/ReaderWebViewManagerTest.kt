@@ -413,6 +413,43 @@ class ReaderWebViewManagerTest {
       assertEquals(restoredWebView, result.await())
       coVerify(exactly = 0) { webViewFactory.create(any(), any()) }
     }
+
+    @Test
+    fun `tab selection callback can call back into this method without deadlocking`() = runTest {
+      val manager = spyk(readerWebViewManager)
+      every { manager.contentUrl(any()) } returns "content://mainPage"
+      val container = mockk<ZimReaderContainer>()
+      every { readerSessionManager.zimReaderContainer } returns container
+      every { container.mainPage } returns "mainPage"
+      every { container.isRedirect(any()) } returns false
+
+      var currentWebView: KiwixWebView? = null
+      every { tabsManager.getCurrentWebView() } answers { currentWebView }
+      every { tabsManager.addWebView(any(), any()) } answers { currentWebView = firstArg() }
+
+      val createdWebView = mockk<KiwixWebView>(relaxed = true)
+      coEvery { webViewFactory.create(any(), any()) } returns createdWebView
+
+      // Mirrors CoreReaderViewModel.selectTab() -> updateTableOfContents() ->
+      // loadUrlWithCurrentWebview() -> getCurrentWebView(), which calls back into this
+      // same method, on the same coroutine, while the first call may still be creating
+      // and selecting the tab. If the re-check above ever required the lock instead of
+      // short-circuiting on the already-added tab, this would deadlock on the mutex its
+      // own call stack is holding, and the test would time out.
+      var reentrantResult: KiwixWebView? = null
+      val configWithReentrantSelect = newTabConfig().copy(
+        selectTab = true,
+        selectTabCallback = {
+          reentrantResult = manager.getCurrentWebViewOrCreateMainPageTab { newTabConfig() }
+        }
+      )
+
+      val result = manager.getCurrentWebViewOrCreateMainPageTab { configWithReentrantSelect }
+
+      assertEquals(createdWebView, result)
+      assertEquals(createdWebView, reentrantResult)
+      coVerify(exactly = 1) { webViewFactory.create(any(), any()) }
+    }
   }
 
   @Nested
