@@ -130,13 +130,13 @@ class DownloadRobot : BaseRobot() {
             onAllNodesWithTag(ONLINE_BOOK_ITEM_TESTING_TAG).fetchSemanticsNodes().isNotEmpty()
           hasTabs || hasDividers || hasBooks
         }
-        if (onAllNodesWithTag(ONLINE_DIVIDER_ITEM_TEXT_TESTING_TAG).fetchSemanticsNodes().isNotEmpty()) {
+        if (onAllNodesWithTag(LANGUAGE_TABS_ROW_TESTING_TAG).fetchSemanticsNodes().isNotEmpty()) {
+          onNodeWithTag("$LANGUAGE_TAB_TESTING_TAG_PREFIX${language.uppercase()}")
+            .assertExists()
+        } else if (onAllNodesWithTag(ONLINE_DIVIDER_ITEM_TEXT_TESTING_TAG).fetchSemanticsNodes().isNotEmpty()) {
           onAllNodesWithTag(ONLINE_DIVIDER_ITEM_TEXT_TESTING_TAG)
             .onFirst()
             .assertTextContains(language, substring = true)
-        } else if (onAllNodesWithTag(LANGUAGE_TABS_ROW_TESTING_TAG).fetchSemanticsNodes().isNotEmpty()) {
-          onNodeWithTag("$LANGUAGE_TAB_TESTING_TAG_PREFIX${language.uppercase()}")
-            .assertExists()
         } else {
           onAllNodesWithTag(ONLINE_BOOK_ITEM_TESTING_TAG)
             .onFirst()

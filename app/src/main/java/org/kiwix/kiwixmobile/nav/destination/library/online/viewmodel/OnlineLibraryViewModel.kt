@@ -349,7 +349,7 @@ class OnlineLibraryViewModel @Inject constructor(
 
   internal val tabDataMap = ConcurrentHashMap<String, TabData>()
 
-  internal suspend fun getAppChosenLanguageCode(): String {
+  private suspend fun getAppChosenLanguageCode(): String {
     val appLocale = LocaleHelper.getAppLocale(context, kiwixDataStore)
     return try {
       appLocale.isO3Language.ifEmpty { appLocale.language }
