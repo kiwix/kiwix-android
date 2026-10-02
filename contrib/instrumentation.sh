@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -o pipefail
 
 #
 # Kiwix Android
@@ -25,11 +26,14 @@
 # genuine test failure, and only retries the whole step for the former.
 touch /tmp/emulator_script_started
 
+# shellcheck source=contrib/ci-diagnostics.sh
+source "$(dirname "${BASH_SOURCE[0]}")/ci-diagnostics.sh"
+
 # The emulator's crashpad_handler subprocess can survive `adb emu kill` and
 # hang the android-emulator-runner action's teardown
 # (https://github.com/ReactiveCircus/android-emulator-runner/issues/385).
 # Kill it once this script exits, regardless of the test outcome.
-trap 'killall -INT crashpad_handler 2>/dev/null || true' EXIT
+trap 'stop_ci_diagnostics; killall -INT crashpad_handler 2>/dev/null || true' EXIT
 
 # Enable Wi-Fi on the emulator
 adb shell svc wifi enable
@@ -40,6 +44,7 @@ if adb shell settings list secure | grep -q "stylus_handwriting_enabled"; then
 fi
 # shellcheck disable=SC2035
 adb logcat *:E -v color &
+start_ci_diagnostics
 
 PACKAGE_NAME="org.kiwix.kiwixmobile"
 TEST_PACKAGE_NAME="${PACKAGE_NAME}.test"
@@ -69,10 +74,11 @@ if is_app_installed "$TEST_ORCHESTRATOR_PACKAGE"; then
 fi
 retry=0
 while [ $retry -le 3 ]; do
-  if ./gradlew jacocoInstrumentationTestReport; then
+  if ./gradlew jacocoInstrumentationTestReport 2>&1 | tee -a "$CI_DIAGNOSTICS_DIR/gradle-output.log"; then
     echo "jacocoInstrumentationTestReport succeeded" >&2
     break
   else
+    stop_ci_diagnostics
     adb kill-server
     adb start-server
     # Enable Wi-Fi on the emulator
@@ -84,6 +90,7 @@ while [ $retry -le 3 ]; do
     fi
     # shellcheck disable=SC2035
     adb logcat *:E -v color &
+    start_ci_diagnostics
 
     if is_app_installed "$PACKAGE_NAME"; then
       # Delete the application to properly run the test cases.
@@ -102,7 +109,7 @@ while [ $retry -le 3 ]; do
     ./gradlew --stop
     retry=$(( retry + 1 ))
     if [ $retry -eq 3 ]; then
-      adb exec-out screencap -p >screencap.png
+      timeout 30 adb exec-out screencap -p >"$CI_DIAGNOSTICS_DIR/screencap.png" 2>/dev/null || true
       exit 1
     fi
   fi
