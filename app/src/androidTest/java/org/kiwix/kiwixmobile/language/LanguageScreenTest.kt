@@ -63,6 +63,10 @@ class LanguageScreenTest : BaseActivityTest() {
   override fun waitForIdle() {
     hiltRule.injectOnce()
     super.waitForIdle()
+    updateKiwixDataStore {
+      setSelectedOnlineContentLanguage("")
+      setSelectedOnlineContentCategory("")
+    }
     launchMainActivity {
       kiwixMainActivity = it
     }
