@@ -34,6 +34,8 @@ import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.entity.LibkiwixBook
 import org.kiwix.kiwixmobile.core.utils.BookUtils
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
+import org.kiwix.kiwixmobile.nav.destination.library.online.usecase.OnlineLibraryTabsUseCase.TabSelectedResult.FetchNeeded
+import org.kiwix.kiwixmobile.nav.destination.library.online.usecase.OnlineLibraryTabsUseCase.TabSelectedResult.FromCache
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.OnlineLibraryViewModel.LanguageTab
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.OnlineLibraryViewModel.OnlineLibraryRequest
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.OnlineLibraryViewModel.OnlineLibraryState.Success
@@ -97,9 +99,8 @@ class OnlineLibraryTabsUseCaseTest {
 
       val result = useCase.selectTab(0, tabs, currentRequest)
 
-      assertThat(result)
-        .isInstanceOf(OnlineLibraryTabsUseCase.TabSelectedResult.FromCache::class.java)
-      val cacheResult = result as OnlineLibraryTabsUseCase.TabSelectedResult.FromCache
+      assertThat(result).isInstanceOf(FromCache::class.java)
+      val cacheResult = result as FromCache
       assertThat(cacheResult.books).containsExactly(book)
       assertThat(cacheResult.totalPages).isEqualTo(2)
       assertThat(cacheResult.currentPage).isEqualTo(1)
@@ -112,9 +113,8 @@ class OnlineLibraryTabsUseCaseTest {
 
       val result = useCase.selectTab(0, tabs, currentRequest)
 
-      assertThat(result)
-        .isInstanceOf(OnlineLibraryTabsUseCase.TabSelectedResult.FetchNeeded::class.java)
-      val fetchResult = result as OnlineLibraryTabsUseCase.TabSelectedResult.FetchNeeded
+      assertThat(result).isInstanceOf(FetchNeeded::class.java)
+      val fetchResult = result as FetchNeeded
       assertThat(fetchResult.newRequest.lang).isEqualTo("fra")
       assertThat(fetchResult.newRequest.page).isEqualTo(0)
     }

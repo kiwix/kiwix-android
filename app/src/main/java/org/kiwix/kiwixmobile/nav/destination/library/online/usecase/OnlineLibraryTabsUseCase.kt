@@ -211,7 +211,7 @@ class OnlineLibraryTabsUseCase @Inject constructor(
     tabDataMap[tabKey] = updatedData
 
     val currentTabKey = currentSelectedTab?.languageCode.orEmpty()
-    val isCurrentTab = (tabKey == currentTabKey || currentSelectedTab == null)
+    val isCurrentTab = tabKey == currentTabKey || currentSelectedTab == null
 
     return SuccessResult(
       updatedBooks = updatedBooks,
