@@ -49,8 +49,43 @@ start_ci_diagnostics() {
     done
   ) &
   CI_DIAG_MONITOR_PID=$!
+
+  start_adb_watchdog
+}
+
+# kiwix/kiwix-android#5155: when the emulator hangs hard enough (e.g. the
+# "QEMU2 main loop" case), adb stops responding and, left alone, the *host*
+# runner VM itself eventually becomes unresponsive too - at which point
+# GitHub's backend loses contact with it and marks the job "cancelled" from
+# the outside. Once that happens the runner process is gone, so nothing in
+# the job can run anymore, not even "if: always()" steps - the diagnostics
+# gathered above never get uploaded.
+# So: watch adb ourselves, and if it stays unresponsive for a few minutes,
+# proactively kill gradle so the step fails *on its own*, while the runner
+# is still alive. That gives the "Upload CI diagnostics" step in ci.yml an
+# actual chance to run.
+start_adb_watchdog() {
+  (
+    failures=0
+    while true; do
+      sleep 30
+      if timeout 10 adb shell true >/dev/null 2>&1; then
+        failures=0
+        continue
+      fi
+      failures=$(( failures + 1 ))
+      echo "$(date -u +%Y-%m-%dT%H:%M:%SZ) adb unresponsive ($failures/6)" >>"$CI_DIAGNOSTICS_DIR/watchdog.log"
+      if [ "$failures" -ge 6 ]; then
+        echo "$(date -u +%Y-%m-%dT%H:%M:%SZ) adb unresponsive for 3+ minutes, killing gradle so the step fails cleanly" >>"$CI_DIAGNOSTICS_DIR/watchdog.log"
+        timeout 10 adb exec-out screencap -p >"$CI_DIAGNOSTICS_DIR/screencap-watchdog.png" 2>/dev/null
+        pkill -9 -f gradle 2>/dev/null || true
+        exit 0
+      fi
+    done
+  ) &
+  CI_DIAG_WATCHDOG_PID=$!
 }
 
 stop_ci_diagnostics() {
-  kill "$CI_DIAG_LOGCAT_PID" "$CI_DIAG_MONITOR_PID" 2>/dev/null || true
+  kill "$CI_DIAG_LOGCAT_PID" "$CI_DIAG_MONITOR_PID" "$CI_DIAG_WATCHDOG_PID" 2>/dev/null || true
 }
