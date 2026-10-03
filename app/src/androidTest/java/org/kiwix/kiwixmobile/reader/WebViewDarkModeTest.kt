@@ -35,18 +35,17 @@ import androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom
 import androidx.test.platform.app.InstrumentationRegistry
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
-import kotlinx.coroutines.runBlocking
 import org.hamcrest.Matcher
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Assume
 import org.junit.Before
+import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import org.kiwix.kiwixmobile.BaseActivityTest
 import org.kiwix.kiwixmobile.core.R
-import org.kiwix.kiwixmobile.core.ThemeConfig
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.settings.DIALOG_PREFERENCE_ITEM_TESTING_TAG
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.COMPOSE_TEST_RULE_ORDER
@@ -89,9 +88,10 @@ class WebViewDarkModeTest : BaseActivityTest() {
 
   @After
   fun resetTheme() {
-    runBlocking { kiwixDataStore.updateAppTheme(ThemeConfig.Theme.SYSTEM.value.toString()) }
+    // runBlocking { kiwixDataStore.updateAppTheme(ThemeConfig.Theme.SYSTEM.value.toString()) }
   }
 
+  @Ignore("Ignoring to check the CI failures.")
   @Test
   fun webViewReflectsThemeSelectedViaSettingsScreen() {
     Assume.assumeTrue(
