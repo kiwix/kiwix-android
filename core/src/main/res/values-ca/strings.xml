@@ -84,8 +84,8 @@
   <string name="external_link_popup_dialog_title">Accés a enllaç extern!</string>
   <string name="external_link_popup_dialog_message" fuzzy="true">Estàs entrant a un enllaç extern. Això podria ocasionar-te costos addicionals per transferència de dades o, senzillament, no funcionarà si no tens connexió. Vols continuar?</string>
   <string name="do_not_ask_anymore">No tornar a preguntar</string>
-  <string name="your_languages">Idiomes seleccionats:</string>
-  <string name="other_languages">Altres idiomes:</string>
+  <string name="your_languages" fuzzy="true">Idiomes seleccionats:</string>
+  <string name="other_languages" fuzzy="true">Altres idiomes:</string>
   <string name="crash_checkbox_device">Detalls de l’aparell</string>
   <string name="crash_button_confirm">ENVIA LES DADES</string>
   <string name="new_tab_shortcut_label">Pestanya nova</string>

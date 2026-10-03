@@ -200,9 +200,9 @@
   <string name="external_link_popup_dialog_title">Vstupovanie na externý odkaz!</string>
   <string name="external_link_popup_dialog_message">Prechádzate na externý odkaz. Môže to viesť k dodatočným nákladom za prenos dát alebo to jednoducho nebude fungovať, keď ste offline.\nChcete pokračovať?</string>
   <string name="do_not_ask_anymore">Už sa nepýtať</string>
-  <string name="your_languages">Vybrané jazyky:</string>
+  <string name="your_languages" fuzzy="true">Vybrané jazyky:</string>
   <string name="your_language">Vybraný jazyk: %s</string>
-  <string name="other_languages">Iné jazyky:</string>
+  <string name="other_languages" fuzzy="true">Iné jazyky:</string>
   <string name="downloading">Sťahovanie</string>
   <string name="no_items_msg">Žiadne dostupné položky</string>
   <string name="crash_title">Hm…Toto je trápne</string>

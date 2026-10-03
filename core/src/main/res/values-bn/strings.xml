@@ -151,8 +151,8 @@
   <string name="time_today">আজ</string>
   <string name="time_yesterday">গতকাল</string>
   <string name="do_not_ask_anymore">আর জিজ্ঞাসা করবেন না</string>
-  <string name="your_languages">নির্বাচিত ভাষা</string>
-  <string name="other_languages">অন্যান্য ভাষাসমূহ:</string>
+  <string name="your_languages" fuzzy="true">নির্বাচিত ভাষা</string>
+  <string name="other_languages" fuzzy="true">অন্যান্য ভাষাসমূহ:</string>
   <string name="new_tab_shortcut_label">নতুন ট্যাব</string>
   <string name="pending_state">মুলতুবী</string>
   <string name="save">সংরক্ষণ</string>

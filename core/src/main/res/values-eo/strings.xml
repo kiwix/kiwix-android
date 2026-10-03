@@ -130,8 +130,8 @@
   <string name="external_link_popup_dialog_title">Enigi Eksteran Ligilon!</string>
   <string name="external_link_popup_dialog_message" fuzzy="true">Vi estas ironta al celo de ekstera ligilo. Tio eble plie kostos por datentransigo, aŭ simple ne funkcios se vi ne estas konektita. Ĉu daŭrigi?</string>
   <string name="do_not_ask_anymore">Ne demandu plu</string>
-  <string name="your_languages">Elektitaj lingvoj:</string>
-  <string name="other_languages">Aliaj Lingvoj:</string>
+  <string name="your_languages" fuzzy="true">Elektitaj lingvoj:</string>
+  <string name="other_languages" fuzzy="true">Aliaj Lingvoj:</string>
   <string name="no_items_msg">Neniu ero havebla</string>
   <string name="crash_title">Nu… Tio estas Hontinda</string>
   <string name="crash_description" fuzzy="true">Ŝajne ni fiaskis.\n\nĈu vi povas helpi la korektadon de ĉi tiu problemo per sendado de la jena informo?</string>

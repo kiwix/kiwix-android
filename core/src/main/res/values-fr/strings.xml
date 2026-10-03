@@ -226,9 +226,9 @@
   <string name="external_link_popup_dialog_title">Vous accédez à un lien externe !</string>
   <string name="external_link_popup_dialog_message">Vous accédez à un lien externe. Cela peut engendrer des coûts supplémentaires pour le transfert de données ou ne fonctionnera tout simplement pas si vous êtes hors ligne. Voulez-vous continuer ?</string>
   <string name="do_not_ask_anymore">Ne plus demander</string>
-  <string name="your_languages">Langues sélectionnées :</string>
+  <string name="your_languages" fuzzy="true">Langues sélectionnées :</string>
   <string name="your_language">Langue sélectionnée : %s</string>
-  <string name="other_languages">Autres langues :</string>
+  <string name="other_languages" fuzzy="true">Autres langues :</string>
   <string name="downloading">Téléchargement</string>
   <string name="no_items_msg">Aucun élément disponible</string>
   <string name="crash_title">Eh bien… c’est embarrassant</string>

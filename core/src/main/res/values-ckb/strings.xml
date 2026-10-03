@@ -107,8 +107,8 @@
   <string name="time_today">ئەمڕۆ</string>
   <string name="time_yesterday">دوێنێ</string>
   <string name="do_not_ask_anymore">زیاتر مەپرسە</string>
-  <string name="your_languages">زمانە ھەڵبژێردراوەکان:</string>
-  <string name="other_languages">زمانەکانی تر:</string>
+  <string name="your_languages" fuzzy="true">زمانە ھەڵبژێردراوەکان:</string>
+  <string name="other_languages" fuzzy="true">زمانەکانی تر:</string>
   <string name="no_items_msg">ھیچ بڕگەیەک بەردەست نییە</string>
   <string name="crash_checkbox_language">ڕێکخستنەکانی زمانەکەت</string>
   <string name="crash_checkbox_logs">لۆگەکانی ئەپلیکەیشن</string>

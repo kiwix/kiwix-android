@@ -159,8 +159,8 @@
   <string name="external_link_popup_dialog_title">Tevlîkirina Girêdana Derveyî</string>
   <string name="external_link_popup_dialog_message">Tu lînkeke xaricî tevlî dikî. Ev tişt dibe ku ji ber neqla daneyê bibe sedema mesrefên zêdetir an jî gava tu oflayn bî, nexebite. Gelo tu dixwazî dewam bikî?</string>
   <string name="do_not_ask_anymore">Zêdetir nepirse</string>
-  <string name="your_languages">Zimanên bijartîː</string>
-  <string name="other_languages">Zimanên din:</string>
+  <string name="your_languages" fuzzy="true">Zimanên bijartîː</string>
+  <string name="other_languages" fuzzy="true">Zimanên din:</string>
   <string name="no_items_msg">Ti hêmanekî berdest tine</string>
   <string name="crash_title">Baş e… Ev Şermker e</string>
   <string name="crash_description" fuzzy="true">Wisa dixuye ku em hilweşiyan. \n\nGelo tu dixwazî alî me bikî ku em vê problemê çareser bikin bi şandina agahiyên li jêr?</string>

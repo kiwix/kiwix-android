@@ -169,9 +169,9 @@
   <string name="external_link_popup_dialog_title" fuzzy="true">Είσοδος σε εξωτερικό σύνδεσμο</string>
   <string name="external_link_popup_dialog_message" fuzzy="true">Μπαίνετε σε ένα εξωτερικό σύνδεσμο. Αυτό μπορεί να οδηγήσει σε πρόσθετο κόστος για μεταφορά δεδομένων που δεν θα δουλεύει μόνο όταν θα είστε εκτός σύνδεσης. Θέλετε να συνεχίσετε;</string>
   <string name="do_not_ask_anymore">Μη με ρωτήσεις άλλο</string>
-  <string name="your_languages">Επιλεγμένες γλώσσες:</string>
+  <string name="your_languages" fuzzy="true">Επιλεγμένες γλώσσες:</string>
   <string name="your_language">Επιλεγμένη γλώσσα: %s</string>
-  <string name="other_languages">Άλλες γλώσσες:</string>
+  <string name="other_languages" fuzzy="true">Άλλες γλώσσες:</string>
   <string name="downloading">Γίνεται λήψη</string>
   <string name="no_items_msg">Δεν υπάρχουν διαθέσιμα στοιχεία</string>
   <string name="crash_title">Λοιπόν… Αυτό είναι ντροπιαστικό</string>

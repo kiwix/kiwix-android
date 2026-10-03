@@ -171,8 +171,8 @@
   <string name="external_link_popup_dialog_title">Kuingia Link ya Nje!</string>
   <string name="external_link_popup_dialog_message" fuzzy="true">Unaingia kwenye uhusiano wa nje. Hii inaweza kusababisha gharama za ziada kwa ajili ya uhamisho wa data au tu si kazi wakati wewe ni nje ya mtandao. Je, unataka kuendelea?</string>
   <string name="do_not_ask_anymore">Usiniulize tena</string>
-  <string name="your_languages">Chagua lugha</string>
-  <string name="other_languages">Lugha zingine:</string>
+  <string name="your_languages" fuzzy="true">Chagua lugha</string>
+  <string name="other_languages" fuzzy="true">Lugha zingine:</string>
   <string name="no_items_msg">Hakuna vipengee vinavyopatikana</string>
   <string name="crash_title">Naam… Hii ni Aibu</string>
   <string name="crash_description" fuzzy="true">Inaonekana tulianguka.\n\nUngependa kutusaidia kurekebisha tatizo hili kwa kutuma maelezo yafuatayo?</string>

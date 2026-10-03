@@ -119,8 +119,8 @@
   <string name="external_link_popup_dialog_title" fuzzy="true">Đang truy cập đường dẫn ngoài</string>
   <string name="external_link_popup_dialog_message" fuzzy="true">Bạn đang truy cập một đường dẫn ngoài. Điều này có thể phát sinh cước dữ liệu hoặc đường dẫn sẽ không hoạt động nếu bạn không có kết nối mạng. Tiếp tục chứ?</string>
   <string name="do_not_ask_anymore">Đừng hỏi lại</string>
-  <string name="your_languages">Ngôn ngữ được chọn:</string>
-  <string name="other_languages">Ngôn ngữ khác:</string>
+  <string name="your_languages" fuzzy="true">Ngôn ngữ được chọn:</string>
+  <string name="other_languages" fuzzy="true">Ngôn ngữ khác:</string>
   <string name="no_bookmarks">Không có Dấu trang</string>
   <string name="reader">Tiêu đề</string>
   <string name="no_open_book">Không có sách nào đang mở</string>

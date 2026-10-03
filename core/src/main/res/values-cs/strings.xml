@@ -167,8 +167,8 @@
   <string name="external_link_popup_dialog_title">Vkládám externí odkaz!</string>
   <string name="external_link_popup_dialog_message" fuzzy="true">Vkládáte externí odkaz. Toto může vést k dodatečným nákladům na přenos dat, nebo to prostě nebude fungovat, když jste offline. Chcete pokračovat?</string>
   <string name="do_not_ask_anymore">Neptat se příště</string>
-  <string name="your_languages">Vybrané jazyky:</string>
-  <string name="other_languages">Jiné jazyky:</string>
+  <string name="your_languages" fuzzy="true">Vybrané jazyky:</string>
+  <string name="other_languages" fuzzy="true">Jiné jazyky:</string>
   <string name="no_items_msg">Žádné dostupné položky</string>
   <string name="crash_title">Inu…to je trapné</string>
   <string name="crash_description" fuzzy="true">Vypadá to, že aplikace selhala.\n\nNevadilo by Vám pomoci nám opravit tento problém zasláním následující informace?</string>

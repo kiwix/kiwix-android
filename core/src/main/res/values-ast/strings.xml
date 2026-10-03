@@ -148,8 +148,8 @@
   <string name="external_link_popup_dialog_title">¡Entrando n’enllaz esternu!</string>
   <string name="external_link_popup_dialog_message" fuzzy="true">Tas por siguir un enllaz esternu. Ello podría xenerar gastos por tresferencia de datos o cenciellamente nun va funcionar si nun tienes conexón. ¿Quies siguir?</string>
   <string name="do_not_ask_anymore">Nun preguntar más</string>
-  <string name="your_languages">Llingües seleicionaes:</string>
-  <string name="other_languages">Otres llingües:</string>
+  <string name="your_languages" fuzzy="true">Llingües seleicionaes:</string>
+  <string name="other_languages" fuzzy="true">Otres llingües:</string>
   <string name="no_items_msg">Nun hai nengún elementu disponible</string>
   <string name="crash_title">Bien… esto ye vergonzoso</string>
   <string name="crash_description" fuzzy="true">Paez que colgamos.\n\n¿Importaríate ayudanos a iguar esti problema unviándonos la siguiente información?</string>

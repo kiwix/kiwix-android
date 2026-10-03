@@ -96,8 +96,8 @@
   <string name="time_today">ယနေ့</string>
   <string name="time_yesterday">မနေ့</string>
   <string name="do_not_ask_anymore">နောက်ထပ် မမေးတော့</string>
-  <string name="your_languages">ရွေးချယ်ထားသော ဘာသာစကားများ -</string>
-  <string name="other_languages">အခြားဘာသာစကားများ</string>
+  <string name="your_languages" fuzzy="true">ရွေးချယ်ထားသော ဘာသာစကားများ -</string>
+  <string name="other_languages" fuzzy="true">အခြားဘာသာစကားများ</string>
   <string name="crash_checkbox_language">သင်၏ ဘာသာစကား အပြင်အဆင်များ</string>
   <string name="articleCount">%s ဆောင်းပါးများ</string>
   <string name="get_started">စတင်ပါ</string>

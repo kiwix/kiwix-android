@@ -206,9 +206,9 @@
   <string name="external_link_popup_dialog_title">Går till extern länk!</string>
   <string name="external_link_popup_dialog_message">Du följer en extern länk. Detta kan leda till ytterligare dataöverföringskostnader eller kommer helt enkelt inte fungera när du är offline. Vill du fortsätta?</string>
   <string name="do_not_ask_anymore">Fråga inte igen</string>
-  <string name="your_languages">Valda språk:</string>
+  <string name="your_languages" fuzzy="true">Valda språk:</string>
   <string name="your_language">Valt språk: %s</string>
-  <string name="other_languages">Andra språk:</string>
+  <string name="other_languages" fuzzy="true">Andra språk:</string>
   <string name="downloading">Laddar ned</string>
   <string name="no_items_msg">Inga tillgängliga objekt</string>
   <string name="crash_title">Ajdå… det här är pinsam</string>

@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
 * Dr Lotus Black
+* Kalixlouiis
 -->
 <resources>
   <string name="retry">ပြန်လုပ်</string>
+  <string name="invalid_installation">ထည့်သွင်းမှု မမှန်ကန်ပါ။ ကျေးဇူးပြု၍ ZIM ဖိုင်ကို ဒေါင်းလုဒ်လုပ်ပါ။\nဝိုင်ဖိုင် ဖွင့်ထားကြောင်းနှင့် ဖုန်းတွင် မန်မိုရီနေရာ လုံလောက်စွာ ရှိကြောင်း သေချာပါစေ။</string>
 </resources>

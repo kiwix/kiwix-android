@@ -159,8 +159,8 @@
   <string name="external_link_popup_dialog_title">Aberende unu ligàmene esternu!</string>
   <string name="external_link_popup_dialog_message" fuzzy="true">Ses aberende unu ligàmene esternu. Custu diat pòdere causare costos in prus pro s’impreu de trasferimentu de datos o diant pòdere non funtzionare cando non ses connessu a ìnternet. Cheres sighire?</string>
   <string name="do_not_ask_anymore">Non mi lu preguntes prus</string>
-  <string name="your_languages">Limbas ischertadas:</string>
-  <string name="other_languages">Àteras limbas:</string>
+  <string name="your_languages" fuzzy="true">Limbas ischertadas:</string>
+  <string name="other_languages" fuzzy="true">Àteras limbas:</string>
   <string name="no_items_msg">Perunu elementu disponìbile</string>
   <string name="crash_title">Oja… Custu est imbaratzante</string>
   <string name="crash_description" fuzzy="true">Paret chi s’aplicatzione si siat serrada pro more de carchi errore.\n\nNon cheres agiudare a acontzare custu problema imbiende·nos sos datos chi sighint?</string>

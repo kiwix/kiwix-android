@@ -86,8 +86,8 @@
   <string name="time_today">Эндр</string>
   <string name="time_yesterday">Өцклдүр</string>
   <string name="do_not_ask_anymore">Дәкҗ сурлго бәәх</string>
-  <string name="your_languages">Суңһсн келмүд:</string>
-  <string name="other_languages">Бусд келәр</string>
+  <string name="your_languages" fuzzy="true">Суңһсн келмүд:</string>
+  <string name="other_languages" fuzzy="true">Бусд келәр</string>
   <string name="crash_title">Нә… Эвго болва</string>
   <string name="crash_checkbox_language">Тана Келнә Тохрлһ</string>
   <string name="custom_download_error_message_for_authentication_failed" fuzzy="true">Zim файлыг татҗ авч чадснго, програмиг Play store-ас дәкн суулһҗ үзтн.</string>

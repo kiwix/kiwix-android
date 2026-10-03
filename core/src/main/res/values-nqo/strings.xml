@@ -159,8 +159,8 @@
   <string name="external_link_popup_dialog_title">ߞߐߞߊ߲߫ ߛߘߌߜߋ߲ ߟߊߛߐ߬ߘߐ߲</string>
   <string name="external_link_popup_dialog_message" fuzzy="true">ߌ ߦߴߌ ߘߐ߫ ߞߊ߬ ߞߐߞߊ߲߫ ߛߘߌߜߋ߲ ߠߋ߬ ߟߊߘߏ߲߬ ߏ߬ ߘߌ߫. ߏ߬ ߘߏ߲߬ ߘߌ߫ ߛߋ߫ ߥߟߏ߫ ߟߊ߫ ߓߟߏߡߟߊ ߟߊߕߊ߬ߡߌ߲ ߛߐ߲߬ߞߐ ߡߊߞߊ߬ߝߏ߬ߟߌ ߟߊ߫ ߤߊߡߊ߲ߕߍ߫ ߊ߬ ߕߍ߫ ߣߊ߬ ߓߊ߯ߙߊ߫ ߟߊ߫ ߞߵߌ ߕߏ߫ ߜߊ߲߬ߞߎ߲߬ߓߊߟߌߦߊ ߘߐ߫. ߌ ߦߴߊ߬ ߝߍ߬ ߞߵߊ߬ ߘߊߓߊ߲߫ ߖߋߎ߫؟</string>
   <string name="do_not_ask_anymore">ߢߌ߬ߣߌ߲߬ߞߊ߬ߟߌ߫ ߜߘߍ߫ ߞߊ߫ ߞߴߏ߬ ߞߐ߫</string>
-  <string name="your_languages">ߞߊ߲ ߛߎߥߊ߲ߘߌ߫</string>
-  <string name="other_languages">ߞߊ߲߫ ߜߘߍ ߟߎ߬:</string>
+  <string name="your_languages" fuzzy="true">ߞߊ߲ ߛߎߥߊ߲ߘߌ߫</string>
+  <string name="other_languages" fuzzy="true">ߞߊ߲߫ ߜߘߍ ߟߎ߬:</string>
   <string name="no_items_msg">ߝߌ߬ߛߌ߬ ߛߌ߫ ߛߐ߬ߘߐ߲߬ߕߊ߫ ߕߍ߫</string>
   <string name="crash_title">ߏ߬ ߓߘߊ߫ ߓߍ߲߬… ߏ߬ ߦߋ߫ ߞߏ߫ ߓߘߍ߫ ߓߊ߫ ߟߋ߬ ߘߌ߫</string>
   <string name="crash_description" fuzzy="true">ߊ߬ ߞߍߣߍ߲߫ ߦߋ߫ ߦߴߊ߲ ߓߘߊ߫ ߜߊߛߊ߲߫. \n\nߊ߬ ߝߐ߫ ߌ ߘߌ߫ ߛߵߊ߲ ߘߍ߬ߡߍ߲߬ ߠߊ߫ ߝߙߋߞߋ ߏ߬ ߝߎߟߋ߲ ߡߊ߬ ߞߎ߲߬ߠߊ߬ߝߏߣߌ߲ ߢߌ߲߬ ߠߎ߬ ߗߋߟߌ ߟߊ߫؟</string>
