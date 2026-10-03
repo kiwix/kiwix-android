@@ -22,13 +22,14 @@ import android.content.Context
 import android.content.ContextWrapper
 import android.content.Intent
 import androidx.compose.ui.test.junit4.ComposeContentTestRule
+import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.By
 import androidx.test.uiautomator.UiDevice
 import androidx.test.uiautomator.UiObject
 import androidx.test.uiautomator.UiSelector
 import okhttp3.OkHttpClient
 import org.kiwix.kiwixmobile.core.data.remote.UserAgentInterceptor
-import org.kiwix.kiwixmobile.core.di.modules.USER_AGENT
+import org.kiwix.kiwixmobile.core.di.modules.userAgent
 import org.kiwix.kiwixmobile.core.utils.files.Log
 import java.io.File
 import java.util.Timer
@@ -159,6 +160,8 @@ object TestUtils {
       .connectTimeout(CONNECTION_TIMEOUT, TimeUnit.MINUTES)
       .readTimeout(READ_AND_CALL_TIMEOUT, TimeUnit.MINUTES)
       .callTimeout(READ_AND_CALL_TIMEOUT, TimeUnit.MINUTES)
-      .addNetworkInterceptor(UserAgentInterceptor(USER_AGENT))
+      .addNetworkInterceptor(
+        UserAgentInterceptor(userAgent(InstrumentationRegistry.getInstrumentation().targetContext))
+      )
       .build()
 }
