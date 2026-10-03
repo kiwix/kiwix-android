@@ -45,6 +45,7 @@ import org.kiwix.kiwixmobile.core.CoreApp.Companion.instance
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.di.IoDispatcher
 import org.kiwix.kiwixmobile.core.di.MainDispatcher
+import org.kiwix.kiwixmobile.core.di.modules.userAgent
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.getCurrentLocale
@@ -86,9 +87,10 @@ open class KiwixWebView constructor(
     if (BuildConfig.DEBUG) {
       WebView.setWebContentsDebuggingEnabled(true)
     }
-    // Set the user agent to the current locale so it can be read with navigator.userAgent
+    // Identify illustration/network requests with the Kiwix user agent, and keep the
+    // current locale appended so it can still be read with navigator.userAgent.
     settings.apply {
-      userAgentString = "${getCurrentLocale(context)}"
+      userAgentString = "${userAgent(context)} ${getCurrentLocale(context)}"
       domStorageEnabled = true
       javaScriptEnabled = true
       loadWithOverviewMode = true
