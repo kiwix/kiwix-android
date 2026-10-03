@@ -60,7 +60,7 @@ abstract class HistoryRoomDao : PageDao {
 
   @Query(
     "SELECT * FROM HistoryRoomEntity WHERE historyUrl" +
-      " LIKE :url AND dateString LIKE :date AND zimReaderSource LIKE :zimReaderSource"
+      " = :url AND dateString = :date AND zimReaderSource = :zimReaderSource"
   )
   abstract fun getHistoryRoomEntity(
     url: String,

@@ -160,5 +160,25 @@ class HistoryRoomDaoTest {
       historyRoomDao.deletePages(listOf(historyItem, historyItem2), mainDispatcherRule.dispatcher)
       historyList = historyRoomDao.historyRoomEntity().first()
       assertThat(historyList.size, equalTo(0))
+
+      val starArticle =
+        getHistoryItem(
+          title = "Red dwarf",
+          historyUrl = "https://kiwix.app/A/Red_dwarf",
+          databaseId = 1
+        )
+      val tvSeriesArticle =
+        getHistoryItem(
+          title = "Red Dwarf",
+          historyUrl = "https://kiwix.app/A/Red_Dwarf",
+          databaseId = 2
+        )
+      historyRoomDao.saveHistory(starArticle)
+      historyRoomDao.saveHistory(tvSeriesArticle)
+      historyList = historyRoomDao.historyRoomEntity().first()
+      assertThat(
+        historyList.map { it.historyUrl }.sorted(),
+        equalTo(listOf(tvSeriesArticle.historyUrl, starArticle.historyUrl).sorted())
+      )
     }
 }
