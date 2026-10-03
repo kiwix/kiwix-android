@@ -39,6 +39,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
+import org.json.JSONArray
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
@@ -48,6 +49,7 @@ import org.kiwix.kiwixmobile.core.utils.ZERO
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore.Companion.DEFAULT_TTS_SPEED
 import org.kiwix.kiwixmobile.core.utils.files.Log
+import java.lang.ref.WeakReference
 import java.util.Locale
 import java.util.concurrent.atomic.AtomicInteger
 
@@ -74,6 +76,8 @@ class KiwixTextToSpeech internal constructor(
 
   @JvmField var currentTTSTask: TTSTask? = null
   private lateinit var tts: TextToSpeech
+  private var webViewReference: WeakReference<WebView>? = null
+  private var isSentenceHighlightingEnabled = false
 
   var speechRate: Float = DEFAULT_TTS_SPEED
     set(value) {
@@ -235,13 +239,16 @@ class KiwixTextToSpeech internal constructor(
    * Starts speaking the WebView content aloud (or stops it if TTS is speaking now).
    */
   fun readAloud(webView: WebView, showTtsLanguageDownloadDialog: () -> Unit) {
+    webViewReference = WeakReference(webView)
     if (currentTTSTask?.paused == true) {
       onSpeakingListener.onSpeakingEnded()
       currentTTSTask = null
+      clearSentenceHighlighting()
     } else if (tts.isSpeaking) {
       if (tts.stop() == SUCCESS) {
         tts.setOnUtteranceProgressListener(null)
         onSpeakingListener.onSpeakingEnded()
+        clearSentenceHighlighting()
       }
     } else {
       val locale = iSO3ToLocale(zimReaderContainer.language)
@@ -279,17 +286,7 @@ class KiwixTextToSpeech internal constructor(
   private fun getFeatures(tts: TextToSpeech?): Set<String> = tts?.voice?.features.orEmpty()
 
   private fun loadURL(webView: WebView) {
-    // We use JavaScript to get the content of the page conveniently, earlier making some
-    // changes in the page
-    webView.loadUrl(
-      """
-      javascript:
-      body = document.getElementsByTagName('body')[0].cloneNode(true);
-      toRemove = body.querySelectorAll('sup.reference, #toc, .thumbcaption, title, .navbox, [role="navigation"], script, noscript, style');
-      Array.prototype.forEach.call(toRemove, function(elem) { elem.parentElement.removeChild(elem); });
-      tts.speakAloud(body.innerText);
-      """.trimIndent()
-    )
+    webView.loadUrl(PREPARE_SENTENCES_SCRIPT)
   }
 
   fun stop() {
@@ -297,7 +294,27 @@ class KiwixTextToSpeech internal constructor(
       currentTTSTask = null
       tts.setOnUtteranceProgressListener(null)
       onSpeakingListener.onSpeakingEnded()
+      clearSentenceHighlighting()
       onAudioFocusChangeListener = null
+    }
+  }
+
+  private fun highlightSentence(index: Int) {
+    if (!isSentenceHighlightingEnabled) return
+    evaluateJavaScript(highlightScript(index))
+  }
+
+  private fun clearSentenceHighlighting() {
+    if (!isSentenceHighlightingEnabled) return
+    isSentenceHighlightingEnabled = false
+    evaluateJavaScript(RESTORE_SCRIPT)
+  }
+
+  private fun evaluateJavaScript(script: String) {
+    val webView = webViewReference?.get() ?: return
+    webView.post {
+      runCatching { webView.evaluateJavascript(script, null) }
+        .onFailure { Log.e(TAG_KIWIX, "Could not run the read aloud script. Exception = $it") }
     }
   }
 
@@ -347,6 +364,7 @@ class KiwixTextToSpeech internal constructor(
   }
 
   fun initWebView(webView: WebView) {
+    webViewReference = WeakReference(webView)
     webView.addJavascriptInterface(TTSJavaScriptInterface(), "tts")
   }
 
@@ -358,6 +376,8 @@ class KiwixTextToSpeech internal constructor(
    */
   fun shutdown() {
     coroutineScope.cancel()
+    clearSentenceHighlighting()
+    webViewReference = null
     if (::tts.isInitialized) {
       tts.shutdown()
     }
@@ -502,31 +522,33 @@ class KiwixTextToSpeech internal constructor(
       tts.stop()
     }
 
+    private fun speakPiece(index: Int, queueMode: Int) {
+      val utteranceId = "$UTTERANCE_ID_PREFIX$index"
+      val bundle =
+        Bundle().apply {
+          putString(Engine.KEY_PARAM_UTTERANCE_ID, utteranceId)
+        }
+      currentUtteranceStartMs = System.currentTimeMillis()
+      tts.speak(pieces[index], queueMode, bundle, utteranceId)
+    }
+
     fun start() {
       if (!paused) {
         return
       }
       paused = false
-      currentUtteranceStartMs = System.currentTimeMillis()
-      val bundle =
-        Bundle().apply {
-          putString(Engine.KEY_PARAM_UTTERANCE_ID, "kiwixLastMessage")
-        }
       if (currentPiece.get() >= pieces.size) {
         stop()
         return
       }
-      tts.speak(
-        pieces[currentPiece.getAndIncrement()],
-        TextToSpeech.QUEUE_FLUSH,
-        bundle,
-        bundle.getString(Engine.KEY_PARAM_UTTERANCE_ID)
-      )
+      speakPiece(currentPiece.getAndIncrement(), TextToSpeech.QUEUE_FLUSH)
       tts.setOnUtteranceProgressListener(
         object : UtteranceProgressListener() {
-          @SuppressWarnings("EmptyFunctionBlock")
           override fun onStart(s: String) {
             currentUtteranceStartMs = System.currentTimeMillis()
+            s.substringAfter(UTTERANCE_ID_PREFIX, "")
+              .toIntOrNull()
+              ?.let(::highlightSentence)
           }
 
           override fun onDone(s: String) {
@@ -534,13 +556,7 @@ class KiwixTextToSpeech internal constructor(
             if (line >= pieces.size && !paused) {
               stop()
             } else {
-              currentUtteranceStartMs = System.currentTimeMillis()
-              tts.speak(
-                pieces[currentPiece.getAndIncrement()],
-                TextToSpeech.QUEUE_ADD,
-                bundle,
-                bundle.getString(Engine.KEY_PARAM_UTTERANCE_ID)
-              )
+              speakPiece(currentPiece.getAndIncrement(), TextToSpeech.QUEUE_ADD)
             }
           }
 
@@ -556,13 +572,26 @@ class KiwixTextToSpeech internal constructor(
     fun stop() {
       currentTTSTask = null
       onSpeakingListener.onSpeakingEnded()
+      clearSentenceHighlighting()
     }
+  }
+
+  private fun startSpeaking(pieces: List<String>) {
+    if (pieces.isEmpty()) {
+      clearSentenceHighlighting()
+      return
+    }
+    val task = TTSTask(pieces)
+    currentTTSTask = task
+    onSpeakingListener.onSpeakingStarted()
+    task.start()
   }
 
   private inner class TTSJavaScriptInterface {
     @Suppress("unused", "MagicNumber", "NestedBlockDepth")
     @JavascriptInterface
     fun speakAloud(content: String) {
+      clearSentenceHighlighting()
       val rawSentences = content.split("(?<=[.?!;:\\n])\\s+".toRegex())
         .filter(String::isNotBlank)
         .map(String::trim)
@@ -579,16 +608,152 @@ class KiwixTextToSpeech internal constructor(
         }
       }
 
-      if (pieces.isNotEmpty()) {
-        val task = TTSTask(pieces)
-        currentTTSTask = task
-        onSpeakingListener.onSpeakingStarted()
-        task.start()
-      }
+      startSpeaking(pieces)
     }
+
+    @JavascriptInterface fun speakAloudSentences(sentencesJson: String) {
+      val pieces = parseSentences(sentencesJson)
+      isSentenceHighlightingEnabled = pieces.isNotEmpty()
+      startSpeaking(pieces)
+    }
+
+    private fun parseSentences(sentencesJson: String): List<String> =
+      runCatching {
+        val jsonArray = JSONArray(sentencesJson)
+        (0 until jsonArray.length()).map { jsonArray.optString(it).trim() }
+      }.getOrElse {
+        Log.e(TAG_KIWIX, "Could not parse the sentences of the page. Exception = $it")
+        emptyList()
+      }
   }
 
   companion object {
     private const val MULTILINGUAL_LANGUAGE_CODE = "mul"
+    private const val UTTERANCE_ID_PREFIX = "kiwixTtsUtterance-"
+
+    private const val SKIP_SELECTOR =
+      "sup.reference, #toc, .thumbcaption, title, .navbox, " +
+        "[role=\"navigation\"], script, noscript, style"
+
+    private const val HIGHLIGHT_STYLE =
+      ".kiwix-tts-active-sentence{" +
+        "background-color:rgba(255,193,7,0.45);" +
+        "border-radius:3px;" +
+        "box-shadow:0 0 0 2px rgba(255,193,7,0.45);" +
+        "}"
+
+    private const val RESTORE_SCRIPT =
+      "if (window.__kiwixTts) { window.__kiwixTts.restore(); }"
+
+    private fun highlightScript(index: Int) =
+      "if (window.__kiwixTts) { window.__kiwixTts.highlight($index); }"
+
+    private val PREPARE_SENTENCES_SCRIPT =
+      """
+      javascript:(function() {
+        if (window.__kiwixTts) { window.__kiwixTts.restore(); }
+        var body = document.body;
+        if (!body) { return; }
+        var skipped = body.querySelectorAll('$SKIP_SELECTOR');
+        Array.prototype.forEach.call(skipped, function(element) {
+          element.setAttribute('data-kiwix-tts-skip', '');
+        });
+        var walker = document.createTreeWalker(body, NodeFilter.SHOW_TEXT, {
+          acceptNode: function(node) {
+            if (!node.nodeValue || !node.nodeValue.trim()) {
+              return NodeFilter.FILTER_REJECT;
+            }
+            var parent = node.parentElement;
+            if (!parent || parent.closest('[data-kiwix-tts-skip]')) {
+              return NodeFilter.FILTER_REJECT;
+            }
+            if (parent !== body && !parent.offsetParent) {
+              return NodeFilter.FILTER_REJECT;
+            }
+            return NodeFilter.FILTER_ACCEPT;
+          }
+        });
+        var textNodes = [];
+        while (walker.nextNode()) { textNodes.push(walker.currentNode); }
+        var sentences = [];
+        var spans = [];
+        textNodes.forEach(function(node) {
+          var parts = node.nodeValue.match(
+            /[^]+?(?:[.?!;:](?=\s|${'$'})|\n|${'$'})/g
+          );
+          if (!parts) { return; }
+          var fragment = document.createDocumentFragment();
+          var wrapped = false;
+          parts.forEach(function(part) {
+            var text = part.trim();
+            if (!text) {
+              fragment.appendChild(document.createTextNode(part));
+              return;
+            }
+            var span = document.createElement('span');
+            span.className = 'kiwix-tts-sentence';
+            span.setAttribute('data-kiwix-tts-index', String(sentences.length));
+            span.appendChild(document.createTextNode(part));
+            fragment.appendChild(span);
+            sentences.push(text);
+            spans.push(span);
+            wrapped = true;
+          });
+          if (wrapped && node.parentNode) {
+            node.parentNode.replaceChild(fragment, node);
+          }
+        });
+        Array.prototype.forEach.call(skipped, function(element) {
+          element.removeAttribute('data-kiwix-tts-skip');
+        });
+        if (!document.getElementById('kiwix-tts-style')) {
+          var style = document.createElement('style');
+          style.id = 'kiwix-tts-style';
+          style.textContent = '$HIGHLIGHT_STYLE';
+          (document.head || body).appendChild(style);
+        }
+        window.__kiwixTts = {
+          spans: spans,
+          current: -1,
+          highlight: function(index) {
+            if (this.current === index) { return; }
+            var previous = this.spans[this.current];
+            if (previous) {
+              previous.classList.remove('kiwix-tts-active-sentence');
+            }
+            this.current = index;
+            var span = this.spans[index];
+            if (!span) { return; }
+            span.classList.add('kiwix-tts-active-sentence');
+            var rect = span.getBoundingClientRect();
+            var height = window.innerHeight || document.documentElement.clientHeight;
+            if (rect.top < 0 || rect.bottom > height) {
+              span.scrollIntoView({ block: 'center', behavior: 'smooth' });
+            }
+          },
+          clear: function() {
+            var span = this.spans[this.current];
+            if (span) {
+              span.classList.remove('kiwix-tts-active-sentence');
+            }
+            this.current = -1;
+          },
+          restore: function() {
+            this.clear();
+            this.spans.forEach(function(span) {
+              var parent = span.parentNode;
+              if (!parent) { return; }
+              while (span.firstChild) {
+                parent.insertBefore(span.firstChild, span);
+              }
+              parent.removeChild(span);
+              parent.normalize();
+            });
+            this.spans = [];
+          }
+        };
+        tts.speakAloudSentences(JSON.stringify(sentences));
+      })();
+      """.trimIndent()
   }
 }
