@@ -80,7 +80,9 @@ class OnlineLibraryScreenTest {
     scanningProgressBarMessage: String = "",
     showScanningProgressBar: Boolean = false,
     noContentMessage: String = "",
-    showNoContent: Boolean = false
+    showNoContent: Boolean = false,
+    tabs: List<OnlineLibraryViewModel.LanguageTab> = emptyList(),
+    selectedTabIndex: Int = 0
   ): OnlineLibraryUiState = OnlineLibraryUiState(
     items = items,
     isRefreshing = isRefreshing,
@@ -91,6 +93,8 @@ class OnlineLibraryScreenTest {
     showScanningProgressBar = showScanningProgressBar,
     noContentMessage = noContentMessage,
     showNoContent = showNoContent,
+    tabs = tabs,
+    selectedTabIndex = selectedTabIndex
   )
 
   private fun renderScreen(
@@ -449,5 +453,51 @@ class OnlineLibraryScreenTest {
     composeTestRule.waitForIdle()
 
     verify(exactly = ZERO) { viewModel.onStopButtonClick(any()) }
+  }
+
+  @Test
+  fun `shows language tabs when multiple tabs exist and clicking tab selects it`() {
+    val viewModel = createMockViewModel()
+    val tabs = listOf(
+      OnlineLibraryViewModel.LanguageTab("en", "ENGLISH"),
+      OnlineLibraryViewModel.LanguageTab("es", "SPANISH")
+    )
+
+    renderScreen(createUiState(tabs = tabs), viewModel = viewModel)
+
+    composeTestRule
+      .onNodeWithTag(LANGUAGE_TABS_ROW_TESTING_TAG)
+      .assertExists()
+
+    composeTestRule
+      .onNodeWithTag("${LANGUAGE_TAB_TESTING_TAG_PREFIX}ENGLISH")
+      .assertExists()
+
+    composeTestRule
+      .onNodeWithTag("${LANGUAGE_TAB_TESTING_TAG_PREFIX}SPANISH")
+      .assertExists()
+      .performClick()
+
+    verify { viewModel.selectTab(1) }
+  }
+
+  @Test
+  fun `shows language tabs when single tab exists`() {
+    val tabs = listOf(OnlineLibraryViewModel.LanguageTab(null, "ALL"))
+
+    renderScreen(createUiState(tabs = tabs))
+
+    composeTestRule
+      .onNodeWithTag(LANGUAGE_TABS_ROW_TESTING_TAG)
+      .assertExists()
+  }
+
+  @Test
+  fun `hides language tabs when tabs are empty`() {
+    renderScreen(createUiState(tabs = emptyList()))
+
+    composeTestRule
+      .onNodeWithTag(LANGUAGE_TABS_ROW_TESTING_TAG)
+      .assertDoesNotExist()
   }
 }
