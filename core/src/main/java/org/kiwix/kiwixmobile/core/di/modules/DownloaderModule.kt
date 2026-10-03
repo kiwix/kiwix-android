@@ -82,12 +82,12 @@ abstract class DownloaderModule {
 
     @Provides
     @Singleton
-    fun provideOkHttpDownloader() = OkHttpDownloader(
+    fun provideOkHttpDownloader(@ApplicationContext context: Context) = OkHttpDownloader(
       OkHttpClient.Builder()
         .connectTimeout(CONNECT_TIME_OUT, TimeUnit.MINUTES)
         .readTimeout(READ_TIME_OUT, TimeUnit.MINUTES)
         .addInterceptor(BasicAuthInterceptor())
-        .addNetworkInterceptor(UserAgentInterceptor(USER_AGENT))
+        .addNetworkInterceptor(UserAgentInterceptor(userAgent(context)))
         .followRedirects(true)
         .followSslRedirects(true)
         .build()

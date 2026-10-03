@@ -18,6 +18,11 @@
 
 package org.kiwix.kiwixmobile.core.di.modules
 
+import android.content.Context
+import android.content.pm.PackageInfo
+import android.content.pm.PackageManager
+import io.mockk.every
+import io.mockk.mockk
 import okhttp3.Request
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
@@ -30,10 +35,16 @@ import org.kiwix.kiwixmobile.core.data.remote.UserAgentInterceptor
 class NetworkModuleTest {
   private lateinit var mockWebServer: MockWebServer
   private val networkModule = NetworkModule()
+  private val context: Context = mockk()
 
   @BeforeEach
   fun setup() {
     mockWebServer = MockWebServer().apply { start() }
+    val packageInfo = PackageInfo().apply { versionName = "1.0.0" }
+    val packageManager: PackageManager = mockk()
+    every { context.packageName } returns "org.kiwix.test"
+    every { context.packageManager } returns packageManager
+    every { packageManager.getPackageInfo("org.kiwix.test", 0) } returns packageInfo
   }
 
   @AfterEach
@@ -43,7 +54,7 @@ class NetworkModuleTest {
 
   @Test
   fun `provideOkHttpClient registers a UserAgentInterceptor as a network interceptor`() {
-    val okHttpClient = networkModule.provideOkHttpClient()
+    val okHttpClient = networkModule.provideOkHttpClient(context)
 
     assertThat(okHttpClient.networkInterceptors.any { it is UserAgentInterceptor }).isTrue()
   }
@@ -51,12 +62,12 @@ class NetworkModuleTest {
   @Test
   fun `provideOkHttpClient sends the expected User-Agent header with every request`() {
     mockWebServer.enqueue(MockResponse().setResponseCode(200))
-    val okHttpClient = networkModule.provideOkHttpClient()
+    val okHttpClient = networkModule.provideOkHttpClient(context)
     val request = Request.Builder().url(mockWebServer.url("/")).build()
 
     okHttpClient.newCall(request).execute().close()
 
     val recordedRequest = mockWebServer.takeRequest()
-    assertThat(recordedRequest.getHeader("User-Agent")).isEqualTo(USER_AGENT)
+    assertThat(recordedRequest.getHeader("User-Agent")).isEqualTo(userAgent(context))
   }
 }

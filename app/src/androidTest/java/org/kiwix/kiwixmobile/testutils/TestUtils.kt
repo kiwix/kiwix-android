@@ -47,7 +47,7 @@ import okhttp3.OkHttpClient
 import org.hamcrest.Description
 import org.hamcrest.Matcher
 import org.kiwix.kiwixmobile.core.data.remote.UserAgentInterceptor
-import org.kiwix.kiwixmobile.core.di.modules.USER_AGENT
+import org.kiwix.kiwixmobile.core.di.modules.userAgent
 import org.kiwix.kiwixmobile.core.entity.LibkiwixBook
 import org.kiwix.kiwixmobile.core.ui.components.SWIPE_REFRESH_TESTING_TAG
 import org.kiwix.kiwixmobile.core.utils.files.Log
@@ -290,7 +290,9 @@ object TestUtils {
       .connectTimeout(CONNECTION_TIMEOUT, TimeUnit.MINUTES)
       .readTimeout(READ_AND_CALL_TIMEOUT, TimeUnit.MINUTES)
       .callTimeout(READ_AND_CALL_TIMEOUT, TimeUnit.MINUTES)
-      .addNetworkInterceptor(UserAgentInterceptor(USER_AGENT))
+      .addNetworkInterceptor(
+        UserAgentInterceptor(userAgent(InstrumentationRegistry.getInstrumentation().targetContext))
+      )
       .build()
 
   fun ComposeContentTestRule.refresh() {

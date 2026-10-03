@@ -17,9 +17,11 @@
  */
 package org.kiwix.kiwixmobile.core.di.modules
 
+import android.content.Context
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import nl.adaptivity.xmlutil.serialization.XML
 import okhttp3.OkHttpClient
@@ -27,10 +29,12 @@ import okhttp3.logging.HttpLoggingInterceptor
 import okhttp3.logging.HttpLoggingInterceptor.Level.BASIC
 import okhttp3.logging.HttpLoggingInterceptor.Level.NONE
 import org.kiwix.kiwixmobile.core.BuildConfig
+import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.getPackageInformation
 import org.kiwix.kiwixmobile.core.data.remote.KiwixService
 import org.kiwix.kiwixmobile.core.data.remote.KiwixService.ServiceCreator
 import org.kiwix.kiwixmobile.core.data.remote.UserAgentInterceptor
 import org.kiwix.kiwixmobile.core.di.OPDSKiwixService
+import org.kiwix.kiwixmobile.core.utils.ZERO
 import java.util.concurrent.TimeUnit.SECONDS
 import javax.inject.Singleton
 
@@ -41,25 +45,35 @@ const val CONNECTION_TIMEOUT = 10L
 // the request is canceled.
 const val READ_TIMEOUT = 300L
 const val CALL_TIMEOUT = 300L
-const val USER_AGENT = "kiwix-android-version:${BuildConfig.VERSION_CODE}"
 const val KIWIX_OPDS_LIBRARY_URL = "https://opds.library.kiwix.org/"
+
+// VERSION_NAME lives in the app/branded modules (not core's own BuildConfig), so the
+// running app's actual version is read from the installed package at request time.
+fun userAgent(context: Context): String {
+  val versionName = context.packageManager
+    .getPackageInformation(context.packageName, ZERO).versionName
+  return "kiwix/$versionName (android)"
+}
 
 @InstallIn(SingletonComponent::class)
 @Module
 class NetworkModule {
-  @Provides @Singleton fun provideOkHttpClient(): OkHttpClient = OkHttpClient().newBuilder()
-    .followRedirects(true)
-    .followSslRedirects(true)
-    .connectTimeout(CONNECTION_TIMEOUT, SECONDS)
-    .readTimeout(READ_TIMEOUT, SECONDS)
-    .callTimeout(CALL_TIMEOUT, SECONDS)
-    .addNetworkInterceptor(UserAgentInterceptor(USER_AGENT))
-    .addNetworkInterceptor(
-      HttpLoggingInterceptor().apply {
-        level = if (BuildConfig.DEBUG) BASIC else NONE
-      }
-    )
-    .build()
+  @Provides
+  @Singleton
+  fun provideOkHttpClient(@ApplicationContext context: Context): OkHttpClient =
+    OkHttpClient().newBuilder()
+      .followRedirects(true)
+      .followSslRedirects(true)
+      .connectTimeout(CONNECTION_TIMEOUT, SECONDS)
+      .readTimeout(READ_TIMEOUT, SECONDS)
+      .callTimeout(CALL_TIMEOUT, SECONDS)
+      .addNetworkInterceptor(UserAgentInterceptor(userAgent(context)))
+      .addNetworkInterceptor(
+        HttpLoggingInterceptor().apply {
+          level = if (BuildConfig.DEBUG) BASIC else NONE
+        }
+      )
+      .build()
 
   @Provides
   @Singleton

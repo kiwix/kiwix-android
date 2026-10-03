@@ -27,7 +27,8 @@ import okhttp3.Request
 import okhttp3.Response
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
-import org.kiwix.kiwixmobile.core.di.modules.USER_AGENT
+
+private const val USER_AGENT = "kiwix/1.0.0 (android)"
 
 class UserAgentInterceptorTest {
   private val interceptor = UserAgentInterceptor(USER_AGENT)
