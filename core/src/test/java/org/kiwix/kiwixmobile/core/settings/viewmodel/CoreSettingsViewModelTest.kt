@@ -79,7 +79,7 @@ import org.kiwix.kiwixmobile.core.settings.viewmodel.Action.NavigateToAppSetting
 import org.kiwix.kiwixmobile.core.settings.viewmodel.Action.OnStorageItemClick
 import org.kiwix.kiwixmobile.core.settings.viewmodel.Action.OpenCredits
 import org.kiwix.kiwixmobile.core.settings.viewmodel.Action.RequestWriteStoragePermission
-import org.kiwix.kiwixmobile.core.settings.viewmodel.Action.ShowSnackbar
+import org.kiwix.kiwixmobile.core.settings.viewmodel.Action.ShowToast
 import org.kiwix.kiwixmobile.core.utils.EXTERNAL_SELECT_POSITION
 import org.kiwix.kiwixmobile.core.utils.INTERNAL_SELECT_POSITION
 import org.kiwix.kiwixmobile.core.utils.KiwixPermissionChecker
@@ -660,7 +660,7 @@ internal class CoreSettingsViewModelTest {
         NavigateToAppSettingsDialog,
         Action.RateApp,
         OnStorageItemClick(mockk()),
-        ShowSnackbar("msg", this)
+        ShowToast("msg")
       )
 
       viewModel.actions.test {
@@ -702,14 +702,14 @@ internal class CoreSettingsViewModelTest {
   @Nested
   inner class ClearHistoryTest {
     @Test
-    fun `clearHistory emits snackbar on success`() = runTest {
+    fun `clearHistory emits toast on success`() = runTest {
       coEvery { dataSource.clearHistory() } just Runs
       every { context.getString(R.string.all_history_cleared) } returns "History cleared"
 
       viewModel.actions.test {
         viewModel.clearHistory()
         advanceUntilIdle()
-        val action = awaitItem() as Action.ShowSnackbar
+        val action = awaitItem() as Action.ShowToast
         assertEquals("History cleared", action.message)
         cancelAndIgnoreRemainingEvents()
       }
@@ -772,13 +772,13 @@ internal class CoreSettingsViewModelTest {
     }
 
     @Test
-    fun `clearHistory emits correct snackbar message`() = runTest {
+    fun `clearHistory emits correct toast message`() = runTest {
       coEvery { dataSource.clearHistory() } just Runs
       every { context.getString(R.string.all_history_cleared) } returns "All history cleared"
       viewModel.actions.test {
         viewModel.clearHistory()
         advanceUntilIdle()
-        val action = awaitItem() as Action.ShowSnackbar
+        val action = awaitItem() as Action.ShowToast
         assertEquals("All history cleared", action.message)
         cancelAndIgnoreRemainingEvents()
       }
@@ -796,8 +796,8 @@ internal class CoreSettingsViewModelTest {
         viewModel.clearAllNotes()
         advanceUntilIdle()
         val action = awaitItem()
-        assertThat(action).isInstanceOf(ShowSnackbar::class.java)
-        assertThat((action as ShowSnackbar).message)
+        assertThat(action).isInstanceOf(ShowToast::class.java)
+        assertThat((action as ShowToast).message)
           .isEqualTo("Notes deletion failed")
         cancelAndIgnoreRemainingEvents()
       }
@@ -814,8 +814,8 @@ internal class CoreSettingsViewModelTest {
         viewModel.clearAllNotes()
         advanceUntilIdle()
         val action = awaitItem()
-        assertThat(action).isInstanceOf(ShowSnackbar::class.java)
-        assertThat((action as ShowSnackbar).message)
+        assertThat(action).isInstanceOf(ShowToast::class.java)
+        assertThat((action as ShowToast).message)
           .isEqualTo("Permission not granted")
         cancelAndIgnoreRemainingEvents()
       }
@@ -833,8 +833,8 @@ internal class CoreSettingsViewModelTest {
         viewModel.clearAllNotes()
         advanceUntilIdle()
         val action = awaitItem()
-        assertThat(action).isInstanceOf(ShowSnackbar::class.java)
-        assertThat((action as ShowSnackbar).message)
+        assertThat(action).isInstanceOf(ShowToast::class.java)
+        assertThat((action as ShowToast).message)
           .isEqualTo("Notes deleted")
         cancelAndIgnoreRemainingEvents()
       }
@@ -852,8 +852,8 @@ internal class CoreSettingsViewModelTest {
         viewModel.clearAllNotes()
         advanceUntilIdle()
         val action = awaitItem()
-        assertThat(action).isInstanceOf(ShowSnackbar::class.java)
-        assertThat((action as ShowSnackbar).message)
+        assertThat(action).isInstanceOf(ShowToast::class.java)
+        assertThat((action as ShowToast).message)
           .isEqualTo("Notes deletion failed")
         cancelAndIgnoreRemainingEvents()
       }

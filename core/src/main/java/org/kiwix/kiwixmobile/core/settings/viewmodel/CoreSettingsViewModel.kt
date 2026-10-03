@@ -29,7 +29,6 @@ import android.webkit.WebView
 import android.widget.Toast
 import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.result.ActivityResult
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -55,7 +54,7 @@ import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.settings.StorageCalculator
 import org.kiwix.kiwixmobile.core.settings.viewmodel.Action.ExportBookmarks
 import org.kiwix.kiwixmobile.core.settings.viewmodel.Action.RequestWriteStoragePermission
-import org.kiwix.kiwixmobile.core.settings.viewmodel.Action.ShowSnackbar
+import org.kiwix.kiwixmobile.core.settings.viewmodel.Action.ShowToast
 import org.kiwix.kiwixmobile.core.utils.EXTERNAL_SELECT_POSITION
 import org.kiwix.kiwixmobile.core.utils.INTERNAL_SELECT_POSITION
 import org.kiwix.kiwixmobile.core.utils.KiwixPermissionChecker
@@ -88,7 +87,6 @@ abstract class CoreSettingsViewModel(
 ) : ViewModel() {
   data class SettingsUiState(
     val storageDeviceList: List<StorageDevice> = emptyList(),
-    val snackbarHostState: SnackbarHostState = SnackbarHostState(),
     val isLoadingStorageDetails: Boolean = true,
     val shouldShowLanguageCategory: Boolean = false,
     val shouldShowStorageCategory: Boolean = false,
@@ -234,9 +232,8 @@ abstract class CoreSettingsViewModel(
         dataSource.clearHistory()
       }.onSuccess {
         sendAction(
-          ShowSnackbar(
-            context.getString(R.string.all_history_cleared),
-            viewModelScope
+          ShowToast(
+            context.getString(R.string.all_history_cleared)
           )
         )
       }.onFailure {
@@ -249,18 +246,16 @@ abstract class CoreSettingsViewModel(
     viewModelScope.launch {
       if (!isExternalStorageWritable()) {
         sendAction(
-          ShowSnackbar(
-            context.getString(R.string.notes_deletion_unsuccessful),
-            viewModelScope
+          ShowToast(
+            context.getString(R.string.notes_deletion_unsuccessful)
           )
         )
         return@launch
       }
       if (!kiwixPermissionChecker.hasWriteExternalStoragePermission()) {
         sendAction(
-          ShowSnackbar(
-            context.getString(R.string.ext_storage_permission_not_granted),
-            viewModelScope
+          ShowToast(
+            context.getString(R.string.ext_storage_permission_not_granted)
           )
         )
         return@launch
@@ -269,17 +264,15 @@ abstract class CoreSettingsViewModel(
         dataSource.clearNotes()
       }.onSuccess {
         sendAction(
-          ShowSnackbar(
-            context.getString(R.string.notes_deletion_successful),
-            viewModelScope
+          ShowToast(
+            context.getString(R.string.notes_deletion_successful)
           )
         )
       }.onFailure {
         Log.e("SettingsPresenter", it.message, it)
         sendAction(
-          ShowSnackbar(
-            context.getString(R.string.notes_deletion_unsuccessful),
-            viewModelScope
+          ShowToast(
+            context.getString(R.string.notes_deletion_unsuccessful)
           )
         )
       }

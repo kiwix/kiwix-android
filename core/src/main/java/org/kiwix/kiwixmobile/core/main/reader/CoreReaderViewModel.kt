@@ -1581,7 +1581,7 @@ abstract class CoreReaderViewModel(
       }
       readerWebViewManager.restoreDeletedTab(removedTab, index)
       emitEffect(
-        ReaderEffect.ShowSnackbar(message = context.getString(string.tab_restored))
+        ReaderEffect.ShowToast(context.getString(string.tab_restored))
       )
       readerWebViewManager.setUpWithTextToSpeech(removedTab, readAloudManager)
       updateBottomToolbarVisibility()

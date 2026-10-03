@@ -19,34 +19,45 @@
 package org.kiwix.kiwixmobile.core.ui.components
 
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Snackbar
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import org.kiwix.kiwixmobile.core.ui.theme.DenimBlue200
 import org.kiwix.kiwixmobile.core.ui.theme.DenimBlue400
 import org.kiwix.kiwixmobile.core.ui.theme.KiwixSnackToastTheme
+import org.kiwix.kiwixmobile.core.ui.theme.MineShaftGray850
+import org.kiwix.kiwixmobile.core.ui.theme.MineShaftGray900
+import org.kiwix.kiwixmobile.core.ui.theme.White
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.EIGHT_DP
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SIXTEEN_DP
 
 /**
- * A custom SnackbarHost for displaying snackbars with theme-aware action button colors.
- *
- * This function ensures that the action button color follows the app's theme:
- * - In **light mode**, the action button color is `DenimBlue400`.
- * - In **dark mode**, the action button color is `surface`, similar to the XML-based styling.
+ * A custom SnackbarHost for displaying snackbars with a pill-shaped appearance and
+ * theme-aware colors matching the app's Toast style.
  *
  * @param snackbarHostState The state that controls the Snackbar display.
  */
 @Composable
 fun KiwixSnackbarHost(snackbarHostState: SnackbarHostState) {
   KiwixSnackToastTheme {
-    val actionColor = if (isSystemInDarkTheme()) {
-      MaterialTheme.colorScheme.surface
-    } else {
-      DenimBlue400
-    }
-    SnackbarHost(hostState = snackbarHostState) { snackbarData ->
+    val isDark = isSystemInDarkTheme()
+    val containerColor = if (isDark) MineShaftGray850 else MineShaftGray900
+    val contentColor = White
+    val actionColor = if (isDark) DenimBlue200 else DenimBlue400
+
+    SnackbarHost(
+      hostState = snackbarHostState,
+      modifier = Modifier.padding(horizontal = SIXTEEN_DP, vertical = EIGHT_DP)
+    ) { snackbarData ->
       Snackbar(
         snackbarData = snackbarData,
+        shape = MaterialTheme.shapes.large,
+        containerColor = containerColor,
+        contentColor = contentColor,
         actionColor = actionColor
       )
     }

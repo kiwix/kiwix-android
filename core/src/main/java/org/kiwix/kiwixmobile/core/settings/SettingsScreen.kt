@@ -81,12 +81,11 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.PermissionState
 import com.google.accompanist.permissions.rememberPermissionState
-import kotlinx.coroutines.CoroutineScope
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.convertToLocal
 import org.kiwix.kiwixmobile.core.extensions.navigateToAppSettings
 import org.kiwix.kiwixmobile.core.extensions.navigateToSettings
-import org.kiwix.kiwixmobile.core.extensions.snack
+import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.settings.viewmodel.Action
 import org.kiwix.kiwixmobile.core.settings.viewmodel.Action.AllowPermission
@@ -96,14 +95,13 @@ import org.kiwix.kiwixmobile.core.settings.viewmodel.Action.ExportBookmarks
 import org.kiwix.kiwixmobile.core.settings.viewmodel.Action.ImportBookmarks
 import org.kiwix.kiwixmobile.core.settings.viewmodel.Action.OnStorageItemClick
 import org.kiwix.kiwixmobile.core.settings.viewmodel.Action.OpenCredits
-import org.kiwix.kiwixmobile.core.settings.viewmodel.Action.ShowSnackbar
+import org.kiwix.kiwixmobile.core.settings.viewmodel.Action.ShowToast
 import org.kiwix.kiwixmobile.core.settings.viewmodel.CoreSettingsViewModel
 import org.kiwix.kiwixmobile.core.settings.viewmodel.CoreSettingsViewModel.SettingsUiState
 import org.kiwix.kiwixmobile.core.settings.viewmodel.ZOOM_OFFSET
 import org.kiwix.kiwixmobile.core.settings.viewmodel.ZOOM_SCALE
 import org.kiwix.kiwixmobile.core.ui.components.ContentLoadingProgressBar
 import org.kiwix.kiwixmobile.core.ui.components.KiwixAppBar
-import org.kiwix.kiwixmobile.core.ui.components.KiwixSnackbarHost
 import org.kiwix.kiwixmobile.core.ui.components.NavigationIcon
 import org.kiwix.kiwixmobile.core.ui.components.StorageDeviceItem
 import org.kiwix.kiwixmobile.core.ui.theme.KiwixTheme
@@ -232,8 +230,8 @@ private suspend fun handleSettingsAction(
     is OnStorageItemClick ->
       viewModel.onStorageDeviceSelected(action.storageDevice)
 
-    is ShowSnackbar ->
-      showSnackbar(action.message, action.lifecycleScope, viewModel)
+    is ShowToast ->
+      activity.toast(action.message)
 
     Action.RequestWriteStoragePermission ->
       writePermissionState.launchPermissionRequest()
@@ -243,17 +241,6 @@ private suspend fun handleSettingsAction(
 
     Action.RateApp -> activity.rateDialogHandler.goToRateApp()
   }
-}
-
-private fun showSnackbar(
-  message: String,
-  lifeCycleScope: CoroutineScope,
-  coreSettingsViewModel: CoreSettingsViewModel
-) {
-  coreSettingsViewModel.uiState.value.snackbarHostState.snack(
-    message = message,
-    lifecycleScope = lifeCycleScope
-  )
 }
 
 private fun showNavigateToAppSettingsDialog(
@@ -306,7 +293,6 @@ internal fun SettingsScreen(
 ) {
   val uiState by coreSettingsViewModel.uiState.collectAsStateWithLifecycle()
   Scaffold(
-    snackbarHost = { KiwixSnackbarHost(snackbarHostState = uiState.snackbarHostState) },
     topBar = {
       KiwixAppBar(
         title = stringResource(R.string.menu_settings),
