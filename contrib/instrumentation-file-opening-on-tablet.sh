@@ -39,7 +39,7 @@ if adb shell settings list secure | grep -q "stylus_handwriting_enabled"; then
   adb shell settings put secure stylus_handwriting_enabled 0
 fi
 # shellcheck disable=SC2035
-adb logcat -v color &
+adb logcat TestRunner:I AndroidRuntime:E ActivityManager:W *:E -v color &
 
 PACKAGE_NAME="org.kiwix.kiwixmobile"
 TEST_PACKAGE_NAME="${PACKAGE_NAME}.test"
@@ -82,7 +82,7 @@ while [ $retry -le 3 ]; do
       adb shell settings put secure stylus_handwriting_enabled 0
     fi
     # shellcheck disable=SC2035
-    adb logcat -v color &
+    adb logcat TestRunner:I AndroidRuntime:E ActivityManager:W *:E -v color &
 
     if is_app_installed "$PACKAGE_NAME"; then
       adb uninstall "${PACKAGE_NAME}"
@@ -100,7 +100,7 @@ while [ $retry -le 3 ]; do
     ./gradlew --stop
     retry=$(( retry + 1 ))
     if [ $retry -eq 3 ]; then
-      timeout 30 adb exec-out screencap -p >"$CI_DIAGNOSTICS_DIR/screencap.png" 2>/dev/null || true
+      adb exec-out screencap -p >screencap.png
       exit 1
     fi
   fi

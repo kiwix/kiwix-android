@@ -146,7 +146,7 @@ jobs:
         api-level: [ 25, 30, 33, 34, 35, 36 ]
         target: [ default ]
       fail-fast: true
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-22.04
     steps:
       - name: Free Disk Space (Ubuntu)
         uses: jlumbroso/free-disk-space@main
@@ -221,7 +221,7 @@ jobs:
         api-level: [ 25, 30, 33, 34, 35, 36 ]
         target: [ default ]
       fail-fast: true
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-22.04
     steps:
       - name: Free Disk Space (Ubuntu)
         uses: jlumbroso/free-disk-space@main
@@ -296,7 +296,7 @@ jobs:
         api-level: [ 25, 30, 33, 34, 35, 36 ]
         target: [ default ]
       fail-fast: true
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-22.04
     steps:
       - name: Free Disk Space (Ubuntu)
         uses: jlumbroso/free-disk-space@main
@@ -366,7 +366,7 @@ jobs:
 
   code-formatting-job:
     name: Code Formatting
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-22.04
     continue-on-error: true
 
     steps:
@@ -393,7 +393,7 @@ jobs:
 
   detekt:
     name: Detekt
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-22.04
     continue-on-error: true
 
     steps:
@@ -419,7 +419,7 @@ jobs:
 
   lint:
     name: Lint
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-22.04
     continue-on-error: true
     steps:
 
@@ -447,7 +447,7 @@ jobs:
 
   assemble:
     name: Assemble
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-22.04
     continue-on-error: true
 
     steps:

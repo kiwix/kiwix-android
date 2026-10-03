@@ -39,7 +39,7 @@ if adb shell settings list secure | grep -q "stylus_handwriting_enabled"; then
   adb shell settings put secure stylus_handwriting_enabled 0
 fi
 # shellcheck disable=SC2035
-adb logcat -v color &
+adb logcat TestRunner:I AndroidRuntime:E ActivityManager:W *:E -v color &
 
 PACKAGE_NAME="org.kiwix.kiwixmobile.custom"
 TEST_PACKAGE_NAME="${PACKAGE_NAME}.test"
@@ -83,7 +83,7 @@ while [ $retry -le 3 ]; do
       adb shell settings put secure stylus_handwriting_enabled 0
     fi
     # shellcheck disable=SC2035
-    adb logcat -v color &
+    adb logcat TestRunner:I AndroidRuntime:E ActivityManager:W *:E -v color &
 
     if is_app_installed "$PACKAGE_NAME"; then
       # Delete the application to properly run the test cases.
