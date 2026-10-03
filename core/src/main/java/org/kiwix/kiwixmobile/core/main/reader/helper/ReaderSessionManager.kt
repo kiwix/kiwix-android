@@ -65,8 +65,11 @@ class ReaderSessionManager @Inject constructor(
 
   private val savingTabsMutex = Mutex()
 
+  suspend fun <T> withTabsMutationLock(block: suspend () -> T): T =
+    savingTabsMutex.withLock { block() }
+
   suspend fun saveReaderSession(onComplete: () -> Unit = {}) {
-    savingTabsMutex.withLock {
+    withTabsMutationLock {
       clearAndSaveLatestReaderSession(getWebViewHistoryList())
       val source = zimFileManager.zimReaderSource?.toDatabase()
       kiwixDataStore.apply {
@@ -91,26 +94,28 @@ class ReaderSessionManager @Inject constructor(
   }
 
   suspend fun restoreReaderSession(): RestoreSessionResult =
-    runCatching {
-      val webViewHistoryList = withContext(ioDispatcher) {
-        // perform database operation on IO thread.
-        mainRepositoryActions.loadWebViewPagesHistory()
-      }
-      if (webViewHistoryList.isEmpty()) {
-        RestoreSessionResult.Empty
-      } else {
-        RestoreSessionResult.Valid(
-          currentTab = safelyGetCurrentTab(),
-          currentZimFile = kiwixDataStore.currentZimFile.first(),
-          webViewHistoryList = webViewHistoryList
+    withTabsMutationLock {
+      runCatching {
+        val webViewHistoryList = withContext(ioDispatcher) {
+          // perform database operation on IO thread.
+          mainRepositoryActions.loadWebViewPagesHistory()
+        }
+        if (webViewHistoryList.isEmpty()) {
+          RestoreSessionResult.Empty
+        } else {
+          RestoreSessionResult.Valid(
+            currentTab = safelyGetCurrentTab(),
+            currentZimFile = kiwixDataStore.currentZimFile.first(),
+            webViewHistoryList = webViewHistoryList
+          )
+        }
+      }.getOrElse {
+        Log.e(
+          TAG_KIWIX,
+          "Could not restore tabs. Original exception = ${it.printStackTrace()}"
         )
+        RestoreSessionResult.Invalid
       }
-    }.getOrElse {
-      Log.e(
-        TAG_KIWIX,
-        "Could not restore tabs. Original exception = ${it.printStackTrace()}"
-      )
-      RestoreSessionResult.Invalid
     }
 
   private suspend fun safelyGetCurrentTab(): Int =

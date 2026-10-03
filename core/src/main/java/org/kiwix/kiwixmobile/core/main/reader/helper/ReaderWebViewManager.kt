@@ -174,23 +174,37 @@ class ReaderWebViewManager @Inject constructor(
     currentTab: Int,
     newTabConfig: TabsManager.NewTabConfig
   ): RestoreTabsResult =
-    runCatching {
-      withContext(mainDispatcher) {
-        setCurrentWebViewIndex(ZERO)
-        tabsManager.clearTabsState()
-        webViewHistoryItemList.forEach { webViewHistoryItem ->
-          val webView = createNewTab(newTabConfig)
-          readerSessionManager.restoreTabState(webView, webViewHistoryItem)
-          addNewTabInTabsManager(webView, newTabConfig)
+    readerSessionManager.withTabsMutationLock {
+      runCatching {
+        withContext(mainDispatcher) {
+          setCurrentWebViewIndex(ZERO)
+          tabsManager.clearTabsState()
+          webViewHistoryItemList.forEach { webViewHistoryItem ->
+            val webView = createNewTab(newTabConfig)
+            readerSessionManager.restoreTabState(webView, webViewHistoryItem)
+            addNewTabInTabsManager(webView, newTabConfig)
+          }
+          setCurrentWebViewIndex(currentTab)
+          RestoreTabsResult.TabsRestored
         }
-        setCurrentWebViewIndex(currentTab)
-        RestoreTabsResult.TabsRestored
-      }
-    }.getOrElse { RestoreTabsResult.ErrorInRestoringTabs(it) }
+      }.getOrElse { RestoreTabsResult.ErrorInRestoringTabs(it) }
+    }
 
   fun getCurrentWebView(): KiwixWebView? = tabsManager.getCurrentWebView()
 
-  suspend fun newMainPageTab(newTabConfig: TabsManager.NewTabConfig): KiwixWebView {
+  suspend fun newMainPageTab(newTabConfig: TabsManager.NewTabConfig): KiwixWebView =
+    readerSessionManager.withTabsMutationLock { createAndAddMainPageTab(newTabConfig) }
+
+  suspend fun getCurrentWebViewOrCreateMainPageTab(
+    newTabConfig: suspend () -> TabsManager.NewTabConfig
+  ): KiwixWebView =
+    getCurrentWebView() ?: readerSessionManager.withTabsMutationLock {
+      // Re-check inside the lock: a genuinely concurrent caller may have raced us here
+      // while we held no lock, so don't blindly create a second tab.
+      getCurrentWebView() ?: createAndAddMainPageTab(newTabConfig())
+    }
+
+  private suspend fun createAndAddMainPageTab(newTabConfig: TabsManager.NewTabConfig): KiwixWebView {
     val mainPageUrl =
       redirectOrOriginal(contentUrl(readerSessionManager.zimReaderContainer.mainPage))
     val newConfig = newTabConfig.copy(url = mainPageUrl)
@@ -204,34 +218,36 @@ class ReaderWebViewManager @Inject constructor(
   }
 
   suspend fun destroyAllTabs() {
-    runCatching {
-      withContext(mainDispatcher.immediate) {
-        webViewList().apply {
-          forEach { webView ->
-            // Stop any ongoing loading of the WebView
-            webView.stopLoading()
-            // Clear the navigation history of the WebView
-            webView.clearHistory()
-            // Clear cached resources to prevent loading old content
-            webView.clearCache(true)
-            // Pause any ongoing activity in the WebView to prevent resource usage
-            webView.onPause()
-            // Break the reference chain from WebView → Callback
-            // to prevent memory leaks through InputMethodManager/DecorView retention.
-            webView.dispose()
-            // Forcefully destroy the WebView before setting the new ZIM file
-            // to ensure that it does not continue attempting to load internal links
-            // from the previous ZIM file, which could cause errors.
-            webView.destroy()
+    readerSessionManager.withTabsMutationLock {
+      runCatching {
+        withContext(mainDispatcher.immediate) {
+          webViewList().apply {
+            forEach { webView ->
+              // Stop any ongoing loading of the WebView
+              webView.stopLoading()
+              // Clear the navigation history of the WebView
+              webView.clearHistory()
+              // Clear cached resources to prevent loading old content
+              webView.clearCache(true)
+              // Pause any ongoing activity in the WebView to prevent resource usage
+              webView.onPause()
+              // Break the reference chain from WebView → Callback
+              // to prevent memory leaks through InputMethodManager/DecorView retention.
+              webView.dispose()
+              // Forcefully destroy the WebView before setting the new ZIM file
+              // to ensure that it does not continue attempting to load internal links
+              // from the previous ZIM file, which could cause errors.
+              webView.destroy()
+            }
+            // Clear the WebView list after destroying the WebViews
+            closeAllTabs()
           }
-          // Clear the WebView list after destroying the WebViews
-          closeAllTabs()
         }
+      }.onFailure {
+        it.printStackTrace()
+        // Clear the WebView list in case of an error
+        closeAllTabs()
       }
-    }.onFailure {
-      it.printStackTrace()
-      // Clear the WebView list in case of an error
-      closeAllTabs()
     }
   }
 }
