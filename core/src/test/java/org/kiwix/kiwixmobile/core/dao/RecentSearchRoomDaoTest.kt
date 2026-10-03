@@ -103,6 +103,20 @@ class RecentSearchRoomDaoTest {
       val unicodeQuery = "title \u03A3"
       recentSearchRoomDao.saveSearch(unicodeQuery, zimId, url)
       assertThat(getRecentSearchByZimId(zimId)[0].searchTerm, equalTo("title Σ"))
+
+      recentSearchRoomDao.deleteSearchHistory()
+      val lowerCaseZimId = "8812214350305159407l"
+      val upperCaseZimId = "8812214350305159407L"
+      recentSearchRoomDao.saveSearch("lower case zim search", lowerCaseZimId, url)
+      recentSearchRoomDao.saveSearch("upper case zim search", upperCaseZimId, url)
+
+      val resultForLowerCaseZimId = getRecentSearchByZimId(lowerCaseZimId)
+      assertThat(resultForLowerCaseZimId.size, equalTo(1))
+      assertThat(resultForLowerCaseZimId[0].zimId, equalTo(lowerCaseZimId))
+
+      val resultForUpperCaseZimId = getRecentSearchByZimId(upperCaseZimId)
+      assertThat(resultForUpperCaseZimId.size, equalTo(1))
+      assertThat(resultForUpperCaseZimId[0].zimId, equalTo(upperCaseZimId))
     }
 
   private suspend fun getRecentSearchByZimId(zimId: String) =

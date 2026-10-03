@@ -160,12 +160,7 @@ class HistoryRoomDaoTest {
       historyRoomDao.deletePages(listOf(historyItem, historyItem2), mainDispatcherRule.dispatcher)
       historyList = historyRoomDao.historyRoomEntity().first()
       assertThat(historyList.size, equalTo(0))
-    }
 
-  @Test
-  fun saveHistoryKeepsSameDayPagesWhoseUrlsDifferOnlyInCase() =
-    runTest(mainDispatcherRule.dispatcher) {
-      historyRoomDao.deleteAllHistory()
       val starArticle =
         getHistoryItem(
           title = "Red dwarf",
@@ -178,11 +173,9 @@ class HistoryRoomDaoTest {
           historyUrl = "https://kiwix.app/A/Red_Dwarf",
           databaseId = 2
         )
-
       historyRoomDao.saveHistory(starArticle)
       historyRoomDao.saveHistory(tvSeriesArticle)
-
-      val historyList = historyRoomDao.historyRoomEntity().first()
+      historyList = historyRoomDao.historyRoomEntity().first()
       assertThat(
         historyList.map { it.historyUrl }.sorted(),
         equalTo(listOf(tvSeriesArticle.historyUrl, starArticle.historyUrl).sorted())

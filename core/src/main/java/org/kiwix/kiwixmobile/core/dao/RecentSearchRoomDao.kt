@@ -28,7 +28,7 @@ import org.kiwix.kiwixmobile.core.search.SearchListItem
 @Dao
 abstract class RecentSearchRoomDao {
   @Query(
-    "SELECT * FROM RecentSearchRoomEntity WHERE zimId LIKE :zimId ORDER BY" +
+    "SELECT * FROM RecentSearchRoomEntity WHERE zimId = :zimId ORDER BY" +
       " RecentSearchRoomEntity.id DESC"
   )
   abstract fun search(zimId: String?): Flow<List<RecentSearchRoomEntity>>
