@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-set -o pipefail
 
 #
 # Kiwix Android
@@ -26,14 +25,11 @@ set -o pipefail
 # genuine test failure, and only retries the whole step for the former.
 touch /tmp/emulator_script_started
 
-# shellcheck source=contrib/ci-diagnostics.sh
-source "$(dirname "${BASH_SOURCE[0]}")/ci-diagnostics.sh"
-
 # The emulator's crashpad_handler subprocess can survive `adb emu kill` and
 # hang the android-emulator-runner action's teardown
 # (https://github.com/ReactiveCircus/android-emulator-runner/issues/385).
 # Kill it once this script exits, regardless of the test outcome.
-trap 'stop_ci_diagnostics; killall -INT crashpad_handler 2>/dev/null || true' EXIT
+trap 'killall -INT crashpad_handler 2>/dev/null || true' EXIT
 
 # Enable Wi-Fi on the emulator
 adb shell svc wifi enable
@@ -43,8 +39,7 @@ if adb shell settings list secure | grep -q "stylus_handwriting_enabled"; then
   adb shell settings put secure stylus_handwriting_enabled 0
 fi
 # shellcheck disable=SC2035
-adb logcat *:E -v color &
-start_ci_diagnostics
+adb logcat -v color &
 
 PACKAGE_NAME="org.kiwix.kiwixmobile"
 TEST_PACKAGE_NAME="${PACKAGE_NAME}.test"
@@ -73,11 +68,10 @@ fi
 
 retry=0
 while [ $retry -le 3 ]; do
-  if ./gradlew :app:connectedDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.class=org.kiwix.kiwixmobile.localLibrary.OpeningFilesFromStorageTest -Dfile.encoding=UTF-8 2>&1 | tee -a "$CI_DIAGNOSTICS_DIR/gradle-output.log"; then
+  if ./gradlew :app:connectedDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.class=org.kiwix.kiwixmobile.localLibrary.OpeningFilesFromStorageTest -Dfile.encoding=UTF-8; then
     echo "connectedDebugAndroidTest for file opening in tablet succeeded" >&2
     break
   else
-    stop_ci_diagnostics
     adb kill-server
     adb start-server
     # Enable Wi-Fi on the emulator
@@ -88,8 +82,7 @@ while [ $retry -le 3 ]; do
       adb shell settings put secure stylus_handwriting_enabled 0
     fi
     # shellcheck disable=SC2035
-    adb logcat *:E -v color &
-    start_ci_diagnostics
+    adb logcat -v color &
 
     if is_app_installed "$PACKAGE_NAME"; then
       adb uninstall "${PACKAGE_NAME}"

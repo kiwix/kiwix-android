@@ -98,13 +98,12 @@ jobs:
           gradle-opts: "-Dorg.gradle.internal.http.connectionTimeout=60000 -Dorg.gradle.internal.http.socketTimeout=60000 -Dorg.gradle.internal.network.retry.max.attempts=6 -Dorg.gradle.internal.network.retry.initial.backOff=2000"
           script: bash contrib/instrumentation.sh
 
-      - name: Upload CI diagnostics
+      - name: Upload screenshot result
         uses: actions/upload-artifact@v6
-        if: always()
+        if: failure()
         with:
-          name: ci-diagnostics-${{ matrix.api-level }}
-          path: ci-diagnostics/
-          if-no-files-found: ignore
+          name: ${{ matrix.api-level }}
+          path: screencap.png
 
       - name: Run benchmarks
         if: ${{ matrix.api-level==30 }}
@@ -215,14 +214,6 @@ jobs:
           gradle-opts: "-Dorg.gradle.internal.http.connectionTimeout=60000 -Dorg.gradle.internal.http.socketTimeout=60000 -Dorg.gradle.internal.network.retry.max.attempts=6 -Dorg.gradle.internal.network.retry.initial.backOff=2000"
           script: bash contrib/instrumentation-release.sh
 
-      - name: Upload CI diagnostics
-        uses: actions/upload-artifact@v6
-        if: always()
-        with:
-          name: ci-diagnostics-playstore-${{ matrix.api-level }}
-          path: ci-diagnostics/
-          if-no-files-found: ignore
-
   automated-tests-branded-apps:
     name: Automated tests for Branded app
     strategy:
@@ -298,14 +289,6 @@ jobs:
           gradle-opts: "-Dorg.gradle.internal.http.connectionTimeout=60000 -Dorg.gradle.internal.http.socketTimeout=60000 -Dorg.gradle.internal.network.retry.max.attempts=6 -Dorg.gradle.internal.network.retry.initial.backOff=2000"
           script: bash contrib/instrumentation-brandedapps.sh
 
-      - name: Upload CI diagnostics
-        uses: actions/upload-artifact@v6
-        if: always()
-        with:
-          name: ci-diagnostics-branded-${{ matrix.api-level }}
-          path: ci-diagnostics/
-          if-no-files-found: ignore
-
   automated-tests-on-tablet:
     name: Automated tests on Tablet
     strategy:
@@ -380,14 +363,6 @@ jobs:
           cores: 4
           gradle-opts: "-Dorg.gradle.internal.http.connectionTimeout=60000 -Dorg.gradle.internal.http.socketTimeout=60000 -Dorg.gradle.internal.network.retry.max.attempts=6 -Dorg.gradle.internal.network.retry.initial.backOff=2000"
           script: bash contrib/instrumentation-file-opening-on-tablet.sh
-
-      - name: Upload CI diagnostics
-        uses: actions/upload-artifact@v6
-        if: always()
-        with:
-          name: ci-diagnostics-tablet-${{ matrix.api-level }}
-          path: ci-diagnostics/
-          if-no-files-found: ignore
 
   code-formatting-job:
     name: Code Formatting
