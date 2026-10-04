@@ -68,8 +68,8 @@ abstract class RecentSearchRoomDao {
   )
   abstract fun saveSearch(title: String, zimId: String, url: String?)
 
-  @Query("DELETE FROM RecentSearchRoomEntity WHERE searchTerm=:searchTerm")
-  abstract fun deleteSearchString(searchTerm: String)
+  @Query("DELETE FROM RecentSearchRoomEntity WHERE searchTerm = :searchTerm AND zimId = :zimId")
+  abstract fun deleteSearchString(searchTerm: String, zimId: String?)
 
   @Query("DELETE FROM RecentSearchRoomEntity")
   abstract fun deleteSearchHistory()

@@ -410,6 +410,7 @@ internal class SearchViewModelTest {
           ConfirmedDelete(searchListItem),
           DeleteRecentSearch(
             searchListItem,
+            "id",
             recentSearchRoomDao,
             viewModel.viewModelScope,
             mainDispatcherRule.dispatcher

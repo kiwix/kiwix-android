@@ -105,7 +105,7 @@ class KiwixRoomDatabaseTest {
       assertEquals(recentSearch.zimId, recentSearches.first().zimId)
 
       // test deleting recent search
-      recentSearchRoomDao.deleteSearchString(searchTerm)
+      recentSearchRoomDao.deleteSearchString(searchTerm, zimId)
       recentSearches = recentSearchRoomDao.search(zimId).first()
       assertEquals(recentSearches.size, 0)
 
