@@ -24,6 +24,8 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -86,6 +88,7 @@ class ReaderMenuState(
 
   private val menuItemVisibility = mutableMapOf<MenuItemType, Boolean>().apply {
     put(MenuItemType.Search, true)
+    put(MenuItemType.NewTab, false)
     put(MenuItemType.TabSwitcher, true)
     put(MenuItemType.Share, true)
     put(MenuItemType.AddNote, true)
@@ -171,10 +174,12 @@ class ReaderMenuState(
   fun showTabSwitcherOptions() {
     setVisibility(
       true,
+      MenuItemType.NewTab,
       MenuItemType.CloseAllTabs
     )
     setVisibility(
       false,
+      MenuItemType.Search,
       MenuItemType.RandomPage,
       MenuItemType.ReadAloud,
       MenuItemType.Share,
@@ -187,6 +192,7 @@ class ReaderMenuState(
   fun hideTabSwitcher() {
     setVisibility(
       false,
+      MenuItemType.NewTab,
       MenuItemType.CloseAllTabs
     )
     updateMenuItems()
@@ -195,6 +201,7 @@ class ReaderMenuState(
   private fun updateMenuItems() {
     menuItems.clear()
     addSearchMenuItem()
+    addNewTabMenuItem()
     addTabMenuItem()
     addAddToHomeScreenMenuItem()
     addReaderMenuItems()
@@ -209,6 +216,18 @@ class ReaderMenuState(
         onClick = { menuClickListener.onSearchMenuClickedMenuClicked() },
         isInOverflow = false,
         testingTag = SEARCH_ICON_TESTING_TAG
+      )
+    }
+  }
+
+  private fun addNewTabMenuItem() {
+    if (menuItemVisibility[MenuItemType.NewTab] == true) {
+      menuItems += ActionMenuItem(
+        icon = IconItem.Vector(Icons.Filled.Add),
+        contentDescription = R.string.search_open_in_new_tab,
+        onClick = { menuClickListener.onHomeMenuClicked() },
+        isInOverflow = false,
+        testingTag = NEW_TAB_BUTTON_TESTING_TAG
       )
     }
   }
@@ -349,6 +368,7 @@ class ReaderMenuState(
 
 enum class MenuItemType {
   Search,
+  NewTab,
   TabSwitcher,
   Share,
   AddNote,
