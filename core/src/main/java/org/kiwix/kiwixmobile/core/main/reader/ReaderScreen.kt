@@ -1218,41 +1218,39 @@ fun TabSwitcherView(
   onReaderAction: (ReaderAction) -> Unit
 ) {
   val state = rememberLazyGridState()
-  Box(modifier = Modifier.fillMaxSize()) {
-    LazyVerticalGrid(
-      columns = GridCells.Adaptive(minSize = TAB_CARD_MIN_WIDTH),
-      modifier = Modifier.fillMaxSize(),
-      contentPadding = PaddingValues(
-        start = TWELVE_DP,
-        top = TWELVE_DP,
-        end = TWELVE_DP,
-        bottom = TAB_SWITCHER_BOTTOM_PADDING
-      ),
-      horizontalArrangement = Arrangement.spacedBy(TWELVE_DP),
-      verticalArrangement = Arrangement.spacedBy(TWELVE_DP),
-      state = state
-    ) {
-      itemsIndexed(tabsState.webViews, key = { _, item -> item.hashCode() }) { index, webView ->
-        val context = LocalContext.current
-        val title = remember(webView, webView.title) {
-          webView.title?.fromHtml()?.toString()
-            ?: context.getString(R.string.menu_home)
-        }
+  LazyVerticalGrid(
+    columns = GridCells.Adaptive(minSize = TAB_CARD_MIN_WIDTH),
+    modifier = Modifier.fillMaxSize(),
+    contentPadding = PaddingValues(
+      start = TWELVE_DP,
+      top = TWELVE_DP,
+      end = TWELVE_DP,
+      bottom = TAB_SWITCHER_BOTTOM_PADDING
+    ),
+    horizontalArrangement = Arrangement.spacedBy(TWELVE_DP),
+    verticalArrangement = Arrangement.spacedBy(TWELVE_DP),
+    state = state
+  ) {
+    itemsIndexed(tabsState.webViews, key = { _, item -> item.hashCode() }) { index, webView ->
+      val context = LocalContext.current
+      val title = remember(webView, webView.title) {
+        webView.title?.fromHtml()?.toString()
+          ?: context.getString(R.string.menu_home)
+      }
 
-        TabItemView(
-          index = index,
-          title = title,
-          isSelected = index == tabsState.selectedIndex,
-          webView = webView,
-          showTabSwitcher = showTabSwitcher,
-          onReaderAction = onReaderAction,
-        )
-      }
+      TabItemView(
+        index = index,
+        title = title,
+        isSelected = index == tabsState.selectedIndex,
+        webView = webView,
+        showTabSwitcher = showTabSwitcher,
+        onReaderAction = onReaderAction,
+      )
     }
-    LaunchedEffect(tabsState.selectedIndex) {
-      if (tabsState.selectedIndex in tabsState.webViews.indices) {
-        state.animateScrollToItem(tabsState.selectedIndex)
-      }
+  }
+  LaunchedEffect(tabsState.selectedIndex) {
+    if (tabsState.selectedIndex in tabsState.webViews.indices) {
+      state.animateScrollToItem(tabsState.selectedIndex)
     }
   }
 }
