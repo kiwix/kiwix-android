@@ -29,13 +29,14 @@ import org.kiwix.kiwixmobile.core.search.SearchListItem
 
 data class DeleteRecentSearch(
   private val searchListItem: SearchListItem,
+  private val zimId: String?,
   private val recentSearchRoomDao: RecentSearchRoomDao,
   private val viewModelScope: CoroutineScope,
   @param:IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : SideEffect<Unit> {
   override fun invokeWith(activity: AppCompatActivity) {
     viewModelScope.launch(ioDispatcher) {
-      recentSearchRoomDao.deleteSearchString(searchListItem.value)
+      recentSearchRoomDao.deleteSearchString(searchListItem.value, zimId)
     }
   }
 }

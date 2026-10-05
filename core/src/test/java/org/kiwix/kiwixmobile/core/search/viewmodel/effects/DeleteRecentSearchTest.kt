@@ -42,11 +42,12 @@ internal class DeleteRecentSearchTest {
     val activity: AppCompatActivity = mockk()
     DeleteRecentSearch(
       searchListItem = searchListItem,
+      zimId = "id",
       recentSearchRoomDao = recentSearchDao,
       viewModelScope = this,
       ioDispatcher = mainDispatcherRule.dispatcher
     ).invokeWith(activity)
     delay(50)
-    verify { recentSearchDao.deleteSearchString(searchListItem.value) }
+    verify { recentSearchDao.deleteSearchString(searchListItem.value, "id") }
   }
 }

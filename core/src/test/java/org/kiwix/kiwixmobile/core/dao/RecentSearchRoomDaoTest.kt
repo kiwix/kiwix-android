@@ -68,7 +68,7 @@ class RecentSearchRoomDaoTest {
       assertThat(result[0].zimId, equalTo(zimId))
 
       // Delete the saved entity by search term
-      recentSearchRoomDao.deleteSearchString(query)
+      recentSearchRoomDao.deleteSearchString(query, zimId)
       // Verify that the result does not contain the deleted entity
       assertThat(getRecentSearchByZimId(zimId).size, equalTo(0))
 
@@ -117,6 +117,17 @@ class RecentSearchRoomDaoTest {
       val resultForUpperCaseZimId = getRecentSearchByZimId(upperCaseZimId)
       assertThat(resultForUpperCaseZimId.size, equalTo(1))
       assertThat(resultForUpperCaseZimId[0].zimId, equalTo(upperCaseZimId))
+
+      recentSearchRoomDao.deleteSearchHistory()
+      val otherZimId = "5468213578902341567L"
+      val sharedQuery = "Paris"
+      recentSearchRoomDao.saveSearch(sharedQuery, zimId, url)
+      recentSearchRoomDao.saveSearch(sharedQuery, otherZimId, url)
+      recentSearchRoomDao.deleteSearchString(sharedQuery, zimId)
+      assertThat(getRecentSearchByZimId(zimId).size, equalTo(0))
+      val resultForOtherZimId = getRecentSearchByZimId(otherZimId)
+      assertThat(resultForOtherZimId.size, equalTo(1))
+      assertThat(resultForOtherZimId[0].searchTerm, equalTo(sharedQuery))
     }
 
   private suspend fun getRecentSearchByZimId(zimId: String) =
