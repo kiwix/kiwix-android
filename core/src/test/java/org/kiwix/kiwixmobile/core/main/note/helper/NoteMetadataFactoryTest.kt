@@ -82,6 +82,7 @@ class NoteMetadataFactoryTest {
     assertEquals("Earth", metadata.articleTitle)
     assertEquals("A/Earth.html", metadata.zimFileUrl)
     assertEquals("favicon", metadata.favicon)
+    assertEquals("Wikipedia: Earth", metadata.getNoteTitle())
   }
 
   @Test
@@ -105,6 +106,7 @@ class NoteMetadataFactoryTest {
     assertEquals("Wikipedia", metadata.zimFileTitle)
     assertEquals("Earth", metadata.articleTitle)
     assertEquals("A/Earth.html", metadata.zimFileUrl)
+    assertEquals("Wikipedia: Earth", metadata.getNoteTitle())
   }
 
   @Test
@@ -188,34 +190,35 @@ class NoteMetadataFactoryTest {
   }
 
   @Test
-  fun `getNoteTitle returns zim title when reader source exists`() {
+  fun `getNoteTitle returns saved title when editing an existing note`() {
     val metadata = NoteMetadata(
       zimFileName = null,
-      zimFileTitle = "Wikipedia",
+      zimFileTitle = "Wikipedia: Earth",
       zimId = "",
-      zimReaderSource = mockk(),
+      zimReaderSource = null,
       favicon = null,
       articleTitle = "Earth",
       zimFileUrl = "",
       zimNoteDirectoryName = "",
       articleNoteFileName = "",
       zimNotesDirectory = "",
-      isZimFileExist = true
+      isZimFileExist = true,
+      isExistingNote = true
     )
 
     assertEquals(
-      "Wikipedia",
+      "Wikipedia: Earth",
       metadata.getNoteTitle()
     )
   }
 
   @Test
-  fun `getNoteTitle returns combined title when reader source is null`() {
+  fun `getNoteTitle returns combined title for a new note`() {
     val metadata = NoteMetadata(
       zimFileName = null,
       zimFileTitle = "Wikipedia",
       zimId = "",
-      zimReaderSource = null,
+      zimReaderSource = mockk(),
       favicon = null,
       articleTitle = "Earth",
       zimFileUrl = "",
