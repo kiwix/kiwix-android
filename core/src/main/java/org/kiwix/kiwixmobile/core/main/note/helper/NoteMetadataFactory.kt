@@ -53,7 +53,7 @@ class NoteMetadataFactory @Inject constructor(
       getTextAfterLastSlashWithoutExtension(noteListItem.noteFilePath)
     } else {
       val url = config.currentWebViewUrl
-      val name = if (url != null) getTextAfterLastSlashWithoutExtension(url) else ""
+      val name = if (url != null) getArticleNameFromUrl(url) else ""
       name.ifEmpty { articleTitle }.orEmpty()
     }
 
@@ -77,6 +77,11 @@ class NoteMetadataFactory @Inject constructor(
 
   private fun getTextAfterLastSlashWithoutExtension(path: String): String =
     path.substringAfterLast('/', "").substringBeforeLast('.')
+
+  // Article names can contain dots (e.g. "U.S._Climate_Alliance"), so only strip the
+  // ".html"/".htm" extension used by older ZIM files.
+  private fun getArticleNameFromUrl(url: String): String =
+    url.substringAfterLast('/', "").removeSuffix(".html").removeSuffix(".htm")
 }
 
 data class NoteMetadata(
