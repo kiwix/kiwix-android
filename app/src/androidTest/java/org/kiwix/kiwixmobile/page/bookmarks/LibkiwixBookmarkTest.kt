@@ -27,7 +27,6 @@ import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import androidx.core.os.LocaleListCompat
-import androidx.navigation.NavOptions
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.platform.app.InstrumentationRegistry
 import dagger.hilt.android.testing.HiltAndroidRule
@@ -50,7 +49,6 @@ import org.kiwix.kiwixmobile.testutils.TestUtils.TEST_PAUSE_MS_FOR_DOWNLOAD_TEST
 import org.kiwix.kiwixmobile.testutils.TestUtils.TEST_PAUSE_MS_FOR_SNACKBAR
 import org.kiwix.kiwixmobile.testutils.TestUtils.getZimFileFromResourceFolder
 import org.kiwix.kiwixmobile.testutils.TestUtils.waitUntilTimeout
-import org.kiwix.kiwixmobile.ui.KiwixDestination
 import org.kiwix.libkiwix.Book
 import org.kiwix.libkiwix.Bookmark
 
@@ -247,21 +245,10 @@ class LibkiwixBookmarkTest : BaseActivityTest() {
     val zimFile = getZimFileFromResourceFolder(context, "testzim.zim")
 
     composeTestRule.runOnUiThread {
-      val navOptions = NavOptions
-        .Builder()
-        .setPopUpTo(KiwixDestination.Reader.route, false)
-        .build()
-
-      composeTestRule.activity.navigate(
-        KiwixDestination.Reader.route,
-        navOptions
-      )
-    }
-
-    composeTestRule.runOnUiThread {
       composeTestRule.activity.openZimFromFilePath(zimFile.absolutePath)
     }
 
     composeTestRule.waitForIdle()
+    composeTestRule.waitUntilTimeout()
   }
 }

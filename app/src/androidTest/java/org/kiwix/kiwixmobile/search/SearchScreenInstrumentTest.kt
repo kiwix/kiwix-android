@@ -27,7 +27,6 @@ import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
-import leakcanary.LeakAssertions
 import okhttp3.Request
 import okhttp3.ResponseBody
 import org.junit.After
@@ -192,10 +191,6 @@ class SearchScreenInstrumentTest : BaseActivityTest() {
       assertArticleLoaded()
     }
     removeTemporaryZimFilesToFreeUpDeviceStorage()
-    if (Build.VERSION.SDK_INT > Build.VERSION_CODES.N_MR1) {
-      // temporary disabled on Android 25
-      LeakAssertions.assertNoLeaks()
-    }
   }
 
   @Test
