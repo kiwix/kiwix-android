@@ -33,7 +33,6 @@ import org.kiwix.kiwixmobile.core.utils.TestingUtils.RETRY_RULE_ORDER
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.splash.splash
 import org.kiwix.kiwixmobile.testutils.RetryRule
-import org.kiwix.kiwixmobile.ui.KiwixDestination
 import org.kiwix.kiwixmobile.utils.StandardActions
 
 @HiltAndroidTest
@@ -61,10 +60,10 @@ class KiwixSettingsScreenTest : BaseActivityTest() {
   private fun startSettingsActivity(isPlayStoreBuild: Boolean) {
     updateKiwixDataStore {
       setIsPlayStoreBuild(isPlayStoreBuild)
+      setIntroShown(true)
     }
     launchMainActivity {
       kiwixMainActivity = it
-      it.navigate(KiwixDestination.Intro.route)
     }
     composeTestRule.enableAccessibilityChecks(createAccessibilityValidator())
     composeTestRule.waitForIdle()

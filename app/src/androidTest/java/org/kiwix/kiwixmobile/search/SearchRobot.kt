@@ -72,6 +72,8 @@ class SearchRobot : BaseRobot() {
           onNodeWithTag(BOTTOM_NAV_READER_ITEM_TESTING_TAG).isDisplayed()
         }
         onNodeWithTag(BOTTOM_NAV_READER_ITEM_TESTING_TAG).assertIsDisplayed()
+        // Adding a little wait so that the ZIM file loads in the reader on slow emulators.
+        waitUntilTimeout()
       }
     })
   }
