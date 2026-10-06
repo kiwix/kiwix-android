@@ -71,7 +71,8 @@ class NoteMetadataFactory @Inject constructor(
       zimNoteDirectoryName = zimNoteDirectoryName,
       articleNoteFileName = articleNoteFileName,
       zimNotesDirectory = zimNotesDirectory,
-      isZimFileExist = zimFileName != null
+      isZimFileExist = zimFileName != null,
+      isExistingNote = noteListItem != null
     )
   }
 
@@ -90,10 +91,11 @@ data class NoteMetadata(
   val zimNoteDirectoryName: String,
   val articleNoteFileName: String,
   val zimNotesDirectory: String,
-  val isZimFileExist: Boolean
+  val isZimFileExist: Boolean,
+  val isExistingNote: Boolean = false
 ) {
   fun getNoteTitle(): String =
-    if (zimFileTitle != null && zimReaderSource != null) {
+    if (zimFileTitle != null && isExistingNote) {
       zimFileTitle
     } else {
       "${zimFileTitle.orEmpty()}: $articleTitle"
