@@ -292,7 +292,13 @@ fun ReaderScreen(
             )
           }
         },
-        floatingActionButton = { BackToTopFab(state.showBackToTopButton, onReaderAction) },
+        floatingActionButton = {
+          // Only in the reader: not over the tab switcher or the "no book open" view.
+          BackToTopFab(
+            state.showBackToTopButton && !state.showTabSwitcher && !state.showNoBookOpenInReader,
+            onReaderAction
+          )
+        },
         modifier = Modifier
           .nestedScroll(topAppBarScrollBehavior.nestedScrollConnection)
           .nestedScroll(bottomAppBarScrollBehavior.nestedScrollConnection)
