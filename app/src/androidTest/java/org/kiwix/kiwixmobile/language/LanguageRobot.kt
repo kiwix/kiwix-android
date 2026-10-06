@@ -83,7 +83,10 @@ class LanguageRobot : BaseRobot() {
     searchLanguage: String
   ) {
     composeTestRule.apply {
-      waitUntilTimeout()
+      waitForIdle()
+      waitUntil(TestUtils.TEST_PAUSE_MS_FOR_DOWNLOAD_TEST) {
+        onAllNodesWithTag(SEARCH_FIELD_TESTING_TAG).fetchSemanticsNodes().isNotEmpty()
+      }
       onNodeWithTag(SEARCH_FIELD_TESTING_TAG).performTextInput(text = searchLanguage)
     }
   }
@@ -92,10 +95,9 @@ class LanguageRobot : BaseRobot() {
     composeTestRule: ComposeContentTestRule,
     matchLanguage: String
   ) {
-    composeTestRule.apply {
-      waitUntilTimeout()
-      onNodeWithText(matchLanguage).performClick()
-    }
+    composeTestRule
+      .onNodeWithText(matchLanguage)
+      .performClick()
   }
 
   fun waitForLanguageToLoad(
