@@ -42,8 +42,10 @@ import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.page.adapter.Page
 import org.kiwix.kiwixmobile.core.page.bookmark.models.LibkiwixBookmarkItem
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
+import org.kiwix.kiwixmobile.core.reader.ZimFileReader.Companion.CONTENT_PREFIX
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
+import org.kiwix.kiwixmobile.core.reader.decodeUrl
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils.EXPORT_BOOK_MARK_PATH
 import org.kiwix.kiwixmobile.core.utils.files.Log
@@ -401,7 +403,7 @@ class LibkiwixBookmarks @Inject constructor(
           zimFileReader?.getPageUrlFrom(bookmarkItem.title)?.let {
             // check if the bookmark url is not equals to redirect entry,
             // then delete the duplicate bookmark. It will keep the original bookmark.
-            if (it != bookmarkItem.bookmarkUrl) {
+            if (!isBookmarkOfPage(bookmarkItem.bookmarkUrl, it)) {
               deleteBookmark(bookmarkItem.zimId, bookmarkItem.bookmarkUrl)
             }
           }
@@ -505,3 +507,10 @@ class LibkiwixBookmarks @Inject constructor(
     const val TAG = "LibkiwixBookmark"
   }
 }
+
+/**
+ * Bookmark urls are full (and encoded) content urls, while `ZimFileReader.getPageUrlFrom()`
+ * returns the entry path, so compare them by path.
+ */
+internal fun isBookmarkOfPage(bookmarkUrl: String, pagePath: String): Boolean =
+  bookmarkUrl.substringAfter(CONTENT_PREFIX).decodeUrl == pagePath
