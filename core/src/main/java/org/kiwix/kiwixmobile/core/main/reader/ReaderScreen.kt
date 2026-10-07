@@ -76,7 +76,6 @@ import androidx.compose.material3.BottomAppBarScrollBehavior
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LocalContentColor
@@ -189,7 +188,6 @@ import org.kiwix.kiwixmobile.core.ui.theme.KiwixTheme
 import org.kiwix.kiwixmobile.core.ui.theme.White
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.CLOSE_TAB_ICON_SIZE
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.EIGHT_DP
-import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FIFTY_SIX_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FIVE_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FOURTEEN_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FOUR_DP
@@ -212,7 +210,6 @@ import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TAB_SWITCHER_TEXT_SIZE
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TEN_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.THREE_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TWELVE_DP
-import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TWENTY_EIGHT_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TWENTY_FOUR_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TWENTY_TWO_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TWO_DP
@@ -902,30 +899,18 @@ private fun TtsControlButtonsRow(
       if (ttsItem.isTtsPaused) R.string.tts_resume else R.string.tts_pause
     )
     PlayerTooltip(playPauseTooltip) {
-      Surface(
+      KiwixFloatingActionButton(
+        icon = painterResource(
+          id = if (ttsItem.isTtsPaused) {
+            R.drawable.ic_baseline_play
+          } else {
+            R.drawable.ic_baseline_pause
+          }
+        ),
         onClick = { onReaderAction(PauseTts) },
-        shape = CircleShape,
-        color = MaterialTheme.colorScheme.primary,
-        contentColor = MaterialTheme.colorScheme.onPrimary,
-        modifier = Modifier
-          .size(FIFTY_SIX_DP)
-          .semantics { testTag = TTS_CONTROL_PLAY_PAUSE_BUTTON_TESTING_TAG }
-      ) {
-        Box(contentAlignment = Alignment.Center) {
-          Icon(
-            painter = painterResource(
-              id = if (ttsItem.isTtsPaused) {
-                R.drawable.ic_baseline_play
-              } else {
-                R.drawable.ic_baseline_pause
-              }
-            ),
-            contentDescription = ttsItem.contentDescription,
-            tint = MaterialTheme.colorScheme.onPrimary,
-            modifier = Modifier.size(TWENTY_EIGHT_DP)
-          )
-        }
-      }
+        contentDescription = ttsItem.contentDescription,
+        modifier = Modifier.semantics { testTag = TTS_CONTROL_PLAY_PAUSE_BUTTON_TESTING_TAG }
+      )
     }
 
     // 4. Forward 10s button
@@ -987,10 +972,10 @@ private fun TtsFloatingActionButton(onReaderAction: (ReaderAction) -> Unit) {
     contentAlignment = Alignment.BottomStart
   ) {
     PlayerTooltip(stringResource(R.string.tts_controls)) {
-      FloatingActionButton(
+      KiwixFloatingActionButton(
+        icon = painterResource(id = R.drawable.ic_volume_up),
         onClick = { onReaderAction(ShowTtsControlsOverlay) },
-        containerColor = MaterialTheme.colorScheme.primary,
-        contentColor = MaterialTheme.colorScheme.onPrimary,
+        contentDescription = stringResource(R.string.menu_read_aloud),
         modifier = Modifier
           .offset { IntOffset(offsetX.roundToInt(), offsetY.roundToInt()) }
           .pointerInput(Unit) {
@@ -1001,13 +986,7 @@ private fun TtsFloatingActionButton(onReaderAction: (ReaderAction) -> Unit) {
             }
           }
           .semantics { testTag = TTS_FLOATING_SPEAKER_BUTTON_TESTING_TAG }
-      ) {
-        Icon(
-          painter = painterResource(id = R.drawable.ic_volume_up),
-          contentDescription = stringResource(R.string.menu_read_aloud),
-          modifier = Modifier.size(TWENTY_FOUR_DP)
-        )
-      }
+      )
     }
   }
 }
