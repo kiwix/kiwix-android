@@ -81,9 +81,34 @@ internal class ReaderMenuStateTest {
   }
 
   @Test
-  internal fun `search menu item remains visible in tab switcher mode`() {
+  internal fun `search menu item is hidden in tab switcher mode`() {
     readerMenuState.showTabSwitcherOptions()
-    assertThat(hasMenuItem(SEARCH_ICON_TESTING_TAG)).isTrue()
+    assertThat(hasMenuItem(SEARCH_ICON_TESTING_TAG)).isFalse()
+  }
+
+  @Test
+  internal fun `new tab menu item is visible in tab switcher mode`() {
+    readerMenuState.showTabSwitcherOptions()
+    assertThat(hasMenuItem(NEW_TAB_BUTTON_TESTING_TAG)).isTrue()
+  }
+
+  @Test
+  internal fun `new tab menu item is hidden after leaving tab switcher mode`() {
+    readerMenuState.showTabSwitcherOptions()
+    assertThat(hasMenuItem(NEW_TAB_BUTTON_TESTING_TAG)).isTrue()
+
+    readerMenuState.showWebViewOptions(true)
+
+    assertThat(hasMenuItem(NEW_TAB_BUTTON_TESTING_TAG)).isFalse()
+  }
+
+  @Test
+  internal fun `new tab menu item click invokes onHomeMenuClicked`() {
+    readerMenuState.showTabSwitcherOptions()
+
+    findMenuItem(NEW_TAB_BUTTON_TESTING_TAG).onClick()
+
+    verify { menuClickListener.onHomeMenuClicked() }
   }
 
   @Test

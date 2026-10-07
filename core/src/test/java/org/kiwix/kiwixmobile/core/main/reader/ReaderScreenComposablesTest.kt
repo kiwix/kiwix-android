@@ -443,29 +443,6 @@ class ReaderScreenComposablesTest {
   }
 
   @Test
-  fun readerScreen_tabSwitcher_newTabButton_displaysWhenTabSwitcherShown() {
-    renderReaderScreen(createTestState(showTabSwitcher = true))
-    composeTestRule.waitForIdle()
-    composeTestRule
-      .onNodeWithTag(NEW_TAB_BUTTON_TESTING_TAG)
-      .assertIsDisplayed()
-  }
-
-  @Test
-  fun readerScreen_tabSwitcher_newTabButton_triggersCallback() {
-    var action: ReaderAction? = null
-    renderReaderScreen(
-      createTestState(showTabSwitcher = true),
-      onReaderAction = { action = it }
-    )
-    composeTestRule.waitForIdle()
-    composeTestRule
-      .onNodeWithTag(NEW_TAB_BUTTON_TESTING_TAG)
-      .performClick()
-    assertEquals(ReaderAction.NewTab, action)
-  }
-
-  @Test
   fun readerScreen_topBar_hiddenInFullScreenMode() {
     renderReaderScreen(
       createTestState(shouldShowFullScreen = true)

@@ -69,8 +69,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.BottomAppBarDefaults
@@ -155,7 +153,6 @@ import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderAction.D
 import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderAction.DonateLaterButtonClick
 import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderAction.ForwardTts10s
 import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderAction.HomeClicked
-import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderAction.NewTab
 import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderAction.NextClicked
 import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderAction.NextLongClicked
 import org.kiwix.kiwixmobile.core.main.reader.CoreReaderViewModel.ReaderAction.OpenLibrary
@@ -187,7 +184,6 @@ import org.kiwix.kiwixmobile.core.ui.components.TWELVE
 import org.kiwix.kiwixmobile.core.ui.models.ActionMenuItem
 import org.kiwix.kiwixmobile.core.ui.models.IconItem
 import org.kiwix.kiwixmobile.core.ui.models.IconItem.Drawable
-import org.kiwix.kiwixmobile.core.ui.models.IconItem.Vector
 import org.kiwix.kiwixmobile.core.ui.models.toPainter
 import org.kiwix.kiwixmobile.core.ui.theme.KiwixTheme
 import org.kiwix.kiwixmobile.core.ui.theme.White
@@ -1222,57 +1218,41 @@ fun TabSwitcherView(
   onReaderAction: (ReaderAction) -> Unit
 ) {
   val state = rememberLazyGridState()
-  Box(modifier = Modifier.fillMaxSize()) {
-    LazyVerticalGrid(
-      columns = GridCells.Adaptive(minSize = TAB_CARD_MIN_WIDTH),
-      modifier = Modifier.fillMaxSize(),
-      contentPadding = PaddingValues(
-        start = TWELVE_DP,
-        top = TWELVE_DP,
-        end = TWELVE_DP,
-        bottom = TAB_SWITCHER_BOTTOM_PADDING
-      ),
-      horizontalArrangement = Arrangement.spacedBy(TWELVE_DP),
-      verticalArrangement = Arrangement.spacedBy(TWELVE_DP),
-      state = state
-    ) {
-      itemsIndexed(tabsState.webViews, key = { _, item -> item.hashCode() }) { index, webView ->
-        val context = LocalContext.current
-        val title = remember(webView, webView.title) {
-          webView.title?.fromHtml()?.toString()
-            ?: context.getString(R.string.menu_home)
-        }
+  LazyVerticalGrid(
+    columns = GridCells.Adaptive(minSize = TAB_CARD_MIN_WIDTH),
+    modifier = Modifier.fillMaxSize(),
+    contentPadding = PaddingValues(
+      start = TWELVE_DP,
+      top = TWELVE_DP,
+      end = TWELVE_DP,
+      bottom = TAB_SWITCHER_BOTTOM_PADDING
+    ),
+    horizontalArrangement = Arrangement.spacedBy(TWELVE_DP),
+    verticalArrangement = Arrangement.spacedBy(TWELVE_DP),
+    state = state
+  ) {
+    itemsIndexed(tabsState.webViews, key = { _, item -> item.hashCode() }) { index, webView ->
+      val context = LocalContext.current
+      val title = remember(webView, webView.title) {
+        webView.title?.fromHtml()?.toString()
+          ?: context.getString(R.string.menu_home)
+      }
 
-        TabItemView(
-          index = index,
-          title = title,
-          isSelected = index == tabsState.selectedIndex,
-          webView = webView,
-          showTabSwitcher = showTabSwitcher,
-          onReaderAction = onReaderAction,
-        )
-      }
+      TabItemView(
+        index = index,
+        title = title,
+        isSelected = index == tabsState.selectedIndex,
+        webView = webView,
+        showTabSwitcher = showTabSwitcher,
+        onReaderAction = onReaderAction,
+      )
     }
-    LaunchedEffect(tabsState.selectedIndex) {
-      if (tabsState.selectedIndex in tabsState.webViews.indices) {
-        state.animateScrollToItem(tabsState.selectedIndex)
-      }
-    }
-    NewTabButton { onReaderAction(NewTab) }
   }
-}
-
-@Composable
-private fun BoxScope.NewTabButton(onNewTab: () -> Unit) {
-  KiwixFloatingActionButton(
-    icon = Vector(Icons.Filled.Add).toPainter(),
-    onClick = onNewTab,
-    modifier = Modifier
-      .align(Alignment.BottomEnd)
-      .padding(end = SIXTEEN_DP, bottom = SIXTEEN_DP)
-      .semantics { testTag = NEW_TAB_BUTTON_TESTING_TAG },
-    contentDescription = stringResource(R.string.search_open_in_new_tab)
-  )
+  LaunchedEffect(tabsState.selectedIndex) {
+    if (tabsState.selectedIndex in tabsState.webViews.indices) {
+      state.animateScrollToItem(tabsState.selectedIndex)
+    }
+  }
 }
 
 @Composable

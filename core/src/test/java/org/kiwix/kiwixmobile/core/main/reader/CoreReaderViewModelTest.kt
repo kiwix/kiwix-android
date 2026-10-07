@@ -1177,13 +1177,6 @@ internal class CoreReaderViewModelTest {
       advanceUntilIdle()
       assertThat(viewModel.uiState.value.showTabSwitcher).isFalse()
     }
-
-    @Test
-    fun `onAction with NewTab should invoke onHomeMenuClicked`() = runTest {
-      viewModel = spyk(viewModel)
-      viewModel.onAction(ReaderAction.NewTab)
-      verify { viewModel.onHomeMenuClicked() }
-    }
   }
 
   @Test

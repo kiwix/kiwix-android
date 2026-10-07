@@ -230,7 +230,6 @@ abstract class CoreReaderViewModel(
     data object OpenTocDrawer : ReaderAction
     data object CloseTocDrawer : ReaderAction
     data object CloseAllTabs : ReaderAction
-    data object NewTab : ReaderAction
     data class SelectTab(val position: Int) : ReaderAction
     data class CloseTab(val position: Int) : ReaderAction
     data object PauseTts : ReaderAction
@@ -604,7 +603,6 @@ abstract class CoreReaderViewModel(
       ReaderAction.BookmarkClicked -> onBookmarkButtonClicked()
       ReaderAction.BookmarkLongClicked -> openBookmarkScreen()
       ReaderAction.CloseAllTabs -> closeAllTabs()
-      ReaderAction.NewTab -> onHomeMenuClicked()
       ReaderAction.HomeClicked -> launchInMainScope { openMainPage() }
       ReaderAction.NextClicked -> goForward()
       ReaderAction.NextLongClicked -> showBackwordForwardHistory(true)
