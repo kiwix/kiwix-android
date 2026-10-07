@@ -23,9 +23,8 @@ inputs:
     required: true
 
   ram-size:
-    description: Emulator RAM size
+    description: Emulator RAM size. Leave unset to use the device profile's own default.
     required: false
-    default: 2048M
 
   cores:
     description: Number of emulator CPU cores
@@ -33,9 +32,8 @@ inputs:
     default: "2"
 
   heap-size:
-    description: Emulator heap size
+    description: Emulator heap size. Leave unset to use the device profile's own default.
     required: false
-    default: 1024M
 
   gradle-opts:
     description: Value for the GRADLE_OPTS environment variable during the emulator script

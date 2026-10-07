@@ -75,12 +75,10 @@ jobs:
           target: ${{ matrix.target }}
           arch: ${{ (matrix.api-level >= 30) && 'x86_64' || 'x86' }}
           profile: pixel_2
-          ram-size: 2048M
           force-avd-creation: false
           sdcard-path-or-size: 1024M
           cores: 2
           disable-animations: false
-          heap-size: 1024M
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -no-metrics
           script: |
             trap 'killall -INT crashpad_handler 2>/dev/null || true' EXIT
@@ -112,12 +110,10 @@ jobs:
           target: ${{ matrix.target }}
           arch: x86_64
           profile: pixel_2
-          ram-size: 3072M
           cores: 4
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -no-metrics
           disable-animations: true
           force-avd-creation: false
-          heap-size: 1024M
           script: |
             trap 'killall -INT crashpad_handler 2>/dev/null || true' EXIT
             ./gradlew :benchmark:connectedBenchmarkAndroidTest
@@ -188,12 +184,10 @@ jobs:
           target: ${{ matrix.target }}
           arch: ${{ (matrix.api-level >= 30) && 'x86_64' || 'x86' }}
           profile: pixel_2
-          ram-size: 2048M
           force-avd-creation: false
           sdcard-path-or-size: 1024M
           cores: 2
           disable-animations: false
-          heap-size: 1024M
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -no-metrics
           script: |
             trap 'killall -INT crashpad_handler 2>/dev/null || true' EXIT
@@ -260,12 +254,10 @@ jobs:
           target: ${{ matrix.target }}
           arch: ${{ (matrix.api-level >= 30) && 'x86_64' || 'x86' }}
           profile: pixel_2
-          ram-size: 2048M
           force-avd-creation: false
           sdcard-path-or-size: 1024M
           cores: 2
           disable-animations: false
-          heap-size: 1024M
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -no-metrics
           script: |
             trap 'killall -INT crashpad_handler 2>/dev/null || true' EXIT
@@ -332,12 +324,10 @@ jobs:
           target: ${{ matrix.target }}
           arch: ${{ (matrix.api-level >= 30) && 'x86_64' || 'x86' }}
           profile: pixel_c
-          ram-size: 2048M
           force-avd-creation: false
           sdcard-path-or-size: 1024M
           cores: 2
           disable-animations: false
-          heap-size: 1024M
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -no-metrics
           script: |
             trap 'killall -INT crashpad_handler 2>/dev/null || true' EXIT
