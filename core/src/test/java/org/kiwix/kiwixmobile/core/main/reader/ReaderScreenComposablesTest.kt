@@ -346,6 +346,22 @@ class ReaderScreenComposablesTest {
   }
 
   @Test
+  fun readerScreen_backToTopFab_hiddenInTabSwitcher() {
+    renderReaderScreen(createTestState(showBackToTopButton = true, showTabSwitcher = true))
+    composeTestRule
+      .onNodeWithContentDescription(context.getString(R.string.pref_back_to_top))
+      .assertDoesNotExist()
+  }
+
+  @Test
+  fun readerScreen_backToTopFab_hiddenWhenNoBookIsOpen() {
+    renderReaderScreen(createTestState(showBackToTopButton = true, showNoBookOpenInReader = true))
+    composeTestRule
+      .onNodeWithContentDescription(context.getString(R.string.pref_back_to_top))
+      .assertDoesNotExist()
+  }
+
+  @Test
   fun readerScreen_backToTopFab_hiddenWhenShowIsFalse() {
     renderReaderScreen(createTestState(showBackToTopButton = false))
     composeTestRule
