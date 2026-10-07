@@ -75,10 +75,10 @@ jobs:
           target: ${{ matrix.target }}
           arch: ${{ (matrix.api-level >= 30) && 'x86_64' || 'x86' }}
           profile: pixel_2
-          ram-size: 4096M
+          ram-size: 2048M
           force-avd-creation: false
           sdcard-path-or-size: 1024M
-          cores: 4
+          cores: 2
           disable-animations: false
           heap-size: 1024M
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -no-metrics
@@ -93,9 +93,6 @@ jobs:
           target: ${{ matrix.target }}
           arch: ${{ (matrix.api-level >= 30) && 'x86_64' || 'x86' }}
           profile: pixel_2
-          ram-size: 4096M
-          cores: 4
-          gradle-opts: "-Dorg.gradle.internal.http.connectionTimeout=60000 -Dorg.gradle.internal.http.socketTimeout=60000 -Dorg.gradle.internal.network.retry.max.attempts=6 -Dorg.gradle.internal.network.retry.initial.backOff=2000"
           script: bash contrib/instrumentation.sh
 
       - name: Upload screenshot result
@@ -191,10 +188,10 @@ jobs:
           target: ${{ matrix.target }}
           arch: ${{ (matrix.api-level >= 30) && 'x86_64' || 'x86' }}
           profile: pixel_2
-          ram-size: 4096M
+          ram-size: 2048M
           force-avd-creation: false
           sdcard-path-or-size: 1024M
-          cores: 4
+          cores: 2
           disable-animations: false
           heap-size: 1024M
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -no-metrics
@@ -209,9 +206,6 @@ jobs:
           target: ${{ matrix.target }}
           arch: ${{ (matrix.api-level >= 30) && 'x86_64' || 'x86' }}
           profile: pixel_2
-          ram-size: 4096M
-          cores: 4
-          gradle-opts: "-Dorg.gradle.internal.http.connectionTimeout=60000 -Dorg.gradle.internal.http.socketTimeout=60000 -Dorg.gradle.internal.network.retry.max.attempts=6 -Dorg.gradle.internal.network.retry.initial.backOff=2000"
           script: bash contrib/instrumentation-release.sh
 
   automated-tests-branded-apps:
@@ -266,10 +260,10 @@ jobs:
           target: ${{ matrix.target }}
           arch: ${{ (matrix.api-level >= 30) && 'x86_64' || 'x86' }}
           profile: pixel_2
-          ram-size: 4096M
+          ram-size: 2048M
           force-avd-creation: false
           sdcard-path-or-size: 1024M
-          cores: 4
+          cores: 2
           disable-animations: false
           heap-size: 1024M
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -no-metrics
@@ -284,9 +278,6 @@ jobs:
           target: ${{ matrix.target }}
           arch: ${{ (matrix.api-level >= 30) && 'x86_64' || 'x86' }}
           profile: pixel_2
-          ram-size: 4096M
-          cores: 4
-          gradle-opts: "-Dorg.gradle.internal.http.connectionTimeout=60000 -Dorg.gradle.internal.http.socketTimeout=60000 -Dorg.gradle.internal.network.retry.max.attempts=6 -Dorg.gradle.internal.network.retry.initial.backOff=2000"
           script: bash contrib/instrumentation-brandedapps.sh
 
   automated-tests-on-tablet:
@@ -341,10 +332,10 @@ jobs:
           target: ${{ matrix.target }}
           arch: ${{ (matrix.api-level >= 30) && 'x86_64' || 'x86' }}
           profile: pixel_c
-          ram-size: 4096M
+          ram-size: 2048M
           force-avd-creation: false
           sdcard-path-or-size: 1024M
-          cores: 4
+          cores: 2
           disable-animations: false
           heap-size: 1024M
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -no-metrics
@@ -359,9 +350,6 @@ jobs:
           target: ${{ matrix.target }}
           arch: ${{ (matrix.api-level >= 30) && 'x86_64' || 'x86' }}
           profile: pixel_c
-          ram-size: 4096M
-          cores: 4
-          gradle-opts: "-Dorg.gradle.internal.http.connectionTimeout=60000 -Dorg.gradle.internal.http.socketTimeout=60000 -Dorg.gradle.internal.network.retry.max.attempts=6 -Dorg.gradle.internal.network.retry.initial.backOff=2000"
           script: bash contrib/instrumentation-file-opening-on-tablet.sh
 
   code-formatting-job:
