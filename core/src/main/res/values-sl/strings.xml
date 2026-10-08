@@ -194,14 +194,14 @@
   <string name="time_left">preostanka</string>
   <string name="time_today">Danes</string>
   <string name="time_yesterday">Včeraj</string>
-  <string name="pref_external_link_popup_title">Opozori pri vnosu zunanjih povezav</string>
+  <string name="pref_external_link_popup_title" fuzzy="true">Opozori pri vnosu zunanjih povezav</string>
   <string name="pref_external_link_popup_summary">Prikaže pojavno okno, da opozori na dodatne stroške ali da povezave ne delujejo v načinu brez povezave.</string>
-  <string name="external_link_popup_dialog_title">Dostopanje do zunanje povezave!</string>
-  <string name="external_link_popup_dialog_message">Odpirate zunanjo povezavo. To bi lahko povzročilo dodatne stroške prenosa podatkov ali preprosto ne bo delovalo, ko boste brez povezave.\nŽelite nadaljevati?</string>
+  <string name="external_link_popup_dialog_title" fuzzy="true">Dostopanje do zunanje povezave!</string>
+  <string name="external_link_popup_dialog_message" fuzzy="true">Odpirate zunanjo povezavo. To bi lahko povzročilo dodatne stroške prenosa podatkov ali preprosto ne bo delovalo, ko boste brez povezave.\nŽelite nadaljevati?</string>
   <string name="do_not_ask_anymore">Ne sprašuj več</string>
-  <string name="your_languages">Izbrani jeziki:</string>
+  <string name="your_languages" fuzzy="true">Izbrani jeziki:</string>
   <string name="your_language">Izbrani jezik: %s</string>
-  <string name="other_languages">Drugi jeziki:</string>
+  <string name="other_languages" fuzzy="true">Drugi jeziki:</string>
   <string name="downloading">Prenašanje</string>
   <string name="no_items_msg">Na voljo ni noben predmet</string>
   <string name="crash_title">No… To je neprijetno</string>

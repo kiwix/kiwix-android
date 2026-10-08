@@ -166,13 +166,13 @@
   <string name="time_left">aka ekpe</string>
   <string name="time_today">Taa</string>
   <string name="time_yesterday">Ụnyaahụ</string>
-  <string name="pref_external_link_popup_title">Dọọ aka na ntị mgbe ị na-abanye njikọ mpụga</string>
+  <string name="pref_external_link_popup_title" fuzzy="true">Dọọ aka na ntị mgbe ị na-abanye njikọ mpụga</string>
   <string name="pref_external_link_popup_summary">Gosipụta mmapụta iji dọọ aka ná ntị gbasara ụgwọ ndị ọzọ ma ọ bụ anaghị arụ ọrụ na njikọ ndị na-adịghị n’ịntanetị.</string>
-  <string name="external_link_popup_dialog_title">Ịbanye Njikọ Mpụga!</string>
+  <string name="external_link_popup_dialog_title" fuzzy="true">Ịbanye Njikọ Mpụga!</string>
   <string name="external_link_popup_dialog_message" fuzzy="true">Ị na-abanye na njikọ mpụga. Nke a nwere ike iduga na mmefu ego maka nnyefe data ma ọ bụ na ọ gaghị arụ ọrụ mgbe ị nọghi n’ịntanetị. Ị chọrọ ịga n’ihu?</string>
   <string name="do_not_ask_anymore">Ajụkwala ọzọ</string>
-  <string name="your_languages">Asụsụ ndị a họọrọ:</string>
-  <string name="other_languages">Asụsụ ndị ọzọ:</string>
+  <string name="your_languages" fuzzy="true">Asụsụ ndị a họọrọ:</string>
+  <string name="other_languages" fuzzy="true">Asụsụ ndị ọzọ:</string>
   <string name="no_items_msg">Enweghị ihe dị</string>
   <string name="crash_title">Ewo… Nke a bụ ihe ihere</string>
   <string name="crash_description" fuzzy="true">Ọ dị ka anyị dara.\n\nỌ ga-amasị gị inyere anyị aka idozi nsogbu a site na izipu ozi ndị a?</string>

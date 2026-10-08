@@ -126,10 +126,12 @@
   <string name="time_left">سمت چپ</string>
   <string name="time_today">امروز</string>
   <string name="time_yesterday">دیروز</string>
-  <string name="external_link_popup_dialog_title">در حال ورود به پیوند بیرونی!</string>
+  <string name="pref_external_link_popup_title">نمایش هشدار هنگام گشودن پیوندهای بیرونی</string>
+  <string name="external_link_popup_dialog_title">در حال گشودن پیوند بیرونی!</string>
+  <string name="external_link_popup_dialog_message">شما در حال گشودن یک پیوند بیرونی هستید. این کار می‌تواند منجر به هزینه‌های اضافی برای انتقال داده شود یا وقتی آفلاین هستید، کار نکند!\nآیا می‌خواهید ادامه دهید؟</string>
   <string name="do_not_ask_anymore">لطفاً دیگر درخواست نکنید</string>
-  <string name="your_languages">زبان‌های انتخاب‌شده:</string>
-  <string name="other_languages">زبان‌های دیگر:</string>
+  <string name="your_languages" fuzzy="true">زبان‌های انتخاب‌شده:</string>
+  <string name="other_languages" fuzzy="true">زبان‌های دیگر:</string>
   <string name="crash_checkbox_language">تنظیمات زبان شما</string>
   <string name="crash_checkbox_device">جزئیات دستگاه</string>
   <string name="crash_button_confirm">ارسال جزئیات</string>

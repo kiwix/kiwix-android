@@ -82,6 +82,8 @@
   <string name="pref_back_to_top">{{Identical|Back to top}}</string>
   <string name="pref_back_to_top_summary">This is part of the preference settings it informs the user, by enabling this setting it displays a button while reading articles at the end of the page, and by clicking on that button it will scroll the page to the top.</string>
   <string name="pref_language_title">{{Identical|Language}}</string>
+  <string name="user_interface">Title of the User Interface category on the settings screen.</string>
+  <string name="system_language_with_name">* Text shown when the user interface language is set to the system language.\n* %s is replaced by the system language name, e.g. \"English\".</string>
   <string name="pref_language_chooser">{{Identical|Choose language}}</string>
   <string name="pref_credits">This is part of preference settings, by clicking on this text it will show a dialog with the information of contributors who are contributing to this project and also shows the licenses as well.</string>
   <string name="pref_credits_title">{{Identical|Credit}}</string>
@@ -215,8 +217,6 @@
   <string name="go_to_previous_page">* This is used in a content description of the image view.\n* By clicking on this image user navigates to the previously opened page.</string>
   <string name="go_to_next_page">* This is used in a content description of the image view.\n* By clicking on this image user navigates to the next opened page.</string>
   <string name="table_of_contents">* This is used as a content description of the image button.\n* By clicking on this button, a navigation drawer opens that contains a list of contents currently available on the opened page.</string>
-  <string name="user_interface">Title of the User Interface category on the settings screen.</string>
-  <string name="system_language_with_name">* Text shown when the user interface language is set to the system language.\n* %s is replaced by the system language name, e.g. "English".</string>
   <string name="select_language">It is shown as the title of the language selection screen.</string>
   <string name="save_languages">It is the title of the menu item which saves the selected languages.</string>
   <string name="expand">{{Identical|Expand}}</string>

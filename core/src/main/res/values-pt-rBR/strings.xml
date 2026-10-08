@@ -205,14 +205,14 @@
   <string name="time_left">esquerda</string>
   <string name="time_today">Hoje</string>
   <string name="time_yesterday">Ontem</string>
-  <string name="pref_external_link_popup_title">Avisar ao seguir links externos</string>
+  <string name="pref_external_link_popup_title" fuzzy="true">Avisar ao seguir links externos</string>
   <string name="pref_external_link_popup_summary">Exibir pop-up para avisar sobre custos adicionais ou não trabalhar em links off-line.</string>
-  <string name="external_link_popup_dialog_title">Entrar no link externo!</string>
-  <string name="external_link_popup_dialog_message">Você está acessando uma ligação externa. Isso pode levar a custos adicionais para transferência de dados ou não funcionará quando você estiver desconectado. Deseja continuar?</string>
+  <string name="external_link_popup_dialog_title" fuzzy="true">Entrar no link externo!</string>
+  <string name="external_link_popup_dialog_message" fuzzy="true">Você está acessando uma ligação externa. Isso pode levar a custos adicionais para transferência de dados ou não funcionará quando você estiver desconectado. Deseja continuar?</string>
   <string name="do_not_ask_anymore">Não perguntar mais</string>
-  <string name="your_languages">Idiomas selecionados:</string>
+  <string name="your_languages" fuzzy="true">Idiomas selecionados:</string>
   <string name="your_language">Idioma selecionado: %s</string>
-  <string name="other_languages">Outros idiomas:</string>
+  <string name="other_languages" fuzzy="true">Outros idiomas:</string>
   <string name="downloading">Baixando</string>
   <string name="no_items_msg">Nenhum item disponível</string>
   <string name="crash_title">Bem, isso é constrangedor</string>

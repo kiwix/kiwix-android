@@ -159,13 +159,13 @@
   <string name="time_left">osi</string>
   <string name="time_today">Òní</string>
   <string name="time_yesterday">Àná</string>
-  <string name="pref_external_link_popup_title">Kilọ nigba titẹ awọn ọna asopọ ita</string>
+  <string name="pref_external_link_popup_title" fuzzy="true">Kilọ nigba titẹ awọn ọna asopọ ita</string>
   <string name="pref_external_link_popup_summary">Ṣe afihan agbejade lati kilo nipa awọn idiyele afikun tabi ko ṣiṣẹ ni awọn ọna asopọ aisinipo.</string>
-  <string name="external_link_popup_dialog_title">Nwọle Ọna asopọ Ita!</string>
+  <string name="external_link_popup_dialog_title" fuzzy="true">Nwọle Ọna asopọ Ita!</string>
   <string name="external_link_popup_dialog_message" fuzzy="true">O n wọle si ọna asopọ ita. Eyi le ja si awọn idiyele afikun fun gbigbe data tabi kii yoo ṣiṣẹ nigbati o ba wa ni offline. Ṣe o fẹ tẹsiwaju bi?</string>
   <string name="do_not_ask_anymore">Maṣe beere mọ</string>
-  <string name="your_languages">Yan ede</string>
-  <string name="other_languages">Awọn ede miiran:</string>
+  <string name="your_languages" fuzzy="true">Yan ede</string>
+  <string name="other_languages" fuzzy="true">Awọn ede miiran:</string>
   <string name="no_items_msg">Ko si nkan to wa</string>
   <string name="crash_title">O dara… Eyi jẹ didamu</string>
   <string name="crash_description" fuzzy="true">Ó jọ pé a ṣubú. yor_Latnyor_Latnyor_Latn ni o Ṣé wàá fẹ́ ràn wá lọ́wọ́ láti yanjú ìṣòro yìí nípa rírán àwọn ìsọfúnni tó wà nísàlẹ̀ yìí ránṣẹ́?</string>

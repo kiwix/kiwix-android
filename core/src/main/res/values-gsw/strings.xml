@@ -119,8 +119,8 @@
   <string name="time_today">Hüt</string>
   <string name="time_yesterday">Geschter</string>
   <string name="do_not_ask_anymore">Nümme fraagä</string>
-  <string name="your_languages">Uusgwählti Spraachä:</string>
-  <string name="other_languages">Angeri Spraachä:</string>
+  <string name="your_languages" fuzzy="true">Uusgwählti Spraachä:</string>
+  <string name="other_languages" fuzzy="true">Angeri Spraachä:</string>
   <string name="no_items_msg">Kei Objäkt verfüegbar</string>
   <string name="crash_description" fuzzy="true">Es gseht uus aus wäre mer abgschtürzt.\n\nWürdet Dir üs hälfe bim Behebä vo däm Problem, indäm Dir üs die folgendä Informationä würdet schickä?</string>
   <string name="crash_checkbox_language">Öiri Spraachyystellige</string>

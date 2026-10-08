@@ -190,14 +190,14 @@
   <string name="time_left">jäljellä</string>
   <string name="time_today">Tänään</string>
   <string name="time_yesterday">Eilen</string>
-  <string name="pref_external_link_popup_title">Varo lisätessä ulkoisia linkkejä</string>
+  <string name="pref_external_link_popup_title" fuzzy="true">Varo lisätessä ulkoisia linkkejä</string>
   <string name="pref_external_link_popup_summary">Näytä ponnahdusikkuna, joka varoittaa lisäkustannuksista tai toimimattomuudesta offline-linkeissä.</string>
-  <string name="external_link_popup_dialog_title">Ulkoisen linkin syöttäminen!</string>
-  <string name="external_link_popup_dialog_message">Olet syöttämässä ulkoista linkkiä. Tämä voi johtaa lisäkustannuksiin tiedonsiirrossa tai se ei yksinkertaisesti toimi offline-tilassa. Haluatko jatkaa?</string>
+  <string name="external_link_popup_dialog_title" fuzzy="true">Ulkoisen linkin syöttäminen!</string>
+  <string name="external_link_popup_dialog_message" fuzzy="true">Olet syöttämässä ulkoista linkkiä. Tämä voi johtaa lisäkustannuksiin tiedonsiirrossa tai se ei yksinkertaisesti toimi offline-tilassa. Haluatko jatkaa?</string>
   <string name="do_not_ask_anymore">Älä kysy enää</string>
-  <string name="your_languages">Valitut kielet:</string>
+  <string name="your_languages" fuzzy="true">Valitut kielet:</string>
   <string name="your_language">Valittu kieli: %s</string>
-  <string name="other_languages">Muut kielet:</string>
+  <string name="other_languages" fuzzy="true">Muut kielet:</string>
   <string name="downloading">Ladataan</string>
   <string name="no_items_msg">Ei kohteita saatavilla</string>
   <string name="crash_title">Jaha… Tämä on noloa</string>

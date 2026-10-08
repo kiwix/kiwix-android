@@ -151,13 +151,13 @@
   <string name="time_left">çep</string>
   <string name="time_today">Ewro</string>
   <string name="time_yesterday">Vızêr</string>
-  <string name="pref_external_link_popup_title">Gırey teberi cıkerdış de iqaz bıde</string>
+  <string name="pref_external_link_popup_title" fuzzy="true">Gırey teberi cıkerdış de iqaz bıde</string>
   <string name="pref_external_link_popup_summary">Ekstra ucret ya zi gırey offline nêgureyê se akerde teqa mocnayışiya iqaz bıdê.</string>
-  <string name="external_link_popup_dialog_title">Gıreyê teberi beno cı!</string>
+  <string name="external_link_popup_dialog_title" fuzzy="true">Gıreyê teberi beno cı!</string>
   <string name="external_link_popup_dialog_message" fuzzy="true">Şımayê kenê ke şırê gırey teberi. No seba transferê ekstra ucreta tabiyo yana weziyetê offline de nêgureniyeno. Şıma qayılê dewam bıkerê?</string>
   <string name="do_not_ask_anymore">Endi meperse</string>
-  <string name="your_languages">Weçinaye zıwan :</string>
-  <string name="other_languages">Zıwano bin:</string>
+  <string name="your_languages" fuzzy="true">Weçinaye zıwan :</string>
+  <string name="other_languages" fuzzy="true">Zıwano bin:</string>
   <string name="no_items_msg">Karneyaye obce çıniyo</string>
   <string name="crash_title">Ey… No teneyê ariyeya</string>
   <string name="crash_description" fuzzy="true">Ze ke ma kewte.\n\nMelumatê cêri rışiyayışa nê problemi baş kerdışi rê şenê peşti bıdê?</string>

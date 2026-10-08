@@ -73,6 +73,7 @@
   <string name="server_failed_toast_message">Impossible de démarrer le serveur.</string>
   <string name="server_started_successfully_toast_message">Serveur démarré avec succès.</string>
   <string name="server_stopped_successfully_toast_message">Serveur arrêté avec succès.</string>
+  <string name="server_stopped_all_books_deleted_toast_message">Le serveur a été arrêté car tous les livres hébergés ont été supprimés.</string>
   <string name="hotspot_turned_on">Point d’accès Wifi activé</string>
   <string name="hotspot_details_message">Voici les détails de votre point d’accès Wifi local.\nSSID : %1$s\nMot de passe : %2$s</string>
   <string name="server_textview_default_message">Sélectionnez les fichiers que vous voulez héberger sur le serveur</string>
@@ -108,6 +109,8 @@
   <string name="pref_back_to_top">Retour en haut</string>
   <string name="pref_back_to_top_summary">Afficher un bouton en bas de la page pour revenir en haut</string>
   <string name="pref_language_title">Langue</string>
+  <string name="user_interface">Interface utilisateur</string>
+  <string name="system_language_with_name">Langue du système ( %s )</string>
   <string name="pref_language_chooser">Choisissez une langue</string>
   <string name="pref_credits">Contributeurs et licences</string>
   <string name="pref_credits_title">Remerciements</string>
@@ -152,6 +155,9 @@
   <string name="rate_dialog_positive">Donnez nous une note !</string>
   <string name="no_thanks">Non merci</string>
   <string name="rate_dialog_neutral">Plus tard</string>
+  <string name="pref_rate_app_title">Évaluez %s</string>
+  <string name="pref_rate_app_summary">Notez %s sur le Play Store</string>
+  <string name="pref_rating_category_title">Évaluation de l\'application</string>
   <string name="open">Ouvrir</string>
   <string name="bookmark_removed">Marque-page supprimé</string>
   <string name="pref_newtab_background_title">Ouvrir un nouvel onglet en arrière-plan</string>
@@ -196,6 +202,14 @@
   <string name="delete_zim_failed">Désolé, nous n’avons pas pu supprimer certains fichiers. Vous devriez essayer d’utiliser un gestionnaire de fichiers à la place.</string>
   <string name="tts_pause">pause</string>
   <string name="tts_resume">reprendre</string>
+  <string name="tts_increase_speed">Accélérer</string>
+  <string name="tts_decrease_speed">Diminuer la vitesse</string>
+  <string name="tts_normal_speed">Normal(e)</string>
+  <string name="tts_speech_speed">Vitesse de parole</string>
+  <string name="tts_rewind_10_seconds">Revenir en arrière de 10 secondes</string>
+  <string name="tts_forward_10_seconds">Avancer de 10 secondes</string>
+  <string name="tts_select_voice">Choisir la voix</string>
+  <string name="tts_controls">Commandes TTS</string>
   <string name="stop">arrêter</string>
   <string name="notification_pause_button_text">Pause</string>
   <string name="notification_resume_button_text">Reprendre</string>
@@ -221,14 +235,17 @@
   <string name="time_left">restant(e)(s)</string>
   <string name="time_today">Aujourd’hui</string>
   <string name="time_yesterday">Hier</string>
-  <string name="pref_external_link_popup_title">Avertir lors de l’accès à des liens externes</string>
+  <string name="pref_external_link_popup_title" fuzzy="true">Avertir lors de l’accès à des liens externes</string>
   <string name="pref_external_link_popup_summary">Afficher un dialogue pour avertir à propos de coûts supplémentaires ou de liens ne fonctionnant pas hors connexion.</string>
-  <string name="external_link_popup_dialog_title">Vous accédez à un lien externe !</string>
-  <string name="external_link_popup_dialog_message">Vous accédez à un lien externe. Cela peut engendrer des coûts supplémentaires pour le transfert de données ou ne fonctionnera tout simplement pas si vous êtes hors ligne. Voulez-vous continuer ?</string>
+  <string name="external_link_popup_dialog_title" fuzzy="true">Vous accédez à un lien externe !</string>
+  <string name="external_link_popup_dialog_message" fuzzy="true">Vous accédez à un lien externe. Cela peut engendrer des coûts supplémentaires pour le transfert de données ou ne fonctionnera tout simplement pas si vous êtes hors ligne. Voulez-vous continuer ?</string>
   <string name="do_not_ask_anymore">Ne plus demander</string>
-  <string name="your_languages">Langues sélectionnées :</string>
+  <string name="your_languages">Langues sélectionnées</string>
   <string name="your_language">Langue sélectionnée : %s</string>
   <string name="other_languages">Autres langues :</string>
+  <string name="move_up">Remonter</string>
+  <string name="move_down">Descendre</string>
+  <string name="reorder_language">Réorganiser la langue</string>
   <string name="downloading">Téléchargement</string>
   <string name="no_items_msg">Aucun élément disponible</string>
   <string name="crash_title">Eh bien… c’est embarrassant</string>
@@ -275,6 +292,7 @@
   <string name="running_state">En cours</string>
   <string name="complete">Terminé</string>
   <string name="paused_state">En pause</string>
+  <string name="paused_offline_state">En pause (appareil hors ligne)</string>
   <string name="failed_state">Échec : %s</string>
   <string name="custom_download_error_message_for_authentication_failed">Le fichier ZIM n’a pas pu être téléchargé, veuillez essayer de réinstaller l’application depuis le Play Store.</string>
   <string name="save">Enregistrer</string>
@@ -298,6 +316,9 @@
   <string name="ext_storage_permission_not_granted">Erreur : permissions de stockage non accordées</string>
   <string name="notes_deletion_successful">Dossier de notes entièrement supprimé</string>
   <string name="notes_deletion_unsuccessful">Certains fichiers n’ont pas été supprimés</string>
+  <plurals name="book_count">
+    <item quantity="other">un= %d livre</item>
+  </plurals>
   <string name="books_count">%d livre(s)</string>
   <string name="discovery_initiated">Découverte mise en place</string>
   <string name="discovery_failed">La découverte a échoué</string>
@@ -393,7 +414,7 @@
   <string name="swipe_down_for_library">Faites glisser vers le bas pour la bibliothèque</string>
   <string name="reaching_remote_library">Accéder à la bibliothèque en ligne</string>
   <string name="parsing_remote_library">Analyse de la bibliothèque en ligne</string>
-  <string name="starting_downloading_remote_library" fuzzy="true">Démarrage du téléchargement de la bibliothèque en ligne</string>
+  <string name="starting_downloading_remote_library">Téléchargement de la bibliothèque en ligne</string>
   <string name="no_notes">Aucune note</string>
   <string name="notes_from_all_books">Afficher les notes de tous les livres</string>
   <string name="search_notes">Rechercher des notes</string>
@@ -414,6 +435,7 @@
   <string name="navigation_history_cleared">Historique de navigation effacé</string>
   <string name="go_to_settings_label">Aller dans les paramètres</string>
   <string name="request_notification_permission_message">Pour effectuer cette action, veuillez accorder l’accès aux notifications</string>
+  <string name="notification_permission_denied_download_info">L\'autorisation de notification a été refusée ; les téléchargements se poursuivront donc en arrière-plan sans notification de progression. Vous pourrez accorder cette autorisation ultérieurement dans les Paramètres pour suivre la progression des téléchargements.</string>
   <string name="click_nearby_devices_message">Cliquez ici pour rechercher des appareils à proximité</string>
   <string name="your_device_name_message">Le nom de votre appareil apparaîtra ici.</string>
   <string name="nearby_devices_list_message">Vous trouverez ici une liste des appareils à proximité. Appuyez sur le nom d’un appareil pour lancer le transfert de fichiers.</string>
