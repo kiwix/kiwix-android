@@ -174,9 +174,7 @@ private fun CategoryHeaderText(modifier: Modifier, item: HeaderItem) {
     },
     modifier = modifier
       .padding(horizontal = ComposeDimens.SIXTEEN_DP, vertical = ComposeDimens.EIGHT_DP),
-    fontSize = ComposeDimens.FOURTEEN_SP,
-    style = MaterialTheme.typography.headlineMedium,
-    color = MaterialTheme.colorScheme.onSurfaceVariant
+    style = MaterialTheme.typography.titleSmall
   )
 }
 
