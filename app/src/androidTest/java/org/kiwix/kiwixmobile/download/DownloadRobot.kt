@@ -23,7 +23,6 @@ import androidx.compose.ui.test.ComposeTimeoutException
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertTextContains
 import androidx.compose.ui.test.assertTextEquals
-import androidx.compose.ui.test.isDisplayed
 import androidx.compose.ui.test.junit4.ComposeContentTestRule
 import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onFirst
@@ -48,6 +47,8 @@ import org.kiwix.kiwixmobile.nav.destination.library.local.NO_FILE_TEXT_TESTING_
 import org.kiwix.kiwixmobile.nav.destination.library.online.DOWNLOADING_PAUSE_BUTTON_TESTING_TAG
 import org.kiwix.kiwixmobile.nav.destination.library.online.DOWNLOADING_STATE_TEXT_TESTING_TAG
 import org.kiwix.kiwixmobile.nav.destination.library.online.DOWNLOADING_STOP_BUTTON_TESTING_TAG
+import org.kiwix.kiwixmobile.nav.destination.library.online.LANGUAGE_TABS_ROW_TESTING_TAG
+import org.kiwix.kiwixmobile.nav.destination.library.online.LANGUAGE_TAB_TESTING_TAG_PREFIX
 import org.kiwix.kiwixmobile.nav.destination.library.online.NO_CONTENT_VIEW_TEXT_TESTING_TAG
 import org.kiwix.kiwixmobile.nav.destination.library.online.ONLINE_BOOK_ITEM_TESTING_TAG
 import org.kiwix.kiwixmobile.nav.destination.library.online.ONLINE_DIVIDER_ITEM_TEXT_TESTING_TAG
@@ -55,7 +56,6 @@ import org.kiwix.kiwixmobile.nav.destination.library.online.ONLINE_LIBRARY_SEARC
 import org.kiwix.kiwixmobile.nav.destination.library.online.ONLINE_LIBRARY_SEARCH_VIEW_TESTING_TAG
 import org.kiwix.kiwixmobile.nav.destination.library.online.SHOW_FETCHING_LIBRARY_LAYOUT_TESTING_TAG
 import org.kiwix.kiwixmobile.testutils.TestUtils
-import org.kiwix.kiwixmobile.testutils.TestUtils.FIVE_SECOND_DELAY
 import org.kiwix.kiwixmobile.testutils.TestUtils.refresh
 import org.kiwix.kiwixmobile.testutils.TestUtils.testFlakyView
 import org.kiwix.kiwixmobile.testutils.TestUtils.waitUntilDisplayedWithScrollNudge
@@ -119,13 +119,31 @@ class DownloadRobot : BaseRobot() {
     composeTestRule: ComposeContentTestRule,
     language: String
   ) {
-    composeTestRule.apply {
-      waitUntil(FIVE_SECOND_DELAY) {
-        onNodeWithTag(ONLINE_DIVIDER_ITEM_TEXT_TESTING_TAG).isDisplayed()
+    testFlakyView({
+      composeTestRule.apply {
+        waitUntil(TestUtils.TEST_PAUSE_MS_FOR_DOWNLOAD_TEST) {
+          val hasTabs =
+            onAllNodesWithTag(LANGUAGE_TABS_ROW_TESTING_TAG).fetchSemanticsNodes().isNotEmpty()
+          val hasDividers =
+            onAllNodesWithTag(ONLINE_DIVIDER_ITEM_TEXT_TESTING_TAG).fetchSemanticsNodes().isNotEmpty()
+          val hasBooks =
+            onAllNodesWithTag(ONLINE_BOOK_ITEM_TESTING_TAG).fetchSemanticsNodes().isNotEmpty()
+          hasTabs || hasDividers || hasBooks
+        }
+        if (onAllNodesWithTag(LANGUAGE_TABS_ROW_TESTING_TAG).fetchSemanticsNodes().isNotEmpty()) {
+          onNodeWithTag("$LANGUAGE_TAB_TESTING_TAG_PREFIX${language.uppercase()}")
+            .assertExists()
+        } else if (onAllNodesWithTag(ONLINE_DIVIDER_ITEM_TEXT_TESTING_TAG).fetchSemanticsNodes().isNotEmpty()) {
+          onAllNodesWithTag(ONLINE_DIVIDER_ITEM_TEXT_TESTING_TAG)
+            .onFirst()
+            .assertTextContains(language, substring = true)
+        } else {
+          onAllNodesWithTag(ONLINE_BOOK_ITEM_TESTING_TAG)
+            .onFirst()
+            .assertIsDisplayed()
+        }
       }
-      onNodeWithTag(ONLINE_DIVIDER_ITEM_TEXT_TESTING_TAG)
-        .assertTextContains(language, substring = true)
-    }
+    })
   }
 
   private fun refreshOnlineListIfSwipeDownForLibraryTextVisible(composeTestRule: ComposeContentTestRule) {

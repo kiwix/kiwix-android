@@ -54,11 +54,9 @@ import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.convertToLocal
 import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.isNetworkAvailable
 import org.kiwix.kiwixmobile.core.dao.DownloadRoomDao
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookOnDisk
-import org.kiwix.kiwixmobile.core.data.remote.KiwixService.Companion.ITEMS_PER_PAGE
 import org.kiwix.kiwixmobile.core.di.IoDispatcher
 import org.kiwix.kiwixmobile.core.downloader.Downloader
 import org.kiwix.kiwixmobile.core.entity.LibkiwixBook
-import org.kiwix.kiwixmobile.core.ui.components.ONE
 import org.kiwix.kiwixmobile.core.utils.BookUtils
 import org.kiwix.kiwixmobile.core.utils.EXTERNAL_SELECT_POSITION
 import org.kiwix.kiwixmobile.core.utils.INTERNAL_SELECT_POSITION
@@ -93,6 +91,8 @@ import org.kiwix.kiwixmobile.nav.destination.library.online.helper.ResolveRefres
 import org.kiwix.kiwixmobile.nav.destination.library.online.helper.ResolveRefreshLibraryAction.Result.NoInternetWithEmptyContent
 import org.kiwix.kiwixmobile.nav.destination.library.online.helper.ResolveRefreshLibraryAction.Result.Proceed
 import org.kiwix.kiwixmobile.nav.destination.library.online.helper.ResolveRefreshLibraryAction.Result.WifiOnlyBlocked
+import org.kiwix.kiwixmobile.nav.destination.library.online.usecase.OnlineLibraryTabsUseCase
+import org.kiwix.kiwixmobile.nav.destination.library.online.usecase.OnlineLibraryTabsUseCase.TabSelectedResult
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.OnlineLibraryViewModel.OnlineLibraryState.Idle
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.OnlineLibraryViewModel.OnlineLibraryState.Loading
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.OnlineLibraryViewModel.OnlineLibraryState.NoInternetConnection
@@ -112,6 +112,7 @@ import org.kiwix.kiwixmobile.zimManager.libraryView.LibraryListItem
 import org.kiwix.kiwixmobile.zimManager.libraryView.LibraryListItem.BookItem
 import org.kiwix.kiwixmobile.zimManager.libraryView.LibraryListItem.LibraryDownloadItem
 import org.kiwix.libkiwix.Book
+import java.util.concurrent.ConcurrentHashMap
 import javax.inject.Inject
 import javax.inject.Provider
 import kotlin.time.Duration.Companion.milliseconds
@@ -120,7 +121,7 @@ import kotlin.time.Duration.Companion.milliseconds
  * ViewModel for the OnlineLibraryRoute composable.
  * Holds dependencies and business logic, emitting UI events for the composable to handle.
  */
-@Suppress("LongParameterList")
+@Suppress("LongParameterList", "LargeClass")
 @HiltViewModel
 class OnlineLibraryViewModel @Inject constructor(
   private val downloaderProvider: Provider<Downloader>,
@@ -139,6 +140,7 @@ class OnlineLibraryViewModel @Inject constructor(
   private val refreshLibraryAction: ResolveRefreshLibraryAction,
   private val observeNetworkState: ObserveNetworkState,
   private val storageDeviceProvider: StorageDeviceProvider,
+  private val onlineLibraryTabsUseCase: OnlineLibraryTabsUseCase,
   @param:IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : ViewModel() {
   data class OnlineLibraryRequest(
@@ -170,6 +172,19 @@ class OnlineLibraryViewModel @Inject constructor(
     data class Parsing(val isLoadMore: Boolean) : OnlineLibraryState()
   }
 
+  data class LanguageTab(
+    val languageCode: String? = null,
+    val displayName: String = ""
+  )
+
+  data class TabData(
+    val books: List<LibkiwixBook> = emptyList(),
+    val totalPages: Int = ZERO,
+    val currentPage: Int = ZERO,
+    val isLoadingMore: Boolean = false,
+    val isLoaded: Boolean = false
+  )
+
   data class OnlineLibraryUiState(
     val items: List<LibraryListItem> = emptyList(),
     val isRefreshing: Boolean = false,
@@ -181,7 +196,9 @@ class OnlineLibraryViewModel @Inject constructor(
     val noContentMessage: String = "",
     val showNoContent: Boolean = false,
     val showStorageSelectDialog: Boolean = false,
-    val showCategoryDialog: Boolean = false
+    val showCategoryDialog: Boolean = false,
+    val tabs: List<LanguageTab> = emptyList(),
+    val selectedTabIndex: Int = 0
   )
 
   /**
@@ -281,6 +298,9 @@ class OnlineLibraryViewModel @Inject constructor(
     }
   }
 
+  private fun getString(resId: Int, vararg args: Any): String =
+    context.getString(resId, *args)
+
   private suspend fun getDisplayLanguage(languageCode: String): String {
     val mappedLocale = bookUtils.localeMap[languageCode] ?: languageCode.convertToLocal()
     return mappedLocale.getDisplayLanguage(LocaleHelper.getAppLocale(context, kiwixDataStore))
@@ -322,18 +342,98 @@ class OnlineLibraryViewModel @Inject constructor(
       else -> ""
     }
 
+  internal data class FiltersInput(
+    val category: String,
+    val language: String,
+    val searchQuery: String
+  )
+
+  internal val tabDataMap: ConcurrentHashMap<String, TabData>
+    get() = onlineLibraryTabsUseCase.tabDataMap
+
+  internal suspend fun createTabs(languageString: String): List<LanguageTab> =
+    onlineLibraryTabsUseCase.createTabs(languageString)
+
   @OptIn(FlowPreview::class)
   @Suppress("MagicNumber")
   private fun observeFilters() =
     combine(
       kiwixDataStore.selectedOnlineContentCategory,
       kiwixDataStore.selectedOnlineContentLanguage,
-      uiState.map { it.searchQuery }.distinctUntilChanged().debounce(500.milliseconds)
-    ) { category, language, searchQuery ->
-      OnlineLibraryRequest(searchQuery, category, language, false, ZERO)
-    }.onEach { updateOnlineLibraryFilters(it) }
+      uiState.map { it.searchQuery }.distinctUntilChanged().debounce(500.milliseconds),
+      kiwixDataStore.prefLanguage
+    ) { category, language, searchQuery, _ ->
+      FiltersInput(category, language, searchQuery)
+    }
+      .onEach { handleFiltersChanged(it) }
       .flowOn(ioDispatcher)
       .launchIn(viewModelScope)
+
+  internal suspend fun handleFiltersChanged(input: FiltersInput) {
+    val result = onlineLibraryTabsUseCase.handleFiltersChanged(
+      category = input.category,
+      language = input.language,
+      searchQuery = input.searchQuery,
+      currentTabs = uiState.value.tabs,
+      currentSelectedTabIndex = uiState.value.selectedTabIndex,
+      currentRequest = currentRequest
+    )
+    _uiState.update { current ->
+      current.copy(
+        tabs = result.tabs,
+        selectedTabIndex = result.selectedTabIndex
+      )
+    }
+    result.newRequest?.let {
+      updateOnlineLibraryFilters(it)
+    }
+  }
+
+  fun selectTab(index: Int) {
+    if (index !in uiState.value.tabs.indices) return
+    if (index == uiState.value.selectedTabIndex) return
+    _uiState.update { it.copy(selectedTabIndex = index) }
+    when (
+      val result = onlineLibraryTabsUseCase.selectTab(
+        index = index,
+        tabs = uiState.value.tabs,
+        currentRequest = currentRequest
+      )
+    ) {
+      is TabSelectedResult.FromCache -> {
+        val tab = uiState.value.tabs[index]
+        currentRequest = currentRequest.copy(
+          lang = tab.languageCode,
+          page = result.currentPage,
+          isLoadMoreItem = false
+        )
+        totalPages = result.totalPages
+        networkBooks.value = result.books
+        _uiState.update {
+          it.copy(
+            isLoadingMore = result.isLoadingMore,
+            showNoContent = result.books.isEmpty() && !it.showScanningProgressBar,
+            noContentMessage = if (result.books.isEmpty()) {
+              noContentMessageWhenItemsComesFromOnlineSource(emptyList())
+            } else {
+              ""
+            }
+          )
+        }
+        if (result.books.isEmpty()) {
+          updateLibraryItems(emptyList())
+        }
+      }
+
+      is TabSelectedResult.FetchNeeded -> {
+        networkBooks.value = emptyList()
+        updateLibraryItems(emptyList())
+        updateOnlineLibraryFilters(result.newRequest)
+      }
+
+      null -> Unit
+    }
+  }
 
   internal fun updateOnlineLibraryFilters(newRequest: OnlineLibraryRequest) {
     currentRequest = currentRequest.copy(
@@ -360,7 +460,7 @@ class OnlineLibraryViewModel @Inject constructor(
       ObserveNetworkState.Result.ShowWifiOnlyMessage -> {
         _uiState.update {
           it.copy(
-            noContentMessage = context.getString(R.string.swipe_down_for_library),
+            noContentMessage = getString(R.string.swipe_down_for_library),
             showNoContent = true,
             showScanningProgressBar = false
           )
@@ -371,7 +471,7 @@ class OnlineLibraryViewModel @Inject constructor(
         if (uiState.value.items.isEmpty()) {
           _uiState.update {
             it.copy(
-              noContentMessage = context.getString(R.string.no_network_connection),
+              noContentMessage = getString(R.string.no_network_connection),
               showNoContent = true,
               isRefreshing = false,
               showScanningProgressBar = false
@@ -391,7 +491,7 @@ class OnlineLibraryViewModel @Inject constructor(
           _uiState.update {
             it.copy(
               showScanningProgressBar = true,
-              scanningProgressBarMessage = context.getString(R.string.reaching_remote_library),
+              scanningProgressBarMessage = getString(R.string.reaching_remote_library),
               noContentMessage = "",
               showNoContent = false,
               isRefreshing = false
@@ -447,23 +547,7 @@ class OnlineLibraryViewModel @Inject constructor(
         R.string.parsing_remote_library
       )
 
-      is Success -> {
-        val currentBooks = networkBooks.value
-        totalPages = state.totalPages
-        val request = state.request
-        val newBooks = when {
-          request.isLoadMoreItem -> currentBooks + state.books
-          else -> state.books
-        }
-        networkBooks.emit(newBooks)
-        if (!request.isLoadMoreItem && newBooks.isNotEmpty()) {
-          sendUiEvent(UiEvent.ScrollToTop)
-        }
-        resetDownloadState()
-        if (newBooks.isEmpty()) {
-          updateLibraryItems(emptyList())
-        }
-      }
+      is Success -> handleSuccessState(state)
 
       is OnlineLibraryState.Error -> {
         if (networkBooks.value.isEmpty()) {
@@ -471,6 +555,29 @@ class OnlineLibraryViewModel @Inject constructor(
         }
         resetDownloadState()
       }
+    }
+  }
+
+  private suspend fun handleSuccessState(state: Success) {
+    val currentSelectedTab = uiState.value.tabs.getOrNull(uiState.value.selectedTabIndex)
+    val result = onlineLibraryTabsUseCase.handleSuccessState(
+      state = state,
+      currentSelectedTab = currentSelectedTab,
+      currentBooks = networkBooks.value
+    )
+
+    if (result.isCurrentTab) {
+      totalPages = result.totalPages
+      networkBooks.emit(result.updatedBooks)
+      if (!result.isLoadMore && result.updatedBooks.isNotEmpty()) {
+        sendUiEvent(UiEvent.ScrollToTop)
+      }
+      resetDownloadState()
+      if (result.updatedBooks.isEmpty()) {
+        updateLibraryItems(emptyList())
+      }
+    } else {
+      resetDownloadState()
     }
   }
 
@@ -485,10 +592,10 @@ class OnlineLibraryViewModel @Inject constructor(
         }
       },
       negativeAction = {
-        emitToast(context.getString(R.string.denied_internet_permission_message))
+        emitToast(getString(R.string.denied_internet_permission_message))
         _uiState.update {
           it.copy(
-            noContentMessage = context.getString(R.string.swipe_down_for_library),
+            noContentMessage = getString(R.string.swipe_down_for_library),
             showNoContent = true
           )
         }
@@ -501,7 +608,7 @@ class OnlineLibraryViewModel @Inject constructor(
       it.copy(
         showScanningProgressBar = !isLoadMore,
         isLoadingMore = isLoadMore,
-        scanningProgressBarMessage = context.getString(messageResId),
+        scanningProgressBarMessage = getString(messageResId),
         noContentMessage = ""
       )
     }
@@ -527,8 +634,8 @@ class OnlineLibraryViewModel @Inject constructor(
   private fun emitNoInternetSnackbar() {
     sendUiEvent(
       UiEvent.ShowSnackbar(
-        message = context.getString(R.string.no_network_connection),
-        actionLabel = context.getString(R.string.menu_settings),
+        message = getString(R.string.no_network_connection),
+        actionLabel = getString(R.string.menu_settings),
         actionIntent = Intent(Settings.ACTION_WIFI_SETTINGS)
       )
     )
@@ -541,10 +648,10 @@ class OnlineLibraryViewModel @Inject constructor(
     sendUiEvent(
       ShowNoSpaceSnackbar(
         message = """
-            ${context.getString(R.string.download_no_space)}
-            ${context.getString(R.string.space_available)} $availableSpace
+            ${getString(R.string.download_no_space)}
+            ${getString(R.string.space_available)} $availableSpace
         """.trimIndent(),
-        actionLabel = context.getString(R.string.change_storage),
+        actionLabel = getString(R.string.change_storage),
         onAction = onStorageSelect
       )
     )
@@ -699,6 +806,7 @@ class OnlineLibraryViewModel @Inject constructor(
     viewModelScope.launch {
       when (refreshLibraryAction(uiState.value.items.isNotEmpty())) {
         Proceed -> {
+          onlineLibraryTabsUseCase.clear()
           updateOnlineLibraryFilters(getOnlineLibraryRequest())
           if (isExplicitRefresh) {
             _uiState.update {
@@ -706,7 +814,7 @@ class OnlineLibraryViewModel @Inject constructor(
                 noContentMessage = "",
                 showNoContent = false,
                 showScanningProgressBar = true,
-                scanningProgressBarMessage = context.getString(R.string.reaching_remote_library)
+                scanningProgressBarMessage = getString(R.string.reaching_remote_library)
               )
             }
           }
@@ -716,11 +824,11 @@ class OnlineLibraryViewModel @Inject constructor(
         NoInternetWithEmptyContent -> {
           _uiState.update {
             it.copy(
-              noContentMessage = context.getString(R.string.no_network_connection),
+              noContentMessage = getString(R.string.no_network_connection),
               showNoContent = true,
               isRefreshing = false,
               showScanningProgressBar = false,
-              scanningProgressBarMessage = context.getString(R.string.reaching_remote_library)
+              scanningProgressBarMessage = getString(R.string.reaching_remote_library)
             )
           }
         }
@@ -732,11 +840,13 @@ class OnlineLibraryViewModel @Inject constructor(
 
   private suspend fun getOnlineLibraryRequest(): OnlineLibraryRequest {
     val category =
-      kiwixDataStore.selectedOnlineContentCategory.first().takeUnless { it.isBlank() }
+      kiwixDataStore.selectedOnlineContentCategory.first().takeUnless { it.isBlank() }.orEmpty()
+    val currentTab = uiState.value.tabs.getOrNull(uiState.value.selectedTabIndex)
+    val configuredLanguage = kiwixDataStore.selectedOnlineContentLanguage.first()
     val language =
-      kiwixDataStore.selectedOnlineContentLanguage.first().takeUnless { it.isBlank() }
+      onlineLibraryTabsUseCase.resolveLanguageForRequest(currentTab, configuredLanguage)
     return OnlineLibraryRequest(
-      null,
+      uiState.value.searchQuery.takeIf { it.isNotBlank() }.orEmpty(),
       category,
       language,
       false,
@@ -745,17 +855,16 @@ class OnlineLibraryViewModel @Inject constructor(
   }
 
   fun handleLoadMore(count: Int) {
-    val currentPage = if (count > ZERO) (count - ONE) / ITEMS_PER_PAGE else ZERO
-    val nextPage = currentPage + ONE
-    if (uiState.value.isLoadingMore) return
-    if (nextPage < totalPages) {
-      updateOnlineLibraryFilters(
-        currentRequest.copy(
-          page = nextPage,
-          isLoadMoreItem = true
-        )
-      )
-    }
+    val currentTab = uiState.value.tabs.getOrNull(uiState.value.selectedTabIndex)
+    val nextRequest = onlineLibraryTabsUseCase.handleLoadMore(
+      count = count,
+      currentTab = currentTab,
+      fallbackTotalPages = totalPages,
+      currentRequest = currentRequest,
+      isCurrentlyLoadingMore = uiState.value.isLoadingMore
+    ) ?: return
+    _uiState.update { it.copy(isLoadingMore = true) }
+    updateOnlineLibraryFilters(nextRequest)
   }
 
   fun onSearchQueryChanged(query: String) {
