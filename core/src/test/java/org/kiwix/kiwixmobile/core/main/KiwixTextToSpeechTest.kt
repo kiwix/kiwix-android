@@ -99,6 +99,12 @@ class KiwixTextToSpeechTest {
     field.set(kiwixTts, tts)
   }
 
+  private fun enableSentenceHighlighting() {
+    val field = KiwixTextToSpeech::class.java.getDeclaredField("isSentenceHighlightingEnabled")
+    field.isAccessible = true
+    field.setBoolean(kiwixTts, true)
+  }
+
   private fun grantAudioFocus() {
     every {
       audioManager.requestAudioFocus(any<AudioFocusRequest>())
@@ -311,8 +317,66 @@ class KiwixTextToSpeechTest {
     kiwixTts.readAloud(setupReadAloudForSuccess()) {
     }
     verify {
-      webView.loadUrl(match { it.contains("body = document.getElementsByTagName") })
+      webView.loadUrl(match { it.contains("tts.speakAloudSentences(JSON.stringify(sentences));") })
     }
+  }
+
+  @Test
+  fun `readAloud wraps the sentences and exposes the highlighting API to the page`() {
+    injectMockTts()
+    grantAudioFocus()
+    kiwixTts.readAloud(setupReadAloudForSuccess()) {
+    }
+    verify {
+      webView.loadUrl(
+        match { it.contains("data-kiwix-tts-index") && it.contains("window.__kiwixTts") }
+      )
+    }
+  }
+
+  @Test
+  fun `task highlights the sentence which is currently spoken`() {
+    injectMockTts()
+    grantAudioFocus()
+    kiwixTts.readAloud(setupReadAloudForSuccess()) {
+    }
+    enableSentenceHighlighting()
+    val task = kiwixTts.TTSTask(listOf("Hello", "World"))
+    task.start()
+    val listenerSlot = slot<UtteranceProgressListener>()
+    verify { tts.setOnUtteranceProgressListener(capture(listenerSlot)) }
+    verify { tts.speak(eq("Hello"), any(), any(), eq("kiwixTtsUtterance-0")) }
+    val runnableSlot = slot<Runnable>()
+    every { webView.post(capture(runnableSlot)) } returns true
+    listenerSlot.captured.onStart("kiwixTtsUtterance-0")
+    verify { webView.post(any()) }
+    runnableSlot.captured.run()
+    verify {
+      webView.evaluateJavascript(match { it.contains("highlight(0)") }, null)
+    }
+  }
+
+  @Test
+  fun `highlight is sent to the playback webView even when another tab calls initWebView`() {
+    injectMockTts()
+    grantAudioFocus()
+    val otherWebView: WebView = mockk(relaxed = true)
+    kiwixTts.readAloud(setupReadAloudForSuccess()) {
+    }
+    kiwixTts.initWebView(otherWebView)
+    enableSentenceHighlighting()
+    val task = kiwixTts.TTSTask(listOf("Hello", "World"))
+    task.start()
+    val listenerSlot = slot<UtteranceProgressListener>()
+    verify { tts.setOnUtteranceProgressListener(capture(listenerSlot)) }
+    val runnableSlot = slot<Runnable>()
+    every { webView.post(capture(runnableSlot)) } returns true
+    listenerSlot.captured.onStart("kiwixTtsUtterance-0")
+    runnableSlot.captured.run()
+    verify {
+      webView.evaluateJavascript(match { it.contains("highlight(0)") }, null)
+    }
+    verify(exactly = 0) { otherWebView.post(any()) }
   }
 
   @Test
@@ -395,6 +459,7 @@ class KiwixTextToSpeechTest {
 
     val pieces = listOf("Hello")
     val task = kiwixTts.TTSTask(pieces)
+    kiwixTts.currentTTSTask = task
 
     task.start()
 
@@ -404,6 +469,9 @@ class KiwixTextToSpeechTest {
 
     assertThat(ShadowToast.getTextOfLatestToast())
       .isEqualTo(context.getString(R.string.texttospeech_error))
+    verify { tts.stop() }
+    verify { speakingListener.onSpeakingEnded() }
+    assertThat(kiwixTts.currentTTSTask).isNull()
   }
 
   @Test
