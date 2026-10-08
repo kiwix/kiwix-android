@@ -238,7 +238,10 @@ class ZimFileReader(
       )
     }.getOrDefault(emptyList())
 
-  fun getPageUrlFrom(title: String): String? =
+  /**
+   * Returns the entry path for given title from the ZIM archive. E.g. A/MainPage.
+   */
+  fun getPageEntryPathFromTitle(title: String): String? =
     try {
       jniKiwixReader.getEntryByTitle(title).path
     } catch (exception: Exception) {
@@ -246,7 +249,10 @@ class ZimFileReader(
       null
     }
 
-  fun getRandomPageUrl(): String? =
+  /**
+   * Returns the random entry path from the ZIM archive. E.g. A/Random_Article.
+   */
+  fun getRandomEntryPath(): String? =
     try {
       jniKiwixReader.randomEntry.path
     } catch (exception: Exception) {

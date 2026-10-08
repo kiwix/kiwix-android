@@ -182,8 +182,8 @@ class ZimReaderContainerTest {
     assertEquals(0L, container.fileSize)
     assertEquals("", container.getRedirect("anything"))
     assertFalse(container.isRedirect("anything"))
-    assertNull(container.getPageUrlFromTitle("anything"))
-    assertNull(container.getRandomPageUrl())
+    assertNull(container.getPageEntryPathFromTitle("anything"))
+    assertNull(container.getRandomEntryPath())
 
     // Load reader
     container.setZimReaderSource(ZimReaderSource(testZimFile))
@@ -200,7 +200,7 @@ class ZimReaderContainerTest {
       .getItem(true)
       .title
 
-    val url = container.getPageUrlFromTitle(title)
+    val url = container.getPageEntryPathFromTitle(title)
     assertNotNull(url)
     assertTrue(url!!.isNotBlank())
 
@@ -208,14 +208,14 @@ class ZimReaderContainerTest {
       .jniKiwixReader.mainEntry
       .getItem(true)
       .title
-    val result = container.getPageUrlFromTitle(mainEntryTitle)
+    val result = container.getPageEntryPathFromTitle(mainEntryTitle)
     assertNotNull(result)
     assertTrue(result!!.isNotBlank())
 
-    assertNull(container.getPageUrlFromTitle("Nonexistent_Title_12345"))
+    assertNull(container.getPageEntryPathFromTitle("Nonexistent_Title_12345"))
 
     // Random Page
-    assertNotNull(container.getRandomPageUrl())
+    assertNotNull(container.getRandomEntryPath())
 
     // Metadata
     container.setZimReaderSource(ZimReaderSource(testZimFile))

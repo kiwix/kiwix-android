@@ -56,9 +56,9 @@ class ZimReaderContainer @Inject constructor(
     }
   }
 
-  fun getPageUrlFromTitle(title: String) = zimFileReader?.getPageUrlFrom(title)
+  fun getPageEntryPathFromTitle(title: String) = zimFileReader?.getPageEntryPathFromTitle(title)
 
-  fun getRandomPageUrl() = zimFileReader?.getRandomPageUrl()
+  fun getRandomEntryPath() = zimFileReader?.getRandomEntryPath()
   fun isRedirect(url: String): Boolean = zimFileReader?.isRedirect(url) == true
   fun getRedirect(url: String): String = zimFileReader?.getRedirect(url).orEmpty()
   fun load(url: String, requestHeaders: Map<String, String>): WebResourceResponse = runBlocking {

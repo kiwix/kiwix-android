@@ -49,7 +49,7 @@ class ReaderPageManager @Inject constructor(
   }
 
   sealed interface GetRandomPageResult {
-    data class Success(val pageUrl: String) : GetRandomPageResult
+    data class Success(val entryPath: String) : GetRandomPageResult
     data object NoZimFileLoaded : GetRandomPageResult
     data object FailedAfterRetries : GetRandomPageResult
   }
@@ -86,7 +86,7 @@ class ReaderPageManager @Inject constructor(
           continuation.resume(Result.success(CreatePdfResult.Success(file)))
         },
         onError = { error ->
-          continuation.resume(Result.success(CreatePdfResult.Failure(Exception(error.toString()))))
+          continuation.resume(Result.success(CreatePdfResult.Failure(Exception("$error"))))
         }
       )
     }
@@ -97,10 +97,10 @@ class ReaderPageManager @Inject constructor(
       return GetRandomPageResult.NoZimFileLoaded
     }
 
-    val pageUrl = zimReaderContainer.getRandomPageUrl() ?: if (retryCount > ZERO) {
+    val entryPath = zimReaderContainer.getRandomEntryPath() ?: if (retryCount > ZERO) {
       Log.e(
         TAG_KIWIX,
-        "Random Page URL is null, retrying... Remaining attempts: $retryCount"
+        "Random Entry Path is null, retrying... Remaining attempts: $retryCount"
       )
       return getRandomPage(retryCount - 1)
     } else {
@@ -108,7 +108,7 @@ class ReaderPageManager @Inject constructor(
       return GetRandomPageResult.FailedAfterRetries
     }
 
-    Log.d(TAG_KIWIX, "getRandomPage: $pageUrl")
-    return GetRandomPageResult.Success(pageUrl)
+    Log.d(TAG_KIWIX, "getRandomPage: $entryPath")
+    return GetRandomPageResult.Success(entryPath)
   }
 }
