@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
+* A.jalate
 * AlexanderFF
 * Ark74
 * Camachevaz
@@ -208,14 +209,17 @@
   <string name="time_left">faltan</string>
   <string name="time_today">Hoy</string>
   <string name="time_yesterday">Ayer</string>
-  <string name="pref_external_link_popup_title">Advertir cuando se acceda a enlaces externos</string>
+  <string name="pref_external_link_popup_title" fuzzy="true">Advertir cuando se acceda a enlaces externos</string>
   <string name="pref_external_link_popup_summary">Mostrar ventana emergente sobre costos adicionales o falta de funcionamiento en enlaces sin conexión.</string>
-  <string name="external_link_popup_dialog_title">¡Accediendo a un enlace externo!</string>
-  <string name="external_link_popup_dialog_message">Está a punto de abrir un enlace externo. Esto podría generarle gastos por transferencia de datos o sencillamente no funcionar si no tiene conexión. ¿Desea continuar?</string>
+  <string name="external_link_popup_dialog_title" fuzzy="true">¡Accediendo a un enlace externo!</string>
+  <string name="external_link_popup_dialog_message" fuzzy="true">Está a punto de abrir un enlace externo. Esto podría generarle gastos por transferencia de datos o sencillamente no funcionar si no tiene conexión. ¿Desea continuar?</string>
   <string name="do_not_ask_anymore">No preguntar de nuevo</string>
-  <string name="your_languages">Idiomas seleccionados:</string>
+  <string name="your_languages">Idiomas seleccionados</string>
   <string name="your_language">Idioma seleccionado: %s</string>
-  <string name="other_languages">Otros idiomas:</string>
+  <string name="other_languages">Otros idiomas</string>
+  <string name="move_up">Mover arriba</string>
+  <string name="move_down">Mover abajo</string>
+  <string name="reorder_language">Reordenar el idioma</string>
   <string name="downloading">Descargando</string>
   <string name="no_items_msg">No hay ningún elemento disponible</string>
   <string name="crash_title">Bueno… esto es incomodo</string>

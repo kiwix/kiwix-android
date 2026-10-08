@@ -105,8 +105,8 @@
   <string name="time_today">ഇന്ന്</string>
   <string name="time_yesterday">ഇന്നലെ</string>
   <string name="do_not_ask_anymore">ഇനി ഒരിക്കലും ചോദിക്കരുത്</string>
-  <string name="your_languages">തിരഞ്ഞെടുത്ത ഭാഷകൾ:</string>
-  <string name="other_languages">മറ്റ് ഭാഷകൾ:</string>
+  <string name="your_languages" fuzzy="true">തിരഞ്ഞെടുത്ത ഭാഷകൾ:</string>
+  <string name="other_languages" fuzzy="true">മറ്റ് ഭാഷകൾ:</string>
   <string name="crash_checkbox_language">താങ്കളുടെ ഭാഷ സജ്ജീകരണങ്ങൾ</string>
   <string name="crash_checkbox_zimfiles" fuzzy="true">Zim പ്രമാണങ്ങളുടെ പട്ടിക</string>
   <string name="crash_button_confirm">വിവരങ്ങൾ അയക്കുക</string>

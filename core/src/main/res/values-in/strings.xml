@@ -113,7 +113,7 @@
   <string name="cancel">Batalkan</string>
   <string name="delete_specific_search_toast">Penelusuran terkini dihapus</string>
   <string name="hint_contents_drawer_message">Anda bisa menggulir ke kiri untuk melihat isi artikel ini</string>
-  <string name="got_it">Paham</string>
+  <string name="got_it">Mengerti</string>
   <string name="did_you_know">Tahukah Anda?</string>
   <string name="undo">Batalkan</string>
   <string name="tab_closed">Tab ditutup</string>
@@ -193,13 +193,13 @@
   <string name="time_left">tersisa</string>
   <string name="time_today">Hari ini</string>
   <string name="time_yesterday">Kemarin</string>
-  <string name="pref_external_link_popup_title">Peringatkan saat mengunjungi pranala luar</string>
+  <string name="pref_external_link_popup_title" fuzzy="true">Peringatkan saat mengunjungi pranala luar</string>
   <string name="pref_external_link_popup_summary">Tampilkan popup untuk memperingatkan tentang biaya tambahan atau tidak bekerja dalam pranala luring.</string>
-  <string name="external_link_popup_dialog_title">Mengunjungi Pranala Luar!</string>
-  <string name="external_link_popup_dialog_message">Anda sedang mengunjungi pranala luar. Hal ini dapat menyebabkan biaya tambahan untuk transfer data atau tidak akan berjalan saat Anda luring.\nApakah Anda ingin melanjutkan?</string>
+  <string name="external_link_popup_dialog_title" fuzzy="true">Mengunjungi Pranala Luar!</string>
+  <string name="external_link_popup_dialog_message" fuzzy="true">Anda sedang mengunjungi pranala luar. Hal ini dapat menyebabkan biaya tambahan untuk transfer data atau tidak akan berjalan saat Anda luring.\nApakah Anda ingin melanjutkan?</string>
   <string name="do_not_ask_anymore">Jangan tanya lagi</string>
-  <string name="your_languages">Bahasa terpilih:</string>
-  <string name="other_languages">Bahasa lain:</string>
+  <string name="your_languages" fuzzy="true">Bahasa terpilih:</string>
+  <string name="other_languages" fuzzy="true">Bahasa lain:</string>
   <string name="downloading">Mengunduh</string>
   <string name="no_items_msg">Tidak ada item yang tersedia</string>
   <string name="crash_title">Yah… Ini memalukan</string>
@@ -215,7 +215,7 @@
   <string name="get_content_shortcut_label">Ambil konten</string>
   <string name="fav_icon">Favicon</string>
   <string name="articleCount">%s artikel</string>
-  <string name="get_started">Mulai</string>
+  <string name="get_started">Memulai</string>
   <string name="download_books">Unduh buku-buku</string>
   <string name="humankind_knowledge">Humankind’s knowledge, on your phone.</string>
   <string name="welcome_to_the_family">Selamat datang di keluarga</string>

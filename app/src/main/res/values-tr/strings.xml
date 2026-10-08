@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
 * BaRaN6161 TURK
+* Efygz
 * Hedda
 * MuratTheTurkish
 * SaldırganSincap
@@ -13,4 +14,21 @@
   <string name="receive_files_title">Dosya Al</string>
   <string name="no_app_found_to_open">ZIM dosyasını seçmek için uygulama bulunamadı!</string>
   <string name="select_zim_file">Okunacak ZIM dosyasını seçin</string>
+  <string name="swipe_down_to_scan_storage">Cihazınızı yeni kitaplar için taramak için aşağı kaydırın…</string>
+  <string name="auto_detect_books">Kitaplarınızı otomatik olarak tespit edin</string>
+  <string name="auto_detect_books_description">İlk başlatıldığında, uygulama depolamanızı tarayabilsin mi diye sorulacak. Eğer izin verirseniz, ZIM dosyalarınızı elle eklemeniz gerekmeden otomatik olarak tespit edeceğiz.</string>
+  <string name="select_category">Kategori Seç</string>
+  <string name="no_category_available">Kategori mevcut değil</string>
+  <string name="your_selected_category">Seçili kategori:</string>
+  <string name="other_categories">Diğer kategoriler:</string>
+  <string name="all_categories">Tüm kategoriler</string>
+  <string name="select_category_content_description">Bu dili seçmek, indirilebilir kitapların o dilde olanlarının en üstte görüntülenmesine öncelik verecektir.</string>
+  <string name="save_categories">Kategorileri kaydet</string>
+  <string name="your_selected_categories">Seçili kategoriler:</string>
+  <plurals name="and_more">
+    <item quantity="one">ve %d benzeri</item>
+    <item quantity="other">ve %d benzeri</item>
+  </plurals>
+  <string name="your_categories">Seçili kategoriler:</string>
+  <string name="your_category">Seçili kategori: %s</string>
 </resources>

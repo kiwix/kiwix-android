@@ -33,6 +33,7 @@
 * Symposiarch
 * ThisCarthing
 * TomatoCake
+* Translatemax
 * Umlaut
 -->
 <resources>
@@ -219,14 +220,17 @@
   <string name="time_left">verbleibend</string>
   <string name="time_today">Heute</string>
   <string name="time_yesterday">Gestern</string>
-  <string name="pref_external_link_popup_title">Beim Öffnen externer Links warnen</string>
+  <string name="pref_external_link_popup_title" fuzzy="true">Beim Öffnen externer Links warnen</string>
   <string name="pref_external_link_popup_summary">Popups für Warnungen über zusätzliche Kosten oder das Nichtfunktionieren von Offlinelinks anzeigen.</string>
-  <string name="external_link_popup_dialog_title">Zugriff auf externen Link!</string>
-  <string name="external_link_popup_dialog_message">Sie öffnen gerade einen externen Link. Dies könnte zu zusätzlichen Kosten für die Datenübermittlung führen oder wird nicht funktionieren, wenn Sie offline sind. Möchten Sie fortfahren?</string>
+  <string name="external_link_popup_dialog_title" fuzzy="true">Zugriff auf externen Link!</string>
+  <string name="external_link_popup_dialog_message" fuzzy="true">Sie öffnen gerade einen externen Link. Dies könnte zu zusätzlichen Kosten für die Datenübermittlung führen oder wird nicht funktionieren, wenn Sie offline sind. Möchten Sie fortfahren?</string>
   <string name="do_not_ask_anymore">Nicht mehr nachfragen</string>
   <string name="your_languages">Ausgewählte Sprachen:</string>
   <string name="your_language">Ausgewählte Sprache: %s</string>
-  <string name="other_languages">Weitere Sprachen:</string>
+  <string name="other_languages">Andere Sprachen</string>
+  <string name="move_up">Nach oben verschieben</string>
+  <string name="move_down">nach unten verschieben</string>
+  <string name="reorder_language">Sprache neu ordnen</string>
   <string name="downloading">Herunterladen</string>
   <string name="no_items_msg">Keine Objekte verfügbar</string>
   <string name="crash_title">Also… Das ist peinlich.</string>

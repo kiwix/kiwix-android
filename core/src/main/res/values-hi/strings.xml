@@ -168,6 +168,7 @@
   <string name="delete_zim_failed">क्षमा करें हम कुछ फ़ाइलों को हटाने में असमर्थ थे।  आपको इसके बजाय फ़ाइल प्रबंधक का उपयोग करने का प्रयास करना चाहिए।</string>
   <string name="tts_pause">रुका</string>
   <string name="tts_resume">फिर से शुरू करना</string>
+  <string name="tts_normal_speed">सामान्य</string>
   <string name="stop">रोकें</string>
   <string name="notification_pause_button_text">विराम</string>
   <string name="notification_resume_button_text">पुनः प्रारम्भ करें</string>
@@ -193,14 +194,14 @@
   <string name="time_left">बाएँ ओर</string>
   <string name="time_today">आज</string>
   <string name="time_yesterday">कल</string>
-  <string name="pref_external_link_popup_title">बाह्य कड़ियों में प्रवेश करने पर सावधान करें</string>
+  <string name="pref_external_link_popup_title" fuzzy="true">बाह्य कड़ियों में प्रवेश करने पर सावधान करें</string>
   <string name="pref_external_link_popup_summary">“अतिरिक्त खर्च एवं ऑफलाइन होने पर काम नहीं करने वाली कड़ी” से सावधान करने हेतु पॉपअप संदेश प्रदर्शित करें।</string>
-  <string name="external_link_popup_dialog_title">बहरी कड़ी में प्रवेश किया जा रहा है!</string>
-  <string name="external_link_popup_dialog_message">आप बहरी कड़ी में प्रवेश कर रहे हैं। इसके कारण डेटा स्थानांतरण हेतु अतिरिक्त खर्च पड़ सकता है, अथवा ऑफलाइन होने पर यह काम ही नहीं करेगा। क्या आप जारी रखना चाहते हैं?</string>
+  <string name="external_link_popup_dialog_title" fuzzy="true">बहरी कड़ी में प्रवेश किया जा रहा है!</string>
+  <string name="external_link_popup_dialog_message" fuzzy="true">आप बहरी कड़ी में प्रवेश कर रहे हैं। इसके कारण डेटा स्थानांतरण हेतु अतिरिक्त खर्च पड़ सकता है, अथवा ऑफलाइन होने पर यह काम ही नहीं करेगा। क्या आप जारी रखना चाहते हैं?</string>
   <string name="do_not_ask_anymore">आगे और ना पूछें</string>
-  <string name="your_languages">चयनित भाषाएं</string>
+  <string name="your_languages" fuzzy="true">चयनित भाषाएं</string>
   <string name="your_language">चुनी गई भाषा: %s</string>
-  <string name="other_languages">अन्य भाषाएँ</string>
+  <string name="other_languages" fuzzy="true">अन्य भाषाएँ</string>
   <string name="downloading">डाउनलोड हो रहा है</string>
   <string name="no_items_msg">कोई आइटम उपलब्ध नहीं है</string>
   <string name="crash_title">खैर, यह शर्मनाक है</string>

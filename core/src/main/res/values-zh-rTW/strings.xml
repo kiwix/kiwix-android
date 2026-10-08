@@ -51,6 +51,7 @@
   <string name="server_failed_toast_message">無法開啟伺服器。</string>
   <string name="server_started_successfully_toast_message">伺服器開啟成功。</string>
   <string name="server_stopped_successfully_toast_message">成功停止伺服器。</string>
+  <string name="server_stopped_all_books_deleted_toast_message">伺服器已停止：所有託管書籍均已刪除。</string>
   <string name="hotspot_turned_on">熱點已啟動</string>
   <string name="hotspot_details_message">以下為您的本地熱點詳細內容。\nSSID：%1$s \n密碼：%2$s</string>
   <string name="server_textview_default_message">選擇您想要在伺服器上託管的檔案</string>
@@ -86,6 +87,8 @@
   <string name="pref_back_to_top">回到頁首</string>
   <string name="pref_back_to_top_summary">在頁面底部顯示一個回到頁首的按鈕</string>
   <string name="pref_language_title">語言</string>
+  <string name="user_interface">使用者介面</string>
+  <string name="system_language_with_name">系統語言（%s）</string>
   <string name="pref_language_chooser">選擇語言</string>
   <string name="pref_credits">貢獻者和授權條款</string>
   <string name="pref_credits_title">參與名單</string>
@@ -177,6 +180,14 @@
   <string name="delete_zim_failed">很抱歉我們無法刪除一些檔案。您應該嘗試改用檔案管理器。</string>
   <string name="tts_pause">暫停</string>
   <string name="tts_resume">繼續</string>
+  <string name="tts_increase_speed">提高速度</string>
+  <string name="tts_decrease_speed">降低速度</string>
+  <string name="tts_normal_speed">正常</string>
+  <string name="tts_speech_speed">口語速度</string>
+  <string name="tts_rewind_10_seconds">倒退 10 秒</string>
+  <string name="tts_forward_10_seconds">向前 10 秒</string>
+  <string name="tts_select_voice">選擇語音</string>
+  <string name="tts_controls">文字轉語音控制</string>
   <string name="stop">停止</string>
   <string name="notification_pause_button_text">暫停</string>
   <string name="notification_resume_button_text">恢復</string>
@@ -202,14 +213,17 @@
   <string name="time_left">左</string>
   <string name="time_today">今日</string>
   <string name="time_yesterday">昨日</string>
-  <string name="pref_external_link_popup_title">當輸入外部連結時警告</string>
+  <string name="pref_external_link_popup_title" fuzzy="true">當輸入外部連結時警告</string>
   <string name="pref_external_link_popup_summary">顯示彈跳項目來警告有關額外的耗費或不運作在離線連結上。</string>
-  <string name="external_link_popup_dialog_title">輸入外部連結！</string>
-  <string name="external_link_popup_dialog_message">您正輸入一個外部連結。這可能會導致出額外耗費的資料傳遞，否則當您離線時不要運作。\n您要繼續嗎？</string>
+  <string name="external_link_popup_dialog_title" fuzzy="true">輸入外部連結！</string>
+  <string name="external_link_popup_dialog_message" fuzzy="true">您正輸入一個外部連結。這可能會導致出額外耗費的資料傳遞，否則當您離線時不要運作。\n您要繼續嗎？</string>
   <string name="do_not_ask_anymore">不再詢問</string>
-  <string name="your_languages">所選語言：</string>
+  <string name="your_languages">所選語言</string>
   <string name="your_language">已選語言：%s</string>
-  <string name="other_languages">其它語言：</string>
+  <string name="other_languages">其它語言</string>
+  <string name="move_up">向上</string>
+  <string name="move_down">向下</string>
+  <string name="reorder_language">重新排序語言</string>
   <string name="downloading">正在下載</string>
   <string name="no_items_msg">沒有可用的項目</string>
   <string name="crash_title">唔…真是丟臉</string>
@@ -256,6 +270,7 @@
   <string name="running_state">運行中</string>
   <string name="complete">完成</string>
   <string name="paused_state">暫停</string>
+  <string name="paused_offline_state">已暫停（裝置離線）</string>
   <string name="failed_state">失敗：%s</string>
   <string name="custom_download_error_message_for_authentication_failed">無法下載 ZIM 檔案。請嘗試從 Play 商店重新安裝應用程式。</string>
   <string name="save">儲存</string>
@@ -279,6 +294,10 @@
   <string name="ext_storage_permission_not_granted">錯誤：未授予儲存權限</string>
   <string name="notes_deletion_successful">整個註釋檔案夾已刪除</string>
   <string name="notes_deletion_unsuccessful">一些檔案未刪除</string>
+  <plurals name="book_count">
+    <item quantity="one">%d 本書籍</item>
+    <item quantity="other">%d 本書籍</item>
+  </plurals>
   <string name="books_count">%d 個書籍</string>
   <string name="discovery_initiated">初始偵測</string>
   <string name="discovery_failed">偵測失敗</string>
@@ -395,6 +414,7 @@
   <string name="navigation_history_cleared">已清除導航歷史記錄</string>
   <string name="go_to_settings_label">前往設定</string>
   <string name="request_notification_permission_message">要執行此操作，請授予通知存取權限</string>
+  <string name="notification_permission_denied_download_info">通知權限已被拒絕，因此下載會在背景繼續進行；但不會顯示進度通知。您可以稍後隨時在設定裡授予權限，以查看下載進度。</string>
   <string name="click_nearby_devices_message">點擊來搜尋附近的設備。</string>
   <string name="your_device_name_message">您的設備名稱會出現在這裡。</string>
   <string name="nearby_devices_list_message">您會在這裡找到附近設備的清單。輕觸設備名稱即可啟動檔案傳輸。</string>

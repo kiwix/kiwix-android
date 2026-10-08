@@ -114,13 +114,13 @@
   <string name="time_minute">мин.</string>
   <string name="time_second">сек.</string>
   <string name="time_left">остават</string>
-  <string name="pref_external_link_popup_title">При зареждане на външни препратки</string>
+  <string name="pref_external_link_popup_title" fuzzy="true">При зареждане на външни препратки</string>
   <string name="pref_external_link_popup_summary">Показва попъп, за да предупреди за допълнителни разходи или неработещи в офлайн режим препратки.</string>
-  <string name="external_link_popup_dialog_title">Зареждане на външна препратка!</string>
+  <string name="external_link_popup_dialog_title" fuzzy="true">Зареждане на външна препратка!</string>
   <string name="external_link_popup_dialog_message" fuzzy="true">Предстои Ви, да заредите външна препратка. Това може да доведе до допълнителни разходи за трансфер на данни или просто няма да работи, когато сте офлайн. Желаете ли да продължите?</string>
   <string name="do_not_ask_anymore">Не питайте отново за това</string>
-  <string name="your_languages">Избрани езици:</string>
-  <string name="other_languages">Други езици:</string>
+  <string name="your_languages" fuzzy="true">Избрани езици:</string>
+  <string name="other_languages" fuzzy="true">Други езици:</string>
   <string name="save">Съхраняване</string>
   <string name="no_bookmarks">Няма отметки</string>
 </resources>

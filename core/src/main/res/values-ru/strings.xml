@@ -218,14 +218,14 @@
   <string name="time_left">осталось</string>
   <string name="time_today">Сегодня</string>
   <string name="time_yesterday">Вчера</string>
-  <string name="pref_external_link_popup_title">Предупреждать когда происходит ввод внешних ссылок</string>
+  <string name="pref_external_link_popup_title" fuzzy="true">Предупреждать когда происходит ввод внешних ссылок</string>
   <string name="pref_external_link_popup_summary">Показать всплывающее сообщение про снятие дополнительных средств мобильным оператором или невозможности работы ссылок в офлайне.</string>
-  <string name="external_link_popup_dialog_title">Открываем внешнюю ссылку!</string>
-  <string name="external_link_popup_dialog_message">Вы открываете внешнюю ссылку. Её открытие может привести к снятию средств мобильным оператором или может не сработать, если вы офлайн.\nХотите продолжить?</string>
+  <string name="external_link_popup_dialog_title" fuzzy="true">Открываем внешнюю ссылку!</string>
+  <string name="external_link_popup_dialog_message" fuzzy="true">Вы открываете внешнюю ссылку. Её открытие может привести к снятию средств мобильным оператором или может не сработать, если вы офлайн.\nХотите продолжить?</string>
   <string name="do_not_ask_anymore">Больше не спрашивать</string>
-  <string name="your_languages">Выбранные языки:</string>
+  <string name="your_languages" fuzzy="true">Выбранные языки:</string>
   <string name="your_language">Выбранный язык: %s</string>
-  <string name="other_languages">Другие языки:</string>
+  <string name="other_languages" fuzzy="true">Другие языки:</string>
   <string name="downloading">Скачивание</string>
   <string name="no_items_msg">Нет доступных элементов</string>
   <string name="crash_title">Хммм… Как неловко</string>

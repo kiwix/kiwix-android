@@ -182,14 +182,14 @@
   <string name="time_left">stânga</string>
   <string name="time_today">Astăzi</string>
   <string name="time_yesterday">Ieri</string>
-  <string name="pref_external_link_popup_title">Atenționați când introduceți legături extern</string>
+  <string name="pref_external_link_popup_title" fuzzy="true">Atenționați când introduceți legături extern</string>
   <string name="pref_external_link_popup_summary">Afișează popup pentru a avertiza în legătură cu costurile suplimentare sau care nu merg în legăturile off-line.</string>
-  <string name="external_link_popup_dialog_title">Introduc Legătura externă!</string>
-  <string name="external_link_popup_dialog_message">Acum introduceți o legătură externă. Această acțiune ar putea duce la costuri suplimentare pentru transferul de date sau nu va funcționa când sunteți offline. \nDoriți să continuați?</string>
+  <string name="external_link_popup_dialog_title" fuzzy="true">Introduc Legătura externă!</string>
+  <string name="external_link_popup_dialog_message" fuzzy="true">Acum introduceți o legătură externă. Această acțiune ar putea duce la costuri suplimentare pentru transferul de date sau nu va funcționa când sunteți offline. \nDoriți să continuați?</string>
   <string name="do_not_ask_anymore">Nu mă mai întreba</string>
-  <string name="your_languages">Limbi selectate:</string>
+  <string name="your_languages" fuzzy="true">Limbi selectate:</string>
   <string name="your_language">Limbă selectată: %s</string>
-  <string name="other_languages">Alte limbi:</string>
+  <string name="other_languages" fuzzy="true">Alte limbi:</string>
   <string name="downloading" fuzzy="true">Descărcare</string>
   <string name="no_items_msg">Nu sunt item-uri disponibile</string>
   <string name="crash_title">Ei bine … Este jenant</string>

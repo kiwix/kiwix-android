@@ -11,6 +11,7 @@
 * Fs00
 * G.garatti
 * Gianfranco
+* Matroz
 * Matteocng
 * MohitMali
 * Moliseforever
@@ -88,6 +89,7 @@
   <string name="pref_back_to_top">Torna all’inizio</string>
   <string name="pref_back_to_top_summary">Mostra un pulsante alla fine della pagina per scorrere fino all’inizio</string>
   <string name="pref_language_title">Lingua</string>
+  <string name="user_interface">Interfaccia utente</string>
   <string name="pref_language_chooser">Scegli la lingua</string>
   <string name="pref_credits">Contributori e licenze</string>
   <string name="pref_credits_title">Riconoscimenti</string>
@@ -201,14 +203,14 @@
   <string name="time_left">rimanenti</string>
   <string name="time_today">Oggi</string>
   <string name="time_yesterday">Ieri</string>
-  <string name="pref_external_link_popup_title">Avvisa quando si aprono link esterni</string>
+  <string name="pref_external_link_popup_title">Avvisa quando si aprono collegamenti esterni</string>
   <string name="pref_external_link_popup_summary">Mostra un avviso in merito a possibili costi aggiuntivi o al mancato funzionamento dei link in assenza di connessione.</string>
-  <string name="external_link_popup_dialog_title">Apertura di un link esterno!</string>
+  <string name="external_link_popup_dialog_title">Apertura di un collegamento esterno!</string>
   <string name="external_link_popup_dialog_message">Stai aprendo un collegamento esterno. Ciò potrebbe comportare dei costi aggiuntivi per il trasferimento dati e non funzionerà se non sei connesso a Internet.\nVuoi continuare?</string>
   <string name="do_not_ask_anymore">Non chiedere più</string>
-  <string name="your_languages">Lingue selezionate:</string>
+  <string name="your_languages">Lingue selezionate</string>
   <string name="your_language">Lingua selezionata: %s</string>
-  <string name="other_languages">Altre lingue:</string>
+  <string name="other_languages">Altre lingue</string>
   <string name="downloading">Download in corso</string>
   <string name="no_items_msg">Nessun elemento disponibile</string>
   <string name="crash_title">Oops… questo è imbarazzante</string>
@@ -255,6 +257,7 @@
   <string name="running_state">In corso</string>
   <string name="complete">Completato</string>
   <string name="paused_state">In pausa</string>
+  <string name="paused_offline_state">Pausa (dispositivo offline)</string>
   <string name="failed_state">Fallito: %s</string>
   <string name="custom_download_error_message_for_authentication_failed">Impossibile scaricare il file ZIM. Per favore, prova a reinstallare l\'applicazione dal Play Store.</string>
   <string name="save">Salva</string>
@@ -391,6 +394,7 @@
   <string name="navigation_history_cleared">Cronologia di navigazione cancellata</string>
   <string name="go_to_settings_label">Vai alle impostazioni</string>
   <string name="request_notification_permission_message">Per eseguire questa azione, concedi l\'accesso alle notifiche</string>
+  <string name="notification_permission_denied_download_info">L\'autorizzazione alle notifiche è stata negata, quindi i download continueranno in background senza notifiche di avanzamento. È possibile concedere l\'autorizzazione in qualsiasi momento successivo dalle Impostazioni per visualizzare l\'avanzamento del download.</string>
   <string name="click_nearby_devices_message">Clicca qui per cercare dispositivi nelle vicinanze.</string>
   <string name="your_device_name_message">Il nome del tuo dispositivo apparirà qui.</string>
   <string name="nearby_devices_list_message">Qui troverai un elenco dei dispositivi nelle vicinanze. Tocca il nome di un dispositivo per avviare il trasferimento file.</string>

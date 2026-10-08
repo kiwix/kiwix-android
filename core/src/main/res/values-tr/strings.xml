@@ -7,6 +7,7 @@
 * BaRaN6161 TURK
 * Can
 * Captantrips
+* Efygz
 * Grkn gll
 * Hedda
 * Joseph
@@ -42,6 +43,7 @@
   <string name="menu_wifi_hotspot">WiFi erişim paylaşımı alanı</string>
   <string name="save_media">Ortam dosyasını kaydet</string>
   <string name="save_media_error">Medya kaydedilmeye çalışılırken bir hata oluştu!</string>
+  <string name="invalid_media_source">Seçilen medya bulunamadı.</string>
   <string name="save_media_saved">Medya %s olarak kaydedildi</string>
   <string name="search_label">Ara</string>
   <string name="searched_list">Aranan liste</string>
@@ -59,6 +61,7 @@
   <string name="server_failed_toast_message">Sunucu başlatılamadı.</string>
   <string name="server_started_successfully_toast_message">Sunucu başarıyla başladı.</string>
   <string name="server_stopped_successfully_toast_message">Sunucu başarıyla durduruldu.</string>
+  <string name="server_stopped_all_books_deleted_toast_message">Sunucu durduruldu: barındırılan tüm kitaplar silindi.</string>
   <string name="hotspot_turned_on">Hotspot açık</string>
   <string name="hotspot_details_message">Aşağıda yerel etkin noktanızın ayrıntıları verilmiştir.\nSSID: %1$s\nGeçiş: %2$s</string>
   <string name="server_textview_default_message">Sunucuda barındırmak istediğiniz dosyaları seçin</string>
@@ -67,7 +70,7 @@
   <string name="wifi_dialog_title">WiFi bağlantı algılandı</string>
   <string name="wifi_dialog_body">Diğer cihazlardaki kitapları görüntülemek için lütfen tüm cihazların aynı WiFi Ağına bağlı olduğundan emin olun.</string>
   <string name="hotspot_dialog_message">Bu özelliğin çalışması için önce WIFI etkin noktanızı manüel olarak açmanız veya ana cihaz ile alıcı cihazın aynı WiFi ağında olduğundan emin olmanız gerekir</string>
-  <string name="hotspot_dialog_neutral_button">İLERLENDİ</string>
+  <string name="hotspot_dialog_neutral_button">İLERLE</string>
   <string name="hotspot_channel_description">Hotspot/sunucunuzun durumu ile ilgili güncellemeler.</string>
   <string name="hotspot_notification_content_title">Kiwix Hotspot</string>
   <string name="start_server_label">Sunucuyu Başlat</string>
@@ -94,6 +97,8 @@
   <string name="pref_back_to_top">Başa Dön</string>
   <string name="pref_back_to_top_summary">Yukarı kaydırmak için sayfanın sonunda bir düğme görüntüleyin</string>
   <string name="pref_language_title">Dil</string>
+  <string name="user_interface">Arayüz</string>
+  <string name="system_language_with_name">Sistem dili (%s)</string>
   <string name="pref_language_chooser">Bir dil seçin</string>
   <string name="pref_credits">Katkıda bulunanlar ve lisanslar</string>
   <string name="pref_credits_title">Katkıda bulunanlar</string>
@@ -117,8 +122,11 @@
   <string name="export_bookmark_saved">Yer imleri %s dosyasına aktarıldı</string>
   <string name="all_history_cleared">Tüm geçmiş temizlendi</string>
   <string name="pref_clear_all_bookmarks_title">Yer imlerini temizle</string>
-  <string name="clear_all_history_dialog_title">Tüm Geçmişi Silinsin mi?</string>
+  <string name="clear_all_history_dialog_title">Tüm Geçmiş Silinsin mi?</string>
   <string name="share">Paylaş</string>
+  <string name="share_article">Makaleyi paylaş</string>
+  <string name="unable_to_share_article">Makale paylaşılamadı.</string>
+  <string name="please_wait_for_page_to_load">Lütfen sayfanın tamamen yüklenmesini bekleyin.</string>
   <string name="selected_file_cab_app_chooser_title">ZIM dosyalarını şu kişilerle paylaş:</string>
   <string name="delete">Sil</string>
   <string name="cancel">İptal</string>
@@ -135,6 +143,9 @@
   <string name="rate_dialog_positive">Değerlendirin!</string>
   <string name="no_thanks">Hayır, teşekkürler</string>
   <string name="rate_dialog_neutral">Sonra</string>
+  <string name="pref_rate_app_title">%s oyla</string>
+  <string name="pref_rate_app_summary">Play Store\'da %s değerlendirin.</string>
+  <string name="pref_rating_category_title">Uygulama Değerlendirmesi</string>
   <string name="open">Aç</string>
   <string name="bookmark_removed">Yer imi kaldırıldı</string>
   <string name="pref_newtab_background_title">Yeni sekmeyi arka planda aç</string>
@@ -179,6 +190,14 @@
   <string name="delete_zim_failed">Üzgünüz, bazı dosyayı silemedik. Bir dosya yöneticisi kullanmayı denemelisiniz.</string>
   <string name="tts_pause">duraklat</string>
   <string name="tts_resume">devam et</string>
+  <string name="tts_increase_speed">Hızı Artır</string>
+  <string name="tts_decrease_speed">Hızı Düşür</string>
+  <string name="tts_normal_speed">Normal</string>
+  <string name="tts_speech_speed">Konuşma hızı</string>
+  <string name="tts_rewind_10_seconds">10 saniye geri sar</string>
+  <string name="tts_forward_10_seconds">10 saniye ileri</string>
+  <string name="tts_select_voice">Ses seç</string>
+  <string name="tts_controls">Konuşturma (TTS) kontrolleri</string>
   <string name="stop">durdur</string>
   <string name="notification_pause_button_text">Duraklat</string>
   <string name="notification_resume_button_text">Devam et</string>
@@ -204,14 +223,17 @@
   <string name="time_left">kaldı</string>
   <string name="time_today">Bugün</string>
   <string name="time_yesterday">Dün</string>
-  <string name="pref_external_link_popup_title">Harici bağlantı girilirken uyarı ver</string>
+  <string name="pref_external_link_popup_title">Harici bağlantıları açarken uyarı ver</string>
   <string name="pref_external_link_popup_summary">Ek ücretlendirmelerde veya çevrimdışı bağlantılarla çalışılmadığında açılır pencere göstererek uyar.</string>
-  <string name="external_link_popup_dialog_title">Harici Bağlantı Giriliyor!</string>
-  <string name="external_link_popup_dialog_message">Bir dış bağlantı giriyorsunuz. Bu, veri aktarımı için ilave ücretlendirmeye neden olabilir veya çevrimdışı olduğunuzda çalışmaz. Devam etmek istiyor musunuz?</string>
+  <string name="external_link_popup_dialog_title">Harici bağlantı açılıyor!</string>
+  <string name="external_link_popup_dialog_message">Harici bir bağlantı açıyorsunuz. Bu, veri aktarımı için ek maliyetlere yol açabilir veya çevrimdışıysanız çalışmayabilir. Devam etmek istiyor musunuz?</string>
   <string name="do_not_ask_anymore">Artık sorma</string>
-  <string name="your_languages">Seçilen diller:</string>
+  <string name="your_languages">Seçilen diller</string>
   <string name="your_language">Seçilen dil: %s</string>
-  <string name="other_languages">Diğer diller:</string>
+  <string name="other_languages">Diğer diller</string>
+  <string name="move_up">Yukarı çık</string>
+  <string name="move_down">Aşağı in</string>
+  <string name="reorder_language">Dili yeniden sırala</string>
   <string name="downloading">İndiriliyor</string>
   <string name="no_items_msg">Kullanılabilir öğe yok</string>
   <string name="crash_title">Peki… Bu utanç verici.</string>
@@ -258,6 +280,7 @@
   <string name="running_state">Devam Ediyor</string>
   <string name="complete">Tamamlandı</string>
   <string name="paused_state">Durduruldu</string>
+  <string name="paused_offline_state">Duraklatıldı (cihaz çevrimdışı)</string>
   <string name="failed_state">Başarısız: %s</string>
   <string name="custom_download_error_message_for_authentication_failed">Zim dosyası indirilemedi. Lütfen uygulamayı Play Store’dan yeniden yüklemeyi deneyin.</string>
   <string name="save">Kaydet</string>
@@ -281,6 +304,10 @@
   <string name="ext_storage_permission_not_granted">Hata: Depolama izinleri verilmemiş</string>
   <string name="notes_deletion_successful">Tüm notlar klasörü silindi</string>
   <string name="notes_deletion_unsuccessful">Bazı dosyalar silinmedi</string>
+  <plurals name="book_count">
+    <item quantity="one">%d kitap</item>
+    <item quantity="other">%d kitap</item>
+  </plurals>
   <string name="books_count">%d kitap</string>
   <string name="discovery_initiated">Keşif başladı</string>
   <string name="discovery_failed">Keşif başarısız oldu</string>
@@ -325,8 +352,8 @@
   <string name="no_bookmarks">Yer İmi Yok</string>
   <string name="no_history">Geçmiş Yok</string>
   <string name="device_default">Cihaz Varsayılanı</string>
-  <string name="delete_history">Tüm Geçmişi Silinsin mi?</string>
-  <string name="delete_selected_history">Seçilmiş Geçmişi Silinsin mi?</string>
+  <string name="delete_history">Tüm Geçmiş Silinsin mi?</string>
+  <string name="delete_selected_history">Seçilen Geçmiş Silinsin mi?</string>
   <string name="delete_bookmarks">Tüm Yer İşaretleri Silinsin mi?</string>
   <string name="delete_selected_bookmarks">Seçilmiş Yer İşaretleri Silinsin mi?</string>
   <string name="import_bookmarks_dialog_title">Yer işaretlerini içeri aktar?</string>
@@ -337,7 +364,7 @@
   <string name="send_report">Teşhis raporu gönder</string>
   <string name="crash_checkbox_file_system">Dosya Sistemi Ayrıntıları</string>
   <string name="diagnostic_report">Teşhis Raporu</string>
-  <string name="diagnostic_report_message">Sorunu teşhis edebilmemiz için önce hatayı yeniden oluştur, ardından tanılama raporunu gönder.</string>
+  <string name="diagnostic_report_message">Sorunu teşhis edebilmemiz için önce hatayı yeniden oluşturun, ardından tanılama raporunu gönderin.</string>
   <string name="percentage">%d%%</string>
   <string name="pref_text_zoom_title">Metin Yakınlığı</string>
   <string name="search_open_in_new_tab">Yeni sekmede aç</string>
@@ -376,7 +403,7 @@
   <string name="swipe_down_for_library">Kitaplık için Aşağı Kaydırın</string>
   <string name="reaching_remote_library">Uzak kütüphaneye bağlanılıyor</string>
   <string name="parsing_remote_library">Uzak kütüphanenin ayrıştırılması</string>
-  <string name="starting_downloading_remote_library" fuzzy="true">Çevrimiçi kütüphanenin indirilmesi başlatılıyor</string>
+  <string name="starting_downloading_remote_library">Çevrimiçi kütüphane yükleniyor</string>
   <string name="no_notes">Not Yok</string>
   <string name="notes_from_all_books">Tüm Kitaplardan Notları Görüntüle</string>
   <string name="search_notes">Notları Ara</string>
@@ -397,6 +424,7 @@
   <string name="navigation_history_cleared">Gezinme Geçmişi Temizlendi</string>
   <string name="go_to_settings_label">Ayarlara gidin</string>
   <string name="request_notification_permission_message">Bu işlemi gerçekleştirmek için lütfen bildirim erişimine izin verin</string>
+  <string name="notification_permission_denied_download_info">Bildirim izni reddedildi, indirmeler arka planda ilerleme bildirimleri olmadan devam edecek. İndirme ilerlemesini görmek için daha sonra Ayarlar\'dan dilediğiniz vakit izin verebilirsiniz.</string>
   <string name="click_nearby_devices_message">Yakınlık cihazları bulmak için buraya tıklayın.</string>
   <string name="your_device_name_message">Cihazınızın adı burada görünecektir.</string>
   <string name="nearby_devices_list_message">Burada yakındaki cihazların bir listesini bulacaksınız. Dosya aktarımını başlatmak için bir cihazın adına dokunun.</string>
@@ -409,8 +437,24 @@
   <string name="save_or_open_unsupported_files_dialog_message">\"Aç\" seçeneğini belirlemek, bu dosyayı harici bir okuyucu uygulamasında açacaktır.</string>
   <string name="donation_dialog_title">Bugün Bağış Yapın</string>
   <string name="donation_dialog_description">%s sizin yardımınıza ihtiyaç duyuyor.</string>
-  <string name="make_donation">Bir bağışta bulunun</string>
+  <string name="make_donation">Bir bağışta bulun</string>
   <string name="resuming_state">Devam ediyor</string>
   <string name="downloading_state">İndiriliyor</string>
   <string name="download_failed_state">Başarısız</string>
+  <string name="searchview_description_clear">Sorguyu temizle</string>
+  <string name="do_you_mean">Bunu mu demek istediniz:</string>
+  <string name="suggested_search_icon_description">Arama sorgunuzu otomatik olarak düzeltmek için bu öneriyi kullanmak üzere dokunun</string>
+  <string name="file_system_scan_dialog_title">Kitaplar için depolama alanı taransın mı?</string>
+  <string name="file_system_scan_dialog_message">Kiwix cihazınızın depolama alanını tarayacak ve mevcut kitapları burada listeleyecektir.</string>
+  <string name="download_timeout_resume_message">Android\'in arka plan indirme işlemi zaman aşımına uğradı. Devam etmek ister misiniz?</string>
+  <string name="validate_zim_files">ZIM dosyalarını doğrula</string>
+  <string name="confirmation_validate_zim_files">Aşağıdaki ZIM dosyalarını doğrulamak istediğinizden emin misiniz?\n\n %s</string>
+  <string name="validating_zim_file">ZIM dosyası doğrulanıyor…</string>
+  <string name="validating_zim_files">ZIM dosyaları doğrulanıyor…</string>
+  <string name="menu_add_to_homescreen">Ana Ekrana Ekle</string>
+  <string name="added_to_homescreen">Ana ekrana kısayol eklendi</string>
+  <string name="add_shortcut_title">Kısayol ekle</string>
+  <string name="shortcut_name_label">Kısayol adı</string>
+  <string name="open_xiaomi_settings">Ayarları aç</string>
+  <string name="xiaomi_permission_required">Bu cihaz, ana ekrana kısayol eklemeden önce kısayol izni verilmesini gerektiriyor. Lütfen ayarlardan gerekli izni verin.</string>
 </resources>

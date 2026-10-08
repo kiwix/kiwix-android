@@ -87,7 +87,7 @@
   <string name="no_email_application_installed">Proszę zainstalować klienta poczty elektronicznej</string>
   <string name="no_app_found_to_select_bookmark_file">Nie znaleziono aplikacji umożliwiającej wybór pliku zakładek</string>
   <string name="no_section_info">Nie znaleziono nagłówków treści</string>
-  <string name="request_storage">Aby uzyskać dostęp do plików ZIM, musimy mieć dostęp do twojego nośnika</string>
+  <string name="request_storage">Aby uzyskać dostęp do plików ZIM, musimy mieć dostęp do Twojego nośnika</string>
   <string name="request_write_storage">Aby pobrać pliki ZIM, potrzebujemy uprawnień zapisu do pamięci Twojego urządzenia</string>
   <string name="clear_recent_and_tabs_history_dialog">Czy na pewno chcesz usunąć historię wyszukiwania i zresetować wszystkie aktywne karty?</string>
   <string name="delete_recent_search_item">Usunąć ten obiekt?</string>
@@ -191,13 +191,13 @@
   <string name="time_left">do lewej</string>
   <string name="time_today">Dzisiaj</string>
   <string name="time_yesterday">Wczoraj</string>
-  <string name="pref_external_link_popup_title">Ostrzegaj podczas wchodzenia w linki zewnętrzne</string>
+  <string name="pref_external_link_popup_title" fuzzy="true">Ostrzegaj podczas wchodzenia w linki zewnętrzne</string>
   <string name="pref_external_link_popup_summary">Wyświetl wyskakujące okienko, aby ostrzec o dodatkowych kosztach lub braku działania w linkach offline.</string>
-  <string name="external_link_popup_dialog_title">Wprowadzanie linku zewnętrznego!</string>
-  <string name="external_link_popup_dialog_message">Otwierasz link zewnętrzny. Może to prowadzić do dodatkowych kosztów transferu danych lub po prostu nie będzie działać, jeśli jesteś offline. Czy chcesz kontynuować?</string>
+  <string name="external_link_popup_dialog_title" fuzzy="true">Wprowadzanie linku zewnętrznego!</string>
+  <string name="external_link_popup_dialog_message" fuzzy="true">Otwierasz link zewnętrzny. Może to prowadzić do dodatkowych kosztów transferu danych lub po prostu nie będzie działać, jeśli jesteś offline. Czy chcesz kontynuować?</string>
   <string name="do_not_ask_anymore">Nie pytaj więcej</string>
-  <string name="your_languages">Wybrane języki:</string>
-  <string name="other_languages">Inne języki:</string>
+  <string name="your_languages" fuzzy="true">Wybrane języki:</string>
+  <string name="other_languages" fuzzy="true">Inne języki:</string>
   <string name="downloading">Pobierane</string>
   <string name="no_items_msg">Brak dostępnych pozycji</string>
   <string name="crash_title">Cóż… To jest krępujące</string>

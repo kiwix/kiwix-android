@@ -21,4 +21,11 @@
   <string name="other_categories">فئات أخرى:</string>
   <string name="all_categories">جميع الفئات</string>
   <string name="select_category_content_description">سيؤدي اختيار هذه الفئة إلى إعطاء الأولوية لعرض الكتب القابلة للتنزيل بتلك اللغة في الأعلى.</string>
+  <string name="save_categories">حفظ التصنيفات</string>
+  <string name="your_selected_categories">الفئات المختارة:</string>
+  <plurals name="and_more">
+    <item quantity="other">واحد=وأكثر من %d</item>
+  </plurals>
+  <string name="your_categories">الفئات المختارة:</string>
+  <string name="your_category">الفئة المختارة: %s</string>
 </resources>

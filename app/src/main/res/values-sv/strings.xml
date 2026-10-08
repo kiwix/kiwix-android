@@ -23,4 +23,12 @@
   <string name="other_categories">Andra kategorier:</string>
   <string name="all_categories">Alla kategorier</string>
   <string name="select_category_content_description">Att välja den här kategorin kommer att prioritera visning av nedladdningsbara böcker på det språket högst upp.</string>
+  <string name="save_categories">Spara kategorier</string>
+  <string name="your_selected_categories">Valda kategorier:</string>
+  <plurals name="and_more">
+    <item quantity="one">och %d till</item>
+    <item quantity="other">och %d till</item>
+  </plurals>
+  <string name="your_categories">Valda kategorier:</string>
+  <string name="your_category">Vald kategori: %s</string>
 </resources>
