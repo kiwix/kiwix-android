@@ -138,6 +138,29 @@ class NoteMetadataFactoryTest {
   }
 
   @Test
+  fun `create removes htm extension from the note file name`() {
+    assertEquals("Earth", articleNoteFileNameFor("https://kiwix.app/A/Earth.htm"))
+  }
+
+  @Test
+  fun `create falls back to article title when url is empty`() {
+    assertEquals("Earth", articleNoteFileNameFor(""))
+  }
+
+  @Test
+  fun `create falls back to article title when url ends with a slash`() {
+    assertEquals("Earth", articleNoteFileNameFor("https://kiwix.app/A/"))
+  }
+
+  private fun articleNoteFileNameFor(url: String): String {
+    every { zimReaderContainer.name } returns "wikipedia_en.zim"
+    return factory.create(
+      AddNoteDialogConfig(articleTitle = "Earth", currentWebViewUrl = url),
+      zimReaderContainer
+    ).articleNoteFileName
+  }
+
+  @Test
   fun `create falls back to article title when url missing`() {
     every { zimReaderContainer.name } returns "wikipedia_en.zim"
 

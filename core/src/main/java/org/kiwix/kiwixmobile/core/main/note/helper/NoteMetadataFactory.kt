@@ -53,7 +53,7 @@ class NoteMetadataFactory @Inject constructor(
       getTextAfterLastSlashWithoutExtension(noteListItem.noteFilePath)
     } else {
       val url = config.currentWebViewUrl
-      val name = if (url != null) getArticleNameFromUrl(url) else ""
+      val name = if (!url.isNullOrBlank()) getArticleNameFromUrl(url) else ""
       name.ifEmpty { articleTitle }.orEmpty()
     }
 
