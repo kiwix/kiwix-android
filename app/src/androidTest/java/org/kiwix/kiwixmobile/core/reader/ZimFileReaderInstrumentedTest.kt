@@ -83,9 +83,9 @@ class ZimFileReaderInstrumentedTest : BaseActivityTest() {
 
       // ── Verify searchSuggestions and related methods ──
       assertNotNull(reader.searchSuggestions("android"))
-      assertNotNull(reader.getRandomPageUrl())
+      assertNotNull(reader.getRandomEntryPath())
       assertTrue(reader.getSuggestedSpelledWords("test", 5).isEmpty())
-      assertNull(reader.getPageUrlFrom("ThisTitleDefinitelyDoesNotExistInTestZim12345"))
+      assertNull(reader.getPageEntryPathFromTitle("ThisTitleDefinitelyDoesNotExistInTestZim12345"))
 
       // ── Verify getMimeTypeFromUrl ──
       assertEquals("text/html", reader.getMimeTypeFromUrl("${CONTENT_PREFIX}A/index.html"))
@@ -156,8 +156,8 @@ class ZimFileReaderInstrumentedTest : BaseActivityTest() {
       assertEquals("", reader.tags)
       assertNull(reader.favicon)
       assertNull(reader.searchSuggestions("test"))
-      assertNull(reader.getRandomPageUrl())
-      assertNull(reader.getPageUrlFrom("index"))
+      assertNull(reader.getRandomEntryPath())
+      assertNull(reader.getPageEntryPathFromTitle("index"))
 
       // ── Verify Factory.create with non-existent file ──
       val factory = ZimFileReader.Factory.Impl(Dispatchers.IO)

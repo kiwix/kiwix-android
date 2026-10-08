@@ -267,14 +267,14 @@ class ReaderPageManagerTest {
     )
 
     verify(exactly = 0) {
-      zimReaderContainer.getRandomPageUrl()
+      zimReaderContainer.getRandomEntryPath()
     }
   }
 
   @Test
   fun `getRandomPage returns Success when page is found`() = runTest {
     every { zimReaderContainer.zimFileReader } returns mockk()
-    every { zimReaderContainer.getRandomPageUrl() } returns "A/B"
+    every { zimReaderContainer.getRandomEntryPath() } returns "A/B"
 
     assertEquals(
       ReaderPageManager.GetRandomPageResult.Success("A/B"),
@@ -282,7 +282,7 @@ class ReaderPageManagerTest {
     )
 
     verify(exactly = 1) {
-      zimReaderContainer.getRandomPageUrl()
+      zimReaderContainer.getRandomEntryPath()
     }
   }
 
@@ -291,7 +291,7 @@ class ReaderPageManagerTest {
     every { zimReaderContainer.zimFileReader } returns mockk()
 
     every {
-      zimReaderContainer.getRandomPageUrl()
+      zimReaderContainer.getRandomEntryPath()
     } returnsMany listOf(
       null,
       null,
@@ -304,7 +304,7 @@ class ReaderPageManagerTest {
     )
 
     verify(exactly = 3) {
-      zimReaderContainer.getRandomPageUrl()
+      zimReaderContainer.getRandomEntryPath()
     }
   }
 
@@ -312,7 +312,7 @@ class ReaderPageManagerTest {
   fun `getRandomPage returns FailedAfterRetries when retries are exhausted`() = runTest {
     every { zimReaderContainer.zimFileReader } returns mockk()
 
-    every { zimReaderContainer.getRandomPageUrl() } returns null
+    every { zimReaderContainer.getRandomEntryPath() } returns null
 
     assertEquals(
       ReaderPageManager.GetRandomPageResult.FailedAfterRetries,
@@ -320,7 +320,7 @@ class ReaderPageManagerTest {
     )
 
     verify(exactly = 3) {
-      zimReaderContainer.getRandomPageUrl()
+      zimReaderContainer.getRandomEntryPath()
     }
   }
 
@@ -328,7 +328,7 @@ class ReaderPageManagerTest {
   fun `getRandomPage respects custom retry count`() = runTest {
     every { zimReaderContainer.zimFileReader } returns mockk()
 
-    every { zimReaderContainer.getRandomPageUrl() } returns null
+    every { zimReaderContainer.getRandomEntryPath() } returns null
 
     assertEquals(
       ReaderPageManager.GetRandomPageResult.FailedAfterRetries,
@@ -336,7 +336,7 @@ class ReaderPageManagerTest {
     )
 
     verify(exactly = 6) {
-      zimReaderContainer.getRandomPageUrl()
+      zimReaderContainer.getRandomEntryPath()
     }
   }
 }

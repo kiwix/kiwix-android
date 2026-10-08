@@ -400,7 +400,7 @@ class LibkiwixBookmarks @Inject constructor(
           // This is a special case where two urls have the same title in a zim file.
           val zimFileReader = getZimFileReaderFromBookmark(bookmarkItem)
           // get the redirect entry so that we can delete the other bookmark.
-          zimFileReader?.getPageUrlFrom(bookmarkItem.title)?.let {
+          zimFileReader?.getPageEntryPathFromTitle(bookmarkItem.title)?.let {
             // check if the bookmark url is not equals to redirect entry,
             // then delete the duplicate bookmark. It will keep the original bookmark.
             if (!isBookmarkOfPage(bookmarkItem.bookmarkUrl, it)) {
@@ -509,7 +509,7 @@ class LibkiwixBookmarks @Inject constructor(
 }
 
 /**
- * Bookmark urls are full (and encoded) content urls, while `ZimFileReader.getPageUrlFrom()`
+ * Bookmark URLs are full (and encoded) content urls, while `ZimFileReader.getPageUrlFrom()`
  * returns the entry path, so compare them by path.
  */
 internal fun isBookmarkOfPage(bookmarkUrl: String, pagePath: String): Boolean =
