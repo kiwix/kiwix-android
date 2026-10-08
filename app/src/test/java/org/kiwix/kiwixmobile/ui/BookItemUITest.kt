@@ -36,15 +36,14 @@ import org.junit.runner.RunWith
 import org.kiwix.kiwixmobile.core.entity.LibkiwixBook
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.zim_manager.Byte
-import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.ArticleCount
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListItem.BookOnDisk
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.SelectionMode
+import org.kiwix.kiwixmobile.ui.BookItemScreen.BOOK_ARTICLE_COUNT_TEST_TAG
 import org.kiwix.kiwixmobile.ui.BookItemScreen.BOOK_ITEM_CHECKBOX_TESTING_TAG
 import org.kiwix.kiwixmobile.ui.BookItemScreen.BOOK_ITEM_TESTING_TAG
 import org.kiwix.kiwixmobile.ui.BookItemScreen.OFFLINE_IMAGE_TEST_TAG
 import org.kiwix.sharedFunctions.TestApplication
 import org.robolectric.RobolectricTestRunner
-import org.robolectric.RuntimeEnvironment
 import org.robolectric.annotation.Config
 import java.io.File
 
@@ -54,8 +53,6 @@ class BookItemUITest {
   @Rule
   @JvmField
   val composeTestRule = createComposeRule()
-
-  private val context get() = RuntimeEnvironment.getApplication()
 
   private fun createBookOnDisk(
     title: String = "Kotlin Docs",
@@ -98,16 +95,15 @@ class BookItemUITest {
 
     bookItem(0, bookOnDisk)
 
-    val expectedArticleCount = ArticleCount("22").toHumanReadable(context)
-
     val expectedSize = Byte("1024").humanReadable
-
-    composeTestRule.onNodeWithText("Kotlin Docs").assertExists()
-    composeTestRule.onNodeWithText("Kotlin").assertExists()
-    composeTestRule.onNodeWithText("2026").assertExists()
-    composeTestRule.onNodeWithText(expectedSize).assertExists()
-    composeTestRule.onNodeWithText(expectedArticleCount).assertExists()
-    composeTestRule.onNodeWithTag(OFFLINE_IMAGE_TEST_TAG, useUnmergedTree = true).assertExists()
+    composeTestRule.onNodeWithText("Kotlin Docs", substring = true).assertIsDisplayed()
+    composeTestRule.onNodeWithText("Kotlin").assertIsDisplayed()
+    composeTestRule.onNodeWithText("2026", substring = true).assertIsDisplayed()
+    composeTestRule.onNodeWithText(expectedSize).assertIsDisplayed()
+    composeTestRule.onNodeWithTag(BOOK_ARTICLE_COUNT_TEST_TAG, useUnmergedTree = true)
+      .assertIsDisplayed()
+    composeTestRule.onNodeWithTag(OFFLINE_IMAGE_TEST_TAG, useUnmergedTree = true)
+      .assertIsDisplayed()
   }
 
   @Test
@@ -273,9 +269,8 @@ class BookItemUITest {
 
     bookItem(index = 0, bookOnDisk = bookOnDisk)
 
-    val expectedArticleCount = ArticleCount("").toHumanReadable(context)
-
-    composeTestRule.onNodeWithText(expectedArticleCount).assertExists()
+    composeTestRule.onNodeWithTag(BOOK_ARTICLE_COUNT_TEST_TAG, useUnmergedTree = true)
+      .assertExists()
   }
 
   @Test

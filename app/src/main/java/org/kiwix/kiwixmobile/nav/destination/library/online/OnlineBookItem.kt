@@ -162,7 +162,7 @@ private fun ShowDetectingFileSystemUi(
 private fun OnlineBookContent(item: BookItem, bookUtils: BookUtils, index: Int) {
   Row(
     modifier = Modifier
-      .padding(top = SIXTEEN_DP, start = SIXTEEN_DP)
+      .padding(SIXTEEN_DP)
       .fillMaxWidth(),
     verticalAlignment = Alignment.CenterVertically
   ) {
