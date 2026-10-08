@@ -819,9 +819,6 @@ abstract class CoreReaderViewModel(
   }
 
   private suspend fun stopReadAloud() {
-    if (isBackToTopEnabled()) {
-      showBackToTopButton()
-    }
     readAloudManager.stopReadAloud()
   }
 
@@ -896,10 +893,6 @@ abstract class CoreReaderViewModel(
   }
 
   private suspend fun startReadAloudFlow() {
-    if (isBackToTopEnabled()) {
-      hideBackToTopButton()
-    }
-
     if (readAloudManager.isTtsInitialed()) {
       startReadAloud()
     } else {
@@ -1110,7 +1103,7 @@ abstract class CoreReaderViewModel(
     launchInMainScope {
       if (!isBackToTopEnabled()) return@launchInMainScope
       val scrollY = getCurrentWebView().scrollY
-      if (scrollY > 200 && !uiState.value.ttsControlsItem.isTtsPlaying) {
+      if (scrollY > 200) {
         showBackToTopButton()
         restartHideBackToTopTimer()
       } else {

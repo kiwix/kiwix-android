@@ -383,6 +383,25 @@ class ReaderScreenComposablesTest {
   }
 
   @Test
+  fun readerScreen_backToTopFabAndTtsOverlay_bothDisplayed() {
+    renderReaderScreen(
+      createTestState(
+        showBackToTopButton = true,
+        ttsControlsItem = CoreReaderViewModel.TtsControlsItem(
+          isTtsPlaying = true,
+          showTtsControlsOverlay = true
+        )
+      )
+    )
+    composeTestRule
+      .onNodeWithContentDescription(context.getString(R.string.pref_back_to_top))
+      .assertIsDisplayed()
+    composeTestRule
+      .onNodeWithTag(TTS_CONTROL_STOP_BUTTON_TESTING_TAG)
+      .assertIsDisplayed()
+  }
+
+  @Test
   fun readerScreen_noBookOpenView_displaysNoOpenBookText() {
     renderReaderScreen(createTestState(showNoBookOpenInReader = true))
     composeTestRule

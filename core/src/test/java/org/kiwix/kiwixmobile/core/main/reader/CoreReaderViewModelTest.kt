@@ -1843,6 +1843,37 @@ internal class CoreReaderViewModelTest {
       advanceUntilIdle()
       assertThat(viewModel.uiState.value.showBackToTopButton).isFalse()
     }
+
+    @Test
+    fun webViewPageChanged_whenScrollYGreaterThan200AndTtsPlaying_showsButton() =
+      runTest {
+        val viewModel = spyk(viewModel, recordPrivateCalls = true)
+
+        every { kiwixDataStore.backToTop } returns flowOf(true)
+        every { mockWebView.scrollY } returns 250
+        viewModel.updateUiStateForTest {
+          copy(
+            ttsControlsItem = ttsControlsItem.copy(isTtsPlaying = true),
+            showBackToTopButton = false
+          )
+        }
+
+        viewModel.uiState.test {
+          awaitItem()
+
+          viewModel.webViewPageChanged(1, 10)
+
+          val visibleState = awaitItem()
+          assertThat(visibleState.showBackToTopButton).isTrue()
+
+          advanceUntilIdle()
+
+          val hiddenState = awaitItem()
+          assertThat(hiddenState.showBackToTopButton).isFalse()
+
+          cancelAndIgnoreRemainingEvents()
+        }
+      }
   }
 
   @Nested

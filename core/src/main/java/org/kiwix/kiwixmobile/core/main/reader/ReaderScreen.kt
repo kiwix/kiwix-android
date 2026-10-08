@@ -25,6 +25,7 @@ import android.widget.FrameLayout
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.animateIntAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -102,6 +103,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -115,6 +117,7 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.colorResource
@@ -264,6 +267,10 @@ fun ReaderScreen(
       bottomAppBarScrollBehavior.state.heightOffset
   }
   KiwixTheme {
+    var ttsPlayerHeightPx by remember { mutableIntStateOf(0) }
+    val isTtsPlayerOpen =
+      state.ttsControlsItem.isTtsPlaying && state.ttsControlsItem.showTtsControlsOverlay
+    val ttsPlayerBottomOffsetPx = if (isTtsPlayerOpen) ttsPlayerHeightPx else 0
     Box(Modifier.fillMaxSize()) {
       Scaffold(
         snackbarHost = { KiwixSnackbarHost(snackbarHostState = snackBarHost) },
@@ -293,7 +300,8 @@ fun ReaderScreen(
           // Only in the reader: not over the tab switcher or the "no book open" view.
           BackToTopFab(
             state.showBackToTopButton && !state.showTabSwitcher && !state.showNoBookOpenInReader,
-            onReaderAction
+            onReaderAction,
+            ttsPlayerBottomOffsetPx
           )
         },
         modifier = Modifier
@@ -308,7 +316,8 @@ fun ReaderScreen(
           Modifier.padding(paddingValues),
           bottomAppBarScrollBehavior,
           topAppBarScrollBehavior,
-          shouldUpdateTopAppBarAndBottomAppBarOnScrolling
+          shouldUpdateTopAppBarAndBottomAppBarOnScrolling,
+          onTtsPlayerHeightChanged = { ttsPlayerHeightPx = it }
         )
       }
       LaunchedEffect(state.showTableOfContentDrawer) {
@@ -405,6 +414,7 @@ private fun ReaderContentLayout(
   bottomAppBarScrollBehavior: BottomAppBarScrollBehavior,
   topAppBarScrollBehavior: TopAppBarScrollBehavior,
   shouldUpdateTopAppBarAndBottomAppBarOnScrolling: MutableState<Boolean>,
+  onTtsPlayerHeightChanged: (Int) -> Unit = {},
 ) {
   Box(modifier = modifier.fillMaxSize()) {
     TabSwitcherAnimated(state, onReaderAction)
@@ -438,7 +448,7 @@ private fun ReaderContentLayout(
             )
           }
           Column(Modifier.align(Alignment.BottomCenter)) {
-            TtsControls(state, onReaderAction)
+            TtsControls(state, onReaderAction, onTtsPlayerHeightChanged)
             ShowDonationLayout(state, onReaderAction)
           }
         }
@@ -677,12 +687,22 @@ private fun formatTime(millis: Long): String {
 @OptIn(ExperimentalMaterial3Api::class)
 @Suppress("LongMethod", "MagicNumber")
 @Composable
-private fun TtsControls(state: ReaderUiState, onReaderAction: (ReaderAction) -> Unit) {
+private fun TtsControls(
+  state: ReaderUiState,
+  onReaderAction: (ReaderAction) -> Unit,
+  onTtsPlayerHeightChanged: (Int) -> Unit = {}
+) {
   val ttsItem = state.ttsControlsItem
 
   if (ttsItem.isTtsPlaying) {
     if (ttsItem.showTtsControlsOverlay) {
-      TtsControlsCard(ttsItem, onReaderAction)
+      Box(
+        modifier = Modifier.onGloballyPositioned { coordinates ->
+          onTtsPlayerHeightChanged(coordinates.size.height)
+        }
+      ) {
+        TtsControlsCard(ttsItem, onReaderAction)
+      }
     } else {
       TtsFloatingActionButton(onReaderAction)
     }
@@ -1066,13 +1086,22 @@ private fun VoiceSelectionDialog(
 }
 
 @Composable
-private fun BackToTopFab(showBackToTop: Boolean, onReaderAction: (ReaderAction) -> Unit) {
+private fun BackToTopFab(
+  showBackToTop: Boolean,
+  onReaderAction: (ReaderAction) -> Unit,
+  bottomOffsetPx: Int = 0
+) {
   if (!showBackToTop) return
+  val animatedBottomOffset by animateIntAsState(
+    targetValue = bottomOffsetPx,
+    label = "backToTopFabBottomOffset"
+  )
   KiwixFloatingActionButton(
     icon = Drawable(R.drawable.ic_arrow_upward_24dp).toPainter(),
     onClick = { onReaderAction(BackToTopButtonClick) },
     contentDescription = stringResource(R.string.pref_back_to_top),
-    shouldPulse = true
+    shouldPulse = true,
+    modifier = Modifier.offset { IntOffset(0, -animatedBottomOffset) }
   )
 }
 
