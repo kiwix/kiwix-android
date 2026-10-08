@@ -39,7 +39,7 @@ class ZimReaderContainerUtilsTest {
   }
 
   @Test
-  fun titleToUrl_whenTitleStartsWithArticlePrefix_returnsSameTitle() {
+  fun titleToEntryPath_whenTitleStartsWithArticlePrefix_returnsSameTitle() {
     val result = container.titleToEntryPath("A/Kiwix")
 
     assertEquals(
@@ -53,7 +53,7 @@ class ZimReaderContainerUtilsTest {
   }
 
   @Test
-  fun titleToUrl_resolvesArticleTitle() {
+  fun titleToEntryPath_resolvesArticleTitle() {
     every {
       container.getPageEntryPathFromTitle("Kiwix")
     } returns "A/Kiwix"
@@ -71,7 +71,7 @@ class ZimReaderContainerUtilsTest {
   }
 
   @Test
-  fun titleToUrl_whenArticleDoesNotExist_returnsNull() {
+  fun titleToEntryPath_whenArticleDoesNotExist_returnsNull() {
     every {
       container.getPageEntryPathFromTitle("Unknown")
     } returns null
@@ -82,7 +82,7 @@ class ZimReaderContainerUtilsTest {
   }
 
   @Test
-  fun titleToUrl_whenTitleIsEmpty_delegatesToPageUrlLookup() {
+  fun titleToEntryPath_whenTitleIsEmpty_delegatesToEntryPathLookup() {
     every {
       container.getPageEntryPathFromTitle("")
     } returns null

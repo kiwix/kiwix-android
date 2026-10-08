@@ -509,7 +509,7 @@ class LibkiwixBookmarks @Inject constructor(
 }
 
 /**
- * Bookmark URLs are full (and encoded) content urls, while `ZimFileReader.getPageUrlFrom()`
+ * Bookmark URLs are full (and encoded) content URLs, while `ZimFileReader.getPageEntryPathFromTitle()`
  * returns the entry path, so compare them by path.
  */
 internal fun isBookmarkOfPage(bookmarkUrl: String, pagePath: String): Boolean =
