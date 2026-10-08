@@ -18,19 +18,38 @@
 
 package org.kiwix.kiwixmobile.ui
 
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.SuggestionChip
 import androidx.compose.material3.SuggestionChipDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.unit.dp
 import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.ui.theme.TagPictureContainerDark
+import org.kiwix.kiwixmobile.core.ui.theme.TagPictureContainerLight
+import org.kiwix.kiwixmobile.core.ui.theme.TagPictureContentDark
+import org.kiwix.kiwixmobile.core.ui.theme.TagPictureContentLight
+import org.kiwix.kiwixmobile.core.ui.theme.TagShortTextContainerDark
+import org.kiwix.kiwixmobile.core.ui.theme.TagShortTextContainerLight
+import org.kiwix.kiwixmobile.core.ui.theme.TagShortTextContentDark
+import org.kiwix.kiwixmobile.core.ui.theme.TagShortTextContentLight
+import org.kiwix.kiwixmobile.core.ui.theme.TagTextOnlyContainerDark
+import org.kiwix.kiwixmobile.core.ui.theme.TagTextOnlyContainerLight
+import org.kiwix.kiwixmobile.core.ui.theme.TagTextOnlyContentDark
+import org.kiwix.kiwixmobile.core.ui.theme.TagTextOnlyContentLight
+import org.kiwix.kiwixmobile.core.ui.theme.TagVideoContainerDark
+import org.kiwix.kiwixmobile.core.ui.theme.TagVideoContainerLight
+import org.kiwix.kiwixmobile.core.ui.theme.TagVideoContentDark
+import org.kiwix.kiwixmobile.core.ui.theme.TagVideoContentLight
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.EIGHT_DP
 import org.kiwix.kiwixmobile.core.zim_manager.KiwixTag
 import org.kiwix.kiwixmobile.core.zim_manager.KiwixTag.Companion.YesNoValueTag
@@ -48,11 +67,25 @@ fun TagsView(tags: List<KiwixTag>, modifier: Modifier = Modifier, index: Int) {
   ) {
     if (tags.isYesOrNotDefined<PicturesTag>()) {
       val picture = stringResource(R.string.tag_pic)
-      TagChip(text = picture, contentDescription = "$picture$index")
+      TagChip(
+        text = picture,
+        contentDescription = "$picture$index",
+        containerColorLight = TagPictureContainerLight,
+        containerColorDark = TagPictureContainerDark,
+        contentColorLight = TagPictureContentLight,
+        contentColorDark = TagPictureContentDark
+      )
     }
     if (tags.isYes<VideoTag>()) {
       val video = stringResource(R.string.tag_vid)
-      TagChip(text = video, contentDescription = "$video$index")
+      TagChip(
+        text = video,
+        contentDescription = "$video$index",
+        containerColorLight = TagVideoContainerLight,
+        containerColorDark = TagVideoContainerDark,
+        contentColorLight = TagVideoContentLight,
+        contentColorDark = TagVideoContentDark
+      )
     }
     val shortTextIsSelected = tags.isDefinedAndNo<DetailsTag>()
     if (tags.isDefinedAndNo<PicturesTag>() &&
@@ -60,28 +93,49 @@ fun TagsView(tags: List<KiwixTag>, modifier: Modifier = Modifier, index: Int) {
       !shortTextIsSelected
     ) {
       val textOnly = stringResource(R.string.tag_text_only)
-      TagChip(text = textOnly, contentDescription = "$textOnly$index")
+      TagChip(
+        text = textOnly,
+        contentDescription = "$textOnly$index",
+        containerColorLight = TagTextOnlyContainerLight,
+        containerColorDark = TagTextOnlyContainerDark,
+        contentColorLight = TagTextOnlyContentLight,
+        contentColorDark = TagTextOnlyContentDark
+      )
     }
     if (shortTextIsSelected) {
       val shortText = stringResource(R.string.tag_short_text)
-      TagChip(text = shortText, contentDescription = "$shortText$index")
+      TagChip(
+        text = shortText,
+        contentDescription = "$shortText$index",
+        containerColorLight = TagShortTextContainerLight,
+        containerColorDark = TagShortTextContainerDark,
+        contentColorLight = TagShortTextContentLight,
+        contentColorDark = TagShortTextContentDark
+      )
     }
   }
 }
 
 @Composable
-private fun TagChip(text: String, contentDescription: String) {
+private fun TagChip(
+  text: String,
+  contentDescription: String,
+  containerColorLight: Color,
+  containerColorDark: Color,
+  contentColorLight: Color,
+  contentColorDark: Color
+) {
+  val isDark = isSystemInDarkTheme()
   val chipColors = SuggestionChipDefaults.suggestionChipColors(
-    disabledContainerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.24f),
-    disabledLabelColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.87f)
+    disabledContainerColor = if (isDark) containerColorDark else containerColorLight,
+    disabledLabelColor = if (isDark) contentColorDark else contentColorLight
   )
   SuggestionChip(
     onClick = {},
     label = { Text(text) },
     enabled = false,
-    shape = MaterialTheme.shapes.extraLarge,
+    shape = RoundedCornerShape(4.dp),
     colors = chipColors,
-    border = null,
     modifier = Modifier.semantics { this.contentDescription = contentDescription }
   )
 }
