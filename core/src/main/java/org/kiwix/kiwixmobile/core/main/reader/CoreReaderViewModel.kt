@@ -133,7 +133,7 @@ import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
 import org.kiwix.kiwixmobile.core.utils.dialog.UnsupportedMimeTypeHandler
 import org.kiwix.kiwixmobile.core.utils.files.Log
-import org.kiwix.kiwixmobile.core.utils.titleToUrl
+import org.kiwix.kiwixmobile.core.utils.titleToEntryPath
 import org.kiwix.kiwixmobile.core.utils.urlSuffixToParsableUrl
 import java.io.File
 import kotlin.math.abs
@@ -784,7 +784,7 @@ abstract class CoreReaderViewModel(
     launchInViewModelScope {
       when (val result = readerPageManager.getRandomPage()) {
         is ReaderPageManager.GetRandomPageResult.Success -> {
-          readerWebViewManager.openPage(result.pageUrl, getCurrentWebView())
+          readerWebViewManager.openPage(result.entryPath, getCurrentWebView())
         }
 
         ReaderPageManager.GetRandomPageResult.NoZimFileLoaded -> {
@@ -1364,8 +1364,8 @@ abstract class CoreReaderViewModel(
     withContext(mainDispatcher) { getCurrentWebView().url != null }
 
   private suspend fun openMainPage() {
-    val pageUrl = zimReaderContainer.mainPage
-    readerWebViewManager.openPage(pageUrl, getCurrentWebView())
+    val mainPagePath = zimReaderContainer.mainPage
+    readerWebViewManager.openPage(mainPagePath, getCurrentWebView())
   }
 
   protected open suspend fun loadUrlWithCurrentWebview(url: String?) {
@@ -1494,7 +1494,7 @@ abstract class CoreReaderViewModel(
 
   private fun resolveDestinationUrl(item: SearchItemToOpen): String? =
     item.pageUrl
-      ?: zimReaderContainer.titleToUrl(item.pageTitle)
+      ?: zimReaderContainer.titleToEntryPath(item.pageTitle)
         ?.let(zimReaderContainer::urlSuffixToParsableUrl)
       ?: zimReaderContainer.mainPage?.let(zimReaderContainer::urlSuffixToParsableUrl)
 

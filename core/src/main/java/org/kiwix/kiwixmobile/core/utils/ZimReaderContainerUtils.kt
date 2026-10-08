@@ -30,5 +30,5 @@ private fun contentUrl(articleUrl: String): String =
 fun ZimReaderContainer.urlSuffixToParsableUrl(suffixUrl: String): String =
   redirectOrOriginal(contentUrl(suffixUrl))
 
-fun ZimReaderContainer.titleToUrl(title: String): String? =
-  if (title.startsWith("A/")) title else getPageUrlFromTitle(title)
+fun ZimReaderContainer.titleToEntryPath(title: String): String? =
+  if (title.startsWith("A/")) title else getPageEntryPathFromTitle(title)

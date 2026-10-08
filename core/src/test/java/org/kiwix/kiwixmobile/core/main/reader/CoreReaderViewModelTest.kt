@@ -108,7 +108,7 @@ import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
 import org.kiwix.kiwixmobile.core.utils.dialog.UnsupportedMimeTypeHandler
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils.readFile
-import org.kiwix.kiwixmobile.core.utils.titleToUrl
+import org.kiwix.kiwixmobile.core.utils.titleToEntryPath
 import org.kiwix.sharedFunctions.MainDispatcherRule
 import java.io.File
 
@@ -2738,7 +2738,7 @@ internal class CoreReaderViewModelTest {
         )
         every { pendingSearchItemManager.consume() } returns item
 
-        every { zimReaderContainer.titleToUrl("Kiwix") } returns "A/kiwix.html"
+        every { zimReaderContainer.titleToEntryPath("Kiwix") } returns "A/kiwix.html"
 
         every { zimReaderContainer.isRedirect(any()) } returns false
 
@@ -2787,7 +2787,7 @@ internal class CoreReaderViewModelTest {
         )
         every { pendingSearchItemManager.consume() } returns item
 
-        every { zimReaderContainer.titleToUrl("Unknown Title") } returns null
+        every { zimReaderContainer.titleToEntryPath("Unknown Title") } returns null
         every { zimReaderContainer.mainPage } returns "A/main.html"
         every { zimReaderContainer.isRedirect(any()) } returns false
 

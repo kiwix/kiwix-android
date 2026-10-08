@@ -40,7 +40,7 @@ class ZimReaderContainerUtilsTest {
 
   @Test
   fun titleToUrl_whenTitleStartsWithArticlePrefix_returnsSameTitle() {
-    val result = container.titleToUrl("A/Kiwix")
+    val result = container.titleToEntryPath("A/Kiwix")
 
     assertEquals(
       "A/Kiwix",
@@ -48,17 +48,17 @@ class ZimReaderContainerUtilsTest {
     )
 
     verify(exactly = 0) {
-      container.getPageUrlFromTitle(any())
+      container.getPageEntryPathFromTitle(any())
     }
   }
 
   @Test
   fun titleToUrl_resolvesArticleTitle() {
     every {
-      container.getPageUrlFromTitle("Kiwix")
+      container.getPageEntryPathFromTitle("Kiwix")
     } returns "A/Kiwix"
 
-    val result = container.titleToUrl("Kiwix")
+    val result = container.titleToEntryPath("Kiwix")
 
     assertEquals(
       "A/Kiwix",
@@ -66,17 +66,17 @@ class ZimReaderContainerUtilsTest {
     )
 
     verify {
-      container.getPageUrlFromTitle("Kiwix")
+      container.getPageEntryPathFromTitle("Kiwix")
     }
   }
 
   @Test
   fun titleToUrl_whenArticleDoesNotExist_returnsNull() {
     every {
-      container.getPageUrlFromTitle("Unknown")
+      container.getPageEntryPathFromTitle("Unknown")
     } returns null
 
-    val result = container.titleToUrl("Unknown")
+    val result = container.titleToEntryPath("Unknown")
 
     assertNull(result)
   }
@@ -84,15 +84,15 @@ class ZimReaderContainerUtilsTest {
   @Test
   fun titleToUrl_whenTitleIsEmpty_delegatesToPageUrlLookup() {
     every {
-      container.getPageUrlFromTitle("")
+      container.getPageEntryPathFromTitle("")
     } returns null
 
-    val result = container.titleToUrl("")
+    val result = container.titleToEntryPath("")
 
     assertNull(result)
 
     verify(exactly = 1) {
-      container.getPageUrlFromTitle("")
+      container.getPageEntryPathFromTitle("")
     }
   }
 
