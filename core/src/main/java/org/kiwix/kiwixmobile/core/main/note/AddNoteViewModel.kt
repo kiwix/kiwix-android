@@ -144,39 +144,43 @@ class AddNoteViewModel @Inject constructor(
   }
 
   fun saveNote() {
-    viewModelScope.launch {
-      if (!isExternalStorageWritable()) {
-        sendEffect(ShowToast(R.string.note_save_error_storage_not_writable))
-        return@launch
-      }
-      if (!kiwixPermissionChecker.hasWriteExternalStoragePermission()) {
-        Log.d("AddNoteDialog", "WRITE_EXTERNAL_STORAGE permission not granted")
-        sendEffect(RequestStoragePermission)
-        return@launch
-      }
-      val noteSaved = withContext(ioDispatcher) {
-        noteRepository.saveNote(requireNoteMetadata(), uiState.value.noteTextFieldValue.text)
-      }
-      if (noteSaved) {
-        _uiState.update { it.copy(noteEdited = false) }
-        updateMenuState(deleteEnabled = true, saveEnabled = false)
-        sendEffect(ShowToast(R.string.note_save_successful))
-      } else {
-        sendEffect(ShowToast(R.string.note_save_unsuccessful))
-      }
+    viewModelScope.launch { writeNoteToFile() }
+  }
+
+  private suspend fun writeNoteToFile() {
+    if (!isExternalStorageWritable()) {
+      sendEffect(ShowToast(R.string.note_save_error_storage_not_writable))
+      return
+    }
+    if (!kiwixPermissionChecker.hasWriteExternalStoragePermission()) {
+      Log.d("AddNoteDialog", "WRITE_EXTERNAL_STORAGE permission not granted")
+      sendEffect(RequestStoragePermission)
+      return
+    }
+    val noteSaved = withContext(ioDispatcher) {
+      noteRepository.saveNote(requireNoteMetadata(), uiState.value.noteTextFieldValue.text)
+    }
+    if (noteSaved) {
+      _uiState.update { it.copy(noteEdited = false) }
+      updateMenuState(deleteEnabled = true, saveEnabled = false)
+      sendEffect(ShowToast(R.string.note_save_successful))
+    } else {
+      sendEffect(ShowToast(R.string.note_save_unsuccessful))
     }
   }
 
   fun shareNote() {
-    if (uiState.value.noteEdited && requireNoteMetadata().isZimFileExist) {
-      saveNote()
-    }
-    val noteFile =
-      File("${requireNoteMetadata().zimNotesDirectory}${requireNoteMetadata().articleNoteFileName}.txt")
-    if (noteFile.exists()) {
-      sendEffect(ShareNote(noteFile))
-    } else {
-      sendEffect(ShowToast(R.string.note_share_error_file_missing))
+    viewModelScope.launch {
+      if (uiState.value.noteEdited && requireNoteMetadata().isZimFileExist) {
+        writeNoteToFile()
+      }
+      val noteFile =
+        File("${requireNoteMetadata().zimNotesDirectory}${requireNoteMetadata().articleNoteFileName}.txt")
+      if (noteFile.exists()) {
+        sendEffect(ShareNote(noteFile))
+      } else {
+        sendEffect(ShowToast(R.string.note_share_error_file_missing))
+      }
     }
   }
 

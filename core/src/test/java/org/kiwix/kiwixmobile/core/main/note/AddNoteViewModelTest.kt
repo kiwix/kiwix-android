@@ -386,17 +386,35 @@ class AddNoteViewModelTest {
 
     viewModel.onTextChanged(TextFieldValue("Edited"))
 
+    val noteFile = File(tempDir, "article.txt")
     every { noteMetadata.isZimFileExist } returns true
+    every { noteMetadata.zimNotesDirectory } returns "${tempDir.absolutePath}/"
+    every { noteMetadata.articleNoteFileName } returns "article"
     every { isExternalStorageWritable() } returns true
     coEvery { kiwixPermissionChecker.hasWriteExternalStoragePermission() } returns true
 
     coEvery {
       noteRepository.saveNote(any(), any())
-    } returns true
+    } answers {
+      noteFile.writeText(secondArg())
+      true
+    }
 
-    viewModel.shareNote()
+    viewModel.effects.test {
+      viewModel.shareNote()
 
-    advanceUntilIdle()
+      advanceUntilIdle()
+
+      assertEquals(
+        AddNoteViewModel.AddNoteEffect.ShowToast(R.string.note_save_successful),
+        awaitItem()
+      )
+      val effect = awaitItem()
+      assertTrue(effect is AddNoteViewModel.AddNoteEffect.ShareNote)
+      val sharedFile = (effect as AddNoteViewModel.AddNoteEffect.ShareNote).noteFile
+      assertEquals(noteFile.absolutePath, sharedFile.absolutePath)
+      assertEquals("Edited", sharedFile.readText())
+    }
 
     coVerify {
       noteRepository.saveNote(noteMetadata, "Edited")
