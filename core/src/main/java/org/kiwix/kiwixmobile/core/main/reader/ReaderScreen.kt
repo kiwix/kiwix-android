@@ -25,6 +25,7 @@ import android.widget.FrameLayout
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.animateIntAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -76,7 +77,6 @@ import androidx.compose.material3.BottomAppBarScrollBehavior
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LocalContentColor
@@ -103,6 +103,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -116,6 +117,7 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.colorResource
@@ -189,7 +191,6 @@ import org.kiwix.kiwixmobile.core.ui.theme.KiwixTheme
 import org.kiwix.kiwixmobile.core.ui.theme.White
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.CLOSE_TAB_ICON_SIZE
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.EIGHT_DP
-import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FIFTY_SIX_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FIVE_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FOURTEEN_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FOUR_DP
@@ -212,7 +213,6 @@ import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TAB_SWITCHER_TEXT_SIZE
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TEN_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.THREE_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TWELVE_DP
-import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TWENTY_EIGHT_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TWENTY_FOUR_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TWENTY_TWO_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TWO_DP
@@ -267,6 +267,10 @@ fun ReaderScreen(
       bottomAppBarScrollBehavior.state.heightOffset
   }
   KiwixTheme {
+    var ttsPlayerHeightPx by remember { mutableIntStateOf(0) }
+    val isTtsPlayerOpen =
+      state.ttsControlsItem.isTtsPlaying && state.ttsControlsItem.showTtsControlsOverlay
+    val ttsPlayerBottomOffsetPx = if (isTtsPlayerOpen) ttsPlayerHeightPx else 0
     Box(Modifier.fillMaxSize()) {
       Scaffold(
         snackbarHost = { KiwixSnackbarHost(snackbarHostState = snackBarHost) },
@@ -296,7 +300,8 @@ fun ReaderScreen(
           // Only in the reader: not over the tab switcher or the "no book open" view.
           BackToTopFab(
             state.showBackToTopButton && !state.showTabSwitcher && !state.showNoBookOpenInReader,
-            onReaderAction
+            onReaderAction,
+            ttsPlayerBottomOffsetPx
           )
         },
         modifier = Modifier
@@ -311,7 +316,8 @@ fun ReaderScreen(
           Modifier.padding(paddingValues),
           bottomAppBarScrollBehavior,
           topAppBarScrollBehavior,
-          shouldUpdateTopAppBarAndBottomAppBarOnScrolling
+          shouldUpdateTopAppBarAndBottomAppBarOnScrolling,
+          onTtsPlayerHeightChanged = { ttsPlayerHeightPx = it }
         )
       }
       LaunchedEffect(state.showTableOfContentDrawer) {
@@ -408,6 +414,7 @@ private fun ReaderContentLayout(
   bottomAppBarScrollBehavior: BottomAppBarScrollBehavior,
   topAppBarScrollBehavior: TopAppBarScrollBehavior,
   shouldUpdateTopAppBarAndBottomAppBarOnScrolling: MutableState<Boolean>,
+  onTtsPlayerHeightChanged: (Int) -> Unit = {},
 ) {
   Box(modifier = modifier.fillMaxSize()) {
     TabSwitcherAnimated(state, onReaderAction)
@@ -441,7 +448,7 @@ private fun ReaderContentLayout(
             )
           }
           Column(Modifier.align(Alignment.BottomCenter)) {
-            TtsControls(state, onReaderAction)
+            TtsControls(state, onReaderAction, onTtsPlayerHeightChanged)
             ShowDonationLayout(state, onReaderAction)
           }
         }
@@ -680,12 +687,22 @@ private fun formatTime(millis: Long): String {
 @OptIn(ExperimentalMaterial3Api::class)
 @Suppress("LongMethod", "MagicNumber")
 @Composable
-private fun TtsControls(state: ReaderUiState, onReaderAction: (ReaderAction) -> Unit) {
+private fun TtsControls(
+  state: ReaderUiState,
+  onReaderAction: (ReaderAction) -> Unit,
+  onTtsPlayerHeightChanged: (Int) -> Unit = {}
+) {
   val ttsItem = state.ttsControlsItem
 
   if (ttsItem.isTtsPlaying) {
     if (ttsItem.showTtsControlsOverlay) {
-      TtsControlsCard(ttsItem, onReaderAction)
+      Box(
+        modifier = Modifier.onGloballyPositioned { coordinates ->
+          onTtsPlayerHeightChanged(coordinates.size.height)
+        }
+      ) {
+        TtsControlsCard(ttsItem, onReaderAction)
+      }
     } else {
       TtsFloatingActionButton(onReaderAction)
     }
@@ -902,30 +919,18 @@ private fun TtsControlButtonsRow(
       if (ttsItem.isTtsPaused) R.string.tts_resume else R.string.tts_pause
     )
     PlayerTooltip(playPauseTooltip) {
-      Surface(
+      KiwixFloatingActionButton(
+        icon = painterResource(
+          id = if (ttsItem.isTtsPaused) {
+            R.drawable.ic_baseline_play
+          } else {
+            R.drawable.ic_baseline_pause
+          }
+        ),
         onClick = { onReaderAction(PauseTts) },
-        shape = CircleShape,
-        color = MaterialTheme.colorScheme.primary,
-        contentColor = MaterialTheme.colorScheme.onPrimary,
-        modifier = Modifier
-          .size(FIFTY_SIX_DP)
-          .semantics { testTag = TTS_CONTROL_PLAY_PAUSE_BUTTON_TESTING_TAG }
-      ) {
-        Box(contentAlignment = Alignment.Center) {
-          Icon(
-            painter = painterResource(
-              id = if (ttsItem.isTtsPaused) {
-                R.drawable.ic_baseline_play
-              } else {
-                R.drawable.ic_baseline_pause
-              }
-            ),
-            contentDescription = ttsItem.contentDescription,
-            tint = MaterialTheme.colorScheme.onPrimary,
-            modifier = Modifier.size(TWENTY_EIGHT_DP)
-          )
-        }
-      }
+        contentDescription = ttsItem.contentDescription,
+        modifier = Modifier.semantics { testTag = TTS_CONTROL_PLAY_PAUSE_BUTTON_TESTING_TAG }
+      )
     }
 
     // 4. Forward 10s button
@@ -987,10 +992,10 @@ private fun TtsFloatingActionButton(onReaderAction: (ReaderAction) -> Unit) {
     contentAlignment = Alignment.BottomStart
   ) {
     PlayerTooltip(stringResource(R.string.tts_controls)) {
-      FloatingActionButton(
+      KiwixFloatingActionButton(
+        icon = painterResource(id = R.drawable.ic_volume_up),
         onClick = { onReaderAction(ShowTtsControlsOverlay) },
-        containerColor = MaterialTheme.colorScheme.primary,
-        contentColor = MaterialTheme.colorScheme.onPrimary,
+        contentDescription = stringResource(R.string.menu_read_aloud),
         modifier = Modifier
           .offset { IntOffset(offsetX.roundToInt(), offsetY.roundToInt()) }
           .pointerInput(Unit) {
@@ -1001,13 +1006,7 @@ private fun TtsFloatingActionButton(onReaderAction: (ReaderAction) -> Unit) {
             }
           }
           .semantics { testTag = TTS_FLOATING_SPEAKER_BUTTON_TESTING_TAG }
-      ) {
-        Icon(
-          painter = painterResource(id = R.drawable.ic_volume_up),
-          contentDescription = stringResource(R.string.menu_read_aloud),
-          modifier = Modifier.size(TWENTY_FOUR_DP)
-        )
-      }
+      )
     }
   }
 }
@@ -1087,13 +1086,22 @@ private fun VoiceSelectionDialog(
 }
 
 @Composable
-private fun BackToTopFab(showBackToTop: Boolean, onReaderAction: (ReaderAction) -> Unit) {
+private fun BackToTopFab(
+  showBackToTop: Boolean,
+  onReaderAction: (ReaderAction) -> Unit,
+  bottomOffsetPx: Int = 0
+) {
   if (!showBackToTop) return
+  val animatedBottomOffset by animateIntAsState(
+    targetValue = bottomOffsetPx,
+    label = "backToTopFabBottomOffset"
+  )
   KiwixFloatingActionButton(
     icon = Drawable(R.drawable.ic_arrow_upward_24dp).toPainter(),
     onClick = { onReaderAction(BackToTopButtonClick) },
     contentDescription = stringResource(R.string.pref_back_to_top),
-    shouldPulse = true
+    shouldPulse = true,
+    modifier = Modifier.offset { IntOffset(0, -animatedBottomOffset) }
   )
 }
 
