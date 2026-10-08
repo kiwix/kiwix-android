@@ -125,6 +125,44 @@ class NoteMetadataFactoryTest {
   }
 
   @Test
+  fun `create keeps dots of the article name in the note file name`() {
+    every { zimReaderContainer.name } returns "wikipedia_en.zim"
+
+    val metadata = factory.create(
+      AddNoteDialogConfig(
+        articleTitle = "U.S. Global Change Research Program",
+        currentWebViewUrl = "https://kiwix.app/A/U.S._Global_Change_Research_Program"
+      ),
+      zimReaderContainer
+    )
+
+    assertEquals("U.S._Global_Change_Research_Program", metadata.articleNoteFileName)
+  }
+
+  @Test
+  fun `create removes htm extension from the note file name`() {
+    assertEquals("Earth", articleNoteFileNameFor("https://kiwix.app/A/Earth.htm"))
+  }
+
+  @Test
+  fun `create falls back to article title when url is empty`() {
+    assertEquals("Earth", articleNoteFileNameFor(""))
+  }
+
+  @Test
+  fun `create falls back to article title when url ends with a slash`() {
+    assertEquals("Earth", articleNoteFileNameFor("https://kiwix.app/A/"))
+  }
+
+  private fun articleNoteFileNameFor(url: String): String {
+    every { zimReaderContainer.name } returns "wikipedia_en.zim"
+    return factory.create(
+      AddNoteDialogConfig(articleTitle = "Earth", currentWebViewUrl = url),
+      zimReaderContainer
+    ).articleNoteFileName
+  }
+
+  @Test
   fun `create falls back to article title when url missing`() {
     every { zimReaderContainer.name } returns "wikipedia_en.zim"
 
