@@ -208,6 +208,7 @@ private fun CollectFileSearched(
       ?.collect { item ->
         item ?: return@collect
         viewModel.pendingSearchItemManager.store(item)
+        backStackEntry.savedStateHandle.remove<SearchItemToOpen>(TAG_FILE_SEARCHED)
         viewModel.emitEffect(ReaderEffect.ConsumeSavedStateHandle(listOf(TAG_FILE_SEARCHED)))
       }
   }
