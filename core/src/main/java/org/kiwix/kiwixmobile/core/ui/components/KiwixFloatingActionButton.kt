@@ -27,13 +27,19 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import kotlinx.coroutines.flow.map
 import org.kiwix.kiwixmobile.core.extensions.pulsing
 import org.kiwix.kiwixmobile.core.ui.theme.KiwixTheme
+import org.kiwix.kiwixmobile.core.utils.datastore.PreferencesKeys
+import org.kiwix.kiwixmobile.core.utils.datastore.kiwixDataStore
 
 /**
  * A reusable Floating Action Button (FAB) composable used across multiple screens
@@ -49,6 +55,7 @@ import org.kiwix.kiwixmobile.core.ui.theme.KiwixTheme
  * @param contentColor The color used for the content of fab button(Icon). Defaults to
  *        [MaterialTheme.colorScheme.onSurface].
  * @param shouldPulse enables the pulsing effect on fab button. By-default it is disabled.
+ *        Suppressed regardless of this value when the "Disable animations" setting is on.
  */
 @Composable
 fun KiwixFloatingActionButton(
@@ -70,7 +77,16 @@ fun KiwixFloatingActionButton(
         }
       }
     }
-    val pulseModifier = if (shouldPulse) {
+    // See issue #3521: a continuously looping animation is exactly the kind of
+    // thing e-ink users want to turn off, so this checks the flag directly
+    // rather than requiring every caller to thread it through.
+    val context = LocalContext.current
+    val animationsDisabled by remember(context) {
+      context.kiwixDataStore.data.map { prefs ->
+        prefs[PreferencesKeys.PREF_DISABLE_ANIMATIONS] ?: false
+      }
+    }.collectAsStateWithLifecycle(initialValue = false)
+    val pulseModifier = if (shouldPulse && !animationsDisabled) {
       Modifier.pulsing()
     } else {
       Modifier
