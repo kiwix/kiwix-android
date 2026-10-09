@@ -41,6 +41,10 @@ class FailFastRule : TestRule {
         }
         try {
           base.evaluate()
+        } catch (t: AssumptionViolatedException) {
+          // A test's own Assume check (e.g. "TTS not available on this device") is an
+          // intentional skip, not a failure - must not trip the fail-fast marker.
+          throw t
         } catch (t: Throwable) {
           markerFile.createNewFile()
           throw t
