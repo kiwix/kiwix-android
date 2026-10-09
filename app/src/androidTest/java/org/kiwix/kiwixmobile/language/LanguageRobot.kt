@@ -82,8 +82,13 @@ class LanguageRobot : BaseRobot() {
     composeTestRule: ComposeContentTestRule,
     searchLanguage: String
   ) {
-    val searchField = composeTestRule.onNodeWithTag(SEARCH_FIELD_TESTING_TAG)
-    searchField.performTextInput(text = searchLanguage)
+    composeTestRule.apply {
+      waitForIdle()
+      waitUntil(TestUtils.TEST_PAUSE_MS_FOR_DOWNLOAD_TEST) {
+        onAllNodesWithTag(SEARCH_FIELD_TESTING_TAG).fetchSemanticsNodes().isNotEmpty()
+      }
+      onNodeWithTag(SEARCH_FIELD_TESTING_TAG).performTextInput(text = searchLanguage)
+    }
   }
 
   fun selectLanguage(
