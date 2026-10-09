@@ -336,12 +336,12 @@ class LibkiwixBookmarks @Inject constructor(
     ensureInitialized()
     if (!bookmarksChanged && bookmarkList.isNotEmpty()) {
       // No changes, return the cached data
-      return bookmarkList.distinctBy(LibkiwixBookmarkItem::bookmarkUrl)
+      return bookmarkList.distinctBookmarks()
     }
     // Retrieve the list of bookmarks from the library, or return an empty list if it's null.
     val bookmarkArray =
       library.getBookmarks(false)?.toList()
-        ?: return bookmarkList.distinctBy(LibkiwixBookmarkItem::bookmarkUrl)
+        ?: return bookmarkList.distinctBookmarks()
 
     // Create a list to store LibkiwixBookmarkItem objects.
     bookmarkList =
@@ -378,8 +378,11 @@ class LibkiwixBookmarks @Inject constructor(
     // Delete duplicates bookmarks if any exist
     deleteDuplicateBookmarks()
 
-    return bookmarkList.distinctBy { it.zimId to it.bookmarkUrl }
+    return bookmarkList.distinctBookmarks()
   }
+
+  private fun List<LibkiwixBookmarkItem>.distinctBookmarks(): List<LibkiwixBookmarkItem> =
+    distinctBy { it.zimId to it.bookmarkUrl }
 
   @Suppress("NestedBlockDepth")
   private suspend fun deleteDuplicateBookmarks() {
