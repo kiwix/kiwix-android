@@ -77,7 +77,7 @@ jobs:
           profile: pixel_2
           force-avd-creation: false
           sdcard-path-or-size: 1024M
-          cores: 2
+          cores: 4
           disable-animations: false
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -no-metrics
           script: |
@@ -91,7 +91,13 @@ jobs:
           target: ${{ matrix.target }}
           arch: ${{ (matrix.api-level >= 30) && 'x86_64' || 'x86' }}
           profile: pixel_2
-          script: bash contrib/instrumentation.sh
+          script: |
+            # The emulator's crashpad_handler subprocess can survive `adb emu kill` and
+            # hang the android-emulator-runner action's teardown
+            # (https://github.com/ReactiveCircus/android-emulator-runner/issues/385).
+            # Kill it once this script exits, regardless of the test outcome.
+            trap 'killall -INT crashpad_handler 2>/dev/null || true' EXIT
+            bash contrib/instrumentation.sh
 
       - name: Upload screenshot result
         uses: actions/upload-artifact@v6
@@ -186,7 +192,7 @@ jobs:
           profile: pixel_2
           force-avd-creation: false
           sdcard-path-or-size: 1024M
-          cores: 2
+          cores: 4
           disable-animations: false
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -no-metrics
           script: |
@@ -200,7 +206,9 @@ jobs:
           target: ${{ matrix.target }}
           arch: ${{ (matrix.api-level >= 30) && 'x86_64' || 'x86' }}
           profile: pixel_2
-          script: bash contrib/instrumentation-release.sh
+          script: |
+            trap 'killall -INT crashpad_handler 2>/dev/null || true' EXIT
+            bash contrib/instrumentation-release.sh
 
   automated-tests-branded-apps:
     name: Automated tests for Branded app
@@ -256,7 +264,7 @@ jobs:
           profile: pixel_2
           force-avd-creation: false
           sdcard-path-or-size: 1024M
-          cores: 2
+          cores: 4
           disable-animations: false
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -no-metrics
           script: |
@@ -270,7 +278,9 @@ jobs:
           target: ${{ matrix.target }}
           arch: ${{ (matrix.api-level >= 30) && 'x86_64' || 'x86' }}
           profile: pixel_2
-          script: bash contrib/instrumentation-brandedapps.sh
+          script: |
+            trap 'killall -INT crashpad_handler 2>/dev/null || true' EXIT
+            bash contrib/instrumentation-brandedapps.sh
 
   automated-tests-on-tablet:
     name: Automated tests on Tablet
@@ -326,7 +336,7 @@ jobs:
           profile: pixel_c
           force-avd-creation: false
           sdcard-path-or-size: 1024M
-          cores: 2
+          cores: 4
           disable-animations: false
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -no-metrics
           script: |
@@ -340,7 +350,9 @@ jobs:
           target: ${{ matrix.target }}
           arch: ${{ (matrix.api-level >= 30) && 'x86_64' || 'x86' }}
           profile: pixel_c
-          script: bash contrib/instrumentation-file-opening-on-tablet.sh
+          script: |
+            trap 'killall -INT crashpad_handler 2>/dev/null || true' EXIT
+            bash contrib/instrumentation-file-opening-on-tablet.sh
 
   code-formatting-job:
     name: Code Formatting

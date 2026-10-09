@@ -29,7 +29,7 @@ inputs:
   cores:
     description: Number of emulator CPU cores
     required: false
-    default: "2"
+    default: "4"
 
   heap-size:
     description: Emulator heap size. Leave unset to use the device profile's own default.
@@ -51,6 +51,7 @@ runs:
       uses: reactivecircus/android-emulator-runner@v2
       env:
         GRADLE_OPTS: ${{ inputs.gradle-opts }}
+        ANDROID_EMULATOR_WAIT_TIME_BEFORE_KILL: 60
       with:
         api-level: ${{ inputs.api-level }}
         target: ${{ inputs.target }}
@@ -74,6 +75,7 @@ runs:
       uses: reactivecircus/android-emulator-runner@v2
       env:
         GRADLE_OPTS: ${{ inputs.gradle-opts }}
+        ANDROID_EMULATOR_WAIT_TIME_BEFORE_KILL: 60
       with:
         api-level: ${{ inputs.api-level }}
         target: ${{ inputs.target }}
@@ -96,6 +98,7 @@ runs:
       uses: reactivecircus/android-emulator-runner@v2
       env:
         GRADLE_OPTS: ${{ inputs.gradle-opts }}
+        ANDROID_EMULATOR_WAIT_TIME_BEFORE_KILL: 60
       with:
         api-level: ${{ inputs.api-level }}
         target: ${{ inputs.target }}
