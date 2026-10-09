@@ -77,7 +77,9 @@ jobs:
           profile: pixel_2
           force-avd-creation: false
           sdcard-path-or-size: 1024M
-          cores: 2
+          heap-size: 1024M
+          ram-size: 4096M
+          cores: 4
           disable-animations: false
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -no-metrics
           script: |
@@ -110,6 +112,8 @@ jobs:
           target: ${{ matrix.target }}
           arch: x86_64
           profile: pixel_2
+          ram-size: 3072M
+          heap-size: 1024M
           cores: 4
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -no-metrics
           disable-animations: true
@@ -186,7 +190,9 @@ jobs:
           profile: pixel_2
           force-avd-creation: false
           sdcard-path-or-size: 1024M
-          cores: 2
+          heap-size: 1024M
+          ram-size: 4096M
+          cores: 4
           disable-animations: false
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -no-metrics
           script: |
@@ -256,7 +262,9 @@ jobs:
           profile: pixel_2
           force-avd-creation: false
           sdcard-path-or-size: 1024M
-          cores: 2
+          heap-size: 1024M
+          ram-size: 4096M
+          cores: 4
           disable-animations: false
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -no-metrics
           script: |
@@ -326,7 +334,9 @@ jobs:
           profile: pixel_c
           force-avd-creation: false
           sdcard-path-or-size: 1024M
-          cores: 2
+          heap-size: 1024M
+          ram-size: 4096M
+          cores: 4
           disable-animations: false
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -no-metrics
           script: |

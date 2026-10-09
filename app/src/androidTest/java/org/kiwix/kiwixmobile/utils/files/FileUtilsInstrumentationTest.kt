@@ -33,6 +33,7 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.kiwix.kiwixmobile.core.entity.LibkiwixBook
+import org.kiwix.kiwixmobile.core.utils.TestingUtils.FAIL_FAST_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.RETRY_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.files.DocumentResolverWrapper
@@ -40,6 +41,7 @@ import org.kiwix.kiwixmobile.core.utils.files.FileUtils
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils.documentProviderContentQuery
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils.getAllZimParts
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils.hasPart
+import org.kiwix.kiwixmobile.testutils.FailFastRule
 import org.kiwix.kiwixmobile.testutils.RetryRule
 import org.kiwix.kiwixmobile.testutils.TestUtils
 import java.io.File
@@ -60,6 +62,10 @@ class FileUtilsInstrumentationTest {
   private val downloadUriPrefix = "content://media/external/downloads/"
   private val expectedFilePath = "${Environment.getExternalStorageDirectory()}/$commonPath"
   lateinit var kiwixDataStore: KiwixDataStore
+
+  @Rule(order = FAIL_FAST_RULE_ORDER)
+  @JvmField
+  val failFastRule = FailFastRule()
 
   @Rule(order = RETRY_RULE_ORDER)
   @JvmField

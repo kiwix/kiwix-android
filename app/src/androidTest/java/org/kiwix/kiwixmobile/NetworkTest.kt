@@ -40,8 +40,10 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.kiwix.kiwixmobile.core.data.remote.KiwixService
+import org.kiwix.kiwixmobile.core.utils.TestingUtils.FAIL_FAST_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.RETRY_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.files.Log
+import org.kiwix.kiwixmobile.testutils.FailFastRule
 import org.kiwix.kiwixmobile.testutils.RetryRule
 import org.kiwix.sharedFunctions.TEST_PORT
 import java.net.InetAddress
@@ -54,6 +56,10 @@ import java.util.concurrent.TimeUnit.SECONDS
 @SmallTest
 @RunWith(AndroidJUnit4::class)
 class NetworkTest {
+  @JvmField
+  @Rule(order = FAIL_FAST_RULE_ORDER)
+  val failFastRule = FailFastRule()
+
   @JvmField
   @Rule(order = RETRY_RULE_ORDER)
   val retryRule = RetryRule()

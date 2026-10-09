@@ -41,14 +41,20 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
+import org.kiwix.kiwixmobile.core.utils.TestingUtils.FAIL_FAST_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.HILT_RULE_ORDER
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
+import org.kiwix.kiwixmobile.testutils.FailFastRule
 import org.kiwix.kiwixmobile.testutils.TestUtils.getZimFileFromResourceFolder
 import java.io.File
 
 @HiltAndroidTest
 @RunWith(AndroidJUnit4::class)
 class ZimReaderSourceTest {
+  @Rule(order = FAIL_FAST_RULE_ORDER)
+  @JvmField
+  val failFastRule = FailFastRule()
+
   @Rule(order = HILT_RULE_ORDER)
   @JvmField
   val hiltRule = HiltAndroidRule(this)

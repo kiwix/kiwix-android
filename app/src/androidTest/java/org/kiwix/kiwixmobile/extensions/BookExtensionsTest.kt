@@ -25,9 +25,12 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.kiwix.kiwixmobile.core.extensions.getFavicon
+import org.kiwix.kiwixmobile.core.utils.TestingUtils.FAIL_FAST_RULE_ORDER
+import org.kiwix.kiwixmobile.testutils.FailFastRule
 import org.kiwix.kiwixmobile.testutils.TestUtils.getZimFileFromResourceFolder
 import org.kiwix.libkiwix.Book
 import org.kiwix.libzim.Archive
@@ -35,6 +38,10 @@ import org.kiwix.libzim.Archive
 @RunWith(AndroidJUnit4::class)
 @SmallTest
 class BookExtensionsTest {
+  @Rule(order = FAIL_FAST_RULE_ORDER)
+  @JvmField
+  val failFastRule = FailFastRule()
+
   @Test
   fun testBookFavicon() {
     // Test null Book

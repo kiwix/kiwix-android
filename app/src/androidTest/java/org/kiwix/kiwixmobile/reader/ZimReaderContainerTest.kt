@@ -31,12 +31,15 @@ import org.junit.Assert.assertNull
 import org.junit.Assert.assertSame
 import org.junit.Assert.assertTrue
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader.Companion.CONTENT_PREFIX
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
+import org.kiwix.kiwixmobile.core.utils.TestingUtils.FAIL_FAST_RULE_ORDER
+import org.kiwix.kiwixmobile.testutils.FailFastRule
 import org.kiwix.kiwixmobile.testutils.TestUtils.getZimFileFromResourceFolder
 import org.kiwix.libzim.Archive
 import org.kiwix.libzim.SuggestionSearcher
@@ -44,6 +47,10 @@ import java.io.File
 
 @RunWith(AndroidJUnit4::class)
 class ZimReaderContainerTest {
+  @Rule(order = FAIL_FAST_RULE_ORDER)
+  @JvmField
+  val failFastRule = FailFastRule()
+
   private lateinit var container: ZimReaderContainer
   private lateinit var testZimFile: File
 
