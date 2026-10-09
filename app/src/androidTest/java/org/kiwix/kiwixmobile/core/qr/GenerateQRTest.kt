@@ -21,12 +21,19 @@ package org.kiwix.kiwixmobile.core.qr
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.SmallTest
 import org.junit.Assert.assertEquals
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.kiwix.kiwixmobile.core.utils.TestingUtils.FAIL_FAST_RULE_ORDER
+import org.kiwix.kiwixmobile.testutils.FailFastRule
 
 @RunWith(AndroidJUnit4::class)
 @SmallTest
 class GenerateQRTest {
+  @Rule(order = FAIL_FAST_RULE_ORDER)
+  @JvmField
+  val failFastRule = FailFastRule()
+
   @Test fun testCreateQR() {
     val qr = GenerateQR().createQR("https://kiwix.org")
     assertEquals(524288, qr.byteCount)
