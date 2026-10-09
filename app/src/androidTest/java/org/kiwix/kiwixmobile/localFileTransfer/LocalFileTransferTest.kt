@@ -68,6 +68,7 @@ class LocalFileTransferTest : BaseActivityTest() {
     shouldShowShowCaseFeatureToUser(false)
     launchMainActivity { kiwixMainActivity = it }
     StandardActions.closeDrawer(kiwixMainActivity as CoreMainActivity)
+    composeTestRule.waitForIdle()
     if (Build.VERSION.SDK_INT > Build.VERSION_CODES.N_MR1) {
       activityScenario.onActivity {
         it.navigate(KiwixDestination.Library.route)
@@ -95,6 +96,7 @@ class LocalFileTransferTest : BaseActivityTest() {
       it.navigate(KiwixDestination.Library.route)
     }
     StandardActions.closeDrawer(kiwixMainActivity as CoreMainActivity)
+    composeTestRule.waitForIdle()
     library {
       assertGetZimNearbyDeviceDisplayed(composeTestRule)
       clickFileTransferIcon(composeTestRule) {
@@ -125,7 +127,9 @@ class LocalFileTransferTest : BaseActivityTest() {
       it.navigate(KiwixDestination.Library.route)
     }
     StandardActions.closeDrawer(kiwixMainActivity as CoreMainActivity)
+    composeTestRule.waitForIdle()
     library {
+      assertGetZimNearbyDeviceDisplayed(composeTestRule)
       // test show case view show once.
       clickFileTransferIcon(composeTestRule) {
         assertClickNearbyDeviceMessageNotVisible(composeTestRule)

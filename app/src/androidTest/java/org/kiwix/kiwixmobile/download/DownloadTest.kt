@@ -43,6 +43,7 @@ import org.junit.BeforeClass
 import org.junit.Rule
 import org.junit.Test
 import org.kiwix.kiwixmobile.BaseActivityTest
+import org.kiwix.kiwixmobile.core.downloader.downloadManager.DownloadMonitorService
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.COMPOSE_TEST_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.HILT_RULE_ORDER
@@ -52,7 +53,6 @@ import org.kiwix.kiwixmobile.main.topLevel
 import org.kiwix.kiwixmobile.nav.destination.library.library
 import org.kiwix.kiwixmobile.testutils.RetryRule
 import org.kiwix.kiwixmobile.testutils.TestUtils
-import org.kiwix.kiwixmobile.testutils.TestUtils.waitUntilTimeout
 import org.kiwix.kiwixmobile.ui.KiwixDestination
 import org.kiwix.kiwixmobile.utils.KiwixIdlingResource.Companion.getInstance
 import java.util.concurrent.TimeUnit
@@ -319,8 +319,13 @@ class DownloadTest : BaseActivityTest() {
       InstrumentationRegistry.getInstrumentation().uiAutomation.performGlobalAction(
         AccessibilityService.GLOBAL_ACTION_HOME
       )
-      // wait for 2 minutes to download the ZIM file in background.
-      composeTestRule.waitUntilTimeout(TWO_MINUTES_IN_MILLISECONDS.toLong())
+      // wait until the download completes in the background without triggering Compose's waitForIdle()
+      val startTime = System.currentTimeMillis()
+      while (DownloadMonitorService.isDownloadMonitorServiceRunning &&
+        System.currentTimeMillis() - startTime < TWO_MINUTES_IN_MILLISECONDS
+      ) {
+        Thread.sleep(500)
+      }
       // relaunch the application.
       val context = ApplicationProvider.getApplicationContext<Context>()
       val intent = context.packageManager.getLaunchIntentForPackage(context.packageName)

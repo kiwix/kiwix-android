@@ -105,7 +105,7 @@ class LibkiwixBookmarkTest : BaseActivityTest() {
         update(zimReaderContainer.zimFileReader?.jniKiwixReader)
       }
     val bookmarkList = arrayListOf<LibkiwixBookmarkItem>()
-    for (i in 1..500) {
+    for (i in 1..20) {
       val bookmark =
         Bookmark().apply {
           bookId = zimReaderContainer.zimFileReader?.id

@@ -19,23 +19,22 @@
 package org.kiwix.kiwixmobile.core.zim_manager.fileselect_view
 
 import android.content.Context
-import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.utils.files.Log
 import java.text.DecimalFormat
 import kotlin.math.log10
 import kotlin.math.pow
 
 @JvmInline
-value class ArticleCount(val articleCount: String) {
-  fun toHumanReadable(context: Context): String = try {
-    val size = Integer.parseInt(articleCount)
+value class ArticleCount(private val countStr: String) {
+  fun toHumanReadable(context: Context, resId: Int): String = try {
+    val size = Integer.parseInt(countStr)
     if (size <= 0) {
       ""
     } else {
       val units = arrayOf("", "K", "M", "B", "T")
       val conversion = (log10(size.toDouble()) / 3).toInt()
       context.getString(
-        R.string.articleCount,
+        resId,
         DecimalFormat("#,##0.#")
           .format(size / 1000.0.pow(conversion.toDouble())) + units[conversion]
       )

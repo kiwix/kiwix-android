@@ -83,6 +83,7 @@ class InitialDownloadTest : BaseActivityTest() {
       waitUntilZimFilesRefreshing(composeTestRule)
       deleteZimIfExists(composeTestRule)
     }
+    composeTestRule.waitForIdle()
     activityScenario.onActivity {
       kiwixMainActivity = it
       it.navigate(KiwixDestination.Downloads.route)

@@ -21,6 +21,7 @@ package org.kiwix.kiwixmobile.ui
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -28,29 +29,35 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Checkbox
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.style.BaselineShift
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
-import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.downloader.model.Base64String
 import org.kiwix.kiwixmobile.core.downloader.model.toPainter
 import org.kiwix.kiwixmobile.core.ui.theme.KiwixTheme
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.BOOK_ICON_SIZE
-import org.kiwix.kiwixmobile.core.utils.ComposeDimens.EIGHT_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FIVE_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FOUR_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SIXTEEN_DP
@@ -64,6 +71,7 @@ import org.kiwix.kiwixmobile.ui.BookItemScreen.BOOK_ITEM_CHECKBOX_TESTING_TAG
 import org.kiwix.kiwixmobile.ui.BookItemScreen.BOOK_ITEM_TESTING_TAG
 import org.kiwix.kiwixmobile.ui.BookItemScreen.OFFLINE_IMAGE_TEST_TAG
 import org.kiwix.kiwixmobile.ui.BookItemScreen.ONLINE_LIBRARY_IMAGE_TEST_TAG
+import org.kiwix.kiwixmobile.core.R as CoreR
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -92,9 +100,10 @@ fun BookItem(
               onLongClick?.invoke(bookOnDisk)
             }
           }
-        ).testTag(BOOK_ITEM_TESTING_TAG),
-      shape = MaterialTheme.shapes.extraSmall,
-      elevation = CardDefaults.elevatedCardElevation(),
+        )
+        .testTag(BOOK_ITEM_TESTING_TAG),
+      shape = RoundedCornerShape(TWO_DP),
+      elevation = CardDefaults.elevatedCardElevation(4.dp),
       colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainer)
     ) {
       BookContent(bookOnDisk, selectionMode, onMultiSelect, index)
@@ -111,14 +120,28 @@ private fun BookContent(
 ) {
   Row(
     modifier = Modifier
-      .padding(top = SIXTEEN_DP, start = SIXTEEN_DP)
+      .padding(SIXTEEN_DP)
       .fillMaxWidth(),
-    verticalAlignment = Alignment.CenterVertically
+    verticalAlignment = Alignment.Top
   ) {
     if (selectionMode == SelectionMode.MULTI) {
       BookCheckbox(bookOnDisk, onMultiSelect, index)
     }
-    BookIcon(bookOnDisk.book.favicon, isOnlineLibrary = false)
+    Column(
+      horizontalAlignment = Alignment.CenterHorizontally,
+      modifier = Modifier.padding(end = SIXTEEN_DP)
+    ) {
+      BookIcon(bookOnDisk.book.favicon, isOnlineLibrary = false)
+      Spacer(modifier = Modifier.height(FOUR_DP))
+      BookSize(
+        size = Byte(bookOnDisk.book.size).humanReadable,
+        index = index,
+        style = MaterialTheme.typography.labelSmall,
+        textAlign = TextAlign.Center,
+        color = Color.Unspecified
+      )
+    }
+
     BookDetails(Modifier.weight(1f), bookOnDisk, index)
   }
 }
@@ -146,15 +169,15 @@ fun BookIcon(iconSource: String, isOnlineLibrary: Boolean) {
   if (isOnlineLibrary) {
     AsyncImage(
       model = iconSource,
-      contentDescription = stringResource(R.string.fav_icon) + iconSource.hashCode(),
+      contentDescription = stringResource(CoreR.string.fav_icon) + iconSource.hashCode(),
       modifier = modifier.testTag(ONLINE_LIBRARY_IMAGE_TEST_TAG),
-      placeholder = painterResource(R.drawable.default_zim_file_icon),
-      error = painterResource(R.drawable.default_zim_file_icon)
+      placeholder = painterResource(CoreR.drawable.default_zim_file_icon),
+      error = painterResource(CoreR.drawable.default_zim_file_icon)
     )
   } else {
     Image(
       painter = Base64String(iconSource).toPainter(),
-      contentDescription = stringResource(R.string.fav_icon) + iconSource.hashCode(),
+      contentDescription = stringResource(CoreR.string.fav_icon) + iconSource.hashCode(),
       modifier = modifier.testTag(OFFLINE_IMAGE_TEST_TAG)
     )
   }
@@ -162,78 +185,144 @@ fun BookIcon(iconSource: String, isOnlineLibrary: Boolean) {
 
 @Composable
 private fun BookDetails(modifier: Modifier, bookOnDisk: BookOnDisk, index: Int) {
-  Column(modifier = modifier.padding(start = SIXTEEN_DP)) {
-    BookTitle(bookOnDisk.book.title, index)
-    Spacer(modifier = Modifier.height(TWO_DP))
-    BookDescription(bookOnDisk.book.description.orEmpty(), index)
-    Row(
-      verticalAlignment = Alignment.CenterVertically,
-      modifier = Modifier.padding(top = FIVE_DP)
-    ) {
-      BookDate(bookOnDisk.book.date, index)
-      Spacer(modifier = Modifier.width(EIGHT_DP))
-      BookSize(Byte(bookOnDisk.book.size).humanReadable, index = index)
-      Spacer(modifier = Modifier.width(EIGHT_DP))
-      BookArticleCount(
-        ArticleCount(bookOnDisk.book.articleCount.orEmpty())
-          .toHumanReadable(LocalContext.current),
-        index = index
-      )
+  Column(modifier = modifier) {
+    val titleStyle = MaterialTheme.typography.titleSmall
+    val dateStyle = MaterialTheme.typography.labelSmall.copy(
+      baselineShift = BaselineShift.Superscript
+    )
+    val annotatedTitle = buildAnnotatedString {
+      append(bookOnDisk.book.title)
+      if (bookOnDisk.book.date.isNotEmpty()) {
+        append(" ")
+        withStyle(dateStyle.toSpanStyle()) {
+          append(bookOnDisk.book.date)
+        }
+      }
     }
+    Text(
+      text = annotatedTitle,
+      style = titleStyle,
+      maxLines = 2,
+      overflow = TextOverflow.Ellipsis,
+      modifier = Modifier.semantics {
+        contentDescription = "${bookOnDisk.book.title}${bookOnDisk.book.date}$index"
+      }
+    )
     Spacer(modifier = Modifier.height(FOUR_DP))
-    TagsView(bookOnDisk.tags, index = index)
+    BookDescription(
+      bookDescription = bookOnDisk.book.description.orEmpty(),
+      index = index,
+      style = MaterialTheme.typography.bodyMedium.copy(color = Color.Gray),
+      color = Color.Unspecified,
+      minLines = 2
+    )
+    Spacer(modifier = Modifier.height(FOUR_DP))
+    HorizontalDivider(
+      color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.6f)
+    )
+    Spacer(modifier = Modifier.height(FOUR_DP))
+    Row(
+      modifier = Modifier.fillMaxWidth(),
+      horizontalArrangement = Arrangement.SpaceBetween,
+      verticalAlignment = Alignment.CenterVertically
+    ) {
+      TagsView(bookOnDisk.tags, modifier = Modifier.weight(1f), index = index)
+      Row(modifier = Modifier.padding(start = SIXTEEN_DP)) {
+        BookArticleCount(
+          articleCount = bookOnDisk.book.articleCount,
+          mediaCount = bookOnDisk.book.mediaCount,
+          index = index
+        )
+      }
+    }
   }
 }
 
 @Composable
-private fun BookArticleCount(articleCount: String, index: Int) {
+private fun BookArticleCount(articleCount: String?, mediaCount: String?, index: Int) {
+  val context = LocalContext.current
+  val articlesStr =
+    ArticleCount(articleCount.orEmpty())
+      .toHumanReadable(context, CoreR.string.articleCount)
+  val mediasStr =
+    ArticleCount(mediaCount.orEmpty())
+      .toHumanReadable(context, CoreR.string.mediaCount)
+
+  val combined = listOf(articlesStr, mediasStr).filter { it.isNotEmpty() }.joinToString(" • ")
+
   Text(
-    text = articleCount,
-    style = MaterialTheme.typography.bodyMedium,
-    color = MaterialTheme.colorScheme.onTertiary,
+    text = combined,
+    style = MaterialTheme.typography.labelMedium,
+    color = MaterialTheme.colorScheme.onSurfaceVariant,
     modifier = Modifier
       .testTag(BOOK_ARTICLE_COUNT_TEST_TAG)
-      .semantics { contentDescription = "$articleCount$index" }
+      .semantics { contentDescription = "$combined$index" }
   )
 }
 
 @Composable
-fun BookSize(size: String, modifier: Modifier = Modifier, index: Int) {
+fun BookSize(
+  size: String,
+  modifier: Modifier = Modifier,
+  index: Int,
+  style: TextStyle = MaterialTheme.typography.bodyMedium,
+  color: Color = MaterialTheme.colorScheme.onTertiary,
+  textAlign: TextAlign? = null
+) {
   Text(
     text = size,
-    style = MaterialTheme.typography.bodyMedium,
-    color = MaterialTheme.colorScheme.onTertiary,
+    style = style,
+    color = color,
+    textAlign = textAlign,
     modifier = modifier.semantics { contentDescription = "$size$index" }
   )
 }
 
 @Composable
-fun BookDate(date: String, index: Int, modifier: Modifier = Modifier) {
+fun BookDate(
+  date: String,
+  index: Int,
+  modifier: Modifier = Modifier,
+  style: TextStyle = MaterialTheme.typography.bodyMedium,
+  color: Color = MaterialTheme.colorScheme.onTertiary
+) {
   Text(
     text = date,
-    style = MaterialTheme.typography.bodyMedium,
-    color = MaterialTheme.colorScheme.onTertiary,
+    style = style,
+    color = color,
     modifier = modifier.semantics { contentDescription = "$date$index" }
   )
 }
 
 @Composable
-fun BookTitle(title: String, index: Int) {
+fun BookTitle(
+  title: String,
+  index: Int,
+  modifier: Modifier = Modifier,
+  style: TextStyle = MaterialTheme.typography.titleSmall
+) {
   Text(
     text = title,
-    style = MaterialTheme.typography.titleSmall,
-    modifier = Modifier.semantics { contentDescription = "$title$index" }
+    style = style,
+    modifier = modifier.semantics { contentDescription = "$title$index" }
   )
 }
 
 @Composable
-fun BookDescription(bookDescription: String, index: Int) {
+fun BookDescription(
+  bookDescription: String,
+  index: Int,
+  style: TextStyle = MaterialTheme.typography.bodyMedium,
+  color: Color = MaterialTheme.colorScheme.onSecondary,
+  minLines: Int = 1
+) {
   Text(
     text = bookDescription,
-    style = MaterialTheme.typography.bodyMedium,
+    style = style,
+    color = color,
+    minLines = minLines,
     maxLines = 2,
     overflow = TextOverflow.Ellipsis,
-    color = MaterialTheme.colorScheme.onSecondary,
     modifier = Modifier.semantics { contentDescription = "$bookDescription$index" }
   )
 }
