@@ -91,13 +91,7 @@ jobs:
           target: ${{ matrix.target }}
           arch: ${{ (matrix.api-level >= 30) && 'x86_64' || 'x86' }}
           profile: pixel_2
-          script: |
-            # The emulator's crashpad_handler subprocess can survive `adb emu kill` and
-            # hang the android-emulator-runner action's teardown
-            # (https://github.com/ReactiveCircus/android-emulator-runner/issues/385).
-            # Kill it once this script exits, regardless of the test outcome.
-            trap 'killall -INT crashpad_handler 2>/dev/null || true' EXIT
-            bash contrib/instrumentation.sh
+          script: bash contrib/instrumentation.sh
 
       - name: Upload screenshot result
         uses: actions/upload-artifact@v6
@@ -206,9 +200,7 @@ jobs:
           target: ${{ matrix.target }}
           arch: ${{ (matrix.api-level >= 30) && 'x86_64' || 'x86' }}
           profile: pixel_2
-          script: |
-            trap 'killall -INT crashpad_handler 2>/dev/null || true' EXIT
-            bash contrib/instrumentation-release.sh
+          script: bash contrib/instrumentation-release.sh
 
   automated-tests-branded-apps:
     name: Automated tests for Branded app
@@ -278,9 +270,7 @@ jobs:
           target: ${{ matrix.target }}
           arch: ${{ (matrix.api-level >= 30) && 'x86_64' || 'x86' }}
           profile: pixel_2
-          script: |
-            trap 'killall -INT crashpad_handler 2>/dev/null || true' EXIT
-            bash contrib/instrumentation-brandedapps.sh
+          script: bash contrib/instrumentation-brandedapps.sh
 
   automated-tests-on-tablet:
     name: Automated tests on Tablet
@@ -350,9 +340,7 @@ jobs:
           target: ${{ matrix.target }}
           arch: ${{ (matrix.api-level >= 30) && 'x86_64' || 'x86' }}
           profile: pixel_c
-          script: |
-            trap 'killall -INT crashpad_handler 2>/dev/null || true' EXIT
-            bash contrib/instrumentation-file-opening-on-tablet.sh
+          script: bash contrib/instrumentation-file-opening-on-tablet.sh
 
   code-formatting-job:
     name: Code Formatting
