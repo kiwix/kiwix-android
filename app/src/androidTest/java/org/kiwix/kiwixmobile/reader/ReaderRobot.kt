@@ -215,7 +215,11 @@ class ReaderRobot : BaseRobot() {
   }
 
   fun clickOnNavigationIcon(composeTestRule: ComposeContentTestRule) {
-    composeTestRule.onNodeWithTag(NAVIGATION_ICON_TESTING_TAG).performClick()
+    composeTestRule.apply {
+      waitForIdle()
+      onNodeWithTag(NAVIGATION_ICON_TESTING_TAG).performClick()
+      waitForIdle()
+    }
   }
 
   fun clickOnReadAloudMenuItem(composeTestRule: ComposeContentTestRule) {

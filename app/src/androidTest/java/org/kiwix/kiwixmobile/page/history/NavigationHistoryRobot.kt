@@ -46,7 +46,7 @@ import org.kiwix.kiwixmobile.core.utils.dialog.ALERT_DIALOG_DISMISS_BUTTON_TESTI
 import org.kiwix.kiwixmobile.core.utils.dialog.ALERT_DIALOG_TITLE_TEXT_TESTING_TAG
 import org.kiwix.kiwixmobile.main.BOTTOM_NAV_READER_ITEM_TESTING_TAG
 import org.kiwix.kiwixmobile.testutils.TestUtils
-import org.kiwix.kiwixmobile.testutils.TestUtils.TEST_PAUSE_MS_FOR_SEARCH_TEST
+import org.kiwix.kiwixmobile.testutils.TestUtils.TEST_PAUSE_MS_FOR_DOWNLOAD_TEST
 import org.kiwix.kiwixmobile.testutils.TestUtils.testFlakyView
 import org.kiwix.kiwixmobile.testutils.TestUtils.waitUntilTimeout
 
@@ -126,7 +126,7 @@ class NavigationHistoryRobot : BaseRobot() {
   }
 
   fun assertBackwardNavigationHistoryDialogDisplayed(composeTestRule: ComposeContentTestRule) {
-    composeTestRule.waitUntil(timeoutMillis = TEST_PAUSE_MS_FOR_SEARCH_TEST.toLong()) {
+    composeTestRule.waitUntil(timeoutMillis = TEST_PAUSE_MS_FOR_DOWNLOAD_TEST) {
       composeTestRule
         .onAllNodesWithTag(TOOLBAR_TITLE_TESTING_TAG)
         .filter(hasText(context.getString(R.string.backward_history), ignoreCase = true))
@@ -150,7 +150,7 @@ class NavigationHistoryRobot : BaseRobot() {
   }
 
   fun assertForwardNavigationHistoryDialogDisplayed(composeTestRule: ComposeContentTestRule) {
-    composeTestRule.waitUntil(timeoutMillis = TEST_PAUSE_MS_FOR_SEARCH_TEST.toLong()) {
+    composeTestRule.waitUntil(timeoutMillis = TEST_PAUSE_MS_FOR_DOWNLOAD_TEST) {
       composeTestRule
         .onAllNodesWithTag(TOOLBAR_TITLE_TESTING_TAG)
         .filter(hasText(context.getString(R.string.forward_history), ignoreCase = true))
@@ -176,7 +176,7 @@ class NavigationHistoryRobot : BaseRobot() {
   }
 
   fun assertDeleteDialogDisplayed(composeTestRule: ComposeContentTestRule) {
-    composeTestRule.waitUntil(timeoutMillis = TEST_PAUSE_MS_FOR_SEARCH_TEST.toLong()) {
+    composeTestRule.waitUntil(timeoutMillis = TEST_PAUSE_MS_FOR_DOWNLOAD_TEST) {
       composeTestRule
         .onAllNodesWithTag(ALERT_DIALOG_TITLE_TEXT_TESTING_TAG)
         .fetchSemanticsNodes()
