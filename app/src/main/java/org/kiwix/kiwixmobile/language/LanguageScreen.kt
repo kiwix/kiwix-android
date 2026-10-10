@@ -21,6 +21,9 @@ package org.kiwix.kiwixmobile.language
 import android.annotation.SuppressLint
 import androidx.activity.compose.BackHandler
 import androidx.annotation.VisibleForTesting
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.calculateEndPadding
@@ -35,9 +38,11 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -46,6 +51,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
@@ -56,14 +62,17 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.compose.currentStateAsState
+import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.extensions.CollectSideEffectWithActivity
 import org.kiwix.kiwixmobile.core.ui.components.ContentLoadingProgressBar
 import org.kiwix.kiwixmobile.core.ui.components.KiwixAppBar
+import org.kiwix.kiwixmobile.core.ui.components.KiwixFloatingActionButton
 import org.kiwix.kiwixmobile.core.ui.components.NavigationIcon
 import org.kiwix.kiwixmobile.core.ui.models.IconItem
 import org.kiwix.kiwixmobile.core.ui.theme.KiwixTheme
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FOUR_DP
+import org.kiwix.kiwixmobile.core.utils.ZERO
 import org.kiwix.kiwixmobile.language.composables.LanguageList
 import org.kiwix.kiwixmobile.language.composables.LanguageListItem
 import org.kiwix.kiwixmobile.language.viewmodel.Action
@@ -73,6 +82,8 @@ import org.kiwix.kiwixmobile.language.viewmodel.State.Content
 import org.kiwix.kiwixmobile.nav.destination.library.online.NO_CONTENT_VIEW_TEXT_TESTING_TAG
 
 const val SAVE_ICON_TESTING_TAG = "saveLanguages"
+const val LANGUAGE_BACK_TO_TOP_TESTING_TAG = "languageBackToTop"
+private const val BACK_TO_TOP_ITEM_THRESHOLD = 5
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Suppress("LongMethod")
@@ -172,12 +183,17 @@ internal fun LanguageScreen(
   val listState: LazyListState = rememberLazyListState()
   val context = LocalContext.current
 
-  Scaffold(topBar = {
-    KiwixAppBar(
-      title = stringResource(R.string.select_language),
-      navigationIcon = navigationIcon
-    )
-  }) { innerPadding ->
+  Scaffold(
+    topBar = {
+      KiwixAppBar(
+        title = stringResource(R.string.select_language),
+        navigationIcon = navigationIcon
+      )
+    },
+    floatingActionButton = {
+      LanguageBackToTopButton(listState = listState)
+    }
+  ) { innerPadding ->
     Column(
       modifier = Modifier
         .fillMaxSize()
@@ -241,5 +257,31 @@ fun LoadingScreen() {
     if (lifecycleState.isAtLeast(Lifecycle.State.RESUMED)) {
       ContentLoadingProgressBar()
     }
+  }
+}
+
+@Composable
+private fun LanguageBackToTopButton(listState: LazyListState) {
+  val coroutineScope = rememberCoroutineScope()
+  val shouldShowBackToTopButton by remember {
+    derivedStateOf { listState.firstVisibleItemIndex >= BACK_TO_TOP_ITEM_THRESHOLD }
+  }
+
+  AnimatedVisibility(
+    visible = shouldShowBackToTopButton,
+    enter = slideInVertically { it },
+    exit = slideOutVertically { it }
+  ) {
+    KiwixFloatingActionButton(
+      icon = painterResource(id = R.drawable.ic_arrow_upward_24dp),
+      onClick = {
+        coroutineScope.launch {
+          listState.animateScrollToItem(ZERO)
+        }
+      },
+      contentDescription = stringResource(R.string.pref_back_to_top),
+      modifier = Modifier.semantics { testTag = LANGUAGE_BACK_TO_TOP_TESTING_TAG },
+      shouldPulse = true
+    )
   }
 }
