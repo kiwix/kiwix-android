@@ -162,8 +162,8 @@
   <string name="pref_free_storage">%s free</string>
   <string name="choose_storage_to_download_book">Choose storage to download the book</string>
   <string name="delete_zim_failed" tools:keep="@string/delete_zim_failed">Sorry we were unable to delete some files. You should try using a file manager instead.</string>
-  <string name="tts_pause">pause</string>
-  <string name="tts_resume">resume</string>
+  <string name="tts_pause">Pause</string>
+  <string name="tts_resume">Resume</string>
   <string name="tts_increase_speed">Increase Speed</string>
   <string name="tts_decrease_speed">Decrease Speed</string>
   <string name="tts_normal_speed">Normal</string>
@@ -172,7 +172,7 @@
   <string name="tts_forward_10_seconds">Forward 10 seconds</string>
   <string name="tts_select_voice">Select voice</string>
   <string name="tts_controls">TTS controls</string>
-  <string name="stop">stop</string>
+  <string name="stop">Stop</string>
   <string name="notification_pause_button_text">Pause</string>
   <string name="notification_resume_button_text">Resume</string>
   <string name="internal_storage">Internal</string>

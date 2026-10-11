@@ -214,7 +214,6 @@ import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TEN_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.THREE_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TWELVE_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TWENTY_FOUR_DP
-import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TWENTY_TWO_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TWO_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.ZERO_DP
 import org.kiwix.kiwixmobile.core.utils.StyleUtils.fromHtml
@@ -745,7 +744,12 @@ private fun TtsControlsCard(
     elevation = CardDefaults.cardElevation(defaultElevation = EIGHT_DP),
     modifier = Modifier
       .fillMaxWidth()
-      .padding(horizontal = SIXTEEN_DP, vertical = EIGHT_DP)
+      .padding(
+        start = SIXTEEN_DP,
+        end = SIXTEEN_DP,
+        bottom = SIXTEEN_DP,
+        top = EIGHT_DP
+      )
   ) {
     Column(
       modifier = Modifier
@@ -970,10 +974,10 @@ private fun TtsControlButtonsRow(
         modifier = Modifier.semantics { testTag = TTS_CONTROL_STOP_BUTTON_TESTING_TAG }
       ) {
         Icon(
-          painter = painterResource(id = R.drawable.ic_stop_square_outline),
+          painter = painterResource(id = R.drawable.ic_baseline_stop),
           contentDescription = stringResource(R.string.stop),
           tint = MaterialTheme.colorScheme.onSurface,
-          modifier = Modifier.size(TWENTY_TWO_DP)
+          modifier = Modifier.size(TWENTY_FOUR_DP)
         )
       }
     }
