@@ -236,7 +236,8 @@ class OnlineLibraryTabsUseCase @Inject constructor(
     } else {
       fallbackTotalPages
     }
-    val currentPage = if (count > ZERO) (count - ONE) / ITEMS_PER_PAGE else ZERO
+    val currentPage = existingData?.currentPage
+      ?: if (count > ZERO) (count - ONE) / ITEMS_PER_PAGE else ZERO
     val nextPage = currentPage + ONE
     return if (nextPage < totalPagesForTab) {
       existingData?.let { tabDataMap[tabKey] = it.copy(isLoadingMore = true) }
@@ -247,6 +248,18 @@ class OnlineLibraryTabsUseCase @Inject constructor(
       )
     } else {
       null
+    }
+  }
+
+  fun resetLoadingMore(tabKey: String? = null) {
+    if (tabKey != null) {
+      tabDataMap[tabKey]?.let { tabDataMap[tabKey] = it.copy(isLoadingMore = false) }
+    } else {
+      tabDataMap.forEach { (key, data) ->
+        if (data.isLoadingMore) {
+          tabDataMap[key] = data.copy(isLoadingMore = false)
+        }
+      }
     }
   }
 

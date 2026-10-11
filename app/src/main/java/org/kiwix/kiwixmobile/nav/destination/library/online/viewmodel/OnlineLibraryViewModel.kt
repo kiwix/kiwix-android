@@ -517,6 +517,7 @@ class OnlineLibraryViewModel @Inject constructor(
       )
 
       WifiOnlyException -> {
+        onlineLibraryTabsUseCase.resetLoadingMore()
         _uiState.update {
           it.copy(
             showScanningProgressBar = false,
@@ -527,6 +528,7 @@ class OnlineLibraryViewModel @Inject constructor(
       }
 
       NoInternetConnection -> {
+        onlineLibraryTabsUseCase.resetLoadingMore()
         _uiState.update {
           it.copy(
             showScanningProgressBar = false,
@@ -615,6 +617,7 @@ class OnlineLibraryViewModel @Inject constructor(
   }
 
   private fun resetDownloadState() {
+    onlineLibraryTabsUseCase.resetLoadingMore()
     _uiState.update {
       it.copy(
         isRefreshing = false,

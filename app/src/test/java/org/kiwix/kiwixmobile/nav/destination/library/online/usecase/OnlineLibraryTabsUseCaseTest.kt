@@ -202,6 +202,37 @@ class OnlineLibraryTabsUseCaseTest {
 
       assertThat(nextRequest).isNull()
     }
+
+    @Test
+    fun `handleLoadMore uses existingData currentPage when available`() {
+      val currentTab = LanguageTab("eng", "ENGLISH")
+      useCase.tabDataMap["eng"] = TabData(totalPages = 5, currentPage = 2, isLoaded = true)
+      val currentRequest = OnlineLibraryRequest(isLoadMoreItem = false, page = 0)
+
+      val nextRequest = useCase.handleLoadMore(
+        count = 10,
+        currentTab = currentTab,
+        fallbackTotalPages = 5,
+        currentRequest = currentRequest,
+        isCurrentlyLoadingMore = false
+      )
+
+      assertThat(nextRequest).isNotNull
+      assertThat(nextRequest?.page).isEqualTo(3)
+    }
+  }
+
+  @Test
+  fun `resetLoadingMore clears isLoadingMore flag`() {
+    useCase.tabDataMap["eng"] = TabData(isLoadingMore = true)
+    useCase.tabDataMap["fra"] = TabData(isLoadingMore = true)
+
+    useCase.resetLoadingMore("eng")
+    assertThat(useCase.tabDataMap["eng"]?.isLoadingMore).isFalse()
+    assertThat(useCase.tabDataMap["fra"]?.isLoadingMore).isTrue()
+
+    useCase.resetLoadingMore()
+    assertThat(useCase.tabDataMap["fra"]?.isLoadingMore).isFalse()
   }
 
   @Test
