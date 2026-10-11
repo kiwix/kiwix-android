@@ -39,6 +39,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
@@ -71,6 +72,8 @@ import org.kiwix.kiwixmobile.ui.BookItemScreen.BOOK_ITEM_CHECKBOX_TESTING_TAG
 import org.kiwix.kiwixmobile.ui.BookItemScreen.BOOK_ITEM_TESTING_TAG
 import org.kiwix.kiwixmobile.ui.BookItemScreen.OFFLINE_IMAGE_TEST_TAG
 import org.kiwix.kiwixmobile.ui.BookItemScreen.ONLINE_LIBRARY_IMAGE_TEST_TAG
+import java.text.SimpleDateFormat
+import java.util.Locale
 import org.kiwix.kiwixmobile.core.R as CoreR
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -165,7 +168,9 @@ private fun BookCheckbox(
 
 @Composable
 fun BookIcon(iconSource: String, isOnlineLibrary: Boolean) {
-  val modifier = Modifier.size(BOOK_ICON_SIZE)
+  val modifier = Modifier
+    .size(BOOK_ICON_SIZE)
+    .clip(RoundedCornerShape(FOUR_DP))
   if (isOnlineLibrary) {
     AsyncImage(
       model = iconSource,
@@ -188,14 +193,16 @@ private fun BookDetails(modifier: Modifier, bookOnDisk: BookOnDisk, index: Int) 
   Column(modifier = modifier) {
     val titleStyle = MaterialTheme.typography.titleSmall
     val dateStyle = MaterialTheme.typography.labelSmall.copy(
-      baselineShift = BaselineShift.Superscript
+      baselineShift = BaselineShift.Superscript,
+      color = Color.Gray
     )
+    val formattedDate = formatBookDate(bookOnDisk.book.date)
     val annotatedTitle = buildAnnotatedString {
       append(bookOnDisk.book.title)
-      if (bookOnDisk.book.date.isNotEmpty()) {
+      if (formattedDate.isNotEmpty()) {
         append(" ")
         withStyle(dateStyle.toSpanStyle()) {
-          append(bookOnDisk.book.date)
+          append(formattedDate)
         }
       }
     }
@@ -205,7 +212,7 @@ private fun BookDetails(modifier: Modifier, bookOnDisk: BookOnDisk, index: Int) 
       maxLines = 2,
       overflow = TextOverflow.Ellipsis,
       modifier = Modifier.semantics {
-        contentDescription = "${bookOnDisk.book.title}${bookOnDisk.book.date}$index"
+        contentDescription = "${bookOnDisk.book.title}${formattedDate}$index"
       }
     )
     Spacer(modifier = Modifier.height(FOUR_DP))
@@ -284,7 +291,7 @@ fun BookDate(
   index: Int,
   modifier: Modifier = Modifier,
   style: TextStyle = MaterialTheme.typography.bodyMedium,
-  color: Color = MaterialTheme.colorScheme.onTertiary
+  color: Color = Color.Gray
 ) {
   Text(
     text = date,
@@ -326,6 +333,15 @@ fun BookDescription(
     modifier = Modifier.semantics { contentDescription = "$bookDescription$index" }
   )
 }
+
+private const val INPUT_YEAR_MONTH_FORMAT = "yyyy-MM"
+private const val OUTPUT_YEAR_MONTH_FORMAT = "MM-yyyy"
+
+fun formatBookDate(rawDate: String): String = runCatching {
+  val date = SimpleDateFormat(INPUT_YEAR_MONTH_FORMAT, Locale.getDefault())
+    .parse(rawDate.take(INPUT_YEAR_MONTH_FORMAT.length))
+  SimpleDateFormat(OUTPUT_YEAR_MONTH_FORMAT, Locale.getDefault()).format(date!!)
+}.getOrDefault(rawDate)
 
 object BookItemScreen {
   const val ONLINE_LIBRARY_IMAGE_TEST_TAG = "onlineLibraryImageTestingTag"

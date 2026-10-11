@@ -28,6 +28,7 @@ import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTouchInput
+import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Rule
@@ -282,5 +283,22 @@ class BookItemUITest {
     composeTestRule
       .onNodeWithTag(BookItemScreen.ONLINE_LIBRARY_IMAGE_TEST_TAG)
       .assertIsDisplayed()
+  }
+
+  @Test
+  fun formatBookDate_formatsIsoDateToMmYyyy() {
+    assertEquals("03-2017", formatBookDate("2017-03-02"))
+    assertEquals("08-2024", formatBookDate("2024-08"))
+    assertEquals("2026", formatBookDate("2026"))
+    assertEquals("", formatBookDate(""))
+  }
+
+  @Test
+  fun bookItem_whenFullDateProvided_formatsToMmYyyy() {
+    val bookOnDisk = createBookOnDisk(date = "2017-03-02")
+
+    bookItem(index = 0, bookOnDisk = bookOnDisk)
+
+    composeTestRule.onNodeWithText("03-2017", substring = true).assertIsDisplayed()
   }
 }
