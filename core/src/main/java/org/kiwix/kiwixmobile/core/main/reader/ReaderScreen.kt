@@ -988,7 +988,7 @@ private fun TtsFloatingActionButton(onReaderAction: (ReaderAction) -> Unit) {
   Box(
     modifier = Modifier
       .fillMaxWidth()
-      .padding(horizontal = SIXTEEN_DP, vertical = EIGHT_DP),
+      .padding(horizontal = SIXTEEN_DP, vertical = SIXTEEN_DP),
     contentAlignment = Alignment.BottomStart
   ) {
     PlayerTooltip(stringResource(R.string.tts_controls)) {
