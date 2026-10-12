@@ -35,7 +35,7 @@ internal class HistoryStateTest {
     assertThat(
       historyState(listOf(matchingItem, nonMatchingItem), searchTerm = "title")
         .visiblePageItems
-    ).isEqualTo(listOf(DateItem(matchingItem.dateString), matchingItem))
+    ).isEqualTo(listOf(DateItem(matchingItem.date), matchingItem))
   }
 
   @Test
@@ -56,15 +56,28 @@ internal class HistoryStateTest {
     val item1 = historyItem(zimReaderSource = zimReaderSource)
     val item2 = historyItem(zimReaderSource = zimReaderSource)
     assertThat(historyState(listOf(item1, item2)).visiblePageItems)
-      .isEqualTo(listOf(DateItem(item1.dateString), item1, item2))
+      .isEqualTo(listOf(DateItem(item1.date), item1, item2))
+  }
+
+  @Test
+  internal fun `visiblePageItems should merge dates of the same day saved in different languages`() {
+    val zimReaderSource: ZimReaderSource = mockk()
+    val item1 = historyItem(dateString = "11 Oct 2026", zimReaderSource = zimReaderSource)
+    val item2 = historyItem(dateString = "۱۱ اکتبر ۲۰۲۶", zimReaderSource = zimReaderSource)
+    assertThat(historyState(listOf(item1, item2)).visiblePageItems)
+      .isEqualTo(listOf(DateItem(item1.date), item1, item2))
   }
 
   @Test
   internal fun `visiblePageItems should not merge dates if on different days`() {
     val zimReaderSource: ZimReaderSource = mockk()
-    val item1 = historyItem(dateString = "today", zimReaderSource = zimReaderSource)
-    val item2 = historyItem(dateString = "tomorrow", zimReaderSource = zimReaderSource)
+    val item1 = historyItem(timeStamp = 100, zimReaderSource = zimReaderSource)
+    val item2 = historyItem(timeStamp = 100 + ONE_DAY_IN_MILLIS, zimReaderSource = zimReaderSource)
     assertThat(historyState(listOf(item1, item2)).visiblePageItems)
-      .isEqualTo(listOf(DateItem(item1.dateString), item1, DateItem(item2.dateString), item2))
+      .isEqualTo(listOf(DateItem(item1.date), item1, DateItem(item2.date), item2))
+  }
+
+  companion object {
+    private const val ONE_DAY_IN_MILLIS = 24 * 60 * 60 * 1000L
   }
 }

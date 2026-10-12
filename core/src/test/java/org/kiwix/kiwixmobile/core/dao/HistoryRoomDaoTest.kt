@@ -122,7 +122,8 @@ class HistoryRoomDaoTest {
           title = "Main Page",
           historyUrl = "https://kiwix.app/A/MainPage",
           databaseId = 1,
-          dateString = "31 May 2024"
+          dateString = "31 May 2024",
+          timeStamp = historyItem.timeStamp - ONE_DAY_IN_MILLIS
         )
       historyRoomDao.saveHistory(historyItem1)
       historyList = historyRoomDao.historyRoomEntity().first()
@@ -181,4 +182,23 @@ class HistoryRoomDaoTest {
         equalTo(listOf(tvSeriesArticle.historyUrl, starArticle.historyUrl).sorted())
       )
     }
+
+  @Test
+  fun saveHistoryUpdatesTheSameDayVisitSavedInAnotherLanguage() =
+    runTest(mainDispatcherRule.dispatcher) {
+      val timeStamp = System.currentTimeMillis()
+      val englishVisit = getHistoryItem(dateString = "30 May 2024", timeStamp = timeStamp)
+      val persianVisit = getHistoryItem(dateString = "۳۰ مه ۲۰۲۴", timeStamp = timeStamp + 1)
+
+      historyRoomDao.saveHistory(englishVisit)
+      historyRoomDao.saveHistory(persianVisit)
+
+      val historyList = historyRoomDao.historyRoomEntity().first()
+      assertThat(historyList.size, equalTo(1))
+      assertThat(historyList.first().timeStamp, equalTo(persianVisit.timeStamp))
+    }
+
+  companion object {
+    private const val ONE_DAY_IN_MILLIS = 24 * 60 * 60 * 1000L
+  }
 }

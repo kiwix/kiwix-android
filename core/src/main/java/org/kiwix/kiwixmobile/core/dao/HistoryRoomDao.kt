@@ -33,6 +33,7 @@ import org.kiwix.kiwixmobile.core.dao.entities.HistoryRoomEntity
 import org.kiwix.kiwixmobile.core.page.adapter.Page
 import org.kiwix.kiwixmobile.core.page.history.models.HistoryListItem
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
+import java.util.Calendar
 
 @Dao
 abstract class HistoryRoomDao : PageDao {
@@ -59,12 +60,13 @@ abstract class HistoryRoomDao : PageDao {
     deleteHistory(pagesToDelete as List<HistoryListItem.HistoryItem>)
 
   @Query(
-    "SELECT * FROM HistoryRoomEntity WHERE historyUrl" +
-      " = :url AND dateString = :date AND zimReaderSource = :zimReaderSource"
+    "SELECT * FROM HistoryRoomEntity WHERE historyUrl = :url" +
+      " AND timeStamp >= :dayStart AND timeStamp < :dayEnd AND zimReaderSource = :zimReaderSource"
   )
   abstract fun getHistoryRoomEntity(
     url: String,
-    date: String,
+    dayStart: Long,
+    dayEnd: Long,
     zimReaderSource: ZimReaderSource?
   ): HistoryRoomEntity?
 
@@ -79,9 +81,19 @@ abstract class HistoryRoomDao : PageDao {
 
   suspend fun saveHistory(historyItem: HistoryListItem.HistoryItem) {
     saveMutex.withLock {
+      // Match the visit by its day instead of dateString, which depends on the app language.
+      val dayStart = Calendar.getInstance().apply {
+        timeInMillis = historyItem.timeStamp
+        set(Calendar.HOUR_OF_DAY, 0)
+        set(Calendar.MINUTE, 0)
+        set(Calendar.SECOND, 0)
+        set(Calendar.MILLISECOND, 0)
+      }
+      val dayEnd = (dayStart.clone() as Calendar).apply { add(Calendar.DAY_OF_MONTH, 1) }
       getHistoryRoomEntity(
         historyItem.historyUrl,
-        historyItem.dateString,
+        dayStart.timeInMillis,
+        dayEnd.timeInMillis,
         historyItem.zimReaderSource
       )?.let {
         it.apply {

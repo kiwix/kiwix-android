@@ -54,6 +54,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
@@ -67,6 +68,7 @@ import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.extensions.CollectSideEffectWithActivity
 import org.kiwix.kiwixmobile.core.extensions.bottomShadow
 import org.kiwix.kiwixmobile.core.extensions.hideKeyboardOnLazyColumnScroll
+import org.kiwix.kiwixmobile.core.extensions.locale
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.page.adapter.Page
 import org.kiwix.kiwixmobile.core.page.adapter.PageRelated
@@ -90,7 +92,7 @@ import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogHost
 import org.threeten.bp.LocalDate
 import org.threeten.bp.format.DateTimeFormatter
-import org.threeten.bp.format.DateTimeParseException
+import org.threeten.bp.format.DecimalStyle
 
 const val SWITCH_TEXT_TESTING_TAG = "switchTextTestingTag"
 const val NO_ITEMS_TEXT_TESTING_TAG = "noItemsTextTestingTag"
@@ -359,7 +361,7 @@ private fun PageSwitchRow(
 @Composable
 fun DateItemText(dateItem: DateItem) {
   Text(
-    text = getFormattedDateLabel(dateItem.dateString),
+    text = getFormattedDateLabel(dateItem.date),
     style = MaterialTheme.typography.bodySmall,
     modifier = Modifier
       .padding(SIXTEEN_DP)
@@ -368,22 +370,19 @@ fun DateItemText(dateItem: DateItem) {
 }
 
 @Composable
-private fun getFormattedDateLabel(dateString: String): String {
+private fun getFormattedDateLabel(date: LocalDate): String {
   val today = LocalDate.now()
-  val yesterday = today.minusDays(1)
-
-  val parsedDate = parseDateSafely(dateString)
-  return when (parsedDate) {
+  return when (date) {
     today -> stringResource(R.string.time_today)
-    yesterday -> stringResource(R.string.time_yesterday)
-    else -> dateString
+    today.minusDays(1) -> stringResource(R.string.time_yesterday)
+    else -> {
+      // Format in the current app language, with its digits (e.g. Persian digits).
+      val locale = LocalContext.current.locale
+      date.format(
+        DateTimeFormatter.ofPattern("d MMM yyyy", locale).withDecimalStyle(DecimalStyle.of(locale))
+      )
+    }
   }
-}
-
-private fun parseDateSafely(dateString: String): LocalDate? = try {
-  LocalDate.parse(dateString, DateTimeFormatter.ofPattern("d MMM yyyy"))
-} catch (_: DateTimeParseException) {
-  null
 }
 
 /**

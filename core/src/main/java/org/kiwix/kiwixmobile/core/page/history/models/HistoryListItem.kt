@@ -22,6 +22,8 @@ import org.kiwix.kiwixmobile.core.page.adapter.Page
 import org.kiwix.kiwixmobile.core.page.adapter.PageRelated
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
+import org.threeten.bp.LocalDate
+import java.util.Calendar
 
 sealed class HistoryListItem : PageRelated {
   data class HistoryItem constructor(
@@ -38,6 +40,13 @@ sealed class HistoryListItem : PageRelated {
     override val id: Long = databaseId,
     override val url: String = historyUrl
   ) : HistoryListItem(), Page {
+    // The day of the visit. It is computed from the timestamp because dateString is
+    // formatted in the app language at the time of the visit.
+    val date: LocalDate
+      get() = Calendar.getInstance().apply { timeInMillis = timeStamp }.let {
+        LocalDate.of(it[Calendar.YEAR], it[Calendar.MONTH] + 1, it[Calendar.DAY_OF_MONTH])
+      }
+
     constructor(
       url: String,
       title: String,
@@ -70,7 +79,7 @@ sealed class HistoryListItem : PageRelated {
   }
 
   data class DateItem(
-    val dateString: String,
-    override val id: Long = dateString.hashCode().toLong()
+    val date: LocalDate,
+    override val id: Long = date.toEpochDay()
   ) : HistoryListItem()
 }
