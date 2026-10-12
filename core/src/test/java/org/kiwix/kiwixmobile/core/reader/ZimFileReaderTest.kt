@@ -65,6 +65,27 @@ class ZimFileReaderTest {
   }
 
   @Test
+  fun checkDecodeUrlKeepsPlusSign() {
+    assertEquals("4+4_Photocycloaddition", "4+4_Photocycloaddition".decodeUrl)
+    assertEquals("C++", "C++".decodeUrl)
+  }
+
+  @Test
+  fun checkDecodeUrlWithEncodedPlusSign() {
+    assertEquals("C++", "C%2B%2B".decodeUrl)
+  }
+
+  @Test
+  fun checkDecodeUrlKeepsPlusSignWithOtherEncodings() {
+    assertEquals("A/A+B testing?q=1+1", "A/A+B%20testing%3Fq%3D1+1".decodeUrl)
+  }
+
+  @Test
+  fun checkDecodeUrlKeepsPlusSignWithPercentSign() {
+    assertEquals("A/FT%+", "A/FT%+".decodeUrl)
+  }
+
+  @Test
   fun checkReplaceWithEncodedStringReplacesQuestionMark() {
     val url = "A/page?query=value"
     assertEquals("A/page%3Fquery=value", url.replaceWithEncodedString)

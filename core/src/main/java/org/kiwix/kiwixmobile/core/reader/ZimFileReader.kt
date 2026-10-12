@@ -482,10 +482,12 @@ private val String.filePath: String
   get() = substringAfter(CONTENT_PREFIX).substringBefore("#").substringBefore("?")
 
 // Decode the URL if it is encoded because libkiwix does not return the path for encoded paths.
+// URLDecoder turns "+" into a space, but "+" is a literal character in paths (e.g. "C++"),
+// so encode it first to keep it. See https://github.com/kiwix/kiwix-android/issues/5188
 val String.decodeUrl: String
   get() =
     try {
-      URLDecoder.decode(this, "UTF-8")
+      URLDecoder.decode(replace("+", "%2B"), "UTF-8")
     } catch (illegalArgumentException: IllegalArgumentException) {
       // Searched item already has the decoded URL,
       // and if any URL contains % in it, then it will fail to decode that URL and will not load the page.
