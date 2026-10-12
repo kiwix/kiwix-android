@@ -19,24 +19,30 @@
 package org.kiwix.kiwixmobile.nav.destination.library.online
 
 import android.content.Context
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.minimumInteractiveComponentSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
@@ -53,7 +59,11 @@ import org.kiwix.kiwixmobile.core.ui.components.ProgressBarStyle
 import org.kiwix.kiwixmobile.core.ui.models.IconItem
 import org.kiwix.kiwixmobile.core.ui.models.toPainter
 import org.kiwix.kiwixmobile.core.ui.theme.KiwixTheme
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.DOWNLOAD_BUTTON_ICON_SIZE
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.DOWNLOAD_BUTTON_SIZE
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.EIGHT_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FIVE_DP
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FOUR_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.ONE_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SIXTEEN_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TEN_DP
@@ -121,7 +131,7 @@ private fun DownloadBookContent(
 ) {
   Row(
     modifier = Modifier
-      .padding(top = SIXTEEN_DP, start = SIXTEEN_DP)
+      .padding(SIXTEEN_DP)
       .fillMaxWidth(),
     verticalAlignment = Alignment.CenterVertically
   ) {
@@ -129,12 +139,17 @@ private fun DownloadBookContent(
     Column(
       modifier = Modifier
         .weight(1f)
-        .padding(start = SIXTEEN_DP),
+        .padding(start = SIXTEEN_DP, end = EIGHT_DP),
       horizontalAlignment = Alignment.Start
     ) {
       BookTitle(item.title, index)
       Spacer(modifier = Modifier.height(TWO_DP))
-      BookDescription(item.description.orEmpty(), index)
+      BookDescription(
+        bookDescription = item.description.orEmpty(),
+        index = index,
+        style = MaterialTheme.typography.bodyMedium.copy(color = Color.Gray),
+        color = Color.Unspecified
+      )
       ContentLoadingProgressBar(
         progressBarStyle = ProgressBarStyle.HORIZONTAL,
         modifier = Modifier
@@ -156,44 +171,54 @@ fun PauseStopButtonsRow(
 ) {
   val context = LocalContext.current
   val isPaused = item.downloadState == DownloadState.Paused
+  val borderStroke = BorderStroke(ONE_DP, Color.LightGray)
+  val buttonShape = RoundedCornerShape(FOUR_DP)
 
-  Row(
-    modifier = Modifier
-      .fillMaxHeight(),
-    verticalAlignment = Alignment.CenterVertically
+  Column(
+    horizontalAlignment = Alignment.CenterHorizontally,
+    verticalArrangement = Arrangement.spacedBy(EIGHT_DP)
   ) {
-    IconButton(
-      onClick = { onPauseResumeClick.invoke(item) },
+    Box(
       modifier = Modifier
-        .padding(horizontal = TWO_DP)
-        .minimumInteractiveComponentSize()
-        .semantics { testTag = DOWNLOADING_PAUSE_BUTTON_TESTING_TAG }
+        .size(DOWNLOAD_BUTTON_SIZE)
+        .clip(buttonShape)
+        .border(borderStroke, buttonShape)
+        .clickable { onPauseResumeClick.invoke(item) }
+        .semantics { testTag = DOWNLOADING_PAUSE_BUTTON_TESTING_TAG },
+      contentAlignment = Alignment.Center
     ) {
       val contentDescription = context.getString(string.tts_pause) +
         "/${context.getString(string.tts_resume)}/${item.hashCode()}"
       Icon(
         painter = getPauseResumeButtonIcon(isPaused).toPainter(),
         contentDescription = contentDescription,
-        modifier = Modifier.testTag(
-          if (isPaused) {
-            RESUME_ICON_TESTING_TAG
-          } else {
-            PAUSE_ICON_TESTING_TAG
-          }
-        )
+        tint = MaterialTheme.colorScheme.onSurface,
+        modifier = Modifier
+          .size(DOWNLOAD_BUTTON_ICON_SIZE)
+          .testTag(
+            if (isPaused) {
+              RESUME_ICON_TESTING_TAG
+            } else {
+              PAUSE_ICON_TESTING_TAG
+            }
+          )
       )
     }
 
-    IconButton(
-      onClick = { onStopClick.invoke(item) },
+    Box(
       modifier = Modifier
-        .minimumInteractiveComponentSize()
-        .padding(horizontal = TWO_DP)
-        .semantics { testTag = DOWNLOADING_STOP_BUTTON_TESTING_TAG }
+        .size(DOWNLOAD_BUTTON_SIZE)
+        .clip(buttonShape)
+        .border(borderStroke, buttonShape)
+        .clickable { onStopClick.invoke(item) }
+        .semantics { testTag = DOWNLOADING_STOP_BUTTON_TESTING_TAG },
+      contentAlignment = Alignment.Center
     ) {
       Icon(
         painter = painterResource(id = R.drawable.ic_stop_24dp),
-        contentDescription = context.getString(string.stop) + item.hashCode()
+        contentDescription = context.getString(string.stop) + item.hashCode(),
+        tint = MaterialTheme.colorScheme.onSurface,
+        modifier = Modifier.size(DOWNLOAD_BUTTON_ICON_SIZE)
       )
     }
   }

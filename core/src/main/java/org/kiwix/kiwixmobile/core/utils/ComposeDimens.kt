@@ -220,4 +220,8 @@ object ComposeDimens {
   // ZIM file validation dialog dimens
   val VALIDATION_BOOK_TITLE_TEXT = 16.sp
   val VALIDATION_BOOK_ICON_SIZE = 30.dp
+
+  // Download item action buttons
+  val DOWNLOAD_BUTTON_SIZE = 32.dp
+  val DOWNLOAD_BUTTON_ICON_SIZE = 20.dp
 }
