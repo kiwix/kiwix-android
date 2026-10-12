@@ -18,12 +18,6 @@
 #
 #
 
-# The emulator's crashpad_handler subprocess can survive `adb emu kill` and
-# hang the android-emulator-runner action's teardown
-# (https://github.com/ReactiveCircus/android-emulator-runner/issues/385).
-# Kill it once this script exits, regardless of the test outcome.
-trap 'killall -INT crashpad_handler 2>/dev/null || true' EXIT
-
 # Enable Wi-Fi on the emulator
 adb shell svc wifi enable
 adb logcat -c
@@ -42,6 +36,8 @@ TEST_ORCHESTRATOR_PACKAGE="androidx.test.orchestrator"
 is_app_installed() {
   adb shell pm list packages | grep -q "$1"
 }
+
+adb shell rm -f "/data/data/${PACKAGE_NAME}/files/fail_fast_marker" 2>/dev/null || true
 
 if is_app_installed "$PACKAGE_NAME"; then
   # Delete the application to properly run the test cases.

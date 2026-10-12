@@ -44,8 +44,11 @@ import org.hamcrest.Matchers.anyOf
 import org.junit.After
 import org.junit.Rule
 import org.junit.runner.RunWith
+import org.kiwix.kiwixmobile.core.utils.TestingUtils.FAIL_FAST_RULE_ORDER
+import org.kiwix.kiwixmobile.core.utils.TestingUtils.PERMISSION_RULE_ORDER
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
+import org.kiwix.kiwixmobile.testutils.FailFastRule
 import org.kiwix.kiwixmobile.testutils.TestUtils
 
 @RunWith(AndroidJUnit4::class)
@@ -84,7 +87,11 @@ abstract class BaseActivityTest {
       arrayOf(POST_NOTIFICATIONS, NEARBY_WIFI_DEVICES)
     }
 
-  @Rule
+  @Rule(order = FAIL_FAST_RULE_ORDER)
+  @JvmField
+  var failFastRule: FailFastRule = FailFastRule()
+
+  @Rule(order = PERMISSION_RULE_ORDER)
   @JvmField
   var permissionRules: GrantPermissionRule = GrantPermissionRule.grant(*permissions())
 

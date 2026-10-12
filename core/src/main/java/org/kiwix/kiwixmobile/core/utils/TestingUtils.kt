@@ -21,9 +21,11 @@ package org.kiwix.kiwixmobile.core.utils
  * Created by mhutti1 on 19/04/17.
  */
 object TestingUtils {
-  const val HILT_RULE_ORDER = 0
-  const val COMPOSE_TEST_RULE_ORDER = 1
-  const val RETRY_RULE_ORDER = 2
+  const val PERMISSION_RULE_ORDER = 0
+  const val HILT_RULE_ORDER = 1
+  const val FAIL_FAST_RULE_ORDER = 2
+  const val COMPOSE_TEST_RULE_ORDER = 3
+  const val RETRY_RULE_ORDER = 4
   const val RETRY_COUNT_FOR_FLAKY_TEST = 3
   private var callback: IdleListener? = null
   private val resources: MutableSet<Class<*>> = HashSet()

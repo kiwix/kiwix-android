@@ -18,12 +18,6 @@
 #
 #
 
-# The emulator's crashpad_handler subprocess can survive `adb emu kill` and
-# hang the android-emulator-runner action's teardown
-# (https://github.com/ReactiveCircus/android-emulator-runner/issues/385).
-# Kill it once this script exits, regardless of the test outcome.
-trap 'killall -INT crashpad_handler 2>/dev/null || true' EXIT
-
 TEST_CLASSES="org.kiwix.kiwixmobile.download.DownloadTest,\
 org.kiwix.kiwixmobile.onlineCategory.OnlineCategoryTest,\
 org.kiwix.kiwixmobile.language.LanguageScreenTest"
