@@ -32,8 +32,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -72,6 +70,7 @@ import org.kiwix.kiwixmobile.core.zim_manager.Byte
 import org.kiwix.kiwixmobile.ui.BookDescription
 import org.kiwix.kiwixmobile.ui.BookIcon
 import org.kiwix.kiwixmobile.ui.BookTitle
+import org.kiwix.kiwixmobile.ui.LibraryCard
 import org.kiwix.kiwixmobile.zimManager.libraryView.LibraryListItem.LibraryDownloadItem
 
 const val DOWNLOAD_BOOK_ITEM_TESTING_TAG = "downloadBookItemTestingTag"
@@ -108,14 +107,8 @@ fun DownloadBookItem(
     }
   }
   KiwixTheme {
-    Card(
-      modifier = Modifier
-        .fillMaxWidth()
-        .padding(FIVE_DP)
-        .testTag(DOWNLOAD_BOOK_ITEM_TESTING_TAG),
-      shape = RoundedCornerShape(TWO_DP),
-      elevation = CardDefaults.elevatedCardElevation(TWO_DP),
-      colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainer)
+    LibraryCard(
+      modifier = Modifier.testTag(DOWNLOAD_BOOK_ITEM_TESTING_TAG)
     ) {
       DownloadBookContent(index, item, onPauseResumeClick, onStopClick)
     }
