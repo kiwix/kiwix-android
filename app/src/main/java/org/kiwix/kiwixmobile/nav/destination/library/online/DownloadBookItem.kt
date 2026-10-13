@@ -113,8 +113,8 @@ fun DownloadBookItem(
         .fillMaxWidth()
         .padding(FIVE_DP)
         .testTag(DOWNLOAD_BOOK_ITEM_TESTING_TAG),
-      shape = MaterialTheme.shapes.extraSmall,
-      elevation = CardDefaults.elevatedCardElevation(),
+      shape = RoundedCornerShape(TWO_DP),
+      elevation = CardDefaults.elevatedCardElevation(TWO_DP),
       colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainer)
     ) {
       DownloadBookContent(index, item, onPauseResumeClick, onStopClick)

@@ -48,6 +48,7 @@ import org.kiwix.kiwixmobile.core.entity.LibkiwixBook
 import org.kiwix.kiwixmobile.core.utils.BookUtils
 import org.kiwix.kiwixmobile.core.utils.ZERO
 import org.kiwix.kiwixmobile.core.zim_manager.Byte
+import org.kiwix.kiwixmobile.ui.formatBookDate
 import org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState
 import org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState.CanWrite4GbFile
 import org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState.CannotWrite4GbFile
@@ -179,7 +180,7 @@ class OnlineBookItemUITest {
   fun onlineBookItem_bookTitleIsInTree() {
     setContent(item = mockBookItem(book = mockLibkiwixBook(title = "Kotlin")))
     composeTestRule
-      .onNode(hasContentDescription("Kotlin$ZERO"))
+      .onNode(hasContentDescription("Kotlin", substring = true))
       .assertExists()
   }
 
@@ -209,19 +210,12 @@ class OnlineBookItemUITest {
   }
 
   @Test
-  fun onlineBookItem_bookDateTagIsInTree() {
-    setContent(item = mockBookItem(book = mockLibkiwixBook(date = "2024-01-01")))
-    composeTestRule
-      .onNodeWithTag(ONLINE_BOOK_DATE_TEXT_TESTING_TAG, useUnmergedTree = true)
-      .assertExists()
-  }
-
-  @Test
-  fun onlineBookItem_bookDateContentDescriptionIsCorrect() {
+  fun onlineBookItem_bookDateIsInTree() {
     val date = "2024-01-01"
     setContent(item = mockBookItem(book = mockLibkiwixBook(date = date)))
+    val formattedDate = formatBookDate(date)
     composeTestRule
-      .onNode(hasContentDescription("$date$ZERO"))
+      .onNode(hasContentDescription(formattedDate, substring = true))
       .assertExists()
   }
 
@@ -538,8 +532,9 @@ class OnlineBookItemUITest {
 
   @Test
   fun onlineBookItem_multipleItems_titlesAreDistinctByIndex() {
-    val item1 = mockBookItem(book = mockLibkiwixBook(id = "book-id-1", title = "Kotlin"))
-    val item2 = mockBookItem(book = mockLibkiwixBook(id = "book-id-2", title = "Java"))
+    val item1 = mockBookItem(book = mockLibkiwixBook(id = "book-id-1", title = "Kotlin", date = "2024-01-01"))
+    val item2 = mockBookItem(book = mockLibkiwixBook(id = "book-id-2", title = "Java", date = "2024-01-01"))
+    val formattedDate = formatBookDate("2024-01-01")
     composeTestRule.setContent {
       Column {
         OnlineBookItem(
@@ -559,8 +554,8 @@ class OnlineBookItemUITest {
       }
     }
     composeTestRule.waitForIdle()
-    composeTestRule.onNode(hasContentDescription("Kotlin0")).assertExists()
-    composeTestRule.onNode(hasContentDescription("Java1")).assertExists()
+    composeTestRule.onNode(hasContentDescription("Kotlin${formattedDate}0")).assertExists()
+    composeTestRule.onNode(hasContentDescription("Java${formattedDate}1")).assertExists()
   }
 
   @Test
