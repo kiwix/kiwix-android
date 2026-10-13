@@ -30,6 +30,7 @@ import org.kiwix.kiwixmobile.core.main.reader.helper.TabsManager.TabsState
 import org.kiwix.kiwixmobile.core.page.history.models.NavigationHistoryListItem
 import org.kiwix.kiwixmobile.core.page.history.models.WebViewHistoryItem
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader.Companion.CONTENT_PREFIX
+import org.kiwix.kiwixmobile.core.reader.encodeLiteralPlus
 import org.kiwix.kiwixmobile.core.utils.ZERO
 import javax.inject.Inject
 
@@ -92,9 +93,12 @@ class ReaderWebViewManager @Inject constructor(
     }
   }
 
-  suspend fun openPage(entryPath: String?, kiwixWebView: KiwixWebView) {
-    entryPath?.let {
-      loadUrlWithCurrentWebview(redirectOrOriginal(contentUrl(it)), kiwixWebView)
+  suspend fun openPage(pageUrl: String?, kiwixWebView: KiwixWebView) {
+    pageUrl?.let {
+      loadUrlWithCurrentWebview(
+        redirectOrOriginal(contentUrl(it)).encodeLiteralPlus(),
+        kiwixWebView
+      )
     }
   }
 

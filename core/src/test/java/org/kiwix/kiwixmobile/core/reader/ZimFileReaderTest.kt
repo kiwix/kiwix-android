@@ -86,24 +86,6 @@ class ZimFileReaderTest {
   }
 
   @Test
-  fun checkReplaceWithEncodedStringReplacesQuestionMark() {
-    val url = "A/page?query=value"
-    assertEquals("A/page%3Fquery=value", url.replaceWithEncodedString)
-  }
-
-  @Test
-  fun checkReplaceWithEncodedStringWithoutQuestionMark() {
-    val url = "A/simple_page"
-    assertEquals("A/simple_page", url.replaceWithEncodedString)
-  }
-
-  @Test
-  fun checkReplaceWithEncodedStringWithMultipleQuestionMarks() {
-    val url = "A/page?a=1?b=2"
-    assertEquals("A/page%3Fa=1%3Fb=2", url.replaceWithEncodedString)
-  }
-
-  @Test
   fun checkAddContentPrefixWhenNotPresent() {
     val path = "A/index.html"
     assertEquals("https://kiwix.app/A/index.html", path.addContentPrefix)

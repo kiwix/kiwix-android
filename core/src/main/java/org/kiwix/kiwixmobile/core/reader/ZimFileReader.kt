@@ -51,6 +51,7 @@ import java.io.FileInputStream
 import java.io.IOException
 import java.io.InputStream
 import java.net.URLDecoder
+import java.net.URLEncoder
 import javax.inject.Inject
 
 private const val TAG = "ZimFileReader"
@@ -306,11 +307,13 @@ class ZimFileReader(
 
   fun getRedirect(url: String) = "${toRedirect(url)}"
 
-  fun isRedirect(url: String) =
-    when {
-      getRedirect(url).isEmpty() -> false
-      else -> url.startsWith(CONTENT_PREFIX) && url != getRedirect(url)
+  fun isRedirect(url: String): Boolean {
+    val redirectUrl = getRedirect(url)
+    return when {
+      redirectUrl.isEmpty() -> false
+      else -> url.startsWith(CONTENT_PREFIX) && url != redirectUrl
     }
+  }
 
   private fun toRedirect(url: String) =
     "$CONTENT_PREFIX${getActualUrl(url)}".toUri()
@@ -487,7 +490,7 @@ private val String.filePath: String
 val String.decodeUrl: String
   get() =
     try {
-      URLDecoder.decode(replace("+", "%2B"), "UTF-8")
+      URLDecoder.decode(encodeLiteralPlus(), "UTF-8")
     } catch (illegalArgumentException: IllegalArgumentException) {
       // Searched item already has the decoded URL,
       // and if any URL contains % in it, then it will fail to decode that URL and will not load the page.
@@ -503,20 +506,23 @@ val String.decodeUrl: String
 val String.truncateMimeType: String
   get() = replace("^([^ ]+).*$", "$1").substringBefore(";")
 
-// Encode question mark with %3F after getting url from checkUrl() method
-// for issue https://github.com/kiwix/kiwix-android/issues/2671
-val String.replaceWithEncodedString: String
-  get() = replace("?", "%3F")
-
 private fun parcelFileDescriptor(file: File): ParcelFileDescriptor? =
   ParcelFileDescriptor.open(file, ParcelFileDescriptor.MODE_READ_ONLY)
 
 // Default illustration size for ZIM file favicons
 const val ILLUSTRATION_SIZE = 48
 
+// A raw libzim entry path may contain a literal '+' (e.g. "4+4_Photocycloaddition"). Left
+// unencoded, a bare '+' in a URL is ambiguous: many decoders (anything built on the
+// application/x-www-form-urlencoded convention, like java.net.URLDecoder) read it as an
+// encoded space. Escaping it to its proper percent-encoded form at the point a raw path is
+// turned into a URL removes that ambiguity, so decoding it back afterward needs no
+// special-casing. See https://en.wikipedia.org/wiki/Percent-encoding
+fun String.encodeLiteralPlus(): String = replace("+", URLEncoder.encode("+", "UTF-8"))
+
 // add content prefix to url since searched items return the url inside of zim without content prefix.
 val String.addContentPrefix: String
-  get() = if (startsWith(CONTENT_PREFIX)) this else CONTENT_PREFIX + this
+  get() = if (startsWith(CONTENT_PREFIX)) encodeLiteralPlus() else CONTENT_PREFIX + encodeLiteralPlus()
 
 /**
  * Handles any error thrown by this method. Developers should handle the flow if this method

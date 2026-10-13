@@ -34,6 +34,7 @@ import org.kiwix.kiwixmobile.core.main.MainRepositoryActions
 import org.kiwix.kiwixmobile.core.page.history.models.WebViewHistoryItem
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader.Companion.CONTENT_PREFIX
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
+import org.kiwix.kiwixmobile.core.reader.encodeLiteralPlus
 import org.kiwix.kiwixmobile.core.utils.TAG_KIWIX
 import org.kiwix.kiwixmobile.core.utils.ZERO
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
@@ -143,7 +144,7 @@ class ReaderSessionManager @Inject constructor(
       webView.scrollY = webViewHistoryItem.webViewCurrentPosition
     } ?: run {
       zimReaderContainer.zimFileReader?.let {
-        webView.loadUrl(redirectOrOriginal(contentUrl("${it.mainPage}")))
+        webView.loadUrl(redirectOrOriginal(contentUrl("${it.mainPage}")).encodeLiteralPlus())
       }
     }
   }

@@ -20,6 +20,7 @@ package org.kiwix.kiwixmobile.core.utils
 
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
+import org.kiwix.kiwixmobile.core.reader.encodeLiteralPlus
 
 private fun ZimReaderContainer.redirectOrOriginal(contentUrl: String): String =
   if (isRedirect(contentUrl)) getRedirect(contentUrl) else contentUrl
@@ -28,7 +29,7 @@ private fun contentUrl(articleUrl: String): String =
   "${ZimFileReader.CONTENT_PREFIX}$articleUrl"
 
 fun ZimReaderContainer.urlSuffixToParsableUrl(suffixUrl: String): String =
-  redirectOrOriginal(contentUrl(suffixUrl))
+  redirectOrOriginal(contentUrl(suffixUrl)).encodeLiteralPlus()
 
 fun ZimReaderContainer.titleToEntryPath(title: String): String? =
   if (title.startsWith("A/")) title else getPageEntryPathFromTitle(title)
