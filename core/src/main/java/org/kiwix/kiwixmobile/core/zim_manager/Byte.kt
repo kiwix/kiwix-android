@@ -19,6 +19,7 @@
 package org.kiwix.kiwixmobile.core.zim_manager
 
 import java.text.DecimalFormat
+import kotlin.math.ceil
 import kotlin.math.log10
 import kotlin.math.pow
 
@@ -28,8 +29,8 @@ value class Byte(private val byteString: String?) {
     get() = byteString?.toLongOrNull()?.let {
       val units = arrayOf("B", "KB", "MB", "GB", "TB")
       val conversion = (log10(it.toDouble()) / log10(1000.0)).toInt()
-      DecimalFormat("#,##0.##")
-        .format(it / 1000.0.pow(conversion.toDouble())) +
+      DecimalFormat("#,##0")
+        .format(ceil(it / 1000.0.pow(conversion.toDouble()))) +
         " " +
         units[conversion]
     }.orEmpty()

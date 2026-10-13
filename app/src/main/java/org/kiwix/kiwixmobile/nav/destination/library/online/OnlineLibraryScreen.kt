@@ -73,7 +73,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.navigation.NavHostController
@@ -376,10 +375,7 @@ private fun ShowDividerItem(dividerItem: DividerItem) {
         onTextLayout = { textLayoutResult ->
           isTruncated = textLayoutResult.hasVisualOverflow
         },
-        style = MaterialTheme.typography.titleSmall.copy(
-          fontWeight = FontWeight.Normal,
-          color = MaterialTheme.colorScheme.onSurfaceVariant
-        ),
+        style = MaterialTheme.typography.titleMedium,
         modifier = Modifier
           .weight(1f)
           .semantics { testTag = ONLINE_DIVIDER_ITEM_TEXT_TESTING_TAG }

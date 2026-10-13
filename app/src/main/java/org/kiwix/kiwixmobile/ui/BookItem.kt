@@ -33,7 +33,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Checkbox
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -53,17 +52,19 @@ import androidx.compose.ui.text.style.BaselineShift
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.withStyle
-import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import org.kiwix.kiwixmobile.core.downloader.model.Base64String
 import org.kiwix.kiwixmobile.core.downloader.model.toPainter
 import org.kiwix.kiwixmobile.core.ui.theme.KiwixTheme
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.BOOK_ICON_SIZE
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.EIGHT_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FIVE_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FOUR_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SIXTEEN_DP
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TWELVE_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TWO_DP
 import org.kiwix.kiwixmobile.core.zim_manager.Byte
+import org.kiwix.kiwixmobile.core.zim_manager.KiwixTag
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.ArticleCount
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListItem.BookOnDisk
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.SelectionMode
@@ -106,7 +107,7 @@ fun BookItem(
         )
         .testTag(BOOK_ITEM_TESTING_TAG),
       shape = RoundedCornerShape(TWO_DP),
-      elevation = CardDefaults.elevatedCardElevation(4.dp),
+      elevation = CardDefaults.elevatedCardElevation(TWO_DP),
       colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainer)
     ) {
       BookContent(bookOnDisk, selectionMode, onMultiSelect, index)
@@ -123,29 +124,60 @@ private fun BookContent(
 ) {
   Row(
     modifier = Modifier
-      .padding(SIXTEEN_DP)
+      .padding(start = SIXTEEN_DP, top = SIXTEEN_DP, end = SIXTEEN_DP, bottom = TWELVE_DP)
       .fillMaxWidth(),
     verticalAlignment = Alignment.Top
   ) {
     if (selectionMode == SelectionMode.MULTI) {
       BookCheckbox(bookOnDisk, onMultiSelect, index)
     }
-    Column(
-      horizontalAlignment = Alignment.CenterHorizontally,
-      modifier = Modifier.padding(end = SIXTEEN_DP)
+    BookIconAndSize(
+      iconSource = bookOnDisk.book.favicon,
+      size = bookOnDisk.book.size,
+      isOnlineLibrary = false,
+      index = index
+    )
+
+    BookDetails(
+      modifier = Modifier.weight(1f),
+      title = bookOnDisk.book.title,
+      date = bookOnDisk.book.date,
+      description = bookOnDisk.book.description.orEmpty(),
+      tags = bookOnDisk.tags,
+      index = index
     ) {
-      BookIcon(bookOnDisk.book.favicon, isOnlineLibrary = false)
-      Spacer(modifier = Modifier.height(FOUR_DP))
-      BookSize(
-        size = Byte(bookOnDisk.book.size).humanReadable,
-        index = index,
-        style = MaterialTheme.typography.labelSmall,
-        textAlign = TextAlign.Center,
-        color = Color.Unspecified
+      BookArticleCount(
+        articleCount = bookOnDisk.book.articleCount,
+        mediaCount = bookOnDisk.book.mediaCount,
+        index = index
       )
     }
+  }
+}
 
-    BookDetails(Modifier.weight(1f), bookOnDisk, index)
+@Composable
+fun BookIconAndSize(
+  iconSource: String,
+  size: String,
+  isOnlineLibrary: Boolean,
+  index: Int,
+  modifier: Modifier = Modifier,
+  sizeModifier: Modifier = Modifier
+) {
+  Column(
+    horizontalAlignment = Alignment.CenterHorizontally,
+    modifier = modifier.padding(end = SIXTEEN_DP)
+  ) {
+    BookIcon(iconSource, isOnlineLibrary = isOnlineLibrary)
+    Spacer(modifier = Modifier.height(FOUR_DP))
+    BookSize(
+      size = Byte(size).humanReadable,
+      index = index,
+      style = MaterialTheme.typography.labelSmall,
+      textAlign = TextAlign.Center,
+      color = Color.Unspecified,
+      modifier = sizeModifier
+    )
   }
 }
 
@@ -189,16 +221,25 @@ fun BookIcon(iconSource: String, isOnlineLibrary: Boolean) {
 }
 
 @Composable
-private fun BookDetails(modifier: Modifier, bookOnDisk: BookOnDisk, index: Int) {
+fun BookDetails(
+  modifier: Modifier = Modifier,
+  title: String,
+  date: String,
+  description: String,
+  tags: List<KiwixTag>,
+  index: Int,
+  subheadContent: (@Composable () -> Unit)? = null,
+  bottomEndContent: @Composable () -> Unit
+) {
   Column(modifier = modifier) {
     val titleStyle = MaterialTheme.typography.titleSmall
     val dateStyle = MaterialTheme.typography.labelSmall.copy(
       baselineShift = BaselineShift.Superscript,
       color = Color.Gray
     )
-    val formattedDate = formatBookDate(bookOnDisk.book.date)
+    val formattedDate = formatBookDate(date)
     val annotatedTitle = buildAnnotatedString {
-      append(bookOnDisk.book.title)
+      append(title)
       if (formattedDate.isNotEmpty()) {
         append(" ")
         withStyle(dateStyle.toSpanStyle()) {
@@ -212,34 +253,36 @@ private fun BookDetails(modifier: Modifier, bookOnDisk: BookOnDisk, index: Int) 
       maxLines = 2,
       overflow = TextOverflow.Ellipsis,
       modifier = Modifier.semantics {
-        contentDescription = "${bookOnDisk.book.title}${formattedDate}$index"
+        contentDescription = "$title${formattedDate}$index"
       }
     )
+    if (subheadContent != null) {
+      Spacer(modifier = Modifier.height(TWO_DP))
+      subheadContent()
+    }
     Spacer(modifier = Modifier.height(FOUR_DP))
     BookDescription(
-      bookDescription = bookOnDisk.book.description.orEmpty(),
+      bookDescription = description,
       index = index,
       style = MaterialTheme.typography.bodyMedium.copy(color = Color.Gray),
       color = Color.Unspecified,
       minLines = 2
     )
-    Spacer(modifier = Modifier.height(FOUR_DP))
-    HorizontalDivider(
-      color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.6f)
-    )
-    Spacer(modifier = Modifier.height(FOUR_DP))
+    Spacer(modifier = Modifier.height(EIGHT_DP))
     Row(
       modifier = Modifier.fillMaxWidth(),
       horizontalArrangement = Arrangement.SpaceBetween,
       verticalAlignment = Alignment.CenterVertically
     ) {
-      TagsView(bookOnDisk.tags, modifier = Modifier.weight(1f), index = index)
-      Row(modifier = Modifier.padding(start = SIXTEEN_DP)) {
-        BookArticleCount(
-          articleCount = bookOnDisk.book.articleCount,
-          mediaCount = bookOnDisk.book.mediaCount,
-          index = index
-        )
+      TagsView(tags, index = index)
+      Row(
+        modifier = Modifier
+          .weight(1f, fill = false)
+          .padding(start = SIXTEEN_DP),
+        horizontalArrangement = Arrangement.End,
+        verticalAlignment = Alignment.CenterVertically
+      ) {
+        bottomEndContent()
       }
     }
   }
@@ -282,22 +325,6 @@ fun BookSize(
     color = color,
     textAlign = textAlign,
     modifier = modifier.semantics { contentDescription = "$size$index" }
-  )
-}
-
-@Composable
-fun BookDate(
-  date: String,
-  index: Int,
-  modifier: Modifier = Modifier,
-  style: TextStyle = MaterialTheme.typography.bodyMedium,
-  color: Color = Color.Gray
-) {
-  Text(
-    text = date,
-    style = style,
-    color = color,
-    modifier = modifier.semantics { contentDescription = "$date$index" }
   )
 }
 
