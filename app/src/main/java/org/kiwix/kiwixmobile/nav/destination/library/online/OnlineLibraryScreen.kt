@@ -297,8 +297,7 @@ private fun OnlineLibraryList(
         is LibraryListItem.BookItem -> OnlineBookItem(
           index = index,
           item = item,
-          onlineLibraryViewModel.bookUtils,
-          onlineLibraryViewModel.availableSpaceCalculator
+          availableSpaceCalculator = onlineLibraryViewModel.availableSpaceCalculator
         ) { onlineLibraryViewModel.onBookItemClick(it) }
 
         is LibraryListItem.LibraryDownloadItem -> DownloadBookItem(

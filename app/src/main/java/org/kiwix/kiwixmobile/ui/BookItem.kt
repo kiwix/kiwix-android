@@ -55,6 +55,7 @@ import androidx.compose.ui.text.withStyle
 import coil3.compose.AsyncImage
 import org.kiwix.kiwixmobile.core.downloader.model.Base64String
 import org.kiwix.kiwixmobile.core.downloader.model.toPainter
+import org.kiwix.kiwixmobile.core.entity.LibkiwixBook
 import org.kiwix.kiwixmobile.core.ui.theme.KiwixTheme
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.BOOK_ICON_SIZE
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.EIGHT_DP
@@ -77,6 +78,23 @@ import java.text.SimpleDateFormat
 import java.util.Locale
 import org.kiwix.kiwixmobile.core.R as CoreR
 
+@Composable
+fun LibraryCard(
+  modifier: Modifier = Modifier,
+  content: @Composable () -> Unit
+) {
+  Card(
+    modifier = modifier
+      .fillMaxWidth()
+      .padding(FIVE_DP),
+    shape = RoundedCornerShape(TWO_DP),
+    elevation = CardDefaults.elevatedCardElevation(TWO_DP),
+    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainer)
+  ) {
+    content()
+  }
+}
+
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun BookItem(
@@ -88,10 +106,8 @@ fun BookItem(
   selectionMode: SelectionMode = SelectionMode.NORMAL,
 ) {
   KiwixTheme {
-    Card(
+    LibraryCard(
       modifier = Modifier
-        .fillMaxWidth()
-        .padding(FIVE_DP)
         .combinedClickable(
           onClick = {
             when (selectionMode) {
@@ -105,53 +121,61 @@ fun BookItem(
             }
           }
         )
-        .testTag(BOOK_ITEM_TESTING_TAG),
-      shape = RoundedCornerShape(TWO_DP),
-      elevation = CardDefaults.elevatedCardElevation(TWO_DP),
-      colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainer)
+        .testTag(BOOK_ITEM_TESTING_TAG)
     ) {
-      BookContent(bookOnDisk, selectionMode, onMultiSelect, index)
+      BookContent(
+        book = bookOnDisk.book,
+        tags = bookOnDisk.tags,
+        isOnlineLibrary = false,
+        index = index,
+        leadingContent = if (selectionMode == SelectionMode.MULTI) {
+          { BookCheckbox(bookOnDisk, onMultiSelect, index) }
+        } else {
+          null
+        }
+      )
     }
   }
 }
 
+@Suppress("ComposableLambdaParameterNaming")
 @Composable
-private fun BookContent(
-  bookOnDisk: BookOnDisk,
-  selectionMode: SelectionMode,
-  onMultiSelect: ((BookOnDisk) -> Unit)?,
+fun BookContent(
+  book: LibkiwixBook,
+  tags: List<KiwixTag>,
+  isOnlineLibrary: Boolean,
   index: Int,
+  modifier: Modifier = Modifier,
+  sizeModifier: Modifier = Modifier,
+  leadingContent: (@Composable () -> Unit)? = null,
 ) {
   Row(
-    modifier = Modifier
+    modifier = modifier
       .padding(start = SIXTEEN_DP, top = SIXTEEN_DP, end = SIXTEEN_DP, bottom = TWELVE_DP)
       .fillMaxWidth(),
     verticalAlignment = Alignment.Top
   ) {
-    if (selectionMode == SelectionMode.MULTI) {
-      BookCheckbox(bookOnDisk, onMultiSelect, index)
+    if (leadingContent != null) {
+      leadingContent()
     }
     BookIconAndSize(
-      iconSource = bookOnDisk.book.favicon,
-      size = bookOnDisk.book.size,
-      isOnlineLibrary = false,
-      index = index
+      iconSource = book.favicon,
+      size = book.size,
+      isOnlineLibrary = isOnlineLibrary,
+      index = index,
+      sizeModifier = sizeModifier
     )
 
     BookDetails(
       modifier = Modifier.weight(1f),
-      title = bookOnDisk.book.title,
-      date = bookOnDisk.book.date,
-      description = bookOnDisk.book.description.orEmpty(),
-      tags = bookOnDisk.tags,
-      index = index
-    ) {
-      BookArticleCount(
-        articleCount = bookOnDisk.book.articleCount,
-        mediaCount = bookOnDisk.book.mediaCount,
-        index = index
-      )
-    }
+      title = book.title,
+      date = book.date,
+      description = book.description.orEmpty(),
+      tags = tags,
+      index = index,
+      articleCount = book.articleCount,
+      mediaCount = book.mediaCount
+    )
   }
 }
 
@@ -228,8 +252,8 @@ fun BookDetails(
   description: String,
   tags: List<KiwixTag>,
   index: Int,
-  subheadContent: (@Composable () -> Unit)? = null,
-  bottomEndContent: @Composable () -> Unit
+  articleCount: String? = null,
+  mediaCount: String? = null
 ) {
   Column(modifier = modifier) {
     val titleStyle = MaterialTheme.typography.titleSmall
@@ -256,10 +280,6 @@ fun BookDetails(
         contentDescription = "$title${formattedDate}$index"
       }
     )
-    if (subheadContent != null) {
-      Spacer(modifier = Modifier.height(TWO_DP))
-      subheadContent()
-    }
     Spacer(modifier = Modifier.height(FOUR_DP))
     BookDescription(
       bookDescription = description,
@@ -282,14 +302,18 @@ fun BookDetails(
         horizontalArrangement = Arrangement.End,
         verticalAlignment = Alignment.CenterVertically
       ) {
-        bottomEndContent()
+        BookArticleCount(
+          articleCount = articleCount,
+          mediaCount = mediaCount,
+          index = index
+        )
       }
     }
   }
 }
 
 @Composable
-private fun BookArticleCount(articleCount: String?, mediaCount: String?, index: Int) {
+fun BookArticleCount(articleCount: String?, mediaCount: String?, index: Int) {
   val context = LocalContext.current
   val articlesStr =
     ArticleCount(articleCount.orEmpty())
