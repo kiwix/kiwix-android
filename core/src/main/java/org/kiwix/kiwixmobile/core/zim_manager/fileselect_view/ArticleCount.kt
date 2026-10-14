@@ -21,6 +21,7 @@ package org.kiwix.kiwixmobile.core.zim_manager.fileselect_view
 import android.content.Context
 import org.kiwix.kiwixmobile.core.utils.files.Log
 import java.text.DecimalFormat
+import kotlin.math.ceil
 import kotlin.math.log10
 import kotlin.math.pow
 
@@ -35,8 +36,8 @@ value class ArticleCount(private val countStr: String) {
       val conversion = (log10(size.toDouble()) / 3).toInt()
       context.getString(
         resId,
-        DecimalFormat("#,##0.#")
-          .format(size / 1000.0.pow(conversion.toDouble())) + units[conversion]
+        DecimalFormat("#,##0")
+          .format(ceil(size / 1000.0.pow(conversion.toDouble()))) + units[conversion]
       )
     }
   } catch (e: NumberFormatException) {

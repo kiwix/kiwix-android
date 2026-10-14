@@ -18,21 +18,24 @@
 
 package org.kiwix.kiwixmobile.ui
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.SuggestionChip
-import androidx.compose.material3.SuggestionChipDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.unit.dp
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.ui.theme.TagPictureContainerDark
 import org.kiwix.kiwixmobile.core.ui.theme.TagPictureContainerLight
@@ -51,6 +54,7 @@ import org.kiwix.kiwixmobile.core.ui.theme.TagVideoContainerLight
 import org.kiwix.kiwixmobile.core.ui.theme.TagVideoContentDark
 import org.kiwix.kiwixmobile.core.ui.theme.TagVideoContentLight
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.EIGHT_DP
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FOUR_DP
 import org.kiwix.kiwixmobile.core.zim_manager.KiwixTag
 import org.kiwix.kiwixmobile.core.zim_manager.KiwixTag.Companion.YesNoValueTag
 import org.kiwix.kiwixmobile.core.zim_manager.KiwixTag.Companion.YesNoValueTag.DetailsTag
@@ -63,7 +67,8 @@ import org.kiwix.kiwixmobile.core.zim_manager.KiwixTag.TagValue.YES
 fun TagsView(tags: List<KiwixTag>, modifier: Modifier = Modifier, index: Int) {
   FlowRow(
     modifier = modifier,
-    horizontalArrangement = Arrangement.spacedBy(EIGHT_DP)
+    horizontalArrangement = Arrangement.spacedBy(EIGHT_DP),
+    verticalArrangement = Arrangement.spacedBy(FOUR_DP)
   ) {
     if (tags.isYesOrNotDefined<PicturesTag>()) {
       val picture = stringResource(R.string.tag_pic)
@@ -126,18 +131,20 @@ private fun TagChip(
   contentColorDark: Color
 ) {
   val isDark = isSystemInDarkTheme()
-  val chipColors = SuggestionChipDefaults.suggestionChipColors(
-    disabledContainerColor = if (isDark) containerColorDark else containerColorLight,
-    disabledLabelColor = if (isDark) contentColorDark else contentColorLight
-  )
-  SuggestionChip(
-    onClick = {},
-    label = { Text(text) },
-    enabled = false,
-    shape = RoundedCornerShape(4.dp),
-    colors = chipColors,
-    modifier = Modifier.semantics { this.contentDescription = contentDescription }
-  )
+  Box(
+    modifier = Modifier
+      .clip(RoundedCornerShape(FOUR_DP))
+      .background(if (isDark) containerColorDark else containerColorLight)
+      .padding(horizontal = EIGHT_DP, vertical = FOUR_DP)
+      .semantics { this.contentDescription = contentDescription },
+    contentAlignment = Alignment.Center
+  ) {
+    Text(
+      text = text,
+      style = MaterialTheme.typography.labelMedium,
+      color = if (isDark) contentColorDark else contentColorLight
+    )
+  }
 }
 
 private inline fun <reified T : YesNoValueTag> List<KiwixTag>.isYesOrNotDefined() =
