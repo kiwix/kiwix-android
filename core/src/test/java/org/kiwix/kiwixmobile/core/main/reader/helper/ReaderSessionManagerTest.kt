@@ -18,7 +18,6 @@
 
 package org.kiwix.kiwixmobile.core.main.reader.helper
 
-import android.net.Uri
 import android.os.Bundle
 import android.webkit.WebBackForwardList
 import io.mockk.Runs
@@ -29,8 +28,6 @@ import io.mockk.coVerifyOrder
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
-import io.mockk.mockkStatic
-import io.mockk.unmockkStatic
 import io.mockk.verify
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
@@ -433,34 +430,19 @@ class ReaderSessionManagerTest {
     }
 
     @Test
-    fun `restoreTabState encodes literal plus sign before loading main page`() {
+    fun `restoreTabState percent-encodes the main page path before loading it`() {
       val webView = mockk<KiwixWebView>(relaxed = true)
       val zimFileReader = mockk<ZimFileReader>()
+      val url = "https://kiwix.app/A/4%2B4_Photocycloaddition"
 
       every { zimReaderContainer.zimFileReader } returns zimFileReader
       every { zimFileReader.mainPage } returns "A/4+4_Photocycloaddition"
+      every { zimReaderContainer.isRedirect(url) } returns false
 
-      // toUri() is a Kotlin inline function (inlines to Uri.parse() at the call site),
-      // so it must be mocked via its underlying Uri.parse() call, not UriKt itself.
-      val contentUrl = "https://kiwix.app/A/4+4_Photocycloaddition"
-      val mockUri = mockk<Uri>()
-      every { mockUri.toString() } returns contentUrl
+      readerSessionManager.restoreTabState(webView, null)
 
-      mockkStatic(Uri::class)
-      every { Uri.parse(contentUrl) } returns mockUri
-
-      every {
-        zimReaderContainer.isRedirect(contentUrl)
-      } returns false
-
-      try {
-        readerSessionManager.restoreTabState(webView, null)
-
-        verify {
-          webView.loadUrl("https://kiwix.app/A/4%2B4_Photocycloaddition")
-        }
-      } finally {
-        unmockkStatic(Uri::class)
+      verify {
+        webView.loadUrl(url)
       }
     }
   }

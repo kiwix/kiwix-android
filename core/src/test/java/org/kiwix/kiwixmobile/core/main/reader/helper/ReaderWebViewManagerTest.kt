@@ -256,41 +256,40 @@ class ReaderWebViewManagerTest {
     }
 
     @Test
-    fun `openArticle encodes literal plus sign before loading original url`() = runTest {
+    fun `openPage percent-encodes special characters of the entry path`() = runTest {
       val webView = mockk<KiwixWebView>()
       val manager = spyk(readerWebViewManager)
 
       val container = mockk<ZimReaderContainer>()
-
-      every { manager.contentUrl("4+4_Photocycloaddition") } returns "content://4+4_Photocycloaddition"
+      val url = "https://kiwix.app/4%2B4_Photocycloaddition_%23_Is_it%3F"
 
       every { readerSessionManager.zimReaderContainer } returns container
-      every { container.isRedirect("content://4+4_Photocycloaddition") } returns false
+      every { container.isRedirect(url) } returns false
 
-      manager.openPage("4+4_Photocycloaddition", webView)
+      manager.openPage("4+4_Photocycloaddition_#_Is_it?", webView)
 
       verify {
-        webView.loadUrl("content://4%2B4_Photocycloaddition")
+        webView.loadUrl(url)
       }
     }
 
     @Test
-    fun `openArticle encodes literal plus sign before loading redirected url`() = runTest {
+    fun `openPage loads the redirect of the encoded url`() = runTest {
       val webView = mockk<KiwixWebView>()
       val manager = spyk(readerWebViewManager)
 
       val container = mockk<ZimReaderContainer>()
-
-      every { manager.contentUrl("article") } returns "content://article"
+      val url = "https://kiwix.app/C%2B%2B"
+      val redirectUrl = "https://kiwix.app/C%2B%2B_(programming_language)"
 
       every { readerSessionManager.zimReaderContainer } returns container
-      every { container.isRedirect("content://article") } returns true
-      every { container.getRedirect("content://article") } returns "content://C++_(programming_language)"
+      every { container.isRedirect(url) } returns true
+      every { container.getRedirect(url) } returns redirectUrl
 
-      manager.openPage("article", webView)
+      manager.openPage("C++", webView)
 
       verify {
-        webView.loadUrl("content://C%2B%2B_(programming_language)")
+        webView.loadUrl(redirectUrl)
       }
     }
   }

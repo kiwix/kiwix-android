@@ -141,70 +141,56 @@ class ZimReaderContainerUtilsTest {
   }
 
   @Test
-  fun urlSuffixToParsableUrl_withUnicodeCharacters_returnsCorrectUrl() {
-    val suffix = "A/Café_भारत_日本"
+  fun urlSuffixToParsableUrl_withUnicodeCharacters_returnsEncodedUrl() {
+    val suffix = "A/Café_日本"
+    val url = "${ZimFileReader.CONTENT_PREFIX}A/Caf%C3%A9_%E6%97%A5%E6%9C%AC"
 
     every {
-      container.isRedirect("${ZimFileReader.CONTENT_PREFIX}$suffix")
+      container.isRedirect(url)
     } returns false
 
     val result = container.urlSuffixToParsableUrl(suffix)
 
     assertEquals(
-      "${ZimFileReader.CONTENT_PREFIX}$suffix",
+      url,
       result
     )
   }
 
   @Test
-  fun urlSuffixToParsableUrl_withSpecialCharacters_returnsCorrectUrl() {
-    val suffix = "A/C%2B%2B_(programming_language)"
+  fun urlSuffixToParsableUrl_withSpecialCharacters_returnsEncodedUrl() {
+    val suffix = "A/Is_C++_(programming_language)_hard?"
+    val url = "${ZimFileReader.CONTENT_PREFIX}A/Is_C%2B%2B_(programming_language)_hard%3F"
 
     every {
-      container.isRedirect("${ZimFileReader.CONTENT_PREFIX}$suffix")
+      container.isRedirect(url)
     } returns false
 
     val result = container.urlSuffixToParsableUrl(suffix)
 
     assertEquals(
-      "${ZimFileReader.CONTENT_PREFIX}$suffix",
+      url,
       result
     )
   }
 
   @Test
-  fun urlSuffixToParsableUrl_withLiteralPlusSign_encodesPlusBeforeReturning() {
-    val suffix = "A/4+4_Photocycloaddition"
-
-    every {
-      container.isRedirect("${ZimFileReader.CONTENT_PREFIX}$suffix")
-    } returns false
-
-    val result = container.urlSuffixToParsableUrl(suffix)
-
-    assertEquals(
-      "${ZimFileReader.CONTENT_PREFIX}A/4%2B4_Photocycloaddition",
-      result
-    )
-  }
-
-  @Test
-  fun urlSuffixToParsableUrl_whenRedirectUrlHasLiteralPlusSign_encodesPlusInRedirectUrl() {
+  fun urlSuffixToParsableUrl_withLiteralPlusSign_looksUpTheRedirectOfTheEncodedUrl() {
     val suffix = "A/C++"
-    val contentUrl = "${ZimFileReader.CONTENT_PREFIX}$suffix"
-    val redirectUrlWithPlus = "${ZimFileReader.CONTENT_PREFIX}A/C++_(programming_language)"
+    val contentUrl = "${ZimFileReader.CONTENT_PREFIX}A/C%2B%2B"
+    val redirectUrl = "${ZimFileReader.CONTENT_PREFIX}A/C%2B%2B_(programming_language)"
 
     every {
       container.isRedirect(contentUrl)
     } returns true
     every {
       container.getRedirect(contentUrl)
-    } returns redirectUrlWithPlus
+    } returns redirectUrl
 
     val result = container.urlSuffixToParsableUrl(suffix)
 
     assertEquals(
-      "${ZimFileReader.CONTENT_PREFIX}A/C%2B%2B_(programming_language)",
+      redirectUrl,
       result
     )
   }

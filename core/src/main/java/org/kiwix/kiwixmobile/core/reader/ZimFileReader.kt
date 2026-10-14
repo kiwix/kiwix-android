@@ -18,7 +18,6 @@
 package org.kiwix.kiwixmobile.core.reader
 
 import android.content.res.AssetFileDescriptor
-import android.net.Uri
 import android.os.ParcelFileDescriptor
 import android.util.Base64
 import androidx.core.net.toUri
@@ -50,8 +49,6 @@ import java.io.File
 import java.io.FileInputStream
 import java.io.IOException
 import java.io.InputStream
-import java.net.URLDecoder
-import java.net.URLEncoder
 import javax.inject.Inject
 
 private const val TAG = "ZimFileReader"
@@ -315,12 +312,11 @@ class ZimFileReader(
     }
   }
 
-  private fun toRedirect(url: String) =
-    "$CONTENT_PREFIX${getActualUrl(url)}".toUri()
+  private fun toRedirect(url: String) = getActualUrl(url).toUri()
 
   private fun getActualUrl(url: String): String {
-    val actualPath = url.toUri().filePath
-    var redirectPath =
+    val actualPath = url.entryPath
+    val redirectPath =
       try {
         jniKiwixReader.getEntryByPath(actualPath)
           .getItem(true)
@@ -328,10 +324,11 @@ class ZimFileReader(
       } catch (_: Exception) {
         actualPath
       }
+    var redirectUrl = redirectPath.addContentPrefix
     if (url.contains("?")) {
-      redirectPath += extractQueryParam(url)
+      redirectUrl += extractQueryParam(url)
     }
-    return redirectPath
+    return redirectUrl
   }
 
   // For fixing the issue with new created zim files,
@@ -345,7 +342,7 @@ class ZimFileReader(
     withContext(ioDispatcher) {
       val item =
         try {
-          jniKiwixReader.getEntryByPath(uri.filePath).getItem(true)
+          jniKiwixReader.getEntryByPath(uri.entryPath).getItem(true)
         } catch (exception: Exception) {
           Log.e(TAG, "Could not get Item for uri = $uri \n original exception = $exception")
           null
@@ -413,16 +410,13 @@ class ZimFileReader(
 
   fun getItem(url: String): Item? =
     try {
-      val actualPath = url.toUri().filePath.decodeUrl
-      jniKiwixReader.getEntryByPath(actualPath)
+      jniKiwixReader.getEntryByPath(url.entryPath)
         .getItem(true)
     } catch (_: Exception) {
       try {
-        // check if we can get the article data when there are (#, ?, etc) any of these in the URL.
-        // See #3924 for more details.
-        jniKiwixReader.getEntryByPath(
-          url.toUri().toString().substringAfter(CONTENT_PREFIX).decodeUrl
-        )
+        // An entry path can contain "?" or "#" when its URL was not encoded, e.g. a URL saved
+        // by an older version of the app. See #3924 for more details.
+        jniKiwixReader.getEntryByPath(url.substringAfter(CONTENT_PREFIX).decodeUrl)
           .getItem(true)
       } catch (exception: Exception) {
         Log.e(TAG, "Could not get Item for url = $url \n original exception = $exception")
@@ -479,28 +473,21 @@ class ZimFileReader(
   }
 }
 
-private val Uri.filePath: String
-  get() = toString().filePath
-private val String.filePath: String
-  get() = substringAfter(CONTENT_PREFIX).substringBefore("#").substringBefore("?")
+// The ZIM entry path of a content URL: its path without the query and the fragment, decoded.
+internal val String.entryPath: String
+  get() = substringAfter(CONTENT_PREFIX).substringBefore("#").substringBefore("?").decodeUrl
 
-// Decode the URL if it is encoded because libkiwix does not return the path for encoded paths.
-// URLDecoder turns "+" into a space, but "+" is a literal character in paths (e.g. "C++"),
-// so encode it first to keep it. See https://github.com/kiwix/kiwix-android/issues/5188
+private val percentEncodedBytes = Regex("(%[0-9A-Fa-f]{2})+")
+
+// Percent-decodes a URL, e.g. "C%2B%2B" to "C++" and "Caf%C3%A9" to "Café". Unlike URLDecoder,
+// "+" stays a "+" (it means a space only in HTML form data), and a "%" that does not start an
+// escape is kept as it is (e.g. "100%"), so URLs saved with an unencoded entry path still work.
 val String.decodeUrl: String
-  get() =
-    try {
-      URLDecoder.decode(encodeLiteralPlus(), "UTF-8")
-    } catch (illegalArgumentException: IllegalArgumentException) {
-      // Searched item already has the decoded URL,
-      // and if any URL contains % in it, then it will fail to decode that URL and will not load the page.
-      // e.g. https://kiwix.app/A/FT%, More info https://github.com/kiwix/kiwix-android/pull/3514
-      Log.e(
-        "ZimFileReader",
-        "Could not decode url $this \n original exception = $illegalArgumentException"
-      )
-      this
-    }
+  get() = percentEncodedBytes.replace(this) { bytes ->
+    bytes.value.chunked(3) { it.substring(1).toInt(16).toByte() }
+      .toByteArray()
+      .toString(Charsets.UTF_8)
+  }
 
 // Truncate mime-type (everything after the first space and semi-colon(if exists)
 val String.truncateMimeType: String
@@ -512,17 +499,23 @@ private fun parcelFileDescriptor(file: File): ParcelFileDescriptor? =
 // Default illustration size for ZIM file favicons
 const val ILLUSTRATION_SIZE = 48
 
-// A raw libzim entry path may contain a literal '+' (e.g. "4+4_Photocycloaddition"). Left
-// unencoded, a bare '+' in a URL is ambiguous: many decoders (anything built on the
-// application/x-www-form-urlencoded convention, like java.net.URLDecoder) read it as an
-// encoded space. Escaping it to its proper percent-encoded form at the point a raw path is
-// turned into a URL removes that ambiguity, so decoding it back afterward needs no
-// special-casing. See https://en.wikipedia.org/wiki/Percent-encoding
-fun String.encodeLiteralPlus(): String = replace("+", URLEncoder.encode("+", "UTF-8"))
+// Characters that are used as they are in a URL path: RFC 3986 "pchar" and "/", except "+",
+// which is also percent-encoded because decoders of form data read it as a space.
+private const val URL_PATH_CHARACTERS =
+  "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~!$&'()*,;=:@/"
 
-// add content prefix to url since searched items return the url inside of zim without content prefix.
+// The content URL of a ZIM entry path. Characters that have another meaning in a URL, such as
+// "?", "#", "%" and "+", and spaces and non-ASCII characters are percent-encoded (UTF-8), so
+// that the URL is read back to the same entry path by entryPath.
 val String.addContentPrefix: String
-  get() = if (startsWith(CONTENT_PREFIX)) encodeLiteralPlus() else CONTENT_PREFIX + encodeLiteralPlus()
+  get() = if (startsWith(CONTENT_PREFIX)) {
+    this
+  } else {
+    CONTENT_PREFIX + toByteArray(Charsets.UTF_8).joinToString("") { byte ->
+      val code = byte.toUByte().toInt()
+      if (code.toChar() in URL_PATH_CHARACTERS) "${code.toChar()}" else "%%%02X".format(code)
+    }
+  }
 
 /**
  * Handles any error thrown by this method. Developers should handle the flow if this method
