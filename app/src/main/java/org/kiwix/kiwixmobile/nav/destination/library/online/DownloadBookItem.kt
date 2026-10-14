@@ -60,12 +60,10 @@ import org.kiwix.kiwixmobile.core.ui.theme.KiwixTheme
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.DOWNLOAD_BUTTON_ICON_SIZE
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.DOWNLOAD_BUTTON_SIZE
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.EIGHT_DP
-import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FIVE_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FOUR_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.ONE_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SIXTEEN_DP
-import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TEN_DP
-import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TWO_DP
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TWELVE_DP
 import org.kiwix.kiwixmobile.core.zim_manager.Byte
 import org.kiwix.kiwixmobile.ui.BookDescription
 import org.kiwix.kiwixmobile.ui.BookIcon
@@ -124,9 +122,9 @@ private fun DownloadBookContent(
 ) {
   Row(
     modifier = Modifier
-      .padding(SIXTEEN_DP)
+      .padding(start = SIXTEEN_DP, top = SIXTEEN_DP, end = SIXTEEN_DP, bottom = TWELVE_DP)
       .fillMaxWidth(),
-    verticalAlignment = Alignment.CenterVertically
+    verticalAlignment = Alignment.Top
   ) {
     BookIcon(item.favIconUrl, isOnlineLibrary = true)
     Column(
@@ -136,23 +134,31 @@ private fun DownloadBookContent(
       horizontalAlignment = Alignment.Start
     ) {
       BookTitle(item.title, index)
-      Spacer(modifier = Modifier.height(TWO_DP))
+      Spacer(modifier = Modifier.height(FOUR_DP))
       BookDescription(
         bookDescription = item.description.orEmpty(),
         index = index,
         style = MaterialTheme.typography.bodyMedium.copy(color = Color.Gray),
-        color = Color.Unspecified
+        color = Color.Unspecified,
+        minLines = 2
       )
+      Spacer(modifier = Modifier.height(FOUR_DP))
       ContentLoadingProgressBar(
         progressBarStyle = ProgressBarStyle.HORIZONTAL,
         modifier = Modifier
-          .padding(horizontal = ONE_DP, vertical = FIVE_DP)
+          .padding(horizontal = ONE_DP)
           .semantics { contentDescription = item.hashCode().toString() },
         progress = item.progress
       )
+      Spacer(modifier = Modifier.height(FOUR_DP))
       DownloadStateRow(item)
     }
-    PauseStopButtonsRow(item, onPauseResumeClick, onStopClick)
+    PauseStopButtonsRow(
+      item = item,
+      onPauseResumeClick = onPauseResumeClick,
+      onStopClick = onStopClick,
+      modifier = Modifier.align(Alignment.CenterVertically)
+    )
   }
 }
 
@@ -160,7 +166,8 @@ private fun DownloadBookContent(
 fun PauseStopButtonsRow(
   item: LibraryDownloadItem,
   onPauseResumeClick: (LibraryDownloadItem) -> Unit,
-  onStopClick: (LibraryDownloadItem) -> Unit
+  onStopClick: (LibraryDownloadItem) -> Unit,
+  modifier: Modifier = Modifier
 ) {
   val context = LocalContext.current
   val isPaused = item.downloadState == DownloadState.Paused
@@ -168,6 +175,7 @@ fun PauseStopButtonsRow(
   val buttonShape = RoundedCornerShape(FOUR_DP)
 
   Column(
+    modifier = modifier,
     horizontalAlignment = Alignment.CenterHorizontally,
     verticalArrangement = Arrangement.spacedBy(EIGHT_DP)
   ) {
@@ -228,9 +236,7 @@ private fun getPauseResumeButtonIcon(isPaused: Boolean): IconItem =
 @Composable
 private fun DownloadStateRow(item: LibraryDownloadItem) {
   Row(
-    modifier = Modifier
-      .fillMaxWidth()
-      .padding(bottom = TEN_DP),
+    modifier = Modifier.fillMaxWidth(),
     verticalAlignment = Alignment.CenterVertically
   ) {
     val downloadState = getDownloadStateText(item, LocalContext.current)

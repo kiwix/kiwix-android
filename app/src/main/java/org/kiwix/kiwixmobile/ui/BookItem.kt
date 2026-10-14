@@ -360,7 +360,7 @@ fun BookTitle(
   Text(
     text = title,
     style = style,
-    maxLines = 1,
+    maxLines = 2,
     overflow = TextOverflow.Ellipsis,
     modifier = modifier.semantics { contentDescription = "$title$index" }
   )
