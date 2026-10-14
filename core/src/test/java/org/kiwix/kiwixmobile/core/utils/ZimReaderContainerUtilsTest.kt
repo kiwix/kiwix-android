@@ -171,4 +171,41 @@ class ZimReaderContainerUtilsTest {
       result
     )
   }
+
+  @Test
+  fun urlSuffixToParsableUrl_withLiteralPlusSign_encodesPlusBeforeReturning() {
+    val suffix = "A/4+4_Photocycloaddition"
+
+    every {
+      container.isRedirect("${ZimFileReader.CONTENT_PREFIX}$suffix")
+    } returns false
+
+    val result = container.urlSuffixToParsableUrl(suffix)
+
+    assertEquals(
+      "${ZimFileReader.CONTENT_PREFIX}A/4%2B4_Photocycloaddition",
+      result
+    )
+  }
+
+  @Test
+  fun urlSuffixToParsableUrl_whenRedirectUrlHasLiteralPlusSign_encodesPlusInRedirectUrl() {
+    val suffix = "A/C++"
+    val contentUrl = "${ZimFileReader.CONTENT_PREFIX}$suffix"
+    val redirectUrlWithPlus = "${ZimFileReader.CONTENT_PREFIX}A/C++_(programming_language)"
+
+    every {
+      container.isRedirect(contentUrl)
+    } returns true
+    every {
+      container.getRedirect(contentUrl)
+    } returns redirectUrlWithPlus
+
+    val result = container.urlSuffixToParsableUrl(suffix)
+
+    assertEquals(
+      "${ZimFileReader.CONTENT_PREFIX}A/C%2B%2B_(programming_language)",
+      result
+    )
+  }
 }

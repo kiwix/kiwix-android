@@ -254,6 +254,45 @@ class ReaderWebViewManagerTest {
         webView.loadUrl("content://article")
       }
     }
+
+    @Test
+    fun `openArticle encodes literal plus sign before loading original url`() = runTest {
+      val webView = mockk<KiwixWebView>()
+      val manager = spyk(readerWebViewManager)
+
+      val container = mockk<ZimReaderContainer>()
+
+      every { manager.contentUrl("4+4_Photocycloaddition") } returns "content://4+4_Photocycloaddition"
+
+      every { readerSessionManager.zimReaderContainer } returns container
+      every { container.isRedirect("content://4+4_Photocycloaddition") } returns false
+
+      manager.openPage("4+4_Photocycloaddition", webView)
+
+      verify {
+        webView.loadUrl("content://4%2B4_Photocycloaddition")
+      }
+    }
+
+    @Test
+    fun `openArticle encodes literal plus sign before loading redirected url`() = runTest {
+      val webView = mockk<KiwixWebView>()
+      val manager = spyk(readerWebViewManager)
+
+      val container = mockk<ZimReaderContainer>()
+
+      every { manager.contentUrl("article") } returns "content://article"
+
+      every { readerSessionManager.zimReaderContainer } returns container
+      every { container.isRedirect("content://article") } returns true
+      every { container.getRedirect("content://article") } returns "content://C++_(programming_language)"
+
+      manager.openPage("article", webView)
+
+      verify {
+        webView.loadUrl("content://C%2B%2B_(programming_language)")
+      }
+    }
   }
 
   @Nested
