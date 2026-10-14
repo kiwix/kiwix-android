@@ -58,8 +58,6 @@ import org.kiwix.kiwixmobile.core.downloader.model.toPainter
 import org.kiwix.kiwixmobile.core.entity.LibkiwixBook
 import org.kiwix.kiwixmobile.core.ui.theme.KiwixTheme
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.BOOK_ICON_SIZE
-import org.kiwix.kiwixmobile.core.utils.ComposeDimens.EIGHT_DP
-import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FIVE_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FOUR_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SIXTEEN_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TWELVE_DP
@@ -86,7 +84,7 @@ fun LibraryCard(
   Card(
     modifier = modifier
       .fillMaxWidth()
-      .padding(FIVE_DP),
+      .padding(horizontal = FOUR_DP, vertical = TWO_DP),
     shape = RoundedCornerShape(TWO_DP),
     elevation = CardDefaults.elevatedCardElevation(TWO_DP),
     colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainer)
@@ -288,7 +286,7 @@ fun BookDetails(
       color = Color.Unspecified,
       minLines = 2
     )
-    Spacer(modifier = Modifier.height(EIGHT_DP))
+    Spacer(modifier = Modifier.height(FOUR_DP))
     Row(
       modifier = Modifier.fillMaxWidth(),
       horizontalArrangement = Arrangement.SpaceBetween,
@@ -362,6 +360,8 @@ fun BookTitle(
   Text(
     text = title,
     style = style,
+    maxLines = 1,
+    overflow = TextOverflow.Ellipsis,
     modifier = modifier.semantics { contentDescription = "$title$index" }
   )
 }
