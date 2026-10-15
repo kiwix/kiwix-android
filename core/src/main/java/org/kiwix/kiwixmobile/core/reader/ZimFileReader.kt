@@ -324,6 +324,8 @@ class ZimFileReader(
       } catch (_: Exception) {
         actualPath
       }
+    // Not a redirect: keep the URL as it is, so its own encoding is not changed.
+    if (redirectPath == actualPath) return url.substringBefore("#")
     var redirectUrl = redirectPath.addContentPrefix
     if (url.contains("?")) {
       redirectUrl += extractQueryParam(url)
