@@ -61,7 +61,7 @@ class MimeTypeTest : BaseActivityTest() {
           SuggestionSearcher(archive),
           Dispatchers.IO
         )
-      zimFileReader.getRandomPageUrl()?.let { randomPage ->
+      zimFileReader.getRandomEntryPath()?.let { randomPage ->
         val mimeType = zimFileReader.getMimeTypeFromUrl(randomPage)
         if (mimeType?.contains("^([^ ]+).*$") == true || mimeType?.contains(";") == true) {
           Assert.fail(
