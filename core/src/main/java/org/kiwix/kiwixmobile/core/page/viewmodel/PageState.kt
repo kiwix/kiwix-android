@@ -38,12 +38,7 @@ abstract class PageState<T : Page> {
   abstract val searchTerm: String
 
   fun getItemsAfterToggleSelectionOfItem(page: Page): List<T> = pageItems.map {
-    // check if the current item is `LibkiwixBookmarkItem` because we have not saving
-    // the bookmarks in database so it does not have any unique value so to get the
-    // selected items we check for url since url is unique for every bookmark.
-    val currentItemIdentifier = if (it is LibkiwixBookmarkItem) it.url else it.id
-    val pageIdentifier = if (it is LibkiwixBookmarkItem) page.url else page.id
-    if (currentItemIdentifier == pageIdentifier) {
+    if (uniqueIdentifierOf(it) == uniqueIdentifierOf(page)) {
       when (it) {
         is LibkiwixBookmarkItem -> it.copy(isSelected = !it.isSelected) as T
         is HistoryItem -> it.copy(isSelected = !it.isSelected) as T
@@ -57,6 +52,17 @@ abstract class PageState<T : Page> {
   }
 
   fun numberOfSelectedItems(): Int = pageItems.filter(Page::isSelected).size
+
+  /**
+   * Returns a value that uniquely identifies the given [page] among [pageItems].
+   *
+   * `LibkiwixBookmarkItem` is handled separately because we are not saving the
+   * bookmarks in database so it does not have any unique value. The url alone
+   * is not unique either since the same page url can exist in different ZIM
+   * files, so we combine url with zimId to uniquely identify a bookmark.
+   */
+  private fun uniqueIdentifierOf(page: Page): Any =
+    if (page is LibkiwixBookmarkItem) page.url + page.zimId else page.id
 
   abstract fun copyWithNewItems(newItems: List<T>): PageState<T>
 }

@@ -32,6 +32,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TemporaryFolder
 import org.junit.runner.RunWith
+import org.kiwix.kiwixmobile.core.BookTestWrapper
 import org.kiwix.kiwixmobile.core.page.bookmark.models.LibkiwixBookmarkItem
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
@@ -108,11 +109,7 @@ class LibkiwixBookmarksTest {
     }
 
   private fun book(bookId: String): Book =
-    mockk {
-      every { id } returns bookId
-      every { path } returns temporaryFolder.root.resolve("$bookId.zim").path
-      every { getIllustration(any()) } returns null
-    }
+    BookTestWrapper(id = bookId, bookPath = temporaryFolder.root.resolve("$bookId.zim").path)
 
   private fun bookmark(ofBookId: String, bookmarkUrl: String, bookmarkTitle: String): Bookmark =
     mockk {
