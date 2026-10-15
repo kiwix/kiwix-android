@@ -13,7 +13,7 @@
     <ID>LongParameterList:MainMenu.kt$MainMenu.Factory$( menu: Menu, webViews: MutableList&lt;KiwixWebView>, urlIsValid: Boolean, menuClickListener: MenuClickListener, disableReadAloud: Boolean, disableTabs: Boolean )</ID>
     <ID>LongParameterList:PageTestHelpers.kt$( bookmarkTitle: String = "bookmarkTitle", isSelected: Boolean = false, id: Long = 2, zimId: String = "zimId", zimName: String = "zimName", zimFilePath: String = "zimFilePath", bookmarkUrl: String = "bookmarkUrl", favicon: String = "favicon" )</ID>
     <ID>LongParameterList:Repository.kt$Repository$( private val libkiwixBookOnDisk: LibkiwixBookOnDisk, private val libkiwixBookmarks: LibkiwixBookmarks, private val historyRoomDao: HistoryRoomDao, private val webViewHistoryRoomDao: WebViewHistoryRoomDao, private val notesRoomDao: NotesRoomDao, private val recentSearchRoomDao: RecentSearchRoomDao, private val zimReaderContainer: ZimReaderContainer, @param:IoDispatcher private val ioDispatcher: CoroutineDispatcher )</ID>
-    <ID>MagicNumber:ArticleCount.kt$ArticleCount$3</ID>
+    <ID>MagicNumber:HumanReadableCount.kt$HumanReadableCount$3</ID>
     <ID>MagicNumber:CompatFindActionModeCallback.kt$CompatFindActionModeCallback$100</ID>
     <ID>MagicNumber:DownloadItem.kt$DownloadItem$1000L</ID>
     <ID>MagicNumber:SearchState.kt$SearchState$100</ID>
@@ -40,7 +40,7 @@
     <ID>NestedBlockDepth:JNIInitialiser.kt$JNIInitialiser$private fun loadICUData(context: Context): String?</ID>
     <ID>NestedBlockDepth:OnSwipeTouchListener.kt$OnSwipeTouchListener.GestureListener$override fun onFling( e1: MotionEvent, e2: MotionEvent, velocityX: Float, velocityY: Float ): Boolean</ID>
     <ID>NestedBlockDepth:StorageDeviceUtils.kt$StorageDeviceUtils$// Amazingly file.canWrite() does not always return the correct value private fun canWrite(file: File): Boolean</ID>
-    <ID>PackageNaming:ArticleCount.kt$package org.kiwix.kiwixmobile.core.zim_manager.fileselect_view</ID>
+    <ID>PackageNaming:HumanReadableCount.kt$package org.kiwix.kiwixmobile.core.zim_manager.fileselect_view</ID>
     <ID>PackageNaming:BooksOnDiskListItem.kt$package org.kiwix.kiwixmobile.core.zim_manager.fileselect_view</ID>
     <ID>PackageNaming:Byte.kt$package org.kiwix.kiwixmobile.core.zim_manager</ID>
     <ID>PackageNaming:KiwixTag.kt$package org.kiwix.kiwixmobile.core.zim_manager</ID>

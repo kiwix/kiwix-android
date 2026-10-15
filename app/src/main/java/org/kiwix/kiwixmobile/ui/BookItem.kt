@@ -64,8 +64,8 @@ import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TWELVE_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TWO_DP
 import org.kiwix.kiwixmobile.core.zim_manager.Byte
 import org.kiwix.kiwixmobile.core.zim_manager.KiwixTag
-import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.ArticleCount
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListItem.BookOnDisk
+import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.HumanReadableCount
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.SelectionMode
 import org.kiwix.kiwixmobile.ui.BookItemScreen.BOOK_ARTICLE_COUNT_TEST_TAG
 import org.kiwix.kiwixmobile.ui.BookItemScreen.BOOK_ITEM_CHECKBOX_TESTING_TAG
@@ -314,10 +314,10 @@ fun BookDetails(
 fun BookArticleCount(articleCount: String?, mediaCount: String?, index: Int) {
   val context = LocalContext.current
   val articlesStr =
-    ArticleCount(articleCount.orEmpty())
+    HumanReadableCount(articleCount.orEmpty())
       .toHumanReadable(context, CoreR.string.articleCount)
   val mediasStr =
-    ArticleCount(mediaCount.orEmpty())
+    HumanReadableCount(mediaCount.orEmpty())
       .toHumanReadable(context, CoreR.string.mediaCount)
 
   val combined = listOf(articlesStr, mediasStr).filter { it.isNotEmpty() }.joinToString(" • ")

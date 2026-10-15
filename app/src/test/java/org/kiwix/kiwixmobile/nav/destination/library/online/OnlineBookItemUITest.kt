@@ -48,7 +48,7 @@ import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.entity.LibkiwixBook
 import org.kiwix.kiwixmobile.core.utils.ZERO
 import org.kiwix.kiwixmobile.core.zim_manager.Byte
-import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.ArticleCount
+import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.HumanReadableCount
 import org.kiwix.kiwixmobile.ui.BookItemScreen.BOOK_ARTICLE_COUNT_TEST_TAG
 import org.kiwix.kiwixmobile.ui.formatBookDate
 import org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState
@@ -259,9 +259,9 @@ class OnlineBookItemUITest {
         book = mockLibkiwixBook(articleCount = articleCount, mediaCount = mediaCount)
       )
     )
-    val articlesStr = ArticleCount(articleCount)
+    val articlesStr = HumanReadableCount(articleCount)
       .toHumanReadable(context, org.kiwix.kiwixmobile.core.R.string.articleCount)
-    val mediasStr = ArticleCount(mediaCount)
+    val mediasStr = HumanReadableCount(mediaCount)
       .toHumanReadable(context, org.kiwix.kiwixmobile.core.R.string.mediaCount)
     val combined = "$articlesStr • $mediasStr"
     composeTestRule
