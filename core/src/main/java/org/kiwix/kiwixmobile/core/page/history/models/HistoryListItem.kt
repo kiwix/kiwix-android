@@ -18,12 +18,12 @@
 package org.kiwix.kiwixmobile.core.page.history.models
 
 import org.kiwix.kiwixmobile.core.dao.entities.HistoryRoomEntity
+import org.kiwix.kiwixmobile.core.extensions.toLocalDate
 import org.kiwix.kiwixmobile.core.page.adapter.Page
 import org.kiwix.kiwixmobile.core.page.adapter.PageRelated
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.threeten.bp.LocalDate
-import java.util.Calendar
 
 sealed class HistoryListItem : PageRelated {
   data class HistoryItem constructor(
@@ -43,9 +43,7 @@ sealed class HistoryListItem : PageRelated {
     // The day of the visit. It is computed from the timestamp because dateString is
     // formatted in the app language at the time of the visit.
     val date: LocalDate
-      get() = Calendar.getInstance().apply { timeInMillis = timeStamp }.let {
-        LocalDate.of(it[Calendar.YEAR], it[Calendar.MONTH] + 1, it[Calendar.DAY_OF_MONTH])
-      }
+      get() = timeStamp.toLocalDate()
 
     constructor(
       url: String,
