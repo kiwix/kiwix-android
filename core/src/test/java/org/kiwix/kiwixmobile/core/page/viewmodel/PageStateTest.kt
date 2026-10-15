@@ -23,6 +23,9 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.kiwix.kiwixmobile.core.page.PageImpl
 import org.kiwix.kiwixmobile.core.page.adapter.Page
+import org.kiwix.kiwixmobile.core.page.bookmark.models.LibkiwixBookmarkItem
+import org.kiwix.kiwixmobile.core.page.history.models.HistoryListItem.HistoryItem
+import org.kiwix.kiwixmobile.core.page.notes.models.NoteListItem
 
 internal class PageStateTest {
   @Test
@@ -99,5 +102,77 @@ internal class PageStateTest {
         showAll = false
       ).publicFilteredPageItems
     ).isEqualTo(emptyList<Page>())
+  }
+
+  @Test
+  internal fun `getItemsAfterToggleSelectionOfItem toggles isSelected for matching page id`() {
+    val item = PageImpl(zimReaderSource = mockk(), id = 1L)
+    val result = TestablePageState(listOf(item)).getItemsAfterToggleSelectionOfItem(item)
+    assertThat(result.single().isSelected).isTrue()
+  }
+
+  @Test
+  internal fun `getItemsAfterToggleSelectionOfItem does not toggle isSelected for non matching page id`() {
+    val item = PageImpl(zimReaderSource = mockk(), id = 1L)
+    val otherPage = PageImpl(zimReaderSource = mockk(), id = 2L)
+    val result = TestablePageState(listOf(item)).getItemsAfterToggleSelectionOfItem(otherPage)
+    assertThat(result.single().isSelected).isFalse()
+  }
+
+  @Test
+  internal fun `getItemsAfterToggleSelectionOfItem toggles bookmark when url and zimId both match`() {
+    val bookmark = LibkiwixBookmarkItem(zimId = "zim1", bookmarkUrl = "page.html")
+    val result = TestablePageState(listOf(bookmark)).getItemsAfterToggleSelectionOfItem(bookmark)
+    assertThat(result.single().isSelected).isTrue()
+  }
+
+  @Test
+  internal fun `getItemsAfterToggleSelectionOfItem does not toggle bookmark with same url but different zimId`() {
+    val bookmarkInZim1 = LibkiwixBookmarkItem(zimId = "zim1", bookmarkUrl = "page.html")
+    val bookmarkInZim2 = LibkiwixBookmarkItem(zimId = "zim2", bookmarkUrl = "page.html")
+    val result =
+      TestablePageState(listOf(bookmarkInZim1, bookmarkInZim2))
+        .getItemsAfterToggleSelectionOfItem(bookmarkInZim1)
+    assertThat((result[0] as LibkiwixBookmarkItem).isSelected).isTrue()
+    assertThat((result[1] as LibkiwixBookmarkItem).isSelected).isFalse()
+  }
+
+  @Test
+  internal fun `getItemsAfterToggleSelectionOfItem toggles only the matching history item by id`() {
+    val historyItem1 = HistoryItem(
+      zimId = "zim1",
+      zimName = "zimName",
+      zimReaderSource = null,
+      favicon = null,
+      historyUrl = "page.html",
+      title = "title",
+      dateString = "date",
+      timeStamp = 0L,
+      id = 1L
+    )
+    val historyItem2 = historyItem1.copy(id = 2L)
+    val result =
+      TestablePageState(listOf(historyItem1, historyItem2))
+        .getItemsAfterToggleSelectionOfItem(historyItem1)
+    assertThat((result[0] as HistoryItem).isSelected).isTrue()
+    assertThat((result[1] as HistoryItem).isSelected).isFalse()
+  }
+
+  @Test
+  internal fun `getItemsAfterToggleSelectionOfItem toggles only the matching note item by id`() {
+    val note1 = NoteListItem(
+      zimId = "zim1",
+      title = "title",
+      zimReaderSource = null,
+      zimUrl = "page.html",
+      noteFilePath = "path",
+      favicon = null,
+      id = 1L
+    )
+    val note2 = note1.copy(id = 2L)
+    val result =
+      TestablePageState(listOf(note1, note2)).getItemsAfterToggleSelectionOfItem(note1)
+    assertThat((result[0] as NoteListItem).isSelected).isTrue()
+    assertThat((result[1] as NoteListItem).isSelected).isFalse()
   }
 }
