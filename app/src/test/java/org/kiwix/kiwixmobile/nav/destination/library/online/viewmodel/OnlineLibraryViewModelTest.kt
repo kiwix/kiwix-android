@@ -1127,7 +1127,9 @@ class OnlineLibraryViewModelTest {
       viewModel.setUiStateForTest(
         viewModel.uiState.value.copy(
           tabs = listOf(tab1, tab2),
-          selectedTabIndex = 0
+          selectedTabIndex = 0,
+          showScanningProgressBar = true,
+          isRefreshing = true
         )
       )
       val cachedBooks = listOf(mockk<LibkiwixBook>())
@@ -1145,6 +1147,9 @@ class OnlineLibraryViewModelTest {
       }
 
       assertThat(viewModel.uiState.value.selectedTabIndex).isEqualTo(1)
+      assertThat(viewModel.uiState.value.showScanningProgressBar).isFalse()
+      assertThat(viewModel.uiState.value.isRefreshing).isFalse()
+      assertThat(viewModel.uiState.value.showNoContent).isFalse()
       assertThat(viewModel.networkBooks.value).isEqualTo(cachedBooks)
       assertThat(viewModel.totalPages).isEqualTo(5)
       assertThat(viewModel.currentRequest.page).isEqualTo(2)
@@ -1154,10 +1159,14 @@ class OnlineLibraryViewModelTest {
     fun `selectTab emits new request when tab data is not yet loaded`() = runTest {
       val tab1 = OnlineLibraryViewModel.LanguageTab("ady", "ADYGHE")
       val tab2 = OnlineLibraryViewModel.LanguageTab("afr", "AFRIKAANS")
+      viewModel.tabDataMap["ady"] = OnlineLibraryViewModel.TabData(
+        isLoadingMore = true
+      )
       viewModel.setUiStateForTest(
         viewModel.uiState.value.copy(
           tabs = listOf(tab1, tab2),
-          selectedTabIndex = 0
+          selectedTabIndex = 0,
+          isLoadingMore = true
         )
       )
 
@@ -1170,6 +1179,8 @@ class OnlineLibraryViewModelTest {
       }
 
       assertThat(viewModel.uiState.value.selectedTabIndex).isEqualTo(1)
+      assertThat(viewModel.uiState.value.isLoadingMore).isFalse()
+      assertThat(viewModel.tabDataMap["ady"]?.isLoadingMore).isFalse()
       assertThat(viewModel.networkBooks.value).isEmpty()
     }
 

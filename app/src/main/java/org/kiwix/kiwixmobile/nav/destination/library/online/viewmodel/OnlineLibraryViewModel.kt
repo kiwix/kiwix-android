@@ -411,8 +411,10 @@ class OnlineLibraryViewModel @Inject constructor(
         networkBooks.value = result.books
         _uiState.update {
           it.copy(
+            showScanningProgressBar = false,
+            isRefreshing = false,
             isLoadingMore = result.isLoadingMore,
-            showNoContent = result.books.isEmpty() && !it.showScanningProgressBar,
+            showNoContent = result.books.isEmpty(),
             noContentMessage = if (result.books.isEmpty()) {
               noContentMessageWhenItemsComesFromOnlineSource(emptyList())
             } else {
@@ -426,6 +428,8 @@ class OnlineLibraryViewModel @Inject constructor(
       }
 
       is TabSelectedResult.FetchNeeded -> {
+        onlineLibraryTabsUseCase.resetLoadingMore()
+        _uiState.update { it.copy(isLoadingMore = false) }
         networkBooks.value = emptyList()
         updateLibraryItems(emptyList())
         updateOnlineLibraryFilters(result.newRequest)
