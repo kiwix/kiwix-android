@@ -43,7 +43,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
@@ -179,49 +178,58 @@ fun PauseStopButtonsRow(
     horizontalAlignment = Alignment.CenterHorizontally,
     verticalArrangement = Arrangement.spacedBy(EIGHT_DP)
   ) {
-    Box(
-      modifier = Modifier
-        .size(DOWNLOAD_BUTTON_SIZE)
-        .clip(buttonShape)
-        .border(borderStroke, buttonShape)
-        .clickable { onPauseResumeClick.invoke(item) }
-        .semantics { testTag = DOWNLOADING_PAUSE_BUTTON_TESTING_TAG },
-      contentAlignment = Alignment.Center
-    ) {
-      val contentDescription = context.getString(string.tts_pause) +
-        "/${context.getString(string.tts_resume)}/${item.hashCode()}"
-      Icon(
-        painter = getPauseResumeButtonIcon(isPaused).toPainter(),
-        contentDescription = contentDescription,
-        tint = MaterialTheme.colorScheme.onSurface,
-        modifier = Modifier
-          .size(DOWNLOAD_BUTTON_ICON_SIZE)
-          .testTag(
-            if (isPaused) {
-              RESUME_ICON_TESTING_TAG
-            } else {
-              PAUSE_ICON_TESTING_TAG
-            }
-          )
-      )
-    }
+    DownloadActionButton(
+      icon = getPauseResumeButtonIcon(isPaused),
+      iconTestTag = if (isPaused) RESUME_ICON_TESTING_TAG else PAUSE_ICON_TESTING_TAG,
+      contentDescription = context.getString(string.tts_pause) +
+        "/${context.getString(string.tts_resume)}/${item.hashCode()}",
+      buttonTestTag = DOWNLOADING_PAUSE_BUTTON_TESTING_TAG,
+      buttonShape = buttonShape,
+      borderStroke = borderStroke,
+      onClick = { onPauseResumeClick.invoke(item) }
+    )
 
-    Box(
+    DownloadActionButton(
+      icon = IconItem.Drawable(R.drawable.ic_stop_24dp),
+      iconTestTag = null,
+      contentDescription = context.getString(string.stop) + item.hashCode(),
+      buttonTestTag = DOWNLOADING_STOP_BUTTON_TESTING_TAG,
+      buttonShape = buttonShape,
+      borderStroke = borderStroke,
+      onClick = { onStopClick.invoke(item) }
+    )
+  }
+}
+
+@Composable
+private fun DownloadActionButton(
+  icon: IconItem,
+  iconTestTag: String?,
+  contentDescription: String,
+  buttonTestTag: String,
+  buttonShape: RoundedCornerShape,
+  borderStroke: BorderStroke,
+  onClick: () -> Unit
+) {
+  Box(
+    modifier = Modifier
+      .size(DOWNLOAD_BUTTON_SIZE)
+      .clip(buttonShape)
+      .border(borderStroke, buttonShape)
+      .clickable { onClick() }
+      .semantics { testTag = buttonTestTag },
+    contentAlignment = Alignment.Center
+  ) {
+    Icon(
+      painter = icon.toPainter(),
+      contentDescription = contentDescription,
+      tint = MaterialTheme.colorScheme.onSurface,
       modifier = Modifier
-        .size(DOWNLOAD_BUTTON_SIZE)
-        .clip(buttonShape)
-        .border(borderStroke, buttonShape)
-        .clickable { onStopClick.invoke(item) }
-        .semantics { testTag = DOWNLOADING_STOP_BUTTON_TESTING_TAG },
-      contentAlignment = Alignment.Center
-    ) {
-      Icon(
-        painter = painterResource(id = R.drawable.ic_stop_24dp),
-        contentDescription = context.getString(string.stop) + item.hashCode(),
-        tint = MaterialTheme.colorScheme.onSurface,
-        modifier = Modifier.size(DOWNLOAD_BUTTON_ICON_SIZE)
-      )
-    }
+        .size(DOWNLOAD_BUTTON_ICON_SIZE)
+        .let { iconModifier ->
+          if (iconTestTag != null) iconModifier.testTag(iconTestTag) else iconModifier
+        }
+    )
   }
 }
 

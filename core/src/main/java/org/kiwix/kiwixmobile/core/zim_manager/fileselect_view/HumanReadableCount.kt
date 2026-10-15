@@ -26,7 +26,7 @@ import kotlin.math.log10
 import kotlin.math.pow
 
 @JvmInline
-value class ArticleCount(private val countStr: String) {
+value class HumanReadableCount(private val countStr: String) {
   fun toHumanReadable(context: Context, resId: Int): String = try {
     val size = Integer.parseInt(countStr)
     if (size <= 0) {
