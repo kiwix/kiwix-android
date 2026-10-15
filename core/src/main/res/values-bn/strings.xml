@@ -129,8 +129,8 @@
   <string name="pref_current_folder">বর্তমান ফোল্ডার</string>
   <string name="delete_zim_failed">দুঃখিত আমরা কিছু ফাইল অপসারণ করতে সমর্থ নই। এর পরিবর্তে আপনি একটি ফাইল ব্যবস্থাপক ব্যবহার করে চেষ্টা করতে পারেন।</string>
   <string name="tts_pause">বিরতি</string>
-  <string name="tts_resume">পুনরায় শুরু করুন</string>
-  <string name="stop">বন্ধ</string>
+  <string name="tts_resume">পুনরারম্ভ করুন</string>
+  <string name="stop">থামান</string>
   <string name="internal_storage">অভ্যন্তরীণ</string>
   <string name="external_storage">বহিঃস্থ</string>
   <string name="yes">হ্যাঁ</string>
@@ -151,8 +151,8 @@
   <string name="time_today">আজ</string>
   <string name="time_yesterday">গতকাল</string>
   <string name="do_not_ask_anymore">আর জিজ্ঞাসা করবেন না</string>
-  <string name="your_languages">নির্বাচিত ভাষা</string>
-  <string name="other_languages">অন্যান্য ভাষাসমূহ:</string>
+  <string name="your_languages" fuzzy="true">নির্বাচিত ভাষা</string>
+  <string name="other_languages" fuzzy="true">অন্যান্য ভাষাসমূহ:</string>
   <string name="new_tab_shortcut_label">নতুন ট্যাব</string>
   <string name="pending_state">মুলতুবী</string>
   <string name="save">সংরক্ষণ</string>

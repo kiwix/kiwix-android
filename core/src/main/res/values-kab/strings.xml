@@ -63,9 +63,10 @@
   <string name="help_5">Anida-t ugbur?</string>
   <string name="pref_storage">Aklas</string>
   <string name="pref_current_folder">Akaram amiran</string>
-  <string name="tts_pause">Serǧu</string>
-  <string name="tts_resume">Kemmel</string>
-  <string name="stop">Seḥbes</string>
+  <string name="tts_pause" fuzzy="true">Serǧu</string>
+  <string name="tts_resume" fuzzy="true">Kemmel</string>
+  <string name="tts_normal_speed">Amagnu</string>
+  <string name="stop" fuzzy="true">Seḥbes</string>
   <string name="internal_storage">Agensan</string>
   <string name="yes">Ih</string>
   <string name="no">Uhu</string>
@@ -78,9 +79,9 @@
   <string name="time_second">sn</string>
   <string name="time_today">Ass-a</string>
   <string name="time_yesterday">Iḍelli</string>
-  <string name="your_languages">Tutlayin i yettwafernen:</string>
+  <string name="your_languages" fuzzy="true">Tutlayin i yettwafernen:</string>
   <string name="your_language">Tutlayin i yettwafernen: %s</string>
-  <string name="other_languages">Tutlayin-nniḍen:</string>
+  <string name="other_languages" fuzzy="true">Tutlayin-nniḍen:</string>
   <string name="downloading" fuzzy="true">Azdam:</string>
   <string name="crash_checkbox_language">Iɣewwaṛen n tutlayt-ik</string>
   <string name="new_tab_shortcut_label">Iccer amaynut</string>

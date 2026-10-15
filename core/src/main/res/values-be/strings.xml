@@ -59,8 +59,8 @@
   <string name="pref_newtab_background_summary">Пры адкрыцці новага вакенца, яно будзе адкрытае ў фоне</string>
   <string name="library">Бібліятэка</string>
   <string name="download">Спампаваць</string>
-  <string name="tts_pause">паўза</string>
-  <string name="tts_resume">аднавіць</string>
+  <string name="tts_pause" fuzzy="true">паўза</string>
+  <string name="tts_resume" fuzzy="true">аднавіць</string>
   <string name="yes">Так</string>
   <string name="no">Не</string>
   <string name="confirm_stop_download_title">Спыніць спампоўванне?</string>

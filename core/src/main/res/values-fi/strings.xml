@@ -80,6 +80,8 @@
   <string name="pref_back_to_top">Takaisin alkuun</string>
   <string name="pref_back_to_top_summary">Näytä painike sivun lopussa rullataksesi ylös alkuun</string>
   <string name="pref_language_title">Kieli</string>
+  <string name="user_interface">Käyttöliittymä</string>
+  <string name="system_language_with_name">Järjestelmän kieli (%s)</string>
   <string name="pref_language_chooser">Valitse kieli</string>
   <string name="pref_credits">Avustajat ja lisenssit</string>
   <string name="pref_credits_title">Tekijät</string>
@@ -163,9 +165,9 @@
   <string name="pref_free_storage">%s vapaana</string>
   <string name="choose_storage_to_download_book">Valitse tallennustila kirjan lataamista varten</string>
   <string name="delete_zim_failed">Emme pystyneet poistamaan joitakin tiedostoja. Sinun tulisi kokeilla käyttää tiedostonhallintaa sen sijaan.</string>
-  <string name="tts_pause">keskeytä</string>
-  <string name="tts_resume">jatka</string>
-  <string name="stop">pysäytä</string>
+  <string name="tts_pause" fuzzy="true">keskeytä</string>
+  <string name="tts_resume" fuzzy="true">jatka</string>
+  <string name="stop" fuzzy="true">pysäytä</string>
   <string name="notification_pause_button_text">Tauko</string>
   <string name="notification_resume_button_text">Jatka</string>
   <string name="internal_storage">Sisäinen</string>
@@ -190,14 +192,14 @@
   <string name="time_left">jäljellä</string>
   <string name="time_today">Tänään</string>
   <string name="time_yesterday">Eilen</string>
-  <string name="pref_external_link_popup_title">Varo lisätessä ulkoisia linkkejä</string>
+  <string name="pref_external_link_popup_title">Varoita avattaessa ulkoisia linkkejä</string>
   <string name="pref_external_link_popup_summary">Näytä ponnahdusikkuna, joka varoittaa lisäkustannuksista tai toimimattomuudesta offline-linkeissä.</string>
-  <string name="external_link_popup_dialog_title">Ulkoisen linkin syöttäminen!</string>
-  <string name="external_link_popup_dialog_message">Olet syöttämässä ulkoista linkkiä. Tämä voi johtaa lisäkustannuksiin tiedonsiirrossa tai se ei yksinkertaisesti toimi offline-tilassa. Haluatko jatkaa?</string>
+  <string name="external_link_popup_dialog_title">Avataan ulkoinen linkki!</string>
+  <string name="external_link_popup_dialog_message" fuzzy="true">Olet syöttämässä ulkoista linkkiä. Tämä voi johtaa lisäkustannuksiin tiedonsiirrossa tai se ei yksinkertaisesti toimi offline-tilassa. Haluatko jatkaa?</string>
   <string name="do_not_ask_anymore">Älä kysy enää</string>
-  <string name="your_languages">Valitut kielet:</string>
+  <string name="your_languages" fuzzy="true">Valitut kielet:</string>
   <string name="your_language">Valittu kieli: %s</string>
-  <string name="other_languages">Muut kielet:</string>
+  <string name="other_languages" fuzzy="true">Muut kielet:</string>
   <string name="downloading">Ladataan</string>
   <string name="no_items_msg">Ei kohteita saatavilla</string>
   <string name="crash_title">Jaha… Tämä on noloa</string>

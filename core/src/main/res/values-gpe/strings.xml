@@ -132,9 +132,9 @@
   <string name="pref_storage">Storage</string>
   <string name="pref_current_folder">Current Folder</string>
   <string name="delete_zim_failed">Sorry we no fi delete sam files. You for try use file manager instead.</string>
-  <string name="tts_pause">pause</string>
-  <string name="tts_resume">resume</string>
-  <string name="stop">stop</string>
+  <string name="tts_pause" fuzzy="true">pause</string>
+  <string name="tts_resume" fuzzy="true">resume</string>
+  <string name="stop" fuzzy="true">stop</string>
   <string name="internal_storage">Internal</string>
   <string name="external_storage">External</string>
 </resources>

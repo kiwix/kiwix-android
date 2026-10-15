@@ -130,9 +130,9 @@
   <string name="pref_storage">ߟߊ߬ߡߊ߲߬ߘߌ߬ߦߙߐ</string>
   <string name="pref_current_folder">ߕߋ߲߭ߕߋ߲߭ ߝߙߏߞߏ</string>
   <string name="delete_zim_failed">ߤߊߞߍ߬ߕߏ߬߸ ߊ߲ ߡߊ߫ ߛߋ߫ ߞߐߕߐ߮ ߘߏ߫ ߟߎ߫ ߖߏ߲߫ ߠߊ߫. ߌ ߘߌ߫ ߛߴߊ߬ ߡߊߝߍߣߍ߲߫ ߠߊ߫ ߞߐߕߐ߮ ߡߙߊ߬ߓߊ߮ ߝߍ߬ ߒߕߋߟߋ߲ߡߊ߬.</string>
-  <string name="tts_pause">ߊ߬ ߟߊߟߐ߬</string>
-  <string name="tts_resume">ߊ߬ ߘߊߡߌ߬ߣߊ߬</string>
-  <string name="stop">ߌ ߟߐ߬</string>
+  <string name="tts_pause" fuzzy="true">ߊ߬ ߟߊߟߐ߬</string>
+  <string name="tts_resume" fuzzy="true">ߊ߬ ߘߊߡߌ߬ߣߊ߬</string>
+  <string name="stop" fuzzy="true">ߌ ߟߐ߬</string>
   <string name="internal_storage">ߞߣߐߟߊ</string>
   <string name="external_storage">ߞߐߞߊ߲ߠߊ</string>
   <string name="yes">ߊ߬ߥߐ߫</string>
@@ -154,13 +154,13 @@
   <string name="time_left">ߕߐ߭ ߕߏߣߍ߲߫</string>
   <string name="time_today">ߓߌ߬</string>
   <string name="time_yesterday">ߞߎߣߎ߲߬</string>
-  <string name="pref_external_link_popup_title">ߞߊ߬ ߖߊ߬ߛߙߋ߬ߡߊ߬ߟߊ ߞߍ߫ ߘߏ߲߬ ߕߎߡߊ ߟߊ߫ ߞߐߞߊ߲߫ ߛߘߌߜߋ߲ ߠߎ߬ ߟߊ߫</string>
+  <string name="pref_external_link_popup_title" fuzzy="true">ߞߊ߬ ߖߊ߬ߛߙߋ߬ߡߊ߬ߟߊ ߞߍ߫ ߘߏ߲߬ ߕߎߡߊ ߟߊ߫ ߞߐߞߊ߲߫ ߛߘߌߜߋ߲ ߠߎ߬ ߟߊ߫</string>
   <string name="pref_external_link_popup_summary">ߦߌ߬ߘߊ߬ߥߟߊ ߟߊߓߊ߯ߙߊ߫ ߞߊ߬ ߟߊ߬ߟߌ߰ߟߌ ߞߍ߫ ߛߐ߲߬ߞߐ ߡߊߞߊ߬ߝߏ߬ߞߏ ߟߊ߫ ߥߟߊ߫ ߞߏ߫ ߛߘߌ߬ߜߋ߲ ߕߍ߫ ߓߊ߯ߙߊ߫ ߟߊ߫ ߓߟߐߟߐߒߕߊ߲ߧߊ ߘߐ߫.</string>
-  <string name="external_link_popup_dialog_title">ߞߐߞߊ߲߫ ߛߘߌߜߋ߲ ߟߊߛߐ߬ߘߐ߲</string>
+  <string name="external_link_popup_dialog_title" fuzzy="true">ߞߐߞߊ߲߫ ߛߘߌߜߋ߲ ߟߊߛߐ߬ߘߐ߲</string>
   <string name="external_link_popup_dialog_message" fuzzy="true">ߌ ߦߴߌ ߘߐ߫ ߞߊ߬ ߞߐߞߊ߲߫ ߛߘߌߜߋ߲ ߠߋ߬ ߟߊߘߏ߲߬ ߏ߬ ߘߌ߫. ߏ߬ ߘߏ߲߬ ߘߌ߫ ߛߋ߫ ߥߟߏ߫ ߟߊ߫ ߓߟߏߡߟߊ ߟߊߕߊ߬ߡߌ߲ ߛߐ߲߬ߞߐ ߡߊߞߊ߬ߝߏ߬ߟߌ ߟߊ߫ ߤߊߡߊ߲ߕߍ߫ ߊ߬ ߕߍ߫ ߣߊ߬ ߓߊ߯ߙߊ߫ ߟߊ߫ ߞߵߌ ߕߏ߫ ߜߊ߲߬ߞߎ߲߬ߓߊߟߌߦߊ ߘߐ߫. ߌ ߦߴߊ߬ ߝߍ߬ ߞߵߊ߬ ߘߊߓߊ߲߫ ߖߋߎ߫؟</string>
   <string name="do_not_ask_anymore">ߢߌ߬ߣߌ߲߬ߞߊ߬ߟߌ߫ ߜߘߍ߫ ߞߊ߫ ߞߴߏ߬ ߞߐ߫</string>
-  <string name="your_languages">ߞߊ߲ ߛߎߥߊ߲ߘߌ߫</string>
-  <string name="other_languages">ߞߊ߲߫ ߜߘߍ ߟߎ߬:</string>
+  <string name="your_languages" fuzzy="true">ߞߊ߲ ߛߎߥߊ߲ߘߌ߫</string>
+  <string name="other_languages" fuzzy="true">ߞߊ߲߫ ߜߘߍ ߟߎ߬:</string>
   <string name="no_items_msg">ߝߌ߬ߛߌ߬ ߛߌ߫ ߛߐ߬ߘߐ߲߬ߕߊ߫ ߕߍ߫</string>
   <string name="crash_title">ߏ߬ ߓߘߊ߫ ߓߍ߲߬… ߏ߬ ߦߋ߫ ߞߏ߫ ߓߘߍ߫ ߓߊ߫ ߟߋ߬ ߘߌ߫</string>
   <string name="crash_description" fuzzy="true">ߊ߬ ߞߍߣߍ߲߫ ߦߋ߫ ߦߴߊ߲ ߓߘߊ߫ ߜߊߛߊ߲߫. \n\nߊ߬ ߝߐ߫ ߌ ߘߌ߫ ߛߵߊ߲ ߘߍ߬ߡߍ߲߬ ߠߊ߫ ߝߙߋߞߋ ߏ߬ ߝߎߟߋ߲ ߡߊ߬ ߞߎ߲߬ߠߊ߬ߝߏߣߌ߲ ߢߌ߲߬ ߠߎ߬ ߗߋߟߌ ߟߊ߫؟</string>

@@ -75,9 +75,9 @@
   <string name="help_5">အကြောင်းအရာ ဘယ်မှာနည်း?</string>
   <string name="pref_storage">သိုလှောင်ခန်း</string>
   <string name="pref_current_folder">လက်ရှိ ဖိုလ်ဒါ</string>
-  <string name="tts_pause">ခေတ္တရပ်</string>
-  <string name="tts_resume">ခေတ္တရပ်နားရာမှ ပြန်လုပ်ရန်</string>
-  <string name="stop">ရပ်</string>
+  <string name="tts_pause" fuzzy="true">ခေတ္တရပ်</string>
+  <string name="tts_resume" fuzzy="true">ခေတ္တရပ်နားရာမှ ပြန်လုပ်ရန်</string>
+  <string name="stop" fuzzy="true">ရပ်</string>
   <string name="internal_storage">အတွင်းပိုင်း</string>
   <string name="external_storage">ပြင်ပ</string>
   <string name="yes">ဟုတ်ကဲ့</string>
@@ -96,8 +96,8 @@
   <string name="time_today">ယနေ့</string>
   <string name="time_yesterday">မနေ့</string>
   <string name="do_not_ask_anymore">နောက်ထပ် မမေးတော့</string>
-  <string name="your_languages">ရွေးချယ်ထားသော ဘာသာစကားများ -</string>
-  <string name="other_languages">အခြားဘာသာစကားများ</string>
+  <string name="your_languages" fuzzy="true">ရွေးချယ်ထားသော ဘာသာစကားများ -</string>
+  <string name="other_languages" fuzzy="true">အခြားဘာသာစကားများ</string>
   <string name="crash_checkbox_language">သင်၏ ဘာသာစကား အပြင်အဆင်များ</string>
   <string name="articleCount">%s ဆောင်းပါးများ</string>
   <string name="get_started">စတင်ပါ</string>
