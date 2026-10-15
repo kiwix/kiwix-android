@@ -139,7 +139,7 @@
   <string name="choose_storage_to_download_book">د کتاب راکښته‌کولو لپاره ساتنځی خوښول</string>
   <string name="delete_zim_failed">په بښنې سره موږ نشو کولی ځينې دوتنې ړنگې کړو. تاسو بايد د دې پرځای دوتنې مهاروونکی وکاروئ.</string>
   <string name="tts_pause">درول‌</string>
-  <string name="tts_resume">بياپيلول</string>
+  <string name="tts_resume">روانول</string>
   <string name="stop">درول</string>
   <string name="notification_pause_button_text">درول‌</string>
   <string name="notification_resume_button_text">روانول</string>
@@ -166,9 +166,9 @@
   <string name="time_today">نن</string>
   <string name="time_yesterday">پرون</string>
   <string name="do_not_ask_anymore">لطفاً نورې پوښتنې مه کوئ</string>
-  <string name="your_languages">غوره‌شوې ژبې:</string>
+  <string name="your_languages" fuzzy="true">غوره‌شوې ژبې:</string>
   <string name="your_language">غوره‌شوې ژبه: %s</string>
-  <string name="other_languages">نورې ژبې:</string>
+  <string name="other_languages" fuzzy="true">نورې ژبې:</string>
   <string name="downloading">راکښته‌کول</string>
   <string name="no_items_msg">هېڅ توکي شتون نه لري</string>
   <string name="crash_checkbox_language">ستاسو د ژبې اوڼنې</string>

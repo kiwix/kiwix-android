@@ -82,8 +82,8 @@
   <string name="time_second">s</string>
   <string name="time_today">Hari ini</string>
   <string name="time_yesterday">Kelmarin</string>
-  <string name="your_languages">Bahasa terpilih:</string>
-  <string name="other_languages">Bahasa lain:</string>
+  <string name="your_languages" fuzzy="true">Bahasa terpilih:</string>
+  <string name="other_languages" fuzzy="true">Bahasa lain:</string>
   <string name="crash_checkbox_device">Butiran Peranti</string>
   <string name="crash_button_confirm">HANTAR BUTIRAN</string>
   <string name="get_content_shortcut_label">Dapatkan kandungan</string>

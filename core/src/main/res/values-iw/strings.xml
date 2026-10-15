@@ -5,6 +5,7 @@
 * Guycn2
 * IKhitron
 * MohitMali
+* Neriah
 * Steeve815
 * Tuvalevsku
 * YaronSh
@@ -26,6 +27,7 @@
   <string name="menu_wifi_hotspot">לארח ספרים</string>
   <string name="save_media">שמירת מדיה</string>
   <string name="save_media_error">אירעה שגיאה בעת ניסיון לשמור את המדיה!</string>
+  <string name="invalid_media_source">המדיה שנבחרה לא נמצאה.</string>
   <string name="save_media_saved">המדיה נשמרה ב־%s</string>
   <string name="search_label">חיפוש</string>
   <string name="searched_list">באיזו רשימה נעשה החיפוש</string>
@@ -43,6 +45,7 @@
   <string name="server_failed_toast_message">לא היה אפשר להריץ את השרת.</string>
   <string name="server_started_successfully_toast_message">השרת הופעל בהצלחה.</string>
   <string name="server_stopped_successfully_toast_message">השרת נעצר בהצלחה.</string>
+  <string name="server_stopped_all_books_deleted_toast_message">השרת נעצר: כל הספרים המתארחים נמחקו</string>
   <string name="hotspot_turned_on">נקודת החיבור הופעלה</string>
   <string name="hotspot_details_message">להלן הפרטים של נקודת החיבור המקומית שלך.\nSSID : %1$s \nPass : %2$s</string>
   <string name="server_textview_default_message">נא לבחור את הקבצים שברצונך לארח בשרת</string>
@@ -78,6 +81,7 @@
   <string name="pref_back_to_top">חזרה למעלה</string>
   <string name="pref_back_to_top_summary">הצגת כפתור בסוף העמוד לגלילה למעלה</string>
   <string name="pref_language_title">שפה</string>
+  <string name="system_language_with_name">שפת המערכת (%s)</string>
   <string name="pref_language_chooser">בחירת שפה</string>
   <string name="pref_credits">תורמים ורשיונות</string>
   <string name="pref_credits_title">תודות</string>
@@ -103,6 +107,9 @@
   <string name="pref_clear_all_bookmarks_title">ניקוי סימניות</string>
   <string name="clear_all_history_dialog_title">לנקות את כל ההיסטוריה?</string>
   <string name="share">שיתוף</string>
+  <string name="share_article">שיתוף ערך</string>
+  <string name="unable_to_share_article">לא ניתן לשתף ערך</string>
+  <string name="please_wait_for_page_to_load">נא להמתין עד שהדף ייטען במלואו</string>
   <string name="selected_file_cab_app_chooser_title">שיתוף קובצי ZIM עם:</string>
   <string name="delete">מחיקה</string>
   <string name="cancel">ביטול</string>
@@ -119,6 +126,7 @@
   <string name="rate_dialog_positive">דירוג!</string>
   <string name="no_thanks">לא, תודה</string>
   <string name="rate_dialog_neutral">פעם אחרת</string>
+  <string name="pref_rate_app_title">דירוג %s</string>
   <string name="open">פתיחה</string>
   <string name="bookmark_removed">הסימנייה הוסרה</string>
   <string name="pref_newtab_background_title">פתיחת כרטיסייה חדשה ברקע</string>
@@ -161,9 +169,15 @@
   <string name="pref_free_storage">פנוי: %s</string>
   <string name="choose_storage_to_download_book">יש לבחור אחסון כדי להוריד את הספר</string>
   <string name="delete_zim_failed">לא הצלחנו למחוק קבצים מסוימים. עליך לנסות להשתמש במנהל קבצים במקום זאת, עמך הסליחה.</string>
-  <string name="tts_pause">השהיה</string>
-  <string name="tts_resume">המשך</string>
-  <string name="stop">עצירה</string>
+  <string name="tts_pause" fuzzy="true">השהיה</string>
+  <string name="tts_resume" fuzzy="true">המשך</string>
+  <string name="tts_increase_speed">האצת המהירות</string>
+  <string name="tts_decrease_speed">האטת המהירות</string>
+  <string name="tts_normal_speed">רגילה</string>
+  <string name="tts_speech_speed">מהירות דיבור</string>
+  <string name="tts_select_voice">בחירת קול</string>
+  <string name="tts_controls">פקדי הקראה</string>
+  <string name="stop" fuzzy="true">עצירה</string>
   <string name="notification_pause_button_text">השהיה</string>
   <string name="notification_resume_button_text">המשך</string>
   <string name="internal_storage">פנימי</string>
@@ -188,14 +202,15 @@
   <string name="time_left">נותרו</string>
   <string name="time_today">היום</string>
   <string name="time_yesterday">אתמול</string>
-  <string name="pref_external_link_popup_title">תן אזהרה בעת כניסה לקישורים חיצוניים</string>
+  <string name="pref_external_link_popup_title">תן אזהרה בעת פתיחת קישורים חיצוניים</string>
   <string name="pref_external_link_popup_summary">הצגת בועת אזהרה על תשלומים נוספים או כאשר אין אפשרות עבודה עם קישורים לא-מקוונים.</string>
-  <string name="external_link_popup_dialog_title">העברה לקישור חיצוני!</string>
+  <string name="external_link_popup_dialog_title">נפתח קישור חיצוני!</string>
   <string name="external_link_popup_dialog_message">פעולה זו מובילה לקישור חיצוני. כתוצאה מכך עשויות לחול עליך עלויות בגין העברת נתונים או שהקישור לא יעבוד עקב העדר חיבור.\n\nלהמשיך?</string>
   <string name="do_not_ask_anymore">לא לשאול שוב</string>
-  <string name="your_languages">שפות נבחרות:</string>
+  <string name="your_languages">שפות נבחרות</string>
   <string name="your_language">השפה הנבחרת: %s</string>
-  <string name="other_languages">שפות אחרות:</string>
+  <string name="other_languages">שפות אחרות</string>
+  <string name="reorder_language">סידור השפה מחדש</string>
   <string name="downloading">מתבצעת הורדה</string>
   <string name="no_items_msg">אין פריטים זמינים</string>
   <string name="crash_title">טוב… זה מביך</string>
@@ -242,6 +257,7 @@
   <string name="running_state">בעבודה</string>
   <string name="complete">הושלם</string>
   <string name="paused_state">מושהה</string>
+  <string name="paused_offline_state">מושהה (המכשיר לא מקוון)</string>
   <string name="failed_state">נכשל: %s</string>
   <string name="custom_download_error_message_for_authentication_failed">לא היה אפשר להוריד את קובץ ה־ZIM. נא לנסות להתקין את היישום מחדש מחנות ה־Play.</string>
   <string name="save">שמירה</string>
@@ -345,6 +361,7 @@
   <string name="copy_move_files_to_app_directory_description">בשל מדיניות Google Play ב־Android 11 ומעלה, היישום שלנו אינו יכול יותר לגשת ישירות לקבצים המאוחסנים במקום אחר במכשיר שלך. כדי לאפשר לך להציג את הקבצים שבחרת, עלינו להעביר או להעתיק אותם לתיקייה מיוחדת בתוך תיקיית היישום שלנו. זה מאפשר לנו לגשת ולפתוח את הקבצים.</string>
   <string name="choose_storage_to_copy_move_zim_file">נא לבחור אחסון כדי להעתיק או להעביר קובץ ZIM</string>
   <string name="move_file_error_message">שגיאה בהעברת קובץ ZIM‏: %s.</string>
+  <string name="your_selected_files_added_to_library">קובצי ה־ZIM שבחרת נוספים לספרייה.</string>
   <string name="how_to_update_content">איך לעדכן תוכן?</string>
   <string name="update_content_description">כדי לעדכן תוכן (קובץ ZIM) עליך להוריד את הגרסה המלאה העדכנית ביותר של אותו התוכן בדיוק. ניתן לעשות זאת דרך סעיף ההורדה.</string>
   <string name="all_files_permission_needed">דרושים כל הרשאות הקבצים</string>
@@ -357,7 +374,7 @@
   <string name="swipe_down_for_library">יש להחליק למטה עבור ספרייה</string>
   <string name="reaching_remote_library">ניסיון להתחבר לספרייה מרוחקת</string>
   <string name="parsing_remote_library">פענוח ספרייה מרוחקת</string>
-  <string name="starting_downloading_remote_library" fuzzy="true">תחילת ההורדה של הספרייה המקוונת</string>
+  <string name="starting_downloading_remote_library">הספרייה המקוונת נטענת</string>
   <string name="no_notes">אין הערות</string>
   <string name="notes_from_all_books">הצגת הערות מכל הספרים</string>
   <string name="search_notes">חיפוש בהערות</string>
@@ -395,4 +412,8 @@
   <string name="downloading_state">בהורדה</string>
   <string name="download_failed_state">זה לא עבד</string>
   <string name="searchview_description_clear">ניקוי שאילתה</string>
+  <string name="do_you_mean">האם כוונתך הייתה:</string>
+  <string name="suggested_search_icon_description">יש לגעת כדי להשתמש בהצעה הזאת ולתקן את החיפוש שלך אוטומטית</string>
+  <string name="file_system_scan_dialog_title">לסרוק לאיתור ספרים באחסון?</string>
+  <string name="open_xiaomi_settings">פתיחת ההגדרות</string>
 </resources>

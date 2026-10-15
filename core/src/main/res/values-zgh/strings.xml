@@ -43,8 +43,8 @@
   <string name="zim_no_vid">ⵡⴰⵍⵓ ⵉⴼⵉⴷⵢⵓⵜⵏ</string>
   <string name="help_2">ⵎⴰⴳ ⵜⴳⴳ Kiwix?</string>
   <string name="help_5">ⵎⴰⵏⵉ ⵜⵓⵎⴰⵢⵜ?</string>
-  <string name="tts_pause">ⵙⴱⴷⴷ</string>
-  <string name="stop">ⵙⴱⴱⴷ</string>
+  <string name="tts_pause" fuzzy="true">ⵙⴱⴷⴷ</string>
+  <string name="stop" fuzzy="true">ⵙⴱⴱⴷ</string>
   <string name="internal_storage">ⴰⴳⵏⵙⴰⵏ</string>
   <string name="external_storage">ⴰⴱⵕⵕⴰⵏⵉ</string>
   <string name="yes">ⵢⴰⵀ</string>
@@ -58,8 +58,8 @@
   <string name="time_today">ⴰⵙⵙⴰ</string>
   <string name="time_yesterday">ⴰⵙⵙⵏⵏⴰⴹ</string>
   <string name="do_not_ask_anymore">ⵓⵙⴰⵔ ⵜⵙⵇⵙⴰⴷ</string>
-  <string name="your_languages">ⵜⵓⵜⵍⴰⵜⵉⵏ ⵉⵜⵜⵓⵙⵜⵢⵏ:</string>
-  <string name="other_languages">ⵜⵓⵜⵍⴰⵢⵉⵏ ⵢⴰⴹⵏⵉⵏ:</string>
+  <string name="your_languages" fuzzy="true">ⵜⵓⵜⵍⴰⵜⵉⵏ ⵉⵜⵜⵓⵙⵜⵢⵏ:</string>
+  <string name="other_languages" fuzzy="true">ⵜⵓⵜⵍⴰⵢⵉⵏ ⵢⴰⴹⵏⵉⵏ:</string>
   <string name="new_tab_shortcut_label">ⴰⵙⴽⵙⵍ ⴰⵎⴰⵢⵏⵓ</string>
   <string name="download_books">ⴰⴳⵎ ⵉⴷⵍⵉⵙⵏ</string>
   <string name="save_languages">ⵃⴹⵓ ⵜⵓⵜⵍⴰⵢⵉⵏ</string>

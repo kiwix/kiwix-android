@@ -138,9 +138,9 @@
   <string name="pref_storage">Úložiště</string>
   <string name="pref_current_folder">Stávající Adresář</string>
   <string name="delete_zim_failed">Omlouváme se, ale nemohli jsme smazat některé soubory. Měli byste na místo toho zkusit použít správce souborů.</string>
-  <string name="tts_pause">Pozastavit</string>
-  <string name="tts_resume">Obnovit</string>
-  <string name="stop">stop</string>
+  <string name="tts_pause" fuzzy="true">Pozastavit</string>
+  <string name="tts_resume" fuzzy="true">Obnovit</string>
+  <string name="stop" fuzzy="true">stop</string>
   <string name="internal_storage">Interní</string>
   <string name="external_storage">Externí</string>
   <string name="yes">Ano</string>
@@ -162,13 +162,13 @@
   <string name="time_left">zbývá</string>
   <string name="time_today">Dnes</string>
   <string name="time_yesterday">Včera</string>
-  <string name="pref_external_link_popup_title">Upozornit při vkládání externích odkazů</string>
+  <string name="pref_external_link_popup_title" fuzzy="true">Upozornit při vkládání externích odkazů</string>
   <string name="pref_external_link_popup_summary">Zobrazit vyskakovací zprávu, která vás upozorní na další možné finanční náklady nebo nefunkčnost offline odkazů.</string>
-  <string name="external_link_popup_dialog_title">Vkládám externí odkaz!</string>
+  <string name="external_link_popup_dialog_title" fuzzy="true">Vkládám externí odkaz!</string>
   <string name="external_link_popup_dialog_message" fuzzy="true">Vkládáte externí odkaz. Toto může vést k dodatečným nákladům na přenos dat, nebo to prostě nebude fungovat, když jste offline. Chcete pokračovat?</string>
   <string name="do_not_ask_anymore">Neptat se příště</string>
-  <string name="your_languages">Vybrané jazyky:</string>
-  <string name="other_languages">Jiné jazyky:</string>
+  <string name="your_languages" fuzzy="true">Vybrané jazyky:</string>
+  <string name="other_languages" fuzzy="true">Jiné jazyky:</string>
   <string name="no_items_msg">Žádné dostupné položky</string>
   <string name="crash_title">Inu…to je trapné</string>
   <string name="crash_description" fuzzy="true">Vypadá to, že aplikace selhala.\n\nNevadilo by Vám pomoci nám opravit tento problém zasláním následující informace?</string>
