@@ -34,6 +34,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.unit.dp
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -188,6 +189,7 @@ private fun HandleUiEvents(
   notificationPermission: PermissionState?,
   writePermissionState: PermissionState
 ) {
+  val currentLazyListState by rememberUpdatedState(lazyListState)
   val lifecycleOwner = LocalLifecycleOwner.current
   LaunchedEffect(lifecycleOwner) {
     lifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -252,7 +254,7 @@ private fun HandleUiEvents(
             activity.navigateToAppSettings()
           }
 
-          ScrollToTop -> lazyListState.scrollToItem(ZERO)
+          ScrollToTop -> currentLazyListState.scrollToItem(ZERO)
         }
       }
     }
