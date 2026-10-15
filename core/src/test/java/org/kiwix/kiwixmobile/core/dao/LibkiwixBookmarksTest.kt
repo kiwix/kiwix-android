@@ -26,6 +26,8 @@ import io.mockk.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
+import org.junit.Assert.assertTrue
+import org.junit.Assert.assertFalse
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
@@ -107,6 +109,21 @@ class LibkiwixBookmarksTest {
 
       verify(exactly = 0) { library.removeBookById(SECOND_BOOK_ID) }
     }
+
+  @Test
+  fun `bookmark url of the article matches the article path`() {
+    assertTrue(isBookmarkOfPage("https://kiwix.app/Food_vs._fuel", "Food_vs._fuel"))
+  }
+
+  @Test
+  fun `bookmark url of a redirect does not match the article path`() {
+    assertFalse(isBookmarkOfPage("https://kiwix.app/Food_vs_fuel", "Food_vs._fuel"))
+  }
+
+  @Test
+  fun `encoded bookmark url matches the decoded article path`() {
+    assertTrue(isBookmarkOfPage("https://kiwix.app/A/C%C3%B4te_d%27Ivoire", "A/Côte_d'Ivoire"))
+  }
 
   private fun book(bookId: String): Book =
     BookTestWrapper(id = bookId, bookPath = temporaryFolder.root.resolve("$bookId.zim").path)
