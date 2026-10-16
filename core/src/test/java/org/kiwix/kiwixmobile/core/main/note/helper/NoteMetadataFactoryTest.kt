@@ -110,18 +110,27 @@ class NoteMetadataFactoryTest {
   }
 
   @Test
-  fun `create extracts article note file name from url`() {
-    every { zimReaderContainer.name } returns "wikipedia_en.zim"
-
-    val metadata = factory.create(
-      AddNoteDialogConfig(
-        articleTitle = "Earth",
-        currentWebViewUrl = "A/Earth.html"
-      ),
-      zimReaderContainer
+  fun `create extracts article note file name for various url formats`() {
+    assertEquals("Earth", articleNoteFileNameFor("https://kiwix.app/A/Earth.htm"))
+    assertEquals("Earth", articleNoteFileNameFor("A/Earth.html"))
+    assertEquals("Earth", articleNoteFileNameFor("https://kiwix.app/A/Earth.html"))
+    assertEquals("Earth", articleNoteFileNameFor("https://kiwix.app/A/Earth"))
+    assertEquals("U.S._Earth", articleNoteFileNameFor("https://kiwix.app/A/U.S._Earth.html"))
+    assertEquals("Earth", articleNoteFileNameFor(""))
+    assertEquals("Earth", articleNoteFileNameFor("   "))
+    assertEquals("Earth", articleNoteFileNameFor("https://kiwix.app/A/"))
+    assertEquals(
+      "U.S._Global_Change_Research_Program",
+      articleNoteFileNameFor("https://kiwix.app/A/U.S._Global_Change_Research_Program")
     )
+  }
 
-    assertEquals("Earth", metadata.articleNoteFileName)
+  private fun articleNoteFileNameFor(url: String): String {
+    every { zimReaderContainer.name } returns "wikipedia_en.zim"
+    return factory.create(
+      AddNoteDialogConfig(articleTitle = "Earth", currentWebViewUrl = url),
+      zimReaderContainer
+    ).articleNoteFileName
   }
 
   @Test
