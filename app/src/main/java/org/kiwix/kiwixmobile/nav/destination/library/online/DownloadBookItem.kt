@@ -35,6 +35,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.minimumInteractiveComponentSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
@@ -213,23 +214,30 @@ private fun DownloadActionButton(
 ) {
   Box(
     modifier = Modifier
+      .minimumInteractiveComponentSize()
       .size(DOWNLOAD_BUTTON_SIZE)
-      .clip(buttonShape)
-      .border(borderStroke, buttonShape)
       .clickable { onClick() }
       .semantics { testTag = buttonTestTag },
     contentAlignment = Alignment.Center
   ) {
-    Icon(
-      painter = icon.toPainter(),
-      contentDescription = contentDescription,
-      tint = MaterialTheme.colorScheme.onSurface,
+    Box(
       modifier = Modifier
-        .size(DOWNLOAD_BUTTON_ICON_SIZE)
-        .let { iconModifier ->
-          if (iconTestTag != null) iconModifier.testTag(iconTestTag) else iconModifier
-        }
-    )
+        .size(DOWNLOAD_BUTTON_SIZE)
+        .clip(buttonShape)
+        .border(borderStroke, buttonShape),
+      contentAlignment = Alignment.Center
+    ) {
+      Icon(
+        painter = icon.toPainter(),
+        contentDescription = contentDescription,
+        tint = MaterialTheme.colorScheme.onSurface,
+        modifier = Modifier
+          .size(DOWNLOAD_BUTTON_ICON_SIZE)
+          .let { iconModifier ->
+            if (iconTestTag != null) iconModifier.testTag(iconTestTag) else iconModifier
+          }
+      )
+    }
   }
 }
 
