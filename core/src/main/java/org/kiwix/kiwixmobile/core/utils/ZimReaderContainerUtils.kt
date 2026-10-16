@@ -18,14 +18,13 @@
 
 package org.kiwix.kiwixmobile.core.utils
 
-import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
+import org.kiwix.kiwixmobile.core.reader.addContentPrefix
 
 private fun ZimReaderContainer.redirectOrOriginal(contentUrl: String): String =
   if (isRedirect(contentUrl)) getRedirect(contentUrl) else contentUrl
 
-private fun contentUrl(articleUrl: String): String =
-  "${ZimFileReader.CONTENT_PREFIX}$articleUrl"
+private fun contentUrl(articleUrl: String): String = articleUrl.addContentPrefix
 
 fun ZimReaderContainer.urlSuffixToParsableUrl(suffixUrl: String): String =
   redirectOrOriginal(contentUrl(suffixUrl))

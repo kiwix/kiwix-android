@@ -22,7 +22,6 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
@@ -30,8 +29,24 @@ import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 
 class ZimReaderContainerUtilsTest {
   private lateinit var container: ZimReaderContainer
-  private val articleUrl = "https://kiwix.app/A/Kiwix"
-  private val redirectUrl = "https://kiwix.app/A/KiwixAndroid"
+
+  private data class TitleToEntryPathScenario(
+    val description: String,
+    val title: String,
+    val lookupResult: String?,
+    val expectedResult: String?,
+    val callsLookup: Boolean
+  )
+
+  private data class UrlSuffixScenario(
+    val description: String,
+    val suffix: String,
+    val contentUrl: String,
+    val isRedirect: Boolean,
+    val redirectUrl: String? = null
+  ) {
+    val expectedResult: String get() = if (isRedirect) redirectUrl!! else contentUrl
+  }
 
   @BeforeEach
   fun setup() {
@@ -39,136 +54,105 @@ class ZimReaderContainerUtilsTest {
   }
 
   @Test
-  fun titleToEntryPath_whenTitleStartsWithArticlePrefix_returnsSameTitle() {
-    val result = container.titleToEntryPath("A/Kiwix")
-
-    assertEquals(
-      "A/Kiwix",
-      result
+  fun titleToEntryPathScenarios() {
+    val scenarios = listOf(
+      TitleToEntryPathScenario(
+        description = "a title that already looks like an entry path is returned unchanged" +
+          " and skips the lookup",
+        title = "A/Kiwix",
+        lookupResult = null,
+        expectedResult = "A/Kiwix",
+        callsLookup = false
+      ),
+      TitleToEntryPathScenario(
+        description = "a plain title resolves through the entry-path lookup",
+        title = "Kiwix",
+        lookupResult = "A/Kiwix",
+        expectedResult = "A/Kiwix",
+        callsLookup = true
+      ),
+      TitleToEntryPathScenario(
+        description = "a title with no matching article resolves to null",
+        title = "Unknown",
+        lookupResult = null,
+        expectedResult = null,
+        callsLookup = true
+      ),
+      TitleToEntryPathScenario(
+        description = "an empty title still delegates to the lookup",
+        title = "",
+        lookupResult = null,
+        expectedResult = null,
+        callsLookup = true
+      )
     )
 
-    verify(exactly = 0) {
-      container.getPageEntryPathFromTitle(any())
+    scenarios.forEach { scenario ->
+      if (scenario.callsLookup) {
+        every { container.getPageEntryPathFromTitle(scenario.title) } returns scenario.lookupResult
+      }
+
+      val result = container.titleToEntryPath(scenario.title)
+
+      assertEquals(scenario.expectedResult, result, scenario.description)
+      verify(exactly = if (scenario.callsLookup) 1 else 0) {
+        container.getPageEntryPathFromTitle(scenario.title)
+      }
     }
   }
 
   @Test
-  fun titleToEntryPath_resolvesArticleTitle() {
-    every {
-      container.getPageEntryPathFromTitle("Kiwix")
-    } returns "A/Kiwix"
-
-    val result = container.titleToEntryPath("Kiwix")
-
-    assertEquals(
-      "A/Kiwix",
-      result
+  fun urlSuffixToParsableUrlScenarios() {
+    val scenarios = listOf(
+      UrlSuffixScenario(
+        description = "a suffix that is not a redirect is returned as its content url",
+        suffix = "A/Kiwix",
+        contentUrl = "${ZimFileReader.CONTENT_PREFIX}A/Kiwix",
+        isRedirect = false
+      ),
+      UrlSuffixScenario(
+        description = "a suffix that redirects resolves to the redirect's url",
+        suffix = "A/OldKiwix",
+        contentUrl = "${ZimFileReader.CONTENT_PREFIX}A/OldKiwix",
+        isRedirect = true,
+        redirectUrl = "${ZimFileReader.CONTENT_PREFIX}A/KiwixAndroid"
+      ),
+      UrlSuffixScenario(
+        description = "unicode characters in the suffix are percent-encoded in the content url",
+        suffix = "A/Café_日本",
+        contentUrl = "${ZimFileReader.CONTENT_PREFIX}A/Caf%C3%A9_%E6%97%A5%E6%9C%AC",
+        isRedirect = false
+      ),
+      UrlSuffixScenario(
+        description = "special characters ('+', '?', parentheses) in the suffix are" +
+          " percent-encoded in the content url",
+        suffix = "A/Is_C++_(programming_language)_hard?",
+        contentUrl = "${ZimFileReader.CONTENT_PREFIX}A/Is_C%2B%2B_(programming_language)_hard%3F",
+        isRedirect = false
+      ),
+      UrlSuffixScenario(
+        description = "a suffix with a literal '+' looks up the redirect of its encoded url",
+        suffix = "A/C++",
+        contentUrl = "${ZimFileReader.CONTENT_PREFIX}A/C%2B%2B",
+        isRedirect = true,
+        redirectUrl = "${ZimFileReader.CONTENT_PREFIX}A/C%2B%2B_(programming_language)"
+      )
     )
 
-    verify {
-      container.getPageEntryPathFromTitle("Kiwix")
+    scenarios.forEach { scenario ->
+      every { container.isRedirect(scenario.contentUrl) } returns scenario.isRedirect
+      if (scenario.isRedirect) {
+        every { container.getRedirect(scenario.contentUrl) } returns scenario.redirectUrl!!
+      }
+
+      val result = container.urlSuffixToParsableUrl(scenario.suffix)
+
+      assertEquals(scenario.expectedResult, result, scenario.description)
+      if (scenario.isRedirect) {
+        verify { container.getRedirect(scenario.contentUrl) }
+      } else {
+        verify(exactly = 0) { container.getRedirect(scenario.contentUrl) }
+      }
     }
-  }
-
-  @Test
-  fun titleToEntryPath_whenArticleDoesNotExist_returnsNull() {
-    every {
-      container.getPageEntryPathFromTitle("Unknown")
-    } returns null
-
-    val result = container.titleToEntryPath("Unknown")
-
-    assertNull(result)
-  }
-
-  @Test
-  fun titleToEntryPath_whenTitleIsEmpty_delegatesToEntryPathLookup() {
-    every {
-      container.getPageEntryPathFromTitle("")
-    } returns null
-
-    val result = container.titleToEntryPath("")
-
-    assertNull(result)
-
-    verify(exactly = 1) {
-      container.getPageEntryPathFromTitle("")
-    }
-  }
-
-  @Test
-  fun urlSuffixToParsableUrl_whenNotRedirect_returnsOriginalUrl() {
-    every {
-      container.isRedirect(articleUrl)
-    } returns false
-
-    val result = container.urlSuffixToParsableUrl("A/Kiwix")
-
-    assertEquals(
-      articleUrl,
-      result
-    )
-
-    verify {
-      container.isRedirect(articleUrl)
-    }
-    verify(exactly = 0) {
-      container.getRedirect(any())
-    }
-  }
-
-  @Test
-  fun urlSuffixToParsableUrl_whenIsRedirect_returnsRedirectUrl() {
-    every {
-      container.isRedirect(articleUrl)
-    } returns true
-
-    every {
-      container.getRedirect(articleUrl)
-    } returns redirectUrl
-
-    val result = container.urlSuffixToParsableUrl("A/Kiwix")
-
-    assertEquals(
-      redirectUrl,
-      result
-    )
-
-    verify {
-      container.isRedirect(articleUrl)
-      container.getRedirect(articleUrl)
-    }
-  }
-
-  @Test
-  fun urlSuffixToParsableUrl_withUnicodeCharacters_returnsCorrectUrl() {
-    val suffix = "A/Café_भारत_日本"
-
-    every {
-      container.isRedirect("${ZimFileReader.CONTENT_PREFIX}$suffix")
-    } returns false
-
-    val result = container.urlSuffixToParsableUrl(suffix)
-
-    assertEquals(
-      "${ZimFileReader.CONTENT_PREFIX}$suffix",
-      result
-    )
-  }
-
-  @Test
-  fun urlSuffixToParsableUrl_withSpecialCharacters_returnsCorrectUrl() {
-    val suffix = "A/C%2B%2B_(programming_language)"
-
-    every {
-      container.isRedirect("${ZimFileReader.CONTENT_PREFIX}$suffix")
-    } returns false
-
-    val result = container.urlSuffixToParsableUrl(suffix)
-
-    assertEquals(
-      "${ZimFileReader.CONTENT_PREFIX}$suffix",
-      result
-    )
   }
 }

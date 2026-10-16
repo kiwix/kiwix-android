@@ -19,7 +19,6 @@
 package org.kiwix.kiwixmobile.core.main.reader.helper
 
 import android.os.Bundle
-import androidx.core.net.toUri
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.MainCoroutineDispatcher
 import kotlinx.coroutines.flow.first
@@ -32,8 +31,8 @@ import org.kiwix.kiwixmobile.core.di.MainDispatcher
 import org.kiwix.kiwixmobile.core.main.KiwixWebView
 import org.kiwix.kiwixmobile.core.main.MainRepositoryActions
 import org.kiwix.kiwixmobile.core.page.history.models.WebViewHistoryItem
-import org.kiwix.kiwixmobile.core.reader.ZimFileReader.Companion.CONTENT_PREFIX
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
+import org.kiwix.kiwixmobile.core.reader.addContentPrefix
 import org.kiwix.kiwixmobile.core.utils.TAG_KIWIX
 import org.kiwix.kiwixmobile.core.utils.ZERO
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
@@ -155,8 +154,8 @@ class ReaderSessionManager @Inject constructor(
       contentUrl
     }
 
-  private fun contentUrl(pageUrl: String?): String =
-    "${CONTENT_PREFIX}$pageUrl".toUri().toString()
+  private fun contentUrl(entryPath: String?): String =
+    "$entryPath".addContentPrefix
 
   private suspend fun getWebViewHistoryList(): List<WebViewHistoryEntity> {
     return withContext(mainDispatcher) {

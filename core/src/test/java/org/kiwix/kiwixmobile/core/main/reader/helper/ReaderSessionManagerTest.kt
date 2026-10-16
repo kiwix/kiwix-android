@@ -428,6 +428,23 @@ class ReaderSessionManagerTest {
         webView.loadUrl(any())
       }
     }
+
+    @Test
+    fun `restoreTabState percent-encodes the main page path before loading it`() {
+      val webView = mockk<KiwixWebView>(relaxed = true)
+      val zimFileReader = mockk<ZimFileReader>()
+      val url = "https://kiwix.app/A/4%2B4_Photocycloaddition"
+
+      every { zimReaderContainer.zimFileReader } returns zimFileReader
+      every { zimFileReader.mainPage } returns "A/4+4_Photocycloaddition"
+      every { zimReaderContainer.isRedirect(url) } returns false
+
+      readerSessionManager.restoreTabState(webView, null)
+
+      verify {
+        webView.loadUrl(url)
+      }
+    }
   }
 
   @Nested

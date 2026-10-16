@@ -25,107 +25,126 @@ import org.kiwix.kiwixmobile.core.data.remote.removeAuthenticationFromUrl
 import org.kiwix.kiwixmobile.core.data.remote.secretKey
 
 class BasicAuthInterceptorTest {
-  private val authenticationUrl =
-    "https://{{BASIC_AUTH_KEY}}@www.dwds.de/kiwix/f/dwds_de_dictionary_nopic_2023-09-12.zim"
-
-  private val normalUrl = "https://download.kiwix.org/zim/wikipedia_fr_test.zim"
-
-  @Test
-  fun checkUrlIsAuthenticationUrl() {
-    assertEquals(true, authenticationUrl.isAuthenticationUrl)
-  }
+  private data class Scenario(
+    val description: String,
+    val url: String,
+    val isAuthenticationUrl: Boolean,
+    val secretKey: String,
+    val removeAuthenticationFromUrl: String
+  )
 
   @Test
-  fun checkUrlIsNormalUrl() {
-    assertEquals(false, normalUrl.isAuthenticationUrl)
-  }
-
-  @Test
-  fun testGetSecretKeyFromAuthenticationUrl() {
-    assertEquals("BASIC_AUTH_KEY", authenticationUrl.secretKey)
-  }
-
-  @Test
-  fun testGetSecretKeyFromNormalUrl() {
-    assertEquals("", normalUrl.secretKey)
-  }
-
-  @Test
-  fun testEmptyUrl() {
-    val emptyUrl = ""
-    assertEquals(false, emptyUrl.isAuthenticationUrl)
-    assertEquals("", emptyUrl.secretKey)
-  }
-
-  @Test
-  fun testUrlWithoutAuthentication() {
-    val urlWithoutAuth = "https://example.com/kiwix/f/somefile.zim"
-    assertEquals(false, urlWithoutAuth.isAuthenticationUrl)
-    assertEquals("", urlWithoutAuth.secretKey)
-    assertEquals(
-      urlWithoutAuth,
-      urlWithoutAuth.removeAuthenticationFromUrl
+  fun basicAuthUrlScenarios() {
+    val scenarios = listOf(
+      Scenario(
+        description = "a normal authentication url",
+        url = "https://{{BASIC_AUTH_KEY}}@www.dwds.de/kiwix/f/dwds_de_dictionary_nopic_2023-09-12.zim",
+        isAuthenticationUrl = true,
+        secretKey = "BASIC_AUTH_KEY",
+        removeAuthenticationFromUrl =
+          "https://www.dwds.de/kiwix/f/dwds_de_dictionary_nopic_2023-09-12.zim"
+      ),
+      Scenario(
+        description = "a normal url without a placeholder",
+        url = "https://download.kiwix.org/zim/wikipedia_fr_test.zim",
+        isAuthenticationUrl = false,
+        secretKey = "",
+        removeAuthenticationFromUrl = "https://download.kiwix.org/zim/wikipedia_fr_test.zim"
+      ),
+      Scenario(
+        description = "an empty url",
+        url = "",
+        isAuthenticationUrl = false,
+        secretKey = "",
+        removeAuthenticationFromUrl = ""
+      ),
+      Scenario(
+        description = "a url without authentication",
+        url = "https://example.com/kiwix/f/somefile.zim",
+        isAuthenticationUrl = false,
+        secretKey = "",
+        removeAuthenticationFromUrl = "https://example.com/kiwix/f/somefile.zim"
+      ),
+      Scenario(
+        description = "a url with a different placeholder name",
+        url = "https://{{ANOTHER_AUTH_KEY}}@example.com/kiwix/f/somefile.zim",
+        isAuthenticationUrl = true,
+        secretKey = "ANOTHER_AUTH_KEY",
+        removeAuthenticationFromUrl = "https://example.com/kiwix/f/somefile.zim"
+      ),
+      Scenario(
+        description = "a url with extra spaces around the placeholder",
+        url = "https:// {{ BASIC_AUTH_KEY }} @example.com/kiwix/f/somefile.zim",
+        isAuthenticationUrl = true,
+        secretKey = "BASIC_AUTH_KEY",
+        removeAuthenticationFromUrl =
+          "https:// {{ BASIC_AUTH_KEY }} @example.com/kiwix/f/somefile.zim"
+      ),
+      Scenario(
+        description = "a url with trailing whitespace",
+        url = "https://{{BASIC_AUTH_KEY}}@example.com/kiwix/f/somefile.zim  ",
+        isAuthenticationUrl = true,
+        secretKey = "BASIC_AUTH_KEY",
+        removeAuthenticationFromUrl = "https://example.com/kiwix/f/somefile.zim"
+      ),
+      Scenario(
+        description = "a non-zim (.txt) url, which is not an authentication url" +
+          " but still exposes its secret key and strips the placeholder",
+        url = "https://{{BASIC_AUTH_KEY}}@example.com/kiwix/f/somefile.txt",
+        isAuthenticationUrl = false,
+        secretKey = "BASIC_AUTH_KEY",
+        removeAuthenticationFromUrl = "https://example.com/kiwix/f/somefile.txt"
+      ),
+      Scenario(
+        description = "a non-zim (.html) url",
+        url = "https://{{BASIC_AUTH_KEY}}@example.com/kiwix/f/somefile.html",
+        isAuthenticationUrl = false,
+        secretKey = "BASIC_AUTH_KEY",
+        removeAuthenticationFromUrl = "https://example.com/kiwix/f/somefile.html"
+      ),
+      Scenario(
+        description = "a url with multiple placeholders, only the first is the secret key",
+        url = "https://{{BASIC_AUTH_KEY}}@example.com/kiwix/f/{{ANOTHER_KEY}}.zim",
+        isAuthenticationUrl = true,
+        secretKey = "BASIC_AUTH_KEY",
+        removeAuthenticationFromUrl = "https://example.com/kiwix/f/{{ANOTHER_KEY}}.zim"
+      ),
+      Scenario(
+        description = "a percent-encoded url",
+        url = "https%3A%2F%2F%7B%7BBASIC_AUTH_KEY%7D%7D%40www.dwds.de/kiwix/" +
+          "dwds_de_dictionary_nopic.zim",
+        isAuthenticationUrl = true,
+        secretKey = "BASIC_AUTH_KEY",
+        removeAuthenticationFromUrl = "https://www.dwds.de/kiwix/dwds_de_dictionary_nopic.zim"
+      ),
+      Scenario(
+        // decodeUrl keeps a literal '+' as '+' instead of decoding it to a space (see
+        // ZimFileReaderTest.decodeUrlDecodesOnlyPercentEscapes), so a '+' in the file name
+        // of a download url must survive unchanged instead of becoming a space.
+        description = "a url with a literal '+' in the file name",
+        url = "https://{{BASIC_AUTH_KEY}}@example.com/kiwix/f/some+file+name.zim",
+        isAuthenticationUrl = true,
+        secretKey = "BASIC_AUTH_KEY",
+        removeAuthenticationFromUrl = "https://example.com/kiwix/f/some+file+name.zim"
+      )
     )
-  }
 
-  @Test
-  fun testUrlWithDifferentPlaceholder() {
-    val urlWithDifferentPlaceholder =
-      "https://{{ANOTHER_AUTH_KEY}}@example.com/kiwix/f/somefile.zim"
-    assertEquals(true, urlWithDifferentPlaceholder.isAuthenticationUrl)
-    assertEquals("ANOTHER_AUTH_KEY", urlWithDifferentPlaceholder.secretKey)
-  }
-
-  @Test
-  fun testUrlWithFormattingVariations() {
-    val formattedUrl1 = "https:// {{ BASIC_AUTH_KEY }} @example.com/kiwix/f/somefile.zim"
-    val formattedUrl2 = "https://{{BASIC_AUTH_KEY}}@example.com/kiwix/f/somefile.zim  "
-    assertEquals(true, formattedUrl1.isAuthenticationUrl)
-    assertEquals(true, formattedUrl2.isAuthenticationUrl)
-    assertEquals("BASIC_AUTH_KEY", formattedUrl1.secretKey)
-    assertEquals("BASIC_AUTH_KEY", formattedUrl2.secretKey)
-  }
-
-  @Test
-  fun testUrlWithOtherExtensions() {
-    val urlWithTxtExtension = "https://{{BASIC_AUTH_KEY}}@example.com/kiwix/f/somefile.txt"
-    val urlWithHtmlExtension = "https://{{BASIC_AUTH_KEY}}@example.com/kiwix/f/somefile.html"
-    assertEquals(false, urlWithTxtExtension.isAuthenticationUrl)
-    assertEquals(false, urlWithHtmlExtension.isAuthenticationUrl)
-    assertEquals("BASIC_AUTH_KEY", urlWithTxtExtension.secretKey)
-    assertEquals("BASIC_AUTH_KEY", urlWithHtmlExtension.secretKey)
-    assertEquals(
-      "https://example.com/kiwix/f/somefile.txt",
-      urlWithTxtExtension.removeAuthenticationFromUrl
-    )
-  }
-
-  @Test
-  fun testUrlWithMultiplePlaceholders() {
-    val urlWithMultiplePlaceholders =
-      "https://{{BASIC_AUTH_KEY}}@example.com/kiwix/f/{{ANOTHER_KEY}}.zim"
-    assertEquals(true, urlWithMultiplePlaceholders.isAuthenticationUrl)
-    assertEquals("BASIC_AUTH_KEY", urlWithMultiplePlaceholders.secretKey)
-    assertEquals(
-      "https://example.com/kiwix/f/{{ANOTHER_KEY}}.zim",
-      urlWithMultiplePlaceholders.removeAuthenticationFromUrl
-    )
-  }
-
-  @Test
-  fun testGetUrlWithoutAuthentication() {
-    assertEquals(
-      "https://www.dwds.de/kiwix/f/dwds_de_dictionary_nopic_2023-09-12.zim",
-      authenticationUrl.removeAuthenticationFromUrl
-    )
-  }
-
-  @Test
-  fun extractSecretKeyFromEncodedUrl() {
-    assertEquals(
-      "BASIC_AUTH_KEY",
-      "https%3A%2F%2F%7B%7BBASIC_AUTH_KEY%7D%7D%40www.dwds.de/kiwix/dwds_de_dictionary_nopic.zim"
-        .secretKey
-    )
+    scenarios.forEach { scenario ->
+      assertEquals(
+        scenario.isAuthenticationUrl,
+        scenario.url.isAuthenticationUrl,
+        "isAuthenticationUrl for ${scenario.description}"
+      )
+      assertEquals(
+        scenario.secretKey,
+        scenario.url.secretKey,
+        "secretKey for ${scenario.description}"
+      )
+      assertEquals(
+        scenario.removeAuthenticationFromUrl,
+        scenario.url.removeAuthenticationFromUrl,
+        "removeAuthenticationFromUrl for ${scenario.description}"
+      )
+    }
   }
 }

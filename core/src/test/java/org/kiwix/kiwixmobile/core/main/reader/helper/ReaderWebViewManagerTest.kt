@@ -254,6 +254,44 @@ class ReaderWebViewManagerTest {
         webView.loadUrl("content://article")
       }
     }
+
+    @Test
+    fun `openPage percent-encodes special characters of the entry path`() = runTest {
+      val webView = mockk<KiwixWebView>()
+      val manager = spyk(readerWebViewManager)
+
+      val container = mockk<ZimReaderContainer>()
+      val url = "https://kiwix.app/4%2B4_Photocycloaddition_%23_Is_it%3F"
+
+      every { readerSessionManager.zimReaderContainer } returns container
+      every { container.isRedirect(url) } returns false
+
+      manager.openPage("4+4_Photocycloaddition_#_Is_it?", webView)
+
+      verify {
+        webView.loadUrl(url)
+      }
+    }
+
+    @Test
+    fun `openPage loads the redirect of the encoded url`() = runTest {
+      val webView = mockk<KiwixWebView>()
+      val manager = spyk(readerWebViewManager)
+
+      val container = mockk<ZimReaderContainer>()
+      val url = "https://kiwix.app/C%2B%2B"
+      val redirectUrl = "https://kiwix.app/C%2B%2B_(programming_language)"
+
+      every { readerSessionManager.zimReaderContainer } returns container
+      every { container.isRedirect(url) } returns true
+      every { container.getRedirect(url) } returns redirectUrl
+
+      manager.openPage("C++", webView)
+
+      verify {
+        webView.loadUrl(redirectUrl)
+      }
+    }
   }
 
   @Nested

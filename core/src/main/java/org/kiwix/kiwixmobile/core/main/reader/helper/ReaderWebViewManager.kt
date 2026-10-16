@@ -18,7 +18,6 @@
 
 package org.kiwix.kiwixmobile.core.main.reader.helper
 
-import androidx.core.net.toUri
 import kotlinx.coroutines.MainCoroutineDispatcher
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.withContext
@@ -29,7 +28,7 @@ import org.kiwix.kiwixmobile.core.main.reader.helper.ReaderWebViewManager.WebVie
 import org.kiwix.kiwixmobile.core.main.reader.helper.TabsManager.TabsState
 import org.kiwix.kiwixmobile.core.page.history.models.NavigationHistoryListItem
 import org.kiwix.kiwixmobile.core.page.history.models.WebViewHistoryItem
-import org.kiwix.kiwixmobile.core.reader.ZimFileReader.Companion.CONTENT_PREFIX
+import org.kiwix.kiwixmobile.core.reader.addContentPrefix
 import org.kiwix.kiwixmobile.core.utils.ZERO
 import javax.inject.Inject
 
@@ -92,8 +91,8 @@ class ReaderWebViewManager @Inject constructor(
     }
   }
 
-  suspend fun openPage(entryPath: String?, kiwixWebView: KiwixWebView) {
-    entryPath?.let {
+  suspend fun openPage(pageUrl: String?, kiwixWebView: KiwixWebView) {
+    pageUrl?.let {
       loadUrlWithCurrentWebview(redirectOrOriginal(contentUrl(it)), kiwixWebView)
     }
   }
@@ -103,7 +102,7 @@ class ReaderWebViewManager @Inject constructor(
   }
 
   fun contentUrl(entryPath: String?): String =
-    "${CONTENT_PREFIX}$entryPath".toUri().toString()
+    "$entryPath".addContentPrefix
 
   private fun redirectOrOriginal(contentUrl: String): String {
     val zimReaderContainer = readerSessionManager.zimReaderContainer
