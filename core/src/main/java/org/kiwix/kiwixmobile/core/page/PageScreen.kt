@@ -378,9 +378,10 @@ private fun getFormattedDateLabel(date: LocalDate): String {
     else -> {
       // Format in the current app language, with its digits (e.g. Persian digits).
       val locale = LocalContext.current.locale
-      date.format(
+      val formatter = remember(locale) {
         DateTimeFormatter.ofPattern("d MMM yyyy", locale).withDecimalStyle(DecimalStyle.of(locale))
-      )
+      }
+      date.format(formatter)
     }
   }
 }
