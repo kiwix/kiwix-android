@@ -34,6 +34,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.unit.dp
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -98,7 +99,15 @@ fun OnlineLibraryRoute(
   }
   val scope = rememberCoroutineScope()
   val snackbarHostState = remember { SnackbarHostState() }
-  val lazyListState = rememberLazyListState()
+  val baseListState = rememberLazyListState()
+  val listStates = remember(uiState.tabs) { mutableMapOf<Int, LazyListState>() }
+  val activeListState = if (uiState.tabs.size <= 1) {
+    baseListState
+  } else {
+    listStates.getOrPut(uiState.selectedTabIndex) {
+      if (uiState.selectedTabIndex == 0) baseListState else LazyListState()
+    }
+  }
 
   // Collect UI events
   HandleUiEvents(
@@ -107,7 +116,7 @@ fun OnlineLibraryRoute(
     alertDialogShower = alertDialogShower,
     activity = activity,
     scope = scope,
-    lazyListState = lazyListState,
+    lazyListState = activeListState,
     notificationPermission = notificationPermission,
     writePermissionState = writePermissionState
   )
@@ -128,7 +137,7 @@ fun OnlineLibraryRoute(
       uiState = uiState,
       onlineLibraryViewModel = onlineLibraryViewModel,
       actionMenuItems = actionMenuItems,
-      listState = lazyListState,
+      listState = activeListState,
       snackBarHostState = snackbarHostState,
       bottomAppBarScrollBehaviour = activity.bottomAppBarScrollBehaviour,
       onUserBackPressed = {
@@ -180,6 +189,7 @@ private fun HandleUiEvents(
   notificationPermission: PermissionState?,
   writePermissionState: PermissionState
 ) {
+  val currentLazyListState by rememberUpdatedState(lazyListState)
   val lifecycleOwner = LocalLifecycleOwner.current
   LaunchedEffect(lifecycleOwner) {
     lifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -244,7 +254,7 @@ private fun HandleUiEvents(
             activity.navigateToAppSettings()
           }
 
-          ScrollToTop -> lazyListState.scrollToItem(ZERO)
+          ScrollToTop -> currentLazyListState.scrollToItem(ZERO)
         }
       }
     }
