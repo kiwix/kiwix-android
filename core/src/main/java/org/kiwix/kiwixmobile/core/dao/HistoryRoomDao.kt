@@ -30,6 +30,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import org.kiwix.kiwixmobile.core.dao.entities.HistoryRoomEntity
+import org.kiwix.kiwixmobile.core.extensions.startOfDayEpochMilli
 import org.kiwix.kiwixmobile.core.page.adapter.Page
 import org.kiwix.kiwixmobile.core.page.history.models.HistoryListItem
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
@@ -59,12 +60,13 @@ abstract class HistoryRoomDao : PageDao {
     deleteHistory(pagesToDelete as List<HistoryListItem.HistoryItem>)
 
   @Query(
-    "SELECT * FROM HistoryRoomEntity WHERE historyUrl" +
-      " = :url AND dateString = :date AND zimReaderSource = :zimReaderSource"
+    "SELECT * FROM HistoryRoomEntity WHERE historyUrl = :url" +
+      " AND timeStamp >= :dayStart AND timeStamp < :dayEnd AND zimReaderSource = :zimReaderSource"
   )
   abstract fun getHistoryRoomEntity(
     url: String,
-    date: String,
+    dayStart: Long,
+    dayEnd: Long,
     zimReaderSource: ZimReaderSource?
   ): HistoryRoomEntity?
 
@@ -79,9 +81,12 @@ abstract class HistoryRoomDao : PageDao {
 
   suspend fun saveHistory(historyItem: HistoryListItem.HistoryItem) {
     saveMutex.withLock {
+      // Match the visit by its day instead of dateString, which depends on the app language.
+      val day = historyItem.date
       getHistoryRoomEntity(
         historyItem.historyUrl,
-        historyItem.dateString,
+        day.startOfDayEpochMilli(),
+        day.plusDays(1).startOfDayEpochMilli(),
         historyItem.zimReaderSource
       )?.let {
         it.apply {

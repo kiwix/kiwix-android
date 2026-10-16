@@ -57,7 +57,6 @@ import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
 import org.robolectric.annotation.Config
 import org.threeten.bp.LocalDate
-import org.threeten.bp.format.DateTimeFormatter
 
 /**
  * Behavior-driven UI tests for [PageScreen].
@@ -408,7 +407,7 @@ class PageScreenTest {
 
   @Test
   fun dateItem_displaysFormattedDateLabel() {
-    val dateItem = HistoryListItem.DateItem("01 Jan 2000")
+    val dateItem = HistoryListItem.DateItem(LocalDate.of(2000, 1, 1))
     val page = TestPage(title = "History Page", id = 1L)
     val state = TestPageStateWithDateItems(
       pageItems = listOf(page),
@@ -416,7 +415,7 @@ class PageScreenTest {
     )
     renderPageScreen(state = state)
     composeTestRule
-      .onNodeWithText("01 Jan 2000")
+      .onNodeWithText("1 Jan 2000")
       .assertIsDisplayed()
   }
 
@@ -479,8 +478,7 @@ class PageScreenTest {
 
   @Test
   fun dateItem_todayLabelDisplayed() {
-    val today = LocalDate.now().format(DateTimeFormatter.ofPattern("d MMM yyyy"))
-    val dateItem = HistoryListItem.DateItem(today)
+    val dateItem = HistoryListItem.DateItem(LocalDate.now())
     // pageItems must be non-empty so PageScreen renders the PageList
     // (it checks state.pageItems.isEmpty() to decide list vs empty state)
     val dummyPage = TestPage(title = "Dummy", id = 1L)
@@ -494,6 +492,24 @@ class PageScreenTest {
     composeTestRule.onNodeWithTag("dateItemTextTestingTag")
       .assertIsDisplayed()
       .assertTextEquals(context.getString(R.string.time_today))
+  }
+
+  @Test
+  fun dateItem_yesterdayLabelDisplayed() {
+    val dateItem = HistoryListItem.DateItem(LocalDate.now().minusDays(1))
+    // pageItems must be non-empty so PageScreen renders the PageList
+    // (it checks state.pageItems.isEmpty() to decide list vs empty state)
+    val dummyPage = TestPage(title = "Dummy", id = 1L)
+    renderPageScreen(
+      state = TestPageStateWithDateItems(
+        pageItems = listOf(dummyPage),
+        customVisibleItems = listOf(dateItem, dummyPage)
+      )
+    )
+    composeTestRule.waitForIdle()
+    composeTestRule.onNodeWithTag("dateItemTextTestingTag")
+      .assertIsDisplayed()
+      .assertTextEquals(context.getString(R.string.time_yesterday))
   }
 
   companion object {

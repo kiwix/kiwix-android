@@ -45,6 +45,7 @@ fun historyItem(
   id: Long = 2,
   zimId: String = "zimId",
   historyUrl: String = "historyUrl",
+  timeStamp: Long = 100,
   zimReaderSource: ZimReaderSource
 ): HistoryListItem.HistoryItem = HistoryListItem.HistoryItem(
   2,
@@ -55,7 +56,7 @@ fun historyItem(
   historyUrl,
   historyTitle,
   dateString,
-  100,
+  timeStamp,
   isSelected,
   id
 )
