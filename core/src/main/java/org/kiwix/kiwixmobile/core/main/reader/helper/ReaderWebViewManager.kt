@@ -101,8 +101,8 @@ class ReaderWebViewManager @Inject constructor(
     loadUrl(url, currentWebView)
   }
 
-  fun contentUrl(pageUrl: String?): String =
-    "$pageUrl".addContentPrefix
+  fun contentUrl(entryPath: String?): String =
+    "$entryPath".addContentPrefix
 
   private fun redirectOrOriginal(contentUrl: String): String {
     val zimReaderContainer = readerSessionManager.zimReaderContainer

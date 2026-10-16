@@ -154,8 +154,8 @@ class ReaderSessionManager @Inject constructor(
       contentUrl
     }
 
-  private fun contentUrl(pageUrl: String?): String =
-    "$pageUrl".addContentPrefix
+  private fun contentUrl(entryPath: String?): String =
+    "$entryPath".addContentPrefix
 
   private suspend fun getWebViewHistoryList(): List<WebViewHistoryEntity> {
     return withContext(mainDispatcher) {
