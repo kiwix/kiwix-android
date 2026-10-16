@@ -25,6 +25,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.hasContentDescription
+import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onNodeWithTag
@@ -45,9 +46,11 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.entity.LibkiwixBook
-import org.kiwix.kiwixmobile.core.utils.BookUtils
 import org.kiwix.kiwixmobile.core.utils.ZERO
 import org.kiwix.kiwixmobile.core.zim_manager.Byte
+import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.HumanReadableCount
+import org.kiwix.kiwixmobile.ui.BookItemScreen.BOOK_ARTICLE_COUNT_TEST_TAG
+import org.kiwix.kiwixmobile.ui.formatBookDate
 import org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState
 import org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState.CanWrite4GbFile
 import org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState.CannotWrite4GbFile
@@ -71,13 +74,11 @@ class OnlineBookItemUITest {
 
   private lateinit var mockOnBookItemClick: (BookItem) -> Unit
   private lateinit var mockAvailableSpaceCalculator: AvailableSpaceCalculator
-  private lateinit var mockBookUtils: BookUtils
 
   @Before
   fun setUp() {
     mockOnBookItemClick = mockk(relaxed = true)
     mockAvailableSpaceCalculator = mockk(relaxed = true)
-    mockBookUtils = mockk(relaxed = true)
     mockkObject(CoreApp.Companion)
     mockkStatic(ContextCompat::class)
     every { CoreApp.instance } returns mockk(relaxed = true)
@@ -101,7 +102,9 @@ class OnlineBookItemUITest {
     date: String = "2024-01-01",
     size: String = "51200",
     id: String = "book-id-1",
-    tags: String = ""
+    tags: String = "",
+    articleCount: String? = null,
+    mediaCount: String? = null
   ): LibkiwixBook {
     val book = LibkiwixBook()
     book.title = title
@@ -113,6 +116,8 @@ class OnlineBookItemUITest {
     book.size = size
     book.id = id
     book.tags = tags
+    book.articleCount = articleCount
+    book.mediaCount = mediaCount
     return book
   }
 
@@ -132,7 +137,6 @@ class OnlineBookItemUITest {
       OnlineBookItem(
         index = ZERO,
         item = item,
-        bookUtils = mockBookUtils,
         availableSpaceCalculator = mockAvailableSpaceCalculator,
         onBookItemClick = onBookItemClick
       )
@@ -179,7 +183,7 @@ class OnlineBookItemUITest {
   fun onlineBookItem_bookTitleIsInTree() {
     setContent(item = mockBookItem(book = mockLibkiwixBook(title = "Kotlin")))
     composeTestRule
-      .onNode(hasContentDescription("Kotlin$ZERO"))
+      .onNode(hasContentDescription("Kotlin", substring = true))
       .assertExists()
   }
 
@@ -209,45 +213,59 @@ class OnlineBookItemUITest {
   }
 
   @Test
-  fun onlineBookItem_bookDateTagIsInTree() {
-    setContent(item = mockBookItem(book = mockLibkiwixBook(date = "2024-01-01")))
-    composeTestRule
-      .onNodeWithTag(ONLINE_BOOK_DATE_TEXT_TESTING_TAG, useUnmergedTree = true)
-      .assertExists()
-  }
-
-  @Test
-  fun onlineBookItem_bookDateContentDescriptionIsCorrect() {
+  fun onlineBookItem_bookDateIsInTree() {
     val date = "2024-01-01"
     setContent(item = mockBookItem(book = mockLibkiwixBook(date = date)))
+    val formattedDate = formatBookDate(date)
     composeTestRule
-      .onNode(hasContentDescription("$date$ZERO"))
+      .onNode(hasContentDescription(formattedDate, substring = true))
       .assertExists()
   }
 
   @Test
-  fun onlineBookItem_bookCreatorTagIsInTree() {
-    setContent(item = mockBookItem(book = mockLibkiwixBook(creator = "Kiwix")))
+  fun onlineBookItem_bookCreatorIsNotDisplayed() {
+    setContent(item = mockBookItem(book = mockLibkiwixBook(creator = "CustomCreator")))
     composeTestRule
-      .onNodeWithTag(ONLINE_BOOK_CREATOR_TEXT_TESTING_TAG, useUnmergedTree = true)
+      .onNode(hasText("CustomCreator"))
+      .assertDoesNotExist()
+  }
+
+  @Test
+  fun onlineBookItem_bookLanguageIsNotDisplayed() {
+    setContent(item = mockBookItem(book = mockLibkiwixBook(language = "CustomLanguage")))
+    composeTestRule
+      .onNode(hasText("CustomLanguage"))
+      .assertDoesNotExist()
+  }
+
+  @Test
+  fun onlineBookItem_bookArticleCountTagIsInTree() {
+    setContent(
+      item = mockBookItem(
+        book = mockLibkiwixBook(articleCount = "100", mediaCount = "20")
+      )
+    )
+    composeTestRule
+      .onNodeWithTag(BOOK_ARTICLE_COUNT_TEST_TAG, useUnmergedTree = true)
       .assertExists()
   }
 
   @Test
-  fun onlineBookItem_bookLanguageTagIsInTree() {
-    every { mockBookUtils.getLanguage("eng") } returns "English"
-    setContent(item = mockBookItem(book = mockLibkiwixBook(language = "eng")))
+  fun onlineBookItem_bookArticleCountContentDescriptionIsCorrect() {
+    val articleCount = "100"
+    val mediaCount = "20"
+    setContent(
+      item = mockBookItem(
+        book = mockLibkiwixBook(articleCount = articleCount, mediaCount = mediaCount)
+      )
+    )
+    val articlesStr = HumanReadableCount(articleCount)
+      .toHumanReadable(context, org.kiwix.kiwixmobile.core.R.string.articleCount)
+    val mediasStr = HumanReadableCount(mediaCount)
+      .toHumanReadable(context, org.kiwix.kiwixmobile.core.R.string.mediaCount)
+    val combined = "$articlesStr • $mediasStr"
     composeTestRule
-      .onNodeWithTag(ONLINE_BOOK_LANGUAGE_TEXT_TESTING_TAG, useUnmergedTree = true)
-      .assertExists()
-  }
-
-  @Test
-  fun onlineBookItem_bookLanguageContentIsCorrect() {
-    every { mockBookUtils.getLanguage("eng") } returns "English"
-    setContent(item = mockBookItem(book = mockLibkiwixBook(language = "eng")))
-    composeTestRule
-      .onNode(hasContentDescription("English"), useUnmergedTree = true)
+      .onNode(hasContentDescription("$combined$ZERO"))
       .assertExists()
   }
 
@@ -459,7 +477,6 @@ class OnlineBookItemUITest {
       OnlineBookItem(
         index = ZERO,
         item = item,
-        bookUtils = mockBookUtils,
         availableSpaceCalculator = mockAvailableSpaceCalculator,
         onBookItemClick = mockOnBookItemClick
       )
@@ -511,14 +528,12 @@ class OnlineBookItemUITest {
         OnlineBookItem(
           index = 0,
           item = item1,
-          bookUtils = mockBookUtils,
           availableSpaceCalculator = mockAvailableSpaceCalculator,
           onBookItemClick = mockOnBookItemClick
         )
         OnlineBookItem(
           index = 1,
           item = item2,
-          bookUtils = mockBookUtils,
           availableSpaceCalculator = mockAvailableSpaceCalculator,
           onBookItemClick = mockOnBookItemClick
         )
@@ -538,29 +553,28 @@ class OnlineBookItemUITest {
 
   @Test
   fun onlineBookItem_multipleItems_titlesAreDistinctByIndex() {
-    val item1 = mockBookItem(book = mockLibkiwixBook(id = "book-id-1", title = "Kotlin"))
-    val item2 = mockBookItem(book = mockLibkiwixBook(id = "book-id-2", title = "Java"))
+    val item1 = mockBookItem(book = mockLibkiwixBook(id = "book-id-1", title = "Kotlin", date = "2024-01-01"))
+    val item2 = mockBookItem(book = mockLibkiwixBook(id = "book-id-2", title = "Java", date = "2024-01-01"))
+    val formattedDate = formatBookDate("2024-01-01")
     composeTestRule.setContent {
       Column {
         OnlineBookItem(
           index = 0,
           item = item1,
-          bookUtils = mockBookUtils,
           availableSpaceCalculator = mockAvailableSpaceCalculator,
           onBookItemClick = mockOnBookItemClick
         )
         OnlineBookItem(
           index = 1,
           item = item2,
-          bookUtils = mockBookUtils,
           availableSpaceCalculator = mockAvailableSpaceCalculator,
           onBookItemClick = mockOnBookItemClick
         )
       }
     }
     composeTestRule.waitForIdle()
-    composeTestRule.onNode(hasContentDescription("Kotlin0")).assertExists()
-    composeTestRule.onNode(hasContentDescription("Java1")).assertExists()
+    composeTestRule.onNode(hasContentDescription("Kotlin${formattedDate}0")).assertExists()
+    composeTestRule.onNode(hasContentDescription("Java${formattedDate}1")).assertExists()
   }
 
   @Test
@@ -574,14 +588,12 @@ class OnlineBookItemUITest {
         OnlineBookItem(
           index = 0,
           item = item1,
-          bookUtils = mockBookUtils,
           availableSpaceCalculator = mockAvailableSpaceCalculator,
           onBookItemClick = onClickItem1
         )
         OnlineBookItem(
           index = 1,
           item = item2,
-          bookUtils = mockBookUtils,
           availableSpaceCalculator = mockAvailableSpaceCalculator,
           onBookItemClick = onClickItem2
         )

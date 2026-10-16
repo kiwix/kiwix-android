@@ -43,3 +43,23 @@ val MonzaRed = Color(0xFFB00020)
 val StartServerGreen = Color(0xFF2E7D31)
 val StopServerRed = Color(0xFFC62728)
 val PureGrey = Color(0xFF808080)
+
+val TagPictureContainerLight = Color(0xFFE6F0E6)
+val TagPictureContentLight = Color(0xFF3B6E41)
+val TagPictureContainerDark = Color(0xFF253D2A)
+val TagPictureContentDark = Color(0xFFA3CFA9)
+
+val TagVideoContainerLight = Color(0xFFEBE6F0)
+val TagVideoContentLight = Color(0xFF5A4A7A)
+val TagVideoContainerDark = Color(0xFF352B47)
+val TagVideoContentDark = Color(0xFFBBA7DA)
+
+val TagShortTextContainerLight = Color(0xFFE6EDF0)
+val TagShortTextContentLight = Color(0xFF3B5E6E)
+val TagShortTextContainerDark = Color(0xFF25333D)
+val TagShortTextContentDark = Color(0xFFA3C2CF)
+
+val TagTextOnlyContainerLight = Color(0xFFEAEAEA)
+val TagTextOnlyContentLight = Color(0xFF505050)
+val TagTextOnlyContainerDark = Color(0xFF2C2C2C)
+val TagTextOnlyContentDark = Color(0xFFC0C0C0)
