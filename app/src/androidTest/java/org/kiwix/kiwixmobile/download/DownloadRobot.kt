@@ -84,7 +84,7 @@ class DownloadRobot : BaseRobot() {
   // the internet connection is slow, and the library download takes longer.
   fun waitForDataToLoad(
     composeTestRule: ComposeContentTestRule,
-    maxRetries: Int = 10
+    maxRetries: Int = 20
   ) {
     repeat(maxRetries) { attempt ->
       try {
@@ -131,6 +131,10 @@ class DownloadRobot : BaseRobot() {
   private fun refreshOnlineListIfSwipeDownForLibraryTextVisible(composeTestRule: ComposeContentTestRule) {
     try {
       composeTestRule.onNodeWithTag(NO_CONTENT_VIEW_TEXT_TESTING_TAG).assertIsDisplayed()
+      Log.e(
+        KIWIX_DOWNLOAD_TEST,
+        "No content view is visible. Retrying to fetch the online library content."
+      )
       refreshOnlineList(composeTestRule)
     } catch (_: AssertionError) {
       try {
@@ -138,7 +142,12 @@ class DownloadRobot : BaseRobot() {
         composeTestRule
           .onNodeWithTag(SHOW_FETCHING_LIBRARY_LAYOUT_TESTING_TAG)
           .assertIsDisplayed()
+        Log.e(KIWIX_DOWNLOAD_TEST, "Fetching the online library content. Progress layout showing")
       } catch (_: AssertionError) {
+        Log.e(
+          KIWIX_DOWNLOAD_TEST,
+          "Failed to fetch the online library content. Retrying to fetch the online library content."
+        )
         // if not visible try to get the online library.
         refreshOnlineList(composeTestRule)
       }
