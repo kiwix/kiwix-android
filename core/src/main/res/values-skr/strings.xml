@@ -85,7 +85,7 @@
   <string name="crash_checkbox_device">ڈیوائس تفصیلاں</string>
   <string name="new_tab_shortcut_label">نویں ٹیب</string>
   <string name="get_content_shortcut_label">مواد گھنو</string>
-  <string name="articleCount">%s مضامین</string>
+  <string name="pagesCount">%s مضامین</string>
   <string name="get_started">شروع کرو</string>
   <string name="download_books">کتاباں ڈاؤن لوڈ کرو</string>
   <string name="go_to_next_page">اڳلے ورقے تے ون٘ڄو</string>

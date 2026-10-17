@@ -226,7 +226,7 @@
   <string name="new_tab_shortcut_label">Yeni sekme</string>
   <string name="get_content_shortcut_label">İçerik alın</string>
   <string name="fav_icon">Favicon</string>
-  <string name="articleCount">%s madde</string>
+  <string name="pagesCount">%s madde</string>
   <string name="get_started">Başla</string>
   <string name="download_books">Kitapları indir</string>
   <string name="humankind_knowledge">İnsan türünün bilgisi, telefonunuzda.</string>

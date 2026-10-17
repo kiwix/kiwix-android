@@ -189,7 +189,7 @@
   <string name="new_tab_shortcut_label">Skedë e re</string>
   <string name="get_content_shortcut_label">Merrni lëndë</string>
   <string name="fav_icon">Favikonë</string>
-  <string name="articleCount">%s artikuj</string>
+  <string name="pagesCount">%s artikuj</string>
   <string name="get_started">Fillojani</string>
   <string name="download_books">Shkarkoni libra</string>
   <string name="humankind_knowledge">Dija njerëzore, në telefonin tuaj.</string>

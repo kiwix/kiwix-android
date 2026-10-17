@@ -85,7 +85,7 @@
   <string name="crash_checkbox_language">Iɣewwaṛen n tutlayt-ik</string>
   <string name="new_tab_shortcut_label">Iccer amaynut</string>
   <string name="get_content_shortcut_label">Awi-d agbur</string>
-  <string name="articleCount">%s n imagraden</string>
+  <string name="pagesCount">%s n imagraden</string>
   <string name="welcome_to_the_family">Ansuf yis-k·m ar twacult</string>
   <string name="go_to_previous_page">Ddu ɣer usebter yezrin</string>
   <string name="go_to_next_page">Ddu ɣer usebter i d-iteddun</string>

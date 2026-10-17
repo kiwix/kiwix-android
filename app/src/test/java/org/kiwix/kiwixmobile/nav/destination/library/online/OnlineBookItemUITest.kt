@@ -45,6 +45,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.kiwix.kiwixmobile.core.CoreApp
+import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.entity.LibkiwixBook
 import org.kiwix.kiwixmobile.core.utils.ZERO
 import org.kiwix.kiwixmobile.core.zim_manager.Byte
@@ -260,9 +261,9 @@ class OnlineBookItemUITest {
       )
     )
     val articlesStr = HumanReadableCount(articleCount)
-      .toHumanReadable(context, org.kiwix.kiwixmobile.core.R.string.articleCount)
+      .toHumanReadable(context, R.string.pagesCount)
     val mediasStr = HumanReadableCount(mediaCount)
-      .toHumanReadable(context, org.kiwix.kiwixmobile.core.R.string.mediaCount)
+      .toHumanReadable(context, R.string.mediaCount)
     val combined = "$articlesStr • $mediasStr"
     composeTestRule
       .onNode(hasContentDescription("$combined$ZERO"))
@@ -274,7 +275,7 @@ class OnlineBookItemUITest {
     val favicon = "https://kiwix.org/favicon.png"
     setContent(item = mockBookItem(book = mockLibkiwixBook(favicon = favicon)))
     val expectedDesc = context.getString(
-      org.kiwix.kiwixmobile.core.R.string.fav_icon
+      R.string.fav_icon
     ) + favicon.hashCode()
     composeTestRule
       .onNode(hasContentDescription(expectedDesc))

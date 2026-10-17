@@ -179,7 +179,7 @@
   <string name="new_tab_shortcut_label">نوې ريښکه</string>
   <string name="get_content_shortcut_label">منځپانگه ترلاسه‌کول</string>
   <string name="fav_icon">خوښ‌نښه</string>
-  <string name="articleCount">%s ليکنې</string>
+  <string name="pagesCount">%s ليکنې</string>
   <string name="get_started">پيلول</string>
   <string name="download_books">کتاب راکښته‌کول</string>
   <string name="welcome_to_the_family">کورنۍ ته ښه راغلاست</string>

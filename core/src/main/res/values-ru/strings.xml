@@ -240,7 +240,7 @@
   <string name="new_tab_shortcut_label">Новая вкладка</string>
   <string name="get_content_shortcut_label">Получить содержимое</string>
   <string name="fav_icon">Иконка</string>
-  <string name="articleCount">%s статей</string>
+  <string name="pagesCount">%s статей</string>
   <string name="get_started">Начать</string>
   <string name="download_books">Скачать книги</string>
   <string name="humankind_knowledge">Знания человечества, на вашем телефоне.</string>

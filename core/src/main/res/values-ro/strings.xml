@@ -204,7 +204,7 @@
   <string name="new_tab_shortcut_label">Filă nouă</string>
   <string name="get_content_shortcut_label">Obține conținut</string>
   <string name="fav_icon">Favicon</string>
-  <string name="articleCount">%s articole</string>
+  <string name="pagesCount">%s articole</string>
   <string name="get_started">Să începem</string>
   <string name="download_books">Descarcă cărți</string>
   <string name="humankind_knowledge">Cunoașterea omenirii pe telefonul tău.</string>

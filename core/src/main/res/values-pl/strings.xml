@@ -212,7 +212,7 @@
   <string name="new_tab_shortcut_label">Nowa zakładka</string>
   <string name="get_content_shortcut_label">Pobierz treść</string>
   <string name="fav_icon">Favicon</string>
-  <string name="articleCount">%s artykułów</string>
+  <string name="pagesCount">%s artykułów</string>
   <string name="get_started">Rozpocznij</string>
   <string name="download_books">Pobierz książki</string>
   <string name="humankind_knowledge">Wiedza ludzkości, na Twoim telefonie.</string>

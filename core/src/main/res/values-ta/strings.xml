@@ -174,7 +174,7 @@
   <string name="new_tab_shortcut_label">புதிய தாவல்</string>
   <string name="get_content_shortcut_label">உள்ளடக்கத்தைப் பெறுங்கள்</string>
   <string name="fav_icon">ஃபேவிகான்</string>
-  <string name="articleCount">%s கட்டுரைகள்</string>
+  <string name="pagesCount">%s கட்டுரைகள்</string>
   <string name="get_started">தொடங்கவும்</string>
   <string name="download_books">புத்தகங்களைப் பதிவிறக்குங்கள்</string>
   <string name="humankind_knowledge">உங்கள் தொலைபேசியில் மனிதகுலத்தின் அறிவு.</string>

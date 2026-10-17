@@ -223,7 +223,7 @@
   <string name="new_tab_shortcut_label">Ny flik</string>
   <string name="get_content_shortcut_label">Hämta innehåll</string>
   <string name="fav_icon">Flikikon</string>
-  <string name="articleCount">%s artiklar</string>
+  <string name="pagesCount">%s artiklar</string>
   <string name="get_started">Kom igång</string>
   <string name="download_books">Ladda ned böcker</string>
   <string name="humankind_knowledge">Mänsklighetens kunskap i din telefon</string>

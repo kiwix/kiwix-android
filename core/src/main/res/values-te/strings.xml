@@ -181,7 +181,7 @@
   <string name="new_tab_shortcut_label">కొత్త ట్యాబ్</string>
   <string name="get_content_shortcut_label">కంటెంట్ పొందండి</string>
   <string name="fav_icon">ఫేవికాన్</string>
-  <string name="articleCount">%s కథనాలు</string>
+  <string name="pagesCount">%s కథనాలు</string>
   <string name="get_started">మొదలు పెట్టండి</string>
   <string name="download_books">పుస్తకాలను డౌన్‌లోడ్ చేయండి</string>
   <string name="humankind_knowledge">మానవజాతి జ్ఞానం, మీ ఫోన్‌లో.</string>

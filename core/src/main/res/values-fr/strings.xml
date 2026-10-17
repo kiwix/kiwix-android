@@ -243,7 +243,7 @@
   <string name="new_tab_shortcut_label">Nouvel onglet</string>
   <string name="get_content_shortcut_label">Obtenir le contenu</string>
   <string name="fav_icon">Icône de favori</string>
-  <string name="articleCount">%s articles</string>
+  <string name="pagesCount">%s articles</string>
   <string name="get_started">Commencer</string>
   <string name="download_books">Télécharger des livres</string>
   <string name="humankind_knowledge">Les connaissances de l’humanité, sur votre téléphone.</string>

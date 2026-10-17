@@ -214,7 +214,7 @@
   <string name="new_tab_shortcut_label">Tab baru</string>
   <string name="get_content_shortcut_label">Ambil konten</string>
   <string name="fav_icon">Favicon</string>
-  <string name="articleCount">%s artikel</string>
+  <string name="pagesCount">%s artikel</string>
   <string name="get_started">Mulai</string>
   <string name="download_books">Unduh buku-buku</string>
   <string name="humankind_knowledge">Humankind’s knowledge, on your phone.</string>

@@ -230,7 +230,7 @@
   <string name="new_tab_shortcut_label">Nueva pestaña</string>
   <string name="get_content_shortcut_label">Obtener contenido</string>
   <string name="fav_icon">Favicon</string>
-  <string name="articleCount">%s artículos</string>
+  <string name="pagesCount">%s artículos</string>
   <string name="get_started">Primeros pasos</string>
   <string name="download_books">Descargar libros</string>
   <string name="humankind_knowledge">El conocimiento de la humanidad, en tu teléfono.</string>

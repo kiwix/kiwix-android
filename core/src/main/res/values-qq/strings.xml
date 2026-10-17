@@ -202,7 +202,7 @@
   <string name="new_tab_shortcut_label">Shortcut item text for opening a new tab.</string>
   <string name="get_content_shortcut_label">This is a shortcut label, by clicking on this shortcut will open the download screen where the user can download the zim files.</string>
   <string name="fav_icon">{{Identical|Favicon}}</string>
-  <string name="articleCount">* This appears on the downloaded books as a text, how many articles contains that book.\n* Here %s will be replaced by the articles number e.g 100 articles.</string>
+  <string name="pagesCount">* This appears on the downloaded books as a text, how many articles contains that book.\n* Here %s will be replaced by the articles number e.g 100 articles.</string>
   <string name="get_started">* This is used for button text, which can be found on the welcome screen.\n* By clicking on this button close the welcome screen and opens the main screen of the application.</string>
   <string name="download_books">* This is used as a button label if there are no books found in the user’s storage.\n* By clicking on this button it will redirect the user to the download screen, where the user can download the book which he wants.</string>
   <string name="humankind_knowledge">This is used in the introduction screen as a text to introduce the feature of the application.</string>

@@ -315,7 +315,7 @@ fun BookArticleCount(articleCount: String?, mediaCount: String?, index: Int) {
   val context = LocalContext.current
   val articlesStr =
     HumanReadableCount(articleCount.orEmpty())
-      .toHumanReadable(context, CoreR.string.articleCount)
+      .toHumanReadable(context, CoreR.string.pagesCount)
   val mediasStr =
     HumanReadableCount(mediaCount.orEmpty())
       .toHumanReadable(context, CoreR.string.mediaCount)

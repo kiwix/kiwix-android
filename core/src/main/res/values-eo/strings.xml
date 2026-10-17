@@ -145,7 +145,7 @@
   <string name="new_tab_shortcut_label">Nova langeto</string>
   <string name="get_content_shortcut_label">Akiri enhavon</string>
   <string name="fav_icon">Retpaĝsimbolo</string>
-  <string name="articleCount">%s artikoloj</string>
+  <string name="pagesCount">%s artikoloj</string>
   <string name="get_started">Komenci</string>
   <string name="download_books">Elŝuti librojn</string>
   <string name="humankind_knowledge">La sciaro de la homaro, en via telefono.</string>

@@ -210,7 +210,7 @@
   <string name="new_tab_shortcut_label">לשונית חדשה</string>
   <string name="get_content_shortcut_label">קבלת תוכן</string>
   <string name="fav_icon">סמל לסימנייה</string>
-  <string name="articleCount">%s ערכים</string>
+  <string name="pagesCount">%s ערכים</string>
   <string name="get_started">איך מתחילים</string>
   <string name="download_books">הורדת ספרים</string>
   <string name="humankind_knowledge">הידע של האנושות, בטלפון שלך.</string>

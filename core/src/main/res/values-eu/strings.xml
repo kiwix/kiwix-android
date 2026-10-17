@@ -194,7 +194,7 @@
   <string name="new_tab_shortcut_label">Fitxa berria</string>
   <string name="get_content_shortcut_label">Lortu edukia</string>
   <string name="fav_icon">Favicon</string>
-  <string name="articleCount">%s artikulu</string>
+  <string name="pagesCount">%s artikulu</string>
   <string name="get_started">Hasi erabiltzen</string>
   <string name="download_books">Deskargatu liburuak</string>
   <string name="humankind_knowledge">Gizakiaren jakituria zeure telefonoan.</string>

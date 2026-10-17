@@ -209,7 +209,7 @@
   <string name="new_tab_shortcut_label">Új lap</string>
   <string name="get_content_shortcut_label">Tartalom beszerzése</string>
   <string name="fav_icon">Böngészőikon</string>
-  <string name="articleCount">%s szócikk</string>
+  <string name="pagesCount">%s szócikk</string>
   <string name="get_started">Kezdeti lépések</string>
   <string name="download_books">Könyvek letöltése</string>
   <string name="humankind_knowledge">Az emberiség tudása az Ön telefonján.</string>
