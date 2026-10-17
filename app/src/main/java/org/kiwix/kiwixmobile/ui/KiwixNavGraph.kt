@@ -125,7 +125,7 @@ fun KiwixNavGraph(
       )
     }
 
-    composable(KiwixDestination.Downloads.route) {
+    composable(KiwixDestination.Explore.route) {
       val activity = LocalActivity.current as KiwixMainActivity
       val onlineLibraryViewModel: OnlineLibraryViewModel =
         hiltViewModel(viewModelStoreOwner = activity)
@@ -258,7 +258,7 @@ sealed class KiwixDestination(val route: String) {
       "$LOCAL_LIBRARY_SCREEN?$ZIM_FILE_URI_KEY=${Uri.encode(zimFileUri)}"
   }
 
-  object Downloads : KiwixDestination(DOWNLOAD_SCREEN)
+  object Explore : KiwixDestination(DOWNLOAD_SCREEN)
   object Bookmarks : KiwixDestination(BOOKMARK_SCREEN)
   object Notes : KiwixDestination(NOTES_SCREEN)
   object Intro : KiwixDestination(INTRO_SCREEN)

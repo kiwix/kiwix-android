@@ -66,7 +66,7 @@ class OnlineLibraryScreenTest : BaseActivityTest() {
     BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS.toLong())
     activityScenario.onActivity {
       kiwixMainActivity = it
-      it.navigate(KiwixDestination.Downloads.route)
+      it.navigate(KiwixDestination.Explore.route)
     }
     downloadRobot {
       waitForDataToLoad(composeTestRule = composeTestRule)
@@ -84,7 +84,7 @@ class OnlineLibraryScreenTest : BaseActivityTest() {
     BaristaSleepInteractions.sleep(TestUtils.TEST_PAUSE_MS.toLong())
     activityScenario.onActivity {
       kiwixMainActivity = it
-      it.navigate(KiwixDestination.Downloads.route)
+      it.navigate(KiwixDestination.Explore.route)
     }
     downloadRobot {
       waitForDataToLoad(composeTestRule = composeTestRule)

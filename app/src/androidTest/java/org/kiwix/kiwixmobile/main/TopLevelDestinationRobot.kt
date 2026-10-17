@@ -83,8 +83,8 @@ class TopLevelDestinationRobot : BaseRobot() {
     func: OnlineLibraryRobot.() -> Unit
   ) {
     composeTestRule.apply {
-      waitUntilDisplayedWithScrollNudge(BOTTOM_NAV_DOWNLOADS_ITEM_TESTING_TAG)
-      onNodeWithTag(BOTTOM_NAV_DOWNLOADS_ITEM_TESTING_TAG).performClick()
+      waitUntilDisplayedWithScrollNudge(BOTTOM_NAV_EXPLORE_ITEM_TESTING_TAG)
+      onNodeWithTag(BOTTOM_NAV_EXPLORE_ITEM_TESTING_TAG).performClick()
     }
     onlineLibrary(func)
   }

@@ -64,7 +64,7 @@ class OnlineCategoryTest : BaseActivityTest() {
   @Test
   fun testOnlineCategory() {
     composeTestRule.runOnUiThread {
-      kiwixMainActivity.navigate(KiwixDestination.Downloads.route)
+      kiwixMainActivity.navigate(KiwixDestination.Explore.route)
     }
     downloadRobot {
       waitForDataToLoad(composeTestRule = composeTestRule)

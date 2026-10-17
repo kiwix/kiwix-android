@@ -104,7 +104,7 @@ import org.kiwix.kiwixmobile.utils.effects.ShowStorageSelectionDialog
 import org.kiwix.kiwixmobile.zimManager.fileselectView.FileSelectListState
 import org.kiwix.kiwixmobile.zimManager.fileselectView.effects.DeleteFiles
 import org.kiwix.kiwixmobile.zimManager.fileselectView.effects.DeleteFilesUseCase
-import org.kiwix.kiwixmobile.zimManager.fileselectView.effects.NavigateToDownloads
+import org.kiwix.kiwixmobile.zimManager.fileselectView.effects.NavigateToExplore
 import org.kiwix.kiwixmobile.zimManager.fileselectView.effects.NavigationDrawerToggle
 import org.kiwix.kiwixmobile.zimManager.fileselectView.effects.None
 import org.kiwix.kiwixmobile.zimManager.fileselectView.effects.OpenFileWithNavigation
@@ -335,7 +335,7 @@ class LocalLibraryViewModel @Inject constructor(
 
       RequestShareMultiSelection -> ShareFiles(selectionsFromState(), viewModelScope, ioDispatcher)
       MultiModeFinished -> noSideEffectAndClearSelectionState()
-      UserClickedDownloadBooksButton -> NavigateToDownloads
+      UserClickedDownloadBooksButton -> NavigateToExplore
       is RequestReadWritePermission -> None // We handle this on UI.
       ReadPermissionDialog -> ReadPermissionRequiredDialog(alertDialogShower)
       RequestValidateZimFiles ->

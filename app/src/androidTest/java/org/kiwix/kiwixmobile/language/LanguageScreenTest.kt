@@ -74,7 +74,7 @@ class LanguageScreenTest : BaseActivityTest() {
     StandardActions.closeDrawer(kiwixMainActivity as CoreMainActivity) // close the drawer if open before running the test cases.
     activityScenario.onActivity {
       kiwixMainActivity = it
-      it.navigate(KiwixDestination.Downloads.route)
+      it.navigate(KiwixDestination.Explore.route)
     }
     downloadRobot {
       waitForDataToLoad(composeTestRule = composeTestRule)

@@ -50,7 +50,7 @@ import org.kiwix.kiwixmobile.nav.destination.library.local.LocalLibraryViewModel
 import org.kiwix.kiwixmobile.utils.effects.ShowStorageSelectionDialog
 import org.kiwix.kiwixmobile.zimManager.fileselectView.effects.DeleteFiles
 import org.kiwix.kiwixmobile.zimManager.fileselectView.effects.DeleteFilesUseCase
-import org.kiwix.kiwixmobile.zimManager.fileselectView.effects.NavigateToDownloads
+import org.kiwix.kiwixmobile.zimManager.fileselectView.effects.NavigateToExplore
 import org.kiwix.kiwixmobile.zimManager.fileselectView.effects.None
 import org.kiwix.kiwixmobile.zimManager.fileselectView.effects.OpenFileWithNavigation
 import org.kiwix.kiwixmobile.zimManager.fileselectView.effects.ShareFiles
@@ -334,11 +334,11 @@ class LocalLibraryViewModelTest {
   }
 
   @Test
-  fun `UserClickedDownloadBooksButton emits NavigateToDownloads side effect`() =
+  fun `UserClickedDownloadBooksButton emits NavigateToExplore side effect`() =
     testActionSideEffect(
       LocalLibraryViewModel.LocalLibraryUiActions.UserClickedDownloadBooksButton
     ) {
-      assertTrue(it === NavigateToDownloads)
+      assertTrue(it === NavigateToExplore)
     }
 
   @Test
@@ -614,10 +614,10 @@ class LocalLibraryViewModelTest {
   }
 
   @Test
-  fun `onDownloadButtonClick emits NavigateToDownloads`() = runTest {
+  fun `onDownloadButtonClick emits NavigateToExplore`() = runTest {
     viewModel.sideEffects.test {
       viewModel.onDownloadButtonClick()
-      assertTrue(awaitItem() === NavigateToDownloads)
+      assertTrue(awaitItem() === NavigateToExplore)
       cancelAndIgnoreRemainingEvents()
     }
   }
