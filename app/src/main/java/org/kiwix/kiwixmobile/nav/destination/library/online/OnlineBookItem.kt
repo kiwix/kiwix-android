@@ -21,23 +21,13 @@ package org.kiwix.kiwixmobile.nav.destination.library.online
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
@@ -50,18 +40,9 @@ import org.kiwix.kiwixmobile.core.extensions.throttledClickable
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.ui.theme.KiwixTheme
 import org.kiwix.kiwixmobile.core.ui.theme.PureGrey
-import org.kiwix.kiwixmobile.core.utils.BookUtils
-import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FIVE_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.ONLINE_BOOK_DISABLED_COLOR_ALPHA
-import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SIXTEEN_DP
-import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TWO_DP
-import org.kiwix.kiwixmobile.core.zim_manager.Byte
-import org.kiwix.kiwixmobile.ui.BookDate
-import org.kiwix.kiwixmobile.ui.BookDescription
-import org.kiwix.kiwixmobile.ui.BookIcon
-import org.kiwix.kiwixmobile.ui.BookSize
-import org.kiwix.kiwixmobile.ui.BookTitle
-import org.kiwix.kiwixmobile.ui.TagsView
+import org.kiwix.kiwixmobile.ui.BookContent
+import org.kiwix.kiwixmobile.ui.LibraryCard
 import org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState.CannotWrite4GbFile
 import org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState.DetectingFileSystem
 import org.kiwix.kiwixmobile.zimManager.libraryView.AvailableSpaceCalculator
@@ -70,15 +51,11 @@ import org.kiwix.kiwixmobile.zimManager.libraryView.LibraryListItem.BookItem
 const val ONLINE_BOOK_ITEM_TESTING_TAG = "onlineBookItemTestingTag"
 const val ONLINE_BOOK_SIZE_TEXT_TESTING_TAG = "onlineBookSizeTextTestingTag"
 const val ONLINE_BOOK_OVERLAY_TESTING_TAG = "onlineBookOverlayTestingTag"
-const val ONLINE_BOOK_DATE_TEXT_TESTING_TAG = "onlineBookDateTextTestingTag"
-const val ONLINE_BOOK_CREATOR_TEXT_TESTING_TAG = "onlineBookCreatorTextTestingTag"
-const val ONLINE_BOOK_LANGUAGE_TEXT_TESTING_TAG = "onlineBookLanguageTextTestingTag"
 
 @Composable
 fun OnlineBookItem(
   index: Int,
   item: BookItem,
-  bookUtils: BookUtils,
   availableSpaceCalculator: AvailableSpaceCalculator,
   onBookItemClick: (BookItem) -> Unit
 ) {
@@ -89,20 +66,21 @@ fun OnlineBookItem(
   }
   val isClickable = item.canBeDownloaded && hasAvailableSpaceInStorage
   KiwixTheme {
-    Card(
+    LibraryCard(
       modifier = Modifier
-        .fillMaxWidth()
-        .padding(FIVE_DP)
         .testTag(ONLINE_BOOK_ITEM_TESTING_TAG)
         .clickable(enabled = isClickable) {
           onBookItemClick.invoke(item)
-        },
-      shape = MaterialTheme.shapes.extraSmall,
-      elevation = CardDefaults.elevatedCardElevation(),
-      colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainer)
+        }
     ) {
       Box(modifier = Modifier.fillMaxWidth()) {
-        OnlineBookContent(item, bookUtils, index)
+        BookContent(
+          book = item.book,
+          tags = item.tags,
+          isOnlineLibrary = true,
+          index = index,
+          sizeModifier = Modifier.testTag(ONLINE_BOOK_SIZE_TEXT_TESTING_TAG)
+        )
         ShowDetectingFileSystemUi(
           isClickable,
           hasAvailableSpaceInStorage,
@@ -156,94 +134,4 @@ private fun ShowDetectingFileSystemUi(
         )
     )
   }
-}
-
-@Composable
-private fun OnlineBookContent(item: BookItem, bookUtils: BookUtils, index: Int) {
-  Row(
-    modifier = Modifier
-      .padding(top = SIXTEEN_DP, start = SIXTEEN_DP)
-      .fillMaxWidth(),
-    verticalAlignment = Alignment.CenterVertically
-  ) {
-    BookIcon(item.book.favicon, isOnlineLibrary = true)
-    Column(
-      modifier = Modifier
-        .weight(1f)
-        .padding(start = SIXTEEN_DP)
-    ) {
-      BookTitle(item.book.title, index)
-      Spacer(modifier = Modifier.height(TWO_DP))
-      BookDescription(item.book.description.orEmpty(), index)
-      BookSizeAndDateRow(item, index)
-      BookCreatorAndLanguageRow(item, bookUtils)
-      TagsView(item.tags, index = index)
-    }
-  }
-}
-
-@Composable
-private fun BookCreatorAndLanguageRow(item: BookItem, bookUtils: BookUtils) {
-  Row(
-    modifier = Modifier
-      .fillMaxWidth()
-      .padding(bottom = FIVE_DP)
-      .padding(end = SIXTEEN_DP),
-    verticalAlignment = Alignment.CenterVertically
-  ) {
-    BookCreator(
-      item.book.creator,
-      Modifier
-        .weight(1f)
-        .testTag(ONLINE_BOOK_CREATOR_TEXT_TESTING_TAG)
-    )
-    BookLanguage(
-      bookUtils.getLanguage(item.book.language),
-      Modifier.testTag(ONLINE_BOOK_LANGUAGE_TEXT_TESTING_TAG)
-    )
-  }
-}
-
-@Composable
-private fun BookSizeAndDateRow(item: BookItem, index: Int) {
-  Row(
-    modifier = Modifier
-      .fillMaxWidth()
-      .padding(vertical = FIVE_DP)
-      .padding(end = SIXTEEN_DP),
-    verticalAlignment = Alignment.CenterVertically
-  ) {
-    BookSize(
-      Byte(item.book.size).humanReadable,
-      modifier = Modifier
-        .weight(1f)
-        .testTag(ONLINE_BOOK_SIZE_TEXT_TESTING_TAG),
-      index = index
-    )
-    BookDate(
-      date = item.book.date,
-      index = index,
-      modifier = Modifier.testTag(ONLINE_BOOK_DATE_TEXT_TESTING_TAG)
-    )
-  }
-}
-
-@Composable
-private fun BookCreator(creator: String, modifier: Modifier = Modifier) {
-  Text(
-    text = creator,
-    style = MaterialTheme.typography.bodyMedium,
-    color = MaterialTheme.colorScheme.onTertiary,
-    modifier = modifier
-  )
-}
-
-@Composable
-private fun BookLanguage(language: String, modifier: Modifier = Modifier) {
-  Text(
-    text = language,
-    style = MaterialTheme.typography.bodyMedium,
-    color = MaterialTheme.colorScheme.onTertiary,
-    modifier = modifier.semantics { contentDescription = language }
-  )
 }

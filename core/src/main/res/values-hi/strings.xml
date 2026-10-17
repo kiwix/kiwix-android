@@ -215,7 +215,7 @@
   <string name="new_tab_shortcut_label">नया टैब</string>
   <string name="get_content_shortcut_label">सामग्री लें</string>
   <string name="fav_icon">फ़ेविकॉन</string>
-  <string name="articleCount">%s लेख</string>
+  <string name="pagesCount">%s लेख</string>
   <string name="get_started">शुरू करें</string>
   <string name="download_books">किताबें डाउनलोड करें</string>
   <string name="humankind_knowledge">मानव जाति का ज्ञान, आपके फ़ोन पर।</string>

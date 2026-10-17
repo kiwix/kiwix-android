@@ -212,7 +212,7 @@
   <string name="new_tab_shortcut_label">Ново јазиче</string>
   <string name="get_content_shortcut_label">Земи содржини</string>
   <string name="fav_icon">Иконка</string>
-  <string name="articleCount">%s статии</string>
+  <string name="pagesCount">%s статии</string>
   <string name="get_started">Започни</string>
   <string name="download_books">Преземи книги</string>
   <string name="humankind_knowledge">Севкупното знаење на човештвото, на вашиот телефон.</string>

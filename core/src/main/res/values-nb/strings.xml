@@ -178,7 +178,7 @@
   <string name="new_tab_shortcut_label">Ny fane</string>
   <string name="get_content_shortcut_label">Få innhold</string>
   <string name="fav_icon">Favorittikon</string>
-  <string name="articleCount">%s artikler</string>
+  <string name="pagesCount">%s artikler</string>
   <string name="get_started">Kom i gang</string>
   <string name="download_books">Last ned bøker</string>
   <string name="humankind_knowledge">Menneskehetens kunnskap, på telefonen din.</string>

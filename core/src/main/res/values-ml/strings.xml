@@ -110,7 +110,7 @@
   <string name="crash_checkbox_language">താങ്കളുടെ ഭാഷ സജ്ജീകരണങ്ങൾ</string>
   <string name="crash_checkbox_zimfiles" fuzzy="true">Zim പ്രമാണങ്ങളുടെ പട്ടിക</string>
   <string name="crash_button_confirm">വിവരങ്ങൾ അയക്കുക</string>
-  <string name="articleCount">%s ലേഖനങ്ങൾ</string>
+  <string name="pagesCount">%s ലേഖനങ്ങൾ</string>
   <string name="get_started">തുടക്കം കുറിക്കുക</string>
   <string name="download_books">പുസ്തകങ്ങൾ ഡൗൺലോഡ് ചെയ്യുക</string>
   <string name="welcome_to_the_family">കുടുംബത്തിലേക്ക് സ്വാഗതം</string>

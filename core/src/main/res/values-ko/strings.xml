@@ -230,7 +230,7 @@
   <string name="new_tab_shortcut_label">새 탭</string>
   <string name="get_content_shortcut_label">내용 가져오기</string>
   <string name="fav_icon">파비콘</string>
-  <string name="articleCount">문서 %s개</string>
+  <string name="pagesCount">문서 %s개</string>
   <string name="get_started">시작하기</string>
   <string name="download_books">책 다운로드</string>
   <string name="humankind_knowledge">인류의 지식을 내 핸드폰에.</string>

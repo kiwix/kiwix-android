@@ -211,7 +211,7 @@
   <string name="new_tab_shortcut_label">Nove scheda</string>
   <string name="get_content_shortcut_label">Obtener contento</string>
   <string name="fav_icon">Favicon</string>
-  <string name="articleCount">%s articulos</string>
+  <string name="pagesCount">%s articulos</string>
   <string name="get_started">Comenciar</string>
   <string name="download_books">Discargar libros</string>
   <string name="humankind_knowledge">Le cognoscentia del humanitate, sur tu telephono.</string>

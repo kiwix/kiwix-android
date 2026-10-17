@@ -154,7 +154,7 @@
   <string name="shortcut_disabled_message">Berradenn ebet da gaout</string>
   <string name="new_tab_shortcut_label">Invinell nevz</string>
   <string name="fav_icon">Favicon</string>
-  <string name="articleCount">%s pennad</string>
+  <string name="pagesCount">%s pennad</string>
   <string name="get_started">Kregiñ</string>
   <string name="download_books">Pellgargañ al levrioù</string>
   <string name="humankind_knowledge">Gouiziegezh ar Mab-den, war ho pellgomzer.</string>

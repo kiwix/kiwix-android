@@ -128,7 +128,7 @@
   <string name="crash_checkbox_exception">Einzelheitä zum Abschturz</string>
   <string name="crash_checkbox_device">Details zum Grät</string>
   <string name="new_tab_shortcut_label">Nöis Tab</string>
-  <string name="articleCount">%s Sytene</string>
+  <string name="pagesCount">%s Sytene</string>
   <string name="get_started">Aafah</string>
   <string name="download_books">Büecher abeladä</string>
   <string name="welcome_to_the_family">Willkommä i de Familiä</string>

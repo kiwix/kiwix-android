@@ -136,7 +136,7 @@
   <string name="shortcut_disabled_message">میانبر موجود نیست</string>
   <string name="new_tab_shortcut_label">زبانهٔ جدید</string>
   <string name="get_content_shortcut_label">دریافت محتوا</string>
-  <string name="articleCount">%s مقاله</string>
+  <string name="pagesCount">%s مقاله</string>
   <string name="get_started">شروع کنید</string>
   <string name="download_books">بارگیری کتاب‌ها</string>
   <string name="humankind_knowledge">دانش بشری، بر روی تلفن همراه شما</string>

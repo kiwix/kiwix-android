@@ -99,7 +99,7 @@
   <string name="your_languages">ရွေးချယ်ထားသော ဘာသာစကားများ -</string>
   <string name="other_languages">အခြားဘာသာစကားများ</string>
   <string name="crash_checkbox_language">သင်၏ ဘာသာစကား အပြင်အဆင်များ</string>
-  <string name="articleCount">%s ဆောင်းပါးများ</string>
+  <string name="pagesCount">%s ဆောင်းပါးများ</string>
   <string name="get_started">စတင်ပါ</string>
   <string name="go_to_previous_page">ယခင်စာမျက်နှာသို့သွားရန်</string>
   <string name="go_to_next_page">နောက်စာမျက်နှာသို့သွားရန်</string>

@@ -231,7 +231,7 @@
   <string name="new_tab_shortcut_label">علامة تبويب جديدة</string>
   <string name="get_content_shortcut_label">الحصول على المحتوى</string>
   <string name="fav_icon">أيقونة المفضلة</string>
-  <string name="articleCount">%s مقالات</string>
+  <string name="pagesCount">%s مقالات</string>
   <string name="get_started">فلنبدأ</string>
   <string name="download_books">تنزيل الكتب</string>
   <string name="humankind_knowledge">جميع المعارف الإنسانية، على هاتفك.</string>

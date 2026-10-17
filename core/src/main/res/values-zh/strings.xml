@@ -246,7 +246,7 @@
   <string name="new_tab_shortcut_label">新建标签页</string>
   <string name="get_content_shortcut_label">获取内容</string>
   <string name="fav_icon">网站图像</string>
-  <string name="articleCount">%s个条目</string>
+  <string name="pagesCount">%s个条目</string>
   <string name="get_started">入门</string>
   <string name="download_books">下载书籍</string>
   <string name="humankind_knowledge">人类所有的知识与智慧的精华，现在就在您的掌中。</string>

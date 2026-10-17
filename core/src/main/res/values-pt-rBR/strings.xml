@@ -227,7 +227,7 @@
   <string name="new_tab_shortcut_label">Nova guia</string>
   <string name="get_content_shortcut_label">Obter conteúdo</string>
   <string name="fav_icon">Favicon</string>
-  <string name="articleCount">%s artigos</string>
+  <string name="pagesCount">%s artigos</string>
   <string name="get_started">Começar</string>
   <string name="download_books">Download de livros</string>
   <string name="humankind_knowledge">Conhecimento do tipo humano, no seu telefone.</string>

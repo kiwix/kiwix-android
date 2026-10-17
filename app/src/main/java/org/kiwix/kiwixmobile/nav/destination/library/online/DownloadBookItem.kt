@@ -19,17 +19,20 @@
 package org.kiwix.kiwixmobile.nav.destination.library.online
 
 import android.content.Context
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.minimumInteractiveComponentSize
@@ -37,9 +40,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
@@ -53,15 +57,18 @@ import org.kiwix.kiwixmobile.core.ui.components.ProgressBarStyle
 import org.kiwix.kiwixmobile.core.ui.models.IconItem
 import org.kiwix.kiwixmobile.core.ui.models.toPainter
 import org.kiwix.kiwixmobile.core.ui.theme.KiwixTheme
-import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FIVE_DP
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.DOWNLOAD_BUTTON_ICON_SIZE
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.DOWNLOAD_BUTTON_SIZE
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.EIGHT_DP
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FOUR_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.ONE_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SIXTEEN_DP
-import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TEN_DP
-import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TWO_DP
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TWELVE_DP
 import org.kiwix.kiwixmobile.core.zim_manager.Byte
 import org.kiwix.kiwixmobile.ui.BookDescription
 import org.kiwix.kiwixmobile.ui.BookIcon
 import org.kiwix.kiwixmobile.ui.BookTitle
+import org.kiwix.kiwixmobile.ui.LibraryCard
 import org.kiwix.kiwixmobile.zimManager.libraryView.LibraryListItem.LibraryDownloadItem
 
 const val DOWNLOAD_BOOK_ITEM_TESTING_TAG = "downloadBookItemTestingTag"
@@ -98,14 +105,8 @@ fun DownloadBookItem(
     }
   }
   KiwixTheme {
-    Card(
-      modifier = Modifier
-        .fillMaxWidth()
-        .padding(FIVE_DP)
-        .testTag(DOWNLOAD_BOOK_ITEM_TESTING_TAG),
-      shape = MaterialTheme.shapes.extraSmall,
-      elevation = CardDefaults.elevatedCardElevation(),
-      colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainer)
+    LibraryCard(
+      modifier = Modifier.testTag(DOWNLOAD_BOOK_ITEM_TESTING_TAG)
     ) {
       DownloadBookContent(index, item, onPauseResumeClick, onStopClick)
     }
@@ -121,30 +122,43 @@ private fun DownloadBookContent(
 ) {
   Row(
     modifier = Modifier
-      .padding(top = SIXTEEN_DP, start = SIXTEEN_DP)
+      .padding(start = SIXTEEN_DP, top = SIXTEEN_DP, end = SIXTEEN_DP, bottom = TWELVE_DP)
       .fillMaxWidth(),
-    verticalAlignment = Alignment.CenterVertically
+    verticalAlignment = Alignment.Top
   ) {
     BookIcon(item.favIconUrl, isOnlineLibrary = true)
     Column(
       modifier = Modifier
         .weight(1f)
-        .padding(start = SIXTEEN_DP),
+        .padding(start = SIXTEEN_DP, end = EIGHT_DP),
       horizontalAlignment = Alignment.Start
     ) {
       BookTitle(item.title, index)
-      Spacer(modifier = Modifier.height(TWO_DP))
-      BookDescription(item.description.orEmpty(), index)
+      Spacer(modifier = Modifier.height(FOUR_DP))
+      BookDescription(
+        bookDescription = item.description.orEmpty(),
+        index = index,
+        style = MaterialTheme.typography.bodyMedium.copy(color = Color.Gray),
+        color = Color.Unspecified,
+        minLines = 2
+      )
+      Spacer(modifier = Modifier.height(FOUR_DP))
       ContentLoadingProgressBar(
         progressBarStyle = ProgressBarStyle.HORIZONTAL,
         modifier = Modifier
-          .padding(horizontal = ONE_DP, vertical = FIVE_DP)
+          .padding(horizontal = ONE_DP)
           .semantics { contentDescription = item.hashCode().toString() },
         progress = item.progress
       )
+      Spacer(modifier = Modifier.height(FOUR_DP))
       DownloadStateRow(item)
     }
-    PauseStopButtonsRow(item, onPauseResumeClick, onStopClick)
+    PauseStopButtonsRow(
+      item = item,
+      onPauseResumeClick = onPauseResumeClick,
+      onStopClick = onStopClick,
+      modifier = Modifier.align(Alignment.CenterVertically)
+    )
   }
 }
 
@@ -152,48 +166,76 @@ private fun DownloadBookContent(
 fun PauseStopButtonsRow(
   item: LibraryDownloadItem,
   onPauseResumeClick: (LibraryDownloadItem) -> Unit,
-  onStopClick: (LibraryDownloadItem) -> Unit
+  onStopClick: (LibraryDownloadItem) -> Unit,
+  modifier: Modifier = Modifier
 ) {
   val context = LocalContext.current
   val isPaused = item.downloadState == DownloadState.Paused
+  val borderStroke = BorderStroke(ONE_DP, Color.LightGray)
+  val buttonShape = RoundedCornerShape(FOUR_DP)
 
-  Row(
-    modifier = Modifier
-      .fillMaxHeight(),
-    verticalAlignment = Alignment.CenterVertically
+  Column(
+    modifier = modifier,
+    horizontalAlignment = Alignment.CenterHorizontally,
+    verticalArrangement = Arrangement.spacedBy(EIGHT_DP)
   ) {
-    IconButton(
-      onClick = { onPauseResumeClick.invoke(item) },
-      modifier = Modifier
-        .padding(horizontal = TWO_DP)
-        .minimumInteractiveComponentSize()
-        .semantics { testTag = DOWNLOADING_PAUSE_BUTTON_TESTING_TAG }
-    ) {
-      val contentDescription = context.getString(string.tts_pause) +
-        "/${context.getString(string.tts_resume)}/${item.hashCode()}"
-      Icon(
-        painter = getPauseResumeButtonIcon(isPaused).toPainter(),
-        contentDescription = contentDescription,
-        modifier = Modifier.testTag(
-          if (isPaused) {
-            RESUME_ICON_TESTING_TAG
-          } else {
-            PAUSE_ICON_TESTING_TAG
-          }
-        )
-      )
-    }
+    DownloadActionButton(
+      icon = getPauseResumeButtonIcon(isPaused),
+      iconTestTag = if (isPaused) RESUME_ICON_TESTING_TAG else PAUSE_ICON_TESTING_TAG,
+      contentDescription = context.getString(string.tts_pause) +
+        "/${context.getString(string.tts_resume)}/${item.hashCode()}",
+      buttonTestTag = DOWNLOADING_PAUSE_BUTTON_TESTING_TAG,
+      buttonShape = buttonShape,
+      borderStroke = borderStroke,
+      onClick = { onPauseResumeClick.invoke(item) }
+    )
 
-    IconButton(
-      onClick = { onStopClick.invoke(item) },
+    DownloadActionButton(
+      icon = IconItem.Drawable(R.drawable.ic_stop_24dp),
+      iconTestTag = null,
+      contentDescription = context.getString(string.stop) + item.hashCode(),
+      buttonTestTag = DOWNLOADING_STOP_BUTTON_TESTING_TAG,
+      buttonShape = buttonShape,
+      borderStroke = borderStroke,
+      onClick = { onStopClick.invoke(item) }
+    )
+  }
+}
+
+@Composable
+private fun DownloadActionButton(
+  icon: IconItem,
+  iconTestTag: String?,
+  contentDescription: String,
+  buttonTestTag: String,
+  buttonShape: RoundedCornerShape,
+  borderStroke: BorderStroke,
+  onClick: () -> Unit
+) {
+  Box(
+    modifier = Modifier
+      .minimumInteractiveComponentSize()
+      .size(DOWNLOAD_BUTTON_SIZE)
+      .clickable { onClick() }
+      .semantics { testTag = buttonTestTag },
+    contentAlignment = Alignment.Center
+  ) {
+    Box(
       modifier = Modifier
-        .minimumInteractiveComponentSize()
-        .padding(horizontal = TWO_DP)
-        .semantics { testTag = DOWNLOADING_STOP_BUTTON_TESTING_TAG }
+        .size(DOWNLOAD_BUTTON_SIZE)
+        .clip(buttonShape)
+        .border(borderStroke, buttonShape),
+      contentAlignment = Alignment.Center
     ) {
       Icon(
-        painter = painterResource(id = R.drawable.ic_stop_24dp),
-        contentDescription = context.getString(string.stop) + item.hashCode()
+        painter = icon.toPainter(),
+        contentDescription = contentDescription,
+        tint = MaterialTheme.colorScheme.onSurface,
+        modifier = Modifier
+          .size(DOWNLOAD_BUTTON_ICON_SIZE)
+          .let { iconModifier ->
+            if (iconTestTag != null) iconModifier.testTag(iconTestTag) else iconModifier
+          }
       )
     }
   }
@@ -210,9 +252,7 @@ private fun getPauseResumeButtonIcon(isPaused: Boolean): IconItem =
 @Composable
 private fun DownloadStateRow(item: LibraryDownloadItem) {
   Row(
-    modifier = Modifier
-      .fillMaxWidth()
-      .padding(bottom = TEN_DP),
+    modifier = Modifier.fillMaxWidth(),
     verticalAlignment = Alignment.CenterVertically
   ) {
     val downloadState = getDownloadStateText(item, LocalContext.current)

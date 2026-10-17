@@ -222,7 +222,7 @@
   <string name="new_tab_shortcut_label">Nieuw tabblad</string>
   <string name="get_content_shortcut_label">Inhoud binnenhalen</string>
   <string name="fav_icon">Favicon</string>
-  <string name="articleCount">%s pagina\'s</string>
+  <string name="pagesCount">%s pagina\'s</string>
   <string name="get_started">Aan de slag</string>
   <string name="download_books">Boeken downloaden</string>
   <string name="humankind_knowledge">De kennis van de mensheid, op uw telefoon.</string>

@@ -87,7 +87,7 @@
   <string name="crash_checkbox_device">Butiran Peranti</string>
   <string name="crash_button_confirm">HANTAR BUTIRAN</string>
   <string name="get_content_shortcut_label">Dapatkan kandungan</string>
-  <string name="articleCount">%s rencana</string>
+  <string name="pagesCount">%s rencana</string>
   <string name="download_books">Muat turun buku</string>
   <string name="welcome_to_the_family">Selamat datang ke keluarga</string>
   <string name="save_books_offline">Simpan buku luar talian</string>

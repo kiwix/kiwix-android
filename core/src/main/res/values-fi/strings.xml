@@ -212,7 +212,7 @@
   <string name="new_tab_shortcut_label">Uusi välilehti</string>
   <string name="get_content_shortcut_label">Hanki sisältöä</string>
   <string name="fav_icon">Favicon</string>
-  <string name="articleCount">%s artikkelia</string>
+  <string name="pagesCount">%s artikkelia</string>
   <string name="get_started">Aloitetaan</string>
   <string name="download_books">Lataa kirjoja</string>
   <string name="humankind_knowledge">Ihmiskunnan tieto puhelimessasi.</string>

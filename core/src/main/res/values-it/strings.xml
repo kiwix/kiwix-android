@@ -223,7 +223,7 @@
   <string name="new_tab_shortcut_label">Nuova scheda</string>
   <string name="get_content_shortcut_label">Ottieni contenuti</string>
   <string name="fav_icon">Favicon</string>
-  <string name="articleCount">%s voci</string>
+  <string name="pagesCount">%s voci</string>
   <string name="get_started">Inizia</string>
   <string name="download_books">Scarica libri</string>
   <string name="humankind_knowledge">Il sapere del genere umano, sul tuo dispositivo.</string>

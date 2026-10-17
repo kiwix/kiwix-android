@@ -180,7 +180,7 @@
   <string name="crash_checkbox_device">Λεπτομέρειες συσκευής</string>
   <string name="new_tab_shortcut_label">Νέα καρτέλα</string>
   <string name="get_content_shortcut_label">Λήψη περιεχομένου</string>
-  <string name="articleCount">%s άρθρα</string>
+  <string name="pagesCount">%s άρθρα</string>
   <string name="get_started">Ξεκινήστε</string>
   <string name="download_books">Λήψη βιβλίων</string>
   <string name="humankind_knowledge">Η γνώση της ανθρωπότητας, στο τηλέφωνό σας.</string>

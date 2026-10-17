@@ -182,7 +182,7 @@
   <string name="new_tab_shortcut_label">Nová karta</string>
   <string name="get_content_shortcut_label">Získat obsah</string>
   <string name="fav_icon">Favicon</string>
-  <string name="articleCount">%s článků</string>
+  <string name="pagesCount">%s článků</string>
   <string name="get_started">Začít</string>
   <string name="download_books">Stáhnout knihy</string>
   <string name="humankind_knowledge">Znalosti lidstva na vašem telefonu.</string>

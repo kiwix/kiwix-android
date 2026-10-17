@@ -24,6 +24,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SIXTEEN_DP
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListItem.LanguageItem
 
@@ -31,10 +32,10 @@ import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListIte
 fun ZimFilesLanguageHeader(languageItem: LanguageItem) {
   Text(
     text = languageItem.text,
-    style = MaterialTheme.typography.titleSmall,
+    style = MaterialTheme.typography.titleMedium,
     modifier = Modifier
       .fillMaxWidth()
       .padding(horizontal = SIXTEEN_DP)
-      .padding(top = SIXTEEN_DP)
+      .padding(top = SIXTEEN_DP, bottom = ComposeDimens.EIGHT_DP)
   )
 }

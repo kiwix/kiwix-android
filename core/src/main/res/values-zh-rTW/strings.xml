@@ -224,7 +224,7 @@
   <string name="new_tab_shortcut_label">新分頁</string>
   <string name="get_content_shortcut_label">獲得內容</string>
   <string name="fav_icon">圖示</string>
-  <string name="articleCount">%s 個條目</string>
+  <string name="pagesCount">%s 個條目</string>
   <string name="get_started">入門</string>
   <string name="download_books">下載書籍</string>
   <string name="humankind_knowledge">在您手機上的人類知識。</string>

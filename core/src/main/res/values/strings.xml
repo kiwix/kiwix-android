@@ -222,7 +222,8 @@
   <string name="new_tab_shortcut_label">New tab</string>
   <string name="get_content_shortcut_label" tools:keep="@string/get_content_shortcut_label">Get content</string>
   <string name="fav_icon">Favicon</string>
-  <string name="articleCount" tools:keep="@string/articleCount">%s articles</string>
+  <string name="pagesCount" tools:keep="@string/articleCount">%s pages</string>
+  <string name="mediaCount" tools:keep="@string/mediaCount">%s media</string>
   <string name="get_started" tools:keep="@string/get_started">Get started</string>
   <string name="download_books">Download books</string>
   <string name="humankind_knowledge" tools:keep="@string/humankind_knowledge">Humankind\’s knowledge, on your phone.</string>
