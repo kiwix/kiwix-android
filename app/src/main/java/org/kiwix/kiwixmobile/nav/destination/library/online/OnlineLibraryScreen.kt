@@ -141,7 +141,7 @@ fun OnlineLibraryScreen(
     snackbarHost = { KiwixSnackbarHost(snackbarHostState = snackBarHostState) },
     topBar = {
       KiwixAppBar(
-        title = stringResource(string.download),
+        title = stringResource(string.explore),
         navigationIcon = navigationIcon,
         actionMenuItems = actionMenuItems,
         topAppBarScrollBehavior = scrollBehavior,
