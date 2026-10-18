@@ -267,7 +267,15 @@ private fun OnlineLibraryScreenContent(
     contentAlignment = Alignment.Center
   ) {
     if (uiState.showNoContent) {
-      NoContentView(uiState.noContentMessage)
+      // Fall back to the default "no items" message when the message is blank,
+      // otherwise a stale empty-search state would render a completely blank
+      // white screen after switching tabs and returning.
+      // See https://github.com/kiwix/kiwix-android/issues/5211
+      NoContentView(
+        uiState.noContentMessage.ifBlank {
+          stringResource(string.no_items_msg)
+        }
+      )
     } else {
       OnlineLibraryList(uiState, lazyListState, onlineLibraryViewModel)
     }
