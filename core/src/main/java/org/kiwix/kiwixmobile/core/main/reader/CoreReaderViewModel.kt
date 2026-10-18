@@ -304,11 +304,27 @@ abstract class CoreReaderViewModel(
   val isAndroid13OrAbove = kiwixPermissionChecker.isAndroid13orAbove()
 
   override fun sectionsLoaded(title: String, sections: List<DocumentSection>) {
-    updateState { copy(tableOfContentTitle = title, documentSections = sections) }
+    updateState {
+      copy(
+        tableOfContentTitle = title,
+        documentSections = sections,
+        // Enable the TOC button only when the current page actually has a table
+        // of content, so that the button is disabled otherwise.
+        // See https://github.com/kiwix/kiwix-android/issues/5207
+        isTocButtonEnable = sections.isNotEmpty()
+      )
+    }
   }
 
   override fun clearSections() {
-    updateState { copy(documentSections = emptyList()) }
+    updateState {
+      copy(
+        documentSections = emptyList(),
+        // A new page is being parsed: disable the TOC button until the parser
+        // reports whether this page has sections.
+        isTocButtonEnable = false
+      )
+    }
   }
 
   private fun setupDocumentParser() {
