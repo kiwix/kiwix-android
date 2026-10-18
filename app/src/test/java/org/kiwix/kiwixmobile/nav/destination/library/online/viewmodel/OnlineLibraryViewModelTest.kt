@@ -587,10 +587,19 @@ class OnlineLibraryViewModelTest {
 
     @Test
     fun `when state is Loading then updates loading flags`() = runTest {
+      viewModel.setUiStateForTest(
+        viewModel.uiState.value.copy(
+          noContentMessage = context.getString(R.string.no_items_msg),
+          showNoContent = true
+        )
+      )
+
       viewModel.handleLibraryState(Loading(isLoadMore = false))
 
       assertTrue(viewModel.uiState.value.showScanningProgressBar)
       assertFalse(viewModel.uiState.value.isLoadingMore)
+      assertFalse(viewModel.uiState.value.showNoContent)
+      assertEquals("", viewModel.uiState.value.noContentMessage)
       assertEquals(
         context.getString(R.string.reaching_remote_library),
         viewModel.uiState.value.scanningProgressBarMessage
