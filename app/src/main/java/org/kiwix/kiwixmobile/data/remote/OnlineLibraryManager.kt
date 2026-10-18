@@ -88,7 +88,13 @@ class OnlineLibraryManager @Inject constructor(
 
     query?.takeIf { it.isNotBlank() }?.let { builder.appendQueryParameter("q", it) }
     lang?.takeIf { it.isNotBlank() }?.let { builder.appendQueryParameter("lang", it) }
-    category?.takeIf { it.isNotBlank() }?.let { builder.appendQueryParameter("category", it) }
+    // "all" is only a sentinel value used by the app to mean "no category filter".
+    // The Kiwix OPDS server treats `category=all` as a real filter and returns no
+    // entries for it (e.g. searching "minecraft" with "All categories" selected
+    // yields no results), so it must not be sent to the server.
+    // See https://github.com/kiwix/kiwix-android/issues/5205
+    category?.takeIf { it.isNotBlank() && !it.equals("all", ignoreCase = true) }
+      ?.let { builder.appendQueryParameter("category", it) }
 
     return builder.build().toString()
   }
