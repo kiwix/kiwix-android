@@ -490,7 +490,7 @@ class DownloadRobot : BaseRobot() {
         waitForIdle()
         waitUntilTimeout()
         onNodeWithTag(TOOLBAR_TITLE_TESTING_TAG)
-          .assertTextEquals(kiwixMainActivity.getString(string.download))
+          .assertTextEquals(kiwixMainActivity.getString(string.explore))
       }
     })
   }

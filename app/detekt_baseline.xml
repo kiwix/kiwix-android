@@ -29,7 +29,7 @@
     <ID>PackageNaming:LibraryViewHolder.kt$package
       org.kiwix.kiwixmobile.zimManager.libraryView.adapter</ID>
     <ID>PackageNaming:MountFileSystemChecker.kt$package org.kiwix.kiwixmobile.zimManager</ID>
-    <ID>PackageNaming:NavigateToDownloads.kt$package
+    <ID>PackageNaming:NavigateToExplore.kt$package
       org.kiwix.kiwixmobile.zimManager.fileselectView.effects</ID>
     <ID>PackageNaming:None.kt$package org.kiwix.kiwixmobile.zimManager.fileselectView.effects</ID>
     <ID>PackageNaming:OpenFileWithNavigation.kt$package

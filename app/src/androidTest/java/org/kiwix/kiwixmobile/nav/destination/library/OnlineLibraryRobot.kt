@@ -38,7 +38,7 @@ class OnlineLibraryRobot : BaseRobot() {
         waitForIdle()
         waitUntilTimeout()
         onNodeWithTag(TOOLBAR_TITLE_TESTING_TAG)
-          .assertTextEquals(context.getString(string.download))
+          .assertTextEquals(context.getString(string.explore))
       }
     })
   }
