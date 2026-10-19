@@ -164,7 +164,8 @@ abstract class CoreReaderViewModel(
   private val readAloudManager: ReadAloudManager,
   private val donationDialogHandler: DonationDialogHandler,
   private val findInPageManager: FindInPageManager,
-  @param:MainDispatcher private val mainDispatcher: MainCoroutineDispatcher
+  @param:MainDispatcher private val mainDispatcher: MainCoroutineDispatcher,
+  private val isTocButtonConfigEnabled: Boolean = true,
 ) : ViewModel(),
   SectionsListener,
   WebViewCallback,
@@ -308,10 +309,7 @@ abstract class CoreReaderViewModel(
       copy(
         tableOfContentTitle = title,
         documentSections = sections,
-        // Enable the TOC button only when the current page actually has a table
-        // of content, so that the button is disabled otherwise.
-        // See https://github.com/kiwix/kiwix-android/issues/5207
-        isTocButtonEnable = sections.isNotEmpty()
+        isTocButtonEnable = isTocButtonConfigEnabled && sections.isNotEmpty()
       )
     }
   }
@@ -320,8 +318,6 @@ abstract class CoreReaderViewModel(
     updateState {
       copy(
         documentSections = emptyList(),
-        // A new page is being parsed: disable the TOC button until the parser
-        // reports whether this page has sections.
         isTocButtonEnable = false
       )
     }

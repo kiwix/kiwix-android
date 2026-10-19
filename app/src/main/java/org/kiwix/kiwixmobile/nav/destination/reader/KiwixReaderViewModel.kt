@@ -126,9 +126,6 @@ class KiwixReaderViewModel @Inject constructor(
   ) {
     super.initialize(coreMainActivity, alertDialogShower)
     val appName = kiwixDataStore.appName.first()
-    // Note: `isTocButtonEnable` is intentionally not forced to `true` here — it is
-    // driven by the document parser and enabled only when the loaded page actually
-    // has a table of content. See https://github.com/kiwix/kiwix-android/issues/5207
     updateState { copy(appName = appName) }
     enableLeftDrawer()
     openPageInBookFromNavigationArguments(coreMainActivity)

@@ -123,7 +123,8 @@ class BrandedReaderViewModel @Inject constructor(
     readAloudManager,
     donationDialogHandler,
     findInPageManager,
-    mainDispatcher
+    mainDispatcher,
+    isTocButtonConfigEnabled = !BuildConfig.DISABLE_SIDEBAR
   ) {
   override suspend fun initialize(
     coreMainActivity: CoreMainActivity,
@@ -134,7 +135,7 @@ class BrandedReaderViewModel @Inject constructor(
     }
     super.initialize(coreMainActivity, alertDialogShower)
     val appName = kiwixDataStore.appName.first()
-    updateState { copy(isTocButtonEnable = !BuildConfig.DISABLE_SIDEBAR, appName = appName) }
+    updateState { copy(appName = appName) }
     enableLeftDrawer()
     loadPageFromNavigationArguments(coreMainActivity)
     if (BuildConfig.DISABLE_EXTERNAL_LINK) {
