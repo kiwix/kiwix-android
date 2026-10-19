@@ -33,7 +33,7 @@ object Config {
   val javaVersion = JavaVersion.VERSION_21
 
   // Version Information
-  const val versionMajor = 3 // Major version component of the app's version name and version code.
-  const val versionMinor = 14 // Minor version component of the app's version name and version code.
+  const val versionMajor = 4 // Major version component of the app's version name and version code.
+  const val versionMinor = 0 // Minor version component of the app's version name and version code.
   const val versionPatch = 0 // Patch version component of the app's version name and version code.
 }
