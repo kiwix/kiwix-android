@@ -147,7 +147,7 @@ class KiwixTextToSpeechTest {
   fun `readAloud does not speak when language is multilingual`() {
     injectMockTts()
     every { tts.isSpeaking } returns false
-    every { zimReaderContainer.language } returns "mul"
+    every { zimReaderContainer.zimMainLanguage } returns "mul"
     kiwixTts.readAloud(webView) {
     }
     verify(exactly = 0) { webView.loadUrl(any()) }
@@ -159,7 +159,7 @@ class KiwixTextToSpeechTest {
   fun `readAloud does not speak when language is not supported`() {
     injectMockTts()
     every { tts.isSpeaking } returns false
-    every { zimReaderContainer.language } returns "eng"
+    every { zimReaderContainer.zimMainLanguage } returns "eng"
     every { tts.isLanguageAvailable(any()) } returns TextToSpeech.LANG_NOT_SUPPORTED
     kiwixTts.readAloud(webView) {
     }
@@ -296,7 +296,7 @@ class KiwixTextToSpeechTest {
 
   private fun setupReadAloudForSuccess(): WebView {
     every { tts.isSpeaking } returns false
-    every { zimReaderContainer.language } returns "eng"
+    every { zimReaderContainer.zimMainLanguage } returns "eng"
     every { tts.isLanguageAvailable(any()) } returns TextToSpeech.LANG_AVAILABLE
     val voice: Voice = mockk(relaxed = true)
     every { voice.features } returns emptySet()
@@ -333,7 +333,7 @@ class KiwixTextToSpeechTest {
     injectMockTts()
 
     every { tts.isSpeaking } returns false
-    every { zimReaderContainer.language } returns "eng"
+    every { zimReaderContainer.zimMainLanguage } returns "eng"
 
     mockkObject(LanguageUtils.Companion)
     every { LanguageUtils.iSO3ToLocale(any()) } returns null
@@ -358,7 +358,7 @@ class KiwixTextToSpeechTest {
     )
     injectMockTts()
     every { tts.isSpeaking } returns false
-    every { zimReaderContainer.language } returns "eng"
+    every { zimReaderContainer.zimMainLanguage } returns "eng"
     every { tts.isLanguageAvailable(any()) } returns TextToSpeech.LANG_AVAILABLE
 
     val voice: Voice = mockk(relaxed = true)

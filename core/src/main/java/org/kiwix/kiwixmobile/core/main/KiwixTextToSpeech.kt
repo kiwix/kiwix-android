@@ -116,7 +116,7 @@ class KiwixTextToSpeech internal constructor(
   fun getAvailableVoices(): List<Voice> {
     if (!isInitialized || !::tts.isInitialized) return emptyList()
     val activeLocale = runCatching { tts.voice?.locale ?: tts.language }.getOrNull()
-      ?: zimReaderContainer.language?.let {
+      ?: zimReaderContainer.zimMainLanguage?.let {
         iSO3ToLocale(it) ?: runCatching { Locale(it) }.getOrNull()
       }
       ?: Locale.getDefault()
@@ -244,11 +244,11 @@ class KiwixTextToSpeech internal constructor(
         onSpeakingListener.onSpeakingEnded()
       }
     } else {
-      val locale = iSO3ToLocale(zimReaderContainer.language)
-        ?: runCatching { Locale(zimReaderContainer.language.orEmpty()) }.getOrNull()
+      val locale = iSO3ToLocale(zimReaderContainer.zimMainLanguage)
+        ?: runCatching { Locale(zimReaderContainer.zimMainLanguage.orEmpty()) }.getOrNull()
         ?: Locale.getDefault()
-      if (MULTILINGUAL_LANGUAGE_CODE == zimReaderContainer.language) {
-        Log.d(TAG_KIWIX, "TextToSpeech: disabled " + zimReaderContainer.language)
+      if (MULTILINGUAL_LANGUAGE_CODE == zimReaderContainer.zimMainLanguage) {
+        Log.d(TAG_KIWIX, "TextToSpeech: disabled " + zimReaderContainer.zimMainLanguage)
         context.toast(R.string.tts_not_enabled, Toast.LENGTH_LONG)
         return
       }
@@ -256,7 +256,7 @@ class KiwixTextToSpeech internal constructor(
       if (availability == LANG_NOT_SUPPORTED) {
         Log.d(
           TAG_KIWIX,
-          "TextToSpeech: language not supported: ${zimReaderContainer.language}"
+          "TextToSpeech: language not supported: ${zimReaderContainer.zimMainLanguage}"
         )
         context.toast(R.string.tts_lang_not_supported, Toast.LENGTH_LONG)
         return

@@ -154,7 +154,9 @@ class ZimFileReader(
     }.onFailure {
       Log.e(TAG, "Could not get the favicon for $title. Original exception: $it")
     }.getOrNull()
-  val language: String get() = getSafeMetaData("Language", "")
+  val zimMainLanguage: String get() = runCatching { jniKiwixReader.mainLanguage }.getOrElse { "" }
+
+  val languages: List<String> get() = runCatching { jniKiwixReader.languages.toList() }.getOrElse { emptyList() }
 
   val tags: String
     get() = getSafeMetaData("Tags", "")
@@ -437,7 +439,7 @@ class ZimFileReader(
       publisher = this@ZimFileReader.publisher
       date = this@ZimFileReader.date
       description = this@ZimFileReader.description
-      language = this@ZimFileReader.language
+      language = this@ZimFileReader.zimMainLanguage
       articleCount = this@ZimFileReader.articleCount.toString()
       mediaCount = this@ZimFileReader.mediaCount.toString()
       bookName = this@ZimFileReader.name
@@ -450,13 +452,10 @@ class ZimFileReader(
     spellingsDB?.dispose()
   }
 
-  @Suppress("TooGenericExceptionCaught")
   private fun getSafeMetaData(name: String, missingDelimiterValue: String) =
-    try {
+    runCatching {
       jniKiwixReader.getMetadata(name)
-    } catch (_: Exception) {
-      missingDelimiterValue
-    }
+    }.getOrElse { missingDelimiterValue }
 
   companion object {
     private val spellingsDBCreationMutex = Mutex()
