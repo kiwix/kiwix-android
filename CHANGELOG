@@ -26,6 +26,7 @@ New Features:
 * Removed the full-screen mode feature. (@MohitMaliFtechiz https://github.com/kiwix/kiwix-android/pull/4415)
 * Implemented proper dark mode for ZIM content, and removed the custom color inversion. (@MohitMaliFtechiz https://github.com/kiwix/kiwix-android/pull/4429)
 * Removed support for `Zimit1` ZIM files, since they have been superseded by `Zimit2` and are no longer distributed. (@MohitMaliFtechiz https://github.com/kiwix/kiwix-android/pull/4653)
+* UI enhancements. (@harshsomankar123-tech, @atharvyadav22, @jaydeep83721-dev, @CaptainAni187)
 
 Bug Fixes:
 * Duplicate resume/cancel buttons and duplicate "download completed" notifications. (@MohitMaliFtechiz https://github.com/kiwix/kiwix-android/pull/4239, https://github.com/kiwix/kiwix-android/pull/4240)
@@ -69,6 +70,10 @@ Bug Fixes:
 * Airplane mode was not fully supported. (@MohitMaliFtechiz https://github.com/kiwix/kiwix-android/pull/5122)
 * Voice search feature was not available on search screen. (@atharvyadav22 https://github.com/kiwix/kiwix-android/pull/4703)
 * Media files don't save. (@atharvyadav22 https://github.com/kiwix/kiwix-android/pull/4664)
+* Same-day history is removed when the other page URL is same in different letter case. (@SajalDevX https://github.com/kiwix/kiwix-android/pull/5150)
+* Deleting a recent search in one ZIM file also deletes the same search in other ZIM files. (@SajalDevX https://github.com/kiwix/kiwix-android/pull/5160)
+* Bookmark improvements. (@aakarshitv https://github.com/kiwix/kiwix-android/pull/5177, https://github.com/kiwix/kiwix-android/pull/5177)
+* Improved the encoding/decoding of article URLs to handle special characters. (@aakarshitv https://github.com/kiwix/kiwix-android/pull/5196)
 + More
 
 Compilation/CI/CD:
