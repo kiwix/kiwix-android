@@ -85,7 +85,7 @@ class InitialDownloadTest : BaseActivityTest() {
     }
     activityScenario.onActivity {
       kiwixMainActivity = it
-      it.navigate(KiwixDestination.Downloads.route)
+      it.navigate(KiwixDestination.Explore.route)
     }
     downloadRobot {
       waitForDataToLoad(composeTestRule = composeTestRule)

@@ -61,7 +61,7 @@ import org.kiwix.kiwixmobile.ui.KiwixNavGraph
 
 const val BOTTOM_NAV_READER_ITEM_TESTING_TAG = "bottomNavReaderItemTestingTag"
 const val BOTTOM_NAV_LIBRARY_ITEM_TESTING_TAG = "bottomNavLibraryItemTestingTag"
-const val BOTTOM_NAV_DOWNLOADS_ITEM_TESTING_TAG = "bottomNavDownloadsItemTestingTag"
+const val BOTTOM_NAV_EXPLORE_ITEM_TESTING_TAG = "bottomNavExploreItemTestingTag"
 
 @Suppress("LongParameterList")
 @OptIn(ExperimentalMaterial3Api::class)
@@ -174,10 +174,10 @@ fun BottomNavigationBar(
       testingTag = BOTTOM_NAV_LIBRARY_ITEM_TESTING_TAG
     ),
     BottomNavItem(
-      route = KiwixDestination.Downloads.route,
-      title = stringResource(id = R.string.download),
-      iconRes = drawable.ic_download_navigation_white_24dp,
-      testingTag = BOTTOM_NAV_DOWNLOADS_ITEM_TESTING_TAG
+      route = KiwixDestination.Explore.route,
+      title = stringResource(id = R.string.explore),
+      iconRes = drawable.ic_explore_navigation_white_24dp,
+      testingTag = BOTTOM_NAV_EXPLORE_ITEM_TESTING_TAG
     )
   )
   val currentDestinationRoute = navBackStackEntry?.destination?.route

@@ -33,7 +33,7 @@ import org.kiwix.kiwixmobile.core.page.SEARCH_ICON_TESTING_TAG
 import org.kiwix.kiwixmobile.core.search.SEARCH_FIELD_TESTING_TAG
 import org.kiwix.kiwixmobile.core.ui.components.NAVIGATION_ICON_TESTING_TAG
 import org.kiwix.kiwixmobile.core.utils.files.Log
-import org.kiwix.kiwixmobile.main.BOTTOM_NAV_DOWNLOADS_ITEM_TESTING_TAG
+import org.kiwix.kiwixmobile.main.BOTTOM_NAV_EXPLORE_ITEM_TESTING_TAG
 import org.kiwix.kiwixmobile.nav.destination.library.online.LANGUAGE_MENU_ICON_TESTING_TAG
 import org.kiwix.kiwixmobile.testutils.TestUtils
 import org.kiwix.kiwixmobile.testutils.TestUtils.waitUntilTimeout
@@ -44,7 +44,7 @@ class LanguageRobot : BaseRobot() {
   fun clickDownloadOnBottomNav(composeTestRule: ComposeContentTestRule) {
     composeTestRule.apply {
       waitUntilTimeout()
-      onNodeWithTag(BOTTOM_NAV_DOWNLOADS_ITEM_TESTING_TAG).performClick()
+      onNodeWithTag(BOTTOM_NAV_EXPLORE_ITEM_TESTING_TAG).performClick()
     }
   }
 

@@ -29,9 +29,9 @@ import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.navigate
 import org.kiwix.kiwixmobile.ui.KiwixDestination
 
-class NavigateToDownloadsTest {
+class NavigateToExploreTest {
   @Test
-  fun `invokeWith should navigate to downloads screen`() {
+  fun `invokeWith should navigate to explore screen`() {
     val activity = mockk<AppCompatActivity>(relaxed = true)
 
     mockkObject(ActivityExtensions)
@@ -40,11 +40,11 @@ class NavigateToDownloadsTest {
       activity.navigate(any(), any())
     } returns Unit
 
-    NavigateToDownloads.invokeWith(activity)
+    NavigateToExplore.invokeWith(activity)
 
     verify(exactly = 1) {
       activity.navigate(
-        KiwixDestination.Downloads.route,
+        KiwixDestination.Explore.route,
         match {
           it.shouldRestoreState()
         }

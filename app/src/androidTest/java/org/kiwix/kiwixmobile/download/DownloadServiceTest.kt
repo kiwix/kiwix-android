@@ -95,7 +95,7 @@ class DownloadServiceTest : BaseActivityTest() {
         deleteZimIfExists(composeTestRule)
       }
       activityScenario.onActivity {
-        it.navigate(KiwixDestination.Downloads.route)
+        it.navigate(KiwixDestination.Explore.route)
       }
       downloadRobot {
         waitForDataToLoad(composeTestRule = composeTestRule)
@@ -115,7 +115,7 @@ class DownloadServiceTest : BaseActivityTest() {
         moveToState(Lifecycle.State.RESUMED)
         onActivity {
           kiwixMainActivity = it
-          it.navigate(KiwixDestination.Downloads.route)
+          it.navigate(KiwixDestination.Explore.route)
         }
       }
       downloadRobot {

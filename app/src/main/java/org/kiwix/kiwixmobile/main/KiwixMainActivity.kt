@@ -127,7 +127,7 @@ class KiwixMainActivity : CoreMainActivity() {
   override val helpScreenRoute: String = KiwixDestination.Help.route
   override val topLevelDestinationsRoute =
     setOf(
-      KiwixDestination.Downloads.route,
+      KiwixDestination.Explore.route,
       KiwixDestination.Library.route,
       KiwixDestination.Reader.route
     )
@@ -240,10 +240,10 @@ class KiwixMainActivity : CoreMainActivity() {
   private fun handleBackgroundTimeoutLimitIntent(intent: Intent?) {
     if (intent?.hasExtra(DOWNLOAD_TIMEOUT_RESUME_INTENT) == true) {
       val currentId = navController.currentDestination?.id
-      val targetId = navController.graph.findNode(KiwixDestination.Downloads.route)?.id
+      val targetId = navController.graph.findNode(KiwixDestination.Explore.route)?.id
 
       if (currentId != targetId) {
-        navigate(KiwixDestination.Downloads.route) {
+        navigate(KiwixDestination.Explore.route) {
           launchSingleTop = true
           popUpTo(navController.graph.findStartDestination().id)
         }
@@ -311,7 +311,7 @@ class KiwixMainActivity : CoreMainActivity() {
 
   private fun handleGetContentIntent(intent: Intent?) {
     if (intent?.action == ACTION_GET_CONTENT) {
-      navigate(KiwixDestination.Downloads.route) {
+      navigate(KiwixDestination.Explore.route) {
         launchSingleTop = true
         popUpTo(navController.graph.findStartDestination().id)
       }

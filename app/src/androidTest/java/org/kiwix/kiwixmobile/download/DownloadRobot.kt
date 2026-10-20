@@ -41,7 +41,7 @@ import org.kiwix.kiwixmobile.core.utils.dialog.ALERT_DIALOG_CONFIRM_BUTTON_TESTI
 import org.kiwix.kiwixmobile.core.utils.dialog.ALERT_DIALOG_TITLE_TEXT_TESTING_TAG
 import org.kiwix.kiwixmobile.core.utils.files.Log
 import org.kiwix.kiwixmobile.download.DownloadTest.Companion.KIWIX_DOWNLOAD_TEST
-import org.kiwix.kiwixmobile.main.BOTTOM_NAV_DOWNLOADS_ITEM_TESTING_TAG
+import org.kiwix.kiwixmobile.main.BOTTOM_NAV_EXPLORE_ITEM_TESTING_TAG
 import org.kiwix.kiwixmobile.main.BOTTOM_NAV_LIBRARY_ITEM_TESTING_TAG
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.nav.destination.library.local.NO_FILE_TEXT_TESTING_TAG
@@ -75,8 +75,8 @@ class DownloadRobot : BaseRobot() {
 
   fun clickDownloadOnBottomNav(composeTestRule: ComposeContentTestRule) {
     composeTestRule.apply {
-      waitUntilDisplayedWithScrollNudge(BOTTOM_NAV_DOWNLOADS_ITEM_TESTING_TAG)
-      onNodeWithTag(BOTTOM_NAV_DOWNLOADS_ITEM_TESTING_TAG).performClick()
+      waitUntilDisplayedWithScrollNudge(BOTTOM_NAV_EXPLORE_ITEM_TESTING_TAG)
+      onNodeWithTag(BOTTOM_NAV_EXPLORE_ITEM_TESTING_TAG).performClick()
     }
   }
 
@@ -490,7 +490,7 @@ class DownloadRobot : BaseRobot() {
         waitForIdle()
         waitUntilTimeout()
         onNodeWithTag(TOOLBAR_TITLE_TESTING_TAG)
-          .assertTextEquals(kiwixMainActivity.getString(string.download))
+          .assertTextEquals(kiwixMainActivity.getString(string.explore))
       }
     })
   }

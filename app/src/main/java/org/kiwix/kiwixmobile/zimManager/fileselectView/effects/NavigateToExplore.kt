@@ -24,13 +24,13 @@ import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.navigate
 import org.kiwix.kiwixmobile.ui.KiwixDestination
 
-object NavigateToDownloads : SideEffect<Unit> {
+object NavigateToExplore : SideEffect<Unit> {
   override fun invokeWith(activity: AppCompatActivity) {
     val navOptions = NavOptions
       .Builder()
       .setPopUpTo(KiwixDestination.Library.route, inclusive = true)
       .setRestoreState(true)
       .build()
-    activity.navigate(KiwixDestination.Downloads.route, navOptions)
+    activity.navigate(KiwixDestination.Explore.route, navOptions)
   }
 }
