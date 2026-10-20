@@ -30,7 +30,7 @@
   <string name="go_to_wifi_settings_label">Go to WIFI settings</string>
   <string name="connection_refused">Connection refused.</string>
   <string name="hotspot_running" tools:keep="@string/hotspot_running">Running Hotspot</string>
-  <string name="no_books_selected_toast_message" tools:keep="@string/no_books_selected_toast_message">Please select books first</string>
+  <string name="no_books_selected_toast_message" tools:keep="@string/no_books_selected_toast_message">Select books first</string>
   <string name="server_failed_message" tools:keep="@string/server_failed_message">Couldn’t start server. Please turn on your hotspot</string>
   <string name="server_failed_toast_message" tools:keep="@string/server_failed_toast_message">Couldn’t start server.</string>
   <string name="server_started_successfully_toast_message" tools:keep="@string/server_started_successfully_toast_message">Server started successfully.</string>
@@ -38,7 +38,7 @@
   <string name="server_stopped_all_books_deleted_toast_message" tools:keep="@string/server_stopped_all_books_deleted_toast_message">Server stopped: all hosted books were deleted.</string>
   <string name="hotspot_turned_on">Hotspot turned on</string>
   <string name="hotspot_details_message">Following are the details of your local hotspot. \nSSID : %1$s \nPass : %2$s</string>
-  <string name="server_textview_default_message" tools:keep="@string/server_textview_default_message">Select the files you wish to host on the server</string>
+  <string name="server_textview_default_message" tools:keep="@string/server_textview_default_message">Select the books you wish to make available</string>
   <string name="progress_dialog_starting_server" tools:keep="@string/progress_dialog_starting_server">Starting server</string>
   <string name="hotspot_dialog_title">Instructions for hosting books</string>
   <string name="wifi_dialog_title">WiFi connection detected</string>
