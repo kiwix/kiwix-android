@@ -502,7 +502,8 @@ class OnlineLibraryViewModel @Inject constructor(
         showScanningProgressBar = !isLoadMore,
         isLoadingMore = isLoadMore,
         scanningProgressBarMessage = context.getString(messageResId),
-        noContentMessage = ""
+        noContentMessage = "",
+        showNoContent = false
       )
     }
   }
