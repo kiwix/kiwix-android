@@ -1,6 +1,6 @@
 <!--
   ~ Kiwix Android
-  ~ Copyright (c) 2020 Kiwix <android.kiwix.org>
+  ~ Copyright (c) 2026 Kiwix <android.kiwix.org>
   ~ This program is free software: you can redistribute it and/or modify
   ~ it under the terms of the GNU General Public License as published by
   ~ the Free Software Foundation, either version 3 of the License, or
@@ -19,9 +19,10 @@
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="24dp"
     android:height="24dp"
-    android:viewportWidth="24"
-    android:viewportHeight="24">
+    android:viewportWidth="512"
+    android:viewportHeight="512">
   <path
-      android:pathData="M13,12h7v1.5h-7zM13,9.5h7L20,11h-7zM13,14.5h7L20,16h-7zM21,4L3,4c-1.1,0 -2,0.9 -2,2v13c0,1.1 0.9,2 2,2h18c1.1,0 2,-0.9 2,-2L23,6c0,-1.1 -0.9,-2 -2,-2zM21,19h-9L12,6h9v13z"
-      android:fillColor="#ffffff"/>
+      android:fillColor="#ffffff"
+      android:fillType="evenOdd"
+      android:pathData="M84,47L65,49L59,52L53,59L51,64L51,103L13,103L8,105L0,113L0,455L8,463L13,465L21,465L42,458L73,451L133,444L161,444L194,447L228,455L252,465L260,465L275,458L298,451L318,447L352,444L395,445L427,449L466,457L492,465L502,464L512,455L512,113L504,105L499,103L461,103L461,64L453,52L442,48L396,47L364,51L343,56L318,65L289,81L282,88L276,91L258,109L258,111L255,112L254,109L236,91L230,88L223,81L184,61L157,53L135,49L116,47L84,47ZM95,91L122,92L142,95L176,105L190,112L207,124L215,133L217,133L231,152L231,380L201,362L168,350L133,343L95,341L95,91ZM409,91L417,92L417,341L379,343L344,350L311,362L281,380L281,152L289,140L305,124L334,106L370,95L409,91ZM42,147L45,147L45,372L47,378L53,387L65,393L117,392L150,397L157,400L101,402L62,408L42,413L42,147ZM467,147L470,147L470,413L450,408L411,402L355,400L367,396L395,392L447,393L459,387L465,378L467,372L467,147Z"/>
 </vector>
