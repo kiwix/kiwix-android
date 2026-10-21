@@ -304,11 +304,22 @@ abstract class CoreReaderViewModel(
   val isAndroid13OrAbove = kiwixPermissionChecker.isAndroid13orAbove()
 
   override fun sectionsLoaded(title: String, sections: List<DocumentSection>) {
-    updateState { copy(tableOfContentTitle = title, documentSections = sections) }
+    updateState {
+      copy(
+        tableOfContentTitle = title,
+        documentSections = sections,
+        isTocButtonEnable = isTocSidebarEnabled() && sections.isNotEmpty()
+      )
+    }
   }
 
   override fun clearSections() {
-    updateState { copy(documentSections = emptyList()) }
+    updateState {
+      copy(
+        documentSections = emptyList(),
+        isTocButtonEnable = false
+      )
+    }
   }
 
   private fun setupDocumentParser() {
@@ -1847,6 +1858,12 @@ abstract class CoreReaderViewModel(
 
   /**
    * Returns a boolean value based on child viewModel implementation,
+   * indicating whether the TOC sidebar should be enabled.
+   */
+  abstract fun isTocSidebarEnabled(): Boolean
+
+  /**
+   * Returns a boolean value based on child viewModel implementation,
    * indicating whether the app is a branded app or not.
    */
   abstract fun isBrandedApp(): Boolean
@@ -1868,6 +1885,8 @@ abstract class CoreReaderViewModel(
     setDonationDialogCallBack()
     readerMenuState = createMainMenu()
     addAlertDialogToDialogHost(coreMainActivity, alertDialogShower)
+    val appName = kiwixDataStore.appName.first()
+    updateState { copy(appName = appName) }
   }
 
   private fun clearObservers() {

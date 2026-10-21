@@ -133,8 +133,6 @@ class BrandedReaderViewModel @Inject constructor(
       return
     }
     super.initialize(coreMainActivity, alertDialogShower)
-    val appName = kiwixDataStore.appName.first()
-    updateState { copy(isTocButtonEnable = !BuildConfig.DISABLE_SIDEBAR, appName = appName) }
     enableLeftDrawer()
     loadPageFromNavigationArguments(coreMainActivity)
     if (BuildConfig.DISABLE_EXTERNAL_LINK) {
@@ -278,6 +276,7 @@ class BrandedReaderViewModel @Inject constructor(
     BuildConfig.SHOW_SEARCH_SUGGESTIONS_SPELLCHECKED
 
   override fun isBrandedApp(): Boolean = true
+  override fun isTocSidebarEnabled(): Boolean = !BuildConfig.DISABLE_SIDEBAR
 
   override fun invalidZimFileFound(onInvalidZimFileFound: () -> Unit) {
     openDownloadScreen()
