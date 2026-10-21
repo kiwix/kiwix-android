@@ -77,7 +77,7 @@ Bug Fixes:
 + More
 
 Compilation/CI/CD:
-* Using libkiwix `2.6.0`. (@MohitMaliFtechiz https://github.com/kiwix/kiwix-android/pull/4868)
+* Using libkiwix `2.7.0`. (@MohitMaliFtechiz https://github.com/kiwix/kiwix-android/pull/5217)
 * Upgraded Gradle to `9.3.0`. (@MohitMaliFtechiz https://github.com/kiwix/kiwix-android/pull/5015)
 * Migrated deprecated SimpleXML serialization to Kotlinx Serialization. (@harshsomankar123-tech https://github.com/kiwix/kiwix-android/pull/5001)
 * Migrated all unit tests to JUnit 5, removing the JUnit 4 vintage dependency. (@atharvyadav22 https://github.com/kiwix/kiwix-android/pull/4806, https://github.com/kiwix/kiwix-android/pull/5113)
