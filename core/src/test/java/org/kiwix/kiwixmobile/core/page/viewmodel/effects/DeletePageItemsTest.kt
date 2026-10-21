@@ -47,7 +47,7 @@ internal class DeletePageItemsTest {
   fun `delete with selected items only deletes the selected items`() = runTest {
     item1.isSelected = true
     DeletePageItems(
-      historyState(listOf(item1, item2)),
+      historyState(listOf(item1, item2), isInSelectionState = true),
       pageDao,
       this,
       mainDispatcherRule.dispatcher
