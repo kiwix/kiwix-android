@@ -3196,7 +3196,7 @@ internal class CoreReaderViewModelTest {
     }
 
     override fun shouldShowSpellCheckedSuggestions(): Boolean = false
-
+    override fun isTocSidebarEnabled(): Boolean = true
     override fun isBrandedApp(): Boolean = false
 
     override fun openBookmarkScreen() {

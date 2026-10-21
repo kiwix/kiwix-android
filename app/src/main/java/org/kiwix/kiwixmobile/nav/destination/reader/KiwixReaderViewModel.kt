@@ -25,7 +25,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.MainCoroutineDispatcher
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.first
 import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.di.IoDispatcher
 import org.kiwix.kiwixmobile.core.di.MainDispatcher
@@ -115,6 +114,7 @@ class KiwixReaderViewModel @Inject constructor(
   ) {
   override fun shouldShowSpellCheckedSuggestions(): Boolean = false
   override fun isBrandedApp(): Boolean = false
+  override fun isTocSidebarEnabled(): Boolean = true
 
   override fun openBookmarkScreen() {
     emitEffect(ReaderEffect.NavigateTo(KiwixDestination.Bookmarks.route))
@@ -125,8 +125,6 @@ class KiwixReaderViewModel @Inject constructor(
     alertDialogShower: AlertDialogShower
   ) {
     super.initialize(coreMainActivity, alertDialogShower)
-    val appName = kiwixDataStore.appName.first()
-    updateState { copy(appName = appName) }
     enableLeftDrawer()
     openPageInBookFromNavigationArguments(coreMainActivity)
   }

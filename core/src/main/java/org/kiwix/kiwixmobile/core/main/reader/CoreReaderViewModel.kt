@@ -164,8 +164,7 @@ abstract class CoreReaderViewModel(
   private val readAloudManager: ReadAloudManager,
   private val donationDialogHandler: DonationDialogHandler,
   private val findInPageManager: FindInPageManager,
-  @param:MainDispatcher private val mainDispatcher: MainCoroutineDispatcher,
-  private val isTocButtonConfigEnabled: Boolean = true,
+  @param:MainDispatcher private val mainDispatcher: MainCoroutineDispatcher
 ) : ViewModel(),
   SectionsListener,
   WebViewCallback,
@@ -309,7 +308,7 @@ abstract class CoreReaderViewModel(
       copy(
         tableOfContentTitle = title,
         documentSections = sections,
-        isTocButtonEnable = isTocButtonConfigEnabled && sections.isNotEmpty()
+        isTocButtonEnable = isTocSidebarEnabled() && sections.isNotEmpty()
       )
     }
   }
@@ -1859,6 +1858,12 @@ abstract class CoreReaderViewModel(
 
   /**
    * Returns a boolean value based on child viewModel implementation,
+   * indicating whether the TOC sidebar should be enabled.
+   */
+  abstract fun isTocSidebarEnabled(): Boolean
+
+  /**
+   * Returns a boolean value based on child viewModel implementation,
    * indicating whether the app is a branded app or not.
    */
   abstract fun isBrandedApp(): Boolean
@@ -1880,6 +1885,8 @@ abstract class CoreReaderViewModel(
     setDonationDialogCallBack()
     readerMenuState = createMainMenu()
     addAlertDialogToDialogHost(coreMainActivity, alertDialogShower)
+    val appName = kiwixDataStore.appName.first()
+    updateState { copy(appName = appName) }
   }
 
   private fun clearObservers() {
