@@ -130,9 +130,9 @@
   <string name="pref_storage">ସଂରକ୍ଷଣ</string>
   <string name="pref_current_folder">ବର୍ତ୍ତମାନର ଫୋଲଡର</string>
   <string name="delete_zim_failed">କ୍ଷମା କରିବେ , ଆମେ କିଛି ଫାଇଲକୁ ଅପସାରଣ କରିପାରିଲୁ ନାହିଁ । ଏହା ପରିବର୍ତ୍ତେ ଆପଣ ଏକ ଫାଇଲ ପରିଚାଳକ ବ୍ୟବହାର କରିବାକୁ ଉଚିତ ।</string>
-  <string name="tts_pause">ବିରାମ</string>
-  <string name="tts_resume">ପୁନଃ ଆରମ୍ଭ କରନ୍ତୁ</string>
-  <string name="stop">ଅଟକି ଯାଆନ୍ତୁ</string>
+  <string name="tts_pause" fuzzy="true">ବିରାମ</string>
+  <string name="tts_resume" fuzzy="true">ପୁନଃ ଆରମ୍ଭ କରନ୍ତୁ</string>
+  <string name="stop" fuzzy="true">ଅଟକି ଯାଆନ୍ତୁ</string>
   <string name="internal_storage">ମଧ୍ୟାନ୍ତର</string>
   <string name="external_storage">ବାହ୍ୟ</string>
   <string name="yes">ହଁ</string>
@@ -154,13 +154,13 @@
   <string name="time_left">ବାମ</string>
   <string name="time_today">ଆଜି</string>
   <string name="time_yesterday">ଗତ କାଲି</string>
-  <string name="pref_external_link_popup_title">ବାହ୍ଯ଼ ଲିଙ୍କଗୁଡ଼ିକୁ ପ୍ରବେଶ କରିବା ସମଯ଼ରେ ଚେତାବନୀ ଦିଅନ୍ତୁ</string>
+  <string name="pref_external_link_popup_title" fuzzy="true">ବାହ୍ଯ଼ ଲିଙ୍କଗୁଡ଼ିକୁ ପ୍ରବେଶ କରିବା ସମଯ଼ରେ ଚେତାବନୀ ଦିଅନ୍ତୁ</string>
   <string name="pref_external_link_popup_summary">ଅତିରିକ୍ତ ଖର୍ଚ୍ଚ କିମ୍ବା ଅଫଲାଇନ୍ ଲିଙ୍କରେ କାମ ନକରିବା ପାଇଁ ପପ୍ଅପ୍ ପ୍ରଦର୍ଶନ କରନ୍ତୁ |</string>
-  <string name="external_link_popup_dialog_title">ବାହ୍ୟ ଲିଙ୍କ୍ ପ୍ରବେଶ କରୁଛି!</string>
+  <string name="external_link_popup_dialog_title" fuzzy="true">ବାହ୍ୟ ଲିଙ୍କ୍ ପ୍ରବେଶ କରୁଛି!</string>
   <string name="external_link_popup_dialog_message" fuzzy="true">ଆପଣ ଏକ ବାହ୍ୟ ଲିଙ୍କ୍ ପ୍ରବେଶ କରୁଛନ୍ତି | ଡାଟା ଟ୍ରାନ୍ସଫର ପାଇଁ ଏହା ଅତିରିକ୍ତ ଖର୍ଚ୍ଚର କାରଣ ହୋଇପାରେ କିମ୍ବା ଯେତେବେଳେ ଆପଣ ଅଫଲାଇନ୍ ଥାଆନ୍ତି ସେତେବେଳେ କାମ କରିବ ନାହିଁ | ଆପଣ ଜାରି ରଖିବାକୁ ଚାହୁଁଛନ୍ତି କି?</string>
   <string name="do_not_ask_anymore">ଆଉ ପଚାରନ୍ତୁ ନାହିଁ</string>
-  <string name="your_languages">ମନୋନୀତ ଭାଷା:</string>
-  <string name="other_languages">ଅଲଗା ଭାଷା</string>
+  <string name="your_languages" fuzzy="true">ମନୋନୀତ ଭାଷା:</string>
+  <string name="other_languages" fuzzy="true">ଅଲଗା ଭାଷା</string>
   <string name="no_items_msg">କୌଣସି ସାମଗ୍ରୀ ଉପଲବ୍ଧ ନାହିଁ</string>
   <string name="crash_title">ଆଚ୍ଛା… ଏହା ଲଜ୍ଜାଜନକ ଅଟେ |</string>
   <string name="crash_description" fuzzy="true">ଏହା ଦେଖାଯାଏ ଯେ ଆମେ ଦୁର୍ଘଟଣାଗ୍ରସ୍ତ।! N !! N! ଆପଣ ନିମ୍ନଲିଖିତ ସୂଚନା ପଠାଇ ଏହି ସମସ୍ୟାର ସମାଧାନ କରିବାରେ ସାହାଯ୍ୟ କରିବେ କି?</string>
@@ -174,7 +174,7 @@
   <string name="new_tab_shortcut_label">ନୂଆ ଟ୍ୟାବ୍</string>
   <string name="get_content_shortcut_label">ବିଷୟବସ୍ତୁ ପ୍ରାପ୍ତ କରନ୍ତୁ</string>
   <string name="fav_icon">ଫାଭିକନ୍</string>
-  <string name="pagesCount">%s ପ୍ରବନ୍ଧଗୁଡି</string>
+  <string name="pagesCount" fuzzy="true">%s ପ୍ରବନ୍ଧଗୁଡି</string>
   <string name="get_started">ଆରମ୍ଭ ହୋଇଗଲା</string>
   <string name="download_books">ବହି ଡାଉନଲୋଡ୍ କରନ୍ତୁ</string>
   <string name="humankind_knowledge">ଆପଣଙ୍କ ଫୋନରେ ମାନବଜାତିର ଜ୍ଞାନ |</string>

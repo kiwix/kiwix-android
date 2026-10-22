@@ -119,9 +119,9 @@
   <string name="pref_storage">Almacenamientu</string>
   <string name="pref_current_folder">Carpeta actual</string>
   <string name="delete_zim_failed">Nun pudimos desaniciar dellos ficheros. Tendríes de tentalo usando un alministrador de ficheros.</string>
-  <string name="tts_pause">posar</string>
-  <string name="tts_resume">siguir</string>
-  <string name="stop">aparar</string>
+  <string name="tts_pause" fuzzy="true">posar</string>
+  <string name="tts_resume" fuzzy="true">siguir</string>
+  <string name="stop" fuzzy="true">aparar</string>
   <string name="internal_storage">Internu</string>
   <string name="external_storage">Esternu</string>
   <string name="yes">Sí</string>
@@ -143,13 +143,13 @@
   <string name="time_left">p’acabar</string>
   <string name="time_today">Güei</string>
   <string name="time_yesterday">Ayeri</string>
-  <string name="pref_external_link_popup_title">Alvertir al siguir enllaces esternos</string>
+  <string name="pref_external_link_popup_title" fuzzy="true">Alvertir al siguir enllaces esternos</string>
   <string name="pref_external_link_popup_summary">Amuesa un cuadru emerxente p’avisar sobre posibles gastos por consumu de datos o nun funcionamientu d’enllaces ensin conexón.</string>
-  <string name="external_link_popup_dialog_title">¡Entrando n’enllaz esternu!</string>
+  <string name="external_link_popup_dialog_title" fuzzy="true">¡Entrando n’enllaz esternu!</string>
   <string name="external_link_popup_dialog_message" fuzzy="true">Tas por siguir un enllaz esternu. Ello podría xenerar gastos por tresferencia de datos o cenciellamente nun va funcionar si nun tienes conexón. ¿Quies siguir?</string>
   <string name="do_not_ask_anymore">Nun preguntar más</string>
-  <string name="your_languages">Llingües seleicionaes:</string>
-  <string name="other_languages">Otres llingües:</string>
+  <string name="your_languages" fuzzy="true">Llingües seleicionaes:</string>
+  <string name="other_languages" fuzzy="true">Otres llingües:</string>
   <string name="no_items_msg">Nun hai nengún elementu disponible</string>
   <string name="crash_title">Bien… esto ye vergonzoso</string>
   <string name="crash_description" fuzzy="true">Paez que colgamos.\n\n¿Importaríate ayudanos a iguar esti problema unviándonos la siguiente información?</string>
@@ -163,7 +163,7 @@
   <string name="new_tab_shortcut_label">Llingüeta nueva</string>
   <string name="get_content_shortcut_label">Recibir conteníu</string>
   <string name="fav_icon">Favicon</string>
-  <string name="pagesCount">%s artículos</string>
+  <string name="pagesCount" fuzzy="true">%s artículos</string>
   <string name="get_started">Primeros pasos</string>
   <string name="download_books">Descargar llibros</string>
   <string name="humankind_knowledge">La conocencia de la humanidá, nel to teléfonu.</string>

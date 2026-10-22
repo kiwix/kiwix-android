@@ -52,6 +52,7 @@
   <string name="library">لائبریری</string>
   <string name="no_files_here">اتھ کوئی فائلاں کائنی</string>
   <string name="download">ڈاؤن لوڈ</string>
+  <string name="explore">پھلورو</string>
   <string name="zim_simple">سادہ</string>
   <string name="zim_no_vid">ویڈیو کائنی</string>
   <string name="help_2">کِوِکس کیا کریندے؟</string>
@@ -61,7 +62,8 @@
   <string name="pref_free_storage">%s باقی</string>
   <string name="tts_pause">اجھکو</string>
   <string name="tts_resume">ولدا شروع کرو</string>
-  <string name="stop">اختتام</string>
+  <string name="tts_normal_speed">عام</string>
+  <string name="stop" fuzzy="true">اختتام</string>
   <string name="notification_pause_button_text">اجھکو</string>
   <string name="notification_resume_button_text">ولدا شروع کرو</string>
   <string name="internal_storage">اندرونی</string>
@@ -78,14 +80,15 @@
   <string name="time_left">باقی</string>
   <string name="time_today">اڄ</string>
   <string name="time_yesterday">کل</string>
-  <string name="your_languages">چُݨیاں ہویاں زباناں:</string>
-  <string name="other_languages">ٻیاں زباناں:</string>
+  <string name="your_languages" fuzzy="true">چُݨیاں ہویاں زباناں:</string>
+  <string name="other_languages" fuzzy="true">ٻیاں زباناں:</string>
   <string name="downloading">ڈاؤن لوڈ تھیندا پئے</string>
   <string name="crash_checkbox_language">تہاݙی زبان ترتیباں</string>
   <string name="crash_checkbox_device">ڈیوائس تفصیلاں</string>
   <string name="new_tab_shortcut_label">نویں ٹیب</string>
   <string name="get_content_shortcut_label">مواد گھنو</string>
-  <string name="pagesCount">%s مضامین</string>
+  <string name="pagesCount">%s ورقے</string>
+  <string name="mediaCount">%s میڈیا</string>
   <string name="get_started">شروع کرو</string>
   <string name="download_books">کتاباں ڈاؤن لوڈ کرو</string>
   <string name="go_to_next_page">اڳلے ورقے تے ون٘ڄو</string>
