@@ -26,6 +26,7 @@ import io.mockk.clearAllMocks
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
+import kotlinx.coroutines.Dispatchers
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
@@ -58,7 +59,8 @@ class ReadAloudManagerTest {
     clearAllMocks()
     tts = mockk<KiwixTextToSpeech>(relaxed = true)
     context = ApplicationProvider.getApplicationContext()
-    readAloudManager = ReadAloudManager(context, zimReaderContainer, kiwixDataStore)
+    readAloudManager =
+      ReadAloudManager(context, zimReaderContainer, kiwixDataStore, Dispatchers.Main)
     readAloudManager.tts = tts
     ReadAloudService.isReadAloudServiceRunning = false
   }

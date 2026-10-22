@@ -24,6 +24,8 @@ import android.media.AudioManager
 import android.media.AudioManager.OnAudioFocusChangeListener
 import android.speech.tts.Voice
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.MainCoroutineDispatcher
+import org.kiwix.kiwixmobile.core.di.MainDispatcher
 import org.kiwix.kiwixmobile.core.main.KiwixTextToSpeech
 import org.kiwix.kiwixmobile.core.main.KiwixTextToSpeech.OnInitSucceedListener
 import org.kiwix.kiwixmobile.core.main.KiwixTextToSpeech.OnSpeakingListener
@@ -49,7 +51,8 @@ import javax.inject.Inject
 class ReadAloudManager @Inject constructor(
   @param:ApplicationContext private val context: Context,
   private val zimReaderContainer: ZimReaderContainer,
-  private val kiwixDataStore: KiwixDataStore
+  private val kiwixDataStore: KiwixDataStore,
+  @param:MainDispatcher private val mainDispatcher: MainCoroutineDispatcher
 ) {
   sealed interface TtsState {
     data object StartReadSelection : TtsState
@@ -151,7 +154,8 @@ class ReadAloudManager @Inject constructor(
         speakingListener,
         audioFocusChangedListener,
         zimReaderContainer,
-        kiwixDataStore
+        kiwixDataStore,
+        mainDispatcher
       )
   }
 
