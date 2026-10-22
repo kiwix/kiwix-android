@@ -170,7 +170,10 @@ class BookTestWrapper(
   override fun getId(): String = id
   override fun getTitle(): String = bookTitle
   override fun getDescription(): String = bookDescription
+
+  @Deprecated("Deprecated in Java")
   override fun getLanguage(): String = bookLanguage
+  override fun getCommaSeparatedLanguages(): String = bookLanguage
   override fun getCreator(): String = bookCreator
   override fun getPublisher(): String = bookPublisher
   override fun getDate(): String = bookDate

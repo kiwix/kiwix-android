@@ -36,10 +36,13 @@ import io.mockk.slot
 import io.mockk.spyk
 import io.mockk.verify
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.test.advanceUntilIdle
+import kotlinx.coroutines.test.runTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.runner.RunWith
@@ -48,6 +51,7 @@ import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore.Companion.DEFAULT_TTS_SPEED
+import org.kiwix.sharedFunctions.MainDispatcherRule
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.Shadows.shadowOf
 import org.robolectric.annotation.Config
@@ -74,6 +78,10 @@ class KiwixTextToSpeechTest {
   private lateinit var audioManager: AudioManager
   private lateinit var kiwixTts: KiwixTextToSpeech
 
+  @JvmField
+  @Rule
+  val mainDispatcherRule = MainDispatcherRule()
+
   @Before
   fun setUp() {
     clearAllMocks()
@@ -89,7 +97,8 @@ class KiwixTextToSpeechTest {
       focusListener,
       zimReaderContainer,
       kiwixDataStore,
-      CoroutineScope(Dispatchers.Unconfined)
+      mainDispatcherRule.mainDispatcher,
+      CoroutineScope(mainDispatcherRule.dispatcher)
     )
   }
 
@@ -147,7 +156,7 @@ class KiwixTextToSpeechTest {
   fun `readAloud does not speak when language is multilingual`() {
     injectMockTts()
     every { tts.isSpeaking } returns false
-    every { zimReaderContainer.language } returns "mul"
+    every { zimReaderContainer.zimMainLanguage } returns "mul"
     kiwixTts.readAloud(webView) {
     }
     verify(exactly = 0) { webView.loadUrl(any()) }
@@ -159,7 +168,7 @@ class KiwixTextToSpeechTest {
   fun `readAloud does not speak when language is not supported`() {
     injectMockTts()
     every { tts.isSpeaking } returns false
-    every { zimReaderContainer.language } returns "eng"
+    every { zimReaderContainer.zimMainLanguage } returns "eng"
     every { tts.isLanguageAvailable(any()) } returns TextToSpeech.LANG_NOT_SUPPORTED
     kiwixTts.readAloud(webView) {
     }
@@ -296,7 +305,7 @@ class KiwixTextToSpeechTest {
 
   private fun setupReadAloudForSuccess(): WebView {
     every { tts.isSpeaking } returns false
-    every { zimReaderContainer.language } returns "eng"
+    every { zimReaderContainer.zimMainLanguage } returns "eng"
     every { tts.isLanguageAvailable(any()) } returns TextToSpeech.LANG_AVAILABLE
     val voice: Voice = mockk(relaxed = true)
     every { voice.features } returns emptySet()
@@ -333,7 +342,7 @@ class KiwixTextToSpeechTest {
     injectMockTts()
 
     every { tts.isSpeaking } returns false
-    every { zimReaderContainer.language } returns "eng"
+    every { zimReaderContainer.zimMainLanguage } returns "eng"
 
     mockkObject(LanguageUtils.Companion)
     every { LanguageUtils.iSO3ToLocale(any()) } returns null
@@ -354,11 +363,12 @@ class KiwixTextToSpeechTest {
       speakingListener,
       focusListener,
       zimReaderContainer,
-      kiwixDataStore
+      kiwixDataStore,
+      mainDispatcherRule.mainDispatcher
     )
     injectMockTts()
     every { tts.isSpeaking } returns false
-    every { zimReaderContainer.language } returns "eng"
+    every { zimReaderContainer.zimMainLanguage } returns "eng"
     every { tts.isLanguageAvailable(any()) } returns TextToSpeech.LANG_AVAILABLE
 
     val voice: Voice = mockk(relaxed = true)
@@ -471,27 +481,31 @@ class KiwixTextToSpeechTest {
     return shadow.onInitListener
   }
 
+  @OptIn(ExperimentalCoroutinesApi::class)
   @Test
-  fun `initializeTTS success sets isInitialized and calls onInitSucceed callback`() {
-    val listener = initializeTtsAndGetListener()
+  fun `initializeTTS success sets isInitialized and calls onInitSucceed callback`() =
+    runTest(mainDispatcherRule.dispatcher) {
+      val listener = initializeTtsAndGetListener()
 
-    listener.onInit(TextToSpeech.SUCCESS)
+      listener.onInit(TextToSpeech.SUCCESS)
+      advanceUntilIdle()
+      assertThat(kiwixTts.isInitialized).isTrue()
+      verify { initListener.onInitSucceed() }
+    }
 
-    assertThat(kiwixTts.isInitialized).isTrue()
-    verify { initListener.onInitSucceed() }
-  }
-
+  @OptIn(ExperimentalCoroutinesApi::class)
   @Test
-  fun `initializeTTS failure shows toast and does not call success callback`() {
-    val listener = initializeTtsAndGetListener()
+  fun `initializeTTS failure shows toast and does not call success callback`() =
+    runTest(mainDispatcherRule.dispatcher) {
+      val listener = initializeTtsAndGetListener()
 
-    listener.onInit(TextToSpeech.ERROR)
-
-    assertThat(kiwixTts.isInitialized).isFalse()
-    verify(exactly = 0) { initListener.onInitSucceed() }
-    assertThat(ShadowToast.getTextOfLatestToast())
-      .isEqualTo(context.getString(R.string.texttospeech_initialization_failed))
-  }
+      listener.onInit(TextToSpeech.ERROR)
+      advanceUntilIdle()
+      assertThat(kiwixTts.isInitialized).isFalse()
+      verify(exactly = 0) { initListener.onInitSucceed() }
+      assertThat(ShadowToast.getTextOfLatestToast())
+        .isEqualTo(context.getString(R.string.texttospeech_initialization_failed))
+    }
 
   @Test
   fun `javascript interface does nothing for empty content`() {
@@ -526,18 +540,20 @@ class KiwixTextToSpeechTest {
     assertThat(kiwixTts.speechRate).isEqualTo(TEST_TTS_SPEED_1_5)
   }
 
+  @OptIn(ExperimentalCoroutinesApi::class)
   @Test
-  fun `initializeTTS success sets speech rate from datastore`() {
-    every { kiwixDataStore.ttsSpeed } returns flowOf(TEST_TTS_SPEED_2_0)
-    val listener = initializeTtsAndGetListener()
-    injectMockTts()
-    every { tts.setSpeechRate(any()) } returns TextToSpeech.SUCCESS
+  fun `initializeTTS success sets speech rate from datastore`() =
+    runTest(mainDispatcherRule.dispatcher) {
+      every { kiwixDataStore.ttsSpeed } returns flowOf(TEST_TTS_SPEED_2_0)
+      val listener = initializeTtsAndGetListener()
+      injectMockTts()
+      every { tts.setSpeechRate(any()) } returns TextToSpeech.SUCCESS
 
-    listener.onInit(TextToSpeech.SUCCESS)
-
-    assertThat(kiwixTts.speechRate).isEqualTo(TEST_TTS_SPEED_2_0)
-    verify { tts.setSpeechRate(TEST_TTS_SPEED_2_0) }
-  }
+      listener.onInit(TextToSpeech.SUCCESS)
+      advanceUntilIdle()
+      assertThat(kiwixTts.speechRate).isEqualTo(TEST_TTS_SPEED_2_0)
+      verify { tts.setSpeechRate(TEST_TTS_SPEED_2_0) }
+    }
 
   @Test
   fun `setting speechRate when speaking pauses and resumes the active task`() {

@@ -67,7 +67,7 @@ data class LibkiwixBook(
     }
 
   var language: String
-    get() = _language.ifEmpty { nativeBook?.language.orEmpty() }
+    get() = _language.ifEmpty { nativeBook?.commaSeparatedLanguages.orEmpty() }
     set(language) {
       _language = language
     }

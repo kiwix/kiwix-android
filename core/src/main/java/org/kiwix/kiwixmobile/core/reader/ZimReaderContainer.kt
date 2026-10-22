@@ -96,5 +96,6 @@ class ZimReaderContainer @Inject constructor(
   val date get() = zimFileReader?.date
   val description get() = zimFileReader?.description
   val favicon get() = zimFileReader?.favicon
-  val language get() = zimFileReader?.language
+  val zimMainLanguage get() = zimFileReader?.zimMainLanguage
+  val languages get() = zimFileReader?.languages
 }

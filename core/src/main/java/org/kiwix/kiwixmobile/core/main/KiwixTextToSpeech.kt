@@ -36,10 +36,13 @@ import android.webkit.WebView
 import android.widget.Toast
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.MainCoroutineDispatcher
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.di.MainDispatcher
 import org.kiwix.kiwixmobile.core.extensions.toast
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils.Companion.iSO3ToLocale
@@ -59,6 +62,7 @@ import java.util.concurrent.atomic.AtomicInteger
  * (and does not receive if it failed)
  * @param onSpeakingListener listener that receives an event when speaking just started or
  */
+@Suppress("LongParameterList")
 class KiwixTextToSpeech internal constructor(
   val context: Context,
   private val onInitSucceedListener: OnInitSucceedListener,
@@ -66,6 +70,7 @@ class KiwixTextToSpeech internal constructor(
   private var onAudioFocusChangeListener: OnAudioFocusChangeListener? = null,
   private val zimReaderContainer: ZimReaderContainer,
   private val kiwixDataStore: KiwixDataStore,
+  @param:MainDispatcher private val mainDispatcher: MainCoroutineDispatcher,
   private val coroutineScope: CoroutineScope = CoroutineScope(Dispatchers.IO)
 ) {
   private var focusRequest: AudioFocusRequest? = null
@@ -116,7 +121,7 @@ class KiwixTextToSpeech internal constructor(
   fun getAvailableVoices(): List<Voice> {
     if (!isInitialized || !::tts.isInitialized) return emptyList()
     val activeLocale = runCatching { tts.voice?.locale ?: tts.language }.getOrNull()
-      ?: zimReaderContainer.language?.let {
+      ?: zimReaderContainer.zimMainLanguage?.let {
         iSO3ToLocale(it) ?: runCatching { Locale(it) }.getOrNull()
       }
       ?: Locale.getDefault()
@@ -200,7 +205,9 @@ class KiwixTextToSpeech internal constructor(
                 tts.voice = savedVoiceObj
               }
             }
-            onInitSucceedListener.onInitSucceed()
+            withContext(mainDispatcher) {
+              onInitSucceedListener.onInitSucceed()
+            }
           }
         } else {
           Log.e(TAG_KIWIX, "Initialization of TextToSpeech Failed!")
@@ -244,11 +251,11 @@ class KiwixTextToSpeech internal constructor(
         onSpeakingListener.onSpeakingEnded()
       }
     } else {
-      val locale = iSO3ToLocale(zimReaderContainer.language)
-        ?: runCatching { Locale(zimReaderContainer.language.orEmpty()) }.getOrNull()
+      val locale = iSO3ToLocale(zimReaderContainer.zimMainLanguage)
+        ?: runCatching { Locale(zimReaderContainer.zimMainLanguage.orEmpty()) }.getOrNull()
         ?: Locale.getDefault()
-      if (MULTILINGUAL_LANGUAGE_CODE == zimReaderContainer.language) {
-        Log.d(TAG_KIWIX, "TextToSpeech: disabled " + zimReaderContainer.language)
+      if (MULTILINGUAL_LANGUAGE_CODE == zimReaderContainer.zimMainLanguage) {
+        Log.d(TAG_KIWIX, "TextToSpeech: disabled " + zimReaderContainer.zimMainLanguage)
         context.toast(R.string.tts_not_enabled, Toast.LENGTH_LONG)
         return
       }
@@ -256,7 +263,7 @@ class KiwixTextToSpeech internal constructor(
       if (availability == LANG_NOT_SUPPORTED) {
         Log.d(
           TAG_KIWIX,
-          "TextToSpeech: language not supported: ${zimReaderContainer.language}"
+          "TextToSpeech: language not supported: ${zimReaderContainer.zimMainLanguage}"
         )
         context.toast(R.string.tts_lang_not_supported, Toast.LENGTH_LONG)
         return
