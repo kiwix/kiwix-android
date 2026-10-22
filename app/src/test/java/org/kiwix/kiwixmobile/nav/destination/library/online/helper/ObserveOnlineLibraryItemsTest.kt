@@ -29,6 +29,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -80,16 +81,8 @@ class ObserveOnlineLibraryItemsTest {
 
   private val fsState = CanWrite4GbFile
 
-  private val getString: (Int, Array<out Any>) -> String = { _, args ->
-    "Your language: ${args[0]}"
-  }
-
-  private val getSimpleString: (Int) -> String = {
+  private val getString: (Int) -> String = {
     "All languages"
-  }
-
-  private val getDisplayLanguage: suspend (String) -> String = { langCode ->
-    if (langCode == "en") "English" else langCode
   }
 
   @Test
@@ -102,13 +95,9 @@ class ObserveOnlineLibraryItemsTest {
       localBooks = flowOf(emptyList()),
       downloads = flowOf(emptyList()),
       networkBooks = flowOf(listOf(book("1"), book("2"))),
-      getString = getString,
-      getSimpleString = getSimpleString,
-      getDisplayLanguage = getDisplayLanguage
+      getString = getString
     ).first()
-
-    assertTrue(result.any { it is LibraryListItem.DividerItem })
-    assertEquals(3, result.size)
+    assertEquals(2, result.size)
   }
 
   @Test
@@ -124,9 +113,7 @@ class ObserveOnlineLibraryItemsTest {
       localBooks = flowOf(listOf(local)),
       downloads = flowOf(emptyList()),
       networkBooks = flowOf(listOf(localLibBook, book("2"))),
-      getString = getString,
-      getSimpleString = getSimpleString,
-      getDisplayLanguage = getDisplayLanguage
+      getString = getString
     ).first()
 
     assertTrue(result.none { it is LibraryListItem.BookItem && it.book == localLibBook })
@@ -145,9 +132,7 @@ class ObserveOnlineLibraryItemsTest {
       localBooks = flowOf(emptyList()),
       downloads = flowOf(listOf(download)),
       networkBooks = flowOf(listOf(b1)),
-      getString = getString,
-      getSimpleString = getSimpleString,
-      getDisplayLanguage = getDisplayLanguage
+      getString = getString
     ).first()
 
     assertTrue(result.any { it is LibraryListItem.LibraryDownloadItem })
@@ -166,9 +151,7 @@ class ObserveOnlineLibraryItemsTest {
       localBooks = flowOf(emptyList()),
       downloads = flowOf(listOf(download)),
       networkBooks = flowOf(listOf(b1)),
-      getString = getString,
-      getSimpleString = getSimpleString,
-      getDisplayLanguage = getDisplayLanguage
+      getString = getString
     ).first()
 
     val mainBooks = result.filterIsInstance<LibraryListItem.BookItem>()
@@ -177,7 +160,7 @@ class ObserveOnlineLibraryItemsTest {
   }
 
   @Test
-  fun `uses language specific title when language selected`() = runTest {
+  fun `there should not be any divider item for normal books`() = runTest {
     every { fat32Checker.fileSystemStates } returns MutableStateFlow(fsState)
     every { kiwixDataStore.selectedOnlineContentLanguage } returns flowOf("en")
     every { kiwixDataStore.selectedOnlineContentCategory } returns flowOf("")
@@ -186,14 +169,10 @@ class ObserveOnlineLibraryItemsTest {
       localBooks = flowOf(emptyList()),
       downloads = flowOf(emptyList()),
       networkBooks = flowOf(listOf(book("1"))),
-      getString = getString,
-      getSimpleString = getSimpleString,
-      getDisplayLanguage = getDisplayLanguage
+      getString = getString
     ).first()
-
-    val divider = result.first() as LibraryListItem.DividerItem
-
-    assertTrue(divider.sectionTitle.contains("English"))
+    val containsDivider = result.any { it is LibraryListItem.DividerItem }
+    assertFalse(containsDivider)
   }
 
   @Test
@@ -206,9 +185,7 @@ class ObserveOnlineLibraryItemsTest {
       localBooks = flowOf(emptyList()),
       downloads = flowOf(emptyList()),
       networkBooks = flowOf(emptyList()),
-      getString = getString,
-      getSimpleString = getSimpleString,
-      getDisplayLanguage = getDisplayLanguage
+      getString = getString
     ).first()
 
     assertTrue(result.isEmpty())

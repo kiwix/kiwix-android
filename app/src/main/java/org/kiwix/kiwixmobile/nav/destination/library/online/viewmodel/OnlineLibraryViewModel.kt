@@ -50,7 +50,6 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.R
-import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.convertToLocal
 import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.isNetworkAvailable
 import org.kiwix.kiwixmobile.core.dao.DownloadRoomDao
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookOnDisk
@@ -61,7 +60,6 @@ import org.kiwix.kiwixmobile.core.utils.BookUtils
 import org.kiwix.kiwixmobile.core.utils.EXTERNAL_SELECT_POSITION
 import org.kiwix.kiwixmobile.core.utils.INTERNAL_SELECT_POSITION
 import org.kiwix.kiwixmobile.core.utils.KiwixPermissionChecker
-import org.kiwix.kiwixmobile.core.utils.LocaleHelper
 import org.kiwix.kiwixmobile.core.utils.StorageDeviceProvider
 import org.kiwix.kiwixmobile.core.utils.ZERO
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
@@ -301,18 +299,11 @@ class OnlineLibraryViewModel @Inject constructor(
   private fun getString(resId: Int, vararg args: Any): String =
     context.getString(resId, *args)
 
-  private suspend fun getDisplayLanguage(languageCode: String): String {
-    val mappedLocale = bookUtils.localeMap[languageCode] ?: languageCode.convertToLocal()
-    return mappedLocale.getDisplayLanguage(LocaleHelper.getAppLocale(context, kiwixDataStore))
-  }
-
   private fun observeLibraryItems() = observeOnlineLibraryItems(
     localBooks = books(),
     downloads = downloadDao.downloads(),
     networkBooks = networkBooks,
-    getString = { resId, args -> context.getString(resId, *args) },
-    getSimpleString = { resId -> context.getString(resId) },
-    getDisplayLanguage = { langCode -> getDisplayLanguage(langCode) }
+    getString = { resId -> context.getString(resId) }
   ).onEach {
     updateLibraryItems(it)
   }.catch { throwable ->
