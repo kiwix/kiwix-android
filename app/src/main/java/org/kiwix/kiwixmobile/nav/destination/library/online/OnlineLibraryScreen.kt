@@ -80,6 +80,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.navigation.NavHostController
@@ -97,6 +98,7 @@ import org.kiwix.kiwixmobile.core.ui.components.KiwixAppBar
 import org.kiwix.kiwixmobile.core.ui.components.KiwixFloatingActionButton
 import org.kiwix.kiwixmobile.core.ui.components.KiwixSearchView
 import org.kiwix.kiwixmobile.core.ui.components.KiwixSnackbarHost
+import org.kiwix.kiwixmobile.core.ui.components.ONE
 import org.kiwix.kiwixmobile.core.ui.components.SwipeRefreshLayout
 import org.kiwix.kiwixmobile.core.ui.models.ActionMenuItem
 import org.kiwix.kiwixmobile.core.ui.theme.MineShaftGray700
@@ -132,7 +134,6 @@ const val LANGUAGE_TABS_ROW_TESTING_TAG = "languageTabsRowTestingTag"
 const val LANGUAGE_TAB_TESTING_TAG_PREFIX = "languageTabTestingTag_"
 const val LOAD_MORE_DELAY = 150L
 private const val BACK_TO_TOP_ITEM_THRESHOLD = 5
-private val TAB_HEIGHT = FORTY_EIGHT_DP
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Suppress("ComposableLambdaParameterNaming", "LongParameterList")
@@ -193,7 +194,10 @@ fun LanguageTabsRow(
   onTabSelected: (Int) -> Unit,
   modifier: Modifier = Modifier
 ) {
-  val safeIndex = selectedTabIndex.coerceIn(0, (tabs.size - 1).coerceAtLeast(0))
+  val safeIndex = selectedTabIndex.coerceIn(
+    minimumValue = ZERO,
+    maximumValue = (tabs.size - ONE).coerceAtLeast(ZERO)
+  )
   Box(modifier = modifier.fillMaxWidth()) {
     HorizontalDivider(
       modifier = Modifier
@@ -208,9 +212,9 @@ fun LanguageTabsRow(
       containerColor = Color.Transparent,
       divider = {},
       indicator = { tabPositions ->
-        if (safeIndex < tabPositions.size) {
+        tabPositions.getOrNull(safeIndex)?.let { position ->
           TabRowDefaults.SecondaryIndicator(
-            Modifier.tabIndicatorOffset(tabPositions[safeIndex]),
+            Modifier.tabIndicatorOffset(position),
             color = MaterialTheme.colorScheme.primary
           )
         }
@@ -237,7 +241,7 @@ fun LanguageTabsRow(
             )
           },
           modifier = Modifier
-            .height(TAB_HEIGHT)
+            .height(FORTY_EIGHT_DP)
             .semantics {
               testTag = "$LANGUAGE_TAB_TESTING_TAG_PREFIX${tab.displayName}"
             }
@@ -295,7 +299,7 @@ private fun OnlineLibraryBackToTopButton(
   bottomAppBarScrollBehaviour: BottomAppBarScrollBehavior?
 ) {
   val coroutineScope = rememberCoroutineScope()
-  val shouldShowBackToTopButton by remember {
+  val shouldShowBackToTopButton by remember(listState) {
     derivedStateOf { listState.firstVisibleItemIndex >= BACK_TO_TOP_ITEM_THRESHOLD }
   }
 
