@@ -160,9 +160,9 @@
   <string name="pref_free_storage">%s szabad</string>
   <string name="choose_storage_to_download_book">Tárhely kiválasztása a könyv letöltéséhez</string>
   <string name="delete_zim_failed">Sajnáljuk, néhány fájlt nem tudtunk törölni. Próbáljon meg inkább egy fájlkezelőt használni.</string>
-  <string name="tts_pause">szüneteltetés</string>
-  <string name="tts_resume">folytatás</string>
-  <string name="stop">leállítás</string>
+  <string name="tts_pause" fuzzy="true">szüneteltetés</string>
+  <string name="tts_resume" fuzzy="true">folytatás</string>
+  <string name="stop" fuzzy="true">leállítás</string>
   <string name="notification_pause_button_text">Szüneteltetés</string>
   <string name="notification_resume_button_text">Folytatás</string>
   <string name="internal_storage">Belső</string>
@@ -187,14 +187,14 @@
   <string name="time_left">maradt</string>
   <string name="time_today">Ma</string>
   <string name="time_yesterday">Tegnap</string>
-  <string name="pref_external_link_popup_title">Figyelmeztetés külső hivatkozások megnyitásakor</string>
+  <string name="pref_external_link_popup_title" fuzzy="true">Figyelmeztetés külső hivatkozások megnyitásakor</string>
   <string name="pref_external_link_popup_summary">Felugró ablak megjelenítése a további költségekkel kapcsolatos figyelmeztetésre, vagy az internet nélküli hivatkozások nem működésével kapcsolatban.</string>
-  <string name="external_link_popup_dialog_title">Külső hivatkozás megnyitása!</string>
-  <string name="external_link_popup_dialog_message">Külső hivatkozást próbál megnyitni. Ez további költségekkel járhat az adatátvitel miatt, vagy egyszerűen nem fog működni, ha internet nélkül van. Szeretné folytatni?</string>
+  <string name="external_link_popup_dialog_title" fuzzy="true">Külső hivatkozás megnyitása!</string>
+  <string name="external_link_popup_dialog_message" fuzzy="true">Külső hivatkozást próbál megnyitni. Ez további költségekkel járhat az adatátvitel miatt, vagy egyszerűen nem fog működni, ha internet nélkül van. Szeretné folytatni?</string>
   <string name="do_not_ask_anymore">Ne kérdezzen többé</string>
-  <string name="your_languages">Kiválasztott nyelvek:</string>
+  <string name="your_languages" fuzzy="true">Kiválasztott nyelvek:</string>
   <string name="your_language">Kiválasztott nyelv: %s</string>
-  <string name="other_languages">További nyelvek:</string>
+  <string name="other_languages" fuzzy="true">További nyelvek:</string>
   <string name="downloading">Letöltés</string>
   <string name="no_items_msg">Nincsenek elérhető elemek</string>
   <string name="crash_title">Nos… ez kínos!</string>
@@ -209,7 +209,7 @@
   <string name="new_tab_shortcut_label">Új lap</string>
   <string name="get_content_shortcut_label">Tartalom beszerzése</string>
   <string name="fav_icon">Böngészőikon</string>
-  <string name="pagesCount">%s szócikk</string>
+  <string name="pagesCount" fuzzy="true">%s szócikk</string>
   <string name="get_started">Kezdeti lépések</string>
   <string name="download_books">Könyvek letöltése</string>
   <string name="humankind_knowledge">Az emberiség tudása az Ön telefonján.</string>

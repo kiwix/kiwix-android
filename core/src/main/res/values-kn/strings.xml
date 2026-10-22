@@ -51,9 +51,9 @@
   <string name="library">ಗ್ರಂಥಾಲಯ</string>
   <string name="zim_simple">ಸರಳ</string>
   <string name="help_2">ಕಿವಿಕ್ಸ್ ಏನು ಮಾಡುತ್ತದೆ?</string>
-  <string name="tts_pause">ಸ್ವಲ್ಪ ನಿಲ್ಲಿಸು</string>
-  <string name="tts_resume">ಮತ್ತೆ ಶುರುಮಾಡು</string>
-  <string name="stop">ನಿಲ್ಲಿಸು</string>
+  <string name="tts_pause" fuzzy="true">ಸ್ವಲ್ಪ ನಿಲ್ಲಿಸು</string>
+  <string name="tts_resume" fuzzy="true">ಮತ್ತೆ ಶುರುಮಾಡು</string>
+  <string name="stop" fuzzy="true">ನಿಲ್ಲಿಸು</string>
   <string name="internal_storage">ಒಳಗಿನ</string>
   <string name="external_storage">ಹೊರಗಿನ</string>
   <string name="yes">ಹೌದು</string>

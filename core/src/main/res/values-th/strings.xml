@@ -73,9 +73,9 @@
   <string name="help_11">การดาวน์โหลดไฟล์ ZIM ในแอพจะอยู่ในไดเรกทอรีจัดเก็บข้อมูลภายนอกในโฟลเดอร์ชื่อ Kiwix</string>
   <string name="pref_current_folder">โฟลเดอร์ปัจจุบัน</string>
   <string name="delete_zim_failed">ขออภัย เราไม่สามารถลบไฟล์บางชิ้น คุณควรลองใช้โปรแกรมจัดการไฟล์แทน</string>
-  <string name="tts_pause">หยุดชั่วคราว</string>
-  <string name="tts_resume">ทำต่อ</string>
-  <string name="stop">หยุด</string>
+  <string name="tts_pause" fuzzy="true">หยุดชั่วคราว</string>
+  <string name="tts_resume" fuzzy="true">ทำต่อ</string>
+  <string name="stop" fuzzy="true">หยุด</string>
   <string name="external_storage">ภายนอก</string>
   <string name="confirm_stop_download_title">หยุดดาวน์โหลดหรือไม่?</string>
   <string name="confirm_stop_download_msg">คุณแน่ใจหรือไม่ว่าต้องการหยุดดาวน์โหลดนี้?</string>

@@ -168,9 +168,9 @@
   <string name="pref_free_storage">%s voľných</string>
   <string name="choose_storage_to_download_book">Vyberte úložisko na stiahnutie knihy</string>
   <string name="delete_zim_failed">Prepáčte nepodarilo sa vymazať nejaké súbory. Skúste použiť manažér súborov.</string>
-  <string name="tts_pause">pozastaviť</string>
-  <string name="tts_resume">pokračovať</string>
-  <string name="stop">zastaviť</string>
+  <string name="tts_pause" fuzzy="true">pozastaviť</string>
+  <string name="tts_resume" fuzzy="true">pokračovať</string>
+  <string name="stop" fuzzy="true">zastaviť</string>
   <string name="notification_pause_button_text">Pozastaviť</string>
   <string name="notification_resume_button_text">Pokračovať</string>
   <string name="internal_storage">Interné</string>
@@ -195,14 +195,14 @@
   <string name="time_left">vľavo</string>
   <string name="time_today">Dnes</string>
   <string name="time_yesterday">Včera</string>
-  <string name="pref_external_link_popup_title">Upozorniť pri vstupe na externé odkazy</string>
+  <string name="pref_external_link_popup_title" fuzzy="true">Upozorniť pri vstupe na externé odkazy</string>
   <string name="pref_external_link_popup_summary">Zobraziť upozornenia pri dodatočných nákladoch alebo pri nemožnosti fungovania odkazov offline.</string>
-  <string name="external_link_popup_dialog_title">Vstupovanie na externý odkaz!</string>
-  <string name="external_link_popup_dialog_message">Prechádzate na externý odkaz. Môže to viesť k dodatočným nákladom za prenos dát alebo to jednoducho nebude fungovať, keď ste offline.\nChcete pokračovať?</string>
+  <string name="external_link_popup_dialog_title" fuzzy="true">Vstupovanie na externý odkaz!</string>
+  <string name="external_link_popup_dialog_message" fuzzy="true">Prechádzate na externý odkaz. Môže to viesť k dodatočným nákladom za prenos dát alebo to jednoducho nebude fungovať, keď ste offline.\nChcete pokračovať?</string>
   <string name="do_not_ask_anymore">Už sa nepýtať</string>
-  <string name="your_languages">Vybrané jazyky:</string>
+  <string name="your_languages" fuzzy="true">Vybrané jazyky:</string>
   <string name="your_language">Vybraný jazyk: %s</string>
-  <string name="other_languages">Iné jazyky:</string>
+  <string name="other_languages" fuzzy="true">Iné jazyky:</string>
   <string name="downloading">Sťahovanie</string>
   <string name="no_items_msg">Žiadne dostupné položky</string>
   <string name="crash_title">Hm…Toto je trápne</string>
@@ -217,7 +217,7 @@
   <string name="new_tab_shortcut_label">Nová karta</string>
   <string name="get_content_shortcut_label">Získať obsah</string>
   <string name="fav_icon">Favicon</string>
-  <string name="pagesCount">%s článkov</string>
+  <string name="pagesCount" fuzzy="true">%s článkov</string>
   <string name="get_started">Začať</string>
   <string name="download_books">Stiahnuť knihy</string>
   <string name="humankind_knowledge">Vedomosti ľudstva, na Vašom telefóne.</string>

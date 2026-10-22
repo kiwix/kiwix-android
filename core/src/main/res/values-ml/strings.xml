@@ -88,9 +88,9 @@
   <string name="download">ഡൗൺലോഡ് ചെയ്യുക</string>
   <string name="zim_no_pic">ചിത്രങ്ങളില്ല</string>
   <string name="help_2">കിവിക്സ് എന്താണ് ചെയ്യുന്നത്?</string>
-  <string name="tts_pause">താത്കാലികമായി നിർത്തുക</string>
-  <string name="tts_resume">തുടരുക</string>
-  <string name="stop">നിർത്തുക</string>
+  <string name="tts_pause" fuzzy="true">താത്കാലികമായി നിർത്തുക</string>
+  <string name="tts_resume" fuzzy="true">തുടരുക</string>
+  <string name="stop" fuzzy="true">നിർത്തുക</string>
   <string name="internal_storage">ആന്തരികം</string>
   <string name="yes">അതെ</string>
   <string name="no">അല്ല</string>
@@ -105,12 +105,12 @@
   <string name="time_today">ഇന്ന്</string>
   <string name="time_yesterday">ഇന്നലെ</string>
   <string name="do_not_ask_anymore">ഇനി ഒരിക്കലും ചോദിക്കരുത്</string>
-  <string name="your_languages">തിരഞ്ഞെടുത്ത ഭാഷകൾ:</string>
-  <string name="other_languages">മറ്റ് ഭാഷകൾ:</string>
+  <string name="your_languages" fuzzy="true">തിരഞ്ഞെടുത്ത ഭാഷകൾ:</string>
+  <string name="other_languages" fuzzy="true">മറ്റ് ഭാഷകൾ:</string>
   <string name="crash_checkbox_language">താങ്കളുടെ ഭാഷ സജ്ജീകരണങ്ങൾ</string>
   <string name="crash_checkbox_zimfiles" fuzzy="true">Zim പ്രമാണങ്ങളുടെ പട്ടിക</string>
   <string name="crash_button_confirm">വിവരങ്ങൾ അയക്കുക</string>
-  <string name="pagesCount">%s ലേഖനങ്ങൾ</string>
+  <string name="pagesCount" fuzzy="true">%s ലേഖനങ്ങൾ</string>
   <string name="get_started">തുടക്കം കുറിക്കുക</string>
   <string name="download_books">പുസ്തകങ്ങൾ ഡൗൺലോഡ് ചെയ്യുക</string>
   <string name="welcome_to_the_family">കുടുംബത്തിലേക്ക് സ്വാഗതം</string>

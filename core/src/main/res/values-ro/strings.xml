@@ -155,9 +155,9 @@
   <string name="pref_free_storage">%s gratuit</string>
   <string name="choose_storage_to_download_book">Alegeți spațiu de stocare pentru a descărca cartea</string>
   <string name="delete_zim_failed">Ne pare rău, dar nu am reușit să ștergem unele fișiere. Ar trebui să folosiți un manager de fișier în loc.</string>
-  <string name="tts_pause">pauză</string>
-  <string name="tts_resume">rezumat</string>
-  <string name="stop">stop</string>
+  <string name="tts_pause" fuzzy="true">pauză</string>
+  <string name="tts_resume" fuzzy="true">rezumat</string>
+  <string name="stop" fuzzy="true">stop</string>
   <string name="notification_pause_button_text">Pauză</string>
   <string name="notification_resume_button_text">Reia</string>
   <string name="internal_storage">Intern</string>
@@ -182,14 +182,14 @@
   <string name="time_left">stânga</string>
   <string name="time_today">Astăzi</string>
   <string name="time_yesterday">Ieri</string>
-  <string name="pref_external_link_popup_title">Atenționați când introduceți legături extern</string>
+  <string name="pref_external_link_popup_title" fuzzy="true">Atenționați când introduceți legături extern</string>
   <string name="pref_external_link_popup_summary">Afișează popup pentru a avertiza în legătură cu costurile suplimentare sau care nu merg în legăturile off-line.</string>
-  <string name="external_link_popup_dialog_title">Introduc Legătura externă!</string>
-  <string name="external_link_popup_dialog_message">Acum introduceți o legătură externă. Această acțiune ar putea duce la costuri suplimentare pentru transferul de date sau nu va funcționa când sunteți offline. \nDoriți să continuați?</string>
+  <string name="external_link_popup_dialog_title" fuzzy="true">Introduc Legătura externă!</string>
+  <string name="external_link_popup_dialog_message" fuzzy="true">Acum introduceți o legătură externă. Această acțiune ar putea duce la costuri suplimentare pentru transferul de date sau nu va funcționa când sunteți offline. \nDoriți să continuați?</string>
   <string name="do_not_ask_anymore">Nu mă mai întreba</string>
-  <string name="your_languages">Limbi selectate:</string>
+  <string name="your_languages" fuzzy="true">Limbi selectate:</string>
   <string name="your_language">Limbă selectată: %s</string>
-  <string name="other_languages">Alte limbi:</string>
+  <string name="other_languages" fuzzy="true">Alte limbi:</string>
   <string name="downloading" fuzzy="true">Descărcare</string>
   <string name="no_items_msg">Nu sunt item-uri disponibile</string>
   <string name="crash_title">Ei bine … Este jenant</string>
@@ -204,7 +204,7 @@
   <string name="new_tab_shortcut_label">Filă nouă</string>
   <string name="get_content_shortcut_label">Obține conținut</string>
   <string name="fav_icon">Favicon</string>
-  <string name="pagesCount">%s articole</string>
+  <string name="pagesCount" fuzzy="true">%s articole</string>
   <string name="get_started">Să începem</string>
   <string name="download_books">Descarcă cărți</string>
   <string name="humankind_knowledge">Cunoașterea omenirii pe telefonul tău.</string>
