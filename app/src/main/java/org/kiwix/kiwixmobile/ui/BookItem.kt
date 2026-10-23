@@ -233,7 +233,6 @@ fun BookIcon(iconSource: String, isOnlineLibrary: Boolean) {
       model = iconSource,
       contentDescription = stringResource(CoreR.string.fav_icon) + iconSource.hashCode(),
       modifier = modifier.testTag(ONLINE_LIBRARY_IMAGE_TEST_TAG),
-      placeholder = painterResource(CoreR.drawable.default_zim_file_icon),
       error = painterResource(CoreR.drawable.default_zim_file_icon)
     )
   } else {
