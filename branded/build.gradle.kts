@@ -259,7 +259,7 @@ fun ApplicationProductFlavor.createPublishBundleWithAssetPlayDelivery(): TaskPro
           val generatedBundleFile =
             File(
               "${layout.buildDirectory.get()}/outputs/bundle/${capitalizedName.lowercase(Locale.getDefault())}" +
-                "Release/custom-${capitalizedName.lowercase(Locale.getDefault())}-release.aab"
+                "Release/branded-${capitalizedName.lowercase(Locale.getDefault())}-release.aab"
             )
           if (generatedBundleFile.exists()) {
             uploadBundle(generatedBundleFile)
