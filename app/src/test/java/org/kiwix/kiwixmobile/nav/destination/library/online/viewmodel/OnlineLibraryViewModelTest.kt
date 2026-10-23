@@ -1286,4 +1286,62 @@ class OnlineLibraryViewModelTest {
         assertThat(viewModel.networkBooks.value).containsExactly(book)
       }
   }
+
+  @Nested
+  inner class CategoryFilterChips {
+    @Test
+    fun `onCategoryChipClicked sets filter and clears tab cache`() = runTest {
+      viewModel.tabDataMap["eng"] = OnlineLibraryViewModel.TabData(
+        books = listOf(mockk()),
+        isLoaded = true
+      )
+
+      viewModel.onlineLibraryRequest.test {
+        viewModel.onCategoryChipClicked("phet")
+        val emitted = awaitItem()
+        assertThat(emitted.category).isEqualTo("phet")
+        cancelAndIgnoreRemainingEvents()
+      }
+
+      assertThat(viewModel.uiState.value.selectedCategories).containsExactly("phet")
+      assertThat(viewModel.tabDataMap).isEmpty()
+    }
+
+    @Test
+    fun `onCategoryChipClicked supports selecting multiple categories`() = runTest {
+      viewModel.onCategoryChipClicked("phet")
+      viewModel.onCategoryChipClicked("mooc")
+      assertThat(viewModel.uiState.value.selectedCategories)
+        .containsExactlyInAnyOrder("phet", "mooc")
+    }
+
+    @Test
+    fun `onCategoryChipClicked toggles off when already selected`() = runTest {
+      viewModel.setUiStateForTest(
+        viewModel.uiState.value.copy(selectedCategories = setOf("phet", "mooc"))
+      )
+
+      viewModel.onCategoryChipClicked("phet")
+      assertThat(viewModel.uiState.value.selectedCategories).containsExactly("mooc")
+    }
+
+    @Test
+    fun `categoryChips is empty initially when no categories selected`() = runTest {
+      val input = OnlineLibraryViewModel.FiltersInput("", "", "")
+      viewModel.handleFiltersChanged(input)
+      assertThat(viewModel.uiState.value.categoryChips).isEmpty()
+    }
+
+    @Test
+    fun `categoryChips contains selected categories when user selects categories`() = runTest {
+      val input = OnlineLibraryViewModel.FiltersInput(
+        "gutenberg,iFixit,mooc,other,phet",
+        "",
+        ""
+      )
+      viewModel.handleFiltersChanged(input)
+      assertThat(viewModel.uiState.value.categoryChips)
+        .containsExactly("gutenberg", "iFixit", "mooc", "other", "phet")
+    }
+  }
 }
