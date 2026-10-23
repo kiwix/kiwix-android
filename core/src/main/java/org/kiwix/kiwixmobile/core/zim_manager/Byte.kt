@@ -28,7 +28,7 @@ value class Byte(private val byteString: String?) {
     get() = byteString?.toLongOrNull()?.let {
       val units = arrayOf("B", "KB", "MB", "GB", "TB")
       val conversion = (log10(it.toDouble()) / log10(1000.0)).toInt()
-      DecimalFormat("#,##0.##")
+      DecimalFormat("#,##0.#")
         .format(it / 1000.0.pow(conversion.toDouble())) +
         " " +
         units[conversion]
