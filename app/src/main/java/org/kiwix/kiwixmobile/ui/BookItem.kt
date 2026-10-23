@@ -20,6 +20,7 @@ package org.kiwix.kiwixmobile.ui
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -56,6 +57,7 @@ import coil3.compose.AsyncImage
 import org.kiwix.kiwixmobile.core.downloader.model.Base64String
 import org.kiwix.kiwixmobile.core.downloader.model.toPainter
 import org.kiwix.kiwixmobile.core.entity.LibkiwixBook
+import org.kiwix.kiwixmobile.core.ui.theme.IconBeigeBackground
 import org.kiwix.kiwixmobile.core.ui.theme.KiwixTheme
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.BOOK_ICON_SIZE
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FOUR_DP
@@ -225,6 +227,7 @@ fun BookIcon(iconSource: String, isOnlineLibrary: Boolean) {
   val modifier = Modifier
     .size(BOOK_ICON_SIZE)
     .clip(RoundedCornerShape(FOUR_DP))
+    .background(IconBeigeBackground)
   if (isOnlineLibrary) {
     AsyncImage(
       model = iconSource,

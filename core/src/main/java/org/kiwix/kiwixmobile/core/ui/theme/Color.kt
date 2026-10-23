@@ -43,6 +43,7 @@ val MonzaRed = Color(0xFFB00020)
 val StartServerGreen = Color(0xFF2E7D31)
 val StopServerRed = Color(0xFFC62728)
 val PureGrey = Color(0xFF808080)
+val IconBeigeBackground = Color(0xFFF5F2EB)
 
 val TagPictureContainerLight = Color(0xFFE6F0E6)
 val TagPictureContentLight = Color(0xFF3B6E41)
