@@ -43,7 +43,7 @@ import org.kiwix.kiwixmobile.core.entity.LibkiwixBook
 import org.kiwix.kiwixmobile.core.qr.GenerateQR
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
-import org.kiwix.kiwixmobile.core.ui.theme.StartServerGreen
+import org.kiwix.kiwixmobile.core.ui.theme.DenimBlue800
 import org.kiwix.kiwixmobile.core.ui.theme.StopServerRed
 import org.kiwix.kiwixmobile.core.utils.ConnectivityReporter
 import org.kiwix.kiwixmobile.core.utils.KiwixPermissionChecker
@@ -457,7 +457,7 @@ class ZimHostViewModelTest {
     assertEquals("", state.serverIpAddress)
     assertFalse(state.showShareIcon)
     assertFalse(state.qrVisible)
-    assertEquals(StartServerGreen, state.startServerButtonColor)
+    assertEquals(DenimBlue800, state.startServerButtonColor)
   }
   // ======== onServerFailedToStart ========
 

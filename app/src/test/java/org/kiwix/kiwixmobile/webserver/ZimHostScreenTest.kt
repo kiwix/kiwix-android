@@ -34,7 +34,7 @@ import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.entity.LibkiwixBook
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.ui.models.IconItem
-import org.kiwix.kiwixmobile.core.ui.theme.StartServerGreen
+import org.kiwix.kiwixmobile.core.ui.theme.DenimBlue800
 import org.kiwix.kiwixmobile.core.ui.theme.StopServerRed
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListItem
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListItem.BookOnDisk
@@ -82,7 +82,7 @@ class ZimHostScreenTest {
     qrIcon: IconItem = IconItem.Drawable(R.drawable.ic_storage),
     booksList: List<BooksOnDiskListItem> = emptyList(),
     startServerButtonText: String = context.getString(CoreR.string.start_server_label),
-    startServerButtonColor: Color = StartServerGreen,
+    startServerButtonColor: Color = DenimBlue800,
     startServerButtonClick: () -> Unit = {},
     selectionMode: SelectionMode = SelectionMode.NORMAL,
     onClick: ((BookOnDisk) -> Unit)? = null,
@@ -130,7 +130,7 @@ class ZimHostScreenTest {
   fun zimHostScreen_whenStartServerButton_showsStartLabelWhenServerStopped() {
     renderZimHostScreen(
       startServerButtonText = context.getString(CoreR.string.start_server_label),
-      startServerButtonColor = StartServerGreen
+      startServerButtonColor = DenimBlue800
     )
     composeTestRule.onNodeWithTag(START_SERVER_BUTTON_TESTING_TAG).assertIsDisplayed()
   }
@@ -298,7 +298,7 @@ class ZimHostScreenTest {
       showShareIcon = false,
       qrVisible = false,
       startServerButtonText = context.getString(CoreR.string.start_server_label),
-      startServerButtonColor = StartServerGreen
+      startServerButtonColor = DenimBlue800
     )
     composeTestRule.onNodeWithTag(SHARE_ICON_TESTING_TAG).assertDoesNotExist()
     composeTestRule.onNodeWithTag(QR_IMAGE_TESTING_TAG).assertDoesNotExist()
