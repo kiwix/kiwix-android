@@ -41,7 +41,7 @@ import org.kiwix.kiwixmobile.core.qr.GenerateQR
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.ui.models.IconItem
-import org.kiwix.kiwixmobile.core.ui.theme.StartServerGreen
+import org.kiwix.kiwixmobile.core.ui.theme.DenimBlue800
 import org.kiwix.kiwixmobile.core.ui.theme.StopServerRed
 import org.kiwix.kiwixmobile.core.utils.ConnectivityReporter
 import org.kiwix.kiwixmobile.core.utils.KiwixPermissionChecker
@@ -79,7 +79,7 @@ class ZimHostViewModel @Inject constructor(
 ) : ViewModel(), ZimHostCallbacks {
   data class UiState(
     @param:StringRes val startServerButtonTextRes: Int = string.start_server_label,
-    val startServerButtonColor: Color = StartServerGreen,
+    val startServerButtonColor: Color = DenimBlue800,
     val serverIpDisplayText: String = "",
     val serverIpAddress: String = "",
     val showShareIcon: Boolean = false,
@@ -299,7 +299,7 @@ class ZimHostViewModel @Inject constructor(
         qrVisible = false,
         qrIcon = getQrIcon(null),
         serverIpDisplayText = context.getString(string.server_textview_default_message),
-        startServerButtonColor = StartServerGreen,
+        startServerButtonColor = DenimBlue800,
         isHotspotServiceActive = false
       )
     }
