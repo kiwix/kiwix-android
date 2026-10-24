@@ -125,10 +125,10 @@ open class CategoryViewModel @Inject constructor(
 
   private fun select(action: Action.Select, currentState: State): State =
     if (currentState is State.Content) {
-      updateSelection(
-        action.category,
-        currentState
-      )
+      val newState = updateSelection(action.category, currentState)
+      // Apply the filter immediately on selection (like the language
+      // selector) instead of requiring a separate save/confirm step.
+      save(newState)
     } else {
       currentState
     }
