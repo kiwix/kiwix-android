@@ -352,7 +352,7 @@ class CategoryViewModelTest {
       @Nested
       inner class Select {
         @Test
-        fun select_whenContentState_togglesActiveState() = runTest {
+        fun select_whenContentState_appliesImmediatelyAndSaves() = runTest {
           coEvery {
             observeCategories(
               any(),
@@ -367,15 +367,29 @@ class CategoryViewModelTest {
           val gutenberg = createCategory(id = 2, active = true, category = "Gutenberg")
 
           categoryViewModel.state.value = State.Content(listOf(wikipedia, gutenberg))
+
+          var sideEffect: SideEffect<*>? = null
+          val collectJob = launch(UnconfinedTestDispatcher(testScheduler)) {
+            categoryViewModel.effects.collect {
+              sideEffect = it
+            }
+          }
+
           categoryViewModel.actions.emit(
             Action.Select(CategoryListItem.CategoryItem(wikipedia))
           )
 
           advanceUntilIdle()
 
-          val content = categoryViewModel.state.value as State.Content
-          assertTrue(content.items.first { it.id == wikipedia.id }.active)
-          assertTrue(content.items.first { it.id == gutenberg.id }.active)
+          // The selection applies immediately: the save side effect is emitted
+          // and the dialog moves to the Saving state without any confirm step.
+          assertThat(categoryViewModel.state.value).isInstanceOf(State.Saving::class.java)
+          assertThat(sideEffect).isInstanceOf(SaveCategoryAndFinish::class.java)
+          val saveEffect = sideEffect as SaveCategoryAndFinish
+          assertThat(saveEffect.categories.map { it.category })
+            .containsExactly("Wikipedia", "Gutenberg")
+
+          collectJob.cancel()
         }
 
         @Test
