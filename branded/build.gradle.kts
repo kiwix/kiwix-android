@@ -14,6 +14,7 @@ import java.net.URI
 import java.net.URLDecoder
 import java.util.Base64
 import java.util.Locale
+import java.util.Locale.getDefault
 
 plugins {
   android
@@ -235,7 +236,7 @@ fun ApplicationProductFlavor.createPublishApkWithExpansionTask(file: File): Task
       println("packageName $packageName")
       createPublisher(File(rootDir, "playstore.json"))
         .transactionWithCommit(packageName) {
-          val apks = apkCollector.findReleaseApks(name)
+          val apks = apkCollector.findReleaseApks(capitalizedName.lowercase(getDefault()))
           apks.forEach(::uploadApk)
           uploadExpansionTo(file, apks.first().versionCode)
           apks.drop(1).forEach { attachExpansionTo(apks.first().versionCode, it) }
