@@ -574,6 +574,25 @@ class OnlineLibraryViewModelTest {
     }
 
     @Test
+    fun `library update during empty search does not leave a blank no-content state`() = runTest {
+      // Empty search result: the "No items available" state is showing.
+      coEvery { refreshAction.invoke(any()) } returns NoInternetWithEmptyContent
+      viewModel.refreshScreen(true)
+      advanceUntilIdle()
+      assertTrue(viewModel.uiState.value.showNoContent)
+
+      // A bulk download kicks off (Idle -> Loading -> Parsing) while the
+      // empty-search state is on screen. The in-flight update must clear the
+      // no-content state entirely - leaving `showNoContent` true with a
+      // cleared message rendered a blank white screen (#5211).
+      viewModel.handleLibraryState(Idle(false))
+
+      val state = viewModel.uiState.value
+      assertFalse(state.showNoContent)
+      assertTrue(state.showScanningProgressBar)
+    }
+
+    @Test
     fun `when state is WifiOnlyException then stops loading and shows dialog`() = runTest {
       viewModel.uiEvents.test {
         viewModel.handleLibraryState(WifiOnlyException)

@@ -602,11 +602,18 @@ class OnlineLibraryViewModel @Inject constructor(
 
   private fun updateDownloadProgressIfNeeded(isLoadMore: Boolean, messageResId: Int) {
     _uiState.update {
+      // An in-flight library update replaces the whole no-content state, not
+      // just the message. Clearing only `noContentMessage` while keeping
+      // `showNoContent = true` rendered an empty text view — the blank white
+      // screen from #5211 (empty search + tab switch while downloads were in
+      // progress). Show the list again while loading; the correct
+      // message/items are re-established when the fetch completes.
       it.copy(
         showScanningProgressBar = !isLoadMore,
         isLoadingMore = isLoadMore,
         scanningProgressBarMessage = getString(messageResId),
-        noContentMessage = ""
+        noContentMessage = "",
+        showNoContent = false
       )
     }
   }
