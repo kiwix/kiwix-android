@@ -19,13 +19,15 @@
 package org.kiwix.kiwixmobile.core.main
 
 import androidx.annotation.DrawableRes
+import androidx.compose.ui.graphics.Color
 
 data class DrawerMenuItem(
   val title: String,
   @param:DrawableRes val iconRes: Int,
   val visible: Boolean = true,
   val onClick: () -> Unit,
-  val testingTag: String
+  val testingTag: String,
+  val iconTint: Color? = null
 )
 
 data class DrawerMenuGroup(val drawerMenuItemList: List<DrawerMenuItem>)

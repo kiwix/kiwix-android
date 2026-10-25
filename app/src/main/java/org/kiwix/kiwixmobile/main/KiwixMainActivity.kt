@@ -87,6 +87,7 @@ import org.kiwix.kiwixmobile.core.main.PAGE_URL_KEY
 import org.kiwix.kiwixmobile.core.main.ZIM_FILE_URI_KEY
 import org.kiwix.kiwixmobile.core.main.ZIM_HOST_DEEP_LINK_SCHEME
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader.Companion.CONTENT_PREFIX
+import org.kiwix.kiwixmobile.core.ui.theme.AppleRed
 import org.kiwix.kiwixmobile.core.utils.HUNDERED
 import org.kiwix.kiwixmobile.core.utils.StorageDeviceProvider
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogHost
@@ -418,7 +419,8 @@ class KiwixMainActivity : CoreMainActivity() {
       iconRes = drawable.ic_support_24px,
       visible = true,
       onClick = { openSupportKiwixExternalLink() },
-      testingTag = LEFT_DRAWER_SUPPORT_ITEM_TESTING_TAG
+      testingTag = LEFT_DRAWER_SUPPORT_ITEM_TESTING_TAG,
+      iconTint = AppleRed
     )
   }
 

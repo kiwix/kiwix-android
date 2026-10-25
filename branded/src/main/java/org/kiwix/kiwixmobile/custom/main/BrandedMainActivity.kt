@@ -47,6 +47,7 @@ import org.kiwix.kiwixmobile.core.main.LEFT_DRAWER_ABOUT_APP_ITEM_TESTING_TAG
 import org.kiwix.kiwixmobile.core.main.LEFT_DRAWER_HELP_ITEM_TESTING_TAG
 import org.kiwix.kiwixmobile.core.main.LEFT_DRAWER_SUPPORT_ITEM_TESTING_TAG
 import org.kiwix.kiwixmobile.core.main.NEW_TAB_SHORTCUT_ID
+import org.kiwix.kiwixmobile.core.ui.theme.AppleRed
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogHost
 import org.kiwix.kiwixmobile.custom.BuildConfig
 import org.kiwix.kiwixmobile.custom.R
@@ -150,7 +151,8 @@ class BrandedMainActivity : CoreMainActivity() {
             )
           }
         },
-        testingTag = LEFT_DRAWER_SUPPORT_ITEM_TESTING_TAG
+        testingTag = LEFT_DRAWER_SUPPORT_ITEM_TESTING_TAG,
+        iconTint = AppleRed
       )
     } else {
       /**
