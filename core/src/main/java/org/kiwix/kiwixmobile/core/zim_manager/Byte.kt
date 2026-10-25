@@ -22,14 +22,18 @@ import java.text.DecimalFormat
 import kotlin.math.log10
 import kotlin.math.pow
 
+private const val DECIMAL_THRESHOLD = 10
+
 @JvmInline
 value class Byte(private val byteString: String?) {
   val humanReadable
     get() = byteString?.toLongOrNull()?.let {
       val units = arrayOf("B", "KB", "MB", "GB", "TB")
       val conversion = (log10(it.toDouble()) / log10(1000.0)).toInt()
-      DecimalFormat("#,##0.##")
-        .format(it / 1000.0.pow(conversion.toDouble())) +
+      val value = it / 1000.0.pow(conversion.toDouble())
+      val pattern = if (value < DECIMAL_THRESHOLD) "#,##0.#" else "#,##0"
+      DecimalFormat(pattern)
+        .format(value) +
         " " +
         units[conversion]
     }.orEmpty()
