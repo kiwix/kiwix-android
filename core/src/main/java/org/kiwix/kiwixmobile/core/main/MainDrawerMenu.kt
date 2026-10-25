@@ -35,6 +35,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItem
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -132,7 +133,8 @@ private fun DrawerMenuItemView(item: DrawerMenuItem) {
     leadingContent = {
       Icon(
         painter = painterResource(id = item.iconRes),
-        contentDescription = item.title
+        contentDescription = item.title,
+        tint = item.iconTint ?: LocalContentColor.current
       )
     },
     headlineContent = {
