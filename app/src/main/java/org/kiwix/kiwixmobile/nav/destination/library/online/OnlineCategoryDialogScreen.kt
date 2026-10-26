@@ -54,7 +54,6 @@ import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.CategoryLi
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.CategoryListItem.CategoryItem
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.CategoryListItem.HeaderItem
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.CategoryViewModel
-import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.CategoryViewModel.Action
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.CategoryViewModel.Action.Select
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.State
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.State.Content
@@ -203,4 +202,3 @@ fun String.toSentenceCaseCategory(): String =
     .replaceFirstChar { word ->
       if (word.isLowerCase()) word.titlecase() else word.toString()
     }
-
