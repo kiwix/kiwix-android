@@ -28,8 +28,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -48,12 +46,9 @@ import androidx.compose.ui.semantics.testTag
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.extensions.CollectSideEffectWithActivity
 import org.kiwix.kiwixmobile.core.ui.components.KiwixAppBar
-import org.kiwix.kiwixmobile.core.ui.models.ActionMenuItem
-import org.kiwix.kiwixmobile.core.ui.models.IconItem
 import org.kiwix.kiwixmobile.core.ui.theme.KiwixDialogTheme
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens
 import org.kiwix.kiwixmobile.language.LoadingScreen
-import org.kiwix.kiwixmobile.language.SAVE_ICON_TESTING_TAG
 import org.kiwix.kiwixmobile.language.ShowErrorMessage
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.CategoryListItem
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.CategoryListItem.CategoryItem
@@ -87,10 +82,7 @@ fun OnlineCategoryDialogScreen(
       topBar = {
         KiwixAppBar(
           title = stringResource(R.string.select_category),
-          navigationIcon = navigationIcon,
-          actionMenuItems = categoryActionMenuItems(
-            onSaveClick = { categoryViewModel.actions.tryEmit(Action.Save) }
-          )
+          navigationIcon = navigationIcon
         )
       }
     ) { paddingValues ->
@@ -212,13 +204,3 @@ fun String.toSentenceCaseCategory(): String =
       if (word.isLowerCase()) word.titlecase() else word.toString()
     }
 
-private fun categoryActionMenuItems(
-  onSaveClick: () -> Unit
-): List<ActionMenuItem> = listOf(
-  ActionMenuItem(
-    icon = IconItem.Vector(Icons.Default.Check),
-    contentDescription = R.string.save_categories,
-    onClick = onSaveClick,
-    testingTag = SAVE_ICON_TESTING_TAG
-  )
-)

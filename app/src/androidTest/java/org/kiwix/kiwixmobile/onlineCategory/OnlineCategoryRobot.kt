@@ -124,11 +124,4 @@ class OnlineCategoryRobot : BaseRobot() {
         .assertIsOn()
     }
   }
-
-  fun clickOnSaveCategoryIcon(composeTestRule: ComposeContentTestRule) {
-    composeTestRule.apply {
-      waitForIdle()
-      onNodeWithTag(org.kiwix.kiwixmobile.language.SAVE_ICON_TESTING_TAG).performClick()
-    }
-  }
 }
