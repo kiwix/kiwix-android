@@ -180,7 +180,7 @@ open class CategoryViewModel @Inject constructor(
 
   private fun selectAll(currentState: State): State =
     if (currentState is State.Content) {
-      currentState.copy(items = currentState.items.map { it.copy(active = it.id != 0L) })
+      currentState.copy(items = currentState.items.map { it.copy(active = true) })
     } else {
       currentState
     }

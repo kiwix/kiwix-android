@@ -144,7 +144,6 @@ private fun CategoryList(
         )
 
         is CategoryItem -> CategoryItemRow(
-          context = context,
           modifier = Modifier
             .animateItem()
             .fillMaxWidth()
@@ -180,7 +179,6 @@ private fun CategoryHeaderText(modifier: Modifier, item: HeaderItem) {
 
 @Composable
 private fun CategoryItemRow(
-  context: Context,
   modifier: Modifier,
   item: CategoryItem,
   onCheckedChange: (CategoryItem) -> Unit
@@ -202,9 +200,7 @@ private fun CategoryItemRow(
       }
     )
     Text(
-      text = category.category
-        .ifEmpty { context.getString(R.string.all_categories) }
-        .toSentenceCaseCategory(),
+      text = category.category.toSentenceCaseCategory(),
       style = MaterialTheme.typography.bodyLarge
     )
   }

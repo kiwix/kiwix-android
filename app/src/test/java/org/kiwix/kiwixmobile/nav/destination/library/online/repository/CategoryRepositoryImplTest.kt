@@ -56,7 +56,7 @@ class CategoryRepositoryImplTest {
   }
 
   @Test
-  fun `fetchCategories emits correct list including all categories item`() = runTest {
+  fun `fetchCategories emits only real categories without an all-categories item`() = runTest {
     val categoryFeed = CategoryFeed().apply {
       entries = listOf(
         CategoryEntry().apply {
@@ -76,19 +76,13 @@ class CategoryRepositoryImplTest {
 
     assertThat(result).hasSize(1)
     val categories = result[0]
-    assertThat(categories).hasSize(3)
+    assertThat(categories).hasSize(2)
 
-    // First category is empty title (all categories)
-    assertThat(categories[0].category).isEmpty()
-    assertThat(categories[0].active).isFalse()
+    assertThat(categories[0].category).isEqualTo("Wikipedia")
+    assertThat(categories[0].active).isTrue()
 
-    // Second is Wikipedia
-    assertThat(categories[1].category).isEqualTo("Wikipedia")
-    assertThat(categories[1].active).isTrue()
-
-    // Third is Gutenberg
-    assertThat(categories[2].category).isEqualTo("Gutenberg")
-    assertThat(categories[2].active).isFalse()
+    assertThat(categories[1].category).isEqualTo("Gutenberg")
+    assertThat(categories[1].active).isFalse()
   }
 
   @Test
