@@ -570,7 +570,16 @@ class KiwixDataStore @Inject constructor(
 
   val selectedOnlineContentCategory: Flow<String> =
     context.kiwixDataStore.data.map { pref ->
+      // Sanitize legacy values: strip empty tokens (e.g. ",gutenberg" saved
+      // while the "All categories" row existed) and stray "all" sentinels, so
+      // a stale cache can never leak an OPDS-breaking category filter.
+      // See https://github.com/kiwix/kiwix-android/issues/5205
       pref[PreferencesKeys.SELECTED_ONLINE_CONTENT_CATEGORY].orEmpty()
+        .split(",")
+        .mapNotNull { token ->
+          token.trim().takeIf { it.isNotEmpty() && !it.equals("all", ignoreCase = true) }
+        }
+        .joinToString(",")
     }
 
   suspend fun setSelectedOnlineContentCategory(selectedOnlineContentCategory: String) {
