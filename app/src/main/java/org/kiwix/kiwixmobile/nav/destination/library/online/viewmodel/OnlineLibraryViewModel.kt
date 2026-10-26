@@ -113,6 +113,8 @@ import org.kiwix.libkiwix.Book
 import java.util.concurrent.ConcurrentHashMap
 import javax.inject.Inject
 import javax.inject.Provider
+import kotlin.collections.map
+import kotlin.collections.toSet
 import kotlin.time.Duration.Companion.milliseconds
 
 /**
@@ -570,12 +572,19 @@ class OnlineLibraryViewModel @Inject constructor(
         sendUiEvent(UiEvent.ScrollToTop)
       }
       resetDownloadState()
-      if (result.updatedBooks.isEmpty()) {
+      if (result.updatedBooks.isEmpty() || isAllRemoteBooksAlreadyDownloaded(result.updatedBooks)) {
         updateLibraryItems(emptyList())
       }
     } else {
       resetDownloadState()
     }
+  }
+
+  private suspend fun isAllRemoteBooksAlreadyDownloaded(updatedBooks: List<LibkiwixBook>): Boolean {
+    if (updatedBooks.isEmpty()) return false
+    val localBookIds = books().first().map { it.id }.toSet()
+    val allBooks = updatedBooks.filterNot { it.id in localBookIds }
+    return allBooks.isEmpty()
   }
 
   private fun showWifiOnlyDialog() {
@@ -602,18 +611,11 @@ class OnlineLibraryViewModel @Inject constructor(
 
   private fun updateDownloadProgressIfNeeded(isLoadMore: Boolean, messageResId: Int) {
     _uiState.update {
-      // An in-flight library update replaces the whole no-content state, not
-      // just the message. Clearing only `noContentMessage` while keeping
-      // `showNoContent = true` rendered an empty text view — the blank white
-      // screen from #5211 (empty search + tab switch while downloads were in
-      // progress). Show the list again while loading; the correct
-      // message/items are re-established when the fetch completes.
       it.copy(
         showScanningProgressBar = !isLoadMore,
         isLoadingMore = isLoadMore,
         scanningProgressBarMessage = getString(messageResId),
-        noContentMessage = "",
-        showNoContent = false
+        noContentMessage = ""
       )
     }
   }
