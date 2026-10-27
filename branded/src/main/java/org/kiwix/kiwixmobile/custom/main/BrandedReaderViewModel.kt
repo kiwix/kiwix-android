@@ -482,4 +482,16 @@ class BrandedReaderViewModel @Inject constructor(
       )
     }
   }
+
+  /**
+   * Overrides this method to configure the showing the TOC sidebar hint dialog. If a branded app
+   * has the TOC sidebar feature disabled, this method prevents the hint dialog from being shown
+   * when the user navigates to a new URL in the WebView.
+   * This ensures that users of branded apps do not see hints for features
+   * that are not available to them.
+   */
+  override fun webViewUrlLoading() {
+    if (!isTocSidebarEnabled()) return
+    super.webViewUrlLoading()
+  }
 }
