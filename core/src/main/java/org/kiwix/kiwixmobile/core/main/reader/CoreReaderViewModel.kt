@@ -1040,6 +1040,15 @@ abstract class CoreReaderViewModel(
     findInPageManager.stop()
   }
 
+  /**
+   * Show the TOC sidebar hint on the first run of the app, unless it's a debug build.
+   * This is to guide users to the contents drawer feature.
+   * Subclasses like BrandedViewModel override this method to provide custom
+   * behavior, such as not showing this dialog when it is disabled in branded app.
+   *
+   * WARNING: If modifying this method, ensure thorough testing with branded apps
+   *          to verify proper functionality.
+   */
   override fun webViewUrlLoading() {
     viewModelScope.launch {
       if (kiwixDataStore.isFirstRun.first() && !kiwixDataStore.isDebugBuild.first()) {
