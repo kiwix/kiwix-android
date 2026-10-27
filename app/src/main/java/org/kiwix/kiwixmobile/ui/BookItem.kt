@@ -49,6 +49,7 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.BaselineShift
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -256,30 +257,7 @@ fun BookDetails(
   mediaCount: String? = null
 ) {
   Column(modifier = modifier) {
-    val titleStyle = MaterialTheme.typography.titleSmall
-    val dateStyle = MaterialTheme.typography.labelSmall.copy(
-      baselineShift = BaselineShift.Superscript,
-      color = Color.Gray
-    )
-    val formattedDate = formatBookDate(date)
-    val annotatedTitle = buildAnnotatedString {
-      append(title)
-      if (formattedDate.isNotEmpty()) {
-        append(" ")
-        withStyle(dateStyle.toSpanStyle()) {
-          append(formattedDate)
-        }
-      }
-    }
-    Text(
-      text = annotatedTitle,
-      style = titleStyle,
-      maxLines = 2,
-      overflow = TextOverflow.Ellipsis,
-      modifier = Modifier.semantics {
-        contentDescription = "$title${formattedDate}$index"
-      }
-    )
+    BookAnnotatedTitle(title = title, date = date, index = index)
     Spacer(modifier = Modifier.height(FOUR_DP))
     BookDescription(
       bookDescription = description,
@@ -310,6 +288,42 @@ fun BookDetails(
       }
     }
   }
+}
+
+@Composable
+private fun BookAnnotatedTitle(
+  title: String,
+  date: String,
+  index: Int
+) {
+  val titleStyle = MaterialTheme.typography.titleSmall.copy(
+    fontWeight = FontWeight.SemiBold,
+    color = MaterialTheme.colorScheme.onSurface
+  )
+  val dateStyle = MaterialTheme.typography.labelSmall.copy(
+    fontWeight = FontWeight.Medium,
+    baselineShift = BaselineShift.Superscript,
+    color = MaterialTheme.colorScheme.onSurfaceVariant
+  )
+  val formattedDate = formatBookDate(date)
+  val annotatedTitle = buildAnnotatedString {
+    append(title)
+    if (formattedDate.isNotEmpty()) {
+      append(" ")
+      withStyle(dateStyle.toSpanStyle()) {
+        append(formattedDate)
+      }
+    }
+  }
+  Text(
+    text = annotatedTitle,
+    style = titleStyle,
+    maxLines = 2,
+    overflow = TextOverflow.Ellipsis,
+    modifier = Modifier.semantics {
+      contentDescription = "$title$formattedDate$index"
+    }
+  )
 }
 
 @Composable
@@ -357,7 +371,10 @@ fun BookTitle(
   title: String,
   index: Int,
   modifier: Modifier = Modifier,
-  style: TextStyle = MaterialTheme.typography.titleSmall
+  style: TextStyle = MaterialTheme.typography.titleSmall.copy(
+    fontWeight = FontWeight.SemiBold,
+    color = MaterialTheme.colorScheme.onSurface
+  )
 ) {
   Text(
     text = title,
