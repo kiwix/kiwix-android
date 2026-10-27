@@ -29,12 +29,14 @@ import androidx.compose.material.icons.filled.Menu
 import androidx.compose.ui.graphics.Color
 import androidx.core.net.toUri
 import androidx.core.os.LocaleListCompat
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavOptions
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.MainCoroutineDispatcher
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.di.IoDispatcher
@@ -491,7 +493,12 @@ class BrandedReaderViewModel @Inject constructor(
    * that are not available to them.
    */
   override fun webViewUrlLoading() {
-    if (!isTocSidebarEnabled()) return
+    if (!isTocSidebarEnabled()) {
+      viewModelScope.launch {
+        kiwixDataStore.setIsFirstRun(false)
+      }
+      return
+    }
     super.webViewUrlLoading()
   }
 }
