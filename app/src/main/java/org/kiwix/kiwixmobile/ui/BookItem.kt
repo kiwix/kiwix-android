@@ -21,8 +21,10 @@ package org.kiwix.kiwixmobile.ui
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -33,7 +35,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Checkbox
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -64,6 +65,7 @@ import org.kiwix.kiwixmobile.core.utils.ComposeDimens.BOOK_ICON_SIZE
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FOUR_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SIXTEEN_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TWELVE_DP
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TWENTY_FOUR_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TWO_DP
 import org.kiwix.kiwixmobile.core.zim_manager.Byte
 import org.kiwix.kiwixmobile.core.zim_manager.KiwixTag
@@ -82,15 +84,21 @@ import org.kiwix.kiwixmobile.core.R as CoreR
 @Composable
 fun LibraryCard(
   modifier: Modifier = Modifier,
+  isSelected: Boolean = false,
   content: @Composable () -> Unit
 ) {
+  val containerColor = if (isSelected) {
+    MaterialTheme.colorScheme.primaryContainer
+  } else {
+    MaterialTheme.colorScheme.surfaceContainer
+  }
   Card(
     modifier = modifier
       .fillMaxWidth()
       .padding(horizontal = FOUR_DP, vertical = TWO_DP),
     shape = RoundedCornerShape(TWO_DP),
     elevation = CardDefaults.elevatedCardElevation(TWO_DP),
-    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainer)
+    colors = CardDefaults.cardColors(containerColor = containerColor)
   ) {
     content()
   }
@@ -106,8 +114,10 @@ fun BookItem(
   onMultiSelect: ((BookOnDisk) -> Unit)? = null,
   selectionMode: SelectionMode = SelectionMode.NORMAL,
 ) {
+  val isSelected = selectionMode == SelectionMode.MULTI && bookOnDisk.isSelected
   KiwixTheme {
     LibraryCard(
+      isSelected = isSelected,
       modifier = Modifier
         .combinedClickable(
           onClick = {
@@ -129,8 +139,13 @@ fun BookItem(
         tags = bookOnDisk.tags,
         isOnlineLibrary = false,
         index = index,
-        leadingContent = if (selectionMode == SelectionMode.MULTI) {
-          { BookCheckbox(bookOnDisk, onMultiSelect, index) }
+        trailingContent = if (isSelected) {
+          {
+            BookSelectedIcon(
+              index = index,
+              onClick = { onMultiSelect?.invoke(bookOnDisk) }
+            )
+          }
         } else {
           null
         }
@@ -148,7 +163,7 @@ fun BookContent(
   index: Int,
   modifier: Modifier = Modifier,
   sizeModifier: Modifier = Modifier,
-  leadingContent: (@Composable () -> Unit)? = null,
+  trailingContent: (@Composable () -> Unit)? = null,
 ) {
   Row(
     modifier = modifier
@@ -156,9 +171,6 @@ fun BookContent(
       .fillMaxWidth(),
     verticalAlignment = Alignment.Top
   ) {
-    if (leadingContent != null) {
-      leadingContent()
-    }
     BookIconAndSize(
       iconSource = book.favicon,
       size = book.size,
@@ -175,7 +187,8 @@ fun BookContent(
       tags = tags,
       index = index,
       articleCount = book.articleCount,
-      mediaCount = book.mediaCount
+      mediaCount = book.mediaCount,
+      trailingContent = trailingContent
     )
   }
 }
@@ -207,19 +220,25 @@ fun BookIconAndSize(
 }
 
 @Composable
-private fun BookCheckbox(
-  bookOnDisk: BookOnDisk,
-  onMultiSelect: ((BookOnDisk) -> Unit)?,
-  index: Int
+private fun BookSelectedIcon(
+  index: Int,
+  modifier: Modifier = Modifier,
+  onClick: (() -> Unit)? = null
 ) {
-  Checkbox(
-    checked = bookOnDisk.isSelected,
-    onCheckedChange = {
-      onMultiSelect?.invoke(bookOnDisk)
-    },
-    modifier = Modifier
+  Image(
+    painter = painterResource(id = CoreR.drawable.ic_check_circle_blue_24dp),
+    contentDescription = "$BOOK_ITEM_CHECKBOX_TESTING_TAG$index",
+    modifier = modifier
+      .size(TWENTY_FOUR_DP)
       .testTag("$BOOK_ITEM_CHECKBOX_TESTING_TAG$index")
-      .semantics { contentDescription = "${bookOnDisk.isSelected}$index" }
+      .semantics { contentDescription = "true$index" }
+      .then(
+        if (onClick != null) {
+          Modifier.clickable(onClick = onClick)
+        } else {
+          Modifier
+        }
+      )
   )
 }
 
@@ -245,6 +264,7 @@ fun BookIcon(iconSource: String, isOnlineLibrary: Boolean) {
   }
 }
 
+@Suppress("ComposableLambdaParameterNaming")
 @Composable
 fun BookDetails(
   modifier: Modifier = Modifier,
@@ -254,10 +274,29 @@ fun BookDetails(
   tags: List<KiwixTag>,
   index: Int,
   articleCount: String? = null,
-  mediaCount: String? = null
+  mediaCount: String? = null,
+  trailingContent: (@Composable () -> Unit)? = null
 ) {
   Column(modifier = modifier) {
-    BookAnnotatedTitle(title = title, date = date, index = index)
+    Row(
+      modifier = Modifier.fillMaxWidth(),
+      verticalAlignment = Alignment.CenterVertically
+    ) {
+      BookAnnotatedTitle(
+        title = title,
+        date = date,
+        index = index,
+        modifier = Modifier.weight(1f)
+      )
+      if (trailingContent != null) {
+        Box(
+          modifier = Modifier.padding(start = SIXTEEN_DP),
+          contentAlignment = Alignment.Center
+        ) {
+          trailingContent()
+        }
+      }
+    }
     Spacer(modifier = Modifier.height(FOUR_DP))
     BookDescription(
       bookDescription = description,
@@ -294,7 +333,8 @@ fun BookDetails(
 private fun BookAnnotatedTitle(
   title: String,
   date: String,
-  index: Int
+  index: Int,
+  modifier: Modifier = Modifier
 ) {
   val titleStyle = MaterialTheme.typography.titleSmall.copy(
     fontWeight = FontWeight.SemiBold,
@@ -320,7 +360,7 @@ private fun BookAnnotatedTitle(
     style = titleStyle,
     maxLines = 2,
     overflow = TextOverflow.Ellipsis,
-    modifier = Modifier.semantics {
+    modifier = modifier.semantics {
       contentDescription = "$title$formattedDate$index"
     }
   )
