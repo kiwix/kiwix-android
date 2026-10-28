@@ -108,7 +108,7 @@ object Versions {
 
   const val HILT_NAVIGATION_COMPOSE = "1.2.0"
 
-  const val DATASTORE = "1.2.0"
+  const val DATASTORE = "1.2.1"
 
   const val LIFECYCLE_VERSION = "2.8.6"
 
