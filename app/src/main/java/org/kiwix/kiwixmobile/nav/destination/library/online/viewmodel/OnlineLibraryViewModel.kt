@@ -113,6 +113,8 @@ import org.kiwix.libkiwix.Book
 import java.util.concurrent.ConcurrentHashMap
 import javax.inject.Inject
 import javax.inject.Provider
+import kotlin.collections.map
+import kotlin.collections.toSet
 import kotlin.time.Duration.Companion.milliseconds
 
 /**
@@ -575,12 +577,19 @@ class OnlineLibraryViewModel @Inject constructor(
         sendUiEvent(UiEvent.ScrollToTop)
       }
       resetDownloadState()
-      if (result.updatedBooks.isEmpty()) {
+      if (result.updatedBooks.isEmpty() || isAllRemoteBooksAlreadyDownloaded(result.updatedBooks)) {
         updateLibraryItems(emptyList())
       }
     } else {
       resetDownloadState()
     }
+  }
+
+  private suspend fun isAllRemoteBooksAlreadyDownloaded(updatedBooks: List<LibkiwixBook>): Boolean {
+    if (updatedBooks.isEmpty()) return false
+    val localBookIds = books().first().map { it.id }.toSet()
+    val allBooks = updatedBooks.filterNot { it.id in localBookIds }
+    return allBooks.isEmpty()
   }
 
   private fun showWifiOnlyDialog() {
