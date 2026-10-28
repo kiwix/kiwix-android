@@ -451,7 +451,12 @@ class OnlineLibraryViewModel @Inject constructor(
 
   internal suspend fun handleNetworkState(state: ObserveNetworkState.Result) {
     when (state) {
-      ObserveNetworkState.Result.WifiAvailable -> refreshScreen(false)
+      ObserveNetworkState.Result.WifiAvailable -> {
+        if (uiState.value.items.isEmpty()) {
+          refreshScreen(false)
+        }
+      }
+
       ObserveNetworkState.Result.ShowWifiOnlyMessage -> {
         _uiState.update {
           it.copy(
