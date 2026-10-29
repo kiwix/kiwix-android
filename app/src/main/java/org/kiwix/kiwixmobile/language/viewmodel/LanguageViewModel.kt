@@ -40,6 +40,7 @@ import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.zim_manager.ConnectivityObserver
 import org.kiwix.kiwixmobile.core.zim_manager.Language
 import org.kiwix.kiwixmobile.core.zim_manager.NetworkState
+import org.kiwix.kiwixmobile.core.zim_manager.offlineMessage
 import org.kiwix.kiwixmobile.language.composables.LanguageListItem.LanguageItem
 import org.kiwix.kiwixmobile.language.helper.ObserveLanguages
 import org.kiwix.kiwixmobile.language.viewmodel.Action.Cancel
@@ -93,12 +94,15 @@ open class LanguageViewModel @Inject constructor(
       .onEach { newState -> state.value = newState }
       .launchIn(viewModelScope)
 
+  private fun offlineMessage(actionResId: Int): String =
+    connectivityObserver.offlineMessage(context, actionResId)
+
   private fun observeLanguages() = viewModelScope.launch {
     state.value = Loading
     when (
       val result = observeLanguages(
         errorNoLanguage = context.getString(R.string.no_language_available),
-        errorNoNetwork = context.getString(R.string.no_network_connection),
+        errorNoNetwork = offlineMessage(R.string.action_load_languages),
         isOnline = connectivityObserver.networkStates.value == NetworkState.CONNECTED
       )
     ) {

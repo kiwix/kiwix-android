@@ -89,6 +89,16 @@ class ObserveNetworkStateTest {
   }
 
   @Test
+  fun `when airplane mode then emit ShowNoInternetSnackBar`() = runTest {
+    every { connectivityManager.isWifi() } returns false
+    every { kiwixDataStore.wifiOnly } returns flowOf(false)
+
+    val result = observeNetworkState(flowOf(NetworkState.AIRPLANE_MODE)).first()
+
+    assertThat(ShowNoInternetSnackBar).isEqualTo(result)
+  }
+
+  @Test
   fun `emits correct sequence for multiple states`() = runTest {
     every { connectivityManager.isWifi() } returns false
     every { kiwixDataStore.wifiOnly } returns flowOf(false)
@@ -96,10 +106,13 @@ class ObserveNetworkStateTest {
     val results = observeNetworkState(
       flowOf(
         NetworkState.NOT_CONNECTED,
+        NetworkState.AIRPLANE_MODE,
         NetworkState.CONNECTED
       )
     ).toList()
 
-    assertThat(listOf(ShowNoInternetSnackBar, MobileInternet)).isEqualTo(results)
+    assertThat(
+      listOf(ShowNoInternetSnackBar, ShowNoInternetSnackBar, MobileInternet)
+    ).isEqualTo(results)
   }
 }

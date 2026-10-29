@@ -52,6 +52,7 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.RegisterExtension
 import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.isNetworkAvailable
 import org.kiwix.kiwixmobile.core.dao.DownloadRoomDao
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookOnDisk
 import org.kiwix.kiwixmobile.core.downloader.Downloader
@@ -173,6 +174,22 @@ class OnlineLibraryViewModelTest {
     viewModel.onClearedExposed()
   }
 
+  private fun stubOfflineMessage(
+    networkState: NetworkState,
+    actionResId: Int,
+    action: String,
+    message: String
+  ) {
+    every { connectivityObserver.networkStates } returns MutableStateFlow(networkState)
+    every { context.getString(actionResId) } returns action
+    val messageResId = if (networkState == NetworkState.AIRPLANE_MODE) {
+      R.string.airplane_mode_feature_blocked_message
+    } else {
+      R.string.offline_feature_blocked_message
+    }
+    every { context.getString(messageResId, action) } returns message
+  }
+
   @Nested
   inner class Context {
     @Test
@@ -205,15 +222,42 @@ class OnlineLibraryViewModelTest {
     }
 
     @Test
-    fun `given no internet with content when refreshScreen then emit snackbar`() = runTest {
-      coEvery { refreshAction.invoke(any()) } returns NoInternetWithContent
-      viewModel.uiEvents.test {
-        viewModel.refreshScreen(true)
-        advanceUntilIdle()
+    fun `given no internet with content when refreshScreen then emit offline snackbar`() =
+      runTest {
+        stubOfflineMessage(
+          NetworkState.NOT_CONNECTED,
+          R.string.action_load_online_library,
+          "load the online library",
+          "offline message"
+        )
+        coEvery { refreshAction.invoke(any()) } returns NoInternetWithContent
+        viewModel.uiEvents.test {
+          viewModel.refreshScreen(true)
+          advanceUntilIdle()
 
-        assertTrue(awaitItem() is ShowSnackbar)
+          val snackBar = awaitItem() as ShowSnackbar
+          assertEquals("offline message", snackBar.message)
+        }
       }
-    }
+
+    @Test
+    fun `given airplane mode with content when refreshScreen then emit flight mode snackbar`() =
+      runTest {
+        stubOfflineMessage(
+          NetworkState.AIRPLANE_MODE,
+          R.string.action_load_online_library,
+          "load the online library",
+          "airplane mode message"
+        )
+        coEvery { refreshAction.invoke(any()) } returns NoInternetWithContent
+        viewModel.uiEvents.test {
+          viewModel.refreshScreen(true)
+          advanceUntilIdle()
+
+          val snackBar = awaitItem() as ShowSnackbar
+          assertEquals("airplane mode message", snackBar.message)
+        }
+      }
 
     @Test
     fun `given wifi only restriction when refreshScreen then show wifi dialog`() = runTest {
@@ -228,14 +272,42 @@ class OnlineLibraryViewModelTest {
     }
 
     @Test
-    fun `given no internet and empty content when refreshScreen then show no content`() = runTest {
-      coEvery { refreshAction.invoke(any()) } returns NoInternetWithEmptyContent
+    fun `given no internet and empty content when refreshScreen then show offline message`() =
+      runTest {
+        stubOfflineMessage(
+          NetworkState.NOT_CONNECTED,
+          R.string.action_load_online_library,
+          "load the online library",
+          "offline message"
+        )
+        coEvery { refreshAction.invoke(any()) } returns NoInternetWithEmptyContent
 
-      viewModel.refreshScreen(true)
-      advanceUntilIdle()
+        viewModel.refreshScreen(true)
+        advanceUntilIdle()
 
-      assertTrue(viewModel.uiState.value.showNoContent)
-    }
+        val state = viewModel.uiState.value
+        assertTrue(state.showNoContent)
+        assertEquals("offline message", state.noContentMessage)
+      }
+
+    @Test
+    fun `given airplane mode and empty content when refreshScreen then show flight mode message`() =
+      runTest {
+        stubOfflineMessage(
+          NetworkState.AIRPLANE_MODE,
+          R.string.action_load_online_library,
+          "load the online library",
+          "airplane mode message"
+        )
+        coEvery { refreshAction.invoke(any()) } returns NoInternetWithEmptyContent
+
+        viewModel.refreshScreen(true)
+        advanceUntilIdle()
+
+        val state = viewModel.uiState.value
+        assertTrue(state.showNoContent)
+        assertEquals("airplane mode message", state.noContentMessage)
+      }
   }
 
   @Nested
@@ -255,8 +327,14 @@ class OnlineLibraryViewModelTest {
     }
 
     @Test
-    fun `when action is NoInternet then emits snackbar`() = runTest {
+    fun `when action is NoInternet and offline then emits offline snackbar`() = runTest {
       val item = mockk<LibraryListItem.BookItem>(relaxed = true)
+      stubOfflineMessage(
+        NetworkState.NOT_CONNECTED,
+        R.string.action_download_book,
+        "download this book",
+        "offline message"
+      )
 
       coEvery { resolveClick.onBookItemClick(any(), any()) } returns
         NoInternet
@@ -265,7 +343,30 @@ class OnlineLibraryViewModelTest {
 
         advanceUntilIdle()
         val snackBar = awaitItem() as ShowSnackbar
-        assertTrue(snackBar.message == context.getString(R.string.no_network_connection))
+        assertEquals("offline message", snackBar.message)
+
+        cancelAndIgnoreRemainingEvents()
+      }
+    }
+
+    @Test
+    fun `when action is NoInternet and airplane mode then emits flight mode snackbar`() = runTest {
+      val item = mockk<LibraryListItem.BookItem>(relaxed = true)
+      stubOfflineMessage(
+        NetworkState.AIRPLANE_MODE,
+        R.string.action_download_book,
+        "download this book",
+        "airplane mode message"
+      )
+
+      coEvery { resolveClick.onBookItemClick(any(), any()) } returns
+        NoInternet
+      viewModel.uiEvents.test {
+        viewModel.onBookItemClick(item)
+
+        advanceUntilIdle()
+        val snackBar = awaitItem() as ShowSnackbar
+        assertEquals("airplane mode message", snackBar.message)
 
         cancelAndIgnoreRemainingEvents()
       }
@@ -384,14 +485,40 @@ class OnlineLibraryViewModelTest {
     }
 
     @Test
-    fun `when action is NoInternet then emits snackbar`() = runTest {
+    fun `when action is NoInternet and offline then emits offline snackbar`() = runTest {
       val item = mockk<LibraryListItem.LibraryDownloadItem>(relaxed = true)
+      stubOfflineMessage(
+        NetworkState.NOT_CONNECTED,
+        R.string.action_download_book,
+        "download this book",
+        "offline message"
+      )
 
       every { resolveClick.onPauseResumeButtonClick(item) } returns NoInternet
 
       viewModel.uiEvents.test {
         viewModel.onPauseResumeButtonClick(item)
-        assertTrue(awaitItem() is ShowSnackbar)
+        val snackBar = awaitItem() as ShowSnackbar
+        assertEquals("offline message", snackBar.message)
+      }
+    }
+
+    @Test
+    fun `when action is NoInternet and airplane mode then emits flight mode snackbar`() = runTest {
+      val item = mockk<LibraryListItem.LibraryDownloadItem>(relaxed = true)
+      stubOfflineMessage(
+        NetworkState.AIRPLANE_MODE,
+        R.string.action_download_book,
+        "download this book",
+        "airplane mode message"
+      )
+
+      every { resolveClick.onPauseResumeButtonClick(item) } returns NoInternet
+
+      viewModel.uiEvents.test {
+        viewModel.onPauseResumeButtonClick(item)
+        val snackBar = awaitItem() as ShowSnackbar
+        assertEquals("airplane mode message", snackBar.message)
       }
     }
   }
@@ -428,14 +555,41 @@ class OnlineLibraryViewModelTest {
     }
 
     @Test
-    fun `when action is NoInternet then emits snackbar`() = runTest {
+    fun `when action is NoInternet and offline then emits offline snackbar`() = runTest {
       val item = mockk<LibraryListItem.LibraryDownloadItem>(relaxed = true)
+      stubOfflineMessage(
+        NetworkState.NOT_CONNECTED,
+        R.string.action_download_book,
+        "download this book",
+        "offline message"
+      )
 
       every { resolveClick.onStopButtonClick(item) } returns NoInternet
 
       viewModel.uiEvents.test {
         viewModel.onStopButtonClick(item)
-        assertTrue(awaitItem() is ShowSnackbar)
+        val snackBar = awaitItem() as ShowSnackbar
+        assertEquals("offline message", snackBar.message)
+        cancelAndIgnoreRemainingEvents()
+      }
+    }
+
+    @Test
+    fun `when action is NoInternet and airplane mode then emits flight mode snackbar`() = runTest {
+      val item = mockk<LibraryListItem.LibraryDownloadItem>(relaxed = true)
+      stubOfflineMessage(
+        NetworkState.AIRPLANE_MODE,
+        R.string.action_download_book,
+        "download this book",
+        "airplane mode message"
+      )
+
+      every { resolveClick.onStopButtonClick(item) } returns NoInternet
+
+      viewModel.uiEvents.test {
+        viewModel.onStopButtonClick(item)
+        val snackBar = awaitItem() as ShowSnackbar
+        assertEquals("airplane mode message", snackBar.message)
         cancelAndIgnoreRemainingEvents()
       }
     }
@@ -708,6 +862,59 @@ class OnlineLibraryViewModelTest {
     }
 
     @Test
+    fun `when success returns empty list while offline then shows offline message`() = runTest {
+      stubOfflineMessage(
+        NetworkState.NOT_CONNECTED,
+        R.string.action_load_online_library,
+        "load the online library",
+        "offline message"
+      )
+      every { connectivityManager.isNetworkAvailable() } returns false
+      val request = mockk<OnlineLibraryViewModel.OnlineLibraryRequest> {
+        every { isLoadMoreItem } returns false
+      }
+
+      val state = Success(
+        books = emptyList(),
+        totalPages = 1,
+        request = request
+      )
+
+      viewModel.handleLibraryState(state)
+
+      val uiState = viewModel.uiState.value
+      assertTrue(uiState.showNoContent)
+      assertEquals("offline message", uiState.noContentMessage)
+    }
+
+    @Test
+    fun `when success returns empty list while airplane mode then shows flight mode message`() =
+      runTest {
+        stubOfflineMessage(
+          NetworkState.AIRPLANE_MODE,
+          R.string.action_load_online_library,
+          "load the online library",
+          "airplane mode message"
+        )
+        every { connectivityManager.isNetworkAvailable() } returns false
+        val request = mockk<OnlineLibraryViewModel.OnlineLibraryRequest> {
+          every { isLoadMoreItem } returns false
+        }
+
+        val state = Success(
+          books = emptyList(),
+          totalPages = 1,
+          request = request
+        )
+
+        viewModel.handleLibraryState(state)
+
+        val uiState = viewModel.uiState.value
+        assertTrue(uiState.showNoContent)
+        assertEquals("airplane mode message", uiState.noContentMessage)
+      }
+
+    @Test
     fun `when error and no existing books then emits empty list`() = runTest {
       viewModel.networkBooks.emit(emptyList())
       val error = OnlineLibraryViewModel.OnlineLibraryState.Error(
@@ -912,7 +1119,13 @@ class OnlineLibraryViewModelTest {
     }
 
     @Test
-    fun `when no internet and no items then shows no content message`() = runTest {
+    fun `when offline and no items then shows offline message`() = runTest {
+      stubOfflineMessage(
+        NetworkState.NOT_CONNECTED,
+        R.string.action_load_online_library,
+        "load the online library",
+        "offline message"
+      )
       viewModel.setUiStateForTest(viewModel.uiState.value.copy(items = emptyList()))
 
       viewModel.handleNetworkState(ObserveNetworkState.Result.ShowNoInternetSnackBar)
@@ -920,16 +1133,64 @@ class OnlineLibraryViewModelTest {
       val state = viewModel.uiState.value
       assertTrue(state.showNoContent)
       assertFalse(state.showScanningProgressBar)
+      assertEquals("offline message", state.noContentMessage)
     }
 
     @Test
-    fun `when no internet and items exist then emits snackbar`() = runTest {
+    fun `when airplane mode and no items then shows flight mode message`() = runTest {
+      stubOfflineMessage(
+        NetworkState.AIRPLANE_MODE,
+        R.string.action_load_online_library,
+        "load the online library",
+        "airplane mode message"
+      )
+      viewModel.setUiStateForTest(viewModel.uiState.value.copy(items = emptyList()))
+
+      viewModel.handleNetworkState(ObserveNetworkState.Result.ShowNoInternetSnackBar)
+
+      val state = viewModel.uiState.value
+      assertTrue(state.showNoContent)
+      assertFalse(state.showScanningProgressBar)
+      assertEquals("airplane mode message", state.noContentMessage)
+    }
+
+    @Test
+    fun `when offline and items exist then emits offline snackbar`() = runTest {
+      stubOfflineMessage(
+        NetworkState.NOT_CONNECTED,
+        R.string.action_load_online_library,
+        "load the online library",
+        "offline message"
+      )
       viewModel.setUiStateForTest(viewModel.uiState.value.copy(items = listOf(mockk())))
 
       viewModel.uiEvents.test {
         viewModel.handleNetworkState(ObserveNetworkState.Result.ShowNoInternetSnackBar)
 
-        assertTrue(awaitItem() is OnlineLibraryViewModel.UiEvent.ShowSnackbar)
+        val snackBar = awaitItem() as OnlineLibraryViewModel.UiEvent.ShowSnackbar
+        assertEquals("offline message", snackBar.message)
+
+        val state = viewModel.uiState.value
+        assertFalse(state.showScanningProgressBar)
+        assertFalse(state.isRefreshing)
+      }
+    }
+
+    @Test
+    fun `when airplane mode and items exist then emits flight mode snackbar`() = runTest {
+      stubOfflineMessage(
+        NetworkState.AIRPLANE_MODE,
+        R.string.action_load_online_library,
+        "load the online library",
+        "airplane mode message"
+      )
+      viewModel.setUiStateForTest(viewModel.uiState.value.copy(items = listOf(mockk())))
+
+      viewModel.uiEvents.test {
+        viewModel.handleNetworkState(ObserveNetworkState.Result.ShowNoInternetSnackBar)
+
+        val snackBar = awaitItem() as OnlineLibraryViewModel.UiEvent.ShowSnackbar
+        assertEquals("airplane mode message", snackBar.message)
 
         val state = viewModel.uiState.value
         assertFalse(state.showScanningProgressBar)
