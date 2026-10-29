@@ -172,7 +172,8 @@ class DownloadMonitorService : Service() {
             resumeQueuedDownloadsOnNetworkAvailable()
           }
 
-          NetworkState.NOT_CONNECTED -> onNetworkLost()
+          NetworkState.NOT_CONNECTED,
+          NetworkState.AIRPLANE_MODE -> onNetworkLost()
         }
       }
     }

@@ -24,6 +24,7 @@ import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
+import io.mockk.slot
 import io.mockk.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -75,10 +76,6 @@ class CategoryViewModelTest {
   @BeforeEach
   fun init() {
     networkStates.value = NetworkState.CONNECTED
-
-    every {
-      application.getString(CoreR.string.no_network_connection)
-    } returns errorMessage
 
     every {
       application.getString(string.no_category_available)
@@ -134,6 +131,50 @@ class CategoryViewModelTest {
       } returns ObserveCategories.Result.Success(emptyList())
       createViewModel()
       assertThat(categoryViewModel.state.value).isEqualTo(Loading)
+    }
+
+    @Test
+    fun whenNotConnected_passesOfflineMessageAsErrorNoNetwork() = runTest {
+      networkStates.value = NetworkState.NOT_CONNECTED
+      every { application.getString(CoreR.string.action_load_categories) } returns
+        "load the list of categories"
+      every {
+        application.getString(
+          CoreR.string.offline_feature_blocked_message,
+          "load the list of categories"
+        )
+      } returns "offline message"
+      val errorNoNetworkSlot = slot<String>()
+      coEvery {
+        observeCategories(any(), capture(errorNoNetworkSlot), any())
+      } returns ObserveCategories.Result.Success(emptyList())
+
+      createViewModel()
+      advanceUntilIdle()
+
+      assertEquals("offline message", errorNoNetworkSlot.captured)
+    }
+
+    @Test
+    fun whenAirplaneModeOn_passesAirplaneModeMessageAsErrorNoNetwork() = runTest {
+      networkStates.value = NetworkState.AIRPLANE_MODE
+      every { application.getString(CoreR.string.action_load_categories) } returns
+        "load the list of categories"
+      every {
+        application.getString(
+          CoreR.string.airplane_mode_feature_blocked_message,
+          "load the list of categories"
+        )
+      } returns "airplane mode message"
+      val errorNoNetworkSlot = slot<String>()
+      coEvery {
+        observeCategories(any(), capture(errorNoNetworkSlot), any())
+      } returns ObserveCategories.Result.Success(emptyList())
+
+      createViewModel()
+      advanceUntilIdle()
+
+      assertEquals("airplane mode message", errorNoNetworkSlot.captured)
     }
   }
 
