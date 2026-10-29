@@ -42,14 +42,14 @@
   <string name="go_to_wifi_settings_label">Ir a configurações de Wi-Fi</string>
   <string name="connection_refused">Conexão recusada.</string>
   <string name="hotspot_running">Ponto de acesso Wi-Fi em execução</string>
-  <string name="no_books_selected_toast_message">Selecione primeiro os livros</string>
+  <string name="no_books_selected_toast_message" fuzzy="true">Selecione primeiro os livros</string>
   <string name="server_failed_message">Não foi possível iniciar o servidor. Por favor, ligue seu ponto de acesso</string>
   <string name="server_failed_toast_message">Não foi possível iniciar o servidor.</string>
   <string name="server_started_successfully_toast_message">Servidor iniciado com sucesso.</string>
   <string name="server_stopped_successfully_toast_message">Servidor parado com sucesso.</string>
   <string name="hotspot_turned_on">Ponto de acesso ativado</string>
   <string name="hotspot_details_message">Detalhes do ponto de acesso local:\nSSID: %1$s\nPalavra-passe: %2$s</string>
-  <string name="server_textview_default_message">Selecione os ficheiros que deseja alojar no servidor</string>
+  <string name="server_textview_default_message" fuzzy="true">Selecione os ficheiros que deseja alojar no servidor</string>
   <string name="progress_dialog_starting_server">A iniciar o servidor</string>
   <string name="hotspot_dialog_title">Instruções para alojar livros</string>
   <string name="wifi_dialog_title">Conexão Wi-Fi detetada</string>
@@ -160,9 +160,9 @@
   <string name="pref_free_storage">%s grátis</string>
   <string name="choose_storage_to_download_book">Selecionar o armazenamento para descarregar o livro</string>
   <string name="delete_zim_failed">Desculpe, não foi possível eliminar este ficheiro. Pode tentar usar um gestor de ficheiros.</string>
-  <string name="tts_pause">pausar</string>
-  <string name="tts_resume">continuar</string>
-  <string name="stop">parar</string>
+  <string name="tts_pause" fuzzy="true">pausar</string>
+  <string name="tts_resume" fuzzy="true">continuar</string>
+  <string name="stop" fuzzy="true">parar</string>
   <string name="notification_pause_button_text">Pausa</string>
   <string name="notification_resume_button_text">Retomar</string>
   <string name="internal_storage">Interno</string>
@@ -187,14 +187,14 @@
   <string name="time_left">esquerda</string>
   <string name="time_today">Hoje</string>
   <string name="time_yesterday">Ontem</string>
-  <string name="pref_external_link_popup_title">Avisar quando seguir hiperligações externas</string>
+  <string name="pref_external_link_popup_title" fuzzy="true">Avisar quando seguir hiperligações externas</string>
   <string name="pref_external_link_popup_summary">Mostrar os cartões flutuantes para avisar sobre os custos adicionais ou quando não funcionar nas hiperligações quando desligadas.</string>
-  <string name="external_link_popup_dialog_title">Acesso a uma ligação externa!</string>
-  <string name="external_link_popup_dialog_message">Está a aceder a uma hiperligação externa. Isto pode acarretar custos adicionais para a transferência de dados ou simplesmente não funcionará quando estiver desligado.\nDeseja realmente continuar?</string>
+  <string name="external_link_popup_dialog_title" fuzzy="true">Acesso a uma ligação externa!</string>
+  <string name="external_link_popup_dialog_message" fuzzy="true">Está a aceder a uma hiperligação externa. Isto pode acarretar custos adicionais para a transferência de dados ou simplesmente não funcionará quando estiver desligado.\nDeseja realmente continuar?</string>
   <string name="do_not_ask_anymore">Não perguntar mais</string>
-  <string name="your_languages">Línguas selecionadas:</string>
+  <string name="your_languages" fuzzy="true">Línguas selecionadas:</string>
   <string name="your_language">Idioma selecionado: %s</string>
-  <string name="other_languages">Outras línguas:</string>
+  <string name="other_languages" fuzzy="true">Outras línguas:</string>
   <string name="downloading">Baixando</string>
   <string name="no_items_msg">Nenhum item disponível</string>
   <string name="crash_title">Bem, isto é constrangedor</string>
@@ -209,7 +209,7 @@
   <string name="new_tab_shortcut_label">Novo separador</string>
   <string name="get_content_shortcut_label">Obter conteúdo</string>
   <string name="fav_icon">Favicon</string>
-  <string name="pagesCount">%s artigos</string>
+  <string name="pagesCount" fuzzy="true">%s artigos</string>
   <string name="get_started">Começar</string>
   <string name="download_books">Descarregar livros</string>
   <string name="humankind_knowledge">O conhecimento da humanidade no seu telemóvel.</string>

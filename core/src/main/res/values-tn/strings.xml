@@ -28,14 +28,14 @@
   <string name="go_to_wifi_settings_label">Ya ko dipaakanyong tsa WIFI</string>
   <string name="connection_refused">Kgolagano e retetse</string>
   <string name="hotspot_running">Hotspot ye e berekang</string>
-  <string name="no_books_selected_toast_message">Tsweetswee tlhopha dibuka pele</string>
+  <string name="no_books_selected_toast_message" fuzzy="true">Tsweetswee tlhopha dibuka pele</string>
   <string name="server_failed_message">Go similodisa server go retetse. tsweetswee tshuba hotspot ya gago</string>
   <string name="server_failed_toast_message">Go simolodisa server go retetse.</string>
   <string name="server_started_successfully_toast_message">Go simolodisa server go atlegile.</string>
   <string name="server_stopped_successfully_toast_message">Go tswala server go atlegile.</string>
   <string name="hotspot_turned_on">Hotspot e tshubilwe</string>
   <string name="hotspot_details_message">Tse di latelang ke dintlha tsa hotspot ya gago. \nSSID: %1$s \nPass: %2$s</string>
-  <string name="server_textview_default_message">Tlhopha difaele tse o batlang go di tsenya mo server</string>
+  <string name="server_textview_default_message" fuzzy="true">Tlhopha difaele tse o batlang go di tsenya mo server</string>
   <string name="progress_dialog_starting_server">Tshimilolo ya sever</string>
   <string name="hotspot_dialog_title">Ditaelo tsa go tshegetsa dibuka</string>
   <string name="wifi_dialog_title">Go lemogilwe kgokagano ya WiFi</string>
@@ -131,9 +131,9 @@
   <string name="pref_storage">Mabolokelo</string>
   <string name="pref_current_folder">Folder ya Gone Jaanong</string>
   <string name="delete_zim_failed">Ke maswabi re ne re sa kgone go phimola difaele dingwe. O tshwanetse go leka go dirisa motsamaisi wa difaele.</string>
-  <string name="tts_pause">Kgama</string>
-  <string name="tts_resume">Tsweledisa</string>
-  <string name="stop">Ema</string>
+  <string name="tts_pause" fuzzy="true">Kgama</string>
+  <string name="tts_resume" fuzzy="true">Tsweledisa</string>
+  <string name="stop" fuzzy="true">Ema</string>
   <string name="internal_storage">Mo teng</string>
   <string name="external_storage">Ka fa ntle</string>
   <string name="yes">Ee</string>
@@ -155,13 +155,13 @@
   <string name="time_left">Molema</string>
   <string name="time_today">Gompieno</string>
   <string name="time_yesterday">Maabane</string>
-  <string name="pref_external_link_popup_title">Tlhagiso fa o tsena mo dikopanong tsa ka fa ntle</string>
+  <string name="pref_external_link_popup_title" fuzzy="true">Tlhagiso fa o tsena mo dikopanong tsa ka fa ntle</string>
   <string name="pref_external_link_popup_summary">Supa popup go tlhagisa ka ditshenyegelo tse oketsegang kgotsa go sa direng mo sokgolaganong tse disw g mo maranyaneng.</string>
-  <string name="external_link_popup_dialog_title">O tsena mo kgolaganyong ye e kwa ntle!</string>
+  <string name="external_link_popup_dialog_title" fuzzy="true">O tsena mo kgolaganyong ye e kwa ntle!</string>
   <string name="external_link_popup_dialog_message" fuzzy="true">O tsena mo kgolaganyong ye e kwa ntle. Sê se ka baka ditshenyegelo tse di oketsegileng tsa data kgotsa go sa bereka fa ose mo maranyaneng. A o batla go tswelela?</string>
   <string name="do_not_ask_anymore">Se tlhole o botsa gotlhêlêlê</string>
-  <string name="your_languages">Diteme tse di tlhophilweng:</string>
-  <string name="other_languages">Diteme tse dingwe:</string>
+  <string name="your_languages" fuzzy="true">Diteme tse di tlhophilweng:</string>
+  <string name="other_languages" fuzzy="true">Diteme tse dingwe:</string>
   <string name="no_items_msg">Ga go na dilo tse di leng teng</string>
   <string name="crash_title">Ee--- Seno se tlhabisa ditlhong</string>
   <string name="crash_description" fuzzy="true">Go lebega ekete re kgautlhane.\nA o ka re thusa go baakanya bothata jo ka romela kitso e e latelang?</string>
@@ -175,7 +175,7 @@
   <string name="new_tab_shortcut_label">Tab e ntšha ga eyo</string>
   <string name="get_content_shortcut_label">Tsaya tshêdimosô</string>
   <string name="fav_icon">Favicon</string>
-  <string name="pagesCount">Dipadi tsa %s</string>
+  <string name="pagesCount" fuzzy="true">Dipadi tsa %s</string>
   <string name="get_started">Simolola</string>
   <string name="download_books">Itseelô dibuka</string>
   <string name="humankind_knowledge">Kitsô ya setho, mo mogalêng wa gago wa lethêka.</string>

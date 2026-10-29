@@ -39,14 +39,14 @@
   <string name="go_to_wifi_settings_label">Wi-Fi の設定に移動する</string>
   <string name="connection_refused">接続が拒否されました。</string>
   <string name="hotspot_running">ホットスポット実行中</string>
-  <string name="no_books_selected_toast_message">まずブックを選択してください</string>
+  <string name="no_books_selected_toast_message" fuzzy="true">まずブックを選択してください</string>
   <string name="server_failed_message">サーバーを起動できませんでした。ホットスポットをオンにしてください。</string>
   <string name="server_failed_toast_message">サーバーを起動できませんでした。</string>
   <string name="server_started_successfully_toast_message">サーバーは正常に起動しました。</string>
   <string name="server_stopped_successfully_toast_message">サーバーは正常に停止しました。</string>
   <string name="hotspot_turned_on">ホットスポットがオンになりました</string>
   <string name="hotspot_details_message">以下は、ローカル ホットスポットの詳細情報です。 \nSSID: %1$s \nパスワード: %2$s</string>
-  <string name="server_textview_default_message">サーバーでホストしたいファイルを選択してください</string>
+  <string name="server_textview_default_message" fuzzy="true">サーバーでホストしたいファイルを選択してください</string>
   <string name="progress_dialog_starting_server">サーバー起動中</string>
   <string name="hotspot_dialog_title">本をホストするための手順</string>
   <string name="wifi_dialog_title">Wi-Fi 接続が見つかりました</string>
@@ -140,9 +140,9 @@
   <string name="pref_storage">ストレージ</string>
   <string name="pref_current_folder">現在のフォルダー</string>
   <string name="delete_zim_failed">申し訳ありませんが、一部のファイルを削除できませんでした。代わりにファイルマネージャーを使用してみてください。</string>
-  <string name="tts_pause">一時停止</string>
-  <string name="tts_resume">再開</string>
-  <string name="stop">停止</string>
+  <string name="tts_pause" fuzzy="true">一時停止</string>
+  <string name="tts_resume" fuzzy="true">再開</string>
+  <string name="stop" fuzzy="true">停止</string>
   <string name="internal_storage">内部ストレージ</string>
   <string name="external_storage">外部ストレージ</string>
   <string name="yes">はい</string>
@@ -164,10 +164,10 @@
   <string name="time_left">残り</string>
   <string name="time_today">今日</string>
   <string name="time_yesterday">昨日</string>
-  <string name="pref_external_link_popup_title">外部リンクを入力したときに警告する</string>
+  <string name="pref_external_link_popup_title" fuzzy="true">外部リンクを入力したときに警告する</string>
   <string name="do_not_ask_anymore">これ以上聞かないでください</string>
-  <string name="your_languages">選択されている言語</string>
-  <string name="other_languages">その他の言語:</string>
+  <string name="your_languages" fuzzy="true">選択されている言語</string>
+  <string name="other_languages" fuzzy="true">その他の言語:</string>
   <string name="crash_checkbox_language">言語設定</string>
   <string name="crash_checkbox_zimfiles">ZIM ファイルのリスト</string>
   <string name="crash_checkbox_exception">クラッシュの詳細</string>

@@ -38,14 +38,14 @@
   <string name="go_to_wifi_settings_label">Μετάβαση στις ρυθμίσεις WIFI</string>
   <string name="connection_refused">Η σύνδεση απορρίφθηκε.</string>
   <string name="hotspot_running">Εκτέλεση σημείου πρόσβασης</string>
-  <string name="no_books_selected_toast_message">Παρακαλούμε επιλέξτε βιβλία πρώτα</string>
+  <string name="no_books_selected_toast_message" fuzzy="true">Παρακαλούμε επιλέξτε βιβλία πρώτα</string>
   <string name="server_failed_message">Ο διακομιστής δεν μπορεί να ξεκινήσει. Ενεργοποιήστε το σημείο πρόσβασης</string>
   <string name="server_failed_toast_message">Ο διακομιστής δεν μπορεί να ξεκινήσει.</string>
   <string name="server_started_successfully_toast_message">Ο διακομιστής ξεκίνησε επιτυχώς.</string>
   <string name="server_stopped_successfully_toast_message">Ο διακομιστής τερματίστηκε επιτυχώς.</string>
   <string name="hotspot_turned_on">Το σημείο πρόσβασης ενεργοποιήθηκε</string>
   <string name="hotspot_details_message">Παρακάτω οι λεπτομέρειες του σημείου πρόσβασης σας.\nΌνομα : %1$s \nΚωδικός : %2$s</string>
-  <string name="server_textview_default_message">Επιλέξτε τα αρχεία που θέλετε να διαθέσετε στον διακομιστή</string>
+  <string name="server_textview_default_message" fuzzy="true">Επιλέξτε τα αρχεία που θέλετε να διαθέσετε στον διακομιστή</string>
   <string name="progress_dialog_starting_server">Έναρξη διακομιστή</string>
   <string name="hotspot_dialog_title">Οδηγίες για τη διάθεση βιβλίων</string>
   <string name="wifi_dialog_title">Εντοπίστηκε η σύνδεση WIFI</string>
@@ -140,9 +140,9 @@
   <string name="pref_free_storage">%s ελεύθερα</string>
   <string name="choose_storage_to_download_book">Επιλέξτε χώρο αποθήκευσης για να κατεβάσετε το βιβλίο</string>
   <string name="delete_zim_failed">Λυπούμαστε, δεν ήταν δυνατή η διαγραφή ορισμένων αρχείων. Θα πρέπει να χρησιμοποιήσετε έναν διαχειριστή αρχείων.</string>
-  <string name="tts_pause">παύση</string>
-  <string name="tts_resume">συνέχεια</string>
-  <string name="stop">Διακοπή</string>
+  <string name="tts_pause" fuzzy="true">παύση</string>
+  <string name="tts_resume" fuzzy="true">συνέχεια</string>
+  <string name="stop" fuzzy="true">Διακοπή</string>
   <string name="notification_pause_button_text">Παύση</string>
   <string name="notification_resume_button_text">Συνέχιση</string>
   <string name="internal_storage">Εξωτερικό</string>
@@ -165,13 +165,13 @@
   <string name="time_left">έμεινε</string>
   <string name="time_today">Σήμερα</string>
   <string name="time_yesterday">Χθες</string>
-  <string name="pref_external_link_popup_title">Προειδοποίησέ με όταν μπαίνω σε εξωτερικούς συνδέσμους</string>
+  <string name="pref_external_link_popup_title" fuzzy="true">Προειδοποίησέ με όταν μπαίνω σε εξωτερικούς συνδέσμους</string>
   <string name="external_link_popup_dialog_title" fuzzy="true">Είσοδος σε εξωτερικό σύνδεσμο</string>
   <string name="external_link_popup_dialog_message" fuzzy="true">Μπαίνετε σε ένα εξωτερικό σύνδεσμο. Αυτό μπορεί να οδηγήσει σε πρόσθετο κόστος για μεταφορά δεδομένων που δεν θα δουλεύει μόνο όταν θα είστε εκτός σύνδεσης. Θέλετε να συνεχίσετε;</string>
   <string name="do_not_ask_anymore">Μη με ρωτήσεις άλλο</string>
-  <string name="your_languages">Επιλεγμένες γλώσσες:</string>
+  <string name="your_languages" fuzzy="true">Επιλεγμένες γλώσσες:</string>
   <string name="your_language">Επιλεγμένη γλώσσα: %s</string>
-  <string name="other_languages">Άλλες γλώσσες:</string>
+  <string name="other_languages" fuzzy="true">Άλλες γλώσσες:</string>
   <string name="downloading">Γίνεται λήψη</string>
   <string name="no_items_msg">Δεν υπάρχουν διαθέσιμα στοιχεία</string>
   <string name="crash_title">Λοιπόν… Αυτό είναι ντροπιαστικό</string>
@@ -180,7 +180,7 @@
   <string name="crash_checkbox_device">Λεπτομέρειες συσκευής</string>
   <string name="new_tab_shortcut_label">Νέα καρτέλα</string>
   <string name="get_content_shortcut_label">Λήψη περιεχομένου</string>
-  <string name="pagesCount">%s άρθρα</string>
+  <string name="pagesCount" fuzzy="true">%s άρθρα</string>
   <string name="get_started">Ξεκινήστε</string>
   <string name="download_books">Λήψη βιβλίων</string>
   <string name="humankind_knowledge">Η γνώση της ανθρωπότητας, στο τηλέφωνό σας.</string>

@@ -34,14 +34,14 @@
   <string name="go_to_wifi_settings_label">WIFI సెట్టింగ్‌లకు వెళ్లండి</string>
   <string name="connection_refused">కనెక్షన్ నిరాకరించబడింది.</string>
   <string name="hotspot_running">హాట్‌స్పాట్ రన్ అవుతోంది</string>
-  <string name="no_books_selected_toast_message">దయచేసి ముందుగా పుస్తకాలను ఎంచుకోండి</string>
+  <string name="no_books_selected_toast_message" fuzzy="true">దయచేసి ముందుగా పుస్తకాలను ఎంచుకోండి</string>
   <string name="server_failed_message">సర్వర్‌ని ప్రారంభించడం సాధ్యపడలేదు. దయచేసి మీ హాట్‌స్పాట్‌ని ఆన్ చేయండి</string>
   <string name="server_failed_toast_message">సర్వర్‌ని ప్రారంభించడం సాధ్యపడలేదు.</string>
   <string name="server_started_successfully_toast_message">సర్వర్ విజయవంతంగా ప్రారంభించబడింది.</string>
   <string name="server_stopped_successfully_toast_message">సర్వర్ విజయవంతంగా ఆగిపోయింది.</string>
   <string name="hotspot_turned_on">హాట్‌స్పాట్ ఆన్ చేయబడింది</string>
   <string name="hotspot_details_message">మీ స్థానిక హాట్‌స్పాట్ వివరాలు క్రిందివి. \nSSID : %1$s \nపాస్ : %2$s</string>
-  <string name="server_textview_default_message">మీరు సర్వర్‌లో హోస్ట్ చేయాలనుకుంటున్న ఫైల్‌లను ఎంచుకోండి</string>
+  <string name="server_textview_default_message" fuzzy="true">మీరు సర్వర్‌లో హోస్ట్ చేయాలనుకుంటున్న ఫైల్‌లను ఎంచుకోండి</string>
   <string name="progress_dialog_starting_server">సర్వర్‌ను ప్రారంభిస్తోంది</string>
   <string name="hotspot_dialog_title">పుస్తకాలను హోస్ట్ చేయడానికి సూచనలు</string>
   <string name="wifi_dialog_title">WiFi కనెక్షన్ కనుగొనబడింది</string>
@@ -137,9 +137,9 @@
   <string name="pref_storage">నిల్వ</string>
   <string name="pref_current_folder">ప్రస్తుత ఫోల్డర్</string>
   <string name="delete_zim_failed">క్షమించండి మేము కొన్ని ఫైల్‌లను తొలగించలేకపోయాము. బదులుగా మీరు ఫైల్ మేనేజర్‌ని ఉపయోగించి ప్రయత్నించాలి.</string>
-  <string name="tts_pause">విరామం</string>
-  <string name="tts_resume">పునఃప్రారంభం</string>
-  <string name="stop">ఆపండి</string>
+  <string name="tts_pause" fuzzy="true">విరామం</string>
+  <string name="tts_resume" fuzzy="true">పునఃప్రారంభం</string>
+  <string name="stop" fuzzy="true">ఆపండి</string>
   <string name="internal_storage">అంతర్గత</string>
   <string name="external_storage">అంతర్గత</string>
   <string name="yes">సరే</string>
@@ -161,13 +161,13 @@
   <string name="time_left">వదిలేశారు</string>
   <string name="time_today">ఈరోజు</string>
   <string name="time_yesterday">నిన్న</string>
-  <string name="pref_external_link_popup_title">బాహ్య లింక్‌లను నమోదు చేసేటప్పుడు హెచ్చరించండి</string>
+  <string name="pref_external_link_popup_title" fuzzy="true">బాహ్య లింక్‌లను నమోదు చేసేటప్పుడు హెచ్చరించండి</string>
   <string name="pref_external_link_popup_summary">అదనపు ఖర్చులు లేదా ఆఫ్‌లైన్ లింక్‌లలో పని చేయకపోవడం గురించి హెచ్చరించడానికి పాప్‌అప్‌ని ప్రదర్శించండి.</string>
-  <string name="external_link_popup_dialog_title">బాహ్య లింక్‌లోకి ప్రవేశిస్తోంది!</string>
+  <string name="external_link_popup_dialog_title" fuzzy="true">బాహ్య లింక్‌లోకి ప్రవేశిస్తోంది!</string>
   <string name="external_link_popup_dialog_message" fuzzy="true">మీరు బాహ్య లింక్‌ని నమోదు చేస్తున్నారు. ఇది డేటా బదిలీకి అదనపు ఖర్చులకు దారితీయవచ్చు లేదా మీరు ఆఫ్‌లైన్‌లో ఉన్నప్పుడు పని చేయదు. మీరు కొనసాగించాలనుకుంటున్నారా?</string>
   <string name="do_not_ask_anymore">ఇక అడగవద్దు</string>
-  <string name="your_languages">ఎంచుకున్న భాషలు:</string>
-  <string name="other_languages">ఇతర భాషలు:</string>
+  <string name="your_languages" fuzzy="true">ఎంచుకున్న భాషలు:</string>
+  <string name="other_languages" fuzzy="true">ఇతర భాషలు:</string>
   <string name="no_items_msg">ఏ వస్తువులు అందుబాటులో లేవు</string>
   <string name="crash_title">సరే. ఇది సిగ్గుచేటు</string>
   <string name="crash_description" fuzzy="true">మేము క్రాష్ అయినట్లు కనిపిస్తోంది.\n\nక్రింది సమాచారాన్ని పంపడం ద్వారా ఈ సమస్యను పరిష్కరించడంలో మాకు సహాయం చేయడానికి మీరు ఇష్టపడతారా?</string>
@@ -181,7 +181,7 @@
   <string name="new_tab_shortcut_label">కొత్త ట్యాబ్</string>
   <string name="get_content_shortcut_label">కంటెంట్ పొందండి</string>
   <string name="fav_icon">ఫేవికాన్</string>
-  <string name="pagesCount">%s కథనాలు</string>
+  <string name="pagesCount" fuzzy="true">%s కథనాలు</string>
   <string name="get_started">మొదలు పెట్టండి</string>
   <string name="download_books">పుస్తకాలను డౌన్‌లోడ్ చేయండి</string>
   <string name="humankind_knowledge">మానవజాతి జ్ఞానం, మీ ఫోన్‌లో.</string>

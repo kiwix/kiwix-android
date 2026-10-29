@@ -38,11 +38,11 @@
   <string name="go_to_wifi_settings_label">Gå til WIFI-innstillinger</string>
   <string name="connection_refused">Tilkobling avvist.</string>
   <string name="hotspot_running">Aktiv Hotspot</string>
-  <string name="no_books_selected_toast_message">Velg bøker først</string>
+  <string name="no_books_selected_toast_message" fuzzy="true">Velg bøker først</string>
   <string name="server_failed_toast_message">Kunne ikke starte tjener.</string>
   <string name="server_started_successfully_toast_message">Tjeneren startet vellykket.</string>
   <string name="server_stopped_successfully_toast_message">Tjeneren ble stoppet.</string>
-  <string name="server_textview_default_message">Velg filene du ønsker å ha på tjeneren</string>
+  <string name="server_textview_default_message" fuzzy="true">Velg filene du ønsker å ha på tjeneren</string>
   <string name="progress_dialog_starting_server">Starter tjener</string>
   <string name="wifi_dialog_title">WiFi-tilkobling oppdaget</string>
   <string name="hotspot_dialog_neutral_button">FORTSETT</string>
@@ -139,9 +139,9 @@
   <string name="pref_storage_used">%s brukt</string>
   <string name="pref_free_storage">%s ledig</string>
   <string name="choose_storage_to_download_book">Velg lagringsplass for å laste ned boken</string>
-  <string name="tts_pause">pause</string>
-  <string name="tts_resume">fortsett</string>
-  <string name="stop">stopp</string>
+  <string name="tts_pause" fuzzy="true">pause</string>
+  <string name="tts_resume" fuzzy="true">fortsett</string>
+  <string name="stop" fuzzy="true">stopp</string>
   <string name="notification_pause_button_text">Pause</string>
   <string name="notification_resume_button_text">Gjenoppta</string>
   <string name="internal_storage">Intern</string>
@@ -164,9 +164,9 @@
   <string name="time_left">igjen</string>
   <string name="time_today">I dag</string>
   <string name="time_yesterday">I går</string>
-  <string name="pref_external_link_popup_title">Varsle når du går til eksterne lenker</string>
+  <string name="pref_external_link_popup_title" fuzzy="true">Varsle når du går til eksterne lenker</string>
   <string name="do_not_ask_anymore">Ikke spør igjen</string>
-  <string name="other_languages">Andre språk:</string>
+  <string name="other_languages" fuzzy="true">Andre språk:</string>
   <string name="crash_title">Vel … Dette er pinlig</string>
   <string name="crash_description">Det ser ut som vi krasjet.\n\nVil du hjelpe oss med å løse dette problemet ved å sende krasjrapporten?</string>
   <string name="crash_checkbox_language">Dine språkinnstillinger</string>
@@ -178,7 +178,7 @@
   <string name="new_tab_shortcut_label">Ny fane</string>
   <string name="get_content_shortcut_label">Få innhold</string>
   <string name="fav_icon">Favorittikon</string>
-  <string name="pagesCount">%s artikler</string>
+  <string name="pagesCount" fuzzy="true">%s artikler</string>
   <string name="get_started">Kom i gang</string>
   <string name="download_books">Last ned bøker</string>
   <string name="humankind_knowledge">Menneskehetens kunnskap, på telefonen din.</string>

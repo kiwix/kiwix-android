@@ -41,14 +41,14 @@
   <string name="go_to_wifi_settings_label">Перейти до налаштувань WIFI</string>
   <string name="connection_refused">У з’єднанні відмовлено.</string>
   <string name="hotspot_running">Точка доступу працює</string>
-  <string name="no_books_selected_toast_message">Будь ласка, спершу виберіть книги</string>
+  <string name="no_books_selected_toast_message" fuzzy="true">Будь ласка, спершу виберіть книги</string>
   <string name="server_failed_message">Неможливо запустити сервер. Будь ласка, ввімкніть вашу точку доступу</string>
   <string name="server_failed_toast_message">Неможливо запустити сервер.</string>
   <string name="server_started_successfully_toast_message">Сервер успішно запущено.</string>
   <string name="server_stopped_successfully_toast_message">Сервер успішно зупинено.</string>
   <string name="hotspot_turned_on">Точку доступу ввімкнено</string>
   <string name="hotspot_details_message">Деталі вашої точки доступу:\nSSID: %1$s \nПароль: %2$s</string>
-  <string name="server_textview_default_message">Виберіть файли, які ви хочете розмістити на сервері</string>
+  <string name="server_textview_default_message" fuzzy="true">Виберіть файли, які ви хочете розмістити на сервері</string>
   <string name="progress_dialog_starting_server">Запуск сервера</string>
   <string name="hotspot_dialog_title">Інструкції з розміщення книг</string>
   <string name="wifi_dialog_title">Виявлено WiFi під’єднання</string>
@@ -143,9 +143,9 @@
   <string name="pref_storage">Зберігання даних</string>
   <string name="pref_current_folder">Поточна папка</string>
   <string name="delete_zim_failed">Вибачте, але нам не вдалося вилучити файли. Вам треба спробувати скористатися натомість менеджером файлів.</string>
-  <string name="tts_pause">пауза</string>
-  <string name="tts_resume">продовжити</string>
-  <string name="stop">зупинити</string>
+  <string name="tts_pause" fuzzy="true">пауза</string>
+  <string name="tts_resume" fuzzy="true">продовжити</string>
+  <string name="stop" fuzzy="true">зупинити</string>
   <string name="internal_storage">Внутрішнє</string>
   <string name="external_storage">Зовнішні</string>
   <string name="yes">Так</string>
@@ -167,13 +167,13 @@
   <string name="time_left">залишилось</string>
   <string name="time_today">Сьогодні</string>
   <string name="time_yesterday">Вчора</string>
-  <string name="pref_external_link_popup_title">Попереджувати, коли введено зовнішнє посилання</string>
+  <string name="pref_external_link_popup_title" fuzzy="true">Попереджувати, коли введено зовнішнє посилання</string>
   <string name="pref_external_link_popup_summary">Відображати попередження щодо проблем із зовнішніми посиланнями, як от зняття додаткових грошей або неспрацювання посилань в офлайні.</string>
-  <string name="external_link_popup_dialog_title">Введіть зовнішнє посилання!</string>
-  <string name="external_link_popup_dialog_message">Ви вказали зовнішнє посилання. Відкриття цього посилання може призвести до зняття грошей мобільним оператором або воно просто не працюватиме, якщо ви офлайн. \nБажаєте продовжити?</string>
+  <string name="external_link_popup_dialog_title" fuzzy="true">Введіть зовнішнє посилання!</string>
+  <string name="external_link_popup_dialog_message" fuzzy="true">Ви вказали зовнішнє посилання. Відкриття цього посилання може призвести до зняття грошей мобільним оператором або воно просто не працюватиме, якщо ви офлайн. \nБажаєте продовжити?</string>
   <string name="do_not_ask_anymore">Більш не питати</string>
-  <string name="your_languages">Вибір мови:</string>
-  <string name="other_languages">Інші мови:</string>
+  <string name="your_languages" fuzzy="true">Вибір мови:</string>
+  <string name="other_languages" fuzzy="true">Інші мови:</string>
   <string name="no_items_msg">Немає елементів</string>
   <string name="crash_title">Хммм… Це збентежує</string>
   <string name="crash_description">Схоже наша програма впала.\n\nЧи не бажаєте допомогти нам виправити цю проблему, надіславши звіт про збій?</string>
@@ -187,7 +187,7 @@
   <string name="new_tab_shortcut_label">Нова вкладка</string>
   <string name="get_content_shortcut_label">Отримати вміст</string>
   <string name="fav_icon">Іконка</string>
-  <string name="pagesCount">%s статей</string>
+  <string name="pagesCount" fuzzy="true">%s статей</string>
   <string name="get_started">Розпочати</string>
   <string name="download_books">Завантажити книги</string>
   <string name="humankind_knowledge">Знання людства, на вашому телефоні.</string>

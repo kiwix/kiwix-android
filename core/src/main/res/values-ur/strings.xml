@@ -26,14 +26,14 @@
   <string name="go_to_wifi_settings_label">وائی فائی کی ترتیبات پر جائیں۔</string>
   <string name="connection_refused">کنکشن سے انکار کر دیا گیا۔</string>
   <string name="hotspot_running">ہاٹ سپاٹ چل رہا ہے۔</string>
-  <string name="no_books_selected_toast_message">براہ کرم پہلے کتابیں منتخب کریں۔</string>
+  <string name="no_books_selected_toast_message" fuzzy="true">براہ کرم پہلے کتابیں منتخب کریں۔</string>
   <string name="server_failed_message">سرور شروع نہیں ہو سکا۔ براہ کرم اپنا ہاٹ اسپاٹ آن کریں۔</string>
   <string name="server_failed_toast_message">سرور شروع نہیں ہو سکا۔</string>
   <string name="server_started_successfully_toast_message">سرور کامیابی سے شروع ہو گیا۔</string>
   <string name="server_stopped_successfully_toast_message">سرور کامیابی سے رک گیا۔</string>
   <string name="hotspot_turned_on">ہاٹ سپاٹ آن ہو گیا۔</string>
   <string name="hotspot_details_message">آپ کے مقامی ہاٹ سپاٹ کی تفصیلات درج ذیل ہیں۔ \nSSID : %1$s \nPass : %2$s</string>
-  <string name="server_textview_default_message">ان فائلوں کو منتخب کریں جن کی آپ سرور پر میزبانی کرنا چاہتے ہیں۔</string>
+  <string name="server_textview_default_message" fuzzy="true">ان فائلوں کو منتخب کریں جن کی آپ سرور پر میزبانی کرنا چاہتے ہیں۔</string>
   <string name="progress_dialog_starting_server">سرور شروع ہو رہا ہے۔</string>
   <string name="hotspot_dialog_title">کتابوں کی میزبانی کے لیے ہدایات</string>
   <string name="wifi_dialog_title">وائی فائی کنکشن کا پتہ چلا</string>

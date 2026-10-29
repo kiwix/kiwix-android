@@ -70,9 +70,9 @@
   <string name="no_network_connection">Pas cap de connexion de ret</string>
   <string name="pref_storage">Emmagazinatge</string>
   <string name="pref_current_folder">Dorsièr actual</string>
-  <string name="tts_pause">pausa</string>
-  <string name="tts_resume">contunhar</string>
-  <string name="stop">arrestar</string>
+  <string name="tts_pause" fuzzy="true">pausa</string>
+  <string name="tts_resume" fuzzy="true">contunhar</string>
+  <string name="stop" fuzzy="true">arrestar</string>
   <string name="internal_storage">Intèrne</string>
   <string name="external_storage">Extèrne</string>
   <string name="yes">Òc</string>

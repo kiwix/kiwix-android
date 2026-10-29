@@ -28,14 +28,14 @@
   <string name="hotspot_failed_message">Paez que’l to puntu WiFi yá ta activáu. Desactiva’l puntu WiFi pa siguir.</string>
   <string name="go_to_wifi_settings_label">Dir a config. de WIFI</string>
   <string name="hotspot_running">Executando puntu WiFi</string>
-  <string name="no_books_selected_toast_message">Primero esbilla llibros</string>
+  <string name="no_books_selected_toast_message" fuzzy="true">Primero esbilla llibros</string>
   <string name="server_failed_message">Nun pudo arrancase’l sirvidor. Activa’l puntu WiFi</string>
   <string name="server_failed_toast_message">Nun pudo arrancase’l sirvidor.</string>
   <string name="server_started_successfully_toast_message">Arrancóse’l sirvidor correutamente.</string>
   <string name="server_stopped_successfully_toast_message">Paróse’l sirvidor correutamente.</string>
   <string name="hotspot_turned_on">Puntu WiFi activáu</string>
   <string name="hotspot_details_message">Los siguientes son los detalles del to puntu WiFi llocal. \nSSID : %1$s \nPass : %2$s</string>
-  <string name="server_textview_default_message">Seleiciona los ficheros que quieras agospiar nel sirvidor</string>
+  <string name="server_textview_default_message" fuzzy="true">Seleiciona los ficheros que quieras agospiar nel sirvidor</string>
   <string name="progress_dialog_starting_server">Aniciando’l sirvidor</string>
   <string name="hotspot_dialog_title">Instrucciones para alojar libros.</string>
   <string name="hotspot_dialog_message">Para que esta función funcione, primero debe iniciar manualmente el punto WiFi o asegurarse de que el dispositivo host y el dispositivo receptor estén en la misma red WiFi.</string>
@@ -119,9 +119,9 @@
   <string name="pref_storage">Almacenamientu</string>
   <string name="pref_current_folder">Carpeta actual</string>
   <string name="delete_zim_failed">Nun pudimos desaniciar dellos ficheros. Tendríes de tentalo usando un alministrador de ficheros.</string>
-  <string name="tts_pause">posar</string>
-  <string name="tts_resume">siguir</string>
-  <string name="stop">aparar</string>
+  <string name="tts_pause" fuzzy="true">posar</string>
+  <string name="tts_resume" fuzzy="true">siguir</string>
+  <string name="stop" fuzzy="true">aparar</string>
   <string name="internal_storage">Internu</string>
   <string name="external_storage">Esternu</string>
   <string name="yes">Sí</string>
@@ -143,13 +143,13 @@
   <string name="time_left">p’acabar</string>
   <string name="time_today">Güei</string>
   <string name="time_yesterday">Ayeri</string>
-  <string name="pref_external_link_popup_title">Alvertir al siguir enllaces esternos</string>
+  <string name="pref_external_link_popup_title" fuzzy="true">Alvertir al siguir enllaces esternos</string>
   <string name="pref_external_link_popup_summary">Amuesa un cuadru emerxente p’avisar sobre posibles gastos por consumu de datos o nun funcionamientu d’enllaces ensin conexón.</string>
-  <string name="external_link_popup_dialog_title">¡Entrando n’enllaz esternu!</string>
+  <string name="external_link_popup_dialog_title" fuzzy="true">¡Entrando n’enllaz esternu!</string>
   <string name="external_link_popup_dialog_message" fuzzy="true">Tas por siguir un enllaz esternu. Ello podría xenerar gastos por tresferencia de datos o cenciellamente nun va funcionar si nun tienes conexón. ¿Quies siguir?</string>
   <string name="do_not_ask_anymore">Nun preguntar más</string>
-  <string name="your_languages">Llingües seleicionaes:</string>
-  <string name="other_languages">Otres llingües:</string>
+  <string name="your_languages" fuzzy="true">Llingües seleicionaes:</string>
+  <string name="other_languages" fuzzy="true">Otres llingües:</string>
   <string name="no_items_msg">Nun hai nengún elementu disponible</string>
   <string name="crash_title">Bien… esto ye vergonzoso</string>
   <string name="crash_description" fuzzy="true">Paez que colgamos.\n\n¿Importaríate ayudanos a iguar esti problema unviándonos la siguiente información?</string>
@@ -163,7 +163,7 @@
   <string name="new_tab_shortcut_label">Llingüeta nueva</string>
   <string name="get_content_shortcut_label">Recibir conteníu</string>
   <string name="fav_icon">Favicon</string>
-  <string name="pagesCount">%s artículos</string>
+  <string name="pagesCount" fuzzy="true">%s artículos</string>
   <string name="get_started">Primeros pasos</string>
   <string name="download_books">Descargar llibros</string>
   <string name="humankind_knowledge">La conocencia de la humanidá, nel to teléfonu.</string>

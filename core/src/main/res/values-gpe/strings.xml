@@ -29,14 +29,14 @@
   <string name="go_to_wifi_settings_label">Go WIFI settings</string>
   <string name="connection_refused">Connection refuse.</string>
   <string name="hotspot_running">Dey run Hotspot</string>
-  <string name="no_books_selected_toast_message">Abeg make you select books first</string>
+  <string name="no_books_selected_toast_message" fuzzy="true">Abeg make you select books first</string>
   <string name="server_failed_message">Eno fi start server. Abeg make you turn on your hotspot</string>
   <string name="server_failed_toast_message">Eno fi start server.</string>
   <string name="server_started_successfully_toast_message">Server start successfully.</string>
   <string name="server_stopped_successfully_toast_message">Server stop successfully.</string>
   <string name="hotspot_turned_on">Hotspot turn on</string>
   <string name="hotspot_details_message">Following be de details of your local hotspot. \nSSID : %1$s \nPass : %2$s</string>
-  <string name="server_textview_default_message">Select de files wey you dey wish say ego host for de server top</string>
+  <string name="server_textview_default_message" fuzzy="true">Select de files wey you dey wish say ego host for de server top</string>
   <string name="progress_dialog_starting_server">Server dey Start</string>
   <string name="hotspot_dialog_title">Instructions for hosting books</string>
   <string name="wifi_dialog_title">WiFi connection detect</string>
@@ -132,9 +132,9 @@
   <string name="pref_storage">Storage</string>
   <string name="pref_current_folder">Current Folder</string>
   <string name="delete_zim_failed">Sorry we no fi delete sam files. You for try use file manager instead.</string>
-  <string name="tts_pause">pause</string>
-  <string name="tts_resume">resume</string>
-  <string name="stop">stop</string>
+  <string name="tts_pause" fuzzy="true">pause</string>
+  <string name="tts_resume" fuzzy="true">resume</string>
+  <string name="stop" fuzzy="true">stop</string>
   <string name="internal_storage">Internal</string>
   <string name="external_storage">External</string>
 </resources>

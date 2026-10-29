@@ -30,7 +30,7 @@
   <string name="hotspot_failed_title">Hotspot başladılamadı</string>
   <string name="go_to_wifi_settings_label">Wifi parametrlərinə keçin</string>
   <string name="connection_refused">Bağlantı rədd edildi.</string>
-  <string name="no_books_selected_toast_message">Zəhmət olmasa əvvəlcə kitabları seçin</string>
+  <string name="no_books_selected_toast_message" fuzzy="true">Zəhmət olmasa əvvəlcə kitabları seçin</string>
   <string name="server_failed_message">Serveri başlatmaq mümkün olmadı. Zəhmət olmasa hotspotu açın.</string>
   <string name="server_failed_toast_message">Serveri başlatmaq mümkün olmadı.</string>
   <string name="server_started_successfully_toast_message">Server uğurla başladıldı.</string>

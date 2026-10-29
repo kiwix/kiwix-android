@@ -31,14 +31,14 @@
   <string name="go_to_wifi_settings_label">Lo ti echetẹgwu WIFI</string>
   <string name="connection_refused">Ikó kónecti</string>
   <string name="hotspot_running">Edu hotspot chekwu</string>
-  <string name="no_books_selected_toast_message">Nago Tu otakada dogba.</string>
+  <string name="no_books_selected_toast_message" fuzzy="true">Nago Tu otakada dogba.</string>
   <string name="server_failed_message">Ineke ti server Jon. Nago kpi hotspot wẹ lu</string>
   <string name="server_failed_toast_message">Ineke ti server jon</string>
   <string name="server_started_successfully_toast_message">Server tajo</string>
   <string name="server_stopped_successfully_toast_message">Server kpalu</string>
   <string name="hotspot_turned_on">Hotspot tajo</string>
   <string name="hotspot_details_message">Etale amenw ki do ji enwn ichi we\nSSID: %1$s\nPass: %2$s</string>
-  <string name="server_textview_default_message">Tené ifilu eke tene duchekeu oji sava</string>
+  <string name="server_textview_default_message" fuzzy="true">Tené ifilu eke tene duchekeu oji sava</string>
   <string name="progress_dialog_starting_server">Eti server jo</string>
   <string name="hotspot_dialog_title">Amọda egba Ami ọtakada nyi</string>
   <string name="wifi_dialog_title">Enwn madu brawus chedomo</string>
@@ -109,9 +109,9 @@
   <string name="help_7">Ma dẹ Aly ZIM files. Ma Che wewe</string>
   <string name="help_8">• Wikipedia dẹ ojoji nwu ichi du</string>
   <string name="pref_storage">Ko ma jó ka</string>
-  <string name="tts_pause">Wei ta</string>
-  <string name="tts_resume">Cha me ke</string>
-  <string name="stop">Wei ta</string>
+  <string name="tts_pause" fuzzy="true">Wei ta</string>
+  <string name="tts_resume" fuzzy="true">Cha me ke</string>
+  <string name="stop" fuzzy="true">Wei ta</string>
   <string name="internal_storage">Éjéfu</string>
   <string name="external_storage">Ododa</string>
   <string name="yes">Iii</string>
@@ -127,8 +127,8 @@
   <string name="time_today">Éñíní</string>
   <string name="time_yesterday">Ónalé</string>
   <string name="do_not_ask_anymore">É kí té néné géñ</string>
-  <string name="your_languages">Amí ichí kù mà kojo</string>
-  <string name="other_languages">Amí ichí ómuné</string>
+  <string name="your_languages" fuzzy="true">Amí ichí kù mà kojo</string>
+  <string name="other_languages" fuzzy="true">Amí ichí ómuné</string>
   <string name="crash_title">Amaa,,, enwn che wn achukata</string>
   <string name="new_tab_shortcut_label">Bie titó</string>
   <string name="get_started">Chané</string>

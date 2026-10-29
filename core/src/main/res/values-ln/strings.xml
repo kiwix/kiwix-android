@@ -29,14 +29,14 @@
   <string name="go_to_wifi_settings_label">Kende na bisika ya WIFI</string>
   <string name="connection_refused">Boyokani eboyamaki.</string>
   <string name="hotspot_running">Esika wifi efugwami</string>
-  <string name="no_books_selected_toast_message">Tosɛngi bino bópona liboso mikanda</string>
+  <string name="no_books_selected_toast_message" fuzzy="true">Tosɛngi bino bópona liboso mikanda</string>
   <string name="server_failed_message">Epekisami kopelisa serveur. Tosengi yo fungola esika nayo ya WiFi</string>
   <string name="server_failed_toast_message">Ekokaki kobanda serveur te.</string>
   <string name="server_started_successfully_toast_message">Serveur ebandaki malamu.</string>
   <string name="server_stopped_successfully_toast_message">Serveur etelemaki malamu.</string>
   <string name="hotspot_turned_on">Esika ya WiFi efungwami</string>
   <string name="hotspot_details_message">Oyo elandi ezali makambo ya esika na yo ya WiFi. SSID: %1$s Pass: %2$s</string>
-  <string name="server_textview_default_message">Poná ba fichiers oyo olingi kobomba na serveur</string>
+  <string name="server_textview_default_message" fuzzy="true">Poná ba fichiers oyo olingi kobomba na serveur</string>
   <string name="progress_dialog_starting_server">Kobanda serveur</string>
   <string name="hotspot_dialog_title">Malako mpo na kobomba babuku</string>
   <string name="wifi_dialog_title">Bokangami ya WiFi emonanaki</string>

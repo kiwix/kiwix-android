@@ -28,14 +28,14 @@
   <string name="go_to_wifi_settings_label">WIFI პარამეტრეფშა გინულა</string>
   <string name="connection_refused">თქვანი ჭირინაფა ვარებული რე.</string>
   <string name="hotspot_running">გოტებული რე ჭირინაფაშ ჭურჭული</string>
-  <string name="no_books_selected_toast_message">ქორთხინთ, დუდშე გეგშაგორით კჷრბეფი</string>
+  <string name="no_books_selected_toast_message" fuzzy="true">ქორთხინთ, დუდშე გეგშაგორით კჷრბეფი</string>
   <string name="server_failed_message">სერვერქ ვაჩქართინესო. ქორთხინთ, ჩართით ინტერნეტი</string>
   <string name="server_failed_toast_message">სერვერქ ვეჩირთინუ.</string>
   <string name="server_started_successfully_toast_message">ჩერვერქ ჩერთუ.</string>
   <string name="server_stopped_successfully_toast_message">სერვერქ წჷმოძინელო გაჩერდჷ.</string>
   <string name="hotspot_turned_on">ჭირინაფაშ ჭურჭული ჩართებული რე</string>
   <string name="hotspot_details_message">გიმე მოჩამილი რე თქვანი აბანური ინტერნეტ-მეჭირინაფაშ ჭურჭულიშ გეშა ინფორმაცია. \nSSID : %1$s \nPass : %2$s</string>
-  <string name="server_textview_default_message">გეგშაგორით ფაილეფი, ნამუეფიშ დინოხუნაფა გონებჷნა სერვერსჷნ</string>
+  <string name="server_textview_default_message" fuzzy="true">გეგშაგორით ფაილეფი, ნამუეფიშ დინოხუნაფა გონებჷნა სერვერსჷნ</string>
   <string name="progress_dialog_starting_server">სერვერიშ გოტება</string>
   <string name="hotspot_dialog_title">კჷრბეფიშ დინოხუნაფაშ ინსტრუქცია</string>
   <string name="wifi_dialog_title">WiFi ჭირინაფაქ გორილი რე</string>
@@ -108,8 +108,8 @@
   <string name="help_9">• თიჯგურა დინოხი, მუჭომით რე Wikleaks ვარ-და Wikisource, თაშნეშე ხემიჭირინაფე</string>
   <string name="pref_storage">შვენა</string>
   <string name="pref_current_folder">ასეიანი საქაღარდე</string>
-  <string name="tts_resume">გაგჷრძოლება</string>
-  <string name="stop">საგურუა</string>
+  <string name="tts_resume" fuzzy="true">გაგჷრძოლება</string>
+  <string name="stop" fuzzy="true">საგურუა</string>
   <string name="internal_storage">დინოხოლენი</string>
   <string name="external_storage">გალენური</string>
   <string name="yes">ქო</string>
@@ -126,10 +126,10 @@
   <string name="time_left">დოსქიდუ</string>
   <string name="time_today">ამდღა</string>
   <string name="time_yesterday">გოღა</string>
-  <string name="external_link_popup_dialog_title">გალენური რცხუშ მიშაჸონაფა!</string>
+  <string name="external_link_popup_dialog_title" fuzzy="true">გალენური რცხუშ მიშაჸონაფა!</string>
   <string name="do_not_ask_anymore">ანწი ვაბკითხა</string>
-  <string name="your_languages">გიშაგორილი ნინეფი:</string>
-  <string name="other_languages">შხვა ნინეფი:</string>
+  <string name="your_languages" fuzzy="true">გიშაგორილი ნინეფი:</string>
+  <string name="other_languages" fuzzy="true">შხვა ნინეფი:</string>
   <string name="crash_checkbox_language">თქვანი ნინაშ პარამეტრეფი</string>
   <string name="crash_checkbox_zimfiles" fuzzy="true">თქვანი Zim ფაილეფიშ ერკებული</string>
   <string name="crash_checkbox_device">მონწყილობაშ ინფორმაცია</string>
