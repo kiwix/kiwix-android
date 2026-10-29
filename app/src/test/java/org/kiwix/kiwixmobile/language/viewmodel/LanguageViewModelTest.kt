@@ -26,6 +26,7 @@ import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
+import io.mockk.slot
 import io.mockk.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -40,6 +41,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.RegisterExtension
+import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.zim_manager.ConnectivityObserver
@@ -183,6 +185,50 @@ class LanguageViewModelTest {
         State.Error("No network connection"),
         languageViewModel.state.value
       )
+    }
+
+    @Test
+    fun whenNotConnected_passesOfflineMessageAsErrorNoNetwork() = runTest {
+      networkStates.value = NetworkState.NOT_CONNECTED
+      every { application.getString(R.string.action_load_languages) } returns
+        "load the list of languages"
+      every {
+        application.getString(
+          R.string.offline_feature_blocked_message,
+          "load the list of languages"
+        )
+      } returns "offline message"
+      val errorNoNetworkSlot = slot<String>()
+      coEvery {
+        observeLanguages(any(), capture(errorNoNetworkSlot), any())
+      } returns ObserveLanguages.Result.Success(emptyList())
+
+      createViewModel()
+      advanceUntilIdle()
+
+      assertEquals("offline message", errorNoNetworkSlot.captured)
+    }
+
+    @Test
+    fun whenAirplaneModeOn_passesAirplaneModeMessageAsErrorNoNetwork() = runTest {
+      networkStates.value = NetworkState.AIRPLANE_MODE
+      every { application.getString(R.string.action_load_languages) } returns
+        "load the list of languages"
+      every {
+        application.getString(
+          R.string.airplane_mode_feature_blocked_message,
+          "load the list of languages"
+        )
+      } returns "airplane mode message"
+      val errorNoNetworkSlot = slot<String>()
+      coEvery {
+        observeLanguages(any(), capture(errorNoNetworkSlot), any())
+      } returns ObserveLanguages.Result.Success(emptyList())
+
+      createViewModel()
+      advanceUntilIdle()
+
+      assertEquals("airplane mode message", errorNoNetworkSlot.captured)
     }
   }
 

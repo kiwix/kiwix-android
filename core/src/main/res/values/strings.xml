@@ -146,6 +146,12 @@
   <string name="zim_no_pic">No Pictures</string>
   <string name="zim_no_vid">No Videos</string>
   <string name="no_network_connection" tools:keep="@string/no_network_connection">No network connection</string>
+  <string name="offline_feature_blocked_message">We need to be online to %1$s, but unfortunately the device is currently offline.</string>
+  <string name="airplane_mode_feature_blocked_message">We need to be online to %1$s, but unfortunately the device is in flight mode.</string>
+  <string name="action_load_online_library">load the online library</string>
+  <string name="action_download_book">download this book</string>
+  <string name="action_load_languages">load the list of languages</string>
+  <string name="action_load_categories">load the list of categories</string>
   <string name="help_2">What does Kiwix do?</string>
   <string name="help_3">Kiwix is an offline content reader. It acts very much like a browser but instead of accessing online web pages, it reads content from a file in ZIM format.</string>
   <string name="help_4">While Kiwix has been originally designed to provide Wikipedia offline, it also reads other contents.</string>

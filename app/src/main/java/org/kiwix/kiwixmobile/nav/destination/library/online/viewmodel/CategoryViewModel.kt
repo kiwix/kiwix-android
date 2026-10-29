@@ -39,6 +39,7 @@ import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.zim_manager.Category
 import org.kiwix.kiwixmobile.core.zim_manager.ConnectivityObserver
 import org.kiwix.kiwixmobile.core.zim_manager.NetworkState
+import org.kiwix.kiwixmobile.core.zim_manager.offlineMessage
 import org.kiwix.kiwixmobile.nav.destination.library.online.helper.ObserveCategories
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.CategoryListItem.CategoryItem
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.State.Saving
@@ -88,12 +89,15 @@ open class CategoryViewModel @Inject constructor(
       .onEach { newState -> state.value = newState }
       .launchIn(viewModelScope)
 
+  private fun offlineMessage(actionResId: Int): String =
+    connectivityObserver.offlineMessage(context, actionResId)
+
   private fun observeCategories() = viewModelScope.launch {
     state.value = State.Loading
     when (
       val result = observeCategories(
         errorNoCategory = context.getString(string.no_category_available),
-        errorNoNetwork = context.getString(R.string.no_network_connection),
+        errorNoNetwork = offlineMessage(R.string.action_load_categories),
         isOnline = connectivityObserver.networkStates.value == NetworkState.CONNECTED
       )
     ) {

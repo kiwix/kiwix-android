@@ -25,6 +25,8 @@ import android.net.NetworkCapabilities.NET_CAPABILITY_INTERNET
 import android.net.NetworkCapabilities.NET_CAPABILITY_VALIDATED
 import android.net.NetworkRequest
 import android.os.Build
+import android.provider.Settings
+import androidx.test.core.app.ApplicationProvider
 import io.mockk.Runs
 import io.mockk.every
 import io.mockk.just
@@ -36,6 +38,7 @@ import org.junit.Assert.assertFalse
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.kiwix.kiwixmobile.core.zim_manager.NetworkState.AIRPLANE_MODE
 import org.kiwix.kiwixmobile.core.zim_manager.NetworkState.CONNECTED
 import org.kiwix.kiwixmobile.core.zim_manager.NetworkState.NOT_CONNECTED
 import org.kiwix.sharedFunctions.TestApplication
@@ -49,14 +52,24 @@ class ConnectivityObserverTest {
   private val network: Network = mockk()
   private val networkCapabilities: NetworkCapabilities = mockk()
   private val callbackSlot = slot<NetworkCallback>()
+  private val context = ApplicationProvider.getApplicationContext<TestApplication>()
 
   @Before
   fun setUp() {
     withNetworkAvailability(available = false)
+    withAirplaneMode(enabled = false)
     every {
       connectivityManager.registerNetworkCallback(any<NetworkRequest>(), capture(callbackSlot))
     } just Runs
     every { connectivityManager.unregisterNetworkCallback(any<NetworkCallback>()) } just Runs
+  }
+
+  private fun withAirplaneMode(enabled: Boolean) {
+    Settings.Global.putInt(
+      context.contentResolver,
+      Settings.Global.AIRPLANE_MODE_ON,
+      if (enabled) 1 else 0
+    )
   }
 
   private fun withNetworkAvailability(available: Boolean) {
@@ -68,14 +81,14 @@ class ConnectivityObserverTest {
   @Test
   fun `initial state reflects the network state at construction`() {
     withNetworkAvailability(available = true)
-    val connectivityObserver = ConnectivityObserver(connectivityManager)
+    val connectivityObserver = ConnectivityObserver(connectivityManager, context)
 
     assertEquals(CONNECTED, connectivityObserver.networkStates.value)
   }
 
   @Test
   fun `register does not request the unsupported VALIDATED capability`() {
-    val connectivityObserver = ConnectivityObserver(connectivityManager)
+    val connectivityObserver = ConnectivityObserver(connectivityManager, context)
     val requestSlot = slot<NetworkRequest>()
     every {
       connectivityManager.registerNetworkCallback(capture(requestSlot), any<NetworkCallback>())
@@ -89,7 +102,7 @@ class ConnectivityObserverTest {
   @Test
   fun `register refreshes a stale initial state`() {
     withNetworkAvailability(available = false)
-    val connectivityObserver = ConnectivityObserver(connectivityManager)
+    val connectivityObserver = ConnectivityObserver(connectivityManager, context)
     // Network became available after construction but before register() is called.
     withNetworkAvailability(available = true)
 
@@ -100,7 +113,7 @@ class ConnectivityObserverTest {
 
   @Test
   fun `onAvailable and onLost update the network state`() {
-    val connectivityObserver = ConnectivityObserver(connectivityManager)
+    val connectivityObserver = ConnectivityObserver(connectivityManager, context)
     connectivityObserver.register()
 
     withNetworkAvailability(available = true)
@@ -114,7 +127,7 @@ class ConnectivityObserverTest {
 
   @Test
   fun `onCapabilitiesChanged updates the network state`() {
-    val connectivityObserver = ConnectivityObserver(connectivityManager)
+    val connectivityObserver = ConnectivityObserver(connectivityManager, context)
     connectivityObserver.register()
 
     withNetworkAvailability(available = true)
@@ -124,8 +137,30 @@ class ConnectivityObserverTest {
   }
 
   @Test
+  fun `initial state reflects airplane mode when there is no active network`() {
+    withNetworkAvailability(available = false)
+    withAirplaneMode(enabled = true)
+
+    val connectivityObserver = ConnectivityObserver(connectivityManager, context)
+
+    assertEquals(AIRPLANE_MODE, connectivityObserver.networkStates.value)
+  }
+
+  @Test
+  fun `onLost reports airplane mode rather than not connected when it is enabled`() {
+    val connectivityObserver = ConnectivityObserver(connectivityManager, context)
+    connectivityObserver.register()
+
+    withNetworkAvailability(available = false)
+    withAirplaneMode(enabled = true)
+    callbackSlot.captured.onLost(network)
+
+    assertEquals(AIRPLANE_MODE, connectivityObserver.networkStates.value)
+  }
+
+  @Test
   fun `onUnavailable marks the network as not connected`() {
-    val connectivityObserver = ConnectivityObserver(connectivityManager)
+    val connectivityObserver = ConnectivityObserver(connectivityManager, context)
     connectivityObserver.register()
 
     withNetworkAvailability(available = true)
@@ -138,7 +173,7 @@ class ConnectivityObserverTest {
 
   @Test
   fun `register forwards the request to ConnectivityManager`() {
-    val connectivityObserver = ConnectivityObserver(connectivityManager)
+    val connectivityObserver = ConnectivityObserver(connectivityManager, context)
 
     connectivityObserver.register()
 
@@ -149,7 +184,7 @@ class ConnectivityObserverTest {
 
   @Test
   fun `unregister without a matching register does not throw`() {
-    val connectivityObserver = ConnectivityObserver(connectivityManager)
+    val connectivityObserver = ConnectivityObserver(connectivityManager, context)
     every {
       connectivityManager.unregisterNetworkCallback(any<NetworkCallback>())
     } throws IllegalArgumentException("NetworkCallback was not registered")

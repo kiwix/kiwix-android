@@ -95,3 +95,6 @@ fun Context.navigateToAppSettings() {
     }
   )
 }
+
+fun Context.isAirplaneModeOn(): Boolean =
+  Settings.Global.getInt(contentResolver, Settings.Global.AIRPLANE_MODE_ON, 0) != 0
