@@ -39,14 +39,14 @@
   <string name="go_to_wifi_settings_label">Nenda kwa mipangilio ya WIFI</string>
   <string name="connection_refused">Muunganisho umekataliwa.</string>
   <string name="hotspot_running">Kukimbia Hotspot</string>
-  <string name="no_books_selected_toast_message">Tafadhali chagua vitabu kwanza</string>
+  <string name="no_books_selected_toast_message" fuzzy="true">Tafadhali chagua vitabu kwanza</string>
   <string name="server_failed_message">Haikuweza kuanzisha seva. Tafadhali washa mtandaopepe wako</string>
   <string name="server_failed_toast_message">Haikuweza kuanzisha seva.</string>
   <string name="server_started_successfully_toast_message">Server ilianza kwa mafanikio.</string>
   <string name="server_stopped_successfully_toast_message">Seva imesimama kwa mafanikio.</string>
   <string name="hotspot_turned_on">Mtandaopepe umewashwa</string>
   <string name="hotspot_details_message">Yafuatayo ni maelezo ya hotspot ya karibu nawe. \nSSID : %1$s \nPass : %2$s</string>
-  <string name="server_textview_default_message">Chagua faili unazotaka kupangisha kwenye seva</string>
+  <string name="server_textview_default_message" fuzzy="true">Chagua faili unazotaka kupangisha kwenye seva</string>
   <string name="progress_dialog_starting_server">Anzisha seva</string>
   <string name="hotspot_dialog_title">Maagizo ya kukaribisha vitabu</string>
   <string name="wifi_dialog_title">Muunganisho wa WiFi umegunduliwa</string>
@@ -142,9 +142,9 @@
   <string name="pref_storage">Hifadhi</string>
   <string name="pref_current_folder">Folda ya Sasa</string>
   <string name="delete_zim_failed">Samahani hatukuweza kufuta baadhi ya faili. Unapaswa kujaribu kutumia kidhibiti faili badala yake.</string>
-  <string name="tts_pause">kupumzika</string>
-  <string name="tts_resume">rejea</string>
-  <string name="stop">acha</string>
+  <string name="tts_pause" fuzzy="true">kupumzika</string>
+  <string name="tts_resume" fuzzy="true">rejea</string>
+  <string name="stop" fuzzy="true">acha</string>
   <string name="internal_storage">Ndani</string>
   <string name="external_storage">Nje</string>
   <string name="yes">Ndiyo</string>
@@ -166,13 +166,13 @@
   <string name="time_left">kushoto</string>
   <string name="time_today">Leo</string>
   <string name="time_yesterday">Jana</string>
-  <string name="pref_external_link_popup_title">Onyo wakati wa kuingia viungo vya nje</string>
+  <string name="pref_external_link_popup_title" fuzzy="true">Onyo wakati wa kuingia viungo vya nje</string>
   <string name="pref_external_link_popup_summary">Onyesha ibukizi kuonya kuhusu gharama za ziada au si kazi katika viungo nje ya mtandao.</string>
-  <string name="external_link_popup_dialog_title">Kuingia Link ya Nje!</string>
+  <string name="external_link_popup_dialog_title" fuzzy="true">Kuingia Link ya Nje!</string>
   <string name="external_link_popup_dialog_message" fuzzy="true">Unaingia kwenye uhusiano wa nje. Hii inaweza kusababisha gharama za ziada kwa ajili ya uhamisho wa data au tu si kazi wakati wewe ni nje ya mtandao. Je, unataka kuendelea?</string>
   <string name="do_not_ask_anymore">Usiniulize tena</string>
-  <string name="your_languages">Chagua lugha</string>
-  <string name="other_languages">Lugha zingine:</string>
+  <string name="your_languages" fuzzy="true">Chagua lugha</string>
+  <string name="other_languages" fuzzy="true">Lugha zingine:</string>
   <string name="no_items_msg">Hakuna vipengee vinavyopatikana</string>
   <string name="crash_title">Naam… Hii ni Aibu</string>
   <string name="crash_description" fuzzy="true">Inaonekana tulianguka.\n\nUngependa kutusaidia kurekebisha tatizo hili kwa kutuma maelezo yafuatayo?</string>
@@ -186,7 +186,7 @@
   <string name="new_tab_shortcut_label">Kichupo kipya</string>
   <string name="get_content_shortcut_label">Pata maudhui</string>
   <string name="fav_icon">Favicon</string>
-  <string name="pagesCount">makala %s</string>
+  <string name="pagesCount" fuzzy="true">makala %s</string>
   <string name="get_started">Anza</string>
   <string name="download_books">Pakua vitabu</string>
   <string name="humankind_knowledge">Maarifa ya wanadamu, kwenye simu yako.</string>

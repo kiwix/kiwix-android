@@ -34,14 +34,14 @@
   <string name="go_to_wifi_settings_label">Tafi saitunan WIFI</string>
   <string name="connection_refused">An ki amincewa da haɗin.</string>
   <string name="hotspot_running">Gudanar da hotspot</string>
-  <string name="no_books_selected_toast_message">Zabi littafin farko</string>
+  <string name="no_books_selected_toast_message" fuzzy="true">Zabi littafin farko</string>
   <string name="server_failed_message">An kasa fara uwar Server. Kunna hotspot</string>
   <string name="server_failed_toast_message">An kasa ta da Server.</string>
   <string name="server_started_successfully_toast_message">A samu nasarar tayar da Server.</string>
   <string name="server_stopped_successfully_toast_message">An samu nasarar tsayar da Server.</string>
   <string name="hotspot_turned_on">An kunna Hotspot</string>
   <string name="hotspot_details_message">Wadannan su ne cikakkun bayanai na hotspot dinka \nSSID : %1$s \nPass : %2$s</string>
-  <string name="server_textview_default_message">Zaɓi fayilolin da kuke so ku karɓa a kan sabar</string>
+  <string name="server_textview_default_message" fuzzy="true">Zaɓi fayilolin da kuke so ku karɓa a kan sabar</string>
   <string name="progress_dialog_starting_server">Fara uwar garke</string>
   <string name="hotspot_dialog_title">Umurni don karɓar littattafai</string>
   <string name="wifi_dialog_title">An gano haɗin Wifi</string>
@@ -137,9 +137,9 @@
   <string name="pref_storage">Adana</string>
   <string name="pref_current_folder">Jaka na yanzu</string>
   <string name="delete_zim_failed">Yi haƙuri ba mu iya share wasu fayiloli ba. Ya kamata ku gwada amfani da mai sarrafa fayil maimakon</string>
-  <string name="tts_pause">dan dakata</string>
-  <string name="tts_resume">ci gaba</string>
-  <string name="stop">Dakata</string>
+  <string name="tts_pause" fuzzy="true">dan dakata</string>
+  <string name="tts_resume" fuzzy="true">ci gaba</string>
+  <string name="stop" fuzzy="true">Dakata</string>
   <string name="internal_storage">Ciki</string>
   <string name="external_storage">Waje</string>
   <string name="yes">Ee</string>
@@ -161,14 +161,14 @@
   <string name="time_left">Hagu</string>
   <string name="time_today">Yau</string>
   <string name="time_yesterday">Jiya</string>
-  <string name="pref_external_link_popup_title">Gargadi lokacin shigar da hanyoyin haɗin waje</string>
+  <string name="pref_external_link_popup_title" fuzzy="true">Gargadi lokacin shigar da hanyoyin haɗin waje</string>
   <string name="pref_external_link_popup_summary">Nuna bugu don faɗakar da ƙarin farashi ko rashin aiki a cikin hanyoyin layi.</string>
-  <string name="external_link_popup_dialog_title">Shigar da Hanyar waje!</string>
+  <string name="external_link_popup_dialog_title" fuzzy="true">Shigar da Hanyar waje!</string>
   <string name="external_link_popup_dialog_message" fuzzy="true">Kuna shigar da hanyar haɗin waje. Wannan na iya haifar da ƙarin farashi don canja wurin bayanai ko kuma ba zai yi aiki ba lokacin da kuke layi. Kuna so ku ci gaba?</string>
   <string name="do_not_ask_anymore">Kar a sake tambaya</string>
-  <string name="your_languages">Zaɓin harshe</string>
+  <string name="your_languages" fuzzy="true">Zaɓin harshe</string>
   <string name="your_language">Harshen da aka zaɓa: %s</string>
-  <string name="other_languages">Wasu harsuna</string>
+  <string name="other_languages" fuzzy="true">Wasu harsuna</string>
   <string name="no_items_msg">Babu abubuwa da akwai</string>
   <string name="crash_title">To… Wannan Abin Abin kunya ne</string>
   <string name="crash_description" fuzzy="true">Kamar dai mun fadi.\n\nShin kuna son taimaka mana mu gyara wannan matsala ta hanyar aika da bayanai masu zuwa?</string>
@@ -182,7 +182,7 @@
   <string name="new_tab_shortcut_label">Sabon shafin</string>
   <string name="get_content_shortcut_label">Samun abun ciki</string>
   <string name="fav_icon">Favicon</string>
-  <string name="pagesCount">%s labarai</string>
+  <string name="pagesCount" fuzzy="true">%s labarai</string>
   <string name="get_started">Fara</string>
   <string name="download_books">Zazzage littattafai</string>
   <string name="humankind_knowledge">Ilimin bil’adama, akan wayar ku.</string>

@@ -37,14 +37,14 @@
   <string name="go_to_wifi_settings_label">وای‌فای اوڼنو ته ورتلل</string>
   <string name="connection_refused">نښلېدا رد شوې.</string>
   <string name="hotspot_running">هاټسپاټ چلول</string>
-  <string name="no_books_selected_toast_message">مهرباني وکړئ لومړی کتابونه غوره کړئ</string>
+  <string name="no_books_selected_toast_message">لومړی کتابونه غوره کړئ</string>
   <string name="server_failed_message">ښونگر نشي پيلېدای. مهرباني وکړئ خپل هاټسپاټ بل کړئ</string>
   <string name="server_failed_toast_message">پالنگر نشي پيلولی.</string>
   <string name="server_started_successfully_toast_message">پالنگر په برياليتوب سره پيل شو.</string>
   <string name="server_stopped_successfully_toast_message">پالنگر په برياليتوب سره ودرول شو.</string>
   <string name="hotspot_turned_on">هاټسپاټ بل شو</string>
   <string name="hotspot_details_message">لاندې ستاسو د ځايي هاټسپاټ سپيناوي دي.\nSSID : %1$s \nPass : %2$s</string>
-  <string name="server_textview_default_message">هغه دوتنېغوره کړئ چې تاسو يې پالنگر کې کوربه کول غواړئ</string>
+  <string name="server_textview_default_message" fuzzy="true">هغه دوتنېغوره کړئ چې تاسو يې پالنگر کې کوربه کول غواړئ</string>
   <string name="progress_dialog_starting_server">پالنگر پيلول</string>
   <string name="hotspot_dialog_title">د کتابونو کوربه کولو لارښوونې</string>
   <string name="wifi_dialog_title">وای‌فای نښلېدا وموندل شوه</string>
@@ -71,10 +71,13 @@
   <string name="pref_back_to_top">بېرته سر ته</string>
   <string name="pref_back_to_top_summary">د مخ په پای کې د مخ سر ته ورتللو لپاره يوه تڼۍ ښکاره کول</string>
   <string name="pref_language_title">ژبه</string>
+  <string name="user_interface">کارن مخبڼه</string>
+  <string name="system_language_with_name">د غونډال ژبه (%s)</string>
   <string name="pref_language_chooser">يوه ژبه وټاکئ</string>
   <string name="pref_credits">ونډې او منښتونه</string>
   <string name="tts_lang_not_supported">د دې مخ ژبه نه ملاتړ کېږي. ليکنه ښايي په سمه توگه ونه لوستل شي.</string>
   <string name="no_reader_application_installed">د دې ډول دوتنې لپاره يو نصب شوی کاريال و نه موندل شو</string>
+  <string name="no_email_application_installed">مهرباني وکړئ يو غوښتندوی برېښليک نصب کړئ</string>
   <string name="no_app_found_to_select_bookmark_file">هېڅ کاريال ونه موندل شو، چې کتاب‌نښې دوتنه غوره کړي</string>
   <string name="no_section_info">د منځپانگې سرليکونه ونه موندل شول</string>
   <string name="request_storage">د افلاين منځپانگې لاسرسي لپاره موږ ستاسو زخيرې ته د لاسرسي اړتيا لرو</string>
@@ -108,6 +111,8 @@
   <string name="rate_dialog_positive">ارزول!</string>
   <string name="no_thanks">نه، مننه</string>
   <string name="rate_dialog_neutral">وروسته</string>
+  <string name="pref_rate_app_title">%s ارزول</string>
+  <string name="pref_rating_category_title">کاريال ارزول</string>
   <string name="open">پرانېستل</string>
   <string name="bookmark_removed">کتاب‌نښه لرې شوه</string>
   <string name="pref_newtab_background_title">نوې ريښکه په شاليد کې پرانېستل</string>
@@ -122,6 +127,7 @@
   <string name="library">کتابتون</string>
   <string name="no_files_here">دلته هېڅ دوتنې نشته</string>
   <string name="download">راکښته‌کول</string>
+  <string name="explore">سپړل</string>
   <string name="download_notification_channel_name">د خبرتيا چينل نوم راکښته‌کول</string>
   <string name="space_available">تشيال شتون لري:</string>
   <string name="zim_simple">اسان</string>
@@ -139,7 +145,14 @@
   <string name="choose_storage_to_download_book">د کتاب راکښته‌کولو لپاره ساتنځی خوښول</string>
   <string name="delete_zim_failed">په بښنې سره موږ نشو کولی ځينې دوتنې ړنگې کړو. تاسو بايد د دې پرځای دوتنې مهاروونکی وکاروئ.</string>
   <string name="tts_pause">درول‌</string>
-  <string name="tts_resume">بياپيلول</string>
+  <string name="tts_resume">روانول</string>
+  <string name="tts_increase_speed">چټکتيا ډېرول</string>
+  <string name="tts_decrease_speed">چټکتيا کمول</string>
+  <string name="tts_normal_speed">نورمال</string>
+  <string name="tts_speech_speed">د خبرو چټکتيا</string>
+  <string name="tts_rewind_10_seconds">۱۰ ثانيې شاته</string>
+  <string name="tts_forward_10_seconds">۱۰ ثانيې مخ‌ته وړل</string>
+  <string name="tts_select_voice">غږ ټاکل</string>
   <string name="stop">درول</string>
   <string name="notification_pause_button_text">درول‌</string>
   <string name="notification_resume_button_text">روانول</string>
@@ -166,9 +179,12 @@
   <string name="time_today">نن</string>
   <string name="time_yesterday">پرون</string>
   <string name="do_not_ask_anymore">لطفاً نورې پوښتنې مه کوئ</string>
-  <string name="your_languages">غوره‌شوې ژبې:</string>
+  <string name="your_languages">غوره‌شوې ژبې</string>
   <string name="your_language">غوره‌شوې ژبه: %s</string>
-  <string name="other_languages">نورې ژبې:</string>
+  <string name="other_languages">نورې ژبې</string>
+  <string name="move_up">پورته تلل</string>
+  <string name="move_down">کښته تلل</string>
+  <string name="reorder_language">ترتيبولو ژبه</string>
   <string name="downloading">راکښته‌کول</string>
   <string name="no_items_msg">هېڅ توکي شتون نه لري</string>
   <string name="crash_checkbox_language">ستاسو د ژبې اوڼنې</string>
@@ -179,7 +195,8 @@
   <string name="new_tab_shortcut_label">نوې ريښکه</string>
   <string name="get_content_shortcut_label">منځپانگه ترلاسه‌کول</string>
   <string name="fav_icon">خوښ‌نښه</string>
-  <string name="pagesCount">%s ليکنې</string>
+  <string name="pagesCount">%s مخونه</string>
+  <string name="mediaCount">%s رسنۍ</string>
   <string name="get_started">پيلول</string>
   <string name="download_books">کتاب راکښته‌کول</string>
   <string name="welcome_to_the_family">کورنۍ ته ښه راغلاست</string>
@@ -198,6 +215,7 @@
   <string name="history_from_current_book">د ټولو کتابونو پېښليک کتل</string>
   <string name="search_history">لټون پېښليک</string>
   <string name="selected_items">%1$d غوره‌شوي</string>
+  <string name="search_bookmarks">کتاب‌نښې پلټل</string>
   <string name="switch_tabs">ريښکې بدلول</string>
   <string name="close_all_tabs">ټولې ريښکې تړل</string>
   <string name="close_tab">ريښکه تړل</string>
@@ -211,6 +229,10 @@
   <string name="wiki_article_title">ويکي ليکنې سرليک</string>
   <string name="ext_storage_permission_rationale_add_note">د يادښتونو لپاره زېرمه کولو لاسرسی اړين دی</string>
   <string name="ext_storage_write_permission_denied_add_note">زېرمه کولو ته له لاسرسي پرته يادښتونه نشي کارېدای</string>
+  <string name="note_save_unsuccessful">يادښت خوندي‌کول نابرياله شو</string>
+  <string name="note_delete_successful">يادښت په برياليتوب سره ړنگ شو</string>
+  <string name="note_delete_unsuccessful">يادښت ړنگ نشو</string>
+  <string name="note_save_successful">يادښت خوندي شو</string>
   <string name="delete_notes_confirmation_msg">ټول يادښتونه ړنگ کړي؟</string>
   <string name="notes_deletion_successful">د يادښتونو ټوله پوښۍ ړنگ شوې ده</string>
   <string name="notes_deletion_unsuccessful">ځينې دوتنې نه دې ړنگې شوې</string>
@@ -248,7 +270,7 @@
   <string name="swipe_down_for_library">کتابتون لپاره کښته لاړ شئ</string>
   <string name="reaching_remote_library">لرې‌پروت کتابتون ته رسېدل</string>
   <string name="parsing_remote_library">د لرې‌پروت کتابتون ارزول</string>
-  <string name="starting_downloading_remote_library" fuzzy="true">د پرليکه کتابتون راکښته‌کول پيلول</string>
+  <string name="starting_downloading_remote_library">پرليکه کتابتون بارېږي</string>
   <string name="no_notes">هېڅ يادښت نشته</string>
   <string name="notes_from_all_books">د ټولو کتابتونو يادښتونه کتل</string>
   <string name="search_notes">يادښتونه پلټل</string>
@@ -271,6 +293,7 @@
   <string name="toolbar_back_button_content_description">پخواني سکرين ته ورتلل</string>
   <string name="save_or_open_unsupported_files_dialog_title">دا مخ خوندي کړي يا يې پرانېځي؟</string>
   <string name="donation_dialog_title">نن بسپنه ورکول</string>
+  <string name="donation_dialog_description">%s ستاسو مرستې ته اړتيا لري.</string>
   <string name="make_donation">بسپنه ورکول</string>
   <string name="resuming_state">بیا پيلول</string>
   <string name="downloading_state">راکښته‌کول</string>
@@ -280,4 +303,10 @@
   <string name="file_system_scan_dialog_title">کتابونو زېرمه سکن کړي؟</string>
   <string name="file_system_scan_dialog_message">کيويکس به ستاسو د وسيلي زېرمه سکن کړي او دلته شته کتابونه به لړليک کړي.</string>
   <string name="download_timeout_resume_message">د اندرويد شاليد راکښته کولو وخت ونيو. ايا تاسو غواړئ بيا يې پيل کړئ؟</string>
+  <string name="validate_zim_files">زيم دوتنې تاييدول</string>
+  <string name="menu_add_to_homescreen">کور ښيښې ته ورگډول</string>
+  <string name="added_to_homescreen">لنډلاره کور ښيښې ته ورگډه شوه</string>
+  <string name="add_shortcut_title">لنډلار ورگډول</string>
+  <string name="shortcut_name_label">لنډلارې نوم</string>
+  <string name="open_xiaomi_settings">اوڼنې پرانېستل</string>
 </resources>

@@ -43,14 +43,14 @@
   <string name="go_to_wifi_settings_label">Przejdź do ustawień WIFI</string>
   <string name="connection_refused">Połączenie odrzucone.</string>
   <string name="hotspot_running">Uruchamianie Hotspot</string>
-  <string name="no_books_selected_toast_message">Proszę wybrać najpierw książki</string>
+  <string name="no_books_selected_toast_message" fuzzy="true">Proszę wybrać najpierw książki</string>
   <string name="server_failed_message">Nie można uruchomić serwera. Włącz hotspot</string>
   <string name="server_failed_toast_message">Nie można uruchomić serwera.</string>
   <string name="server_started_successfully_toast_message">Serwer został uruchomiony pomyślnie.</string>
   <string name="server_stopped_successfully_toast_message">Serwer został pomyślnie zatrzymany.</string>
   <string name="hotspot_turned_on">Hotspot włączony</string>
   <string name="hotspot_details_message">Poniżej znajdują się szczegółowe informacje o lokalnym hotspocie.\nSSID : %1$s \nPass : %2$s</string>
-  <string name="server_textview_default_message">Wybierz pliki, które chcesz hostować na serwerze</string>
+  <string name="server_textview_default_message" fuzzy="true">Wybierz pliki, które chcesz hostować na serwerze</string>
   <string name="progress_dialog_starting_server">Uruchamianie serwera</string>
   <string name="hotspot_dialog_title">Instrukcje dotyczące hostingu książek</string>
   <string name="wifi_dialog_title">Wykryto połączenie WiFi</string>
@@ -87,7 +87,7 @@
   <string name="no_email_application_installed">Proszę zainstalować klienta poczty elektronicznej</string>
   <string name="no_app_found_to_select_bookmark_file">Nie znaleziono aplikacji umożliwiającej wybór pliku zakładek</string>
   <string name="no_section_info">Nie znaleziono nagłówków treści</string>
-  <string name="request_storage">Aby uzyskać dostęp do plików ZIM, musimy mieć dostęp do twojego nośnika</string>
+  <string name="request_storage">Aby uzyskać dostęp do plików ZIM, musimy mieć dostęp do Twojego nośnika</string>
   <string name="request_write_storage">Aby pobrać pliki ZIM, potrzebujemy uprawnień zapisu do pamięci Twojego urządzenia</string>
   <string name="clear_recent_and_tabs_history_dialog">Czy na pewno chcesz usunąć historię wyszukiwania i zresetować wszystkie aktywne karty?</string>
   <string name="delete_recent_search_item">Usunąć ten obiekt?</string>
@@ -164,9 +164,9 @@
   <string name="pref_free_storage">%s wolne</string>
   <string name="choose_storage_to_download_book">Wybierz miejsce przechowywania, aby pobrać książkę</string>
   <string name="delete_zim_failed">Niestety nie udało się usunąć niektórych plików. Zamiast tego powinieneś spróbować użyć menedżera plików.</string>
-  <string name="tts_pause">wstrzymaj</string>
-  <string name="tts_resume">wznów</string>
-  <string name="stop">stop</string>
+  <string name="tts_pause" fuzzy="true">wstrzymaj</string>
+  <string name="tts_resume" fuzzy="true">wznów</string>
+  <string name="stop" fuzzy="true">stop</string>
   <string name="notification_pause_button_text">Wstrzymaj</string>
   <string name="notification_resume_button_text">Wznów</string>
   <string name="internal_storage">Wewnętrzna</string>
@@ -191,13 +191,13 @@
   <string name="time_left">do lewej</string>
   <string name="time_today">Dzisiaj</string>
   <string name="time_yesterday">Wczoraj</string>
-  <string name="pref_external_link_popup_title">Ostrzegaj podczas wchodzenia w linki zewnętrzne</string>
+  <string name="pref_external_link_popup_title" fuzzy="true">Ostrzegaj podczas wchodzenia w linki zewnętrzne</string>
   <string name="pref_external_link_popup_summary">Wyświetl wyskakujące okienko, aby ostrzec o dodatkowych kosztach lub braku działania w linkach offline.</string>
-  <string name="external_link_popup_dialog_title">Wprowadzanie linku zewnętrznego!</string>
-  <string name="external_link_popup_dialog_message">Otwierasz link zewnętrzny. Może to prowadzić do dodatkowych kosztów transferu danych lub po prostu nie będzie działać, jeśli jesteś offline. Czy chcesz kontynuować?</string>
+  <string name="external_link_popup_dialog_title" fuzzy="true">Wprowadzanie linku zewnętrznego!</string>
+  <string name="external_link_popup_dialog_message" fuzzy="true">Otwierasz link zewnętrzny. Może to prowadzić do dodatkowych kosztów transferu danych lub po prostu nie będzie działać, jeśli jesteś offline. Czy chcesz kontynuować?</string>
   <string name="do_not_ask_anymore">Nie pytaj więcej</string>
-  <string name="your_languages">Wybrane języki:</string>
-  <string name="other_languages">Inne języki:</string>
+  <string name="your_languages" fuzzy="true">Wybrane języki:</string>
+  <string name="other_languages" fuzzy="true">Inne języki:</string>
   <string name="downloading">Pobierane</string>
   <string name="no_items_msg">Brak dostępnych pozycji</string>
   <string name="crash_title">Cóż… To jest krępujące</string>
@@ -212,7 +212,7 @@
   <string name="new_tab_shortcut_label">Nowa zakładka</string>
   <string name="get_content_shortcut_label">Pobierz treść</string>
   <string name="fav_icon">Favicon</string>
-  <string name="pagesCount">%s artykułów</string>
+  <string name="pagesCount">Liczba stron: %s</string>
   <string name="get_started">Rozpocznij</string>
   <string name="download_books">Pobierz książki</string>
   <string name="humankind_knowledge">Wiedza ludzkości, na Twoim telefonie.</string>

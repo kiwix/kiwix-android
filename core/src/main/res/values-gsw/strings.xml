@@ -23,14 +23,14 @@
   <string name="hotspot_failed_title">Hotspot het nid chönne gschtartet wärde</string>
   <string name="go_to_wifi_settings_label">Zu de WIFI Yystellige gah</string>
   <string name="hotspot_running">Aktivä Hotspot</string>
-  <string name="no_books_selected_toast_message">Bitte zersch Büecher uswähle</string>
+  <string name="no_books_selected_toast_message" fuzzy="true">Bitte zersch Büecher uswähle</string>
   <string name="server_failed_message">Server het nid chönne gschtartät wärde. Bitte zersch Hotspot aktivierä</string>
   <string name="server_failed_toast_message">Server het nid chönne gschtartät wärde.</string>
   <string name="server_started_successfully_toast_message">Server erfolgriich gschtartät.</string>
   <string name="server_stopped_successfully_toast_message">Server erfolgriich gschtopped.</string>
   <string name="hotspot_turned_on">Hotspot aktiviärt</string>
   <string name="hotspot_details_message">Aagabä zum lokalä Hotspot.\nSSID: %1$s\nPass: %2$s</string>
-  <string name="server_textview_default_message">Dateiä uswähle wo sölle uf em Server bereitgstellt wärde</string>
+  <string name="server_textview_default_message" fuzzy="true">Dateiä uswähle wo sölle uf em Server bereitgstellt wärde</string>
   <string name="progress_dialog_starting_server">Server am Schtartä</string>
   <string name="hotspot_dialog_title">Inschtruktionä um Büecher bereit z’stellä</string>
   <string name="wifi_dialog_title">WiFi Verbindig gfundä</string>
@@ -102,9 +102,9 @@
   <string name="help_5">Wo isch der Inhaut?</string>
   <string name="pref_storage">Spiicher</string>
   <string name="pref_current_folder">Aktuelle Ordnär</string>
-  <string name="tts_pause">pousiere</string>
-  <string name="tts_resume">wiitermache</string>
-  <string name="stop">schtoppe</string>
+  <string name="tts_pause" fuzzy="true">pousiere</string>
+  <string name="tts_resume" fuzzy="true">wiitermache</string>
+  <string name="stop" fuzzy="true">schtoppe</string>
   <string name="internal_storage">Intern</string>
   <string name="external_storage">Extern</string>
   <string name="yes">Ja</string>
@@ -119,8 +119,8 @@
   <string name="time_today">Hüt</string>
   <string name="time_yesterday">Geschter</string>
   <string name="do_not_ask_anymore">Nümme fraagä</string>
-  <string name="your_languages">Uusgwählti Spraachä:</string>
-  <string name="other_languages">Angeri Spraachä:</string>
+  <string name="your_languages" fuzzy="true">Uusgwählti Spraachä:</string>
+  <string name="other_languages" fuzzy="true">Angeri Spraachä:</string>
   <string name="no_items_msg">Kei Objäkt verfüegbar</string>
   <string name="crash_description" fuzzy="true">Es gseht uus aus wäre mer abgschtürzt.\n\nWürdet Dir üs hälfe bim Behebä vo däm Problem, indäm Dir üs die folgendä Informationä würdet schickä?</string>
   <string name="crash_checkbox_language">Öiri Spraachyystellige</string>
@@ -128,7 +128,7 @@
   <string name="crash_checkbox_exception">Einzelheitä zum Abschturz</string>
   <string name="crash_checkbox_device">Details zum Grät</string>
   <string name="new_tab_shortcut_label">Nöis Tab</string>
-  <string name="pagesCount">%s Sytene</string>
+  <string name="pagesCount" fuzzy="true">%s Sytene</string>
   <string name="get_started">Aafah</string>
   <string name="download_books">Büecher abeladä</string>
   <string name="welcome_to_the_family">Willkommä i de Familiä</string>

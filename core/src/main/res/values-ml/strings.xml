@@ -34,14 +34,14 @@
   <string name="go_to_wifi_settings_label">വൈഫൈ സജ്ജീകരണങ്ങളിലേക്ക് പോവുക</string>
   <string name="connection_refused">കണക്ഷൻ നിരസിച്ചു.</string>
   <string name="hotspot_running">ഹോട്ട്സ്പോട്ട് ഓടുന്നു</string>
-  <string name="no_books_selected_toast_message">പുസ്തകങ്ങൾ ആദ്യം തിരഞ്ഞെടുക്കുക</string>
+  <string name="no_books_selected_toast_message" fuzzy="true">പുസ്തകങ്ങൾ ആദ്യം തിരഞ്ഞെടുക്കുക</string>
   <string name="server_failed_message">സെർവർ തുടങ്ങാൻ സാധിച്ചില്ല. ദയവായി ഹോട്ട്സ്പോട്ട് ഓൺ ചെയ്യുക</string>
   <string name="server_failed_toast_message">സെർവർ തുടങ്ങുവാൻ സാധിച്ചില്ല.</string>
   <string name="server_started_successfully_toast_message">സെർവർ വിജയകരമായി തുടങ്ങി.</string>
   <string name="server_stopped_successfully_toast_message">സെർവർ വിജയകരമായി നിർത്തി.</string>
   <string name="hotspot_turned_on">ഹോട്ട്സ്പോട്ട് ഓൺ ആക്കിയിരിക്കുന്നു</string>
   <string name="hotspot_details_message">നിങ്ങളുടെ വൈഫൈ ഹോട്ട്‌സ്‌പോട്ടിന്റെ വിശദാംശങ്ങൾ താഴെ കൊടുക്കുന്നു. \nSSID : %1$s \nPass : %2$s</string>
-  <string name="server_textview_default_message">സെർവറിൽ ഹോസ്റ്റ് ചെയ്യാൻ ആഗ്രഹിക്കുന്ന ഫയലുകൾ തിരഞ്ഞെടുക്കുക.</string>
+  <string name="server_textview_default_message" fuzzy="true">സെർവറിൽ ഹോസ്റ്റ് ചെയ്യാൻ ആഗ്രഹിക്കുന്ന ഫയലുകൾ തിരഞ്ഞെടുക്കുക.</string>
   <string name="progress_dialog_starting_server">സെർവർ തുടങ്ങുന്നു</string>
   <string name="hotspot_dialog_title">പുസ്തകങ്ങൾ ഹോസ്റ്റ് ചെയ്യുന്നതിനുള്ള നിർദ്ദേശങ്ങൾ</string>
   <string name="wifi_dialog_title">വൈഫൈ കണക്ഷൻ കണ്ടെത്തി</string>
@@ -88,9 +88,9 @@
   <string name="download">ഡൗൺലോഡ് ചെയ്യുക</string>
   <string name="zim_no_pic">ചിത്രങ്ങളില്ല</string>
   <string name="help_2">കിവിക്സ് എന്താണ് ചെയ്യുന്നത്?</string>
-  <string name="tts_pause">താത്കാലികമായി നിർത്തുക</string>
-  <string name="tts_resume">തുടരുക</string>
-  <string name="stop">നിർത്തുക</string>
+  <string name="tts_pause" fuzzy="true">താത്കാലികമായി നിർത്തുക</string>
+  <string name="tts_resume" fuzzy="true">തുടരുക</string>
+  <string name="stop" fuzzy="true">നിർത്തുക</string>
   <string name="internal_storage">ആന്തരികം</string>
   <string name="yes">അതെ</string>
   <string name="no">അല്ല</string>
@@ -105,12 +105,12 @@
   <string name="time_today">ഇന്ന്</string>
   <string name="time_yesterday">ഇന്നലെ</string>
   <string name="do_not_ask_anymore">ഇനി ഒരിക്കലും ചോദിക്കരുത്</string>
-  <string name="your_languages">തിരഞ്ഞെടുത്ത ഭാഷകൾ:</string>
-  <string name="other_languages">മറ്റ് ഭാഷകൾ:</string>
+  <string name="your_languages" fuzzy="true">തിരഞ്ഞെടുത്ത ഭാഷകൾ:</string>
+  <string name="other_languages" fuzzy="true">മറ്റ് ഭാഷകൾ:</string>
   <string name="crash_checkbox_language">താങ്കളുടെ ഭാഷ സജ്ജീകരണങ്ങൾ</string>
   <string name="crash_checkbox_zimfiles" fuzzy="true">Zim പ്രമാണങ്ങളുടെ പട്ടിക</string>
   <string name="crash_button_confirm">വിവരങ്ങൾ അയക്കുക</string>
-  <string name="pagesCount">%s ലേഖനങ്ങൾ</string>
+  <string name="pagesCount" fuzzy="true">%s ലേഖനങ്ങൾ</string>
   <string name="get_started">തുടക്കം കുറിക്കുക</string>
   <string name="download_books">പുസ്തകങ്ങൾ ഡൗൺലോഡ് ചെയ്യുക</string>
   <string name="welcome_to_the_family">കുടുംബത്തിലേക്ക് സ്വാഗതം</string>

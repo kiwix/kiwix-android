@@ -27,7 +27,7 @@
   <string name="server_failed_toast_message">Сервериг аҗллулх болмҗ уга.</string>
   <string name="server_started_successfully_toast_message">Сервериг амҗлтта аҗллулв.</string>
   <string name="server_stopped_successfully_toast_message">Сервериг амҗлтта зогсав.</string>
-  <string name="server_textview_default_message">Серверт бәәрлүлх гиҗәх файлмудыг суңһтн</string>
+  <string name="server_textview_default_message" fuzzy="true">Серверт бәәрлүлх гиҗәх файлмудыг суңһтн</string>
   <string name="progress_dialog_starting_server">Серверин аҗллһн</string>
   <string name="wifi_dialog_title">Wi-Fi холвлт олдв.</string>
   <string name="hotspot_dialog_neutral_button">ҮРГЛҖЛҮЛХ</string>
@@ -65,9 +65,9 @@
   <string name="no_network_connection">Сүлҗәнә холвлт уга</string>
   <string name="help_5">Аһулһнь альдв?</string>
   <string name="pref_current_folder">Одаһин Хавцан</string>
-  <string name="tts_pause">завсрлһ</string>
-  <string name="tts_resume">үрглҗлүлх</string>
-  <string name="stop">зогсах</string>
+  <string name="tts_pause" fuzzy="true">завсрлһ</string>
+  <string name="tts_resume" fuzzy="true">үрглҗлүлх</string>
+  <string name="stop" fuzzy="true">зогсах</string>
   <string name="internal_storage">Дотад</string>
   <string name="external_storage">Һазад</string>
   <string name="yes">Тиим</string>
@@ -86,8 +86,8 @@
   <string name="time_today">Эндр</string>
   <string name="time_yesterday">Өцклдүр</string>
   <string name="do_not_ask_anymore">Дәкҗ сурлго бәәх</string>
-  <string name="your_languages">Суңһсн келмүд:</string>
-  <string name="other_languages">Бусд келәр</string>
+  <string name="your_languages" fuzzy="true">Суңһсн келмүд:</string>
+  <string name="other_languages" fuzzy="true">Бусд келәр</string>
   <string name="crash_title">Нә… Эвго болва</string>
   <string name="crash_checkbox_language">Тана Келнә Тохрлһ</string>
   <string name="custom_download_error_message_for_authentication_failed" fuzzy="true">Zim файлыг татҗ авч чадснго, програмиг Play store-ас дәкн суулһҗ үзтн.</string>

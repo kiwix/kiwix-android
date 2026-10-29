@@ -27,7 +27,7 @@
   <string name="hotspot_failed_title">Kawasan khas gagal dihidupkan</string>
   <string name="go_to_wifi_settings_label">Pergi ke tetapan WIFI</string>
   <string name="hotspot_running">Menjalankan Kawasan Khas</string>
-  <string name="no_books_selected_toast_message">Sila pilih buku terlebih dahulu</string>
+  <string name="no_books_selected_toast_message" fuzzy="true">Sila pilih buku terlebih dahulu</string>
   <string name="server_failed_toast_message">Pelayan tidak dapat dimulakan.</string>
   <string name="server_started_successfully_toast_message">Pelayan berjaya dimulakan.</string>
   <string name="hotspot_turned_on">Kawasan khas dihidupkan</string>
@@ -82,12 +82,12 @@
   <string name="time_second">s</string>
   <string name="time_today">Hari ini</string>
   <string name="time_yesterday">Kelmarin</string>
-  <string name="your_languages">Bahasa terpilih:</string>
-  <string name="other_languages">Bahasa lain:</string>
+  <string name="your_languages" fuzzy="true">Bahasa terpilih:</string>
+  <string name="other_languages" fuzzy="true">Bahasa lain:</string>
   <string name="crash_checkbox_device">Butiran Peranti</string>
   <string name="crash_button_confirm">HANTAR BUTIRAN</string>
   <string name="get_content_shortcut_label">Dapatkan kandungan</string>
-  <string name="pagesCount">%s rencana</string>
+  <string name="pagesCount" fuzzy="true">%s rencana</string>
   <string name="download_books">Muat turun buku</string>
   <string name="welcome_to_the_family">Selamat datang ke keluarga</string>
   <string name="save_books_offline">Simpan buku luar talian</string>

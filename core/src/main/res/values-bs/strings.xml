@@ -29,14 +29,14 @@
   <string name="go_to_wifi_settings_label">Idi na postavke WiFi-ja</string>
   <string name="connection_refused">Veza odbijena.</string>
   <string name="hotspot_running">pokretanje pristupačne tačke</string>
-  <string name="no_books_selected_toast_message">Molim vas, prvo izaberite knjige.</string>
+  <string name="no_books_selected_toast_message" fuzzy="true">Molim vas, prvo izaberite knjige.</string>
   <string name="server_failed_message">Nije moguće pokrenuti server. Molimo vas da uključite svoju pristupnu tačku.</string>
   <string name="server_failed_toast_message">Nije moguće pokrenuti server.</string>
   <string name="server_started_successfully_toast_message">Server je uspješno pokrenut.</string>
   <string name="server_stopped_successfully_toast_message">Server je uspješno zaustavljen.</string>
   <string name="hotspot_turned_on">Pristupna tačka je uključena</string>
   <string name="hotspot_details_message">Slijede detalji vaše lokalne pristupne tačke. \nSSID : %1$s \nLozinka : %2$s</string>
-  <string name="server_textview_default_message">Izaberite datoteke koje želite da dijelite na serveru</string>
+  <string name="server_textview_default_message" fuzzy="true">Izaberite datoteke koje želite da dijelite na serveru</string>
   <string name="progress_dialog_starting_server">Pokretanje servera</string>
   <string name="hotspot_dialog_title">Upute za dijeljenje knjiga</string>
   <string name="wifi_dialog_title">Otkrivena je WiFi veza</string>

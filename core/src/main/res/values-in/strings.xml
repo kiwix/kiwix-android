@@ -43,14 +43,14 @@
   <string name="go_to_wifi_settings_label">Pergi ke pengaturan WIFI</string>
   <string name="connection_refused">Sambungan ditolak.</string>
   <string name="hotspot_running">Hotspot Berjalan</string>
-  <string name="no_books_selected_toast_message">Harap pilih buku terlebih dahulu</string>
+  <string name="no_books_selected_toast_message" fuzzy="true">Harap pilih buku terlebih dahulu</string>
   <string name="server_failed_message">Peladen tidak dapat dihidupkan. Harap nyalakan hotspot Anda.</string>
   <string name="server_failed_toast_message">Peladen tidak dapat dihidupkan.</string>
   <string name="server_started_successfully_toast_message">Peladen berhasil dihidupkan.</string>
   <string name="server_stopped_successfully_toast_message">Peladen berhasil dihentikan.</string>
   <string name="hotspot_turned_on">Hotspot dinyalakan</string>
   <string name="hotspot_details_message">Berikut adalah rincian hotspot setempat Anda.\nSSID : %1$s\nSandi : %2$s</string>
-  <string name="server_textview_default_message">Pilih berkas yang ingin Anda hos di peladen</string>
+  <string name="server_textview_default_message" fuzzy="true">Pilih berkas yang ingin Anda hos di peladen</string>
   <string name="progress_dialog_starting_server">Menghidupkan peladen</string>
   <string name="hotspot_dialog_title">Petunjuk untuk hosting buku</string>
   <string name="wifi_dialog_title">Sambungan Wifi telah terdeteksi</string>
@@ -113,7 +113,7 @@
   <string name="cancel">Batalkan</string>
   <string name="delete_specific_search_toast">Penelusuran terkini dihapus</string>
   <string name="hint_contents_drawer_message">Anda bisa menggulir ke kiri untuk melihat isi artikel ini</string>
-  <string name="got_it">Paham</string>
+  <string name="got_it">Mengerti</string>
   <string name="did_you_know">Tahukah Anda?</string>
   <string name="undo">Batalkan</string>
   <string name="tab_closed">Tab ditutup</string>
@@ -166,9 +166,9 @@
   <string name="pref_free_storage">%s tersedia</string>
   <string name="choose_storage_to_download_book">Pilih penyimpanan untuk mengunduh buku</string>
   <string name="delete_zim_failed">Maaf kami tidak dapat menghapus beberapa berkas. Anda sebaiknya coba gunakan sebuah pengelola berkas.</string>
-  <string name="tts_pause">jeda</string>
-  <string name="tts_resume">lanjut</string>
-  <string name="stop">berhenti</string>
+  <string name="tts_pause" fuzzy="true">jeda</string>
+  <string name="tts_resume" fuzzy="true">lanjut</string>
+  <string name="stop" fuzzy="true">berhenti</string>
   <string name="notification_pause_button_text">Jeda</string>
   <string name="notification_resume_button_text">Lanjutkan</string>
   <string name="internal_storage">Internal</string>
@@ -193,13 +193,13 @@
   <string name="time_left">tersisa</string>
   <string name="time_today">Hari ini</string>
   <string name="time_yesterday">Kemarin</string>
-  <string name="pref_external_link_popup_title">Peringatkan saat mengunjungi pranala luar</string>
+  <string name="pref_external_link_popup_title" fuzzy="true">Peringatkan saat mengunjungi pranala luar</string>
   <string name="pref_external_link_popup_summary">Tampilkan popup untuk memperingatkan tentang biaya tambahan atau tidak bekerja dalam pranala luring.</string>
-  <string name="external_link_popup_dialog_title">Mengunjungi Pranala Luar!</string>
-  <string name="external_link_popup_dialog_message">Anda sedang mengunjungi pranala luar. Hal ini dapat menyebabkan biaya tambahan untuk transfer data atau tidak akan berjalan saat Anda luring.\nApakah Anda ingin melanjutkan?</string>
+  <string name="external_link_popup_dialog_title" fuzzy="true">Mengunjungi Pranala Luar!</string>
+  <string name="external_link_popup_dialog_message" fuzzy="true">Anda sedang mengunjungi pranala luar. Hal ini dapat menyebabkan biaya tambahan untuk transfer data atau tidak akan berjalan saat Anda luring.\nApakah Anda ingin melanjutkan?</string>
   <string name="do_not_ask_anymore">Jangan tanya lagi</string>
-  <string name="your_languages">Bahasa terpilih:</string>
-  <string name="other_languages">Bahasa lain:</string>
+  <string name="your_languages" fuzzy="true">Bahasa terpilih:</string>
+  <string name="other_languages" fuzzy="true">Bahasa lain:</string>
   <string name="downloading">Mengunduh</string>
   <string name="no_items_msg">Tidak ada item yang tersedia</string>
   <string name="crash_title">Yah… Ini memalukan</string>
@@ -214,8 +214,8 @@
   <string name="new_tab_shortcut_label">Tab baru</string>
   <string name="get_content_shortcut_label">Ambil konten</string>
   <string name="fav_icon">Favicon</string>
-  <string name="pagesCount">%s artikel</string>
-  <string name="get_started">Mulai</string>
+  <string name="pagesCount" fuzzy="true">%s artikel</string>
+  <string name="get_started">Memulai</string>
   <string name="download_books">Unduh buku-buku</string>
   <string name="humankind_knowledge">Humankind’s knowledge, on your phone.</string>
   <string name="welcome_to_the_family">Selamat datang di keluarga</string>

@@ -42,14 +42,14 @@
   <string name="go_to_wifi_settings_label">ওয়াইফাই সেটিংসে যান</string>
   <string name="connection_refused">সংযোগ প্রত্যাখান করা হয়েছে।</string>
   <string name="hotspot_running">হটস্পট চলছে</string>
-  <string name="no_books_selected_toast_message">প্রথমে বই নির্বাচন করুন</string>
+  <string name="no_books_selected_toast_message" fuzzy="true">প্রথমে বই নির্বাচন করুন</string>
   <string name="server_failed_message">সার্ভার শুরু করা যায়নি। দয়া করে আপনার হটস্পট চালু করুন</string>
   <string name="server_failed_toast_message">সার্ভার শুরু করা যায়নি।</string>
   <string name="server_started_successfully_toast_message">সার্ভার সফলভাবে শুরু হয়েছে।</string>
   <string name="server_stopped_successfully_toast_message">সার্ভার সফলভাবে বন্ধ হয়েছে।</string>
   <string name="hotspot_turned_on">হটস্পট চালু করা হয়েছে</string>
   <string name="hotspot_details_message">আপনার স্থানীয় হটস্পটের বিবরণ নিচে দেওয়া হল। \nSSID : %1$s \nPass : %2$s</string>
-  <string name="server_textview_default_message">সার্ভারে আপনি যে ফাইলগুলি হোস্ট করতে চান তা নির্বাচন করুন</string>
+  <string name="server_textview_default_message" fuzzy="true">সার্ভারে আপনি যে ফাইলগুলি হোস্ট করতে চান তা নির্বাচন করুন</string>
   <string name="progress_dialog_starting_server">সার্ভার শুরু করা হচ্ছে</string>
   <string name="hotspot_dialog_title">বই রাখার নির্দেশাবলী</string>
   <string name="wifi_dialog_body">অন্যান্য ডিভাইসে বই দেখার জন্য, দয়া করে নিশ্চিত করুন যে সমস্ত ডিভাইস একই ওয়াইফাই নেটওয়ার্কের সাথে সংযুক্ত।</string>
@@ -129,8 +129,8 @@
   <string name="pref_current_folder">বর্তমান ফোল্ডার</string>
   <string name="delete_zim_failed">দুঃখিত আমরা কিছু ফাইল অপসারণ করতে সমর্থ নই। এর পরিবর্তে আপনি একটি ফাইল ব্যবস্থাপক ব্যবহার করে চেষ্টা করতে পারেন।</string>
   <string name="tts_pause">বিরতি</string>
-  <string name="tts_resume">পুনরায় শুরু করুন</string>
-  <string name="stop">বন্ধ</string>
+  <string name="tts_resume">পুনরারম্ভ করুন</string>
+  <string name="stop">থামান</string>
   <string name="internal_storage">অভ্যন্তরীণ</string>
   <string name="external_storage">বহিঃস্থ</string>
   <string name="yes">হ্যাঁ</string>
@@ -151,8 +151,8 @@
   <string name="time_today">আজ</string>
   <string name="time_yesterday">গতকাল</string>
   <string name="do_not_ask_anymore">আর জিজ্ঞাসা করবেন না</string>
-  <string name="your_languages">নির্বাচিত ভাষা</string>
-  <string name="other_languages">অন্যান্য ভাষাসমূহ:</string>
+  <string name="your_languages" fuzzy="true">নির্বাচিত ভাষা</string>
+  <string name="other_languages" fuzzy="true">অন্যান্য ভাষাসমূহ:</string>
   <string name="new_tab_shortcut_label">নতুন ট্যাব</string>
   <string name="pending_state">মুলতুবী</string>
   <string name="save">সংরক্ষণ</string>

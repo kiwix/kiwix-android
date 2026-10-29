@@ -36,14 +36,14 @@
   <string name="go_to_wifi_settings_label">Gaa na ntọala WIFI</string>
   <string name="connection_refused">Njikọ jụrụ</string>
   <string name="hotspot_running">Hotspot na-agba ọsọ</string>
-  <string name="no_books_selected_toast_message">Biko buru ụzọ họrọ akwụkwọ</string>
+  <string name="no_books_selected_toast_message" fuzzy="true">Biko buru ụzọ họrọ akwụkwọ</string>
   <string name="server_failed_message">Enweghị ike ịmalite nkesa. Biko gbanye hotspot gị</string>
   <string name="server_failed_toast_message">Enweghị ike ịmalite ihe nkesa.</string>
   <string name="server_started_successfully_toast_message">Ihe nkesa malitere nke ọma.</string>
   <string name="server_stopped_successfully_toast_message">Ihe nkesa kwụsịrị nke ọma.</string>
   <string name="hotspot_turned_on">Agbanyela hotspot</string>
   <string name="hotspot_details_message">Ihe ndị na-esonụ bụ nkọwa nke hotspot dị n’ógbè gi ahụ. \nSSID: %1$s \nPass: %2$s</string>
-  <string name="server_textview_default_message">Họrọ faịlụ ndị ị chọrọ ịnabata na sava</string>
+  <string name="server_textview_default_message" fuzzy="true">Họrọ faịlụ ndị ị chọrọ ịnabata na sava</string>
   <string name="progress_dialog_starting_server">Malite ihe nkesa</string>
   <string name="hotspot_dialog_title">Ntuziaka maka ịnabata akwụkwọ</string>
   <string name="wifi_dialog_title">A chọpụtara njikọ WiFi</string>
@@ -142,9 +142,9 @@
   <string name="pref_storage">Nchekwa</string>
   <string name="pref_current_folder">Folder nke ugbu a</string>
   <string name="delete_zim_failed">O wutere anyị na anyị enweghi ike ihichapụ faịlụ ụfọdụ. Ị nwere ike iji njikwa faịlụ ọzọ.</string>
-  <string name="tts_pause">kwụsịtụ</string>
-  <string name="tts_resume">maliteghachi</string>
-  <string name="stop">ịkwụsị</string>
+  <string name="tts_pause" fuzzy="true">kwụsịtụ</string>
+  <string name="tts_resume" fuzzy="true">maliteghachi</string>
+  <string name="stop" fuzzy="true">ịkwụsị</string>
   <string name="internal_storage">Ime</string>
   <string name="external_storage">Mpụga</string>
   <string name="yes">Ee</string>
@@ -166,13 +166,13 @@
   <string name="time_left">aka ekpe</string>
   <string name="time_today">Taa</string>
   <string name="time_yesterday">Ụnyaahụ</string>
-  <string name="pref_external_link_popup_title">Dọọ aka na ntị mgbe ị na-abanye njikọ mpụga</string>
+  <string name="pref_external_link_popup_title" fuzzy="true">Dọọ aka na ntị mgbe ị na-abanye njikọ mpụga</string>
   <string name="pref_external_link_popup_summary">Gosipụta mmapụta iji dọọ aka ná ntị gbasara ụgwọ ndị ọzọ ma ọ bụ anaghị arụ ọrụ na njikọ ndị na-adịghị n’ịntanetị.</string>
-  <string name="external_link_popup_dialog_title">Ịbanye Njikọ Mpụga!</string>
+  <string name="external_link_popup_dialog_title" fuzzy="true">Ịbanye Njikọ Mpụga!</string>
   <string name="external_link_popup_dialog_message" fuzzy="true">Ị na-abanye na njikọ mpụga. Nke a nwere ike iduga na mmefu ego maka nnyefe data ma ọ bụ na ọ gaghị arụ ọrụ mgbe ị nọghi n’ịntanetị. Ị chọrọ ịga n’ihu?</string>
   <string name="do_not_ask_anymore">Ajụkwala ọzọ</string>
-  <string name="your_languages">Asụsụ ndị a họọrọ:</string>
-  <string name="other_languages">Asụsụ ndị ọzọ:</string>
+  <string name="your_languages" fuzzy="true">Asụsụ ndị a họọrọ:</string>
+  <string name="other_languages" fuzzy="true">Asụsụ ndị ọzọ:</string>
   <string name="no_items_msg">Enweghị ihe dị</string>
   <string name="crash_title">Ewo… Nke a bụ ihe ihere</string>
   <string name="crash_description" fuzzy="true">Ọ dị ka anyị dara.\n\nỌ ga-amasị gị inyere anyị aka idozi nsogbu a site na izipu ozi ndị a?</string>
@@ -186,7 +186,7 @@
   <string name="new_tab_shortcut_label">Taabụ ọhụrụ</string>
   <string name="get_content_shortcut_label">Nweta ọdịnaya</string>
   <string name="fav_icon">Favicon</string>
-  <string name="pagesCount">%s isiokwu</string>
+  <string name="pagesCount" fuzzy="true">%s isiokwu</string>
   <string name="get_started">Malite</string>
   <string name="download_books">Budata akwụkwọ</string>
   <string name="humankind_knowledge">Ọmụma nke mmadụ, na ekwentị gị.</string>

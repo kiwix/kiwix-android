@@ -36,14 +36,14 @@
   <string name="go_to_wifi_settings_label">Mergi la setările WIFI</string>
   <string name="connection_refused">Conectare refuzată.</string>
   <string name="hotspot_running">Hotspot Pornit</string>
-  <string name="no_books_selected_toast_message">Vă rugăm să selectați cărțile mai întâi</string>
+  <string name="no_books_selected_toast_message" fuzzy="true">Vă rugăm să selectați cărțile mai întâi</string>
   <string name="server_failed_message">Nu am putut porni serverul. Vă rugăm porniți hotspot</string>
   <string name="server_failed_toast_message">Nu am putut porni serverul.</string>
   <string name="server_started_successfully_toast_message">Serverul a pornit cu succes.</string>
   <string name="server_stopped_successfully_toast_message">Oprire reușită a serverului.</string>
   <string name="hotspot_turned_on">Hotspot deschis</string>
   <string name="hotspot_details_message">Următoarele sunt detaliile hotspot-ului tău local.\nSSID : %1$s \nParo : %2$s</string>
-  <string name="server_textview_default_message">Selectează fișierele pe care dorești să le găzduiești pe server</string>
+  <string name="server_textview_default_message" fuzzy="true">Selectează fișierele pe care dorești să le găzduiești pe server</string>
   <string name="progress_dialog_starting_server">Pornire server</string>
   <string name="hotspot_dialog_title">Instrucțiuni pentru găzduirea de cărți</string>
   <string name="wifi_dialog_title">Conexiune WiFi detectată</string>
@@ -155,9 +155,9 @@
   <string name="pref_free_storage">%s gratuit</string>
   <string name="choose_storage_to_download_book">Alegeți spațiu de stocare pentru a descărca cartea</string>
   <string name="delete_zim_failed">Ne pare rău, dar nu am reușit să ștergem unele fișiere. Ar trebui să folosiți un manager de fișier în loc.</string>
-  <string name="tts_pause">pauză</string>
-  <string name="tts_resume">rezumat</string>
-  <string name="stop">stop</string>
+  <string name="tts_pause" fuzzy="true">pauză</string>
+  <string name="tts_resume" fuzzy="true">rezumat</string>
+  <string name="stop" fuzzy="true">stop</string>
   <string name="notification_pause_button_text">Pauză</string>
   <string name="notification_resume_button_text">Reia</string>
   <string name="internal_storage">Intern</string>
@@ -182,14 +182,14 @@
   <string name="time_left">stânga</string>
   <string name="time_today">Astăzi</string>
   <string name="time_yesterday">Ieri</string>
-  <string name="pref_external_link_popup_title">Atenționați când introduceți legături extern</string>
+  <string name="pref_external_link_popup_title" fuzzy="true">Atenționați când introduceți legături extern</string>
   <string name="pref_external_link_popup_summary">Afișează popup pentru a avertiza în legătură cu costurile suplimentare sau care nu merg în legăturile off-line.</string>
-  <string name="external_link_popup_dialog_title">Introduc Legătura externă!</string>
-  <string name="external_link_popup_dialog_message">Acum introduceți o legătură externă. Această acțiune ar putea duce la costuri suplimentare pentru transferul de date sau nu va funcționa când sunteți offline. \nDoriți să continuați?</string>
+  <string name="external_link_popup_dialog_title" fuzzy="true">Introduc Legătura externă!</string>
+  <string name="external_link_popup_dialog_message" fuzzy="true">Acum introduceți o legătură externă. Această acțiune ar putea duce la costuri suplimentare pentru transferul de date sau nu va funcționa când sunteți offline. \nDoriți să continuați?</string>
   <string name="do_not_ask_anymore">Nu mă mai întreba</string>
-  <string name="your_languages">Limbi selectate:</string>
+  <string name="your_languages" fuzzy="true">Limbi selectate:</string>
   <string name="your_language">Limbă selectată: %s</string>
-  <string name="other_languages">Alte limbi:</string>
+  <string name="other_languages" fuzzy="true">Alte limbi:</string>
   <string name="downloading" fuzzy="true">Descărcare</string>
   <string name="no_items_msg">Nu sunt item-uri disponibile</string>
   <string name="crash_title">Ei bine … Este jenant</string>
@@ -204,7 +204,7 @@
   <string name="new_tab_shortcut_label">Filă nouă</string>
   <string name="get_content_shortcut_label">Obține conținut</string>
   <string name="fav_icon">Favicon</string>
-  <string name="pagesCount">%s articole</string>
+  <string name="pagesCount" fuzzy="true">%s articole</string>
   <string name="get_started">Să începem</string>
   <string name="download_books">Descarcă cărți</string>
   <string name="humankind_knowledge">Cunoașterea omenirii pe telefonul tău.</string>

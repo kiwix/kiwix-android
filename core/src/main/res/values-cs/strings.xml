@@ -39,14 +39,14 @@
   <string name="go_to_wifi_settings_label">Jít na nastavení WIFI</string>
   <string name="connection_refused">Spojení odmítnuto.</string>
   <string name="hotspot_running">Spouštím Hotspot</string>
-  <string name="no_books_selected_toast_message">Vyberte prosím nejprve knihy</string>
+  <string name="no_books_selected_toast_message" fuzzy="true">Vyberte prosím nejprve knihy</string>
   <string name="server_failed_message">Nemohu spustit server. Zapněte prosím svůj hotspot</string>
   <string name="server_failed_toast_message">Nelze spustit server.</string>
   <string name="server_started_successfully_toast_message">Server úspěšně spuštěn.</string>
   <string name="server_stopped_successfully_toast_message">Server byl úspěšně zastaven.</string>
   <string name="hotspot_turned_on">Hotspot spuštěn</string>
   <string name="hotspot_details_message">Následují podrobnosti o vašem hotspotu.\nSSID : %1$s \nPass : %2$s</string>
-  <string name="server_textview_default_message">Vyberte soubory, které si přejete hostovat na svém serveru</string>
+  <string name="server_textview_default_message" fuzzy="true">Vyberte soubory, které si přejete hostovat na svém serveru</string>
   <string name="progress_dialog_starting_server">Server se spouští</string>
   <string name="hotspot_dialog_title">Pokyny k hostingu knih</string>
   <string name="wifi_dialog_title">Zjištěno připojení WiFi</string>
@@ -138,9 +138,9 @@
   <string name="pref_storage">Úložiště</string>
   <string name="pref_current_folder">Stávající Adresář</string>
   <string name="delete_zim_failed">Omlouváme se, ale nemohli jsme smazat některé soubory. Měli byste na místo toho zkusit použít správce souborů.</string>
-  <string name="tts_pause">Pozastavit</string>
-  <string name="tts_resume">Obnovit</string>
-  <string name="stop">stop</string>
+  <string name="tts_pause" fuzzy="true">Pozastavit</string>
+  <string name="tts_resume" fuzzy="true">Obnovit</string>
+  <string name="stop" fuzzy="true">stop</string>
   <string name="internal_storage">Interní</string>
   <string name="external_storage">Externí</string>
   <string name="yes">Ano</string>
@@ -162,13 +162,13 @@
   <string name="time_left">zbývá</string>
   <string name="time_today">Dnes</string>
   <string name="time_yesterday">Včera</string>
-  <string name="pref_external_link_popup_title">Upozornit při vkládání externích odkazů</string>
+  <string name="pref_external_link_popup_title" fuzzy="true">Upozornit při vkládání externích odkazů</string>
   <string name="pref_external_link_popup_summary">Zobrazit vyskakovací zprávu, která vás upozorní na další možné finanční náklady nebo nefunkčnost offline odkazů.</string>
-  <string name="external_link_popup_dialog_title">Vkládám externí odkaz!</string>
+  <string name="external_link_popup_dialog_title" fuzzy="true">Vkládám externí odkaz!</string>
   <string name="external_link_popup_dialog_message" fuzzy="true">Vkládáte externí odkaz. Toto může vést k dodatečným nákladům na přenos dat, nebo to prostě nebude fungovat, když jste offline. Chcete pokračovat?</string>
   <string name="do_not_ask_anymore">Neptat se příště</string>
-  <string name="your_languages">Vybrané jazyky:</string>
-  <string name="other_languages">Jiné jazyky:</string>
+  <string name="your_languages" fuzzy="true">Vybrané jazyky:</string>
+  <string name="other_languages" fuzzy="true">Jiné jazyky:</string>
   <string name="no_items_msg">Žádné dostupné položky</string>
   <string name="crash_title">Inu…to je trapné</string>
   <string name="crash_description" fuzzy="true">Vypadá to, že aplikace selhala.\n\nNevadilo by Vám pomoci nám opravit tento problém zasláním následující informace?</string>
@@ -182,7 +182,7 @@
   <string name="new_tab_shortcut_label">Nová karta</string>
   <string name="get_content_shortcut_label">Získat obsah</string>
   <string name="fav_icon">Favicon</string>
-  <string name="pagesCount">%s článků</string>
+  <string name="pagesCount" fuzzy="true">%s článků</string>
   <string name="get_started">Začít</string>
   <string name="download_books">Stáhnout knihy</string>
   <string name="humankind_knowledge">Znalosti lidstva na vašem telefonu.</string>
