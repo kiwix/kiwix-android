@@ -55,6 +55,7 @@ import org.kiwix.kiwixmobile.core.dao.entities.PauseReason
 import org.kiwix.kiwixmobile.core.di.IoDispatcher
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.utils.ACTIVE_DOWNLOAD_GROUP_KEY
+import org.kiwix.kiwixmobile.core.utils.COMPLETED_DOWNLOAD_GROUP_KEY
 import org.kiwix.kiwixmobile.core.utils.DOWNLOAD_NOTIFICATION_CHANNEL_ID
 import org.kiwix.kiwixmobile.core.utils.ZERO
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
@@ -67,7 +68,8 @@ const val DOWNLOAD_SERVICE_NOTIFICATION_ID = 1
 const val DOWNLOAD_TIMEOUT_RESUME_INTENT = "downloadTimeoutResumeIntent"
 const val BACKGROUND_DOWNLOAD_LIMIT_REACH_ACTION = "backgroundDownloadLimitReachAction"
 const val DOWNLOAD_TIMEOUT_LIMIT_REACH_NOTIFICATION_ID = 2
-const val DOWNLOAD_NOTIFICATION_GROUP_SUMMARY_ID = 3
+const val ACTIVE_DOWNLOAD_NOTIFICATION_GROUP_ID = 0
+const val DOWNLOADED_NOTIFICATION_GROUP_SUMMARY_ID = 4
 const val DOWNLOAD_TIMEOUT_NOTIFICATION_YES_REQUEST_CODE = 2001
 const val DOWNLOAD_TIMEOUT_NOTIFICATION_NO_REQUEST_CODE = 2002
 
@@ -527,7 +529,7 @@ class DownloadMonitorService : Service() {
       .setContentTitle(notificationTitle)
       .setContentText(getString(string.complete))
       .setOngoing(false)
-      .setGroup(download.id.toString())
+      .setGroup(COMPLETED_DOWNLOAD_GROUP_KEY)
       .setGroupSummary(false)
       .setProgress(ZERO, ZERO, false)
       .setTimeoutAfter(DEFAULT_NOTIFICATION_TIMEOUT_AFTER_RESET)
@@ -549,6 +551,47 @@ class DownloadMonitorService : Service() {
     // Cancel the fetch related any notification if present.
     notificationManager.cancel(download.id)
     notificationManager.notify(downloadCompleteNotificationId, notificationBuilder.build())
+    updateCompletedDownloadsGroupSummary(downloadCompleteNotificationId, notificationTitle)
+  }
+
+  /**
+   * Builds/refreshes the summary notification for the completed-downloads group from whatever
+   * completed notifications are currently posted, so it never drifts from what's on screen.
+   *
+   * [justPostedId]/[justPostedTitle] are unioned in explicitly because `notify()` is an async
+   * call into the system process - re-querying [NotificationManager.getActiveNotifications]
+   * immediately afterwards is not guaranteed to already reflect the notification we just posted.
+   */
+  private fun updateCompletedDownloadsGroupSummary(justPostedId: Int, justPostedTitle: String) {
+    val completedNotificationTitles = (
+      notificationManager.activeNotifications
+        .filter {
+          it.id != DOWNLOADED_NOTIFICATION_GROUP_SUMMARY_ID &&
+            it.notification.group == COMPLETED_DOWNLOAD_GROUP_KEY
+        }
+        .associate {
+          it.id to it.notification.extras.getCharSequence(Notification.EXTRA_TITLE)?.toString()
+        } + (justPostedId to justPostedTitle)
+    ).values.filterNotNull()
+    if (completedNotificationTitles.isEmpty()) return
+    val style = NotificationCompat.InboxStyle()
+    completedNotificationTitles.forEach(style::addLine)
+    val summaryNotification = NotificationCompat.Builder(this, DOWNLOAD_NOTIFICATION_CHANNEL_ID)
+      .setSmallIcon(android.R.drawable.stat_sys_download_done)
+      .setContentTitle(
+        resources.getQuantityString(
+          R.plurals.downloaded_files_count,
+          completedNotificationTitles.size,
+          completedNotificationTitles.size
+        )
+      )
+      .setStyle(style)
+      .setGroup(COMPLETED_DOWNLOAD_GROUP_KEY)
+      .setGroupSummary(true)
+      .setOnlyAlertOnce(true)
+      .setAutoCancel(true)
+      .build()
+    notificationManager.notify(DOWNLOADED_NOTIFICATION_GROUP_SUMMARY_ID, summaryNotification)
   }
 
   @OptIn(ExperimentalCoroutinesApi::class)
@@ -558,7 +601,7 @@ class DownloadMonitorService : Service() {
     scope = null
     unregisterNetworkCallback()
     fetch.removeListener(fetchListener)
-    notificationManager.cancel(DOWNLOAD_NOTIFICATION_GROUP_SUMMARY_ID)
+    notificationManager.cancel(ACTIVE_DOWNLOAD_NOTIFICATION_GROUP_ID)
     stopForeground(STOP_FOREGROUND_REMOVE)
     stopSelf()
     isDownloadMonitorServiceRunning = false
