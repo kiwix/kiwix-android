@@ -352,7 +352,7 @@ class CategoryViewModelTest {
       @Nested
       inner class Select {
         @Test
-        fun select_whenContentState_appliesImmediatelyAndSaves() = runTest {
+        fun select_whenContentState_savesImmediatelyAndKeepsDialogOpen() = runTest {
           coEvery {
             observeCategories(
               any(),
@@ -381,9 +381,10 @@ class CategoryViewModelTest {
 
           advanceUntilIdle()
 
-          // The filter applies immediately: save side effect emitted, dialog
-          // moves to Saving, no separate confirm step.
-          assertThat(categoryViewModel.state.value).isInstanceOf(State.Saving::class.java)
+          // The filter is saved immediately, but the dialog stays open so the
+          // user can select/deselect more categories — no Saving state, no
+          // dismissal on selection (review feedback on #5215).
+          assertThat(categoryViewModel.state.value).isInstanceOf(State.Content::class.java)
           assertThat(sideEffect).isInstanceOf(SaveCategoryAndFinish::class.java)
           val saveEffect = sideEffect as SaveCategoryAndFinish
           assertThat(saveEffect.categories.map { it.category })
