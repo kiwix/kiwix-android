@@ -43,7 +43,8 @@ const val NAV_ARG_SEARCH_STRING = "searchString"
 @Composable
 fun SearchScreenRoute(
   arguments: Bundle?,
-  coreMainActivity: CoreMainActivity
+  coreMainActivity: CoreMainActivity,
+  showOpenInNewTabIcon: Boolean = true,
 ) {
   val alertDialogShower = remember { AlertDialogShower() }
   val viewModel: SearchViewModel = hiltViewModel()
@@ -84,6 +85,7 @@ fun SearchScreenRoute(
       uiState,
       viewModel,
       buildActionMenuItems(viewModel),
+      showOpenInNewTabIcon,
       {
         NavigationIcon(
           onClick = {

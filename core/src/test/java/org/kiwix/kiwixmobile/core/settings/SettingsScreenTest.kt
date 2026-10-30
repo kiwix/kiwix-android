@@ -259,7 +259,11 @@ class SettingsScreenTest {
 
   @Test
   fun settingsScreen_extrasCategory_newTabInBackgroundSwitch_isDisplayed() {
-    renderSettingsScreen(createMockViewModel())
+    renderSettingsScreen(
+      createMockViewModel(
+        uiState = SettingsUiState(shouldShowNewTabInBackgroundPreference = true)
+      )
+    )
     scrollToContentDescription(context.getString(R.string.pref_newtab_background_title))
     composeTestRule
       .onNodeWithTag(context.getString(R.string.pref_newtab_background_title))
@@ -269,13 +273,31 @@ class SettingsScreenTest {
 
   @Test
   fun settingsScreen_extrasCategory_newTabInBackgroundSwitch_reflectsStateChange() {
-    renderSettingsScreen(createMockViewModel(newTabInBackground = true))
+    renderSettingsScreen(
+      createMockViewModel(
+        uiState = SettingsUiState(shouldShowNewTabInBackgroundPreference = true),
+        newTabInBackground = true
+      )
+    )
     scrollToContentDescription(context.getString(R.string.pref_newtab_background_title))
 
     composeTestRule
       .onNodeWithTag(context.getString(R.string.pref_newtab_background_title))
       .assertIsDisplayed()
       .assertIsOn()
+  }
+
+  @Test
+  fun settingsScreen_extrasCategory_newTabInBackgroundSwitch_hiddenWhenDisabled() {
+    renderSettingsScreen(
+      createMockViewModel(
+        uiState = SettingsUiState(shouldShowNewTabInBackgroundPreference = false)
+      )
+    )
+    scrollToText(context.getString(R.string.pref_extras))
+    composeTestRule
+      .onNodeWithText(context.getString(R.string.pref_newtab_background_title))
+      .assertDoesNotExist()
   }
 
   @Test
@@ -363,7 +385,10 @@ class SettingsScreenTest {
 
   @Test
   fun settingsScreen_extrasCategory_newTabToggle_triggersCallback() {
-    val viewModel = createMockViewModel(newTabInBackground = false)
+    val viewModel = createMockViewModel(
+      uiState = SettingsUiState(shouldShowNewTabInBackgroundPreference = true),
+      newTabInBackground = false
+    )
     renderSettingsScreen(viewModel)
     scrollToText(context.getString(R.string.pref_newtab_background_summary))
     composeTestRule
