@@ -29,14 +29,18 @@ data class SaveCategoryAndFinish(
   val categories: List<Category>,
   private val kiwixDataStore: KiwixDataStore,
   private val lifecycleScope: CoroutineScope,
-  private val onDismiss: () -> Unit
+  /** Dismiss callback; when null the dialog stays open after saving. */
+  private val onDismiss: (() -> Unit)? = null
 ) : SideEffect<Unit> {
   override fun invokeWith(activity: AppCompatActivity) {
     lifecycleScope.launch {
       runCatching {
-        val categoryCodes = categories.joinToString(",") { it.category }
+        val categoryCodes = categories
+          .map { it.category }
+          .filter { it.isNotEmpty() && !it.equals("all", ignoreCase = true) }
+          .joinToString(",")
         kiwixDataStore.setSelectedOnlineContentCategory(categoryCodes)
-        onDismiss()
+        onDismiss?.invoke()
       }.onFailure {
         it.printStackTrace()
       }

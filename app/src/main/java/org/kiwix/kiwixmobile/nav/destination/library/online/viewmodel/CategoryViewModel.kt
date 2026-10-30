@@ -125,10 +125,12 @@ open class CategoryViewModel @Inject constructor(
 
   private fun select(action: Action.Select, currentState: State): State =
     if (currentState is State.Content) {
-      updateSelection(
-        action.category,
-        currentState
-      )
+      // Persist the filter immediately on selection, but keep the dialog open
+      // so the user can select and deselect more categories. The dialog only
+      // closes when the user navigates back (see review feedback on #5215).
+      val newState = updateSelection(action.category, currentState)
+      saveSelection(newState, dismissAfterSaving = false)
+      newState
     } else {
       currentState
     }
@@ -147,16 +149,20 @@ open class CategoryViewModel @Inject constructor(
   ) = currentState.select(categoryItem)
 
   private fun save(currentState: State.Content): State {
+    saveSelection(currentState, dismissAfterSaving = true)
+    return Saving(currentState)
+  }
+
+  private fun saveSelection(currentState: State.Content, dismissAfterSaving: Boolean) {
     val selectedCategories = currentState.items.filter { it.active }
     effects.tryEmit(
       SaveCategoryAndFinish(
         selectedCategories,
         kiwixDataStore,
         viewModelScope,
-        requireOnDismissCallBack()
+        if (dismissAfterSaving) requireOnDismissCallBack() else null
       )
     )
-    return Saving(currentState)
   }
 
   private fun requireOnDismissCallBack() = requireNotNull(onDismiss) {
@@ -180,7 +186,7 @@ open class CategoryViewModel @Inject constructor(
 
   private fun selectAll(currentState: State): State =
     if (currentState is State.Content) {
-      currentState.copy(items = currentState.items.map { it.copy(active = it.id != 0L) })
+      currentState.copy(items = currentState.items.map { it.copy(active = true) })
     } else {
       currentState
     }

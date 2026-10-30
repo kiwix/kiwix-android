@@ -53,6 +53,13 @@ class OnlineCategoryRobot : BaseRobot() {
     }
   }
 
+  fun clickOnCloseDialogIcon(composeTestRule: ComposeContentTestRule) {
+    composeTestRule.apply {
+      waitForIdle()
+      onAllNodesWithContentDescription("Close Drawer").onFirst().performClick()
+    }
+  }
+
   fun assertCategoryDialogDisplayed(composeTestRule: ComposeContentTestRule) {
     testFlakyView({
       composeTestRule.waitForIdle()
@@ -122,13 +129,6 @@ class OnlineCategoryRobot : BaseRobot() {
         .performScrollToNode(hasTestTag("$CATEGORY_ITEM_CHECKBOX_TESTING_TAG$matchLanguage"))
       onNodeWithTag("$CATEGORY_ITEM_CHECKBOX_TESTING_TAG$matchLanguage")
         .assertIsOn()
-    }
-  }
-
-  fun clickOnSaveCategoryIcon(composeTestRule: ComposeContentTestRule) {
-    composeTestRule.apply {
-      waitForIdle()
-      onNodeWithTag(org.kiwix.kiwixmobile.language.SAVE_ICON_TESTING_TAG).performClick()
     }
   }
 }
