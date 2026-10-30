@@ -53,6 +53,13 @@ class OnlineCategoryRobot : BaseRobot() {
     }
   }
 
+  fun clickOnCloseDialogIcon(composeTestRule: ComposeContentTestRule) {
+    composeTestRule.apply {
+      waitForIdle()
+      onAllNodesWithContentDescription("Close Drawer").onFirst().performClick()
+    }
+  }
+
   fun assertCategoryDialogDisplayed(composeTestRule: ComposeContentTestRule) {
     testFlakyView({
       composeTestRule.waitForIdle()
