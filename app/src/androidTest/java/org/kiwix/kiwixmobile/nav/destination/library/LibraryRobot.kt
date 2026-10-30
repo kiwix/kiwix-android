@@ -172,6 +172,7 @@ class LibraryRobot : BaseRobot() {
       clickOnDeleteZimFile(composeTestRule)
       composeTestRule.waitUntilTimeout()
       assertNoFilesTextDisplayed(composeTestRule)
+      composeTestRule.waitForIdle()
     } catch (e: AssertionError) {
       Log.i(
         "TEST_DELETE_ZIM",

@@ -27,6 +27,7 @@ object TestingUtils {
   const val COMPOSE_TEST_RULE_ORDER = 3
   const val RETRY_RULE_ORDER = 4
   const val RETRY_COUNT_FOR_FLAKY_TEST = 3
+  const val FLAKY_TEST_RETRY_TIMEOUT = 1000L
   private var callback: IdleListener? = null
   private val resources: MutableSet<Class<*>> = HashSet()
 
