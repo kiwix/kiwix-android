@@ -270,6 +270,14 @@
   <string name="paused_state">Paused</string>
   <string name="paused_offline_state">Paused (device is offline)</string>
   <string name="failed_state">Failed: %s</string>
+  <plurals name="downloading_files_count">
+    <item quantity="one">%d file downloading</item>
+    <item quantity="other">%d files downloading</item>
+  </plurals>
+  <plurals name="downloaded_files_count">
+    <item quantity="one">%d file downloaded</item>
+    <item quantity="other">%d files downloaded</item>
+  </plurals>
   <string name="custom_download_error_message_for_authentication_failed">The ZIM file could not be downloaded. Please try reinstalling the application from the Play store.</string>
   <string name="save">Save</string>
   <string name="note">Note</string>

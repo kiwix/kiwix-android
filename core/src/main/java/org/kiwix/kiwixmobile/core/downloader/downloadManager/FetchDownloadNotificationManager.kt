@@ -121,16 +121,26 @@ class FetchDownloadNotificationManager @Inject constructor(
     downloadNotifications: List<DownloadNotification>,
     context: Context
   ): Boolean {
+    val activeDownloadNotifications = downloadNotifications.filter {
+      it.isDownloading || it.isPaused || it.isQueued
+    }
+    if (activeDownloadNotifications.isEmpty()) return false
+    val style = NotificationCompat.InboxStyle()
+    activeDownloadNotifications.forEach { style.addLine(it.title) }
     notificationBuilder
       .setSmallIcon(android.R.drawable.stat_sys_download)
+      .setContentTitle(
+        context.resources.getQuantityString(
+          R.plurals.downloading_files_count,
+          activeDownloadNotifications.size,
+          activeDownloadNotifications.size
+        )
+      )
+      .setStyle(style)
       .setGroup(ACTIVE_DOWNLOAD_GROUP_KEY)
       .setGroupSummary(true)
       .setOnlyAlertOnce(true)
-    downloadNotificationManager.notify(
-      DOWNLOAD_NOTIFICATION_GROUP_SUMMARY_ID,
-      notificationBuilder.build()
-    )
-    return false
+    return true
   }
 
   override fun getSubtitleText(
