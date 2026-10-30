@@ -50,6 +50,7 @@ import org.kiwix.kiwixmobile.core.search.SearchScreenRoute
 import org.kiwix.kiwixmobile.core.settings.SettingsScreenRoute
 import org.kiwix.kiwixmobile.core.utils.EXTRA_IS_WIDGET_VOICE
 import org.kiwix.kiwixmobile.core.utils.TAG_FROM_TAB_SWITCHER
+import org.kiwix.kiwixmobile.custom.BuildConfig
 import org.kiwix.kiwixmobile.custom.download.BrandedDownloadRoute
 import org.kiwix.kiwixmobile.custom.download.BrandedDownloadViewModel
 import org.kiwix.kiwixmobile.custom.help.BrandedHelpViewModel
@@ -139,7 +140,8 @@ fun BrandedNavGraph(
 
       SearchScreenRoute(
         arguments = backStackEntry.arguments,
-        coreMainActivity = coreMainActivity
+        coreMainActivity = coreMainActivity,
+        showOpenInNewTabIcon = !BuildConfig.DISABLE_TABS
       )
     }
   }

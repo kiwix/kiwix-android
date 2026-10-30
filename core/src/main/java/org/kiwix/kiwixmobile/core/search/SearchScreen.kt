@@ -104,7 +104,8 @@ fun SearchScreen(
   state: SearchScreenUiState,
   searchViewModel: SearchViewModel,
   actionMenuItemList: List<ActionMenuItem>,
-  navigationIcon: @Composable() () -> Unit
+  showOpenInNewTabIcon: Boolean = true,
+  navigationIcon: @Composable () -> Unit
 ) {
   val lazyListState = rememberLazyListState()
   Scaffold(
@@ -126,7 +127,7 @@ fun SearchScreen(
       )
     }
   ) { innerPadding ->
-    SearchScreenContent(state, searchViewModel, innerPadding, lazyListState)
+    SearchScreenContent(state, searchViewModel, innerPadding, lazyListState, showOpenInNewTabIcon)
   }
   InfiniteListHandler(
     listState = lazyListState,
@@ -140,7 +141,8 @@ private fun SearchScreenContent(
   state: SearchScreenUiState,
   searchViewModel: SearchViewModel,
   innerPadding: PaddingValues,
-  lazyListState: LazyListState
+  lazyListState: LazyListState,
+  showOpenInNewTabIcon: Boolean
 ) {
   val progressBarTrackColor = MaterialTheme.colorScheme.background
   Box(
@@ -178,6 +180,7 @@ private fun SearchScreenContent(
               searchListItem = item,
               onItemClick = { searchViewModel.onItemClick(item) },
               onNewTabIconClick = { searchViewModel.onNewTabIconClick(item) },
+              showOpenInNewTabIcon = showOpenInNewTabIcon,
               onItemLongClick = if (item is SearchListItem.RecentSearchListItem) {
                 { searchViewModel.onItemLongClick(item) }
               } else {
@@ -320,7 +323,8 @@ private fun SearchListItem(
   searchListItem: SearchListItem,
   onNewTabIconClick: (SearchListItem) -> Unit,
   onItemClick: (SearchListItem) -> Unit,
-  onItemLongClick: ((SearchListItem) -> Unit)? = null
+  onItemLongClick: ((SearchListItem) -> Unit)? = null,
+  showOpenInNewTabIcon: Boolean = true
 ) {
   Row(
     modifier = Modifier
@@ -353,18 +357,20 @@ private fun SearchListItem(
       )
     }
 
-    IconButton(
-      onClick = { onNewTabIconClick(searchListItem) },
-      modifier = Modifier
-        .testTag(OPEN_ITEM_IN_NEW_TAB_ICON_TESTING_TAG)
-        .size(OPEN_IN_NEW_TAB_ICON_SIZE)
-        .padding(end = SIX_DP)
-    ) {
-      Icon(
-        painter = painterResource(id = R.drawable.ic_open_in_new_24dp),
-        contentDescription =
-          stringResource(R.string.search_open_in_new_tab) + searchListItem.hashCode()
-      )
+    if (showOpenInNewTabIcon) {
+      IconButton(
+        onClick = { onNewTabIconClick(searchListItem) },
+        modifier = Modifier
+          .testTag(OPEN_ITEM_IN_NEW_TAB_ICON_TESTING_TAG)
+          .size(OPEN_IN_NEW_TAB_ICON_SIZE)
+          .padding(end = SIX_DP)
+      ) {
+        Icon(
+          painter = painterResource(id = R.drawable.ic_open_in_new_24dp),
+          contentDescription =
+            stringResource(R.string.search_open_in_new_tab) + searchListItem.hashCode()
+        )
+      }
     }
   }
 }
