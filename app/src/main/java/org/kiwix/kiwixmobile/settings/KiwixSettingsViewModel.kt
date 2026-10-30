@@ -86,6 +86,10 @@ class KiwixSettingsViewModel @Inject constructor(
     settingsUiState.update { it.copy(shouldShowPrefWifiOnlyPreference = true) }
   }
 
+  override suspend fun showNewTabInBackgroundPreference() {
+    settingsUiState.update { it.copy(shouldShowNewTabInBackgroundPreference = true) }
+  }
+
   override suspend fun showPermissionItem() {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R &&
       !kiwixDataStore.isPlayStoreBuild.first()

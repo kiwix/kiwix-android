@@ -79,6 +79,10 @@ class BrandedSettingsViewModel @Inject constructor(
     settingsUiState.update { it.copy(shouldShowPrefWifiOnlyPreference = false) }
   }
 
+  override suspend fun showNewTabInBackgroundPreference() {
+    settingsUiState.update { it.copy(shouldShowNewTabInBackgroundPreference = !BuildConfig.DISABLE_TABS) }
+  }
+
   override suspend fun showLanguageCategory() {
     settingsUiState.update { it.copy(shouldShowLanguageCategory = BuildConfig.ENFORCED_LANG.isEmpty()) }
   }
