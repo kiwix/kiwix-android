@@ -23,14 +23,21 @@ import kotlin.math.log10
 import kotlin.math.pow
 
 private const val DECIMAL_THRESHOLD = 10
+private const val UNIT_STEP = 1000.0
+private const val NEXT_UNIT_THRESHOLD = 999.5
 
 @JvmInline
 value class Byte(private val byteString: String?) {
   val humanReadable
     get() = byteString?.toLongOrNull()?.let {
       val units = arrayOf("B", "KB", "MB", "GB", "TB")
-      val conversion = (log10(it.toDouble()) / log10(1000.0)).toInt()
-      val value = it / 1000.0.pow(conversion.toDouble())
+      var conversion = (log10(it.toDouble()) / log10(UNIT_STEP)).toInt()
+        .coerceIn(0, units.lastIndex)
+      var value = it / UNIT_STEP.pow(conversion.toDouble())
+      if (value >= NEXT_UNIT_THRESHOLD && conversion < units.lastIndex) {
+        conversion++
+        value /= UNIT_STEP
+      }
       val pattern = if (value < DECIMAL_THRESHOLD) "#,##0.#" else "#,##0"
       DecimalFormat(pattern)
         .format(value) +
