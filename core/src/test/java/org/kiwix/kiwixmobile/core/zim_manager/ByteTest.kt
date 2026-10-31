@@ -56,6 +56,22 @@ class ByteTest {
   }
 
   @Nested
+  inner class UnitBoundaryValues {
+    @Test
+    fun `moves to the next unit when the value rounds up to 1000`() {
+      assertThat(Byte("999700000").humanReadable).isEqualTo("1 GB")
+      assertThat(Byte("999999").humanReadable).isEqualTo("1 MB")
+      assertThat(Byte("999500").humanReadable).isEqualTo("1 MB")
+      assertThat(Byte("999400").humanReadable).isEqualTo("999 KB")
+    }
+
+    @Test
+    fun `displays zero bytes instead of crashing`() {
+      assertThat(Byte("0").humanReadable).isEqualTo("0 B")
+    }
+  }
+
+  @Nested
   inner class InvalidOrNullValues {
     @Test
     fun `returns empty string when input is null`() {
