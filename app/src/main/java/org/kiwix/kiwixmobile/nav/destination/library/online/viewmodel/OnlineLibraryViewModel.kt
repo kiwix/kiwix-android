@@ -196,7 +196,9 @@ class OnlineLibraryViewModel @Inject constructor(
     val showStorageSelectDialog: Boolean = false,
     val showCategoryDialog: Boolean = false,
     val tabs: List<LanguageTab> = emptyList(),
-    val selectedTabIndex: Int = 0
+    val selectedTabIndex: Int = 0,
+    val categoryChips: List<String> = emptyList(),
+    val selectedCategories: Set<String> = emptySet()
   )
 
   /**
@@ -361,8 +363,19 @@ class OnlineLibraryViewModel @Inject constructor(
       .launchIn(viewModelScope)
 
   internal suspend fun handleFiltersChanged(input: FiltersInput) {
+    val categoryChips =
+      input.category.split(",").map { it.trim() }.filter { it.isNotEmpty() }
+    val activeSelectedCategories = uiState.value.selectedCategories.filter { selected ->
+      categoryChips.any { it.equals(selected, ignoreCase = true) }
+    }.toSet()
+    val activeCategory = if (activeSelectedCategories.isNotEmpty()) {
+      activeSelectedCategories.joinToString(",")
+    } else {
+      input.category
+    }
+
     val result = onlineLibraryTabsUseCase.handleFiltersChanged(
-      category = input.category,
+      category = activeCategory,
       language = input.language,
       searchQuery = input.searchQuery,
       currentTabs = uiState.value.tabs,
@@ -372,7 +385,9 @@ class OnlineLibraryViewModel @Inject constructor(
     _uiState.update { current ->
       current.copy(
         tabs = result.tabs,
-        selectedTabIndex = result.selectedTabIndex
+        selectedTabIndex = result.selectedTabIndex,
+        categoryChips = categoryChips,
+        selectedCategories = activeSelectedCategories
       )
     }
     result.newRequest?.let {
@@ -427,6 +442,21 @@ class OnlineLibraryViewModel @Inject constructor(
       }
 
       null -> Unit
+    }
+  }
+
+  fun onCategoryChipClicked(category: String) {
+    val currentSelected = uiState.value.selectedCategories
+    val isAlreadySelected = currentSelected.any { it.equals(category, ignoreCase = true) }
+    val newSelected = if (isAlreadySelected) {
+      currentSelected.filterNot { it.equals(category, ignoreCase = true) }.toSet()
+    } else {
+      currentSelected + category
+    }
+    _uiState.update { it.copy(selectedCategories = newSelected) }
+    onlineLibraryTabsUseCase.clear()
+    viewModelScope.launch {
+      updateOnlineLibraryFilters(getOnlineLibraryRequest())
     }
   }
 
@@ -842,8 +872,11 @@ class OnlineLibraryViewModel @Inject constructor(
   }
 
   private suspend fun getOnlineLibraryRequest(): OnlineLibraryRequest {
-    val category =
+    val category = if (uiState.value.selectedCategories.isNotEmpty()) {
+      uiState.value.selectedCategories.joinToString(",")
+    } else {
       kiwixDataStore.selectedOnlineContentCategory.first().takeUnless { it.isBlank() }.orEmpty()
+    }
     val currentTab = uiState.value.tabs.getOrNull(uiState.value.selectedTabIndex)
     val configuredLanguage = kiwixDataStore.selectedOnlineContentLanguage.first()
     val language =

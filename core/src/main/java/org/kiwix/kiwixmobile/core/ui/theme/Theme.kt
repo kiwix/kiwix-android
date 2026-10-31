@@ -32,6 +32,9 @@ import androidx.core.view.WindowCompat
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.MEDIUM_BODY_LETTER_SPACING
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.MEDIUM_BODY_TEXT_SIZE
 
+private const val DARK_SECONDARY_CONTAINER_ALPHA = 0.5f
+private const val LIGHT_SECONDARY_CONTAINER_ALPHA = 0.35f
+
 private val DarkColorScheme = darkColorScheme(
   primary = DenimBlue200,
   secondary = DenimBlue200,
@@ -48,6 +51,8 @@ private val DarkColorScheme = darkColorScheme(
   surfaceVariant = MineShaftGray850,
   onSurfaceVariant = MineShaftGray350,
   outlineVariant = MineShaftGray700,
+  secondaryContainer = DenimBlue800.copy(alpha = DARK_SECONDARY_CONTAINER_ALPHA),
+  onSecondaryContainer = DenimBlue200
 )
 
 private val LightColorScheme = lightColorScheme(
@@ -66,6 +71,8 @@ private val LightColorScheme = lightColorScheme(
   surfaceVariant = LightGrey,
   onSurfaceVariant = MineShaftGray700,
   outlineVariant = MineShaftGray350,
+  secondaryContainer = DenimBlue200.copy(alpha = LIGHT_SECONDARY_CONTAINER_ALPHA),
+  onSecondaryContainer = DenimBlue800
 )
 
 @Composable

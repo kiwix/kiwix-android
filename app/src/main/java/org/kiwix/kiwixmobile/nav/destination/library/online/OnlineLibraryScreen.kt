@@ -40,18 +40,24 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Done
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.BottomAppBarScrollBehavior
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FilterChip
+import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.LocalMinimumInteractiveComponentSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.ScrollableTabRow
@@ -63,6 +69,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -83,6 +90,7 @@ import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.Dp
 import androidx.navigation.NavHostController
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.debounce
@@ -132,6 +140,9 @@ const val SHOW_FETCHING_LIBRARY_LAYOUT_TESTING_TAG = "showFetchingLibraryLayoutT
 const val ONLINE_DIVIDER_ITEM_TEXT_TESTING_TAG = "onlineDividerItemTextTag"
 const val LANGUAGE_TABS_ROW_TESTING_TAG = "languageTabsRowTestingTag"
 const val LANGUAGE_TAB_TESTING_TAG_PREFIX = "languageTabTestingTag_"
+const val CATEGORY_CHIPS_ROW_TESTING_TAG = "categoryChipsRowTestingTag"
+const val CATEGORY_CHIP_TESTING_TAG_PREFIX = "categoryChipTestingTag_"
+private const val CATEGORY_CHIP_SELECTED_CONTAINER_ALPHA = 0.18f
 const val LOAD_MORE_DELAY = 150L
 private const val BACK_TO_TOP_ITEM_THRESHOLD = 5
 
@@ -253,6 +264,62 @@ fun LanguageTabsRow(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
+fun CategoryFilterChipsRow(
+  categoryChips: List<String>,
+  selectedCategories: Set<String>,
+  onChipClick: (String) -> Unit,
+  modifier: Modifier = Modifier
+) {
+  CompositionLocalProvider(
+    LocalMinimumInteractiveComponentSize provides Dp.Unspecified
+  ) {
+    LazyRow(
+      modifier = modifier
+        .fillMaxWidth()
+        .semantics { testTag = CATEGORY_CHIPS_ROW_TESTING_TAG },
+      horizontalArrangement = Arrangement.spacedBy(EIGHT_DP),
+      contentPadding = PaddingValues(
+        start = SIXTEEN_DP,
+        end = SIXTEEN_DP,
+        top = FOUR_DP,
+        bottom = FOUR_DP
+      )
+    ) {
+      items(categoryChips) { category ->
+        val isSelected = selectedCategories.any { it.equals(category, ignoreCase = true) }
+        FilterChip(
+          selected = isSelected,
+          onClick = { onChipClick(category) },
+          label = { Text(category.toSentenceCaseCategory()) },
+          leadingIcon = if (isSelected) {
+            {
+              Icon(
+                imageVector = Icons.Default.Done,
+                contentDescription = null,
+                modifier = Modifier.size(FilterChipDefaults.IconSize)
+              )
+            }
+          } else {
+            null
+          },
+          colors = FilterChipDefaults.filterChipColors(
+            selectedContainerColor = MaterialTheme.colorScheme.primary.copy(
+              alpha = CATEGORY_CHIP_SELECTED_CONTAINER_ALPHA
+            ),
+            selectedLabelColor = MaterialTheme.colorScheme.primary,
+            selectedLeadingIconColor = MaterialTheme.colorScheme.primary
+          ),
+          modifier = Modifier.semantics {
+            testTag = "$CATEGORY_CHIP_TESTING_TAG_PREFIX$category"
+          }
+        )
+      }
+    }
+  }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
 private fun OnlineLibraryMainContent(
   uiState: OnlineLibraryUiState,
   onlineLibraryViewModel: OnlineLibraryViewModel,
@@ -277,6 +344,14 @@ private fun OnlineLibraryMainContent(
         tabs = uiState.tabs,
         selectedTabIndex = uiState.selectedTabIndex,
         onTabSelected = onlineLibraryViewModel::selectTab
+      )
+    }
+
+    if (uiState.categoryChips.isNotEmpty()) {
+      CategoryFilterChipsRow(
+        categoryChips = uiState.categoryChips,
+        selectedCategories = uiState.selectedCategories,
+        onChipClick = onlineLibraryViewModel::onCategoryChipClicked
       )
     }
 
