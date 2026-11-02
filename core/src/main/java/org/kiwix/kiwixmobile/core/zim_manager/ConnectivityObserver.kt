@@ -18,39 +18,46 @@
 
 package org.kiwix.kiwixmobile.core.zim_manager
 
+import android.content.Context
 import android.net.ConnectivityManager
 import android.net.Network
 import android.net.NetworkCapabilities
 import android.net.NetworkRequest
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.extensions.isAirplaneModeOn
 import org.kiwix.kiwixmobile.core.networkState
 import javax.inject.Inject
 
 class ConnectivityObserver @Inject constructor(
-  private val connectivityManager: ConnectivityManager
+  private val connectivityManager: ConnectivityManager,
+  @param:ApplicationContext private val context: Context
 ) {
-  private val _networkStates = MutableStateFlow(connectivityManager.networkState)
+  private val _networkStates = MutableStateFlow(connectivityManager.networkState(context))
   val networkStates: StateFlow<NetworkState> = _networkStates
 
   private val networkCallback = object : ConnectivityManager.NetworkCallback() {
     override fun onAvailable(network: Network) {
-      _networkStates.tryEmit(connectivityManager.networkState)
+      _networkStates.tryEmit(connectivityManager.networkState(context))
     }
 
     override fun onLost(network: Network) {
-      _networkStates.tryEmit(connectivityManager.networkState)
+      _networkStates.tryEmit(connectivityManager.networkState(context))
     }
 
     override fun onCapabilitiesChanged(
       network: Network,
       networkCapabilities: NetworkCapabilities
     ) {
-      _networkStates.tryEmit(connectivityManager.networkState)
+      _networkStates.tryEmit(connectivityManager.networkState(context))
     }
 
     override fun onUnavailable() {
-      _networkStates.tryEmit(NetworkState.NOT_CONNECTED)
+      _networkStates.tryEmit(
+        if (context.isAirplaneModeOn()) NetworkState.AIRPLANE_MODE else NetworkState.NOT_CONNECTED
+      )
     }
   }
 
@@ -59,12 +66,26 @@ class ConnectivityObserver @Inject constructor(
       .addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
       .build()
     connectivityManager.registerNetworkCallback(request, networkCallback)
-    _networkStates.tryEmit(connectivityManager.networkState)
+    _networkStates.tryEmit(connectivityManager.networkState(context))
   }
 
   fun unregister() {
     runCatching {
       connectivityManager.unregisterNetworkCallback(networkCallback)
     }.onFailure { it.printStackTrace() }
+  }
+}
+
+/**
+ * Builds the "we need to be online to <action>" message, picking the flight-mode
+ * wording when the OS reports airplane mode, otherwise the generic offline wording.
+ * Only call this once connectivity is already known to be absent.
+ */
+fun ConnectivityObserver.offlineMessage(context: Context, actionResId: Int): String {
+  val action = context.getString(actionResId)
+  return if (networkStates.value == NetworkState.AIRPLANE_MODE) {
+    context.getString(R.string.airplane_mode_feature_blocked_message, action)
+  } else {
+    context.getString(R.string.offline_feature_blocked_message, action)
   }
 }

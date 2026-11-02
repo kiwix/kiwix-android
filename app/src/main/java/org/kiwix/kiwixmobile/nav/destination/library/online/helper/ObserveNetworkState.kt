@@ -50,7 +50,7 @@ class ObserveNetworkState @Inject constructor(
           }
         }
 
-        NetworkState.NOT_CONNECTED -> {
+        NetworkState.NOT_CONNECTED, NetworkState.AIRPLANE_MODE -> {
           Result.ShowNoInternetSnackBar
         }
       }

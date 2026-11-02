@@ -18,11 +18,18 @@
 
 package org.kiwix.kiwixmobile.core
 
+import android.content.Context
 import android.net.ConnectivityManager
 import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.isNetworkAvailable
+import org.kiwix.kiwixmobile.core.extensions.isAirplaneModeOn
 import org.kiwix.kiwixmobile.core.zim_manager.NetworkState
+import org.kiwix.kiwixmobile.core.zim_manager.NetworkState.AIRPLANE_MODE
 import org.kiwix.kiwixmobile.core.zim_manager.NetworkState.CONNECTED
 import org.kiwix.kiwixmobile.core.zim_manager.NetworkState.NOT_CONNECTED
 
-val ConnectivityManager.networkState: NetworkState
-  get() = if (isNetworkAvailable()) CONNECTED else NOT_CONNECTED
+fun ConnectivityManager.networkState(context: Context): NetworkState =
+  when {
+    isNetworkAvailable() -> CONNECTED
+    context.isAirplaneModeOn() -> AIRPLANE_MODE
+    else -> NOT_CONNECTED
+  }

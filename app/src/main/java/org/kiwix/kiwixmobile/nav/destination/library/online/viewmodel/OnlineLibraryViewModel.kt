@@ -66,6 +66,7 @@ import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
 import org.kiwix.kiwixmobile.core.utils.files.Log
 import org.kiwix.kiwixmobile.core.zim_manager.ConnectivityObserver
+import org.kiwix.kiwixmobile.core.zim_manager.offlineMessage
 import org.kiwix.kiwixmobile.main.KiwixMainActivity
 import org.kiwix.kiwixmobile.nav.destination.library.StorageSelectDialogConfig
 import org.kiwix.kiwixmobile.nav.destination.library.online.helper.ObserveNetworkState
@@ -327,11 +328,14 @@ class OnlineLibraryViewModel @Inject constructor(
       items.isEmpty() -> if (connectivityManager.isNetworkAvailable()) {
         context.getString(R.string.no_items_msg)
       } else {
-        context.getString(R.string.no_network_connection)
+        offlineMessage(R.string.action_load_online_library)
       }
 
       else -> ""
     }
+
+  private fun offlineMessage(actionResId: Int): String =
+    connectivityObserver.offlineMessage(context, actionResId)
 
   internal data class FiltersInput(
     val category: String,
@@ -471,7 +475,7 @@ class OnlineLibraryViewModel @Inject constructor(
         if (uiState.value.items.isEmpty()) {
           _uiState.update {
             it.copy(
-              noContentMessage = getString(R.string.no_network_connection),
+              noContentMessage = offlineMessage(R.string.action_load_online_library),
               showNoContent = true,
               isRefreshing = false,
               showScanningProgressBar = false
@@ -634,10 +638,12 @@ class OnlineLibraryViewModel @Inject constructor(
         .mapNotNull { it.book.nativeBook }
     }
 
-  private fun emitNoInternetSnackbar() {
+  private fun emitNoInternetSnackbar(
+    actionResId: Int = R.string.action_load_online_library
+  ) {
     sendUiEvent(
       UiEvent.ShowSnackbar(
-        message = getString(R.string.no_network_connection),
+        message = offlineMessage(actionResId),
         actionLabel = getString(R.string.menu_settings),
         actionIntent = Intent(Settings.ACTION_WIFI_SETTINGS)
       )
@@ -695,7 +701,7 @@ class OnlineLibraryViewModel @Inject constructor(
       when (action) {
         ShowStorageSelection -> showStorageSelectDialog(false)
         is StartDownload -> downloadFile()
-        NoInternet -> emitNoInternetSnackbar()
+        NoInternet -> emitNoInternetSnackbar(R.string.action_download_book)
         RequestStoragePermission -> sendUiEvent(RequestPermission(WRITE_EXTERNAL_STORAGE))
         RequestNotificationPermission -> if (isAndroid13OrAbove) {
           sendUiEvent(RequestPermission(POST_NOTIFICATIONS))
@@ -734,7 +740,7 @@ class OnlineLibraryViewModel @Inject constructor(
 
   fun onPauseResumeButtonClick(item: LibraryDownloadItem) {
     when (val result = resolveBookClickAction.onPauseResumeButtonClick(item)) {
-      NoInternet -> emitNoInternetSnackbar()
+      NoInternet -> emitNoInternetSnackbar(R.string.action_download_book)
       is PauseResume -> withDownloader {
         it.pauseResumeDownload(result.downloadId, result.isPaused)
       }
@@ -745,7 +751,7 @@ class OnlineLibraryViewModel @Inject constructor(
 
   fun onStopButtonClick(item: LibraryDownloadItem) {
     when (val result = resolveBookClickAction.onStopButtonClick(item)) {
-      NoInternet -> emitNoInternetSnackbar()
+      NoInternet -> emitNoInternetSnackbar(R.string.action_download_book)
       is RetryDownload -> withDownloader {
         it.retryDownload(result.downloadId)
       }
@@ -827,7 +833,7 @@ class OnlineLibraryViewModel @Inject constructor(
         NoInternetWithEmptyContent -> {
           _uiState.update {
             it.copy(
-              noContentMessage = getString(R.string.no_network_connection),
+              noContentMessage = offlineMessage(R.string.action_load_online_library),
               showNoContent = true,
               isRefreshing = false,
               showScanningProgressBar = false,
