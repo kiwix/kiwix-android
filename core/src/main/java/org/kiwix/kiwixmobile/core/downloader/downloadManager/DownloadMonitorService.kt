@@ -397,7 +397,7 @@ class DownloadMonitorService : Service() {
 
     override fun onError(download: Download, error: Error, throwable: Throwable?) {
       val isInternetConnectionError = error in NETWORK_RELATED_ERRORS
-      if (isInternetConnectionError) {
+      if (isInternetConnectionError && !isNetworkAvailable) {
         showDownloadPauseNotification(download, true)
       }
       update(download, !isInternetConnectionError)
@@ -416,7 +416,7 @@ class DownloadMonitorService : Service() {
     }
 
     override fun onQueued(download: Download, waitingOnNetwork: Boolean) {
-      if (waitingOnNetwork) {
+      if (waitingOnNetwork && !isNetworkAvailable) {
         showDownloadPauseNotification(download, true)
       }
       update(download)
@@ -451,7 +451,9 @@ class DownloadMonitorService : Service() {
     }
 
     override fun onWaitingNetwork(download: Download) {
-      showDownloadPauseNotification(download, true)
+      if (!isNetworkAvailable) {
+        showDownloadPauseNotification(download, true)
+      }
       update(download)
     }
 
@@ -564,15 +566,15 @@ class DownloadMonitorService : Service() {
    * immediately afterwards is not guaranteed to already reflect the notification we just posted.
    */
   private fun updateCompletedDownloadsGroupSummary(justPostedId: Int, justPostedTitle: String) {
+    val existingCompletedNotifications = notificationManager.activeNotifications.filter {
+      it.id != DOWNLOADED_NOTIFICATION_GROUP_SUMMARY_ID &&
+        it.id != justPostedId &&
+        it.notification.group == COMPLETED_DOWNLOAD_GROUP_KEY
+    }
     val completedNotificationTitles = (
-      notificationManager.activeNotifications
-        .filter {
-          it.id != DOWNLOADED_NOTIFICATION_GROUP_SUMMARY_ID &&
-            it.notification.group == COMPLETED_DOWNLOAD_GROUP_KEY
-        }
-        .associate {
-          it.id to it.notification.extras.getCharSequence(Notification.EXTRA_TITLE)?.toString()
-        } + (justPostedId to justPostedTitle)
+      existingCompletedNotifications.associate {
+        it.id to it.notification.extras.getCharSequence(Notification.EXTRA_TITLE)?.toString()
+      } + (justPostedId to justPostedTitle)
     ).values.filterNotNull()
     if (completedNotificationTitles.isEmpty()) return
     val style = NotificationCompat.InboxStyle()
@@ -593,6 +595,10 @@ class DownloadMonitorService : Service() {
       .setAutoCancel(true)
       .build()
     notificationManager.notify(DOWNLOADED_NOTIFICATION_GROUP_SUMMARY_ID, summaryNotification)
+    // Combine the existing notification into single notification group.
+    existingCompletedNotifications.forEach {
+      notificationManager.notify(it.id, it.notification)
+    }
   }
 
   @OptIn(ExperimentalCoroutinesApi::class)
