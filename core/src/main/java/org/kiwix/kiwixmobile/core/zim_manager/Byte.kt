@@ -18,30 +18,36 @@
 
 package org.kiwix.kiwixmobile.core.zim_manager
 
+import java.math.BigDecimal
+import java.math.RoundingMode
 import java.text.DecimalFormat
-import kotlin.math.log10
-import kotlin.math.pow
 
-private const val DECIMAL_THRESHOLD = 10
-private const val UNIT_STEP = 1000.0
-private const val NEXT_UNIT_THRESHOLD = 999.5
+private val UNIT_STEP = BigDecimal(1000)
+private val DECIMAL_THRESHOLD = BigDecimal.TEN
+private val UNITS = listOf("B", "KB", "MB", "GB", "TB")
 
 @JvmInline
 value class Byte(private val byteString: String?) {
   val humanReadable
-    get() = byteString?.toLongOrNull()?.let {
-      val units = arrayOf("B", "KB", "MB", "GB", "TB")
-      var conversion = (log10(it.toDouble()) / log10(UNIT_STEP)).toInt()
-        .coerceIn(0, units.lastIndex)
-      var value = it / UNIT_STEP.pow(conversion.toDouble())
-      if (value >= NEXT_UNIT_THRESHOLD && conversion < units.lastIndex) {
-        conversion++
-        value /= UNIT_STEP
-      }
-      val pattern = if (value < DECIMAL_THRESHOLD) "#,##0.#" else "#,##0"
-      DecimalFormat(pattern)
-        .format(value) +
-        " " +
-        units[conversion]
-    }.orEmpty()
+    get() = byteString?.toLongOrNull()?.let(::format).orEmpty()
+
+  private fun format(bytes: Long): String {
+    var unitIndex = 0
+    var value = BigDecimal(bytes)
+    while (value >= UNIT_STEP && unitIndex < UNITS.lastIndex) {
+      value = value.divide(UNIT_STEP)
+      unitIndex++
+    }
+    var rounded = round(value)
+    if (rounded >= UNIT_STEP && unitIndex < UNITS.lastIndex) {
+      rounded = round(value.divide(UNIT_STEP))
+      unitIndex++
+    }
+    return "${DecimalFormat("#,##0.#").format(rounded)} ${UNITS[unitIndex]}"
+  }
+
+  private fun round(value: BigDecimal): BigDecimal {
+    val scale = if (value < DECIMAL_THRESHOLD) 1 else 0
+    return value.setScale(scale, RoundingMode.HALF_UP)
+  }
 }

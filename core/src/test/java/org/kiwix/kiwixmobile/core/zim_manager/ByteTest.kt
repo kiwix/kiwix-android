@@ -72,6 +72,29 @@ class ByteTest {
   }
 
   @Nested
+  inner class ExpectedValuesFromIssue5201 {
+    @Test
+    fun `formats sizes as listed in the expected table`() {
+      assertThat(Byte("0").humanReadable).isEqualTo("0 B")
+      assertThat(Byte("5").humanReadable).isEqualTo("5 B")
+      assertThat(Byte("1490").humanReadable).isEqualTo("1.5 KB")
+      assertThat(Byte("9940").humanReadable).isEqualTo("9.9 KB")
+      assertThat(Byte("9950").humanReadable).isEqualTo("10 KB")
+      assertThat(Byte("10412").humanReadable).isEqualTo("10 KB")
+      assertThat(Byte("8200000").humanReadable).isEqualTo("8.2 MB")
+      assertThat(Byte("9940000").humanReadable).isEqualTo("9.9 MB")
+      assertThat(Byte("9950000").humanReadable).isEqualTo("10 MB")
+      assertThat(Byte("10400000").humanReadable).isEqualTo("10 MB")
+      assertThat(Byte("999499").humanReadable).isEqualTo("999 KB")
+      assertThat(Byte("999500").humanReadable).isEqualTo("1 MB")
+      assertThat(Byte("999700000").humanReadable).isEqualTo("1 GB")
+      assertThat(Byte("10400000000").humanReadable).isEqualTo("10 GB")
+      assertThat(Byte("456100000000").humanReadable).isEqualTo("456 GB")
+      assertThat(Byte("1000000000000").humanReadable).isEqualTo("1 TB")
+    }
+  }
+
+  @Nested
   inner class InvalidOrNullValues {
     @Test
     fun `returns empty string when input is null`() {
