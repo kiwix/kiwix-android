@@ -250,7 +250,11 @@ class SettingsScreenTest {
 
   @Test
   fun settingsScreen_extrasCategory_isDisplayed() {
-    renderSettingsScreen(createMockViewModel())
+    renderSettingsScreen(
+      createMockViewModel(
+        uiState = SettingsUiState(shouldShowExternalLinkPreference = true)
+      )
+    )
     scrollToText(context.getString(R.string.pref_extras))
     composeTestRule
       .onNodeWithText(context.getString(R.string.pref_extras))
@@ -291,7 +295,10 @@ class SettingsScreenTest {
   fun settingsScreen_extrasCategory_newTabInBackgroundSwitch_hiddenWhenDisabled() {
     renderSettingsScreen(
       createMockViewModel(
-        uiState = SettingsUiState(shouldShowNewTabInBackgroundPreference = false)
+        uiState = SettingsUiState(
+          shouldShowNewTabInBackgroundPreference = false,
+          shouldShowExternalLinkPreference = true
+        )
       )
     )
     scrollToText(context.getString(R.string.pref_extras))

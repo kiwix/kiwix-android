@@ -34,6 +34,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -104,7 +105,7 @@ fun SearchScreen(
   state: SearchScreenUiState,
   searchViewModel: SearchViewModel,
   actionMenuItemList: List<ActionMenuItem>,
-  showOpenInNewTabIcon: Boolean = true,
+  showOpenInNewTabIcon: Boolean,
   navigationIcon: @Composable () -> Unit
 ) {
   val lazyListState = rememberLazyListState()
@@ -324,7 +325,7 @@ private fun SearchListItem(
   onNewTabIconClick: (SearchListItem) -> Unit,
   onItemClick: (SearchListItem) -> Unit,
   onItemLongClick: ((SearchListItem) -> Unit)? = null,
-  showOpenInNewTabIcon: Boolean = true
+  showOpenInNewTabIcon: Boolean,
 ) {
   Row(
     modifier = Modifier
@@ -343,6 +344,7 @@ private fun SearchListItem(
       modifier = Modifier
         .weight(1f)
         .fillMaxHeight()
+        .heightIn(min = OPEN_IN_NEW_TAB_ICON_SIZE)
         .combinedClickable(
           onClick = { onItemClick(searchListItem) },
           onLongClick = { onItemLongClick?.invoke(searchListItem) }

@@ -70,6 +70,7 @@ class SearchScreenUITest {
         state = state,
         searchViewModel = mockViewModel,
         actionMenuItemList = actionMenuItems,
+        showOpenInNewTabIcon = true,
         navigationIcon = {}
       )
     }

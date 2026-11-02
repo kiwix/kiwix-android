@@ -96,7 +96,12 @@ abstract class CoreSettingsViewModel(
     val versionInformation: String = "",
     val permissionItem: Pair<Boolean, String> = false to "",
     val shouldShowRatingCategory: Boolean = false
-  )
+  ) {
+    val shouldShowExtrasCategory: Boolean
+      get() = shouldShowExternalLinkPreference ||
+        shouldShowPrefWifiOnlyPreference ||
+        shouldShowNewTabInBackgroundPreference
+  }
 
   abstract suspend fun setStorage()
   abstract suspend fun showExternalLinksPreference()

@@ -309,7 +309,9 @@ internal fun SettingsScreen(
         }
     ) {
       item { DisplayCategory(coreSettingsViewModel) }
-      item { ExtrasCategory(coreSettingsViewModel, uiState) }
+      if (uiState.shouldShowExtrasCategory) {
+        item { ExtrasCategory(coreSettingsViewModel, uiState) }
+      }
       storageCategory(uiState, coreSettingsViewModel)
       item { HistoryCategory(coreSettingsViewModel) }
       item { NotesCategory(coreSettingsViewModel) }
