@@ -47,7 +47,7 @@ import org.kiwix.kiwixmobile.nav.destination.library.local.CopyMoveProgressBarCo
 import org.kiwix.kiwixmobile.nav.destination.library.local.FileOperationHandler
 import org.kiwix.kiwixmobile.nav.destination.library.local.MultipleFilesProcessAction
 import org.kiwix.kiwixmobile.zimManager.Fat32Checker
-import org.kiwix.kiwixmobile.zimManager.Fat32Checker.Companion.FOUR_GIGABYTES_IN_KILOBYTES
+import org.kiwix.kiwixmobile.zimManager.Fat32Checker.Companion.FOUR_GIGABYTES_IN_BYTES
 import org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState.CannotWrite4GbFile
 import org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState.DetectingFileSystem
 import org.kiwix.libzim.Archive
@@ -193,7 +193,7 @@ class CopyMoveFileHandler @Inject constructor(
   }
 
   fun isBookLessThan4GB(): Boolean =
-    requireSelectedFile().length() < FOUR_GIGABYTES_IN_KILOBYTES
+    requireSelectedFile().length() < FOUR_GIGABYTES_IN_BYTES
 
   private fun hasNotSufficientStorageSpace(availableSpace: Long): Boolean =
     availableSpace < requireSelectedFile().length()

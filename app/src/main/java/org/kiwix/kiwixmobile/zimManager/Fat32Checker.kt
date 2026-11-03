@@ -123,7 +123,6 @@ class Fat32Checker constructor(
 
   companion object {
     const val FOUR_GIGABYTES_IN_BYTES = 4L * 1024L * 1024L * 1024L
-    const val FOUR_GIGABYTES_IN_KILOBYTES = 4L * 1024L * 1024L
   }
 
   sealed class FileSystemState {

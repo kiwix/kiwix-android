@@ -61,7 +61,7 @@ import org.kiwix.kiwixmobile.nav.destination.library.local.CopyMoveProgressBarCo
 import org.kiwix.kiwixmobile.nav.destination.library.local.FileOperationHandler
 import org.kiwix.kiwixmobile.nav.destination.library.local.MultipleFilesProcessAction
 import org.kiwix.kiwixmobile.zimManager.Fat32Checker
-import org.kiwix.kiwixmobile.zimManager.Fat32Checker.Companion.FOUR_GIGABYTES_IN_KILOBYTES
+import org.kiwix.kiwixmobile.zimManager.Fat32Checker.Companion.FOUR_GIGABYTES_IN_BYTES
 import org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState
 import org.kiwix.libzim.Archive
 import org.kiwix.sharedFunctions.MainDispatcherRule
@@ -455,7 +455,25 @@ class CopyMoveFileHandlerTest {
     fun fileGreaterThan4Gb_returnsFalse() {
       every {
         selectedFile.length()
-      } returns FOUR_GIGABYTES_IN_KILOBYTES + 1
+      } returns FOUR_GIGABYTES_IN_BYTES + 1
+
+      assertFalse(fileHandler.isBookLessThan4GB())
+    }
+
+    @Test
+    fun fileOfOneGigabyte_returnsTrue() {
+      every {
+        selectedFile.length()
+      } returns 1_000_000_000L
+
+      assertTrue(fileHandler.isBookLessThan4GB())
+    }
+
+    @Test
+    fun fileOfExactly4Gb_returnsFalse() {
+      every {
+        selectedFile.length()
+      } returns FOUR_GIGABYTES_IN_BYTES
 
       assertFalse(fileHandler.isBookLessThan4GB())
     }
@@ -579,7 +597,7 @@ class CopyMoveFileHandlerTest {
 
       every {
         selectedFile.length()
-      } returns FOUR_GIGABYTES_IN_KILOBYTES + 1
+      } returns FOUR_GIGABYTES_IN_BYTES + 1
 
       every {
         fileHandler.observeFileSystemState()
@@ -626,7 +644,7 @@ class CopyMoveFileHandlerTest {
     fun bookGreaterThan4Gb_notifiesFilesystemLimitation() = runTest {
       every {
         selectedFile.length()
-      } returns FOUR_GIGABYTES_IN_KILOBYTES + 1
+      } returns FOUR_GIGABYTES_IN_BYTES + 1
 
       fileHandler.handleCannotWrite4GbFileState(storageFile)
 

@@ -272,9 +272,6 @@ class Fat32CheckerTest {
     fun `constants are correct`() {
       assertThat(Fat32Checker.FOUR_GIGABYTES_IN_BYTES)
         .isEqualTo(4L * 1024 * 1024 * 1024)
-
-      assertThat(Fat32Checker.FOUR_GIGABYTES_IN_KILOBYTES)
-        .isEqualTo(4L * 1024 * 1024)
     }
 
     @Test
