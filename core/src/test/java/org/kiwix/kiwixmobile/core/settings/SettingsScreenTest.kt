@@ -262,6 +262,14 @@ class SettingsScreenTest {
   }
 
   @Test
+  fun settingsScreen_extrasCategory_isHiddenWhenAllItemsAreHidden() {
+    renderSettingsScreen(createMockViewModel())
+    composeTestRule
+      .onNodeWithText(context.getString(R.string.pref_extras))
+      .assertDoesNotExist()
+  }
+
+  @Test
   fun settingsScreen_extrasCategory_newTabInBackgroundSwitch_isDisplayed() {
     renderSettingsScreen(
       createMockViewModel(
