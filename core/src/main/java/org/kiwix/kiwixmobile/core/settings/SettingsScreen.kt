@@ -309,7 +309,9 @@ internal fun SettingsScreen(
         }
     ) {
       item { DisplayCategory(coreSettingsViewModel) }
-      item { ExtrasCategory(coreSettingsViewModel, uiState) }
+      if (uiState.shouldShowExtrasCategory) {
+        item { ExtrasCategory(coreSettingsViewModel, uiState) }
+      }
       storageCategory(uiState, coreSettingsViewModel)
       item { HistoryCategory(coreSettingsViewModel) }
       item { NotesCategory(coreSettingsViewModel) }
@@ -516,12 +518,14 @@ private fun ExtrasCategory(
   val externalLinkPopup by coreSettingsViewModel.externalLinkPopup.collectAsStateWithLifecycle()
   val wifiOnly by coreSettingsViewModel.wifiOnly.collectAsStateWithLifecycle()
   SettingsCategory(stringResource(R.string.pref_extras)) {
-    SwitchPreference(
-      title = stringResource(R.string.pref_newtab_background_title),
-      summary = stringResource(R.string.pref_newtab_background_summary),
-      checked = newTabInBackground,
-      onCheckedChange = { coreSettingsViewModel.setNewTabInBackground(it) }
-    )
+    if (settingsUiState.shouldShowNewTabInBackgroundPreference) {
+      SwitchPreference(
+        title = stringResource(R.string.pref_newtab_background_title),
+        summary = stringResource(R.string.pref_newtab_background_summary),
+        checked = newTabInBackground,
+        onCheckedChange = { coreSettingsViewModel.setNewTabInBackground(it) }
+      )
+    }
     if (settingsUiState.shouldShowExternalLinkPreference) {
       SwitchPreference(
         title = stringResource(R.string.pref_external_link_popup_title),

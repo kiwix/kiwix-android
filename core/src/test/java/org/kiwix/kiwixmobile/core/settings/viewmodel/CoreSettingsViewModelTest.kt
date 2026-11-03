@@ -139,6 +139,10 @@ private class TestCoreSettingsViewModel(
   override suspend fun showRatingCategory() {
     // Do nothing
   }
+
+  override suspend fun showNewTabInBackgroundPreference() {
+    // Do nothing
+  }
 }
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -254,6 +258,7 @@ internal class CoreSettingsViewModelTest {
       coEvery { spyViewModel.showPermissionItem() } just Runs
       coEvery { spyViewModel.showLanguageCategory() } just Runs
       coEvery { spyViewModel.showRatingCategory() } just Runs
+      coEvery { spyViewModel.showNewTabInBackgroundPreference() } just Runs
 
       spyViewModel.initialize()
 
@@ -263,6 +268,7 @@ internal class CoreSettingsViewModelTest {
       coVerify(exactly = 1) { spyViewModel.showPermissionItem() }
       coVerify(exactly = 1) { spyViewModel.showLanguageCategory() }
       coVerify(exactly = 1) { spyViewModel.showRatingCategory() }
+      coVerify(exactly = 1) { spyViewModel.showNewTabInBackgroundPreference() }
       val versionInfo = spyViewModel.uiState.value.versionInformation
 
       assertTrue(versionInfo.contains("Build"))

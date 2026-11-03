@@ -92,14 +92,21 @@ abstract class CoreSettingsViewModel(
     val shouldShowStorageCategory: Boolean = false,
     val shouldShowExternalLinkPreference: Boolean = false,
     val shouldShowPrefWifiOnlyPreference: Boolean = false,
+    val shouldShowNewTabInBackgroundPreference: Boolean = false,
     val versionInformation: String = "",
     val permissionItem: Pair<Boolean, String> = false to "",
     val shouldShowRatingCategory: Boolean = false
-  )
+  ) {
+    val shouldShowExtrasCategory: Boolean
+      get() = shouldShowExternalLinkPreference ||
+        shouldShowPrefWifiOnlyPreference ||
+        shouldShowNewTabInBackgroundPreference
+  }
 
   abstract suspend fun setStorage()
   abstract suspend fun showExternalLinksPreference()
   abstract suspend fun showPrefWifiOnlyPreference()
+  abstract suspend fun showNewTabInBackgroundPreference()
   abstract suspend fun showPermissionItem()
   abstract suspend fun showLanguageCategory()
   abstract suspend fun showRatingCategory()
@@ -114,6 +121,7 @@ abstract class CoreSettingsViewModel(
     setStorage()
     showExternalLinksPreference()
     showPrefWifiOnlyPreference()
+    showNewTabInBackgroundPreference()
     showPermissionItem()
     showLanguageCategory()
     showRatingCategory()
