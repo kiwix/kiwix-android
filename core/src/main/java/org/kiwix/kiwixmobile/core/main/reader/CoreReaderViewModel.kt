@@ -47,6 +47,7 @@ import androidx.core.net.toUri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavOptions
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.MainCoroutineDispatcher
@@ -65,6 +66,7 @@ import kotlinx.coroutines.withContext
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.base.BackPressActivityExtensions
+import org.kiwix.kiwixmobile.core.di.IoDispatcher
 import org.kiwix.kiwixmobile.core.di.MainDispatcher
 import org.kiwix.kiwixmobile.core.extensions.browserIntent
 import org.kiwix.kiwixmobile.core.extensions.navigateToAppSettings
@@ -164,7 +166,8 @@ abstract class CoreReaderViewModel(
   private val readAloudManager: ReadAloudManager,
   private val donationDialogHandler: DonationDialogHandler,
   private val findInPageManager: FindInPageManager,
-  @param:MainDispatcher private val mainDispatcher: MainCoroutineDispatcher
+  @param:MainDispatcher private val mainDispatcher: MainCoroutineDispatcher,
+  @param:IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : ViewModel(),
   SectionsListener,
   WebViewCallback,
@@ -999,11 +1002,14 @@ abstract class CoreReaderViewModel(
       )
       ReaderEffect.ShowKiwixDialog(dialog) {
         launchInMainScope {
-          val result = addBookShortcut(
-            zimFileReader = reader,
-            pageUrl = getCurrentWebView().url,
-            customName = nameState.value
-          )
+          val pageUrl = getCurrentWebView().url
+          val result = withContext(ioDispatcher) {
+            addBookShortcut(
+              zimFileReader = reader,
+              pageUrl = pageUrl,
+              customName = nameState.value
+            )
+          }
           if (result == ShortcutResult.NotSupported) {
             emitEffect(ReaderEffect.ShowToast(context.getString(string.shortcut_disabled_message)))
           }

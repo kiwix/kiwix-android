@@ -119,17 +119,7 @@ object ShortcutUtils {
       flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
     }
 
-    val faviconBitmap = try {
-      zimFileReader.favicon?.let { faviconBase64 ->
-        val decodedString: ByteArray = Base64.decode(faviconBase64, Base64.DEFAULT)
-        BitmapFactory.decodeByteArray(decodedString, 0, decodedString.size)
-      }
-    } catch (e: IllegalArgumentException) {
-      Log.e(TAG, "Error decoding favicon for $displayTitle", e)
-      null
-    }
-
-    val icon = createProfessionalIcon(context, faviconBitmap)
+    val icon = createProfessionalIcon(context, zimFileReader.favicon, displayTitle)
     val shortcutInfo =
       buildShortcutInfo(context, id, displayTitle, icon, shortcutIntent, componentName)
 
@@ -183,7 +173,11 @@ object ShortcutUtils {
   /**
    * Creates a professional adaptive icon with a background and centered favicon.
    */
-  private fun createProfessionalIcon(context: Context, favicon: Bitmap?): IconCompat {
+  private fun createProfessionalIcon(
+    context: Context,
+    faviconBase64: String?,
+    displayTitle: String
+  ): IconCompat {
     val density = context.resources.displayMetrics.density
     val sizePx = (ADAPTIVE_ICON_SIZE_DP * density).toInt()
     val safeZonePx = (ADAPTIVE_SAFE_ZONE_SIZE_DP * density).toInt()
@@ -201,17 +195,14 @@ object ShortcutUtils {
       canvas.drawCircle(radius, radius, radius, bgPaint)
     }
 
-    // Draw favicon or default launcher icon in the center
-    if (favicon != null) {
+    // Draw favicon or default launcher icon in the center, decoded at the
+    // size it will actually be drawn at rather than full resolution.
+    val favicon = decodeFaviconBitmap(faviconBase64, safeZonePx, safeZonePx, displayTitle)
+    val iconBitmap = favicon
+      ?: decodeSampledBitmapFromResource(context, R.mipmap.ic_launcher, safeZonePx, safeZonePx)
+    if (iconBitmap != null) {
       val destRect = Rect(insetPx, insetPx, sizePx - insetPx, sizePx - insetPx)
-      canvas.drawBitmap(favicon, null, destRect, Paint(Paint.FILTER_BITMAP_FLAG))
-    } else {
-      // Fallback: Default launcher icon
-      val defaultIcon = BitmapFactory.decodeResource(context.resources, R.mipmap.ic_launcher)
-      if (defaultIcon != null) {
-        val destRect = Rect(insetPx, insetPx, sizePx - insetPx, sizePx - insetPx)
-        canvas.drawBitmap(defaultIcon, null, destRect, Paint(Paint.FILTER_BITMAP_FLAG))
-      }
+      canvas.drawBitmap(iconBitmap, null, destRect, Paint(Paint.FILTER_BITMAP_FLAG))
     }
 
     return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -219,6 +210,73 @@ object ShortcutUtils {
     } else {
       IconCompat.createWithBitmap(bitmap)
     }
+  }
+
+  /**
+   * Decodes the base64-encoded ZIM favicon at the given target size, avoiding
+   * a full-resolution decode when the source image is larger than needed.
+   */
+  private fun decodeFaviconBitmap(
+    faviconBase64: String?,
+    reqWidth: Int,
+    reqHeight: Int,
+    displayTitle: String
+  ): Bitmap? {
+    if (faviconBase64 == null) return null
+    return try {
+      val decodedString: ByteArray = Base64.decode(faviconBase64, Base64.DEFAULT)
+      decodeSampledBitmapFromByteArray(decodedString, reqWidth, reqHeight)
+    } catch (e: IllegalArgumentException) {
+      Log.e(TAG, "Error decoding favicon for $displayTitle", e)
+      null
+    }
+  }
+
+  /**
+   * Decodes a byte array into a [Bitmap] downsampled to approximately the
+   * requested size, rather than decoding at the source's full resolution.
+   */
+  private fun decodeSampledBitmapFromByteArray(
+    data: ByteArray,
+    reqWidth: Int,
+    reqHeight: Int
+  ): Bitmap? {
+    val options = BitmapFactory.Options().apply { inJustDecodeBounds = true }
+    BitmapFactory.decodeByteArray(data, 0, data.size, options)
+    options.inSampleSize =
+      calculateInSampleSize(options.outWidth, options.outHeight, reqWidth, reqHeight)
+    options.inJustDecodeBounds = false
+    return BitmapFactory.decodeByteArray(data, 0, data.size, options)
+  }
+
+  /**
+   * Decodes a drawable resource into a [Bitmap] downsampled to approximately
+   * the requested size, rather than decoding at the source's full resolution.
+   */
+  private fun decodeSampledBitmapFromResource(
+    context: Context,
+    resId: Int,
+    reqWidth: Int,
+    reqHeight: Int
+  ): Bitmap? {
+    val options = BitmapFactory.Options().apply { inJustDecodeBounds = true }
+    BitmapFactory.decodeResource(context.resources, resId, options)
+    options.inSampleSize =
+      calculateInSampleSize(options.outWidth, options.outHeight, reqWidth, reqHeight)
+    options.inJustDecodeBounds = false
+    return BitmapFactory.decodeResource(context.resources, resId, options)
+  }
+
+  private fun calculateInSampleSize(width: Int, height: Int, reqWidth: Int, reqHeight: Int): Int {
+    var inSampleSize = 1
+    if (height > reqHeight || width > reqWidth) {
+      val halfHeight = height / 2
+      val halfWidth = width / 2
+      while (halfHeight / inSampleSize >= reqHeight && halfWidth / inSampleSize >= reqWidth) {
+        inSampleSize *= 2
+      }
+    }
+    return inSampleSize
   }
 
   /**

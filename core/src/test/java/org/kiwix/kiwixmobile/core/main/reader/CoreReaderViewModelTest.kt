@@ -46,6 +46,7 @@ import io.mockk.slot
 import io.mockk.spyk
 import io.mockk.unmockkAll
 import io.mockk.verify
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.MainCoroutineDispatcher
 import kotlinx.coroutines.cancel
@@ -193,7 +194,8 @@ internal class CoreReaderViewModelTest {
       readAloudManager,
       donationDialogHandler,
       findInPageManager,
-      mainDispatcherRule.mainDispatcher
+      mainDispatcherRule.mainDispatcher,
+      mainDispatcherRule.dispatcher
     )
   }
 
@@ -3154,7 +3156,8 @@ internal class CoreReaderViewModelTest {
     readAloudManager: ReadAloudManager,
     donationDialogHandler: DonationDialogHandler,
     findInPageManager: FindInPageManager,
-    mainDispatcher: MainCoroutineDispatcher
+    mainDispatcher: MainCoroutineDispatcher,
+    ioDispatcher: CoroutineDispatcher
   ) : CoreReaderViewModel(
       context,
       kiwixDataStore,
@@ -3174,7 +3177,8 @@ internal class CoreReaderViewModelTest {
       readAloudManager,
       donationDialogHandler,
       findInPageManager,
-      mainDispatcher
+      mainDispatcher,
+      ioDispatcher
     ) {
     override fun openLocalLibrary() {}
     override fun openSearch(

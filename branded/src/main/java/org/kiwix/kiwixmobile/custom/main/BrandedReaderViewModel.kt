@@ -125,7 +125,8 @@ class BrandedReaderViewModel @Inject constructor(
     readAloudManager,
     donationDialogHandler,
     findInPageManager,
-    mainDispatcher
+    mainDispatcher,
+    ioDispatcher
   ) {
   override suspend fun initialize(
     coreMainActivity: CoreMainActivity,
