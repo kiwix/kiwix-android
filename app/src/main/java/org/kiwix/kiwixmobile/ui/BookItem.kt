@@ -32,6 +32,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -65,7 +66,7 @@ import org.kiwix.kiwixmobile.core.utils.ComposeDimens.BOOK_ICON_SIZE
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FOUR_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SIXTEEN_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TWELVE_DP
-import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TWENTY_FOUR_DP
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TWENTY_EIGHT_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TWO_DP
 import org.kiwix.kiwixmobile.core.zim_manager.Byte
 import org.kiwix.kiwixmobile.core.zim_manager.KiwixTag
@@ -114,7 +115,7 @@ fun BookItem(
   onMultiSelect: ((BookOnDisk) -> Unit)? = null,
   selectionMode: SelectionMode = SelectionMode.NORMAL,
 ) {
-  val isSelected = selectionMode == SelectionMode.MULTI && bookOnDisk.isSelected
+  val isSelected = bookOnDisk.isSelected
   KiwixTheme {
     LibraryCard(
       isSelected = isSelected,
@@ -187,9 +188,19 @@ fun BookContent(
       tags = tags,
       index = index,
       articleCount = book.articleCount,
-      mediaCount = book.mediaCount,
-      trailingContent = trailingContent
+      mediaCount = book.mediaCount
     )
+
+    if (trailingContent != null) {
+      Box(
+        modifier = Modifier
+          .align(Alignment.CenterVertically)
+          .padding(start = SIXTEEN_DP),
+        contentAlignment = Alignment.Center
+      ) {
+        trailingContent()
+      }
+    }
   }
 }
 
@@ -229,9 +240,10 @@ private fun BookSelectedIcon(
     painter = painterResource(id = CoreR.drawable.ic_check_circle_blue_24dp),
     contentDescription = "$BOOK_ITEM_CHECKBOX_TESTING_TAG$index",
     modifier = modifier
-      .size(TWENTY_FOUR_DP)
+      .size(TWENTY_EIGHT_DP)
       .testTag("$BOOK_ITEM_CHECKBOX_TESTING_TAG$index")
       .semantics { contentDescription = "true$index" }
+      .clip(CircleShape)
       .then(
         if (onClick != null) {
           Modifier.clickable(onClick = onClick)
@@ -264,7 +276,6 @@ fun BookIcon(iconSource: String, isOnlineLibrary: Boolean) {
   }
 }
 
-@Suppress("ComposableLambdaParameterNaming")
 @Composable
 fun BookDetails(
   modifier: Modifier = Modifier,
@@ -274,8 +285,7 @@ fun BookDetails(
   tags: List<KiwixTag>,
   index: Int,
   articleCount: String? = null,
-  mediaCount: String? = null,
-  trailingContent: (@Composable () -> Unit)? = null
+  mediaCount: String? = null
 ) {
   Column(modifier = modifier) {
     Row(
@@ -288,14 +298,6 @@ fun BookDetails(
         index = index,
         modifier = Modifier.weight(1f)
       )
-      if (trailingContent != null) {
-        Box(
-          modifier = Modifier.padding(start = SIXTEEN_DP),
-          contentAlignment = Alignment.Center
-        ) {
-          trailingContent()
-        }
-      }
     }
     Spacer(modifier = Modifier.height(FOUR_DP))
     BookDescription(
