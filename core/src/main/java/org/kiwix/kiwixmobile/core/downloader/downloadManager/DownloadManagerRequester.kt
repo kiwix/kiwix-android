@@ -106,4 +106,5 @@ private suspend fun DownloadRequest.toFetchRequest(kiwixDataStore: KiwixDataStor
   Request("$uri", getDestination(kiwixDataStore)).apply {
     networkType = if (kiwixDataStore.wifiOnly.first()) WIFI_ONLY else ALL
     autoRetryMaxAttempts = AUTO_RETRY_MAX_ATTEMPTS
+    groupId = ACTIVE_DOWNLOAD_NOTIFICATION_GROUP_ID
   }

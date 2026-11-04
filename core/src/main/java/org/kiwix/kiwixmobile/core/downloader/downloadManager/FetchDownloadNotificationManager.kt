@@ -121,17 +121,30 @@ class FetchDownloadNotificationManager @Inject constructor(
     downloadNotifications: List<DownloadNotification>,
     context: Context
   ): Boolean {
+    val activeDownloadNotifications = downloadNotifications.filter {
+      it.isDownloading || it.isPaused || it.isQueued
+    }
+    if (activeDownloadNotifications.isEmpty()) return false
+    val style = NotificationCompat.InboxStyle()
+    activeDownloadNotifications.forEach { style.addLine(it.title) }
     notificationBuilder
       .setSmallIcon(android.R.drawable.stat_sys_download)
+      .setContentTitle(
+        context.resources.getQuantityString(
+          R.plurals.downloading_files_count,
+          activeDownloadNotifications.size,
+          activeDownloadNotifications.size
+        )
+      )
+      .setStyle(style)
       .setGroup(ACTIVE_DOWNLOAD_GROUP_KEY)
       .setGroupSummary(true)
       .setOnlyAlertOnce(true)
-    downloadNotificationManager.notify(
-      DOWNLOAD_NOTIFICATION_GROUP_SUMMARY_ID,
-      notificationBuilder.build()
-    )
-    return false
+    return true
   }
+
+  override fun shouldUpdateNotification(downloadNotification: DownloadNotification): Boolean =
+    !downloadNotification.isCompleted && super.shouldUpdateNotification(downloadNotification)
 
   override fun getSubtitleText(
     context: Context,
@@ -256,9 +269,6 @@ class FetchDownloadNotificationManager @Inject constructor(
       else -> notificationBuilder.setTimeoutAfter(DEFAULT_NOTIFICATION_TIMEOUT_AFTER_RESET)
     }
     notificationCustomisation(downloadNotification, notificationBuilder, context)
-    // Remove the already shown notification if any, because fetch now pushes a
-    // download complete notification.
-    removeNotificationIfAlreadyShowingForCompletedDownload(downloadNotification)
   }
 
   private fun notificationCustomisation(
@@ -275,25 +285,6 @@ class FetchDownloadNotificationManager @Inject constructor(
         context.getString(R.string.open),
         getOpenActionPendingIntent(context, downloadNotification)
       )
-    }
-  }
-
-  /**
-   * We are adding 33 to the groupId (which is the download ID) because the download
-   * complete notification is shown by DownloadMonitorService. If the application resumes
-   * just before the download completes, Fetch in the application might also push a
-   * download complete notification.
-   *
-   * To avoid duplicate notifications, we clear the previous notification if it is already shown.
-   * See #4237 for more information.
-   *
-   * @see DownloadMonitorService.showDownloadCompletedNotification
-   */
-  private fun removeNotificationIfAlreadyShowingForCompletedDownload(
-    downloadNotification: DownloadNotification
-  ) {
-    if (downloadNotification.isCompleted) {
-      downloadNotificationManager.cancel(downloadNotification.groupId + THIRTY_TREE)
     }
   }
 
