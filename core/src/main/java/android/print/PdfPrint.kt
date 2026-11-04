@@ -37,6 +37,7 @@ private fun ParcelFileDescriptor.closeSafely() {
 }
 
 class PdfPrint(private val printAttributes: PrintAttributes) {
+  @Suppress("TooGenericExceptionCaught")
   fun print(
     adapter: PrintDocumentAdapter,
     outputFile: File,
@@ -45,53 +46,85 @@ class PdfPrint(private val printAttributes: PrintAttributes) {
     cancellationSignal: CancellationSignal = CancellationSignal()
   ) {
     adapter.onStart()
-    adapter.onLayout(
-      null,
-      printAttributes,
-      cancellationSignal,
-      object : PrintDocumentAdapter.LayoutResultCallback() {
-        override fun onLayoutFinished(info: PrintDocumentInfo?, changed: Boolean) {
-          if (info == null) {
-            adapter.onFinish()
-            onError("Layout failed: PrintDocumentInfo is null")
-            return
-          }
-          val pfd = runCatching {
-            ParcelFileDescriptor.open(
-              outputFile,
-              ParcelFileDescriptor.MODE_CREATE or ParcelFileDescriptor.MODE_WRITE_ONLY
-            )
-          }.getOrElse {
-            adapter.onFinish()
-            onError(it.message)
-            return
-          }
-          adapter.onWrite(
-            arrayOf(PageRange.ALL_PAGES),
-            pfd,
-            cancellationSignal,
-            object : PrintDocumentAdapter.WriteResultCallback() {
-              override fun onWriteFinished(pages: Array<out PageRange>?) {
-                pfd.closeSafely()
-                adapter.onFinish()
-                onComplete(outputFile)
-              }
-
-              override fun onWriteFailed(error: CharSequence?) {
-                pfd.closeSafely()
-                adapter.onFinish()
-                onError(error)
-              }
+    var isFinished = false
+    try {
+      adapter.onLayout(
+        null,
+        printAttributes,
+        cancellationSignal,
+        object : PrintDocumentAdapter.LayoutResultCallback() {
+          override fun onLayoutFinished(info: PrintDocumentInfo?, changed: Boolean) {
+            if (info == null) {
+              isFinished = true
+              adapter.onFinish()
+              onError("Layout failed: PrintDocumentInfo is null")
+              return
             }
-          )
-        }
+            val pfd = runCatching {
+              ParcelFileDescriptor.open(
+                outputFile,
+                ParcelFileDescriptor.MODE_CREATE or ParcelFileDescriptor.MODE_WRITE_ONLY
+              )
+            }.getOrElse {
+              isFinished = true
+              adapter.onFinish()
+              onError(it.message)
+              return
+            }
+            try {
+              adapter.onWrite(
+                arrayOf(PageRange.ALL_PAGES),
+                pfd,
+                cancellationSignal,
+                object : PrintDocumentAdapter.WriteResultCallback() {
+                  override fun onWriteFinished(pages: Array<out PageRange>?) {
+                    pfd.closeSafely()
+                    isFinished = true
+                    adapter.onFinish()
+                    onComplete(outputFile)
+                  }
 
-        override fun onLayoutFailed(error: CharSequence?) {
-          adapter.onFinish()
-          onError(error)
-        }
-      },
-      null
-    )
+                  override fun onWriteFailed(error: CharSequence?) {
+                    pfd.closeSafely()
+                    isFinished = true
+                    adapter.onFinish()
+                    onError(error)
+                  }
+
+                  override fun onWriteCancelled() {
+                    pfd.closeSafely()
+                    isFinished = true
+                    adapter.onFinish()
+                  }
+                }
+              )
+            } catch (throwable: Throwable) {
+              pfd.closeSafely()
+              isFinished = true
+              adapter.onFinish()
+              throw throwable
+            }
+          }
+
+          override fun onLayoutCancelled() {
+            isFinished = true
+            adapter.onFinish()
+          }
+
+          override fun onLayoutFailed(error: CharSequence?) {
+            isFinished = true
+            adapter.onFinish()
+            onError(error)
+          }
+        },
+        null
+      )
+    } catch (throwable: Throwable) {
+      if (!isFinished) {
+        isFinished = true
+        adapter.onFinish()
+      }
+      throw throwable
+    }
   }
 }

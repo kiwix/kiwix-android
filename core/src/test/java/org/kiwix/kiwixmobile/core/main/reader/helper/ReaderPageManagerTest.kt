@@ -20,6 +20,7 @@ package org.kiwix.kiwixmobile.core.main.reader.helper
 
 import android.content.Context
 import android.os.Build
+import android.os.CancellationSignal
 import android.print.PdfPrint
 import android.print.PrintDocumentAdapter
 import androidx.test.core.app.ApplicationProvider
@@ -27,10 +28,12 @@ import io.mockk.clearAllMocks
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.runner.RunWith
 import org.kiwix.kiwixmobile.core.main.KiwixWebView
@@ -255,6 +258,69 @@ class ReaderPageManagerTest {
     readerPageManager.createPdf(webView)
 
     assertTrue(existingFile.exists())
+  }
+
+  @Test
+  fun `createPdf cancels CancellationSignal when calling coroutine is cancelled`() = runTest {
+    val webView = mockk<KiwixWebView>()
+    val adapter = mockk<PrintDocumentAdapter>(relaxed = true)
+
+    every { webView.progress } returns 100
+    every { webView.title } returns "Article"
+    every { webView.createPrintDocumentAdapter("Article") } returns adapter
+
+    var capturedSignal: CancellationSignal? = null
+    every {
+      pdfPrinter.print(
+        adapter,
+        any(),
+        any(),
+        any(),
+        any()
+      )
+    } answers {
+      capturedSignal = lastArg<CancellationSignal>()
+    }
+
+    val job = launch {
+      readerPageManager.createPdf(webView)
+    }
+    testScheduler.runCurrent()
+
+    assertTrue(capturedSignal != null)
+    assertFalse(capturedSignal!!.isCanceled)
+
+    job.cancel()
+    testScheduler.runCurrent()
+
+    assertTrue(capturedSignal!!.isCanceled)
+  }
+
+  @Test
+  fun `createPdf returns handled failure when printing throws IllegalStateException`() = runTest {
+    val webView = mockk<KiwixWebView>()
+    val adapter = mockk<PrintDocumentAdapter>(relaxed = true)
+
+    every { webView.progress } returns 100
+    every { webView.title } returns "Article"
+    every { webView.createPrintDocumentAdapter("Article") } returns adapter
+
+    val exception = IllegalStateException("printing is already pending")
+    every {
+      pdfPrinter.print(
+        adapter,
+        any(),
+        any(),
+        any(),
+        any()
+      )
+    } throws exception
+
+    val result = readerPageManager.createPdf(webView)
+
+    assertTrue(result.isSuccess)
+    val failure = result.getOrThrow() as ReaderPageManager.CreatePdfResult.Failure
+    assertEquals(exception, failure.throwable)
   }
 
   @Test

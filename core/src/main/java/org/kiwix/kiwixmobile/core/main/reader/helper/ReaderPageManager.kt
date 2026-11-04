@@ -19,8 +19,10 @@
 package org.kiwix.kiwixmobile.core.main.reader.helper
 
 import android.content.Context
+import android.os.CancellationSignal
 import android.print.PdfPrint
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.suspendCancellableCoroutine
 import org.kiwix.kiwixmobile.core.extensions.toSlug
 import org.kiwix.kiwixmobile.core.main.KiwixWebView
@@ -77,18 +79,29 @@ class ReaderPageManager @Inject constructor(
         createNewFile()
       }
 
-      val adapter = webView.createPrintDocumentAdapter(title)
+      val cancellationSignal = CancellationSignal()
+      continuation.invokeOnCancellation {
+        cancellationSignal.cancel()
+      }
 
-      pdfPrinter.print(
-        adapter,
-        pdfFile,
-        onComplete = { file ->
-          continuation.resume(Result.success(CreatePdfResult.Success(file)))
-        },
-        onError = { error ->
-          continuation.resume(Result.success(CreatePdfResult.Failure(Exception("$error"))))
-        }
-      )
+      try {
+        val adapter = webView.createPrintDocumentAdapter(title)
+        pdfPrinter.print(
+          adapter,
+          pdfFile,
+          onComplete = { file ->
+            continuation.resume(Result.success(CreatePdfResult.Success(file)))
+          },
+          onError = { error ->
+            continuation.resume(Result.success(CreatePdfResult.Failure(Exception("$error"))))
+          },
+          cancellationSignal = cancellationSignal
+        )
+      } catch (cancellationException: CancellationException) {
+        throw cancellationException
+      } catch (illegalStateException: IllegalStateException) {
+        continuation.resume(Result.success(CreatePdfResult.Failure(illegalStateException)))
+      }
     }
 
   @Suppress("ReturnCount")
