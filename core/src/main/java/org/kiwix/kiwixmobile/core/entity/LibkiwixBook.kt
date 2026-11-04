@@ -108,6 +108,12 @@ data class LibkiwixBook(
       _mediaCount = mediaCount
     }
 
+  /**
+   * Returns the size of the book as a string. If the size is not set,
+   * it falls back to the native book's size ([Book.getSize]).
+   * [Book.getSize] returns the size in `Bytes`, so this value must always be
+   * set in `Bytes` as well to keep units consistent.
+   */
   var size: String
     get() = _size.ifEmpty { nativeBook?.size?.toString().orEmpty() }
     set(size) {

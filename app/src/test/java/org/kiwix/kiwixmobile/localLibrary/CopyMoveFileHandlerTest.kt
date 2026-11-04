@@ -42,6 +42,7 @@ import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertThrows
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
@@ -66,6 +67,7 @@ import org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState
 import org.kiwix.libzim.Archive
 import org.kiwix.sharedFunctions.MainDispatcherRule
 import java.io.File
+import java.io.FileNotFoundException
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class CopyMoveFileHandlerTest {
@@ -449,6 +451,47 @@ class CopyMoveFileHandlerTest {
       } returns 1000L
 
       assertTrue(fileHandler.isBookLessThan4GB())
+
+      // 1GB file returns true
+      every {
+        selectedFile.length()
+      } returns 1_000_000_000L
+
+      assertTrue(fileHandler.isBookLessThan4GB())
+
+      // 3.99GB file returns true
+      every {
+        selectedFile.length()
+      } returns FOUR_GIGABYTES_IN_BYTES - 1
+
+      assertTrue(fileHandler.isBookLessThan4GB())
+
+      // Documents current behaviour: a negative length (e.g. reported by some
+      // content providers for an unknown size) is treated as "less than 4GB"
+      every {
+        selectedFile.length()
+      } returns -1L
+
+      assertTrue(fileHandler.isBookLessThan4GB())
+
+      every {
+        selectedFile.length()
+      } returns 0L
+
+      assertTrue(fileHandler.isBookLessThan4GB())
+    }
+
+    // Regression test for #5250: FOUR_GIGABYTES_IN_BYTES was previously
+    // FOUR_GIGABYTES_IN_KILOBYTES (4L * 1024L * 1024L = 4_194_304), so a
+    // realistically-sized 100MB book (104_857_600 bytes, well under the real
+    // 4GB limit) was incorrectly treated as too big to copy/move/download.
+    @Test
+    fun ordinarySizedBook_isNotMistakenForOver4Gb() {
+      every {
+        selectedFile.length()
+      } returns 104_857_600L // 100MB
+
+      assertTrue(fileHandler.isBookLessThan4GB())
     }
 
     @Test
@@ -456,26 +499,46 @@ class CopyMoveFileHandlerTest {
       every {
         selectedFile.length()
       } returns FOUR_GIGABYTES_IN_BYTES + 1
-
       assertFalse(fileHandler.isBookLessThan4GB())
-    }
 
-    @Test
-    fun fileOfOneGigabyte_returnsTrue() {
-      every {
-        selectedFile.length()
-      } returns 1_000_000_000L
-
-      assertTrue(fileHandler.isBookLessThan4GB())
-    }
-
-    @Test
-    fun fileOfExactly4Gb_returnsFalse() {
+      // Exactly file 4GB return false
       every {
         selectedFile.length()
       } returns FOUR_GIGABYTES_IN_BYTES
 
       assertFalse(fileHandler.isBookLessThan4GB())
+
+      // 8GB file returns false
+      every {
+        selectedFile.length()
+      } returns FOUR_GIGABYTES_IN_BYTES * 2
+
+      assertFalse(fileHandler.isBookLessThan4GB())
+
+      // Largest possible file size returns false, i.e. no overflow when comparing
+      every {
+        selectedFile.length()
+      } returns Long.MAX_VALUE
+
+      assertFalse(fileHandler.isBookLessThan4GB())
+    }
+
+    @Test
+    fun noSelectedFile_throwsFileNotFoundException() {
+      val handlerWithoutSelectedFile = CopyMoveFileHandler(
+        context = context,
+        kiwixDataStore = kiwixDataStore,
+        storageCalculator = storageCalculator,
+        fat32Checker = fat32Checker,
+        fileOperationHandler = fileOperationHandler,
+        copyMoveProgressBarController = copyMoveProgressBarController,
+        mainDispatcher = mainDispatcherRule.mainDispatcher,
+        ioDispatcher = mainDispatcherRule.dispatcher
+      )
+
+      assertThrows(FileNotFoundException::class.java) {
+        handlerWithoutSelectedFile.isBookLessThan4GB()
+      }
     }
   }
 
