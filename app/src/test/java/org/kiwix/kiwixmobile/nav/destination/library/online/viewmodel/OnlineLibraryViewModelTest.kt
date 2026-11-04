@@ -140,6 +140,7 @@ class OnlineLibraryViewModelTest {
     every { kiwixDataStore.selectedOnlineContentCategory } returns MutableStateFlow("")
     every { kiwixDataStore.selectedOnlineContentLanguage } returns MutableStateFlow("")
     every { kiwixDataStore.prefLanguage } returns MutableStateFlow("")
+    every { libkiwixBookOnDisk.books() } returns flowOf(emptyList())
     val configuration = Configuration()
     configuration.setLocales(LocaleList(Locale.ENGLISH))
     every { context.resources.configuration } returns configuration
@@ -795,7 +796,7 @@ class OnlineLibraryViewModelTest {
 
     @Test
     fun `when success with fresh load then replaces books and scrolls to top`() = runTest {
-      val books = listOf(mockk<LibkiwixBook>(), mockk())
+      val books = listOf(mockk<LibkiwixBook>(relaxed = true), mockk(relaxed = true))
 
       val request = mockk<OnlineLibraryViewModel.OnlineLibraryRequest> {
         every { isLoadMoreItem } returns false
@@ -820,8 +821,8 @@ class OnlineLibraryViewModelTest {
 
     @Test
     fun `when success with load more then appends books`() = runTest {
-      val existing = listOf(mockk<LibkiwixBook>())
-      val newBooks = listOf(mockk<LibkiwixBook>())
+      val existing = listOf(mockk<LibkiwixBook>(relaxed = true))
+      val newBooks = listOf(mockk<LibkiwixBook>(relaxed = true))
 
       viewModel.networkBooks.emit(existing)
 
@@ -1472,8 +1473,8 @@ class OnlineLibraryViewModelTest {
           selectedTabIndex = 0
         )
       )
-      val adyBook1 = mockk<LibkiwixBook>()
-      val afrBook1 = mockk<LibkiwixBook>()
+      val adyBook1 = mockk<LibkiwixBook>(relaxed = true)
+      val afrBook1 = mockk<LibkiwixBook>(relaxed = true)
 
       viewModel.tabDataMap["ady"] = OnlineLibraryViewModel.TabData(
         books = listOf(adyBook1),
@@ -1488,7 +1489,7 @@ class OnlineLibraryViewModelTest {
         isLoaded = true
       )
 
-      val adyBook2 = mockk<LibkiwixBook>()
+      val adyBook2 = mockk<LibkiwixBook>(relaxed = true)
       val successState = OnlineLibraryViewModel.OnlineLibraryState.Success(
         books = listOf(adyBook2),
         totalPages = 5,
@@ -1535,7 +1536,7 @@ class OnlineLibraryViewModelTest {
 
         assertThat(viewModel.currentRequest.lang).isEmpty()
 
-        val book = mockk<LibkiwixBook>()
+        val book = mockk<LibkiwixBook>(relaxed = true)
         val successState = OnlineLibraryViewModel.OnlineLibraryState.Success(
           books = listOf(book),
           totalPages = 1,
