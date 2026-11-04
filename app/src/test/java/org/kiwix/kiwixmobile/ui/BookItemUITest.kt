@@ -20,8 +20,6 @@ package org.kiwix.kiwixmobile.ui
 
 import android.os.Build
 import androidx.compose.ui.test.assertIsDisplayed
-import androidx.compose.ui.test.assertIsOff
-import androidx.compose.ui.test.assertIsOn
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.longClick
 import androidx.compose.ui.test.onNodeWithTag
@@ -198,8 +196,8 @@ class BookItemUITest {
   }
 
   @Test
-  fun bookItem_whenSelectionModeMulti_checkboxIsDisplayed() {
-    val bookOnDisk = createBookOnDisk()
+  fun bookItem_whenSelectionModeMultiAndBookSelected_selectedIconIsDisplayed() {
+    val bookOnDisk = createBookOnDisk(isSelected = true)
 
     bookItem(
       index = 0,
@@ -211,20 +209,7 @@ class BookItemUITest {
   }
 
   @Test
-  fun whenBookSelected_checkboxIsChecked() {
-    val bookOnDisk = createBookOnDisk(isSelected = true)
-
-    bookItem(
-      index = 0,
-      bookOnDisk = bookOnDisk,
-      selectionMode = SelectionMode.MULTI
-    )
-
-    composeTestRule.onNodeWithTag("${BOOK_ITEM_CHECKBOX_TESTING_TAG}0").assertIsOn()
-  }
-
-  @Test
-  fun bookItem_whenBookNotSelected_checkboxIsUnchecked() {
+  fun bookItem_whenSelectionModeMultiAndBookNotSelected_selectedIconIsNotDisplayed() {
     val bookOnDisk = createBookOnDisk(isSelected = false)
 
     bookItem(
@@ -233,12 +218,12 @@ class BookItemUITest {
       selectionMode = SelectionMode.MULTI
     )
 
-    composeTestRule.onNodeWithTag("${BOOK_ITEM_CHECKBOX_TESTING_TAG}0").assertIsOff()
+    composeTestRule.onNodeWithTag("${BOOK_ITEM_CHECKBOX_TESTING_TAG}0").assertDoesNotExist()
   }
 
   @Test
-  fun checkbox_whenClicked_invokesOnMultiSelect() {
-    val bookOnDisk = createBookOnDisk()
+  fun selectedIcon_whenClicked_invokesOnMultiSelect() {
+    val bookOnDisk = createBookOnDisk(isSelected = true)
     var invoked = false
 
     bookItem(

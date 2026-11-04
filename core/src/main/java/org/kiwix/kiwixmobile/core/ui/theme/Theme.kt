@@ -48,6 +48,7 @@ private val DarkColorScheme = darkColorScheme(
   surfaceVariant = MineShaftGray850,
   onSurfaceVariant = MineShaftGray350,
   outlineVariant = MineShaftGray700,
+  primaryContainer = BookItemSelectedBackgroundDark,
 )
 
 private val LightColorScheme = lightColorScheme(
@@ -66,6 +67,7 @@ private val LightColorScheme = lightColorScheme(
   surfaceVariant = LightGrey,
   onSurfaceVariant = MineShaftGray700,
   outlineVariant = MineShaftGray350,
+  primaryContainer = BookItemSelectedBackgroundLight,
 )
 
 @Composable

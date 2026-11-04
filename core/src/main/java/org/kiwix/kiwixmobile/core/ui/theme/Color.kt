@@ -65,3 +65,6 @@ val TagTextOnlyContainerLight = Color(0xFFEAEAEA)
 val TagTextOnlyContentLight = Color(0xFF505050)
 val TagTextOnlyContainerDark = Color(0xFF2C2C2C)
 val TagTextOnlyContentDark = Color(0xFFC0C0C0)
+
+val BookItemSelectedBackgroundLight = Color(0xFFBBDEFB)
+val BookItemSelectedBackgroundDark = Color(0xFF304D66)
