@@ -14,7 +14,7 @@
   <string name="external_redirect_message">You will now be redirected to our %s.</string>
   <string name="support_donation_platform">donation platform</string>
   <string name="about_app_page">about app page</string>
-  <string name="menu_wifi_hotspot">WiFi Hotspot</string>
+  <string name="menu_wifi_hotspot">Hotspot</string>
   <string name="save_media">Save Media</string>
   <string name="save_media_error">An error occurred when trying to save the media!</string>
   <string name="invalid_media_source">The selected media is not found.</string>
@@ -26,7 +26,7 @@
   <string name="open_in_new_tab">Open link in new tab?</string>
   <string name="hotspot_service_channel_name" tools:keep="@string/hotspot_service_channel_name">Hotspot Service Channel</string>
   <string name="hotspot_failed_title">Failed to start hotspot</string>
-  <string name="hotspot_failed_message">It seems like your hotspot is already turned on. Please disable your wifi hotspot to continue.</string>
+  <string name="hotspot_failed_message">It seems like your hotspot is already turned on. Please disable your WiFi hotspot to continue.</string>
   <string name="go_to_wifi_settings_label">Go to WIFI settings</string>
   <string name="connection_refused">Connection refused.</string>
   <string name="hotspot_running" tools:keep="@string/hotspot_running">Running Hotspot</string>
@@ -43,7 +43,7 @@
   <string name="hotspot_dialog_title">Instructions for hosting books</string>
   <string name="wifi_dialog_title">WiFi connection detected</string>
   <string name="wifi_dialog_body">In order to view books on other devices, please ensure that all devices are connected to the same WiFi Network.</string>
-  <string name="hotspot_dialog_message">In order for this feature to work you need to first turn on your WIFI hotspot manually or ensure that the host device and receiver device are on the same WiFi network</string>
+  <string name="hotspot_dialog_message">In order for this feature to work you need to first turn on your WiFi hotspot manually or ensure that the host device and receiver device are on the same WiFi network</string>
   <string name="hotspot_dialog_neutral_button">PROCEED</string>
   <string name="hotspot_channel_description" tools:keep="@string/hotspot_channel_description">Updates about the state of your hotspot/server.</string>
   <string name="hotspot_notification_content_title" tools:keep="@string/hotspot_notification_content_title">Kiwix Hotspot</string>

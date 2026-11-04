@@ -396,7 +396,7 @@ class KiwixMainActivity : CoreMainActivity() {
   override val zimHostDrawerMenuItem: DrawerMenuItem? by lazy {
     DrawerMenuItem(
       title = getString(string.menu_wifi_hotspot),
-      iconRes = drawable.ic_mobile_screen_share_24px,
+      iconRes = drawable.ic_hotspot,
       visible = true,
       onClick = { openZimHostScreen() },
       testingTag = LEFT_DRAWER_ZIM_HOST_ITEM_TESTING_TAG
