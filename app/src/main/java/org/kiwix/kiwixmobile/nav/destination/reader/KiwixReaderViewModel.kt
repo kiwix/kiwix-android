@@ -110,7 +110,8 @@ class KiwixReaderViewModel @Inject constructor(
     readAloudManager,
     donationDialogHandler,
     findInPageManager,
-    mainDispatcher
+    mainDispatcher,
+    ioDispatcher
   ) {
   override fun shouldShowSpellCheckedSuggestions(): Boolean = false
   override fun isBrandedApp(): Boolean = false
