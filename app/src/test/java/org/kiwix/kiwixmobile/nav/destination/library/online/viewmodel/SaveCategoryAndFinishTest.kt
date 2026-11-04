@@ -36,7 +36,12 @@ class SaveCategoryAndFinishTest {
     val lifeCycleScope = TestScope(testScheduler)
     val onDismiss = mockk<() -> Unit>(relaxed = true)
     val category = Category(category = "wikipedia", active = true)
-    SaveCategoryAndFinish(listOf(category), kiwixDataStore, lifeCycleScope, onDismiss).invokeWith(activity)
+    SaveCategoryAndFinish(
+      listOf(category),
+      kiwixDataStore,
+      lifeCycleScope,
+      onDismiss
+    ).invokeWith(activity)
     testScheduler.advanceUntilIdle()
     coVerify { kiwixDataStore.setSelectedOnlineContentCategory(category.category) }
     verify { onDismiss() }
@@ -51,34 +56,19 @@ class SaveCategoryAndFinishTest {
     val category1 = Category(category = "wikipedia", active = true)
     val category2 = Category(category = "gutenberg", active = true)
     val categories = listOf(category1, category2)
-    SaveCategoryAndFinish(categories, kiwixDataStore, lifeCycleScope, onDismiss).invokeWith(activity)
+    SaveCategoryAndFinish(
+      categories,
+      kiwixDataStore,
+      lifeCycleScope,
+      onDismiss
+    ).invokeWith(activity)
     testScheduler.advanceUntilIdle()
     coVerify { kiwixDataStore.setSelectedOnlineContentCategory("wikipedia,gutenberg") }
     verify { onDismiss() }
   }
 
   @Test
-  fun `invoke filters out the all-categories row before saving`() = runTest {
-    // Regression for #5211: the "All categories" row is stored with an empty
-    // category code. Joining it unchecked produced values like ",gutenberg",
-    // which the OPDS server treated as a real filter and returned no entries.
-    val kiwixDataStore = mockk<KiwixDataStore>()
-    val activity = mockk<AppCompatActivity>()
-    val lifeCycleScope = TestScope(testScheduler)
-    val onDismiss = mockk<() -> Unit>(relaxed = true)
-    val allCategories = Category(id = 0, active = true, category = "")
-    val gutenberg = Category(id = 2, active = true, category = "gutenberg")
-
-    SaveCategoryAndFinish(listOf(allCategories, gutenberg), kiwixDataStore, lifeCycleScope, onDismiss)
-      .invokeWith(activity)
-    testScheduler.advanceUntilIdle()
-
-    coVerify { kiwixDataStore.setSelectedOnlineContentCategory("gutenberg") }
-    verify { onDismiss() }
-  }
-
-  @Test
-  fun `invoke saves empty string when only the all-categories row is selected`() = runTest {
+  fun `invoke saves empty string when only the no-categories row is selected`() = runTest {
     val kiwixDataStore = mockk<KiwixDataStore>()
     val activity = mockk<AppCompatActivity>()
     val lifeCycleScope = TestScope(testScheduler)
@@ -86,6 +76,21 @@ class SaveCategoryAndFinishTest {
     val allCategories = Category(id = 0, active = true, category = "")
 
     SaveCategoryAndFinish(listOf(allCategories), kiwixDataStore, lifeCycleScope, onDismiss)
+      .invokeWith(activity)
+    testScheduler.advanceUntilIdle()
+
+    coVerify { kiwixDataStore.setSelectedOnlineContentCategory("") }
+    verify { onDismiss() }
+  }
+
+  @Test
+  fun `invoke saves empty string when a empty list is emitted`() = runTest {
+    val kiwixDataStore = mockk<KiwixDataStore>()
+    val activity = mockk<AppCompatActivity>()
+    val lifeCycleScope = TestScope(testScheduler)
+    val onDismiss = mockk<() -> Unit>(relaxed = true)
+
+    SaveCategoryAndFinish(emptyList(), kiwixDataStore, lifeCycleScope, onDismiss)
       .invokeWith(activity)
     testScheduler.advanceUntilIdle()
 

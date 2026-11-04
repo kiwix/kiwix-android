@@ -39,7 +39,6 @@ class CategoryRepositoryImpl @Inject constructor(
   private val kiwixDataStore: KiwixDataStore,
   @param:IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : CategoryRepository {
-  @Suppress("MagicNumber")
   override fun fetchCategories(): Flow<List<Category>> = flow {
     val feed = kiwixService.getCategories()
     val selectedCategoriesRaw = kiwixDataStore.selectedOnlineContentCategory.first()

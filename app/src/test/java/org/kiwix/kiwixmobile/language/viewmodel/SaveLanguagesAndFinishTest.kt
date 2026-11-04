@@ -32,7 +32,7 @@ import org.kiwix.kiwixmobile.core.zim_manager.Language
 
 class SaveLanguagesAndFinishTest {
   @Test
-  fun `invoke saves and finishes`() = runTest {
+  fun `invoke saves multiple languages and finishes`() = runTest {
     val kiwixDataStore = mockk<KiwixDataStore>()
     coEvery { kiwixDataStore.setSelectedOnlineContentLanguage(any()) } just Runs
     val activity = mockk<AppCompatActivity>()
@@ -48,6 +48,65 @@ class SaveLanguagesAndFinishTest {
     ).invokeWith(activity)
     testScheduler.advanceUntilIdle()
     coEvery { kiwixDataStore.setSelectedOnlineContentLanguage("eng,fra") }
+    testScheduler.advanceUntilIdle()
+    verify { onFinish() }
+  }
+
+  @Test
+  fun `invoke saves single language and finishes`() = runTest {
+    val kiwixDataStore = mockk<KiwixDataStore>()
+    coEvery { kiwixDataStore.setSelectedOnlineContentLanguage(any()) } just Runs
+    val activity = mockk<AppCompatActivity>()
+    val lifeCycleScope = TestScope(testScheduler)
+    val onFinish = mockk<() -> Unit>(relaxed = true)
+    val language = Language(languageCode = "eng", active = true, occurrencesOfLanguage = 1)
+    SaveLanguagesAndFinish(
+      listOf(language),
+      kiwixDataStore,
+      lifeCycleScope,
+      onFinish
+    ).invokeWith(activity)
+    testScheduler.advanceUntilIdle()
+    coEvery { kiwixDataStore.setSelectedOnlineContentLanguage("eng") }
+    testScheduler.advanceUntilIdle()
+    verify { onFinish() }
+  }
+
+  @Test
+  fun `invoke saves empty string when only the no-languages row is selected`() = runTest {
+    val kiwixDataStore = mockk<KiwixDataStore>()
+    coEvery { kiwixDataStore.setSelectedOnlineContentLanguage(any()) } just Runs
+    val activity = mockk<AppCompatActivity>()
+    val lifeCycleScope = TestScope(testScheduler)
+    val onFinish = mockk<() -> Unit>(relaxed = true)
+    val language = Language(languageCode = "", active = true, occurrencesOfLanguage = 1)
+    SaveLanguagesAndFinish(
+      listOf(language),
+      kiwixDataStore,
+      lifeCycleScope,
+      onFinish
+    ).invokeWith(activity)
+    testScheduler.advanceUntilIdle()
+    coEvery { kiwixDataStore.setSelectedOnlineContentLanguage("") }
+    testScheduler.advanceUntilIdle()
+    verify { onFinish() }
+  }
+
+  @Test
+  fun `invoke saves empty string when a empty list is emitted`() = runTest {
+    val kiwixDataStore = mockk<KiwixDataStore>()
+    coEvery { kiwixDataStore.setSelectedOnlineContentLanguage(any()) } just Runs
+    val activity = mockk<AppCompatActivity>()
+    val lifeCycleScope = TestScope(testScheduler)
+    val onFinish = mockk<() -> Unit>(relaxed = true)
+    SaveLanguagesAndFinish(
+      emptyList(),
+      kiwixDataStore,
+      lifeCycleScope,
+      onFinish
+    ).invokeWith(activity)
+    testScheduler.advanceUntilIdle()
+    coEvery { kiwixDataStore.setSelectedOnlineContentLanguage("") }
     testScheduler.advanceUntilIdle()
     verify { onFinish() }
   }

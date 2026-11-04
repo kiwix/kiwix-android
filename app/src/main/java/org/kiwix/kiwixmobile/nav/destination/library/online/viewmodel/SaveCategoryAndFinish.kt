@@ -35,10 +35,7 @@ data class SaveCategoryAndFinish(
   override fun invokeWith(activity: AppCompatActivity) {
     lifecycleScope.launch {
       runCatching {
-        val categoryCodes = categories
-          .map { it.category }
-          .filter { it.isNotEmpty() && !it.equals("all", ignoreCase = true) }
-          .joinToString(",")
+        val categoryCodes = categories.joinToString(",") { it.category }
         kiwixDataStore.setSelectedOnlineContentCategory(categoryCodes)
         onDismiss?.invoke()
       }.onFailure {

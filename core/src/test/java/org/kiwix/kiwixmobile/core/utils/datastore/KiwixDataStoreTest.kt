@@ -528,6 +528,13 @@ class KiwixDataStoreTest {
   }
 
   @Test
+  fun `setSelectedOnlineContentLanguage stores empty value when no languages are selected`() =
+    runTest {
+      kiwixDataStore.setSelectedOnlineContentLanguage("")
+      assertThat(kiwixDataStore.selectedOnlineContentLanguage.first()).isEmpty()
+    }
+
+  @Test
   fun `setSelectedOnlineContentLanguage stores the value`() = runTest {
     kiwixDataStore.setSelectedOnlineContentLanguage("en")
     assertThat(kiwixDataStore.selectedOnlineContentLanguage.first()).isEqualTo("en")
@@ -537,6 +544,13 @@ class KiwixDataStoreTest {
   fun `selectedOnlineContentCategory returns empty by default`() = runTest {
     assertThat(kiwixDataStore.selectedOnlineContentCategory.first()).isEmpty()
   }
+
+  @Test
+  fun `selectedOnlineContentCategory stores empty value when no categories are selected`() =
+    runTest {
+      kiwixDataStore.setSelectedOnlineContentCategory("")
+      assertThat(kiwixDataStore.selectedOnlineContentCategory.first()).isEmpty()
+    }
 
   @Test
   fun `setSelectedOnlineContentCategory stores the value`() = runTest {
@@ -664,6 +678,14 @@ class KiwixDataStoreTest {
   }
 
   @Test
+  fun `saveLanguageList with empty list returns empty cachedLanguageList`() = runTest {
+    kiwixDataStore.saveLanguageList(emptyList())
+    val loaded = kiwixDataStore.cachedLanguageList.first()
+    assertThat(loaded).isNotNull()
+    assertThat(loaded).isEmpty()
+  }
+
+  @Test
   fun `cachedOnlineCategoryList returns null when nothing saved`() = runTest {
     assertThat(kiwixDataStore.cachedOnlineCategoryList.first()).isNull()
   }
@@ -702,6 +724,14 @@ class KiwixDataStoreTest {
     assertThat(loaded).isNotNull()
     assertThat(loaded!!.first { it.category == "wikipedia" }.active).isFalse()
     assertThat(loaded.first { it.category == "FreeCodeCamp" }.active).isTrue()
+  }
+
+  @Test
+  fun `saveOnlineCategoryList with empty list returns empty cachedOnlineCategoryList`() = runTest {
+    kiwixDataStore.saveOnlineCategoryList(emptyList())
+    val loaded = kiwixDataStore.cachedOnlineCategoryList.first()
+    assertThat(loaded).isNotNull()
+    assertThat(loaded).isEmpty()
   }
 
   @Test
