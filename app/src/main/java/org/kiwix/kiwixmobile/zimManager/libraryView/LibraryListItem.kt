@@ -56,7 +56,7 @@ sealed class LibraryListItem {
       private fun LibkiwixBook.isLessThan4GB(): Boolean {
         val parsedSize = size.toLongOrNull()
         return parsedSize == null ||
-          parsedSize < Fat32Checker.FOUR_GIGABYTES_IN_KILOBYTES
+          parsedSize < Fat32Checker.FOUR_GIGABYTES_IN_BYTES
       }
     }
   }

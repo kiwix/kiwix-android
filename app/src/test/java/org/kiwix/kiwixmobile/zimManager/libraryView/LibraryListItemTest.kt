@@ -18,18 +18,28 @@
 
 package org.kiwix.kiwixmobile.zimManager.libraryView
 
+import android.content.Context
+import androidx.core.content.ContextCompat
 import com.tonyodev.fetch2.Error
 import com.tonyodev.fetch2.Status
 import io.mockk.clearAllMocks
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.mockkObject
+import io.mockk.mockkStatic
+import io.mockk.unmockkAll
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
+import org.kiwix.kiwixmobile.core.CoreApp
+import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadModel
 import org.kiwix.kiwixmobile.core.downloader.model.Seconds
 import org.kiwix.kiwixmobile.core.entity.LibkiwixBook
-import org.kiwix.kiwixmobile.zimManager.Fat32Checker.Companion.FOUR_GIGABYTES_IN_KILOBYTES
+import org.kiwix.kiwixmobile.core.zim_manager.KiwixTag.Companion.TagOnly
+import org.kiwix.kiwixmobile.zimManager.Fat32Checker.Companion.FOUR_GIGABYTES_IN_BYTES
 import org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState
 import org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState.CanWrite4GbFile
 import org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState.CannotWrite4GbFile
@@ -40,137 +50,225 @@ import org.kiwix.kiwixmobile.zimManager.libraryView.LibraryListItem.DividerItem
 import org.kiwix.kiwixmobile.zimManager.libraryView.LibraryListItem.LibraryDownloadItem
 
 internal class LibraryListItemTest {
-  private val book = mockk<LibkiwixBook>()
+  @Nested
+  inner class BookItemTest {
+    private val book = mockk<LibkiwixBook>()
 
-  @BeforeEach
-  fun init() {
-    clearAllMocks()
-    every { book.id } returns "0"
-    every { book.size } returns "0"
-    every { book.tags } returns null
+    @BeforeEach
+    fun init() {
+      clearAllMocks()
+      every { book.id } returns "0"
+      every { book.size } returns "0"
+      every { book.tags } returns null
+    }
+
+    @Test
+    fun `BookItem should map tags from book`() {
+      every { book.tags } returns "wikipedia;science"
+
+      val item = BookItem(book, CanWrite4GbFile)
+
+      assertThat(item.tags).containsExactly(
+        TagOnly("wikipedia"),
+        TagOnly("science")
+      )
+    }
+
+    @Test
+    fun `BookItem should generate id from book id`() {
+      every { book.id } returns "abc"
+
+      val item = BookItem(book, CanWrite4GbFile)
+
+      assertThat(item.id).isEqualTo("abc".hashCode().toLong())
+    }
+
+    @Test
+    internal fun `Unknown file system state files under 4GB can be downloaded`() {
+      assertThat(canBeDownloaded(book, DetectingFileSystem)).isTrue
+    }
+
+    @Test
+    internal fun `Unknown file system state greater than 4GB can't be downloaded`() {
+      every { book.size } returns (FOUR_GIGABYTES_IN_BYTES + 1).toString()
+      assertThat(canBeDownloaded(book, DetectingFileSystem)).isFalse
+    }
+
+    @Test
+    internal fun `Unknown file system state empty size can be downloaded`() {
+      every { book.size } returns ""
+      assertThat(canBeDownloaded(book, DetectingFileSystem)).isTrue
+    }
+
+    @Test
+    internal fun `CannotWrite4GbFile file system state can be downloaded`() {
+      assertThat(canBeDownloaded(book, CannotWrite4GbFile)).isTrue
+    }
+
+    @Test
+    internal fun `CannotWrite4GbFile file system state cannot be downloaded if file is too big`() {
+      every { book.size } returns (FOUR_GIGABYTES_IN_BYTES + 1).toString()
+      assertThat(canBeDownloaded(book, CannotWrite4GbFile)).isFalse
+    }
+
+    @Test
+    internal fun `CannotWrite4GbFile file system state can download a 1 GB book`() {
+      every { book.size } returns "1000000000"
+      assertThat(canBeDownloaded(book, CannotWrite4GbFile)).isTrue
+    }
+
+    @Test
+    internal fun `CannotWrite4GbFile file system state can download an ordinary 100MB book`() {
+      every { book.size } returns "104857600"
+      assertThat(canBeDownloaded(book, CannotWrite4GbFile)).isTrue
+    }
+
+    @Test
+    internal fun `CannotWrite4GbFile file system state cannot download a 4 GiB book`() {
+      every { book.size } returns FOUR_GIGABYTES_IN_BYTES.toString()
+      assertThat(canBeDownloaded(book, CannotWrite4GbFile)).isFalse
+    }
+
+    @Test
+    internal fun `CanWrite4GbFile file system state can be downloaded`() {
+      assertThat(canBeDownloaded(book, CanWrite4GbFile)).isTrue
+    }
+
+    @Test
+    internal fun `NotEnoughSpaceFor4GbFile file system state can be downloaded`() {
+      assertThat(canBeDownloaded(book, NotEnoughSpaceFor4GbFile)).isTrue
+    }
+
+    @Test
+    internal fun `NotEnoughSpaceFor4GbFile file system state can be downloaded even for a book over 4GB`() {
+      every { book.size } returns (FOUR_GIGABYTES_IN_BYTES + 1).toString()
+      assertThat(canBeDownloaded(book, NotEnoughSpaceFor4GbFile)).isTrue
+    }
+
+    private fun canBeDownloaded(book: LibkiwixBook, fileSystemState: FileSystemState) =
+      BookItem(book, fileSystemState).canBeDownloaded
   }
 
-  @Test
-  fun `BookItem should map tags from book`() {
-    every { book.tags } returns "wikipedia;science"
+  @Nested
+  inner class DividerItemTest {
+    @Test
+    fun `DividerItem should store values correctly`() {
+      val item = DividerItem(
+        id = 1L,
+        sectionTitle = "Recent"
+      )
 
-    val item = BookItem(book, CanWrite4GbFile)
-
-    assertThat(item.tags).isNotEmpty
+      assertThat(item.id).isEqualTo(1L)
+      assertThat(item.sectionTitle).isEqualTo("Recent")
+    }
   }
 
-  @Test
-  fun `BookItem should generate id from book id`() {
-    every { book.id } returns "abc"
+  @Nested
+  inner class LibraryDownloadItemTest {
+    private lateinit var mockContext: Context
 
-    val item = BookItem(book, CanWrite4GbFile)
+    @BeforeEach
+    fun setUp() {
+      mockContext = mockk(relaxed = true)
+      mockkObject(CoreApp.Companion)
+      mockkStatic(ContextCompat::class)
+      every { CoreApp.instance } returns mockk(relaxed = true)
+      every { ContextCompat.getContextForLanguage(any()) } returns mockContext
+      every { mockContext.getString(R.string.time_minute) } returns "minute"
+      every { mockContext.getString(R.string.time_second) } returns "second"
+      every { mockContext.getString(R.string.time_left) } returns "left"
+    }
 
-    assertThat(item.id).isEqualTo("abc".hashCode().toLong())
-  }
+    @AfterEach
+    fun tearDown() {
+      unmockkAll()
+    }
 
-  @Test
-  internal fun `Unknown file system state files under 4GB can be downloaded`() {
-    assertThat(canBeDownloaded(book, DetectingFileSystem)).isTrue
-  }
+    @Test
+    fun `LibraryDownloadItem constructor should map DownloadModel correctly`() {
+      val book = mockk<LibkiwixBook>()
 
-  @Test
-  internal fun `Unknown file system state greater than 4GB can't be downloaded`() {
-    every { book.size } returns (FOUR_GIGABYTES_IN_KILOBYTES + 1).toString()
-    assertThat(canBeDownloaded(book, DetectingFileSystem)).isFalse
-  }
+      every { book.id } returns "book-id"
+      every { book.favicon } returns "favicon-url"
+      every { book.title } returns "Wikipedia"
+      every { book.description } returns "Description"
+      every { book.url } returns "url"
 
-  @Test
-  internal fun `Unknown file system state empty size can be downloaded`() {
-    every { book.size } returns ""
-    assertThat(canBeDownloaded(book, DetectingFileSystem)).isTrue
-  }
+      val downloadModel = mockk<DownloadModel>()
 
-  @Test
-  internal fun `CannotWrite4GbFile file system state can be downloaded`() {
-    assertThat(canBeDownloaded(book, CannotWrite4GbFile)).isTrue
-  }
+      every { downloadModel.downloadId } returns 10L
+      every { downloadModel.book } returns book
+      every { downloadModel.bytesDownloaded } returns 100L
+      every { downloadModel.totalSizeOfDownload } returns 1000L
+      every { downloadModel.progress } returns 10
+      every { downloadModel.etaInMilliSeconds } returns 0L
+      every { downloadModel.state } returns Status.DOWNLOADING
+      every { downloadModel.error } returns Error.NONE
 
-  @Test
-  internal fun `CannotWrite4GbFile file system state cannot be downloaded if file is too big`() {
-    every { book.size } returns (FOUR_GIGABYTES_IN_KILOBYTES + 1).toString()
-    assertThat(canBeDownloaded(book, CannotWrite4GbFile)).isFalse
-  }
+      val item = LibraryDownloadItem(downloadModel)
 
-  @Test
-  internal fun `CanWrite4GbFile file system state can be downloaded`() {
-    assertThat(canBeDownloaded(book, CanWrite4GbFile)).isTrue
-  }
+      assertThat(item.downloadId).isEqualTo(10L)
+      assertThat(item.title).isEqualTo("Wikipedia")
+      assertThat(item.description).isEqualTo("Description")
+      assertThat(item.bytesDownloaded).isEqualTo(100L)
+      assertThat(item.totalSizeBytes).isEqualTo(1000L)
+      assertThat(item.progress).isEqualTo(10)
+      assertThat(item.eta.seconds).isEqualTo(0L)
+      assertThat(item.currentDownloadState).isEqualTo(Status.DOWNLOADING)
+      assertThat(item.downloadError).isEqualTo(Error.NONE)
+    }
 
-  @Test
-  internal fun `NotEnoughSpaceFor4GbFile file system state can be downloaded`() {
-    assertThat(canBeDownloaded(book, NotEnoughSpaceFor4GbFile)).isTrue
-  }
+    @Test
+    fun `LibraryDownloadItem constructor converts etaInMilliSeconds to whole seconds`() {
+      val book = mockk<LibkiwixBook>(relaxed = true)
+      val downloadModel = mockk<DownloadModel>(relaxed = true)
 
-  private fun canBeDownloaded(book: LibkiwixBook, fileSystemState: FileSystemState) =
-    BookItem(book, fileSystemState).canBeDownloaded
+      every { downloadModel.book } returns book
+      every { downloadModel.etaInMilliSeconds } returns 65_000L
 
-  @Test
-  fun `DividerItem should store values correctly`() {
-    val item = DividerItem(
-      id = 1L,
-      sectionTitle = "Recent"
-    )
+      val item = LibraryDownloadItem(downloadModel)
 
-    assertThat(item.id).isEqualTo(1L)
-    assertThat(item.sectionTitle).isEqualTo("Recent")
-  }
+      assertThat(item.eta.seconds).isEqualTo(65L)
+    }
 
-  @Test
-  fun `LibraryDownloadItem constructor should map DownloadModel correctly`() {
-    val book = mockk<LibkiwixBook>()
+    @Test
+    fun `readableEta should be empty when eta is zero`() {
+      val item = LibraryDownloadItem(
+        downloadId = 1L,
+        favIconUrl = "",
+        title = "",
+        description = "",
+        bytesDownloaded = 0L,
+        totalSizeBytes = 0L,
+        progress = 0,
+        eta = Seconds(0),
+        downloadState = mockk(),
+        id = 1L,
+        currentDownloadState = Status.NONE,
+        downloadError = Error.NONE
+      )
 
-    every { book.id } returns "book-id"
-    every { book.favicon } returns "favicon-url"
-    every { book.title } returns "Wikipedia"
-    every { book.description } returns "Description"
-    every { book.url } returns "url"
+      assertThat(item.readableEta).isEmpty()
+    }
 
-    val downloadModel = mockk<DownloadModel>()
+    @Test
+    fun `readableEta should return formatted time when eta is greater than zero`() {
+      val item = LibraryDownloadItem(
+        downloadId = 1L,
+        favIconUrl = "",
+        title = "",
+        description = "",
+        bytesDownloaded = 0L,
+        totalSizeBytes = 0L,
+        progress = 0,
+        eta = Seconds(90),
+        downloadState = mockk(),
+        id = 1L,
+        currentDownloadState = Status.NONE,
+        downloadError = Error.NONE
+      )
 
-    every { downloadModel.downloadId } returns 10L
-    every { downloadModel.book } returns book
-    every { downloadModel.bytesDownloaded } returns 100L
-    every { downloadModel.totalSizeOfDownload } returns 1000L
-    every { downloadModel.progress } returns 10
-    every { downloadModel.etaInMilliSeconds } returns 0L
-    every { downloadModel.state } returns Status.DOWNLOADING
-    every { downloadModel.error } returns Error.NONE
-
-    val item = LibraryDownloadItem(downloadModel)
-
-    assertThat(item.downloadId).isEqualTo(10L)
-    assertThat(item.title).isEqualTo("Wikipedia")
-    assertThat(item.description).isEqualTo("Description")
-    assertThat(item.bytesDownloaded).isEqualTo(100L)
-    assertThat(item.totalSizeBytes).isEqualTo(1000L)
-    assertThat(item.progress).isEqualTo(10)
-    assertThat(item.eta.seconds).isEqualTo(0L)
-    assertThat(item.currentDownloadState).isEqualTo(Status.DOWNLOADING)
-    assertThat(item.downloadError).isEqualTo(Error.NONE)
-  }
-
-  @Test
-  fun `readableEta should be empty when eta is zero`() {
-    val item = LibraryListItem.LibraryDownloadItem(
-      downloadId = 1L,
-      favIconUrl = "",
-      title = "",
-      description = "",
-      bytesDownloaded = 0L,
-      totalSizeBytes = 0L,
-      progress = 0,
-      eta = Seconds(0),
-      downloadState = mockk(),
-      id = 1L,
-      currentDownloadState = Status.NONE,
-      downloadError = Error.NONE
-    )
-
-    assertThat(item.readableEta).isEmpty()
+      assertThat(item.readableEta).isEqualTo("2 minute left")
+    }
   }
 }

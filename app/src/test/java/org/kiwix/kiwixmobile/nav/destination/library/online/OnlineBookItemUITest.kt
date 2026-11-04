@@ -52,6 +52,7 @@ import org.kiwix.kiwixmobile.core.zim_manager.Byte
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.HumanReadableCount
 import org.kiwix.kiwixmobile.ui.BookItemScreen.BOOK_ARTICLE_COUNT_TEST_TAG
 import org.kiwix.kiwixmobile.ui.formatBookDate
+import org.kiwix.kiwixmobile.zimManager.Fat32Checker.Companion.FOUR_GIGABYTES_IN_BYTES
 import org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState
 import org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState.CanWrite4GbFile
 import org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState.CannotWrite4GbFile
@@ -327,9 +328,40 @@ class OnlineBookItemUITest {
   }
 
   @Test
+  fun onlineBookItem_whenNotEnoughSpaceFor4GbFileAndBookTooLarge_cardNotClickableOverlayInvokesCallback() {
+    val book = mockLibkiwixBook(size = (FOUR_GIGABYTES_IN_BYTES + 1).toString())
+    coEvery {
+      mockAvailableSpaceCalculator.hasAvailableSpaceForBook(book)
+    } returns false
+    val item = mockBookItem(book = book, fileSystemState = NotEnoughSpaceFor4GbFile)
+    setContent(item = item)
+
+    composeTestRule
+      .onNodeWithTag(ONLINE_BOOK_OVERLAY_TESTING_TAG)
+      .assertExists()
+      .performClick()
+    verify(exactly = 1) { mockOnBookItemClick.invoke(item) }
+  }
+
+  @Test
+  fun onlineBookItem_whenNotEnoughSpaceFor4GbFileAndSpaceAvailableForLargeBook_bookIsClickable() {
+    val book = mockLibkiwixBook(size = (FOUR_GIGABYTES_IN_BYTES + 1).toString())
+    coEvery {
+      mockAvailableSpaceCalculator.hasAvailableSpaceForBook(book)
+    } returns true
+    val item = mockBookItem(book = book, fileSystemState = NotEnoughSpaceFor4GbFile)
+    setContent(item = item)
+
+    composeTestRule
+      .onNodeWithTag(ONLINE_BOOK_ITEM_TESTING_TAG)
+      .performClick()
+    verify(exactly = 1) { mockOnBookItemClick.invoke(item) }
+  }
+
+  @Test
   fun onlineBookItem_whenLargeBookAndCanWrite4GbFile_bookIsClickable() {
     val item = mockBookItem(
-      book = mockLibkiwixBook(size = "5000000"),
+      book = mockLibkiwixBook(size = (FOUR_GIGABYTES_IN_BYTES + 1).toString()),
       fileSystemState = CanWrite4GbFile
     )
     setContent(item = item)
@@ -412,10 +444,26 @@ class OnlineBookItemUITest {
   }
 
   @Test
+  fun onlineBookItem_whenDetectingFileSystemAndBookTooLarge_overlayExistsEvenWithSpaceAvailable() {
+    coEvery {
+      mockAvailableSpaceCalculator.hasAvailableSpaceForBook(any())
+    } returns true
+    setContent(
+      item = mockBookItem(
+        book = mockLibkiwixBook(size = (FOUR_GIGABYTES_IN_BYTES + 1).toString()),
+        fileSystemState = DetectingFileSystem
+      )
+    )
+    composeTestRule
+      .onNodeWithTag(ONLINE_BOOK_OVERLAY_TESTING_TAG)
+      .assertExists()
+  }
+
+  @Test
   fun onlineBookItem_whenCannotWrite4GbFile_overlayExistsInTree() {
     setContent(
       item = mockBookItem(
-        book = mockLibkiwixBook(size = "5000000"),
+        book = mockLibkiwixBook(size = (FOUR_GIGABYTES_IN_BYTES + 1).toString()),
         fileSystemState = CannotWrite4GbFile
       )
     )
@@ -428,7 +476,7 @@ class OnlineBookItemUITest {
   fun onlineBookItem_whenLargeBookAndCanWrite4GbFile_overlayDoesNotExist() {
     setContent(
       item = mockBookItem(
-        book = mockLibkiwixBook(size = "5000000"),
+        book = mockLibkiwixBook(size = (FOUR_GIGABYTES_IN_BYTES + 1).toString()),
         fileSystemState = CanWrite4GbFile
       )
     )
@@ -510,7 +558,7 @@ class OnlineBookItemUITest {
   fun onlineBookItem_whenCannotWrite4GbFile_overlayAbsorbsClick() {
     setContent(
       item = mockBookItem(
-        book = mockLibkiwixBook(size = "5000000"),
+        book = mockLibkiwixBook(size = (FOUR_GIGABYTES_IN_BYTES + 1).toString()),
         fileSystemState = CannotWrite4GbFile
       )
     )
@@ -554,8 +602,10 @@ class OnlineBookItemUITest {
 
   @Test
   fun onlineBookItem_multipleItems_titlesAreDistinctByIndex() {
-    val item1 = mockBookItem(book = mockLibkiwixBook(id = "book-id-1", title = "Kotlin", date = "2024-01-01"))
-    val item2 = mockBookItem(book = mockLibkiwixBook(id = "book-id-2", title = "Java", date = "2024-01-01"))
+    val item1 =
+      mockBookItem(book = mockLibkiwixBook(id = "book-id-1", title = "Kotlin", date = "2024-01-01"))
+    val item2 =
+      mockBookItem(book = mockLibkiwixBook(id = "book-id-2", title = "Java", date = "2024-01-01"))
     val formattedDate = formatBookDate("2024-01-01")
     composeTestRule.setContent {
       Column {
