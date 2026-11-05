@@ -40,6 +40,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.test.advanceTimeBy
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.assertj.core.api.Assertions.assertThat
@@ -655,6 +656,60 @@ class OnlineLibraryViewModelTest {
       advanceUntilIdle()
       verify(exactly = 0) { spyVm.updateOnlineLibraryFilters(any()) }
     }
+  }
+
+  @Nested
+  inner class CategoryDialogDebounce {
+    @Test
+    fun `category toggles while dialog is open are applied once, only after it closes`() =
+      runTest {
+        val categoryFlow = MutableStateFlow("")
+        every { kiwixDataStore.selectedOnlineContentCategory } returns categoryFlow
+
+        val dialogViewModel = OnlineLibraryViewModel(
+          downloaderProvider,
+          kiwixDataStore,
+          bookUtils,
+          libkiwixBookOnDisk,
+          downloadDao,
+          availableSpaceCalculator,
+          permissionChecker,
+          context,
+          connectivityObserver,
+          connectivityManager,
+          observeItems,
+          resolveClick,
+          observeLibrary,
+          refreshAction,
+          observeNetwork,
+          storageDeviceProvider,
+          onlineLibraryTabsUseCase,
+          mainDispatcherRule.dispatcher
+        )
+
+        dialogViewModel.onlineLibraryRequest.test {
+          // Consume the request emitted once for the initial (empty) filter state.
+          advanceUntilIdle()
+          awaitItem()
+
+          dialogViewModel.setShowCategoryDialog(true)
+          categoryFlow.value = "wikipedia"
+          advanceTimeBy(200.milliseconds)
+          categoryFlow.value = "wikipedia,gutenberg"
+          advanceTimeBy(200.milliseconds)
+          categoryFlow.value = "wikipedia,gutenberg,ted"
+          advanceTimeBy(1000.milliseconds)
+          expectNoEvents()
+
+          dialogViewModel.setShowCategoryDialog(false)
+          advanceTimeBy(600.milliseconds)
+          assertEquals("wikipedia,gutenberg,ted", awaitItem().category)
+
+          cancelAndIgnoreRemainingEvents()
+        }
+
+        dialogViewModel.onClearedExposed()
+      }
   }
 
   @Nested

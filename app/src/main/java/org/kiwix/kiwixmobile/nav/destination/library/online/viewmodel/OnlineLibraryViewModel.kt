@@ -42,6 +42,7 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
@@ -355,13 +356,16 @@ class OnlineLibraryViewModel @Inject constructor(
   @Suppress("MagicNumber")
   private fun observeFilters() =
     combine(
+      uiState.map { it.showCategoryDialog }.distinctUntilChanged(),
       kiwixDataStore.selectedOnlineContentCategory,
       kiwixDataStore.selectedOnlineContentLanguage,
       uiState.map { it.searchQuery }.distinctUntilChanged().debounce(500.milliseconds),
       kiwixDataStore.prefLanguage
-    ) { category, language, searchQuery, _ ->
-      FiltersInput(category, language, searchQuery)
+    ) { showCategoryDialog, category, language, searchQuery, _ ->
+      FiltersInput(category, language, searchQuery).takeUnless { showCategoryDialog }
     }
+      .distinctUntilChanged()
+      .filterNotNull()
       .onEach { handleFiltersChanged(it) }
       .flowOn(ioDispatcher)
       .launchIn(viewModelScope)
