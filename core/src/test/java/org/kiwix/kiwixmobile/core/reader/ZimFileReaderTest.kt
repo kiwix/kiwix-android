@@ -24,6 +24,8 @@ import kotlinx.coroutines.Dispatchers
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.CsvSource
 import org.kiwix.kiwixmobile.core.zim_manager.Byte
 import org.kiwix.libzim.Archive
 import org.kiwix.libzim.SuggestionSearcher
@@ -32,26 +34,40 @@ import java.io.File
 class ZimFileReaderTest {
   @Nested
   inner class FileSizeTest {
-    private val archive: SizedArchive = mockk(relaxed = true) {
-      every { filesize } returns 357_269L
+    private fun readerForArchiveSize(sizeInBytes: Long): ZimFileReader {
+      val archive: SizedArchive = mockk(relaxed = true) {
+        every { filesize } returns sizeInBytes
+      }
+      return ZimFileReader(
+        ZimReaderSource(File("testzim.zim")),
+        archive,
+        mockk<SuggestionSearcher>(relaxed = true),
+        Dispatchers.Unconfined
+      )
     }
-    private val reader = ZimFileReader(
-      ZimReaderSource(File("testzim.zim")),
-      archive,
-      mockk<SuggestionSearcher>(relaxed = true),
-      Dispatchers.Unconfined
+
+    @ParameterizedTest
+    @CsvSource(
+      "357269",
+      "8200000",
+      "1490000000",
+      "1000000000000"
     )
-
-    @Test
-    fun fileSizeIsTheArchiveSizeInBytes() {
-      assertEquals(357_269L, reader.fileSize)
+    fun fileSizeIsTheArchiveSizeInBytes(sizeInBytes: Long) {
+      assertEquals(sizeInBytes, readerForArchiveSize(sizeInBytes).fileSize)
     }
 
-    @Test
-    fun bookSizeIsInBytes() {
-      val book = reader.toBook()
-      assertEquals("357269", book.size)
-      assertEquals("357 KB", Byte(book.size).humanReadable)
+    @ParameterizedTest
+    @CsvSource(
+      "357269, 357 KB",
+      "8200000, 8.2 MB",
+      "1490000000, 1.5 GB",
+      "1000000000000, 1 TB"
+    )
+    fun bookSizeIsInBytesAndHumanReadableAcrossUnits(sizeInBytes: Long, humanReadable: String) {
+      val book = readerForArchiveSize(sizeInBytes).toBook()
+      assertEquals("$sizeInBytes", book.size)
+      assertEquals(humanReadable, Byte(book.size).humanReadable)
     }
   }
 
