@@ -34,6 +34,7 @@ import androidx.compose.ui.test.performScrollToNode
 import applyWithViewHierarchyPrinting
 import org.kiwix.kiwixmobile.BaseRobot
 import org.kiwix.kiwixmobile.R
+import org.kiwix.kiwixmobile.core.ui.components.NAVIGATION_ICON_TESTING_TAG
 import org.kiwix.kiwixmobile.core.ui.components.TOOLBAR_TITLE_TESTING_TAG
 import org.kiwix.kiwixmobile.core.utils.files.Log
 import org.kiwix.kiwixmobile.nav.destination.library.online.CATEGORY_ITEM_CHECKBOX_TESTING_TAG
@@ -56,7 +57,7 @@ class OnlineCategoryRobot : BaseRobot() {
   fun clickOnCloseDialogIcon(composeTestRule: ComposeContentTestRule) {
     composeTestRule.apply {
       waitForIdle()
-      onAllNodesWithContentDescription("Close Drawer").onFirst().performClick()
+      onAllNodesWithTag(NAVIGATION_ICON_TESTING_TAG).onFirst().performClick()
     }
   }
 

@@ -73,11 +73,9 @@ class OnlineCategoryTest : BaseActivityTest() {
       clickOnCategoryMenuIcon(composeTestRule)
       assertCategoryDialogDisplayed(composeTestRule)
       waitForCategoryToLoad(composeTestRule)
-      // Selecting a category saves the filter immediately, but the dialog
-      // stays open so multiple categories can be selected in one session.
       selectCategory(composeTestRule, "gutenberg")
       selectCategory(composeTestRule, "wikipedia")
-      // Close the dialog and reopen: both selections were saved.
+      // Assert categories are saved. Close dialog and re-open.
       clickOnCloseDialogIcon(composeTestRule)
       clickOnCategoryMenuIcon(composeTestRule)
       assertCategoryDialogDisplayed(composeTestRule)
