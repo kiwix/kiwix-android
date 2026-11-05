@@ -17,6 +17,5 @@
   <string name="no_category_available">Нема категории на располагање</string>
   <string name="your_selected_category">Избрана категорија:</string>
   <string name="other_categories">Други категории:</string>
-  <string name="all_categories">Сите категории</string>
   <string name="select_category_content_description">Ако ја изберете оваа категорија, тогаш најгоре предност ќе имаат преземливите книги на тој јазик.</string>
 </resources>

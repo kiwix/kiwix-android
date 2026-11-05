@@ -21,50 +21,43 @@ package org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel
 import androidx.appcompat.app.AppCompatActivity
 import io.mockk.coVerify
 import io.mockk.mockk
-import io.mockk.verify
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.zim_manager.Category
 
-class SaveCategoryAndFinishTest {
+class SaveCategoryTest {
   @Test
-  fun `invoke saves single category and finishes`() = runTest {
+  fun `invoke saves single category`() = runTest {
     val kiwixDataStore = mockk<KiwixDataStore>()
     val activity = mockk<AppCompatActivity>()
     val lifeCycleScope = TestScope(testScheduler)
-    val onDismiss = mockk<() -> Unit>(relaxed = true)
     val category = Category(category = "wikipedia", active = true)
-    SaveCategoryAndFinish(
+    SaveCategory(
       listOf(category),
       kiwixDataStore,
-      lifeCycleScope,
-      onDismiss
+      lifeCycleScope
     ).invokeWith(activity)
     testScheduler.advanceUntilIdle()
     coVerify { kiwixDataStore.setSelectedOnlineContentCategory(category.category) }
-    verify { onDismiss() }
   }
 
   @Test
-  fun `invoke saves multiple categories and finishes`() = runTest {
+  fun `invoke saves multiple categories`() = runTest {
     val kiwixDataStore = mockk<KiwixDataStore>()
     val activity = mockk<AppCompatActivity>()
     val lifeCycleScope = TestScope(testScheduler)
-    val onDismiss = mockk<() -> Unit>(relaxed = true)
     val category1 = Category(category = "wikipedia", active = true)
     val category2 = Category(category = "gutenberg", active = true)
     val categories = listOf(category1, category2)
-    SaveCategoryAndFinish(
+    SaveCategory(
       categories,
       kiwixDataStore,
-      lifeCycleScope,
-      onDismiss
+      lifeCycleScope
     ).invokeWith(activity)
     testScheduler.advanceUntilIdle()
     coVerify { kiwixDataStore.setSelectedOnlineContentCategory("wikipedia,gutenberg") }
-    verify { onDismiss() }
   }
 
   @Test
@@ -72,15 +65,13 @@ class SaveCategoryAndFinishTest {
     val kiwixDataStore = mockk<KiwixDataStore>()
     val activity = mockk<AppCompatActivity>()
     val lifeCycleScope = TestScope(testScheduler)
-    val onDismiss = mockk<() -> Unit>(relaxed = true)
     val allCategories = Category(id = 0, active = true, category = "")
 
-    SaveCategoryAndFinish(listOf(allCategories), kiwixDataStore, lifeCycleScope, onDismiss)
+    SaveCategory(listOf(allCategories), kiwixDataStore, lifeCycleScope)
       .invokeWith(activity)
     testScheduler.advanceUntilIdle()
 
     coVerify { kiwixDataStore.setSelectedOnlineContentCategory("") }
-    verify { onDismiss() }
   }
 
   @Test
@@ -88,13 +79,11 @@ class SaveCategoryAndFinishTest {
     val kiwixDataStore = mockk<KiwixDataStore>()
     val activity = mockk<AppCompatActivity>()
     val lifeCycleScope = TestScope(testScheduler)
-    val onDismiss = mockk<() -> Unit>(relaxed = true)
 
-    SaveCategoryAndFinish(emptyList(), kiwixDataStore, lifeCycleScope, onDismiss)
+    SaveCategory(emptyList(), kiwixDataStore, lifeCycleScope)
       .invokeWith(activity)
     testScheduler.advanceUntilIdle()
 
     coVerify { kiwixDataStore.setSelectedOnlineContentCategory("") }
-    verify { onDismiss() }
   }
 }

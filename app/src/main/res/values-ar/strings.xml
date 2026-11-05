@@ -19,6 +19,5 @@
   <string name="no_category_available">لا توجد فئات متاحة</string>
   <string name="your_selected_category">الفئة المختارة:</string>
   <string name="other_categories">فئات أخرى:</string>
-  <string name="all_categories">جميع الفئات</string>
   <string name="select_category_content_description">سيؤدي اختيار هذه الفئة إلى إعطاء الأولوية لعرض الكتب القابلة للتنزيل بتلك اللغة في الأعلى.</string>
 </resources>

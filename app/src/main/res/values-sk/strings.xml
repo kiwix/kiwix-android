@@ -18,6 +18,5 @@
   <string name="no_category_available">Nie sú dostupné žiadne kategórie</string>
   <string name="your_selected_category">Vybraná kategória:</string>
   <string name="other_categories">Ostatné kategórie:</string>
-  <string name="all_categories">Všetky kategórie</string>
   <string name="select_category_content_description">Výberom tejto kategórie sa uprednostní zobrazovanie stiahnuteľných kníh v danom jazyku navrchu.</string>
 </resources>

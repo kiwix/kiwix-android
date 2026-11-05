@@ -35,7 +35,6 @@ import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -94,9 +93,7 @@ class CategoryViewModelTest {
         kiwixDataStore,
         observeCategories,
         connectivityObserver
-      ).apply {
-        setOnDismissCallback { }
-      }
+      )
   }
 
   @Nested
@@ -213,45 +210,6 @@ class CategoryViewModelTest {
   }
 
   @Nested
-  inner class OnDialogOpen {
-    @Test
-    fun onDialogOpened_whenSavingState_restoresContent() {
-      createViewModel()
-
-      val content = State.Content(
-        listOf(createCategory())
-      )
-
-      categoryViewModel.state.value = State.Saving(content)
-
-      categoryViewModel.onDialogOpened()
-
-      assertEquals(
-        content,
-        categoryViewModel.state.value
-      )
-    }
-
-    @Test
-    fun onDialogOpened_whenNotSavingState_doesNothing() {
-      createViewModel()
-
-      val content = State.Content(
-        listOf(createCategory())
-      )
-
-      categoryViewModel.state.value = content
-
-      categoryViewModel.onDialogOpened()
-
-      assertEquals(
-        content,
-        categoryViewModel.state.value
-      )
-    }
-  }
-
-  @Nested
   inner class ObserveActions {
     @Nested
     inner class Reduce {
@@ -335,62 +293,6 @@ class CategoryViewModelTest {
       }
 
       @Nested
-      inner class Filter {
-        @Test
-        fun filter_whenContentState_updatesContent() = runTest {
-          coEvery {
-            observeCategories(
-              any(),
-              any(),
-              any()
-            )
-          } returns ObserveCategories.Result.Success(emptyList())
-          createViewModel()
-          advanceUntilIdle()
-
-          val categoriesList =
-            listOf(
-              createCategory(category = "Wikipedia"),
-              createCategory(id = 2, category = "Gutenburg")
-            )
-
-          categoryViewModel.state.value = State.Content(categoriesList)
-          categoryViewModel.actions.emit(Action.Filter("Wiki"))
-
-          advanceUntilIdle()
-
-          val content = categoryViewModel.state.value as State.Content
-
-          assertEquals("Wikipedia", content.items.first().category)
-        }
-
-        @Test
-        fun filter_whenNotContentState_emitsCurrentState() = runTest {
-          coEvery {
-            observeCategories(
-              any(),
-              any(),
-              any()
-            )
-          } returns ObserveCategories.Result.Success(emptyList())
-          createViewModel()
-          advanceUntilIdle()
-
-          val currentState = State.Error(errorMessage)
-
-          categoryViewModel.state.value = currentState
-          categoryViewModel.actions.emit(Action.Filter("Wiki"))
-
-          advanceUntilIdle()
-
-          assertEquals(
-            currentState,
-            categoryViewModel.state.value
-          )
-        }
-      }
-
-      @Nested
       inner class Select {
         @Test
         fun select_whenContentState_savesImmediatelyAndKeepsDialogOpen() = runTest {
@@ -426,8 +328,8 @@ class CategoryViewModelTest {
           // user can select/deselect more categories — no Saving state, no
           // dismissal on selection (review feedback on #5215).
           assertThat(categoryViewModel.state.value).isInstanceOf(State.Content::class.java)
-          assertThat(sideEffect).isInstanceOf(SaveCategoryAndFinish::class.java)
-          val saveEffect = sideEffect as SaveCategoryAndFinish
+          assertThat(sideEffect).isInstanceOf(SaveCategory::class.java)
+          val saveEffect = sideEffect as SaveCategory
           assertThat(saveEffect.categories.map { it.category })
             .containsExactly("Wikipedia", "Gutenberg")
 
@@ -452,218 +354,6 @@ class CategoryViewModelTest {
           categoryViewModel.actions.emit(
             Action.Select(CategoryListItem.CategoryItem(createCategory()))
           )
-
-          advanceUntilIdle()
-
-          assertEquals(currentState, categoryViewModel.state.value)
-        }
-      }
-
-      @Nested
-      inner class ClearAll {
-        @Test
-        fun clearAll_whenContentState_clearsAllSelections() = runTest {
-          coEvery {
-            observeCategories(
-              any(),
-              any(),
-              any()
-            )
-          } returns ObserveCategories.Result.Success(emptyList())
-          createViewModel()
-          advanceUntilIdle()
-
-          val wikipedia = createCategory(active = true)
-          val gutenberg = createCategory(id = 2, active = true, category = "Gutenberg")
-
-          categoryViewModel.state.value = State.Content(listOf(wikipedia, gutenberg))
-          categoryViewModel.actions.emit(Action.ClearAll)
-
-          advanceUntilIdle()
-
-          val content = categoryViewModel.state.value as State.Content
-          assertTrue(content.items.none { it.active })
-        }
-
-        @Test
-        fun clearAll_whenNotContentState_emitsCurrentState() = runTest {
-          coEvery {
-            observeCategories(
-              any(),
-              any(),
-              any()
-            )
-          } returns ObserveCategories.Result.Success(emptyList())
-          createViewModel()
-          advanceUntilIdle()
-
-          val currentState = State.Error(errorMessage)
-
-          categoryViewModel.state.value = currentState
-          categoryViewModel.actions.emit(Action.ClearAll)
-
-          advanceUntilIdle()
-
-          assertEquals(currentState, categoryViewModel.state.value)
-        }
-      }
-
-      @Nested
-      inner class SelectAll {
-        @Test
-        fun selectAll_whenContentState_selectAllSelections() = runTest {
-          coEvery {
-            observeCategories(
-              any(),
-              any(),
-              any()
-            )
-          } returns ObserveCategories.Result.Success(emptyList())
-          createViewModel()
-          advanceUntilIdle()
-
-          val wikipedia = createCategory(active = false)
-          val gutenberg = createCategory(id = 2, active = false, category = "Gutenberg")
-
-          categoryViewModel.state.value = State.Content(listOf(wikipedia, gutenberg))
-          categoryViewModel.actions.emit(Action.SelectAll)
-
-          advanceUntilIdle()
-
-          val content = categoryViewModel.state.value as State.Content
-          assertTrue(content.items.all { it.active })
-        }
-
-        @Test
-        fun selectAll_whenNotContentState_emitsCurrentState() = runTest {
-          coEvery {
-            observeCategories(
-              any(),
-              any(),
-              any()
-            )
-          } returns ObserveCategories.Result.Success(emptyList())
-          createViewModel()
-          advanceUntilIdle()
-
-          val currentState = State.Error(errorMessage)
-
-          categoryViewModel.state.value = currentState
-          categoryViewModel.actions.emit(Action.SelectAll)
-
-          advanceUntilIdle()
-
-          assertEquals(currentState, categoryViewModel.state.value)
-        }
-      }
-
-      @Nested
-      inner class Cancel {
-        @Test
-        fun cancel_whenContentState_emitsCancelSideEffect() = runTest {
-          coEvery {
-            observeCategories(
-              any(),
-              any(),
-              any()
-            )
-          } returns ObserveCategories.Result.Success(emptyList())
-          createViewModel()
-          advanceUntilIdle()
-
-          categoryViewModel.state.value = State.Content(listOf(createCategory()))
-
-          var sideEffect: SideEffect<*>? = null
-          val collectJob = launch(UnconfinedTestDispatcher(testScheduler)) {
-            categoryViewModel.effects.collect {
-              sideEffect = it
-            }
-          }
-
-          categoryViewModel.actions.emit(Action.Cancel)
-          advanceUntilIdle()
-
-          assertThat(sideEffect).isNotNull
-          collectJob.cancel()
-        }
-
-        @Test
-        fun cancel_whenNotContentState_emitsCurrentState() = runTest {
-          coEvery {
-            observeCategories(
-              any(),
-              any(),
-              any()
-            )
-          } returns ObserveCategories.Result.Success(emptyList())
-          createViewModel()
-          advanceUntilIdle()
-
-          val currentState = State.Error(errorMessage)
-
-          categoryViewModel.state.value = currentState
-          categoryViewModel.actions.emit(Action.Cancel)
-
-          advanceUntilIdle()
-
-          assertEquals(currentState, categoryViewModel.state.value)
-        }
-      }
-
-      @Nested
-      inner class Save {
-        @Test
-        fun save_whenContentState_returnsSavingAndEmitsSideEffect() = runTest {
-          coEvery {
-            observeCategories(
-              any(),
-              any(),
-              any()
-            )
-          } returns ObserveCategories.Result.Success(emptyList())
-          createViewModel()
-          advanceUntilIdle()
-
-          val wikipedia = createCategory(active = true)
-          val gutenberg = createCategory(id = 2, active = false, category = "Gutenberg")
-
-          categoryViewModel.state.value = State.Content(listOf(wikipedia, gutenberg))
-
-          var sideEffect: SideEffect<*>? = null
-          val collectJob = launch(UnconfinedTestDispatcher(testScheduler)) {
-            categoryViewModel.effects.collect {
-              sideEffect = it
-            }
-          }
-
-          categoryViewModel.actions.emit(Action.Save)
-          advanceUntilIdle()
-
-          assertThat(categoryViewModel.state.value).isInstanceOf(State.Saving::class.java)
-
-          assertThat(sideEffect).isInstanceOf(SaveCategoryAndFinish::class.java)
-          val saveEffect = sideEffect as SaveCategoryAndFinish
-          assertThat(saveEffect.categories.map { it.category }).containsExactly("Wikipedia")
-
-          collectJob.cancel()
-        }
-
-        @Test
-        fun save_whenNotContentState_emitsCurrentState() = runTest {
-          coEvery {
-            observeCategories(
-              any(),
-              any(),
-              any()
-            )
-          } returns ObserveCategories.Result.Success(emptyList())
-          createViewModel()
-          advanceUntilIdle()
-
-          val currentState = State.Error(errorMessage)
-
-          categoryViewModel.state.value = currentState
-          categoryViewModel.actions.emit(Action.Save)
 
           advanceUntilIdle()
 

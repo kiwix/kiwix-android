@@ -22,6 +22,5 @@
   <string name="no_category_available">Категории недоступны</string>
   <string name="your_selected_category">Выбранная категория:</string>
   <string name="other_categories">Другие категории</string>
-  <string name="all_categories">Все категории</string>
   <string name="select_category_content_description">Выбор этой категории приведёт к тому, что вверху списка будут отображаться книги, доступные для скачивания на этом языке.</string>
 </resources>

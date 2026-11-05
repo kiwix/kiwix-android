@@ -17,6 +17,5 @@
   <string name="no_category_available">Kategorije niso na voljo</string>
   <string name="your_selected_category">Izbrana kategorija:</string>
   <string name="other_categories">Druge kategorije:</string>
-  <string name="all_categories">Vse kategorije</string>
   <string name="select_category_content_description">Če boste izbrali to kategorijo, boste na vrhu prednostno prikazali knjige, ki jih je mogoče prenesti v tem jeziku.</string>
 </resources>

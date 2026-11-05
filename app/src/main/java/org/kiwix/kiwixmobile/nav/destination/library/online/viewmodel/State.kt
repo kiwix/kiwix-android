@@ -25,7 +25,6 @@ import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.CategoryLi
 sealed class State {
   data class Error(val errorMessage: String) : State()
   object Loading : State()
-  data class Saving(val items: Content) : State()
 
   data class Content(
     val items: List<Category>,

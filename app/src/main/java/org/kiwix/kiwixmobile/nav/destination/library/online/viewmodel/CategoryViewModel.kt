@@ -20,7 +20,6 @@ package org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel
 
 import android.app.Application
 import androidx.annotation.VisibleForTesting
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -42,7 +41,6 @@ import org.kiwix.kiwixmobile.core.zim_manager.NetworkState
 import org.kiwix.kiwixmobile.core.zim_manager.offlineMessage
 import org.kiwix.kiwixmobile.nav.destination.library.online.helper.ObserveCategories
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.CategoryListItem.CategoryItem
-import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.State.Saving
 import javax.inject.Inject
 
 @HiltViewModel
@@ -54,25 +52,15 @@ open class CategoryViewModel @Inject constructor(
 ) : ViewModel() {
   sealed class Action {
     data class UpdateCategory(val categories: List<Category>) : Action()
-    data class Filter(val filter: String) : Action()
     data class Select(val category: CategoryItem) : Action()
     data class Error(val errorMessage: String) : Action()
-    object Save : Action()
-    object ClearAll : Action()
-    object SelectAll : Action()
-    object Cancel : Action()
   }
 
   val state = MutableStateFlow<State>(State.Loading)
   val actions = MutableSharedFlow<Action>(extraBufferCapacity = Int.MAX_VALUE)
   val effects = MutableSharedFlow<SideEffect<*>>(extraBufferCapacity = Int.MAX_VALUE)
-  private var onDismiss: (() -> Unit)? = null
 
   private val coroutineJobs = mutableListOf<Job>()
-
-  fun setOnDismissCallback(onDismiss: () -> Unit) {
-    this.onDismiss = onDismiss
-  }
 
   init {
     connectivityObserver.register()
@@ -113,96 +101,35 @@ open class CategoryViewModel @Inject constructor(
     when (action) {
       is Action.Error -> State.Error(action.errorMessage)
       is Action.UpdateCategory -> updateCategory(action, currentState)
-      is Action.Filter -> filter(action, currentState)
       is Action.Select -> select(action, currentState)
-      Action.Save -> saveAction(currentState)
-      Action.ClearAll -> clearAll(currentState)
-      Action.SelectAll -> selectAll(currentState)
-      Action.Cancel -> cancel(currentState)
     }
 
   private fun updateCategory(action: Action.UpdateCategory, currentState: State): State =
     if (currentState == State.Loading) State.Content(action.categories) else currentState
 
-  private fun filter(action: Action.Filter, currentState: State): State =
-    if (currentState is State.Content) filterContent(action.filter, currentState) else currentState
-
   private fun select(action: Action.Select, currentState: State): State =
     if (currentState is State.Content) {
-      // Persist the filter immediately on selection, but keep the dialog open
-      // so the user can select and deselect more categories. The dialog only
-      // closes when the user navigates back (see review feedback on #5215).
       val newState = updateSelection(action.category, currentState)
-      saveSelection(newState, dismissAfterSaving = false)
+      saveSelection(newState)
       newState
     } else {
       currentState
     }
-
-  private fun saveAction(currentState: State): State =
-    if (currentState is State.Content) save(currentState) else currentState
-
-  private fun filterContent(
-    filter: String,
-    currentState: State.Content
-  ) = currentState.updateFilter(filter)
 
   private fun updateSelection(
     categoryItem: CategoryItem,
     currentState: State.Content
   ) = currentState.select(categoryItem)
 
-  private fun save(currentState: State.Content): State {
-    saveSelection(currentState, dismissAfterSaving = true)
-    return Saving(currentState)
-  }
-
-  private fun saveSelection(currentState: State.Content, dismissAfterSaving: Boolean) {
+  private fun saveSelection(currentState: State.Content) {
     val selectedCategories = currentState.items.filter { it.active }
     effects.tryEmit(
-      SaveCategoryAndFinish(
+      SaveCategory(
         selectedCategories,
         kiwixDataStore,
-        viewModelScope,
-        if (dismissAfterSaving) requireOnDismissCallBack() else null
+        viewModelScope
       )
     )
-  }
-
-  private fun requireOnDismissCallBack() = requireNotNull(onDismiss) {
-    "onDismiss callback is not set. " +
-      "Set CategoryViewModel.setOnDismissCallback() before using the callback"
-  }
-
-  fun onDialogOpened() {
-    val current = state.value
-    if (current is Saving) {
-      state.value = current.items
-    }
-  }
-
-  private fun clearAll(currentState: State): State =
-    if (currentState is State.Content) {
-      currentState.copy(items = currentState.items.map { it.copy(active = false) })
-    } else {
-      currentState
-    }
-
-  private fun selectAll(currentState: State): State =
-    if (currentState is State.Content) {
-      currentState.copy(items = currentState.items.map { it.copy(active = true) })
-    } else {
-      currentState
-    }
-
-  private fun cancel(currentState: State): State {
-    if (currentState !is State.Content) return currentState
-    effects.tryEmit(object : SideEffect<Unit> {
-      override fun invokeWith(activity: AppCompatActivity) {
-        activity.onBackPressedDispatcher.onBackPressed()
-      }
-    })
-    return currentState
   }
 
   @VisibleForTesting
@@ -216,7 +143,6 @@ open class CategoryViewModel @Inject constructor(
     }
     coroutineJobs.clear()
     connectivityObserver.unregister()
-    onDismiss = null
     super.onCleared()
   }
 }

@@ -59,7 +59,6 @@ import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.State
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.State.Content
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.State.Error
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.State.Loading
-import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.State.Saving
 
 const val CATEGORY_ITEM_CHECKBOX_TESTING_TAG = "categoryItemCheckboxTestingTag"
 const val ONLINE_CATEGORY_LIST_TEST_TAG = "category_list"
@@ -87,7 +86,7 @@ fun OnlineCategoryDialogScreen(
     ) { paddingValues ->
       Column(modifier = Modifier.fillMaxSize().padding(paddingValues)) {
         when (state) {
-          Loading, is Saving -> {
+          Loading -> {
             LoadingScreen()
           }
 
@@ -200,5 +199,5 @@ private fun CategoryItemRow(
 fun String.toSentenceCaseCategory(): String =
   replace("_", " ")
     .replaceFirstChar { word ->
-      if (word.isLowerCase()) word.titlecase() else word.toString()
+      if (word.isLowerCase()) word.titlecase() else "$word"
     }

@@ -351,10 +351,6 @@ private fun ShowCategoryDialog(
   onDismiss: () -> Unit
 ) {
   if (!showCategoryDialog) return
-  categoryViewModel.apply {
-    setOnDismissCallback(onDismiss)
-    onDialogOpened()
-  }
   KiwixBasicDialogFrame(
     onDismissRequest = onDismiss,
     dialogPadding = TEN_DP,
