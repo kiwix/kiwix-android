@@ -81,7 +81,6 @@ import org.kiwix.kiwixmobile.language.viewmodel.State
 import org.kiwix.kiwixmobile.language.viewmodel.State.Content
 import org.kiwix.kiwixmobile.nav.destination.library.online.NO_CONTENT_VIEW_TEXT_TESTING_TAG
 
-const val SAVE_ICON_TESTING_TAG = "saveLanguages"
 const val LANGUAGE_BACK_TO_TOP_TESTING_TAG = "languageBackToTop"
 private const val BACK_TO_TOP_ITEM_THRESHOLD = 5
 

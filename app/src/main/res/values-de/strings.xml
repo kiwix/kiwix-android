@@ -22,6 +22,5 @@
   <string name="no_category_available">Keine Kategorien verfügbar</string>
   <string name="your_selected_category">Kategorie auswählen:</string>
   <string name="other_categories">Andere Kategorien:</string>
-  <string name="all_categories">Alle Kategorien</string>
   <string name="select_category_content_description">Wenn diese Sprache ausgewählt wird, werden herunterladbare Bücher in dieser Sprache ganz oben angezeigt.</string>
 </resources>

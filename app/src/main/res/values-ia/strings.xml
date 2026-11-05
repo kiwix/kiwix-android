@@ -17,6 +17,5 @@
   <string name="no_category_available">Il non ha categorias disponibile</string>
   <string name="your_selected_category">Categoria seligite:</string>
   <string name="other_categories">Altere categorias:</string>
-  <string name="all_categories">Tote le categorias</string>
   <string name="select_category_content_description">Si iste categoria es seligite, le libros discargabile in iste lingua essera monstrate primo.</string>
 </resources>

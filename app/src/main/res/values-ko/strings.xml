@@ -19,6 +19,5 @@
   <string name="no_category_available">사용할 수 있는 분류 없음</string>
   <string name="your_selected_category">선택된 분류:</string>
   <string name="other_categories">다른 분류:</string>
-  <string name="all_categories">모든 분류</string>
   <string name="select_category_content_description">이 분류를 선택하면 해당 언어로 다운로드할 수 있는 책이 맨 위에 우선적으로 표시됩니다.</string>
 </resources>

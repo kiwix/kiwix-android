@@ -19,6 +19,5 @@
   <string name="no_category_available">Geen categorieën beschikbaar</string>
   <string name="your_selected_category">Selecteer categorie:</string>
   <string name="other_categories">Overige categorieën:</string>
-  <string name="all_categories">Alle categorieën</string>
   <string name="select_category_content_description">Als u deze categorie kiest, worden downloadbare boeken in die taal bovenaan weergegeven.</string>
 </resources>

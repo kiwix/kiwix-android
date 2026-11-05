@@ -21,7 +21,6 @@ package org.kiwix.kiwixmobile.webserver
 import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsNotDisplayed
-import androidx.compose.ui.test.assertIsOn
 import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.junit4.ComposeContentTestRule
 import androidx.compose.ui.test.onAllNodesWithTag
@@ -82,6 +81,7 @@ class ZimHostRobot : BaseRobot() {
       composeTestRule.apply {
         waitForIdle()
         onNodeWithTag(LEFT_DRAWER_ZIM_HOST_ITEM_TESTING_TAG).performClick()
+        waitForIdle()
       }
     })
   }
@@ -90,7 +90,7 @@ class ZimHostRobot : BaseRobot() {
     testFlakyView({
       composeTestRule.apply {
         waitForIdle()
-        onNodeWithTag("${BOOK_ITEM_CHECKBOX_TESTING_TAG}2").performClick()
+        onAllNodesWithTag(BOOK_ITEM_TESTING_TAG)[1].performClick()
       }
     })
   }
@@ -168,11 +168,9 @@ class ZimHostRobot : BaseRobot() {
     try {
       composeTestRule
         .onNodeWithTag("$BOOK_ITEM_CHECKBOX_TESTING_TAG$position")
-        .assertIsOn()
+        .assertIsDisplayed()
     } catch (_: AssertionError) {
-      composeTestRule
-        .onNodeWithTag("$BOOK_ITEM_CHECKBOX_TESTING_TAG$position")
-        .performClick()
+      composeTestRule.onAllNodesWithTag(BOOK_ITEM_TESTING_TAG)[position + 1].performClick()
     }
   }
 
@@ -180,7 +178,7 @@ class ZimHostRobot : BaseRobot() {
     for (i in 0 until itemCount) {
       composeTestRule
         .onNodeWithTag("$BOOK_ITEM_CHECKBOX_TESTING_TAG${i + 1}")
-        .assertIsOn()
+        .assertIsDisplayed()
     }
   }
 

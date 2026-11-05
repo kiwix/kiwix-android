@@ -25,7 +25,6 @@ import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.CategoryLi
 sealed class State {
   data class Error(val errorMessage: String) : State()
   object Loading : State()
-  data class Saving(val items: Content) : State()
 
   data class Content(
     val items: List<Category>,
@@ -38,24 +37,8 @@ sealed class State {
   ) : State() {
     fun select(category: CategoryItem): Content {
       val selectedId = category.id
-      val isAllCategories = selectedId == 0L
       val updatedItems = items.map { item ->
-        when {
-          // Selecting the "All Categories" item
-          isAllCategories -> {
-            val shouldBeActive = item.id == 0L
-            if (item.active == shouldBeActive) {
-              item
-            } else {
-              item.copy(active = shouldBeActive)
-            }
-          }
-          // Toggling a specific category
-          item.id == selectedId -> item.copy(active = !item.active)
-          // Deselect "All Categories" when a specific category is selected
-          item.id == 0L -> if (item.active) item.copy(active = false) else item
-          else -> item
-        }
+        if (item.id == selectedId) item.copy(active = !item.active) else item
       }
       return Content(
         items = updatedItems,

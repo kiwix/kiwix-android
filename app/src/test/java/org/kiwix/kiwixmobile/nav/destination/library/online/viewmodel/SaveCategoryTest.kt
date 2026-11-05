@@ -19,43 +19,71 @@
 package org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel
 
 import androidx.appcompat.app.AppCompatActivity
-import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.mockk
-import io.mockk.verify
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.zim_manager.Category
 
-class SaveCategoryAndFinishTest {
+class SaveCategoryTest {
   @Test
-  fun `invoke saves single category and finishes`() = runTest {
+  fun `invoke saves single category`() = runTest {
     val kiwixDataStore = mockk<KiwixDataStore>()
     val activity = mockk<AppCompatActivity>()
     val lifeCycleScope = TestScope(testScheduler)
-    val onDismiss = mockk<() -> Unit>(relaxed = true)
     val category = Category(category = "wikipedia", active = true)
-    SaveCategoryAndFinish(listOf(category), kiwixDataStore, lifeCycleScope, onDismiss).invokeWith(activity)
+    SaveCategory(
+      listOf(category),
+      kiwixDataStore,
+      lifeCycleScope
+    ).invokeWith(activity)
     testScheduler.advanceUntilIdle()
-    coEvery { kiwixDataStore.setSelectedOnlineContentCategory(category.category) }
-    testScheduler.advanceUntilIdle()
-    verify { onDismiss() }
+    coVerify { kiwixDataStore.setSelectedOnlineContentCategory(category.category) }
   }
 
   @Test
-  fun `invoke saves multiple categories and finishes`() = runTest {
+  fun `invoke saves multiple categories`() = runTest {
     val kiwixDataStore = mockk<KiwixDataStore>()
     val activity = mockk<AppCompatActivity>()
     val lifeCycleScope = TestScope(testScheduler)
-    val onDismiss = mockk<() -> Unit>(relaxed = true)
     val category1 = Category(category = "wikipedia", active = true)
     val category2 = Category(category = "gutenberg", active = true)
     val categories = listOf(category1, category2)
-    SaveCategoryAndFinish(categories, kiwixDataStore, lifeCycleScope, onDismiss).invokeWith(activity)
+    SaveCategory(
+      categories,
+      kiwixDataStore,
+      lifeCycleScope
+    ).invokeWith(activity)
     testScheduler.advanceUntilIdle()
-    coEvery { kiwixDataStore.setSelectedOnlineContentCategory("wikipedia,gutenberg") }
+    coVerify { kiwixDataStore.setSelectedOnlineContentCategory("wikipedia,gutenberg") }
+  }
+
+  @Test
+  fun `invoke saves empty string when only the no-categories row is selected`() = runTest {
+    val kiwixDataStore = mockk<KiwixDataStore>()
+    val activity = mockk<AppCompatActivity>()
+    val lifeCycleScope = TestScope(testScheduler)
+    val allCategories = Category(id = 0, active = true, category = "")
+
+    SaveCategory(listOf(allCategories), kiwixDataStore, lifeCycleScope)
+      .invokeWith(activity)
     testScheduler.advanceUntilIdle()
-    verify { onDismiss() }
+
+    coVerify { kiwixDataStore.setSelectedOnlineContentCategory("") }
+  }
+
+  @Test
+  fun `invoke saves empty string when a empty list is emitted`() = runTest {
+    val kiwixDataStore = mockk<KiwixDataStore>()
+    val activity = mockk<AppCompatActivity>()
+    val lifeCycleScope = TestScope(testScheduler)
+
+    SaveCategory(emptyList(), kiwixDataStore, lifeCycleScope)
+      .invokeWith(activity)
+    testScheduler.advanceUntilIdle()
+
+    coVerify { kiwixDataStore.setSelectedOnlineContentCategory("") }
   }
 }

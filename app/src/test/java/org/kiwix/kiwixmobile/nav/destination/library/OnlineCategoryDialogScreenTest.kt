@@ -162,27 +162,6 @@ class OnlineCategoryDialogScreenTest {
   }
 
   @Test
-  fun showsLoadingIndicator_whenStateIsSaving() {
-    stateFlow.value = State.Saving(
-      getContent(
-        listOf(
-          Category(
-            id = 1,
-            active = true,
-            category = "science"
-          )
-        )
-      )
-    )
-
-    setDialogScreen()
-
-    composeRule
-      .onNodeWithTag(CONTENT_LOADING_PROGRESS_BAR_TESTING_TAG)
-      .assertExists()
-  }
-
-  @Test
   fun selectsRadioButton_whenCategoryIsActive() {
     stateFlow.value = getContent(
       listOf(Category(id = 1, active = true, category = "science"))

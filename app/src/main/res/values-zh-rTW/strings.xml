@@ -19,6 +19,5 @@
   <string name="no_category_available">沒有可用的分類</string>
   <string name="your_selected_category">所選分類：</string>
   <string name="other_categories">其他分類：</string>
-  <string name="all_categories">所有分類</string>
   <string name="select_category_content_description">選擇此分類會在頂部優先顯示該語言的可下載書籍。</string>
 </resources>

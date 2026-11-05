@@ -28,9 +28,7 @@ import kotlinx.coroutines.flow.retry
 import org.kiwix.kiwixmobile.core.data.remote.KiwixService
 import org.kiwix.kiwixmobile.core.di.IoDispatcher
 import org.kiwix.kiwixmobile.core.di.OPDSKiwixService
-import org.kiwix.kiwixmobile.core.ui.components.ONE
 import org.kiwix.kiwixmobile.core.utils.FIVE
-import org.kiwix.kiwixmobile.core.utils.ZERO
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.zim_manager.Category
 import javax.inject.Inject
@@ -40,7 +38,6 @@ class CategoryRepositoryImpl @Inject constructor(
   private val kiwixDataStore: KiwixDataStore,
   @param:IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : CategoryRepository {
-  @Suppress("MagicNumber")
   override fun fetchCategories(): Flow<List<Category>> = flow {
     val feed = kiwixService.getCategories()
     val selectedCategoriesRaw = kiwixDataStore.selectedOnlineContentCategory.first()
@@ -54,25 +51,11 @@ class CategoryRepositoryImpl @Inject constructor(
       Category(
         category = entry.title,
         active = entry.title in selectedCategories,
-        id = (index + ONE).toLong()
+        id = index.toLong()
       )
     }
 
-    val categoryList =
-      when {
-        categories.isEmpty() -> emptyList()
-        else -> buildList {
-          add(
-            Category(
-              category = "",
-              active = selectedCategoriesRaw.isEmpty(),
-              id = ZERO.toLong()
-            )
-          )
-          addAll(categories)
-        }
-      }
-    emit(categoryList)
+    emit(categories)
   }.retry(FIVE.toLong())
     .catch { e ->
       e.printStackTrace()
