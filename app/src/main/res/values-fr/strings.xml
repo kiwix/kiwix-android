@@ -3,8 +3,10 @@
 * Chpol
 * Gomoko
 * Mahabarata
+* Stephane
 * Thibaut120094
 * Verdy p
+* Wladek92
 -->
 <resources>
   <string name="file_system_does_not_support_4gb">Votre système de fichiers ne prend pas en charge les fichiers de 4 Go ou plus.</string>
@@ -23,4 +25,11 @@
   <string name="other_categories">Autres catégories :</string>
   <string name="all_categories">Toutes les catégories</string>
   <string name="select_category_content_description">Sélectionner cette catégorie permettra d\'afficher en priorité les livres téléchargeables dans cette langue en tête de liste.</string>
+  <string name="save_categories">Enregistrer les catégories</string>
+  <string name="your_selected_categories">Catégories sélectionnées :</string>
+  <plurals name="and_more">
+    <item quantity="other">un=et %d de plus</item>
+  </plurals>
+  <string name="your_categories">Catégories sélectionnées :</string>
+  <string name="your_category">Catégorie sélectionnée : %s</string>
 </resources>

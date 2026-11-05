@@ -20,4 +20,13 @@
   <string name="other_categories">Ostatné kategórie:</string>
   <string name="all_categories">Všetky kategórie</string>
   <string name="select_category_content_description">Výberom tejto kategórie sa uprednostní zobrazovanie stiahnuteľných kníh v danom jazyku navrchu.</string>
+  <string name="save_categories">Uložiť kategórie</string>
+  <string name="your_selected_categories">Vybrané kategórie:</string>
+  <plurals name="and_more">
+    <item quantity="one">a ešte %d</item>
+    <item quantity="few">a ešte %d</item>
+    <item quantity="other">a ešte %d</item>
+  </plurals>
+  <string name="your_categories">Vybrané kategórie:</string>
+  <string name="your_category">Vybraná kategória: %s</string>
 </resources>

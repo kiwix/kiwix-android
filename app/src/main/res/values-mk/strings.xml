@@ -19,4 +19,12 @@
   <string name="other_categories">Други категории:</string>
   <string name="all_categories">Сите категории</string>
   <string name="select_category_content_description">Ако ја изберете оваа категорија, тогаш најгоре предност ќе имаат преземливите книги на тој јазик.</string>
+  <string name="save_categories">Зачувај категории</string>
+  <string name="your_selected_categories">Изберете категории:</string>
+  <plurals name="and_more">
+    <item quantity="one">и уште %d</item>
+    <item quantity="other">и уште %d</item>
+  </plurals>
+  <string name="your_categories">Избрани категории:</string>
+  <string name="your_category">Избрана категорија: %s</string>
 </resources>
