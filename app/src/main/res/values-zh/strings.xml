@@ -25,4 +25,11 @@
   <string name="other_categories">其他分类：</string>
   <string name="all_categories">所有分类</string>
   <string name="select_category_content_description">选择此分类将优先在顶部显示该语言的可下载书籍。</string>
+  <string name="save_categories">保存分类</string>
+  <string name="your_selected_categories">所选分类：</string>
+  <plurals name="and_more">
+    <item quantity="other">和另外%d个</item>
+  </plurals>
+  <string name="your_categories">所选分类：</string>
+  <string name="your_category">所选分类：%s</string>
 </resources>

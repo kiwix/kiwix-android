@@ -19,4 +19,12 @@
   <string name="other_categories">Altere categorias:</string>
   <string name="all_categories">Tote le categorias</string>
   <string name="select_category_content_description">Si iste categoria es seligite, le libros discargabile in iste lingua essera monstrate primo.</string>
+  <string name="save_categories">Salveguardar categorias</string>
+  <string name="your_selected_categories">Categorias seligite:</string>
+  <plurals name="and_more">
+    <item quantity="one">e un altere</item>
+    <item quantity="other">e %d alteres</item>
+  </plurals>
+  <string name="your_categories">Categorias seligite:</string>
+  <string name="your_category">Categoria seligite: %s</string>
 </resources>
