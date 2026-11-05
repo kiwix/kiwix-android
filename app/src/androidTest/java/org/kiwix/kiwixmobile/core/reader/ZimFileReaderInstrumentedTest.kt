@@ -79,7 +79,7 @@ class ZimFileReaderInstrumentedTest : BaseActivityTest() {
       assertEquals("en", reader.zimMainLanguage)
       assertEquals("en", reader.languages[0])
       assertEquals("", reader.tags)
-      assertEquals(348, reader.fileSize)
+      assertEquals(357269L, reader.fileSize)
       assertNotNull(reader.favicon)
 
       // ── Verify searchSuggestions and related methods ──

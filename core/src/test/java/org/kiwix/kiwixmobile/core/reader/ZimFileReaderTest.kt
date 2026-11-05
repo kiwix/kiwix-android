@@ -18,11 +18,47 @@
 
 package org.kiwix.kiwixmobile.core.reader
 
+import io.mockk.every
+import io.mockk.mockk
+import kotlinx.coroutines.Dispatchers
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
+import org.kiwix.kiwixmobile.core.zim_manager.Byte
+import org.kiwix.libzim.Archive
+import org.kiwix.libzim.SuggestionSearcher
+import java.io.File
 
 class ZimFileReaderTest {
+  @Nested
+  inner class FileSizeTest {
+    private val archive: SizedArchive = mockk(relaxed = true) {
+      every { filesize } returns 357_269L
+    }
+    private val reader = ZimFileReader(
+      ZimReaderSource(File("testzim.zim")),
+      archive,
+      mockk<SuggestionSearcher>(relaxed = true),
+      Dispatchers.Unconfined
+    )
+
+    @Test
+    fun fileSizeIsTheArchiveSizeInBytes() {
+      assertEquals(357_269L, reader.fileSize)
+    }
+
+    @Test
+    fun bookSizeIsInBytes() {
+      val book = reader.toBook()
+      assertEquals("357269", book.size)
+      assertEquals("357 KB", Byte(book.size).humanReadable)
+    }
+  }
+
+  abstract class SizedArchive : Archive("") {
+    override fun getFilesize(): Long = 0L
+  }
+
   @Nested
   inner class MimeTypeTest {
     @Test

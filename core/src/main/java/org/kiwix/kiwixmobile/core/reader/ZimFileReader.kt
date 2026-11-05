@@ -134,12 +134,7 @@ class ZimFileReader(
         null
       }
   val id: String get() = jniKiwixReader.uuid
-
-  /*
-     libzim returns file size in kib so we need to convert it into bytes.
-     More information here https://github.com/kiwix/java-libkiwix/issues/41
-   */
-  val fileSize: Long get() = jniKiwixReader.filesize / 1024
+  val fileSize: Long get() = jniKiwixReader.filesize
   val creator: String get() = getSafeMetaData("Creator", "")
   val publisher: String get() = getSafeMetaData("Publisher", "")
   val name: String get() = getSafeMetaData("Name", id)
