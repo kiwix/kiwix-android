@@ -23,6 +23,7 @@ import android.os.ParcelFileDescriptor
 import org.kiwix.kiwixmobile.core.utils.TAG_KIWIX
 import org.kiwix.kiwixmobile.core.utils.files.Log
 import java.io.File
+import java.util.concurrent.atomic.AtomicBoolean
 
 /**
  * Helper to generate a PDF from a [PrintDocumentAdapter].
@@ -37,61 +38,90 @@ private fun ParcelFileDescriptor.closeSafely() {
 }
 
 class PdfPrint(private val printAttributes: PrintAttributes) {
+  @Suppress("TooGenericExceptionCaught")
   fun print(
     adapter: PrintDocumentAdapter,
     outputFile: File,
     onComplete: (File) -> Unit,
     onError: (CharSequence?) -> Unit,
-    cancellationSignal: CancellationSignal = CancellationSignal()
+    cancellationSignal: CancellationSignal = CancellationSignal(),
+    onFinished: () -> Unit = {}
   ) {
     adapter.onStart()
-    adapter.onLayout(
-      null,
-      printAttributes,
-      cancellationSignal,
-      object : PrintDocumentAdapter.LayoutResultCallback() {
-        override fun onLayoutFinished(info: PrintDocumentInfo?, changed: Boolean) {
-          if (info == null) {
-            adapter.onFinish()
-            onError("Layout failed: PrintDocumentInfo is null")
-            return
-          }
-          val pfd = runCatching {
-            ParcelFileDescriptor.open(
-              outputFile,
-              ParcelFileDescriptor.MODE_CREATE or ParcelFileDescriptor.MODE_WRITE_ONLY
-            )
-          }.getOrElse {
-            adapter.onFinish()
-            onError(it.message)
-            return
-          }
-          adapter.onWrite(
-            arrayOf(PageRange.ALL_PAGES),
-            pfd,
-            cancellationSignal,
-            object : PrintDocumentAdapter.WriteResultCallback() {
-              override fun onWriteFinished(pages: Array<out PageRange>?) {
-                pfd.closeSafely()
-                adapter.onFinish()
-                onComplete(outputFile)
-              }
-
-              override fun onWriteFailed(error: CharSequence?) {
-                pfd.closeSafely()
-                adapter.onFinish()
-                onError(error)
-              }
+    val isFinished = AtomicBoolean(false)
+    fun finish() {
+      if (isFinished.compareAndSet(false, true)) {
+        adapter.onFinish()
+        onFinished()
+      }
+    }
+    try {
+      adapter.onLayout(
+        null,
+        printAttributes,
+        cancellationSignal,
+        object : PrintDocumentAdapter.LayoutResultCallback() {
+          override fun onLayoutFinished(info: PrintDocumentInfo?, changed: Boolean) {
+            if (info == null) {
+              finish()
+              onError("Layout failed: PrintDocumentInfo is null")
+              return
             }
-          )
-        }
+            val pfd = runCatching {
+              ParcelFileDescriptor.open(
+                outputFile,
+                ParcelFileDescriptor.MODE_CREATE or ParcelFileDescriptor.MODE_WRITE_ONLY
+              )
+            }.getOrElse {
+              finish()
+              onError(it.message)
+              return@onLayoutFinished
+            }
+            try {
+              adapter.onWrite(
+                arrayOf(PageRange.ALL_PAGES),
+                pfd,
+                cancellationSignal,
+                object : PrintDocumentAdapter.WriteResultCallback() {
+                  override fun onWriteFinished(pages: Array<out PageRange>?) {
+                    pfd.closeSafely()
+                    finish()
+                    onComplete(outputFile)
+                  }
 
-        override fun onLayoutFailed(error: CharSequence?) {
-          adapter.onFinish()
-          onError(error)
-        }
-      },
-      null
-    )
+                  override fun onWriteFailed(error: CharSequence?) {
+                    pfd.closeSafely()
+                    finish()
+                    onError(error)
+                  }
+
+                  override fun onWriteCancelled() {
+                    pfd.closeSafely()
+                    finish()
+                  }
+                }
+              )
+            } catch (throwable: Throwable) {
+              pfd.closeSafely()
+              finish()
+              throw throwable
+            }
+          }
+
+          override fun onLayoutCancelled() {
+            finish()
+          }
+
+          override fun onLayoutFailed(error: CharSequence?) {
+            finish()
+            onError(error)
+          }
+        },
+        null
+      )
+    } catch (throwable: Throwable) {
+      finish()
+      throw throwable
+    }
   }
 }

@@ -51,6 +51,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.MainCoroutineDispatcher
+import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -302,6 +303,7 @@ abstract class CoreReaderViewModel(
   var readerMenuState: ReaderMenuState? = null
   private var documentParser: DocumentParser? = null
   private var hideBackToTopJob: Job? = null
+  private var pdfJob: Job? = null
   private var actionMode: ActionMode? = null
 
   val isAndroid13OrAbove = kiwixPermissionChecker.isAndroid13orAbove()
@@ -770,7 +772,9 @@ abstract class CoreReaderViewModel(
   }
 
   override fun onShareMenuClicked() {
-    launchInViewModelScope {
+    val previousJob = pdfJob
+    pdfJob = viewModelScope.launch {
+      previousJob?.cancelAndJoin()
       val pdfResult = readerPageManager.createPdf(getCurrentWebView())
       when (val result = pdfResult.getOrNull()) {
         is ReaderPageManager.CreatePdfResult.Success -> {

@@ -20,6 +20,7 @@ package org.kiwix.kiwixmobile.core.main.reader.helper
 
 import android.content.Context
 import android.os.Build
+import android.os.CancellationSignal
 import android.print.PdfPrint
 import android.print.PrintDocumentAdapter
 import androidx.test.core.app.ApplicationProvider
@@ -27,10 +28,12 @@ import io.mockk.clearAllMocks
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.runner.RunWith
 import org.kiwix.kiwixmobile.core.main.KiwixWebView
@@ -78,12 +81,14 @@ class ReaderPageManagerTest {
         any(),
         any(),
         any(),
+        any(),
         any()
       )
     } answers {
       expectedFile = secondArg()
 
       thirdArg<(File) -> Unit>().invoke(expectedFile)
+      arg<() -> Unit>(5).invoke()
     }
 
     val result = readerPageManager.createPdf(webView)
@@ -98,6 +103,7 @@ class ReaderPageManagerTest {
     verify(exactly = 1) {
       pdfPrinter.print(
         adapter,
+        any(),
         any(),
         any(),
         any(),
@@ -122,7 +128,7 @@ class ReaderPageManagerTest {
     )
 
     verify(exactly = 0) {
-      pdfPrinter.print(any(), any(), any(), any(), any())
+      pdfPrinter.print(any(), any(), any(), any(), any(), any())
     }
   }
 
@@ -141,11 +147,13 @@ class ReaderPageManagerTest {
         any(),
         any(),
         any(),
+        any(),
         any()
       )
     } answers {
       val onError = arg<(CharSequence?) -> Unit>(3)
       onError("Printing failed")
+      arg<() -> Unit>(5).invoke()
     }
 
     val result = readerPageManager.createPdf(webView)
@@ -178,11 +186,13 @@ class ReaderPageManagerTest {
         any(),
         any(),
         any(),
+        any(),
         any()
       )
     } answers {
       generatedFile = secondArg()
       thirdArg<(File) -> Unit>().invoke(generatedFile)
+      arg<() -> Unit>(5).invoke()
     }
 
     readerPageManager.createPdf(webView)
@@ -210,11 +220,13 @@ class ReaderPageManagerTest {
         any(),
         any(),
         any(),
+        any(),
         any()
       )
     } answers {
       generatedFile = secondArg()
       thirdArg<(File) -> Unit>().invoke(generatedFile)
+      arg<() -> Unit>(5).invoke()
     }
 
     readerPageManager.createPdf(webView)
@@ -246,15 +258,179 @@ class ReaderPageManagerTest {
         any(),
         any(),
         any(),
+        any(),
         any()
       )
     } answers {
       thirdArg<(File) -> Unit>().invoke(secondArg())
+      arg<() -> Unit>(5).invoke()
     }
 
     readerPageManager.createPdf(webView)
 
     assertTrue(existingFile.exists())
+  }
+
+  @Test
+  fun `createPdf cancels CancellationSignal when calling coroutine is cancelled`() = runTest {
+    val webView = mockk<KiwixWebView>()
+    val adapter = mockk<PrintDocumentAdapter>(relaxed = true)
+
+    every { webView.progress } returns 100
+    every { webView.title } returns "Article"
+    every { webView.createPrintDocumentAdapter("Article") } returns adapter
+
+    var capturedSignal: CancellationSignal? = null
+    every {
+      pdfPrinter.print(
+        adapter,
+        any(),
+        any(),
+        any(),
+        any(),
+        any()
+      )
+    } answers {
+      capturedSignal = arg<CancellationSignal>(4)
+    }
+
+    val job = launch {
+      readerPageManager.createPdf(webView)
+    }
+    testScheduler.runCurrent()
+
+    assertTrue(capturedSignal != null)
+    assertFalse(capturedSignal!!.isCanceled)
+
+    job.cancel()
+    testScheduler.runCurrent()
+
+    assertTrue(capturedSignal!!.isCanceled)
+  }
+
+  @Test
+  fun `createPdf waits for previous adapter onFinish before starting a new print`() = runTest {
+    val firstWebView = mockk<KiwixWebView>()
+    val firstAdapter = mockk<PrintDocumentAdapter>(relaxed = true)
+    val secondWebView = mockk<KiwixWebView>()
+    val secondAdapter = mockk<PrintDocumentAdapter>(relaxed = true)
+
+    every { firstWebView.progress } returns 100
+    every { firstWebView.title } returns "First"
+    every { firstWebView.createPrintDocumentAdapter("First") } returns firstAdapter
+
+    every { secondWebView.progress } returns 100
+    every { secondWebView.title } returns "Second"
+    every { secondWebView.createPrintDocumentAdapter("Second") } returns secondAdapter
+
+    var firstOnFinished: (() -> Unit)? = null
+    every {
+      pdfPrinter.print(
+        firstAdapter,
+        any(),
+        any(),
+        any(),
+        any(),
+        any()
+      )
+    } answers {
+      firstOnFinished = arg(5)
+    }
+
+    every {
+      pdfPrinter.print(
+        secondAdapter,
+        any(),
+        any(),
+        any(),
+        any(),
+        any()
+      )
+    } answers {
+      arg<() -> Unit>(5).invoke()
+    }
+
+    val firstJob = launch { readerPageManager.createPdf(firstWebView) }
+    testScheduler.runCurrent()
+
+    assertTrue(firstOnFinished != null)
+
+    // Cancelling the coroutine does not mean the native adapter has actually finished.
+    firstJob.cancel()
+    testScheduler.runCurrent()
+
+    val secondJob = launch { readerPageManager.createPdf(secondWebView) }
+    testScheduler.runCurrent()
+
+    verify(exactly = 0) {
+      pdfPrinter.print(secondAdapter, any(), any(), any(), any(), any())
+    }
+
+    // Only once the first adapter's onFinish actually fires should the second print start.
+    firstOnFinished?.invoke()
+    testScheduler.runCurrent()
+
+    verify(exactly = 1) {
+      pdfPrinter.print(secondAdapter, any(), any(), any(), any(), any())
+    }
+
+    secondJob.cancel()
+  }
+
+  @Test
+  fun `createPdf returns handled failure when printing throws IllegalStateException`() = runTest {
+    val webView = mockk<KiwixWebView>()
+    val adapter = mockk<PrintDocumentAdapter>(relaxed = true)
+
+    every { webView.progress } returns 100
+    every { webView.title } returns "Article"
+    every { webView.createPrintDocumentAdapter("Article") } returns adapter
+
+    val exception = IllegalStateException("printing is already pending")
+    every {
+      pdfPrinter.print(
+        adapter,
+        any(),
+        any(),
+        any(),
+        any(),
+        any()
+      )
+    } throws exception
+
+    val result = readerPageManager.createPdf(webView)
+
+    assertTrue(result.isSuccess)
+    val failure = result.getOrThrow() as ReaderPageManager.CreatePdfResult.Failure
+    assertEquals(exception, failure.throwable)
+  }
+
+  @Test
+  fun `createPdf returns handled failure when printing throws other exception types`() = runTest {
+    val webView = mockk<KiwixWebView>()
+    val adapter = mockk<PrintDocumentAdapter>(relaxed = true)
+
+    every { webView.progress } returns 100
+    every { webView.title } returns "Article"
+    every { webView.createPrintDocumentAdapter("Article") } returns adapter
+
+    val exception = NullPointerException("native print surface was torn down")
+    every {
+      pdfPrinter.print(
+        adapter,
+        any(),
+        any(),
+        any(),
+        any(),
+        any()
+      )
+    } throws exception
+
+    val result = readerPageManager.createPdf(webView)
+
+    assertTrue(result.isSuccess)
+    val failure = result.getOrThrow() as ReaderPageManager.CreatePdfResult.Failure
+    assertEquals(exception, failure.throwable)
   }
 
   @Test

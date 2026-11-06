@@ -53,6 +53,7 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.assertj.core.api.Assertions.assertThat
@@ -1300,6 +1301,36 @@ internal class CoreReaderViewModelTest {
         assertThat(effect.message).isEqualTo("Unable to share article")
 
         cancelAndIgnoreRemainingEvents()
+      }
+    }
+
+    @Test
+    fun onShareMenuClicked_whenCalledTwiceQuickly_cancelsFirstJobAndSecondJobProducesResult() = runTest {
+      val secondFile = mockk<File>()
+      var firstCallCancelled = false
+
+      coEvery { readerPageManager.createPdf(mockWebView) } coAnswers {
+        suspendCancellableCoroutine { continuation ->
+          continuation.invokeOnCancellation {
+            firstCallCancelled = true
+          }
+        }
+      } andThenAnswer {
+        Result.success(ReaderPageManager.CreatePdfResult.Success(secondFile))
+      }
+
+      viewModel.effects.test {
+        viewModel.onShareMenuClicked()
+        testScheduler.runCurrent()
+
+        viewModel.onShareMenuClicked()
+        advanceUntilIdle()
+
+        val effect = awaitItem() as CoreReaderViewModel.ReaderEffect.SharePdfFile
+        assertThat(effect.pdfFile).isEqualTo(secondFile)
+        assertThat(firstCallCancelled).isTrue()
+
+        expectNoEvents()
       }
     }
   }
