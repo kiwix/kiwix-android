@@ -190,7 +190,7 @@
   <string name="your_languages">A label for language codes field of selected languages, to notify the user which languages he selected.</string>
   <string name="other_languages">{{Identical|Otherlanguages}}</string>
   <string name="downloading">This appears on top of a list of currently downloading ZIM files.</string>
-  <string name="no_items_msg">This message appears when there are no items available to show the user.</string>
+  <string name="no_items_msg">This message appears when there are no books found to show the user.</string>
   <string name="crash_title">This is the title message of the error screen when the application crashes.</string>
   <string name="crash_description">This is the descriptive message when the application crashes, asking the user to provide information about the crash.</string>
   <string name="crash_checkbox_language">This is used in the checkbox to select the reason if the application crashes on the language settings.</string>
