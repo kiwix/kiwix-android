@@ -19,6 +19,7 @@
 package org.kiwix.kiwixmobile.language
 
 import androidx.compose.ui.test.ComposeTimeoutException
+import androidx.compose.ui.test.isDisplayed
 import androidx.compose.ui.test.junit4.ComposeContentTestRule
 import androidx.compose.ui.test.onAllNodesWithContentDescription
 import androidx.compose.ui.test.onAllNodesWithTag
@@ -29,11 +30,9 @@ import androidx.compose.ui.test.performTextInput
 import applyWithViewHierarchyPrinting
 import org.kiwix.kiwixmobile.BaseRobot
 import org.kiwix.kiwixmobile.core.R.string
-import org.kiwix.kiwixmobile.core.page.SEARCH_ICON_TESTING_TAG
 import org.kiwix.kiwixmobile.core.search.SEARCH_FIELD_TESTING_TAG
 import org.kiwix.kiwixmobile.core.ui.components.NAVIGATION_ICON_TESTING_TAG
 import org.kiwix.kiwixmobile.core.utils.files.Log
-import org.kiwix.kiwixmobile.main.BOTTOM_NAV_EXPLORE_ITEM_TESTING_TAG
 import org.kiwix.kiwixmobile.nav.destination.library.online.LANGUAGE_MENU_ICON_TESTING_TAG
 import org.kiwix.kiwixmobile.testutils.TestUtils
 import org.kiwix.kiwixmobile.testutils.TestUtils.waitUntilTimeout
@@ -41,13 +40,6 @@ import org.kiwix.kiwixmobile.testutils.TestUtils.waitUntilTimeout
 fun language(func: LanguageRobot.() -> Unit) = LanguageRobot().applyWithViewHierarchyPrinting(func)
 
 class LanguageRobot : BaseRobot() {
-  fun clickDownloadOnBottomNav(composeTestRule: ComposeContentTestRule) {
-    composeTestRule.apply {
-      waitUntilTimeout()
-      onNodeWithTag(BOTTOM_NAV_EXPLORE_ITEM_TESTING_TAG).performClick()
-    }
-  }
-
   fun clickOnLanguageIcon(composeTestRule: ComposeContentTestRule) {
     // Wait for a few seconds to properly save selected language.
     composeTestRule.apply {
@@ -56,13 +48,15 @@ class LanguageRobot : BaseRobot() {
     }
   }
 
-  fun clickOnSaveLanguageIcon(composeTestRule: ComposeContentTestRule) {
+  fun clickOnNavigationBackIconInLanguageScreen(composeTestRule: ComposeContentTestRule) {
     composeTestRule
       .onNodeWithTag(NAVIGATION_ICON_TESTING_TAG)
       .performClick()
     composeTestRule.waitForIdle()
-    if (composeTestRule.onAllNodesWithTag(LANGUAGE_MENU_ICON_TESTING_TAG).fetchSemanticsNodes().isEmpty() &&
-      composeTestRule.onAllNodesWithTag(NAVIGATION_ICON_TESTING_TAG).fetchSemanticsNodes().isNotEmpty()
+    if (composeTestRule.onAllNodesWithTag(LANGUAGE_MENU_ICON_TESTING_TAG)
+        .fetchSemanticsNodes().isEmpty() &&
+      composeTestRule.onAllNodesWithTag(NAVIGATION_ICON_TESTING_TAG).fetchSemanticsNodes()
+        .isNotEmpty()
     ) {
       composeTestRule
         .onNodeWithTag(NAVIGATION_ICON_TESTING_TAG)
@@ -71,19 +65,18 @@ class LanguageRobot : BaseRobot() {
     }
   }
 
-  fun clickOnLanguageSearchIcon(composeTestRule: ComposeContentTestRule) {
-    if (composeTestRule.onAllNodesWithTag(SEARCH_ICON_TESTING_TAG).fetchSemanticsNodes().isNotEmpty()) {
-      composeTestRule.onNodeWithTag(SEARCH_ICON_TESTING_TAG).performClick()
-      composeTestRule.waitForIdle()
-    }
-  }
-
   fun searchLanguage(
     composeTestRule: ComposeContentTestRule,
     searchLanguage: String
   ) {
-    val searchField = composeTestRule.onNodeWithTag(SEARCH_FIELD_TESTING_TAG)
-    searchField.performTextInput(text = searchLanguage)
+    composeTestRule.apply {
+      waitForIdle()
+      waitUntil(TestUtils.TEST_PAUSE_MS_FOR_DOWNLOAD_TEST) {
+        onNodeWithTag(SEARCH_FIELD_TESTING_TAG).isDisplayed()
+      }
+      val searchField = onNodeWithTag(SEARCH_FIELD_TESTING_TAG)
+      searchField.performTextInput(text = searchLanguage)
+    }
   }
 
   fun selectLanguage(
