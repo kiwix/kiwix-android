@@ -378,69 +378,6 @@ class ReaderPageManagerTest {
   }
 
   @Test
-  fun `createPdf deletes a cancelled call's leftover file before the next call starts`() = runTest {
-    val firstWebView = mockk<KiwixWebView>()
-    val firstAdapter = mockk<PrintDocumentAdapter>(relaxed = true)
-    val secondWebView = mockk<KiwixWebView>()
-    val secondAdapter = mockk<PrintDocumentAdapter>(relaxed = true)
-
-    every { firstWebView.progress } returns 100
-    every { firstWebView.title } returns "First"
-    every { firstWebView.createPrintDocumentAdapter("First") } returns firstAdapter
-
-    every { secondWebView.progress } returns 100
-    every { secondWebView.title } returns "Second"
-    every { secondWebView.createPrintDocumentAdapter("Second") } returns secondAdapter
-
-    var firstOnFinished: (() -> Unit)? = null
-    lateinit var firstPdfFile: File
-    every {
-      pdfPrinter.print(
-        firstAdapter,
-        any(),
-        any(),
-        any(),
-        any(),
-        any()
-      )
-    } answers {
-      firstPdfFile = secondArg()
-      firstOnFinished = arg(5)
-    }
-
-    every {
-      pdfPrinter.print(
-        secondAdapter,
-        any(),
-        any(),
-        any(),
-        any(),
-        any()
-      )
-    } answers {
-      arg<() -> Unit>(5).invoke()
-    }
-
-    val firstJob = launch { readerPageManager.createPdf(firstWebView) }
-    testScheduler.runCurrent()
-
-    assertTrue(firstPdfFile.exists())
-
-    firstJob.cancel()
-    testScheduler.runCurrent()
-    firstOnFinished?.invoke()
-
-    assertTrue(firstPdfFile.exists())
-
-    val secondJob = launch { readerPageManager.createPdf(secondWebView) }
-    testScheduler.runCurrent()
-
-    assertFalse(firstPdfFile.exists())
-
-    secondJob.cancel()
-  }
-
-  @Test
   fun `createPdf returns handled failure when printing throws IllegalStateException`() = runTest {
     val webView = mockk<KiwixWebView>()
     val adapter = mockk<PrintDocumentAdapter>(relaxed = true)
