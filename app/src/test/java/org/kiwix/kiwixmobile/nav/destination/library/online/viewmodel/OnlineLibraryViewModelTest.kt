@@ -872,6 +872,8 @@ class OnlineLibraryViewModelTest {
         assertTrue(awaitItem() === OnlineLibraryViewModel.UiEvent.ScrollToTop)
         cancelAndIgnoreRemainingEvents()
       }
+
+      assertFalse(viewModel.uiState.value.showNoContent)
     }
 
     @Test
