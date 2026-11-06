@@ -35,6 +35,8 @@ import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 import java.io.File
+import java.util.concurrent.CountDownLatch
+import java.util.concurrent.atomic.AtomicInteger
 
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [Build.VERSION_CODES.R])
@@ -67,6 +69,7 @@ class PdfPrintTest {
   fun `onLayoutCancelled leads to adapter onFinish being called`() {
     var onCompleteCalled = false
     var onErrorCalled = false
+    var onFinishedCalled = false
     val layoutCallbackSlot = slot<PrintDocumentAdapter.LayoutResultCallback>()
     every {
       adapter.onLayout(any(), any(), any(), capture(layoutCallbackSlot), any())
@@ -78,19 +81,22 @@ class PdfPrintTest {
       adapter,
       tempFile,
       onComplete = { onCompleteCalled = true },
-      onError = { onErrorCalled = true }
+      onError = { onErrorCalled = true },
+      onFinished = { onFinishedCalled = true }
     )
 
     verify(exactly = 1) { adapter.onStart() }
     verify(exactly = 1) { adapter.onFinish() }
     assertFalse(onCompleteCalled)
     assertFalse(onErrorCalled)
+    assertTrue(onFinishedCalled)
   }
 
   @Test
   fun `onWriteCancelled leads to adapter onFinish being called and ParcelFileDescriptor being closed`() {
     var onCompleteCalled = false
     var onErrorCalled = false
+    var onFinishedCalled = false
     val layoutCallbackSlot = slot<PrintDocumentAdapter.LayoutResultCallback>()
     val writeCallbackSlot = slot<PrintDocumentAdapter.WriteResultCallback>()
     val pfdSlot = slot<ParcelFileDescriptor>()
@@ -111,7 +117,8 @@ class PdfPrintTest {
       adapter,
       tempFile,
       onComplete = { onCompleteCalled = true },
-      onError = { onErrorCalled = true }
+      onError = { onErrorCalled = true },
+      onFinished = { onFinishedCalled = true }
     )
 
     verify(exactly = 1) { adapter.onFinish() }
@@ -119,6 +126,43 @@ class PdfPrintTest {
     assertFalse(pfdSlot.captured.fileDescriptor.valid())
     assertFalse(onCompleteCalled)
     assertFalse(onErrorCalled)
+    assertTrue(onFinishedCalled)
+  }
+
+  @Test
+  fun `finish is thread-safe when the print framework races cancellation callbacks`() {
+    val onFinishedCallCount = AtomicInteger(0)
+    val layoutCallbackSlot = slot<PrintDocumentAdapter.LayoutResultCallback>()
+
+    every {
+      adapter.onLayout(any(), any(), any(), capture(layoutCallbackSlot), any())
+    } answers { }
+
+    pdfPrint.print(
+      adapter,
+      tempFile,
+      onComplete = {},
+      onError = {},
+      onFinished = { onFinishedCallCount.incrementAndGet() }
+    )
+
+    val callback = layoutCallbackSlot.captured
+    val readyLatch = CountDownLatch(2)
+    val startLatch = CountDownLatch(1)
+    val threads = List(2) {
+      Thread {
+        readyLatch.countDown()
+        startLatch.await()
+        callback.onLayoutCancelled()
+      }
+    }
+    threads.forEach { it.start() }
+    readyLatch.await()
+    startLatch.countDown()
+    threads.forEach { it.join() }
+
+    verify(exactly = 1) { adapter.onFinish() }
+    assertEquals(1, onFinishedCallCount.get())
   }
 
   @Test

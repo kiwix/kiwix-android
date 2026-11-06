@@ -23,6 +23,7 @@ import android.os.CancellationSignal
 import android.print.PdfPrint
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.suspendCancellableCoroutine
 import org.kiwix.kiwixmobile.core.extensions.toSlug
 import org.kiwix.kiwixmobile.core.main.KiwixWebView
@@ -56,8 +57,15 @@ class ReaderPageManager @Inject constructor(
     data object FailedAfterRetries : GetRandomPageResult
   }
 
-  suspend fun createPdf(webView: KiwixWebView): Result<CreatePdfResult> =
-    suspendCancellableCoroutine { continuation ->
+  private var activeCancellationSignal: CancellationSignal? = null
+  private var activePrintFinished: CompletableDeferred<Unit>? = null
+
+  @Suppress("TooGenericExceptionCaught")
+  suspend fun createPdf(webView: KiwixWebView): Result<CreatePdfResult> {
+    activeCancellationSignal?.cancel()
+    activePrintFinished?.await()
+
+    return suspendCancellableCoroutine { continuation ->
       if (webView.progress < HUNDERED) {
         continuation.resume(Result.success(PageStillLoading))
         return@suspendCancellableCoroutine
@@ -80,6 +88,10 @@ class ReaderPageManager @Inject constructor(
       }
 
       val cancellationSignal = CancellationSignal()
+      val printFinished = CompletableDeferred<Unit>()
+      activeCancellationSignal = cancellationSignal
+      activePrintFinished = printFinished
+
       continuation.invokeOnCancellation {
         cancellationSignal.cancel()
       }
@@ -95,14 +107,18 @@ class ReaderPageManager @Inject constructor(
           onError = { error ->
             continuation.resume(Result.success(CreatePdfResult.Failure(Exception("$error"))))
           },
-          cancellationSignal = cancellationSignal
+          cancellationSignal = cancellationSignal,
+          onFinished = { printFinished.complete(Unit) }
         )
       } catch (cancellationException: CancellationException) {
+        printFinished.complete(Unit)
         throw cancellationException
-      } catch (illegalStateException: IllegalStateException) {
-        continuation.resume(Result.success(CreatePdfResult.Failure(illegalStateException)))
+      } catch (throwable: Throwable) {
+        printFinished.complete(Unit)
+        continuation.resume(Result.success(CreatePdfResult.Failure(throwable)))
       }
     }
+  }
 
   @Suppress("ReturnCount")
   suspend fun getRandomPage(retryCount: Int = 2): GetRandomPageResult {
