@@ -22,6 +22,7 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
@@ -110,7 +111,8 @@ import org.kiwix.kiwixmobile.core.utils.ComposeDimens.DOWNLOADING_LIBRARY_PROGRE
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.DOWNLOADING_LIBRARY_PROGRESS_CARD_VIEW_WIDTH
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.EIGHT_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FORTY_EIGHT_DP
-import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FOUR_DP
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.NO_ITEMS_AVAILABLE_IMAGE_HEIGHT
+import org.kiwix.kiwixmobile.core.utils.ComposeDimens.NO_ITEMS_AVAILABLE_IMAGE_WIDTH
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.ONE_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SIXTEEN_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SIX_DP
@@ -356,7 +358,7 @@ private fun OnlineLibraryScreenContent(
     modifier = Modifier.fillMaxSize(),
     contentAlignment = Alignment.Center
   ) {
-    if (uiState.showNoContent) {
+    if (uiState.showNoContent && !uiState.showScanningProgressBar && !uiState.isRefreshing) {
       NoContentView(uiState.noContentMessage)
     } else {
       OnlineLibraryList(uiState, lazyListState, onlineLibraryViewModel)
@@ -420,7 +422,7 @@ private fun OnlineLibraryList(
     }.distinctUntilChanged()
       .debounce(LOAD_MORE_DELAY.milliseconds)
       .collect { (lastVisibleBookIndex, totalBookCount) ->
-        if (lastVisibleBookIndex >= totalBookCount.minus(FIVE) && !state.isLoadingMore) {
+        if (totalBookCount > 0 && lastVisibleBookIndex >= totalBookCount.minus(FIVE) && !state.isLoadingMore) {
           onlineLibraryViewModel.handleLoadMore(totalBookCount)
         }
       }
@@ -495,11 +497,21 @@ private fun NoContentView(noContentMessage: String) {
     verticalArrangement = Arrangement.Center,
     horizontalAlignment = Alignment.CenterHorizontally
   ) {
+    Image(
+      painter = painterResource(id = drawable.ic_no_items_available),
+      contentDescription = null,
+      modifier = Modifier.size(
+        width = NO_ITEMS_AVAILABLE_IMAGE_WIDTH,
+        height = NO_ITEMS_AVAILABLE_IMAGE_HEIGHT
+      )
+    )
     Text(
       text = noContentMessage,
       textAlign = TextAlign.Center,
+      style = MaterialTheme.typography.bodyMedium,
+      color = MaterialTheme.colorScheme.onSurfaceVariant,
       modifier = Modifier
-        .padding(horizontal = FOUR_DP)
+        .padding(horizontal = SIXTEEN_DP)
         .semantics { testTag = NO_CONTENT_VIEW_TEXT_TESTING_TAG }
     )
   }

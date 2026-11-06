@@ -430,9 +430,17 @@ class OnlineLibraryViewModel @Inject constructor(
 
       is TabSelectedResult.FetchNeeded -> {
         onlineLibraryTabsUseCase.resetLoadingMore()
-        _uiState.update { it.copy(isLoadingMore = false) }
+        _uiState.update {
+          it.copy(
+            isLoadingMore = false,
+            items = emptyList(),
+            showNoContent = false,
+            noContentMessage = "",
+            showScanningProgressBar = true,
+            scanningProgressBarMessage = getString(R.string.reaching_remote_library)
+          )
+        }
         networkBooks.value = emptyList()
-        updateLibraryItems(emptyList())
         updateOnlineLibraryFilters(result.newRequest)
       }
 
@@ -580,6 +588,9 @@ class OnlineLibraryViewModel @Inject constructor(
 
     if (result.isCurrentTab) {
       totalPages = result.totalPages
+      if (result.updatedBooks.isNotEmpty()) {
+        _uiState.update { it.copy(showNoContent = false) }
+      }
       networkBooks.emit(result.updatedBooks)
       if (!result.isLoadMore && result.updatedBooks.isNotEmpty()) {
         sendUiEvent(UiEvent.ScrollToTop)
@@ -628,7 +639,8 @@ class OnlineLibraryViewModel @Inject constructor(
         showScanningProgressBar = !isLoadMore,
         isLoadingMore = isLoadMore,
         scanningProgressBarMessage = getString(messageResId),
-        noContentMessage = ""
+        noContentMessage = "",
+        showNoContent = if (!isLoadMore) false else it.showNoContent
       )
     }
   }
