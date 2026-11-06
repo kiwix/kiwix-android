@@ -175,14 +175,16 @@ class BookItemUITest {
   }
 
   @Test
-  fun bookItem_whenLongClickedInMultiMode_onLongClickIsNotInvoked() {
+  fun bookItem_whenLongClickedInMultiMode_onMultiSelectInvoked() {
     val bookOnDisk = createBookOnDisk()
     var longClick = false
+    var multiSelect = false
 
     bookItem(
       index = 0,
       bookOnDisk = bookOnDisk,
       onLongClick = { longClick = true },
+      onMultiSelect = { multiSelect = true },
       selectionMode = SelectionMode.MULTI
     )
 
@@ -192,6 +194,7 @@ class BookItemUITest {
         longClick()
       }
 
+    assertTrue(multiSelect)
     assertFalse(longClick)
   }
 
