@@ -67,6 +67,7 @@ class InitialDownloadRobot : BaseRobot() {
         waitUntil(FIVE_SECOND_DELAY) {
           onAllNodesWithTag(STORAGE_DEVICE_ITEM_TESTING_TAG).fetchSemanticsNodes().isNotEmpty()
         }
+        waitForIdle()
         onAllNodesWithTag(STORAGE_DEVICE_ITEM_TESTING_TAG)[0].performClick()
       }
     })

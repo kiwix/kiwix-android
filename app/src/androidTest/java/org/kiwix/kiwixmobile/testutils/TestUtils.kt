@@ -50,6 +50,7 @@ import org.kiwix.kiwixmobile.core.data.remote.UserAgentInterceptor
 import org.kiwix.kiwixmobile.core.di.modules.userAgent
 import org.kiwix.kiwixmobile.core.entity.LibkiwixBook
 import org.kiwix.kiwixmobile.core.ui.components.SWIPE_REFRESH_TESTING_TAG
+import org.kiwix.kiwixmobile.core.utils.TestingUtils.FLAKY_TEST_RETRY_TIMEOUT
 import org.kiwix.kiwixmobile.core.utils.files.Log
 import java.io.File
 import java.io.FileNotFoundException
@@ -228,6 +229,7 @@ object TestUtils {
       action()
     } catch (ignore: Throwable) {
       if (retryCount > 0) {
+        Thread.sleep(FLAKY_TEST_RETRY_TIMEOUT)
         testFlakyView(action, retryCount - 1)
       } else {
         throw ignore // No more retries, rethrow the exception

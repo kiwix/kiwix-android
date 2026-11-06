@@ -30,6 +30,7 @@ import androidx.test.uiautomator.UiSelector
 import okhttp3.OkHttpClient
 import org.kiwix.kiwixmobile.core.data.remote.UserAgentInterceptor
 import org.kiwix.kiwixmobile.core.di.modules.userAgent
+import org.kiwix.kiwixmobile.core.utils.TestingUtils.FLAKY_TEST_RETRY_TIMEOUT
 import org.kiwix.kiwixmobile.core.utils.files.Log
 import java.io.File
 import java.util.Timer
@@ -94,6 +95,7 @@ object TestUtils {
       action()
     } catch (ignore: Throwable) {
       if (retryCount > 0) {
+        Thread.sleep(FLAKY_TEST_RETRY_TIMEOUT)
         testFlakyView(action, retryCount - 1)
       } else {
         throw ignore // No more retries, rethrow the exception

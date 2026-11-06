@@ -98,7 +98,7 @@ class LanguageScreenTest : BaseActivityTest() {
         composeTestRule = composeTestRule,
         matchLanguage = "German"
       )
-      clickOnSaveLanguageIcon(composeTestRule)
+      clickOnNavigationBackIconInLanguageScreen(composeTestRule)
       // test if the selected language filter is applied on the online library or not.
       downloadRobot {
         composeTestRule.waitUntilTimeout(TestUtils.TEST_PAUSE_MS_FOR_DOWNLOAD_TEST)
@@ -126,7 +126,7 @@ class LanguageScreenTest : BaseActivityTest() {
         composeTestRule = composeTestRule,
         matchLanguage = "Italian"
       )
-      clickOnSaveLanguageIcon(composeTestRule)
+      clickOnNavigationBackIconInLanguageScreen(composeTestRule)
 
       // test if the selected language filter is applied on the online library or not.
       downloadRobot {
