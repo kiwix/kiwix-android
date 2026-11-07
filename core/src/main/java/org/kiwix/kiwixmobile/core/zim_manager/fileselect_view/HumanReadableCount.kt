@@ -19,28 +19,43 @@
 package org.kiwix.kiwixmobile.core.zim_manager.fileselect_view
 
 import android.content.Context
-import org.kiwix.kiwixmobile.core.utils.files.Log
+import androidx.annotation.StringRes
+import java.math.BigDecimal
+import java.math.RoundingMode
 import java.text.DecimalFormat
-import kotlin.math.log10
-import kotlin.math.pow
+
+private val UNIT_STEP = BigDecimal(1000)
+private val DECIMAL_THRESHOLD = BigDecimal.TEN
+private val UNITS = listOf("", "K", "M", "B", "T")
 
 @JvmInline
-value class HumanReadableCount(private val countStr: String) {
-  fun toHumanReadable(context: Context, resId: Int): String = try {
-    val size = Integer.parseInt(countStr)
-    if (size <= 0) {
-      ""
-    } else {
-      val units = arrayOf("", "K", "M", "B", "T")
-      val conversion = (log10(size.toDouble()) / 3).toInt()
-      context.getString(
-        resId,
-        DecimalFormat("#,##0.#")
-          .format(size / 1000.0.pow(conversion.toDouble())) + units[conversion]
-      )
+value class HumanReadableCount(private val countStr: String?) {
+  val humanReadable
+    get() = countStr?.toLongOrNull()?.let(::format).orEmpty()
+
+  fun toHumanReadable(context: Context, @StringRes resId: Int): String {
+    val formatted = humanReadable
+    return if (formatted.isEmpty()) "" else context.getString(resId, formatted)
+  }
+
+  private fun format(count: Long): String {
+    if (count <= 0L) return ""
+    var unitIndex = 0
+    var value = BigDecimal(count)
+    while (value >= UNIT_STEP && unitIndex < UNITS.lastIndex) {
+      value = value.divide(UNIT_STEP)
+      unitIndex++
     }
-  } catch (e: NumberFormatException) {
-    Log.d("BooksAdapter", "$e")
-    ""
+    var rounded = round(value)
+    if (rounded >= UNIT_STEP && unitIndex < UNITS.lastIndex) {
+      rounded = round(value.divide(UNIT_STEP))
+      unitIndex++
+    }
+    return "${DecimalFormat("#,##0.#").format(rounded)}${UNITS[unitIndex]}"
+  }
+
+  private fun round(value: BigDecimal): BigDecimal {
+    val scale = if (value < DECIMAL_THRESHOLD) 1 else 0
+    return value.setScale(scale, RoundingMode.HALF_UP)
   }
 }
