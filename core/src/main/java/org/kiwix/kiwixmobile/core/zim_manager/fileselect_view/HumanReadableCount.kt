@@ -32,15 +32,19 @@ value class HumanReadableCount(private val countStr: String) {
       ""
     } else {
       val units = arrayOf("", "K", "M", "B", "T")
-      val conversion = (log10(size.toDouble()) / 3).toInt()
-      context.getString(
-        resId,
-        DecimalFormat("#,##0.#")
-          .format(size / 1000.0.pow(conversion.toDouble())) + units[conversion]
-      )
+      val format = DecimalFormat("#,##0.#")
+      var conversion = (log10(size.toDouble()) / 3).toInt()
+      var formatted = format.format(size / 1000.0.pow(conversion))
+      if (format.parse(formatted).toDouble() >= UNIT_STEP && conversion < units.lastIndex) {
+        conversion++
+        formatted = format.format(size / 1000.0.pow(conversion))
+      }
+      context.getString(resId, formatted + units[conversion])
     }
   } catch (e: NumberFormatException) {
     Log.d("BooksAdapter", "$e")
     ""
   }
 }
+
+private const val UNIT_STEP = 1000.0
