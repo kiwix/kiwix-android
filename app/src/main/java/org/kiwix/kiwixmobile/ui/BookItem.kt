@@ -128,8 +128,9 @@ fun BookItem(
             }
           },
           onLongClick = {
-            if (selectionMode == SelectionMode.NORMAL) {
-              onLongClick?.invoke(bookOnDisk)
+            when (selectionMode) {
+              SelectionMode.MULTI -> onMultiSelect?.invoke(bookOnDisk)
+              SelectionMode.NORMAL -> onLongClick?.invoke(bookOnDisk)
             }
           }
         )
