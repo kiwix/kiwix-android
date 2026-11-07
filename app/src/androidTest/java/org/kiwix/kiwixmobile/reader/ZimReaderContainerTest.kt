@@ -235,7 +235,7 @@ class ZimReaderContainerTest {
     assertEquals("en", container.zimMainLanguage)
     assertEquals("en", container.languages?.get(0))
     assertEquals("A/index.html", container.mainPage)
-    assertEquals(348L, container.fileSize)
+    assertEquals(357269L, container.fileSize)
     assertNotNull(container.id)
     assertNotNull(container.favicon)
   }

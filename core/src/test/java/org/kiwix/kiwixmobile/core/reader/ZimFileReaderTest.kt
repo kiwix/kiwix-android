@@ -18,11 +18,63 @@
 
 package org.kiwix.kiwixmobile.core.reader
 
+import io.mockk.every
+import io.mockk.mockk
+import kotlinx.coroutines.Dispatchers
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.CsvSource
+import org.kiwix.kiwixmobile.core.zim_manager.Byte
+import org.kiwix.libzim.Archive
+import org.kiwix.libzim.SuggestionSearcher
+import java.io.File
 
 class ZimFileReaderTest {
+  @Nested
+  inner class FileSizeTest {
+    private fun readerForArchiveSize(sizeInBytes: Long): ZimFileReader {
+      val archive: SizedArchive = mockk(relaxed = true) {
+        every { filesize } returns sizeInBytes
+      }
+      return ZimFileReader(
+        ZimReaderSource(File("testzim.zim")),
+        archive,
+        mockk<SuggestionSearcher>(relaxed = true),
+        Dispatchers.Unconfined
+      )
+    }
+
+    @ParameterizedTest
+    @CsvSource(
+      "357269",
+      "8200000",
+      "1490000000",
+      "1000000000000"
+    )
+    fun fileSizeIsTheArchiveSizeInBytes(sizeInBytes: Long) {
+      assertEquals(sizeInBytes, readerForArchiveSize(sizeInBytes).fileSize)
+    }
+
+    @ParameterizedTest
+    @CsvSource(
+      "357269, 357 KB",
+      "8200000, 8.2 MB",
+      "1490000000, 1.5 GB",
+      "1000000000000, 1 TB"
+    )
+    fun bookSizeIsInBytesAndHumanReadableAcrossUnits(sizeInBytes: Long, humanReadable: String) {
+      val book = readerForArchiveSize(sizeInBytes).toBook()
+      assertEquals("$sizeInBytes", book.size)
+      assertEquals(humanReadable, Byte(book.size).humanReadable)
+    }
+  }
+
+  abstract class SizedArchive : Archive("") {
+    override fun getFilesize(): Long = 0L
+  }
+
   @Nested
   inner class MimeTypeTest {
     @Test

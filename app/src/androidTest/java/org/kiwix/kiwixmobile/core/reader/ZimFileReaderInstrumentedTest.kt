@@ -32,11 +32,13 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.kiwix.kiwixmobile.BaseActivityTest
+import org.kiwix.kiwixmobile.core.entity.LibkiwixBook
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader.Companion.CONTENT_PREFIX
 import org.kiwix.kiwixmobile.core.search.viewmodel.MAX_SUGGEST_WORD_COUNT
 import org.kiwix.kiwixmobile.core.utils.TestingUtils.HILT_RULE_ORDER
 import org.kiwix.kiwixmobile.testutils.TestUtils
 import org.kiwix.kiwixmobile.testutils.TestUtils.getZimFileFromResourceFolder
+import org.kiwix.libkiwix.Book
 import org.kiwix.libzim.SuggestionSearcher
 import java.io.File
 
@@ -79,7 +81,19 @@ class ZimFileReaderInstrumentedTest : BaseActivityTest() {
       assertEquals("en", reader.zimMainLanguage)
       assertEquals("en", reader.languages[0])
       assertEquals("", reader.tags)
-      assertEquals(348, reader.fileSize)
+      // Manually check the size of archive in bytes.
+      assertEquals(357269L, reader.fileSize)
+      // The native `Book.update(archive)` computes its size with KiB granularity
+      // (floors to the nearest 1024 bytes, per the legacy library.xml/OPDS convention),
+      // so it can be slightly smaller than the exact byte count `ZimFileReader.fileSize`
+      // reports. Assert it falls within that known rounding tolerance instead of
+      // exact equality.
+      val nativeBook = Book().apply {
+        update(reader.jniKiwixReader)
+      }
+      val libkiwixBook = LibkiwixBook(nativeBook)
+      val sizeDifference = reader.fileSize - (libkiwixBook.size.toLongOrNull() ?: 0L)
+      assertTrue(sizeDifference in 0 until 1024)
       assertNotNull(reader.favicon)
 
       // ── Verify searchSuggestions and related methods ──
