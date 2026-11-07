@@ -24,6 +24,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.createComposeRule
@@ -269,6 +270,18 @@ class OnlineBookItemUITest {
     composeTestRule
       .onNode(hasContentDescription("$combined$ZERO"))
       .assertExists()
+  }
+
+  @Test
+  fun onlineBookItem_whenCountRoundsUpToThousand_showsNextUnit() {
+    setContent(
+      item = mockBookItem(
+        book = mockLibkiwixBook(articleCount = "999999", mediaCount = "999950000")
+      )
+    )
+    composeTestRule
+      .onNodeWithTag(BOOK_ARTICLE_COUNT_TEST_TAG, useUnmergedTree = true)
+      .assertTextEquals("1M pages • 1B media")
   }
 
   @Test
