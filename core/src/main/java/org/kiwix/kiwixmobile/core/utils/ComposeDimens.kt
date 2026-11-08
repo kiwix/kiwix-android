@@ -67,6 +67,8 @@ object ComposeDimens {
   val TWENTY_EIGHT_DP = 28.dp
   val FORTY_EIGHT_DP = 48.dp
   val FIFTY_SIX_DP = 56.dp
+  val NO_ITEMS_AVAILABLE_IMAGE_WIDTH = 200.dp
+  val NO_ITEMS_AVAILABLE_IMAGE_HEIGHT = 200.dp
 
   // Font Sizes
   val TWENTY_FOUR_SP = 24.sp
