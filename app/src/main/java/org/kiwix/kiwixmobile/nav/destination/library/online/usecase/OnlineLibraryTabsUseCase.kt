@@ -33,6 +33,7 @@ import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.OnlineLibr
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.OnlineLibraryViewModel.OnlineLibraryRequest
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.OnlineLibraryViewModel.OnlineLibraryState.Success
 import org.kiwix.kiwixmobile.nav.destination.library.online.viewmodel.OnlineLibraryViewModel.TabData
+import java.util.Locale
 import java.util.concurrent.ConcurrentHashMap
 import javax.inject.Inject
 
@@ -78,17 +79,18 @@ class OnlineLibraryTabsUseCase @Inject constructor(
     }
   }
 
-  private suspend fun getDisplayLanguage(languageCode: String): String {
+  private fun getDisplayLanguage(languageCode: String, appLocale: Locale): String {
     val mappedLocale = bookUtils.localeMap[languageCode] ?: languageCode.convertToLocal()
-    return mappedLocale.getDisplayLanguage(LocaleHelper.getAppLocale(context, kiwixDataStore))
+    return mappedLocale.getDisplayLanguage(appLocale)
   }
 
   suspend fun createTabs(languageString: String): List<LanguageTab> {
+    val appLocale = LocaleHelper.getAppLocale(context, kiwixDataStore)
     if (languageString.equals("all", ignoreCase = true)) {
       return listOf(
         LanguageTab(
           languageCode = null,
-          displayName = context.getString(R.string.all_languages).uppercase()
+          displayName = context.getString(R.string.all_languages).uppercase(appLocale)
         )
       )
     }
@@ -99,14 +101,14 @@ class OnlineLibraryTabsUseCase @Inject constructor(
         listOf(
           LanguageTab(
             languageCode = appLang,
-            displayName = getDisplayLanguage(appLang).uppercase()
+            displayName = getDisplayLanguage(appLang, appLocale).uppercase(appLocale)
           )
         )
       } else {
         listOf(
           LanguageTab(
             languageCode = null,
-            displayName = context.getString(R.string.all_languages).uppercase()
+            displayName = context.getString(R.string.all_languages).uppercase(appLocale)
           )
         )
       }
@@ -114,7 +116,7 @@ class OnlineLibraryTabsUseCase @Inject constructor(
       languageCodes.map { code ->
         LanguageTab(
           languageCode = code,
-          displayName = getDisplayLanguage(code).uppercase()
+          displayName = getDisplayLanguage(code, appLocale).uppercase(appLocale)
         )
       }
     }
