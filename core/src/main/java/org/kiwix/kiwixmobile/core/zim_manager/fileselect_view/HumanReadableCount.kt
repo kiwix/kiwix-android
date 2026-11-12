@@ -20,42 +20,22 @@ package org.kiwix.kiwixmobile.core.zim_manager.fileselect_view
 
 import android.content.Context
 import androidx.annotation.StringRes
-import java.math.BigDecimal
-import java.math.RoundingMode
-import java.text.DecimalFormat
+import org.kiwix.kiwixmobile.core.utils.formatHumanReadable
 
-private val UNIT_STEP = BigDecimal(1000)
-private val DECIMAL_THRESHOLD = BigDecimal.TEN
-private val UNITS = listOf("", "K", "M", "B", "T")
+private val COUNT_UNITS = listOf("", "K", "M", "B", "T")
 
 @JvmInline
 value class HumanReadableCount(private val countStr: String?) {
-  val humanReadable
-    get() = countStr?.toLongOrNull()?.let(::format).orEmpty()
+  val humanReadable: String
+    get() = formatHumanReadable(
+      rawValue = countStr,
+      units = COUNT_UNITS,
+      includeSpace = false,
+      allowZeroOrNegative = false,
+    )
 
   fun toHumanReadable(context: Context, @StringRes resId: Int): String {
     val formatted = humanReadable
     return if (formatted.isEmpty()) "" else context.getString(resId, formatted)
-  }
-
-  private fun format(count: Long): String {
-    if (count <= 0L) return ""
-    var unitIndex = 0
-    var value = BigDecimal(count)
-    while (value >= UNIT_STEP && unitIndex < UNITS.lastIndex) {
-      value = value.divide(UNIT_STEP)
-      unitIndex++
-    }
-    var rounded = round(value)
-    if (rounded >= UNIT_STEP && unitIndex < UNITS.lastIndex) {
-      rounded = round(value.divide(UNIT_STEP))
-      unitIndex++
-    }
-    return "${DecimalFormat("#,##0.#").format(rounded)}${UNITS[unitIndex]}"
-  }
-
-  private fun round(value: BigDecimal): BigDecimal {
-    val scale = if (value < DECIMAL_THRESHOLD) 1 else 0
-    return value.setScale(scale, RoundingMode.HALF_UP)
   }
 }
