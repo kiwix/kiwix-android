@@ -23,6 +23,7 @@ import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsSelected
 import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.filter
+import androidx.compose.ui.test.hasAnyAncestor
 import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.junit4.ComposeContentTestRule
@@ -275,15 +276,14 @@ class SettingsRobot : BaseRobot() {
       waitForIdle()
       composeTestRule
         .onNodeWithTag(SETTINGS_LIST_TESTING_TAG)
-        .performScrollToNode(
-          hasTestTag(SEEKBAR_PREFERENCE_TESTING_TAG) and hasContentDescription(context.getString(R.string.pref_text_zoom_title))
-        )
+        .performScrollToNode(hasTestTag(SEEKBAR_PREFERENCE_TESTING_TAG))
       composeTestRule
-        .onAllNodesWithTag(SEEKBAR_PREFERENCE_TESTING_TAG)
-        .filter(hasContentDescription(context.getString(R.string.pref_text_zoom_title)))
-        .onFirst()
+        .onNode(
+          hasContentDescription(context.getString(R.string.pref_text_zoom_title)) and
+            hasAnyAncestor(hasTestTag(SEEKBAR_PREFERENCE_TESTING_TAG))
+        )
         .performScrollTo()
-        .performClick()
+        .assertIsDisplayed()
     }
   }
 
