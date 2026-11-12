@@ -26,16 +26,13 @@ private val COUNT_UNITS = listOf("", "K", "M", "B", "T")
 
 @JvmInline
 value class HumanReadableCount(private val countStr: String?) {
-  val humanReadable: String
-    get() = formatHumanReadable(
+  fun toHumanReadable(context: Context, @StringRes resId: Int): String {
+    val formatted = formatHumanReadable(
       rawValue = countStr,
       units = COUNT_UNITS,
       includeSpace = false,
       allowZeroOrNegative = false,
     )
-
-  fun toHumanReadable(context: Context, @StringRes resId: Int): String {
-    val formatted = humanReadable
     return if (formatted.isEmpty()) "" else context.getString(resId, formatted)
   }
 }
