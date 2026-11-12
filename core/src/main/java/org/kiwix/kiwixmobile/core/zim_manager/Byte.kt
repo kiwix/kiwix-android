@@ -18,36 +18,17 @@
 
 package org.kiwix.kiwixmobile.core.zim_manager
 
-import java.math.BigDecimal
-import java.math.RoundingMode
-import java.text.DecimalFormat
+import org.kiwix.kiwixmobile.core.utils.formatHumanReadable
 
-private val UNIT_STEP = BigDecimal(1000)
-private val DECIMAL_THRESHOLD = BigDecimal.TEN
-private val UNITS = listOf("B", "KB", "MB", "GB", "TB")
+private val BYTE_UNITS = listOf("B", "KB", "MB", "GB", "TB")
 
 @JvmInline
 value class Byte(private val byteString: String?) {
-  val humanReadable
-    get() = byteString?.toLongOrNull()?.let(::format).orEmpty()
-
-  private fun format(bytes: Long): String {
-    var unitIndex = 0
-    var value = BigDecimal(bytes)
-    while (value >= UNIT_STEP && unitIndex < UNITS.lastIndex) {
-      value = value.divide(UNIT_STEP)
-      unitIndex++
-    }
-    var rounded = round(value)
-    if (rounded >= UNIT_STEP && unitIndex < UNITS.lastIndex) {
-      rounded = round(value.divide(UNIT_STEP))
-      unitIndex++
-    }
-    return "${DecimalFormat("#,##0.#").format(rounded)} ${UNITS[unitIndex]}"
-  }
-
-  private fun round(value: BigDecimal): BigDecimal {
-    val scale = if (value < DECIMAL_THRESHOLD) 1 else 0
-    return value.setScale(scale, RoundingMode.HALF_UP)
-  }
+  val humanReadable: String
+    get() = formatHumanReadable(
+      rawValue = byteString,
+      units = BYTE_UNITS,
+      includeSpace = true,
+      allowZeroOrNegative = true,
+    )
 }

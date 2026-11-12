@@ -19,28 +19,20 @@
 package org.kiwix.kiwixmobile.core.zim_manager.fileselect_view
 
 import android.content.Context
-import org.kiwix.kiwixmobile.core.utils.files.Log
-import java.text.DecimalFormat
-import kotlin.math.log10
-import kotlin.math.pow
+import androidx.annotation.StringRes
+import org.kiwix.kiwixmobile.core.utils.formatHumanReadable
+
+private val COUNT_UNITS = listOf("", "K", "M", "B", "T")
 
 @JvmInline
-value class HumanReadableCount(private val countStr: String) {
-  fun toHumanReadable(context: Context, resId: Int): String = try {
-    val size = Integer.parseInt(countStr)
-    if (size <= 0) {
-      ""
-    } else {
-      val units = arrayOf("", "K", "M", "B", "T")
-      val conversion = (log10(size.toDouble()) / 3).toInt()
-      context.getString(
-        resId,
-        DecimalFormat("#,##0.#")
-          .format(size / 1000.0.pow(conversion.toDouble())) + units[conversion]
-      )
-    }
-  } catch (e: NumberFormatException) {
-    Log.d("BooksAdapter", "$e")
-    ""
+value class HumanReadableCount(private val countStr: String?) {
+  fun toHumanReadable(context: Context, @StringRes resId: Int): String {
+    val formatted = formatHumanReadable(
+      rawValue = countStr,
+      units = COUNT_UNITS,
+      includeSpace = false,
+      allowZeroOrNegative = false,
+    )
+    return if (formatted.isEmpty()) "" else context.getString(resId, formatted)
   }
 }
