@@ -16,7 +16,7 @@
   <string name="menu_read_aloud">ߊ߬ ߞߊ߬ߙߊ߲߬ ߞߊ߲ߡߊߦߟߍ ߘߐ߫</string>
   <string name="menu_read_aloud_stop">ߞߊ߲ߡߊߦߟߍ߫ ߘߐ߬ߞߊ߬ߙߊ߲߬ߠߌ߲ ߠߊߟߐ߬</string>
   <string name="menu_support_kiwix">ߞߥߌߺߌߞߛ ߞߐߞߘߐߓߌ߲ߓߌ߲߫</string>
-  <string name="menu_wifi_hotspot">ߥߝߌ ߛߐ߬ߘߐ߲߬ ߦߙߐ</string>
+  <string name="menu_wifi_hotspot" fuzzy="true">ߥߝߌ ߛߐ߬ߘߐ߲߬ ߦߙߐ</string>
   <string name="save_media">ߡߍ߲ߞߊ߲ ߠߎ߬ ߟߊߡߙߊ߬</string>
   <string name="save_media_error">ߝߎ߬ߕߎ߲߬ߕߌ ߘߏ߫ ߓߘߊ߫ ߓߌ߬ߟߴߊ߬ ߘߐ߫ ߞߵߌ ߕߴߌ ߞߊߘߊ߲ ߞߊ߲߬ ߞߊ߬ ߞߟߋߞߟߋ ߟߊߞߎ߲߬ߘߎ߫߹</string>
   <string name="save_media_saved">ߞߟߋߞߟߋ߫ ߟߊߞߎ߲߬ߘߎ߬ %s ߘߌ߫</string>
@@ -25,23 +25,23 @@
   <string name="open_in_new_tab">ߞߊ߬ ߛߘߌ߬ߜߋ߲ ߠߊߞߊ߬ ߝߢߐߘߊ߫ ߞߎߘߊ߫ ߟߊ߫؟</string>
   <string name="hotspot_service_channel_name">ߥߌߝߌ ߟߊߛߐ߬ߘߐ߲߬ ߛߌߟߊ ߗߋߘߊ ߥߙߏߝߋ</string>
   <string name="hotspot_failed_title">ߡߊ߬ߛߐ߬ߘߐ߲߬ ߛߌߟߊ ߓߘߊ߫ ߞߢߊ߬ ߟߊߝߟߐ߫ ߟߊ߫</string>
-  <string name="hotspot_failed_message">ߊ߬ ߞߍߣߍ߲߫ ߦߋ߫ ߦߴߌ ߟߊ߫ ߟߊ߬ߛߐ߬ߘߐ߲߬ ߛߌߟߊ ߟߊߡߍߣߍ߲ߣߍ߲߫ ߞߘߐ ߟߋ߬.ߌ ߟߊ߫ ߥߌߝߌ ߟߊߛߐ߬ߘߐ߲߬ ߛߌߟߊ ߓߐ߫ ߊ߬ ߟߊ߫ ߖߊ߰ߣߌ߲߫ ߞߊ߬ ߣߊ߬ ߕߴߊ߬ ߘߊߓߊ߲߫ ߠߊ߫.</string>
+  <string name="hotspot_failed_message" fuzzy="true">ߊ߬ ߞߍߣߍ߲߫ ߦߋ߫ ߦߴߌ ߟߊ߫ ߟߊ߬ߛߐ߬ߘߐ߲߬ ߛߌߟߊ ߟߊߡߍߣߍ߲ߣߍ߲߫ ߞߘߐ ߟߋ߬.ߌ ߟߊ߫ ߥߌߝߌ ߟߊߛߐ߬ߘߐ߲߬ ߛߌߟߊ ߓߐ߫ ߊ߬ ߟߊ߫ ߖߊ߰ߣߌ߲߫ ߞߊ߬ ߣߊ߬ ߕߴߊ߬ ߘߊߓߊ߲߫ ߠߊ߫.</string>
   <string name="go_to_wifi_settings_label">ߥߊ߫ ߥߝߌ (ߥߊߝߊ߬) ߟߊ߬ߓߍ߲߬ߢߐ߲߰ߡߦߊ߬ߘߊ ߞߊ߲߬</string>
   <string name="connection_refused">ߜߊ߬ߞߎ߲߬ߠߌ߲ ߓߊ߲߬ߣߍ߲߫</string>
   <string name="hotspot_running">ߟߊ߬ߛߐ߬ߘߐ߲߬ ߛߌߟߊ ߦߴߊ߬ ߞߊ߲߬</string>
-  <string name="no_books_selected_toast_message">ߞߊ߬ߝߊ ߘߏ߫ ߛߎߥߊ߲ߘߌ߫ ߡߎߣߎ߲߬ ߖߊ߰ߣߌ߲߫</string>
+  <string name="no_books_selected_toast_message" fuzzy="true">ߞߊ߬ߝߊ ߘߏ߫ ߛߎߥߊ߲ߘߌ߫ ߡߎߣߎ߲߬ ߖߊ߰ߣߌ߲߫</string>
   <string name="server_failed_message">ߡߊ߬ߛߐ߬ߟߊ߲ ߕߍ߫ ߛߐ߲߬ ߟߊߝߟߐ߫ ߟߊ߫. ߌ ߟߊ߫ ߥߌߝߌ ߟߊߛߐ߬ߘߐ߲߬ ߛߌߟߊ ߟߊߞߎߣߎ߲߫ ߖߊ߰ߣߌ߲߫</string>
   <string name="server_failed_toast_message">ߡߊ߬ߛߐ߬ߟߊ߲ ߕߍ߫ ߛߐ߲߬ ߟߊߝߟߐ߫ ߟߊ߫.</string>
   <string name="server_started_successfully_toast_message">ߡߊ߬ߛߐ߬ߟߊ߲ ߟߊߝߟߐ ߓߘߊ߫ ߛߎߘߊ߲߫.</string>
   <string name="server_stopped_successfully_toast_message">ߡߊ߬ߛߐ߬ߟߊ߲ ߟߊߟߐ߬ߟߌ ߓߘߊ߫ ߛߎߘߊ߲߫.</string>
   <string name="hotspot_turned_on">ߥߌߝߌ ߡߊߛߐ߬ߘߐ߲߬ ߛߌߟߊ ߓߘߊ߫ ߟߊߞߎߣߎ߲߫</string>
   <string name="hotspot_details_message">ߢߌ߲߬ ߠߎ߫ ߟߋ߬ ߦߴߌ ߘߌ߲߬ߞߌߙߊ ߥߌߝߌ ߟߊߛߐ߬ߘߐ߲߬ ߛߌߟߊ ߘߌ߫. \nSSID : %1$s\nߕߊ߬ߡߌ߲߬ߞߊ߲ : %2$s</string>
-  <string name="server_textview_default_message">ߞߐߕߐ߮ ߘߏ߫ ߟߎ߫ ߛߎߥߊ߲ߘߌ߫߸ ߌ ߦߋ߫ ߡߍ߲ ߠߎ߬ ߟߊߖߌ߬ߦߊ߬ ߞߏ ߘߐ߫ ߡߊ߬ߛߐ߬ߟߊ߲ ߠߊ߫</string>
+  <string name="server_textview_default_message" fuzzy="true">ߞߐߕߐ߮ ߘߏ߫ ߟߎ߫ ߛߎߥߊ߲ߘߌ߫߸ ߌ ߦߋ߫ ߡߍ߲ ߠߎ߬ ߟߊߖߌ߬ߦߊ߬ ߞߏ ߘߐ߫ ߡߊ߬ߛߐ߬ߟߊ߲ ߠߊ߫</string>
   <string name="progress_dialog_starting_server">ߟߊ߬ߝߟߐ߬ߟߌ ߡߊߛߐߟߊ</string>
   <string name="hotspot_dialog_title">ߞߝߊ߬ ߟߊ߬ߖߌߦߊ ߟߊ߬ߟߌ߰ߒ߬ߞߊ߲߬ߠߊ ߟߎ߬</string>
   <string name="wifi_dialog_title">ߥߌߝߌ ߜߊ߲߬ߞߎ߲߬ߠߌ߲ ߓߘߊ߫ ߟߊߞߏߟߐ߲߫</string>
   <string name="wifi_dialog_body">ߖߐ߲߬ߛߊ߫ ߞߊ߬ ߛߋ߫ ߞߊ߬ߝߊ ߟߎ߬ ߦߋ߫ ߟߊ߫ ߞߍߟߊ߲߫ ߜߘߍ ߟߎ߬ ߘߐ߫߸ ߘߍ߲߬ߞߣߍ߬ߦߴߊ߬ ߡߊ߬ ߡߎߣߎ߲߬ ߖߊ߰ߣߌ߲߫ ߞߏ߫ ߞߍߟߊ߲ ߠߎ߬ ߓߍ߯ ߜߊ߲߬ߞߎ߲߬ߣߍ߲߫ ߦߋ߫ ߥߌߝߌ ߞߙߏ߬ߝߏ߬ ߞߋߟߋ߲߫ ߠߊ߫.</string>
-  <string name="hotspot_dialog_message">ߖߐ߲߬ߛߊ߫ ߓߊ߯ߙߊ߫ ߛߎ߮ ߏ߬ ߦߋ߫ ߓߊ߯ߙߴߊ߬ ߢߊ ߡߊ߬߸ ߌ ߞߊߡߊ߲߫ ߦߋ߫ ߞߊ߬ ߥߊߝߊ (ߥߌߝߌ) ߟߊߛߐ߬ߘߐ߲߬ ߛߌߟߊ ߟߊߞߎߣߎ߲߫ ߌ ߓߟߏ ߟߊ߫ ߡߎߣߎ߲߬ ߥߟߊ߫ ߌ ߦߋ߫ ߟߴߊ߬ ߟߊ߫ ߞߏ߫ ߟߊ߬ߖߌ߬ߦߊ߬ߟߌ߫ ߞߍߟߊ߲ ߣߌ߫ ߟߊ߬ߛߣߍ߬ߟߌ߫ ߞߍߟߊ߲ ߠߎ߬ ߓߍ߯ ߜߊ߲߬ߞߎ߲߬ߣߍ߲߫ ߦߋ߫ ߥߌߝߌ ߞߙߏ߬ߝߏ߬ ߞߋߟߋ߲ ߠߊ߫.</string>
+  <string name="hotspot_dialog_message" fuzzy="true">ߖߐ߲߬ߛߊ߫ ߓߊ߯ߙߊ߫ ߛߎ߮ ߏ߬ ߦߋ߫ ߓߊ߯ߙߴߊ߬ ߢߊ ߡߊ߬߸ ߌ ߞߊߡߊ߲߫ ߦߋ߫ ߞߊ߬ ߥߊߝߊ (ߥߌߝߌ) ߟߊߛߐ߬ߘߐ߲߬ ߛߌߟߊ ߟߊߞߎߣߎ߲߫ ߌ ߓߟߏ ߟߊ߫ ߡߎߣߎ߲߬ ߥߟߊ߫ ߌ ߦߋ߫ ߟߴߊ߬ ߟߊ߫ ߞߏ߫ ߟߊ߬ߖߌ߬ߦߊ߬ߟߌ߫ ߞߍߟߊ߲ ߣߌ߫ ߟߊ߬ߛߣߍ߬ߟߌ߫ ߞߍߟߊ߲ ߠߎ߬ ߓߍ߯ ߜߊ߲߬ߞߎ߲߬ߣߍ߲߫ ߦߋ߫ ߥߌߝߌ ߞߙߏ߬ߝߏ߬ ߞߋߟߋ߲ ߠߊ߫.</string>
   <string name="hotspot_dialog_neutral_button">ߢߊߓߐ ߦߴߌ ߘߐ߫</string>
   <string name="hotspot_channel_description">ߊ߬ ߟߊߞߎߘߦߊ߫ ߞߊ߬ ߓߍ߲߬ ߌ ߟߊ߫ ߟߊ߬ߛߐ߬ߘߐ߲߬ ߛߌߟߊ\\ߡߊߛߐߟߊ߲ ߟߌ߬ߤߟߊ ߡߊ߬.</string>
   <string name="hotspot_notification_content_title">ߞߥߌߞߛ ߟߊ߬ߛߐ߬ߘߐ߲߬ ߛߌߟߊ</string>
@@ -130,9 +130,9 @@
   <string name="pref_storage">ߟߊ߬ߡߊ߲߬ߘߌ߬ߦߙߐ</string>
   <string name="pref_current_folder">ߕߋ߲߭ߕߋ߲߭ ߝߙߏߞߏ</string>
   <string name="delete_zim_failed">ߤߊߞߍ߬ߕߏ߬߸ ߊ߲ ߡߊ߫ ߛߋ߫ ߞߐߕߐ߮ ߘߏ߫ ߟߎ߫ ߖߏ߲߫ ߠߊ߫. ߌ ߘߌ߫ ߛߴߊ߬ ߡߊߝߍߣߍ߲߫ ߠߊ߫ ߞߐߕߐ߮ ߡߙߊ߬ߓߊ߮ ߝߍ߬ ߒߕߋߟߋ߲ߡߊ߬.</string>
-  <string name="tts_pause">ߊ߬ ߟߊߟߐ߬</string>
-  <string name="tts_resume">ߊ߬ ߘߊߡߌ߬ߣߊ߬</string>
-  <string name="stop">ߌ ߟߐ߬</string>
+  <string name="tts_pause" fuzzy="true">ߊ߬ ߟߊߟߐ߬</string>
+  <string name="tts_resume" fuzzy="true">ߊ߬ ߘߊߡߌ߬ߣߊ߬</string>
+  <string name="stop" fuzzy="true">ߌ ߟߐ߬</string>
   <string name="internal_storage">ߞߣߐߟߊ</string>
   <string name="external_storage">ߞߐߞߊ߲ߠߊ</string>
   <string name="yes">ߊ߬ߥߐ߫</string>
@@ -154,14 +154,14 @@
   <string name="time_left">ߕߐ߭ ߕߏߣߍ߲߫</string>
   <string name="time_today">ߓߌ߬</string>
   <string name="time_yesterday">ߞߎߣߎ߲߬</string>
-  <string name="pref_external_link_popup_title">ߞߊ߬ ߖߊ߬ߛߙߋ߬ߡߊ߬ߟߊ ߞߍ߫ ߘߏ߲߬ ߕߎߡߊ ߟߊ߫ ߞߐߞߊ߲߫ ߛߘߌߜߋ߲ ߠߎ߬ ߟߊ߫</string>
+  <string name="pref_external_link_popup_title" fuzzy="true">ߞߊ߬ ߖߊ߬ߛߙߋ߬ߡߊ߬ߟߊ ߞߍ߫ ߘߏ߲߬ ߕߎߡߊ ߟߊ߫ ߞߐߞߊ߲߫ ߛߘߌߜߋ߲ ߠߎ߬ ߟߊ߫</string>
   <string name="pref_external_link_popup_summary">ߦߌ߬ߘߊ߬ߥߟߊ ߟߊߓߊ߯ߙߊ߫ ߞߊ߬ ߟߊ߬ߟߌ߰ߟߌ ߞߍ߫ ߛߐ߲߬ߞߐ ߡߊߞߊ߬ߝߏ߬ߞߏ ߟߊ߫ ߥߟߊ߫ ߞߏ߫ ߛߘߌ߬ߜߋ߲ ߕߍ߫ ߓߊ߯ߙߊ߫ ߟߊ߫ ߓߟߐߟߐߒߕߊ߲ߧߊ ߘߐ߫.</string>
-  <string name="external_link_popup_dialog_title">ߞߐߞߊ߲߫ ߛߘߌߜߋ߲ ߟߊߛߐ߬ߘߐ߲</string>
+  <string name="external_link_popup_dialog_title" fuzzy="true">ߞߐߞߊ߲߫ ߛߘߌߜߋ߲ ߟߊߛߐ߬ߘߐ߲</string>
   <string name="external_link_popup_dialog_message" fuzzy="true">ߌ ߦߴߌ ߘߐ߫ ߞߊ߬ ߞߐߞߊ߲߫ ߛߘߌߜߋ߲ ߠߋ߬ ߟߊߘߏ߲߬ ߏ߬ ߘߌ߫. ߏ߬ ߘߏ߲߬ ߘߌ߫ ߛߋ߫ ߥߟߏ߫ ߟߊ߫ ߓߟߏߡߟߊ ߟߊߕߊ߬ߡߌ߲ ߛߐ߲߬ߞߐ ߡߊߞߊ߬ߝߏ߬ߟߌ ߟߊ߫ ߤߊߡߊ߲ߕߍ߫ ߊ߬ ߕߍ߫ ߣߊ߬ ߓߊ߯ߙߊ߫ ߟߊ߫ ߞߵߌ ߕߏ߫ ߜߊ߲߬ߞߎ߲߬ߓߊߟߌߦߊ ߘߐ߫. ߌ ߦߴߊ߬ ߝߍ߬ ߞߵߊ߬ ߘߊߓߊ߲߫ ߖߋߎ߫؟</string>
   <string name="do_not_ask_anymore">ߢߌ߬ߣߌ߲߬ߞߊ߬ߟߌ߫ ߜߘߍ߫ ߞߊ߫ ߞߴߏ߬ ߞߐ߫</string>
-  <string name="your_languages">ߞߊ߲ ߛߎߥߊ߲ߘߌ߫</string>
-  <string name="other_languages">ߞߊ߲߫ ߜߘߍ ߟߎ߬:</string>
-  <string name="no_items_msg">ߝߌ߬ߛߌ߬ ߛߌ߫ ߛߐ߬ߘߐ߲߬ߕߊ߫ ߕߍ߫</string>
+  <string name="your_languages" fuzzy="true">ߞߊ߲ ߛߎߥߊ߲ߘߌ߫</string>
+  <string name="other_languages" fuzzy="true">ߞߊ߲߫ ߜߘߍ ߟߎ߬:</string>
+  <string name="no_items_msg" fuzzy="true">ߝߌ߬ߛߌ߬ ߛߌ߫ ߛߐ߬ߘߐ߲߬ߕߊ߫ ߕߍ߫</string>
   <string name="crash_title">ߏ߬ ߓߘߊ߫ ߓߍ߲߬… ߏ߬ ߦߋ߫ ߞߏ߫ ߓߘߍ߫ ߓߊ߫ ߟߋ߬ ߘߌ߫</string>
   <string name="crash_description" fuzzy="true">ߊ߬ ߞߍߣߍ߲߫ ߦߋ߫ ߦߴߊ߲ ߓߘߊ߫ ߜߊߛߊ߲߫. \n\nߊ߬ ߝߐ߫ ߌ ߘߌ߫ ߛߵߊ߲ ߘߍ߬ߡߍ߲߬ ߠߊ߫ ߝߙߋߞߋ ߏ߬ ߝߎߟߋ߲ ߡߊ߬ ߞߎ߲߬ߠߊ߬ߝߏߣߌ߲ ߢߌ߲߬ ߠߎ߬ ߗߋߟߌ ߟߊ߫؟</string>
   <string name="crash_checkbox_language">ߌ ߟߊ߫ ߞߊ߲ ߟߊ߬ߓߍ߲߬ߢߐ߲߰ߡߦߊ߬ߘߊ ߟߎ߫</string>
@@ -174,7 +174,7 @@
   <string name="new_tab_shortcut_label">ߝߢߐߘߊ߫ ߞߎߘߊ</string>
   <string name="get_content_shortcut_label">ߞߣߐߘߐ ߟߊߛߐ߬ߘߐ߲߬</string>
   <string name="fav_icon">ߤߣߍߞߍߕߊ ߛߌ߲ߞߐ߲</string>
-  <string name="pagesCount">ߞߎߡߘߊ %s ߟߎ߬</string>
+  <string name="pagesCount" fuzzy="true">ߞߎߡߘߊ %s ߟߎ߬</string>
   <string name="get_started">ߊ߬ ߘߊߡߌ߬ߣߊ߬</string>
   <string name="download_books">ߞߊ߬ߝߊ ߟߎ߬ ߟߊߖߌ߰ ߌ ߞߎ߲߬</string>
   <string name="humankind_knowledge">ߡߐ߱ ߡߊߟߐ߲ߠߌ߲߸ ߌ ߟߊ߫ ߜߋߟߋ߲ߜߋߟߋ߲ ߠߊ߫.</string>
