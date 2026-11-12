@@ -18,7 +18,7 @@
   <string name="menu_read_aloud">ಜೋರಾಗಿ ಓದು</string>
   <string name="menu_read_aloud_stop">ಜೋರಾಗಿ ಓದುವುದನ್ನು ನಿಲ್ಲಿಸು</string>
   <string name="menu_support_kiwix">ಕಿವಿಕ್ಸಿಗೆ ಬೆಂಬಲ ನೀಡಿ</string>
-  <string name="menu_wifi_hotspot">ವೈಫೈ ಹಾಟ್‌ಸ್ಪಾಟ್</string>
+  <string name="menu_wifi_hotspot" fuzzy="true">ವೈಫೈ ಹಾಟ್‌ಸ್ಪಾಟ್</string>
   <string name="save_media">ಮಾಧ್ಯಮವನ್ನು ಉಳಿಸಿ</string>
   <string name="save_media_error">ಮಾಧ್ಯಮವನ್ನು ಉಳಿಸಲು ಪ್ರಯತ್ನಿಸುವಾಗ ದೋಷ ಸಂಭವಿಸಿದೆ!</string>
   <string name="save_media_saved">ಮಾಧ್ಯಮವನ್ನು %s ಗೆ ಉಳಿಸಲಾಗಿದೆ</string>
@@ -27,11 +27,11 @@
   <string name="open_in_new_tab">ಹೊಸ ಟ್ಯಾಬ್‌ನಲ್ಲಿ ಕೊಂಡಿಯನ್ನು ತೆರೆಯಿರಿ?</string>
   <string name="hotspot_service_channel_name">ಹಾಟ್‌ಸ್ಪಾಟ್ ಸೇವಾ ಚಾನೆಲ್</string>
   <string name="hotspot_failed_title">ಹಾಟ್‌ಸ್ಪಾಟ್ ಪ್ರಾರಂಭಿಸಲು ವಿಫಲವಾಗಿದೆ</string>
-  <string name="hotspot_failed_message">ನಿಮ್ಮ ಹಾಟ್‌ಸ್ಪಾಟ್ ಈಗಾಗಲೇ ಆನ್ ಆಗಿರುವಂತೆ ತೋರುತ್ತಿದೆ. ಮುಂದುವರಿಯಲು ದಯವಿಟ್ಟು ನಿಮ್ಮ ವೈಫೈ ಹಾಟ್‌ಸ್ಪಾಟ್ಅನ್ನು ನಿಷ್ಕ್ರಿಯಗೊಳಿಸಿ.</string>
+  <string name="hotspot_failed_message" fuzzy="true">ನಿಮ್ಮ ಹಾಟ್‌ಸ್ಪಾಟ್ ಈಗಾಗಲೇ ಆನ್ ಆಗಿರುವಂತೆ ತೋರುತ್ತಿದೆ. ಮುಂದುವರಿಯಲು ದಯವಿಟ್ಟು ನಿಮ್ಮ ವೈಫೈ ಹಾಟ್‌ಸ್ಪಾಟ್ಅನ್ನು ನಿಷ್ಕ್ರಿಯಗೊಳಿಸಿ.</string>
   <string name="go_to_wifi_settings_label">ವೈಫೈ ಸೆಟ್ಟಿಂಗ್‌ಗಳಿಗೆ ಹೋಗಿ</string>
   <string name="connection_refused">ಸಂಪರ್ಕ ತಿರಸ್ಕರಿಸಲಾಗಿದೆ.</string>
   <string name="hotspot_running">ಹಾಟ್‌ಸ್ಪಾಟ್ ರನ್ ಆಗುತ್ತಿದೆ</string>
-  <string name="no_books_selected_toast_message">ದಯವಿಟ್ಟು ಮೊದಲು ಪುಸ್ತಕಗಳನ್ನು ಆಯ್ಕೆಮಾಡಿ</string>
+  <string name="no_books_selected_toast_message" fuzzy="true">ದಯವಿಟ್ಟು ಮೊದಲು ಪುಸ್ತಕಗಳನ್ನು ಆಯ್ಕೆಮಾಡಿ</string>
   <string name="hotspot_dialog_neutral_button">ಮುಂದುವರಿಸಿ</string>
   <string name="error_file_invalid" fuzzy="true">ದೋಷ: ಆರಿಸಿದ ಫೈಲು ಸರಿಯಾದ ZIM ಫೈಲು ಅಲ್ಲ %s</string>
   <string name="error_article_url_not_found">ದೋಷ: ಲೇಖನ (Url: %1$s) ತರುವುದು ವಿಫಲವಾಗಿದೆ.</string>
@@ -51,9 +51,9 @@
   <string name="library">ಗ್ರಂಥಾಲಯ</string>
   <string name="zim_simple">ಸರಳ</string>
   <string name="help_2">ಕಿವಿಕ್ಸ್ ಏನು ಮಾಡುತ್ತದೆ?</string>
-  <string name="tts_pause">ಸ್ವಲ್ಪ ನಿಲ್ಲಿಸು</string>
-  <string name="tts_resume">ಮತ್ತೆ ಶುರುಮಾಡು</string>
-  <string name="stop">ನಿಲ್ಲಿಸು</string>
+  <string name="tts_pause" fuzzy="true">ಸ್ವಲ್ಪ ನಿಲ್ಲಿಸು</string>
+  <string name="tts_resume" fuzzy="true">ಮತ್ತೆ ಶುರುಮಾಡು</string>
+  <string name="stop" fuzzy="true">ನಿಲ್ಲಿಸು</string>
   <string name="internal_storage">ಒಳಗಿನ</string>
   <string name="external_storage">ಹೊರಗಿನ</string>
   <string name="yes">ಹೌದು</string>

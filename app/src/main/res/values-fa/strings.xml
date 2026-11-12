@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Authors:
+* Darafsh
+-->
+<resources>
+  <string name="file_system_does_not_support_4gb">سامانهٔ پرونده‌های دستگاه شما از پرونده‌های بزرگ‌تر از ۴ گیگابایت پشتیبانی نمی‌کند</string>
+  <string name="detecting_file_system">در حال بررسی امکان ایجاد پرونده‌های ۴ گیگابایتی در سامانهٔ پرونده‌ها</string>
+  <string name="cannot_open_file">بازکردن پرونده ناموفق بود\nلطفاً این پرونده را در کتابخانهٔ خود جستجو کنید</string>
+  <string name="send_files_title">ارسال پرونده‌ها</string>
+  <string name="receive_files_title">دریافت پرونده‌ها</string>
+  <string name="no_app_found_to_open">برنامه‌ای برای انتخاب پروندهٔ ZIM پیدا نشد!</string>
+  <string name="select_zim_file">انتخاب پروندهٔ ZIM برای خواندن</string>
+  <string name="swipe_down_to_scan_storage">برای جستجوی کتاب‌های جدید در دستگاه، صفحه را به پایین بکشید…</string>
+  <string name="auto_detect_books">شناسایی خودکار کتاب‌ها</string>
+  <string name="auto_detect_books_description">هنگام نخستین اجرای برنامه، از شما پرسیده می‌شود که آیا اجازه می‌دهید فضای ذخیره‌سازی دستگاه بررسی شود. اگر اجازه دهید، پرونده‌های ZIM شما به‌طور خودکار شناسایی می‌شوند و دیگر نیازی نیست آن‌ها را دستی اضافه کنید.</string>
+  <string name="select_category">انتخاب رده</string>
+  <string name="no_category_available">هیچ رده‌ای در دسترس نیست</string>
+  <string name="your_selected_category">ردهٔ انتخاب‌شده:</string>
+  <string name="other_categories">رده‌های دیگر:</string>
+  <string name="select_category_content_description">با انتخاب این رده، کتاب‌های قابل بارگیری به آن زبان در بالای فهرست نمایش داده می‌شوند.</string>
+  <string name="save_categories">ذخیرهٔ رده‌ها</string>
+  <string name="your_selected_categories">رده‌های انتخاب‌شده:</string>
+  <plurals name="and_more">
+    <item quantity="one">و %d مورد دیگر</item>
+    <item quantity="other">و %d مورد دیگر</item>
+  </plurals>
+  <string name="your_categories">رده‌های انتخاب‌شده:</string>
+  <string name="your_category">ردهٔ انتخاب‌شده: %s</string>
+</resources>

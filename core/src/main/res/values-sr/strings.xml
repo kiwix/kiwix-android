@@ -84,11 +84,11 @@
   <string name="wifi_only_msg">Ако одаберете „Да”, нећемо да вас упозоравамо у будућности. Свеједно, увек можете да промените ову опцију у подешавањима.</string>
   <string name="time_today">Данас</string>
   <string name="time_yesterday">Јуче</string>
-  <string name="external_link_popup_dialog_title">Уношење спољашње везе!</string>
-  <string name="external_link_popup_dialog_message">Уносите спољашњу везу. То може довести до додатних трошкова за пренос података или неће радити када сте офлајн. \nЖелите ли да наставите?</string>
+  <string name="external_link_popup_dialog_title" fuzzy="true">Уношење спољашње везе!</string>
+  <string name="external_link_popup_dialog_message" fuzzy="true">Уносите спољашњу везу. То може довести до додатних трошкова за пренос података или неће радити када сте офлајн. \nЖелите ли да наставите?</string>
   <string name="do_not_ask_anymore">Не питај више</string>
-  <string name="your_languages">Изабрани језици:</string>
-  <string name="other_languages">Други језици:</string>
+  <string name="your_languages" fuzzy="true">Изабрани језици:</string>
+  <string name="other_languages" fuzzy="true">Други језици:</string>
   <string name="crash_checkbox_language">Ваша подешавања језика</string>
   <string name="crash_checkbox_logs">Дневници апликације</string>
   <string name="crash_checkbox_device">Детаљи о уређају</string>

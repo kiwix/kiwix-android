@@ -26,7 +26,7 @@
   <string name="menu_support_kiwix">Tue Kiwixiä</string>
   <string name="menu_support_kiwix_for_custom_apps">Tue %s</string>
   <string name="menu_about_app">Tietoja sovelluksesta %s</string>
-  <string name="menu_wifi_hotspot">WiFI Hotspot</string>
+  <string name="menu_wifi_hotspot" fuzzy="true">WiFI Hotspot</string>
   <string name="save_media">Tallenna media</string>
   <string name="save_media_error">Virhe mediaa tallennettaessa!</string>
   <string name="invalid_media_source">Valittua mediatiedostoa ei löydy.</string>
@@ -38,23 +38,23 @@
   <string name="open_in_new_tab">Avaa linkki uudessa välilehdessä?</string>
   <string name="hotspot_service_channel_name">Hotspot-palvelukanava</string>
   <string name="hotspot_failed_title">Virhe käynnistettäessä hotspottia</string>
-  <string name="hotspot_failed_message">Näyttää siltä, että hotspotisi on jo käytössä. Jatka poistamalla Wi-Fi-hotspot käytöstä.</string>
+  <string name="hotspot_failed_message" fuzzy="true">Näyttää siltä, että hotspotisi on jo käytössä. Jatka poistamalla Wi-Fi-hotspot käytöstä.</string>
   <string name="go_to_wifi_settings_label">Siirry WiFi-asetuksiin</string>
   <string name="connection_refused">Yhteys evätty.</string>
   <string name="hotspot_running">Aktiivinen hotspot</string>
-  <string name="no_books_selected_toast_message">Valitse ensin kirjat</string>
+  <string name="no_books_selected_toast_message" fuzzy="true">Valitse ensin kirjat</string>
   <string name="server_failed_message">Palvelinta ei voitu käynnistää. Aktivoi hotspotisi.</string>
   <string name="server_failed_toast_message">Ei voitu käynnistää palvelinta.</string>
   <string name="server_started_successfully_toast_message">Palvelin käynnistetty onnistuneesti.</string>
   <string name="server_stopped_successfully_toast_message">Palvelin pysäytetty onnistuneesti.</string>
   <string name="hotspot_turned_on">Hotspot kytketty päälle</string>
   <string name="hotspot_details_message">Paikallisen tukiasemasi tiedot. \nSSID: %1$s \nPass: %2$s</string>
-  <string name="server_textview_default_message">Valitse tiedostot, joita haluat isännöidä palvelimella</string>
+  <string name="server_textview_default_message" fuzzy="true">Valitse tiedostot, joita haluat isännöidä palvelimella</string>
   <string name="progress_dialog_starting_server">Käynnistetään palvelinta</string>
   <string name="hotspot_dialog_title">Ohjeet kirjojen hostaamiseen</string>
   <string name="wifi_dialog_title">WiFi-yhteys tunnistettu</string>
   <string name="wifi_dialog_body">Jotta voit katsella kirjoja muilla laitteilla, varmista, että kaikki laitteet on yhdistetty samaan WiFi-verkkoon.</string>
-  <string name="hotspot_dialog_message">Jotta tämä ominaisuus toimisi, sinun on ensin otettava Wi-Fi-hotspot käyttöön manuaalisesti tai varmistettava, että isäntälaite ja vastaanottava laite ovat samassa Wi-Fi-verkossa.</string>
+  <string name="hotspot_dialog_message" fuzzy="true">Jotta tämä ominaisuus toimisi, sinun on ensin otettava Wi-Fi-hotspot käyttöön manuaalisesti tai varmistettava, että isäntälaite ja vastaanottava laite ovat samassa Wi-Fi-verkossa.</string>
   <string name="hotspot_dialog_neutral_button">ETENE</string>
   <string name="hotspot_channel_description">Päivityksiä hotspotisi/palvelimesi tilasta.</string>
   <string name="hotspot_notification_content_title">Kiwix-hotspot</string>
@@ -80,6 +80,8 @@
   <string name="pref_back_to_top">Takaisin alkuun</string>
   <string name="pref_back_to_top_summary">Näytä painike sivun lopussa rullataksesi ylös alkuun</string>
   <string name="pref_language_title">Kieli</string>
+  <string name="user_interface">Käyttöliittymä</string>
+  <string name="system_language_with_name">Järjestelmän kieli (%s)</string>
   <string name="pref_language_chooser">Valitse kieli</string>
   <string name="pref_credits">Avustajat ja lisenssit</string>
   <string name="pref_credits_title">Tekijät</string>
@@ -138,6 +140,7 @@
   <string name="no_files_here">Ei tiedostoja täällä</string>
   <string name="download_no_space">Ei riittävästi tilaa lataamiseen.</string>
   <string name="download">Lataa</string>
+  <string name="explore">Tutustu</string>
   <string name="download_notification_channel_name">Latausilmoituskanavan nimi</string>
   <string name="download_notification_channel_description">Ladataan ZIM-tiedostoja…</string>
   <string name="space_available">Tilaa käytettävissä:</string>
@@ -146,6 +149,12 @@
   <string name="zim_no_pic">Ei kuvia</string>
   <string name="zim_no_vid">Ei videoita</string>
   <string name="no_network_connection">Ei verkkoyhteyttä</string>
+  <string name="offline_feature_blocked_message">%1$s edellyttää online-tilaa, mutta laite on valitettavasti parhaillaan lentotilassa.</string>
+  <string name="airplane_mode_feature_blocked_message">%1$s edellyttää online-tilaa, mutta laite on valitettavasti lentotilassa.</string>
+  <string name="action_load_online_library">lataa verkkokirjasto</string>
+  <string name="action_download_book">lataa tämä kirja</string>
+  <string name="action_load_languages">lataa kieliluettelo</string>
+  <string name="action_load_categories">lataa luokkaluettelo</string>
   <string name="help_2">Mitä Kiwix tekee?</string>
   <string name="help_3">Kiwix on offline-sisällönlukija. Se toimii hyvin samalla tavalla kuin selain, mutta verkkosivujen sijaan se lukee sisältöä ZIM-muodossa olevasta tiedostosta.</string>
   <string name="help_4">Vaikka Kiwix on alun perin suunniteltu tarjoamaan Wikipediaa offline-tilassa, se lukee myös muuta sisältöä.</string>
@@ -163,9 +172,9 @@
   <string name="pref_free_storage">%s vapaana</string>
   <string name="choose_storage_to_download_book">Valitse tallennustila kirjan lataamista varten</string>
   <string name="delete_zim_failed">Emme pystyneet poistamaan joitakin tiedostoja. Sinun tulisi kokeilla käyttää tiedostonhallintaa sen sijaan.</string>
-  <string name="tts_pause">keskeytä</string>
-  <string name="tts_resume">jatka</string>
-  <string name="stop">pysäytä</string>
+  <string name="tts_pause" fuzzy="true">keskeytä</string>
+  <string name="tts_resume" fuzzy="true">jatka</string>
+  <string name="stop" fuzzy="true">pysäytä</string>
   <string name="notification_pause_button_text">Tauko</string>
   <string name="notification_resume_button_text">Jatka</string>
   <string name="internal_storage">Sisäinen</string>
@@ -190,16 +199,16 @@
   <string name="time_left">jäljellä</string>
   <string name="time_today">Tänään</string>
   <string name="time_yesterday">Eilen</string>
-  <string name="pref_external_link_popup_title">Varo lisätessä ulkoisia linkkejä</string>
+  <string name="pref_external_link_popup_title">Varoita avattaessa ulkoisia linkkejä</string>
   <string name="pref_external_link_popup_summary">Näytä ponnahdusikkuna, joka varoittaa lisäkustannuksista tai toimimattomuudesta offline-linkeissä.</string>
-  <string name="external_link_popup_dialog_title">Ulkoisen linkin syöttäminen!</string>
-  <string name="external_link_popup_dialog_message">Olet syöttämässä ulkoista linkkiä. Tämä voi johtaa lisäkustannuksiin tiedonsiirrossa tai se ei yksinkertaisesti toimi offline-tilassa. Haluatko jatkaa?</string>
+  <string name="external_link_popup_dialog_title">Avataan ulkoinen linkki!</string>
+  <string name="external_link_popup_dialog_message" fuzzy="true">Olet syöttämässä ulkoista linkkiä. Tämä voi johtaa lisäkustannuksiin tiedonsiirrossa tai se ei yksinkertaisesti toimi offline-tilassa. Haluatko jatkaa?</string>
   <string name="do_not_ask_anymore">Älä kysy enää</string>
-  <string name="your_languages">Valitut kielet:</string>
+  <string name="your_languages" fuzzy="true">Valitut kielet:</string>
   <string name="your_language">Valittu kieli: %s</string>
-  <string name="other_languages">Muut kielet:</string>
+  <string name="other_languages" fuzzy="true">Muut kielet:</string>
   <string name="downloading">Ladataan</string>
-  <string name="no_items_msg">Ei kohteita saatavilla</string>
+  <string name="no_items_msg" fuzzy="true">Ei kohteita saatavilla</string>
   <string name="crash_title">Jaha… Tämä on noloa</string>
   <string name="crash_description">Näyttää siltä, että sovellus kaatui.\n\nVoisitko auttaa meitä korjaamaan tämän ongelman lähettämällä kaatumisraportin?</string>
   <string name="crash_checkbox_language">Omat kieliasetukset</string>
@@ -212,7 +221,8 @@
   <string name="new_tab_shortcut_label">Uusi välilehti</string>
   <string name="get_content_shortcut_label">Hanki sisältöä</string>
   <string name="fav_icon">Favicon</string>
-  <string name="pagesCount">%s artikkelia</string>
+  <string name="pagesCount">%s sivua</string>
+  <string name="mediaCount">%s mediatiedostoa</string>
   <string name="get_started">Aloitetaan</string>
   <string name="download_books">Lataa kirjoja</string>
   <string name="humankind_knowledge">Ihmiskunnan tieto puhelimessasi.</string>
