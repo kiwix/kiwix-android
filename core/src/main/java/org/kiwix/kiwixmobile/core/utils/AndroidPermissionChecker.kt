@@ -19,6 +19,7 @@
 package org.kiwix.kiwixmobile.core.utils
 
 import android.Manifest.permission.ACCESS_FINE_LOCATION
+import android.Manifest.permission.ACCESS_LOCAL_NETWORK
 import android.Manifest.permission.NEARBY_WIFI_DEVICES
 import android.Manifest.permission.POST_NOTIFICATIONS
 import android.Manifest.permission.READ_EXTERNAL_STORAGE
@@ -54,6 +55,10 @@ class AndroidPermissionChecker @Inject constructor(
       checkSelfPermission(context, READ_EXTERNAL_STORAGE) == PERMISSION_GRANTED
     }
 
+  @RequiresApi(Build.VERSION_CODES.CINNAMON_BUN)
+  override suspend fun hasAccessLocalNetworkPermission(): Boolean =
+    checkSelfPermission(context, ACCESS_LOCAL_NETWORK) == PERMISSION_GRANTED
+
   @RequiresApi(Build.VERSION_CODES.TIRAMISU)
   override suspend fun hasNearbyWifiPermission(): Boolean =
     checkSelfPermission(context, NEARBY_WIFI_DEVICES) == PERMISSION_GRANTED
@@ -78,9 +83,6 @@ class AndroidPermissionChecker @Inject constructor(
     !isAndroid13orAbove() &&
       !kiwixDataStore.isPlayStoreBuildWithAndroid11OrAbove()
 
-  @ChecksSdkIntAtLeast(api = Build.VERSION_CODES.O)
-  override fun isAndroid8OrAbove(): Boolean = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
-
   override suspend fun hasNotificationPermission(): Boolean =
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && !kiwixDataStore.prefIsTest.first()) {
       checkSelfPermission(context, POST_NOTIFICATIONS) == PERMISSION_GRANTED
@@ -88,11 +90,18 @@ class AndroidPermissionChecker @Inject constructor(
       true
     }
 
-  @ChecksSdkIntAtLeast(api = Build.VERSION_CODES.TIRAMISU)
-  override fun isAndroid13orAbove(): Boolean = Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
+  @ChecksSdkIntAtLeast(api = Build.VERSION_CODES.O)
+  override fun isAndroid8OrAbove(): Boolean = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
 
   @ChecksSdkIntAtLeast(api = Build.VERSION_CODES.R)
   override fun isAndroid11OrAbove(): Boolean = Build.VERSION.SDK_INT >= Build.VERSION_CODES.R
+
+  @ChecksSdkIntAtLeast(api = Build.VERSION_CODES.TIRAMISU)
+  override fun isAndroid13orAbove(): Boolean = Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
+
+  @ChecksSdkIntAtLeast(api = Build.VERSION_CODES.CINNAMON_BUN)
+  override fun isAndroid17orAbove(): Boolean =
+    Build.VERSION.SDK_INT >= Build.VERSION_CODES.CINNAMON_BUN
 
   override suspend fun isManageExternalStoragePermissionGranted(): Boolean =
     if (kiwixDataStore.isNotPlayStoreBuildWithAndroid11OrAbove() &&

@@ -1,6 +1,7 @@
 package org.kiwix.kiwixmobile.localFileTransfer
 
 import android.Manifest.permission.ACCESS_FINE_LOCATION
+import android.Manifest.permission.ACCESS_LOCAL_NETWORK
 import android.Manifest.permission.NEARBY_WIFI_DEVICES
 import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
 import android.location.LocationManager
@@ -57,6 +58,7 @@ class LocalFileTransferViewModelTest {
     mockkObject(WifiDirectManager.Companion)
     every { WifiDirectManager.getFileName(any()) } returns "test.zim"
     every { permissionChecker.isAndroid13orAbove() } returns true
+    every { permissionChecker.isAndroid17orAbove() } returns false
     every { permissionChecker.isAndroid8OrAbove() } returns true
     coEvery { permissionChecker.isWriteExternalStoragePermissionRequired() } returns false
     every { kiwixDataStore.showShowCaseToUser } returns flowOf(false)
@@ -203,6 +205,38 @@ class LocalFileTransferViewModelTest {
   }
 
   @Test
+  fun `onSearchMenuClicked requests access local network permission on Android 17 or above`() =
+    runTest {
+      every { permissionChecker.isAndroid17orAbove() } returns true
+      coEvery { permissionChecker.hasAccessLocalNetworkPermission() } returns false
+      createViewModel()
+
+      viewModel.events.test {
+        viewModel.onSearchMenuClicked()
+        val event = awaitItem()
+        assertThat(event).isInstanceOf(UiEvent.RequestPermission::class.java)
+        assertThat((event as UiEvent.RequestPermission).permission)
+          .isEqualTo(ACCESS_LOCAL_NETWORK)
+      }
+    }
+
+  @Test
+  fun `onSearchMenuClicked does not request permission when access local network already granted`() =
+    runTest {
+      every { permissionChecker.isAndroid17orAbove() } returns true
+      coEvery { permissionChecker.hasAccessLocalNetworkPermission() } returns true
+      coEvery { permissionChecker.hasWriteExternalStoragePermission() } returns true
+      createViewModel()
+
+      viewModel.events.test {
+        viewModel.onSearchMenuClicked()
+        val event = awaitItem()
+        assertThat(event).isNotInstanceOf(UiEvent.RequestPermission::class.java)
+        cancelAndIgnoreRemainingEvents()
+      }
+    }
+
+  @Test
   fun `onSearchMenuClicked requests write storage permission on older Android`() = runTest {
     every { permissionChecker.isAndroid13orAbove() } returns false
     coEvery { permissionChecker.hasFineLocationPermission() } returns true
@@ -336,6 +370,17 @@ class LocalFileTransferViewModelTest {
       viewModel.onPermissionGranted()
       val event = awaitItem()
       assertThat(event).isInstanceOf(UiEvent.RequestPermission::class.java)
+    }
+  }
+
+  @Test
+  fun `onPermissionRationaleRequired emits ShowDialog for access local network`() = runTest {
+    viewModel.events.test {
+      viewModel.onPermissionRationaleRequired(ACCESS_LOCAL_NETWORK)
+      val event = awaitItem()
+      assertThat(event).isInstanceOf(UiEvent.ShowDialog::class.java)
+      assertThat((event as UiEvent.ShowDialog).dialog)
+        .isEqualTo(DialogEvent.ShowAccessLocalNetworkRationale)
     }
   }
 
