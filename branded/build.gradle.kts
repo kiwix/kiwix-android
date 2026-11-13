@@ -87,6 +87,8 @@ fun ApplicationProductFlavor.createDownloadTask(
       }
     }Zim"
   ) {
+    description =
+      "Downloads the ZIM file for the $name branded app and saves it to the specified file location."
     group = "Downloading"
     doLast {
       if (!file.exists()) {
@@ -187,6 +189,8 @@ fun ApplicationProductFlavor.createDownloadTaskForPlayAssetDelivery(
       }
     }ZimAndPutInAssetFolder"
   ) {
+    description =
+      "Downloads the ZIM file for the $name branded app and saves it to the specified file location in the asset folder for Play Asset Delivery."
     group = "Downloading"
     doLast {
       if (file.exists()) file.delete()
