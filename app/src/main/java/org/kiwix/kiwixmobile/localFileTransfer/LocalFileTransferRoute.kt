@@ -68,7 +68,9 @@ internal fun LocalFileTransferScreenRoute(
   uris: List<Uri>
 ) {
   val alertDialogShower = remember { AlertDialogShower() }
-  viewModel.initialize(uris, alertDialogShower)
+  LaunchedEffect(Unit) {
+    viewModel.initialize(uris, alertDialogShower)
+  }
   val context = LocalContext.current
   val uiState by viewModel.uiState.collectAsStateWithLifecycle()
   val locationPermission = rememberPermissionState(viewModel.locationPermission)
@@ -141,13 +143,6 @@ private fun handleDialog(
   enableLocationServicesLauncher: ManagedActivityResultLauncher<Intent, ActivityResult>
 ) {
   when (dialog) {
-    DialogEvent.ShowAccessLocalNetworkRationale ->
-      alertDialogShower.show(
-        KiwixDialog.AccessLocalNetworkPermissionRationale,
-        { context.navigateToAppSettings() },
-        { context.toast(string.permission_refused_access_local_network) }
-      )
-
     DialogEvent.ShowNearbyWifiRationale ->
       alertDialogShower.show(
         KiwixDialog.NearbyWifiPermissionRationale,

@@ -374,15 +374,16 @@ class LocalFileTransferViewModelTest {
   }
 
   @Test
-  fun `onPermissionRationaleRequired emits ShowDialog for access local network`() = runTest {
-    viewModel.events.test {
-      viewModel.onPermissionRationaleRequired(ACCESS_LOCAL_NETWORK)
-      val event = awaitItem()
-      assertThat(event).isInstanceOf(UiEvent.ShowDialog::class.java)
-      assertThat((event as UiEvent.ShowDialog).dialog)
-        .isEqualTo(DialogEvent.ShowAccessLocalNetworkRationale)
+  fun `onPermissionRationaleRequired emits nearby wifi dialog for access local network`() =
+    runTest {
+      viewModel.events.test {
+        viewModel.onPermissionRationaleRequired(ACCESS_LOCAL_NETWORK)
+        val event = awaitItem()
+        assertThat(event).isInstanceOf(UiEvent.ShowDialog::class.java)
+        assertThat((event as UiEvent.ShowDialog).dialog)
+          .isEqualTo(DialogEvent.ShowNearbyWifiRationale)
+      }
     }
-  }
 
   @Test
   fun `onPermissionRationaleRequired emits ShowDialog for nearby wifi`() = runTest {

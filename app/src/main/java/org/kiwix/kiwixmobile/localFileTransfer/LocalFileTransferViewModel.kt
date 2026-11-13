@@ -149,15 +149,11 @@ class LocalFileTransferViewModel @Inject constructor(
       }
 
   private fun isProviderEnabled(locationProvider: String): Boolean =
-    try {
+    runCatching {
       locationManager.isProviderEnabled(locationProvider)
-    } catch (ex: SecurityException) {
-      ex.printStackTrace()
-      false
-    } catch (ex: IllegalArgumentException) {
-      ex.printStackTrace()
-      false
-    }
+    }.onFailure {
+      it.printStackTrace()
+    }.getOrDefault(false)
 
   private fun requestEnableWifiP2pServices() {
     showDialog(DialogEvent.ShowEnableWifiP2p)
@@ -199,8 +195,8 @@ class LocalFileTransferViewModel @Inject constructor(
 
   fun onPermissionRationaleRequired(permission: String) {
     val dialog = when (permission) {
-      ACCESS_LOCAL_NETWORK -> DialogEvent.ShowAccessLocalNetworkRationale
-      NEARBY_WIFI_DEVICES -> DialogEvent.ShowNearbyWifiRationale
+      // Both sit in Android's "Nearby devices" permission group, so share the same rationale.
+      ACCESS_LOCAL_NETWORK, NEARBY_WIFI_DEVICES -> DialogEvent.ShowNearbyWifiRationale
       ACCESS_FINE_LOCATION -> DialogEvent.ShowLocationRationale
       WRITE_EXTERNAL_STORAGE -> DialogEvent.ShowStorageRationale
       else -> null
@@ -282,7 +278,6 @@ class LocalFileTransferViewModel @Inject constructor(
 }
 
 sealed class DialogEvent {
-  object ShowAccessLocalNetworkRationale : DialogEvent()
   object ShowNearbyWifiRationale : DialogEvent()
   object ShowLocationRationale : DialogEvent()
   object ShowStorageRationale : DialogEvent()
