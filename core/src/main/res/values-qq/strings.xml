@@ -259,7 +259,10 @@
   <string name="connection_failed">This is toast’s message when a user fails to connect to another device via wifi P2P.</string>
   <string name="permission_rationale_location">This is dialog’s message when a user is trying to search nearby devices but the app does not have access to location permission.</string>
   <string name="permission_rationale_nearby">This is the dialog’s message when a user is trying to search nearby devices but the app does not have access to nearby devices permission.</string>
+  <string name="permission_rationale_access_local_network">This is the dialog’s message when a user is trying to search nearby devices but the app does not have access to access local network permission.</string>
   <string name="permission_refused_location">It is a toast’s message shown when a user tries to share zim files but the app does not have access to location permission.</string>
+  <string name="permission_refused_nearby">It is a toast’s message shown when a user tries to share zim files but the app does not have access to nearby devices permission.</string>
+  <string name="permission_refused_access_local_network">It is a toast’s message shown when a user tries to share zim files but the app does not have access to access local network permission.</string>
   <string name="permission_refused_storage">It is a toast’s message shown when a user tries to share zim files but the app does not have access to storage permission.</string>
   <string name="request_enable_location">It is a dialog’s message shown when a user tries to share zim files but location service is not enabled.</string>
   <string name="discovery_needs_location">It is a toast’s message shown when a user tries to search nearby devices but the location service is not enabled.</string>

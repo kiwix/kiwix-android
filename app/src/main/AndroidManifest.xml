@@ -12,6 +12,7 @@
     android:name="android.permission.NEARBY_WIFI_DEVICES"
     android:usesPermissionFlags="neverForLocation"
     tools:targetApi="s" />
+  <uses-permission android:name="android.permission.ACCESS_LOCAL_NETWORK" />
 
   <application
     android:name=".KiwixApp"

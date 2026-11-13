@@ -77,6 +77,13 @@ sealed class KiwixDialog(
     android.R.string.cancel
   )
 
+  object AccessLocalNetworkPermissionRationale : KiwixDialog(
+    null,
+    R.string.permission_rationale_access_local_network,
+    android.R.string.ok,
+    android.R.string.cancel
+  )
+
   object NearbyWifiPermissionRationale : KiwixDialog(
     null,
     R.string.permission_rationale_nearby,

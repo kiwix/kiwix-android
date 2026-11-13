@@ -1,6 +1,7 @@
 package org.kiwix.kiwixmobile.localFileTransfer
 
 import android.Manifest.permission.ACCESS_FINE_LOCATION
+import android.Manifest.permission.ACCESS_LOCAL_NETWORK
 import android.Manifest.permission.NEARBY_WIFI_DEVICES
 import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
 import android.location.LocationManager
@@ -53,6 +54,7 @@ class LocalFileTransferViewModel @Inject constructor(
   val events = _events.asSharedFlow()
 
   private val isAndroid13OrAbove = permissionChecker.isAndroid13orAbove()
+  private val isAndroid17OrAbove = permissionChecker.isAndroid17orAbove()
 
   init {
     viewModelScope.launch {
@@ -170,7 +172,9 @@ class LocalFileTransferViewModel @Inject constructor(
   }
 
   private suspend fun checkFineLocationOrWifiPermission(): Boolean {
-    val hasLocalPermission = if (isAndroid13OrAbove) {
+    val hasLocalPermission = if (isAndroid17OrAbove) {
+      permissionChecker.hasAccessLocalNetworkPermission()
+    } else if (isAndroid13OrAbove) {
       permissionChecker.hasNearbyWifiPermission()
     } else {
       permissionChecker.hasFineLocationPermission()
@@ -195,6 +199,7 @@ class LocalFileTransferViewModel @Inject constructor(
 
   fun onPermissionRationaleRequired(permission: String) {
     val dialog = when (permission) {
+      ACCESS_LOCAL_NETWORK -> DialogEvent.ShowAccessLocalNetworkRationale
       NEARBY_WIFI_DEVICES -> DialogEvent.ShowNearbyWifiRationale
       ACCESS_FINE_LOCATION -> DialogEvent.ShowLocationRationale
       WRITE_EXTERNAL_STORAGE -> DialogEvent.ShowStorageRationale
@@ -252,7 +257,9 @@ class LocalFileTransferViewModel @Inject constructor(
     }
   }
 
-  val locationPermission = if (isAndroid13OrAbove) {
+  val locationPermission = if (isAndroid17OrAbove) {
+    ACCESS_LOCAL_NETWORK
+  } else if (isAndroid13OrAbove) {
     NEARBY_WIFI_DEVICES
   } else {
     ACCESS_FINE_LOCATION
@@ -275,6 +282,7 @@ class LocalFileTransferViewModel @Inject constructor(
 }
 
 sealed class DialogEvent {
+  object ShowAccessLocalNetworkRationale : DialogEvent()
   object ShowNearbyWifiRationale : DialogEvent()
   object ShowLocationRationale : DialogEvent()
   object ShowStorageRationale : DialogEvent()

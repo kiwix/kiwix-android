@@ -317,7 +317,10 @@
   <string name="connection_failed" tools:keep="@string/connection_failed">Connection failed</string>
   <string name="permission_rationale_location">Location permission is required by Android to allow the app to detect peer devices</string>
   <string name="permission_rationale_nearby">Nearby devices permission is required by Android to allow the app to detect peer devices</string>
+  <string name="permission_rationale_access_local_network">Access local network permission is required by Android to allow the app to detect peer devices</string>
   <string name="permission_refused_location" tools:keep="@string/permission_refused_location">Cannot locate peer devices without location permissions</string>
+  <string name="permission_refused_nearby" tools:keep="@string/permission_refused_nearby">Cannot locate peer devices without nearby permissions</string>
+  <string name="permission_refused_access_local_network" tools:keep="@string/permission_refused_access_local_network">Cannot locate peer devices without access local network permissions</string>
   <string name="permission_refused_storage" tools:keep="@string/permission_refused_storage">Cannot access ZIM files without storage permission</string>
   <string name="request_enable_location">Enable location to allow detection of peers</string>
   <string name="discovery_needs_location" tools:keep="@string/discovery_needs_location">Cannot discover peers without location services</string>
