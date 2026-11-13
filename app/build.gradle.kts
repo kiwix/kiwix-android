@@ -1,7 +1,15 @@
 import com.slack.keeper.optInToKeeper
+import org.gradle.api.flow.FlowAction
+import org.gradle.api.flow.FlowParameters
+import org.gradle.api.flow.FlowScope
+import org.gradle.api.provider.ListProperty
+import org.gradle.api.provider.Property
+import org.gradle.api.tasks.Input
+import org.gradle.kotlin.dsl.newInstance
 import org.w3c.dom.Element
 import plugin.KiwixConfigurationPlugin
 import java.io.StringWriter
+import javax.inject.Inject
 import javax.xml.parsers.DocumentBuilderFactory
 import javax.xml.transform.OutputKeys
 import javax.xml.transform.TransformerFactory
@@ -22,6 +30,7 @@ apply(from = rootProject.file("jacoco.gradle"))
 fun generateVersionName() = "${Config.versionMajor}.${Config.versionMinor}.${Config.versionPatch}"
 
 val apkPrefix get() = System.getenv("TAG") ?: "kiwix"
+val disableSingingRequested = providers.gradleProperty("disableSigning").isPresent
 val autoModifiedTrackedFiles = listOf(
   File("$rootDir/core/src/main/res/values-b+be+tarask/strings.xml"),
   File("$rootDir/core/src/main/res/values-b+be+tarask+old/strings.xml"),
@@ -44,25 +53,6 @@ fun backupTrackedFile(file: File) {
   } else if (backupFile.exists()) {
     backupFile.delete()
   }
-}
-
-fun restoreTrackedFile(file: File) {
-  val fileKey =
-    file.relativeTo(rootDir).path.replace(File.separator, "_")
-  val backupFile = File(trackedFileBackupDir, "$fileKey.bak")
-  val existsMarkerFile = File(trackedFileBackupDir, "$fileKey.exists")
-  if (!existsMarkerFile.exists()) return
-
-  val existedBeforeBuild = existsMarkerFile.readText().trim() == "1"
-  if (existedBeforeBuild && backupFile.exists()) {
-    if (!file.parentFile.exists()) file.parentFile.mkdirs()
-    backupFile.copyTo(file, overwrite = true)
-  } else if (!existedBeforeBuild && file.exists()) {
-    file.delete()
-  }
-
-  backupFile.delete()
-  existsMarkerFile.delete()
 }
 
 android {
@@ -92,7 +82,7 @@ android {
     getByName("release") {
       buildConfigField("boolean", "KIWIX_ERROR_ACTIVITY", "true")
       buildConfigField("boolean", "IS_PLAYSTORE", "false")
-      if (properties.containsKey("disableSigning")) {
+      if (disableSingingRequested) {
         signingConfig = null
       }
     }
@@ -182,6 +172,8 @@ dependencies {
 }
 
 tasks.register("generateVersionCodeAndName") {
+  description =
+    "Generates the version code and name for the Kiwix Android app and writes them to a VERSION_INFO file."
   val file = File("VERSION_INFO")
   if (!file.exists()) file.createNewFile()
   file.printWriter().use {
@@ -190,6 +182,8 @@ tasks.register("generateVersionCodeAndName") {
 }
 
 tasks.register("renameTarakFile") {
+  description =
+    "Renames the tarask strings.xml file to tarask+old and creates a new tarask strings.xml file with only the strings that are present in the main strings.xml file. This is done to prevent lint errors when a string is removed from the main strings.xml file but still exists in the tarask strings.xml file."
   doFirst {
     autoModifiedTrackedFiles.forEach(::backupTrackedFile)
   }
@@ -271,11 +265,9 @@ fun elementToString(element: Element): String {
   return result.writer.toString()
 }
 
-gradle.buildFinished {
-  autoModifiedTrackedFiles.forEach(::restoreTrackedFile)
-  if (trackedFileBackupDir.exists() && trackedFileBackupDir.listFiles().isNullOrEmpty()) {
-    trackedFileBackupDir.delete()
-  }
+project.objects.newInstance<FlowServices>().flowScope.always(RestoreTrackedFilesFlowAction::class) {
+  parameters.rootDir.set(rootDir)
+  parameters.trackedFiles.set(autoModifiedTrackedFiles)
 }
 
 gradle.projectsEvaluated {
@@ -286,4 +278,47 @@ gradle.projectsEvaluated {
       }
     }
   }
+}
+
+abstract class RestoreTrackedFilesFlowAction :
+  FlowAction<RestoreTrackedFilesFlowAction.Parameters> {
+  interface Parameters : FlowParameters {
+    @get:Input
+    val rootDir: Property<File>
+
+    @get:Input
+    val trackedFiles: ListProperty<File>
+  }
+
+  override fun execute(parameters: Parameters) {
+    val root = parameters.rootDir.get()
+    val backupDir = File(root, "build/tracked-file-backups")
+
+    parameters.trackedFiles.get().forEach { file ->
+      val fileKey = file.relativeTo(root).path.replace(File.separator, "_")
+      val backupFile = File(backupDir, "$fileKey.bak")
+      val existsMarkerFile = File(backupDir, "$fileKey.exists")
+      if (!existsMarkerFile.exists()) return@forEach
+
+      val existedBeforeBuild = existsMarkerFile.readText().trim() == "1"
+      if (existedBeforeBuild && backupFile.exists()) {
+        if (!file.parentFile.exists()) file.parentFile.mkdirs()
+        backupFile.copyTo(file, overwrite = true)
+      } else if (!existedBeforeBuild && file.exists()) {
+        file.delete()
+      }
+
+      backupFile.delete()
+      existsMarkerFile.delete()
+    }
+
+    if (backupDir.exists() && backupDir.listFiles().isNullOrEmpty()) {
+      backupDir.delete()
+    }
+  }
+}
+
+interface FlowServices {
+  @get:Inject
+  val flowScope: FlowScope
 }

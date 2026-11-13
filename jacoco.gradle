@@ -28,8 +28,8 @@ tasks.withType(Test).configureEach {
 
 tasks.register('jacocoInstrumentationTestReport', JacocoReport) {
   dependsOn = ['createDebugCoverageReport']
-  group "Reporting"
-  description "Generate Jacoco coverage reports."
+  group = "Reporting"
+  description = "Generate Jacoco coverage reports."
   reports {
     xml.required.set(true)
     html.required.set(true)

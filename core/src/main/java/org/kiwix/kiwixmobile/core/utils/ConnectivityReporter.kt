@@ -21,8 +21,8 @@ package org.kiwix.kiwixmobile.core.utils
 import android.net.ConnectivityManager
 import android.net.wifi.WifiManager
 import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.isWifi
-import java.lang.reflect.InvocationTargetException
 import java.lang.reflect.Method
+import java.net.NetworkInterface
 import javax.inject.Inject
 
 class ConnectivityReporter @Inject constructor(
@@ -32,18 +32,29 @@ class ConnectivityReporter @Inject constructor(
   fun checkWifi(): Boolean =
     connectivityManager.isWifi()
 
-  fun checkTethering(): Boolean = try {
+  // Reflection still works on devices that don't enforce the non-SDK restriction; fall back otherwise.
+  fun checkTethering(): Boolean = checkTetheringViaReflection() ?: checkTetheringViaApInterface()
+
+  private fun checkTetheringViaReflection(): Boolean? = runCatching {
     val method: Method = wifiManager.javaClass.getDeclaredMethod("isWifiApEnabled")
     method.isAccessible = true
     method.invoke(wifiManager) as Boolean
-  } catch (exception: IllegalArgumentException) {
-    exception.printStackTrace()
-    false
-  } catch (exception: IllegalAccessException) {
-    exception.printStackTrace()
-    false
-  } catch (exception: InvocationTargetException) {
-    exception.printStackTrace()
-    false
+  }.onFailure {
+    it.printStackTrace()
+  }.getOrNull()
+
+  private fun checkTetheringViaApInterface(): Boolean = runCatching {
+    NetworkInterface.getNetworkInterfaces()?.asSequence().orEmpty().any { networkInterface ->
+      hotspotInterfaceNamePattern.matches(networkInterface.name) && networkInterface.isUp
+    }
+  }.onFailure {
+    it.printStackTrace()
+  }.getOrDefault(false)
+
+  companion object {
+    // Soft AP interface naming varies by OEM/chipset: ap0 (AOSP/Pixel), swlan0 (Samsung),
+    // softap0, and wlan1+ on dual-radio chips where wlan0 stays the station interface.
+    private val hotspotInterfaceNamePattern =
+      Regex("^(ap\\d*|softap\\d*|swlan\\d*|wlan[1-9]\\d*)$", RegexOption.IGNORE_CASE)
   }
 }

@@ -19,6 +19,7 @@
 package org.kiwix.kiwixmobile
 
 import android.Manifest.permission.ACCESS_FINE_LOCATION
+import android.Manifest.permission.ACCESS_LOCAL_NETWORK
 import android.Manifest.permission.NEARBY_WIFI_DEVICES
 import android.Manifest.permission.POST_NOTIFICATIONS
 import android.Manifest.permission.READ_EXTERNAL_STORAGE
@@ -81,10 +82,12 @@ abstract class BaseActivityTest {
   }
 
   open fun permissions(): Array<String> =
-    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
-      arrayOf(READ_EXTERNAL_STORAGE, WRITE_EXTERNAL_STORAGE, ACCESS_FINE_LOCATION)
-    } else {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.CINNAMON_BUN) {
+      arrayOf(POST_NOTIFICATIONS, ACCESS_LOCAL_NETWORK)
+    } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
       arrayOf(POST_NOTIFICATIONS, NEARBY_WIFI_DEVICES)
+    } else {
+      arrayOf(READ_EXTERNAL_STORAGE, WRITE_EXTERNAL_STORAGE, ACCESS_FINE_LOCATION)
     }
 
   @Rule(order = FAIL_FAST_RULE_ORDER)
