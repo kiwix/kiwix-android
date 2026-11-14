@@ -2,7 +2,7 @@
 
 echo "Running lint..."
 
-./gradlew ktlintCheck detektDebug detektCustomExampleDebug app:lintDebug branded:lintCustomexampleDebug --daemon
+./gradlew ktlintCheck detektDebug detektCustomexampleDebug app:lintDebug branded:lintCustomexampleDebug --daemon
 
 status=$?
 
@@ -14,7 +14,7 @@ else
     echo 1>&2 "Static analysis found violations and attempted to autofix, please commit these autoformat changes"
     echo "
     ---------------------------IMPORTANT FOR KIWIX DEVELOPERS----------------------------------------------
-    If the build failed with '.../.gradle/daemon/9.5.0/branded/scr/customexample/info.json No File Found' then you do not have JAVA_HOME set to JDK21
+    If the build failed with '.../.gradle/daemon/9.9.0/branded/scr/customexample/info.json No File Found' then you do not have JAVA_HOME set to JDK21
     Please make sure JAVA_HOME is set to JDK21
     ---------------------------IMPORTANT FOR KIWIX DEVELOPERS----------------------------------------------"
 

@@ -397,7 +397,7 @@ jobs:
           cache: 'gradle'
 
       - name: Static Analysis
-        run: ./gradlew detektDebug detektCustomExampleDebug
+        run: ./gradlew detektDebug detektCustomexampleDebug
       - name: Upload Lint Reports
         uses: actions/upload-artifact@v6
         if: ${{ always() }}

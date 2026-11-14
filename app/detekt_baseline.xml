@@ -1,57 +1,42 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" ?>
 <SmellBaseline>
   <ManuallySuppressedIssues/>
   <CurrentIssues>
-    <ID>EmptyFunctionBlock:None.kt$None${ }</ID>
-    <ID>EmptyFunctionBlock:SimplePageChangeListener.kt$SimplePageChangeListener${ }</ID>
-    <ID>MagicNumber:LibraryListItem.kt$LibraryListItem.LibraryDownloadItem$1000L</ID>
-    <ID>MagicNumber:PeerGroupHandshake.kt$PeerGroupHandshake$15000</ID>
-    <ID>MagicNumber:ShareFiles.kt$ShareFiles$24</ID>
-    <ID>MagicNumber:ZimManageViewModel.kt$ZimManageViewModel$5</ID>
-    <ID>MagicNumber:ZimManageViewModel.kt$ZimManageViewModel$500</ID>
-    <ID>NestedBlockDepth:PeerGroupHandshake.kt$PeerGroupHandshake$private fun readHandshakeAndExchangeMetaData(): InetAddress?</ID>
-    <ID>NestedBlockDepth:ReceiverHandShake.kt$ReceiverHandShake$override fun exchangeFileTransferMetadata(inputStream: InputStream, outputStream: OutputStream)</ID>
-    <ID>PackageNaming:AvailableSpaceCalculator.kt$package
-      org.kiwix.kiwixmobile.zimManager.libraryView</ID>
-    <ID>PackageNaming:DeleteFiles.kt$package
-      org.kiwix.kiwixmobile.zimManager.fileselectView.effects</ID>
-    <ID>PackageNaming:Fat32Checker.kt$package org.kiwix.kiwixmobile.zimManager</ID>
-    <ID>PackageNaming:FileSelectListState.kt$package
-      org.kiwix.kiwixmobile.zimManager.fileselectView</ID>
-    <ID>PackageNaming:FileSystemChecker.kt$package org.kiwix.kiwixmobile.zimManager</ID>
-    <ID>PackageNaming:FileWritingFileSystemChecker.kt$package org.kiwix.kiwixmobile.zimManager</ID>
-    <ID>PackageNaming:LibraryAdapter.kt$package
-      org.kiwix.kiwixmobile.zimManager.libraryView.adapter</ID>
-    <ID>PackageNaming:LibraryDelegate.kt$package
-      org.kiwix.kiwixmobile.zimManager.libraryView.adapter</ID>
-    <ID>PackageNaming:LibraryListItem.kt$package
-      org.kiwix.kiwixmobile.zimManager.libraryView.adapter</ID>
-    <ID>PackageNaming:LibraryViewHolder.kt$package
-      org.kiwix.kiwixmobile.zimManager.libraryView.adapter</ID>
-    <ID>PackageNaming:MountFileSystemChecker.kt$package org.kiwix.kiwixmobile.zimManager</ID>
-    <ID>PackageNaming:NavigateToExplore.kt$package
-      org.kiwix.kiwixmobile.zimManager.fileselectView.effects</ID>
-    <ID>PackageNaming:None.kt$package org.kiwix.kiwixmobile.zimManager.fileselectView.effects</ID>
-    <ID>PackageNaming:OpenFileWithNavigation.kt$package
-      org.kiwix.kiwixmobile.zimManager.fileselectView.effects</ID>
-    <ID>PackageNaming:ShareFiles.kt$package org.kiwix.kiwixmobile.zimManager.fileselectView.effects</ID>
-    <ID>PackageNaming:SimplePageChangeListener.kt$package org.kiwix.kiwixmobile.zimManager</ID>
-    <ID>PackageNaming:StartMultiSelection.kt$package
-      org.kiwix.kiwixmobile.zimManager.fileselectView.effects</ID>
-    <ID>PackageNaming:HotspotNotificationManager.kt$package org.kiwix.kiwixmobile.webserver.wifi_hotspot</ID>
-    <ID>PackageNaming:HotspotStateReceiver.kt$package org.kiwix.kiwixmobile.webserver.wifi_hotspot</ID>
-    <ID>PackageNaming:IpAddressCallbacks.kt$package org.kiwix.kiwixmobile.webserver.wifi_hotspot</ID>
-    <ID>PackageNaming:HotspotService.kt$package org.kiwix.kiwixmobile.webserver.wifi_hotspot</ID>
-    <ID>PackageNaming:ServerStatus.kt$package org.kiwix.kiwixmobile.webserver.wifi_hotspot</ID>
-    <ID>PackageNaming:ZimManageViewModel.kt$package org.kiwix.kiwixmobile.zimManager</ID>
-    <ID>ReturnCount:Fat32Checker.kt$Fat32Checker$private fun canCreate4GbFile(storagePath: String): Boolean</ID>
-    <ID>TooGenericExceptionCaught:FileWritingFileSystemChecker.kt$FileWritingFileSystemChecker$e: Exception</ID>
-    <ID>TooGenericExceptionCaught:PeerGroupHandshake.kt$PeerGroupHandshake$ex: Exception</ID>
-    <ID>TooGenericExceptionCaught:ReceiverHandShake.kt$ReceiverHandShake$e: Exception</ID>
-    <ID>TooGenericExceptionCaught:SenderHandShake.kt$SenderHandShake$e: Exception</ID>
-    <ID>TooGenericExceptionThrown:ActivityExtensions.kt$throw RuntimeException( """ applicationContext is ${applicationContext::class.java.simpleName} application is ${application::class.java.simpleName} """.trimIndent() )</ID>
-    <ID>TooGenericExceptionThrown:LibraryViewHolder.kt$LibraryViewHolder.LibraryBookViewHolder$throw RuntimeException("impossible invalid state: ${item.fileSystemState}")</ID>
-    <ID>TooGenericExceptionThrown:ZimManageViewModel.kt$ZimManageViewModel$throw RuntimeException("Impossible state")</ID>
-    <ID>VariableNaming:PeerGroupHandshake.kt$PeerGroupHandshake$private val HANDSHAKE_MESSAGE = "Request Kiwix File Sharing"</ID>
+    <ID>AbstractClassCanBeInterface:Action.kt:Action$Action</ID>
+    <ID>AbstractClassCanBeInterface:AvailableSpaceCalculator.kt:AvailableSpaceCalculator.AvailableSpaceResult$AvailableSpaceResult</ID>
+    <ID>AbstractClassCanBeInterface:CategoryListItem.kt:CategoryListItem$CategoryListItem</ID>
+    <ID>AbstractClassCanBeInterface:CategoryViewModel.kt:CategoryViewModel.Action$Action</ID>
+    <ID>AbstractClassCanBeInterface:Fat32Checker.kt:Fat32Checker.FileSystemState$FileSystemState</ID>
+    <ID>AbstractClassCanBeInterface:LanguageListItem.kt:LanguageListItem$LanguageListItem</ID>
+    <ID>AbstractClassCanBeInterface:LibraryListItem.kt:LibraryListItem$LibraryListItem</ID>
+    <ID>AbstractClassCanBeInterface:LocalFileTransferViewModel.kt:DialogEvent$DialogEvent</ID>
+    <ID>AbstractClassCanBeInterface:LocalFileTransferViewModel.kt:UiEvent$UiEvent</ID>
+    <ID>AbstractClassCanBeInterface:LocalLibraryViewModel.kt:LocalLibraryViewModel.LocalLibraryUiActions$LocalLibraryUiActions</ID>
+    <ID>AbstractClassCanBeInterface:LocalLibraryViewModel.kt:LocalLibraryViewModel.ReadeWritePermissionResultAction$ReadeWritePermissionResultAction</ID>
+    <ID>AbstractClassCanBeInterface:ObserveCategories.kt:ObserveCategories.Result$Result</ID>
+    <ID>AbstractClassCanBeInterface:ObserveLanguages.kt:ObserveLanguages.Result$Result</ID>
+    <ID>AbstractClassCanBeInterface:ObserveNetworkState.kt:ObserveNetworkState.Result$Result</ID>
+    <ID>AbstractClassCanBeInterface:OnlineLibraryViewModel.kt:OnlineLibraryViewModel.OnlineLibraryState$OnlineLibraryState</ID>
+    <ID>AbstractClassCanBeInterface:OnlineLibraryViewModel.kt:OnlineLibraryViewModel.UISideEffects$UISideEffects</ID>
+    <ID>AbstractClassCanBeInterface:OnlineLibraryViewModel.kt:OnlineLibraryViewModel.UiEvent$UiEvent</ID>
+    <ID>AbstractClassCanBeInterface:ProcessSelectedZimFilesForPlayStore.kt:MultipleFilesProcessAction$MultipleFilesProcessAction</ID>
+    <ID>AbstractClassCanBeInterface:ResolveBookClickAction.kt:ResolveBookClickAction.LibraryActionResult$LibraryActionResult</ID>
+    <ID>AbstractClassCanBeInterface:ResolveRefreshLibraryAction.kt:ResolveRefreshLibraryAction.Result$Result</ID>
+    <ID>AbstractClassCanBeInterface:State.kt:State$State</ID>
+    <ID>AbstractClassCanBeInterface:ZimHostViewModel.kt:ZimHostViewModel.Event$Event</ID>
+    <ID>EmptyFunctionBlock:None.kt:None${ }</ID>
+    <ID>MagicNumber:LibraryListItem.kt:LibraryListItem.LibraryDownloadItem$1000L</ID>
+    <ID>MagicNumber:PeerGroupHandshake.kt:PeerGroupHandshake$15000</ID>
+    <ID>PackageNaming:HotspotNotificationManager.kt:package org.kiwix.kiwixmobile.webserver.wifi_hotspot</ID>
+    <ID>PackageNaming:HotspotService.kt:package org.kiwix.kiwixmobile.webserver.wifi_hotspot</ID>
+    <ID>PackageNaming:HotspotStateReceiver.kt:package org.kiwix.kiwixmobile.webserver.wifi_hotspot</ID>
+    <ID>PackageNaming:IpAddressCallbacks.kt:package org.kiwix.kiwixmobile.webserver.wifi_hotspot</ID>
+    <ID>PackageNaming:ServerStatus.kt:package org.kiwix.kiwixmobile.webserver.wifi_hotspot</ID>
+    <ID>ReturnCount:Fat32Checker.kt:Fat32Checker$private fun canCreate4GbFile: Boolean</ID>
+    <ID>TooGenericExceptionCaught:FileWritingFileSystemChecker.kt:FileWritingFileSystemChecker$e: Exception</ID>
+    <ID>TooGenericExceptionCaught:PeerGroupHandshake.kt:PeerGroupHandshake$ex: Exception</ID>
+    <ID>TooGenericExceptionCaught:ReceiverHandShake.kt:ReceiverHandShake$e: Exception</ID>
+    <ID>TooGenericExceptionCaught:SenderHandShake.kt:SenderHandShake$e: Exception</ID>
+    <ID>UnusedPrivateProperty:Fat32Checker.kt:Fat32Checker$@param:IoDispatcher private val ioDispatcher: CoroutineDispatcher</ID>
   </CurrentIssues>
 </SmellBaseline>
