@@ -81,6 +81,15 @@ class OnlineLibraryTabsUseCaseTest {
       assertThat(tabs[0].languageCode).isEqualTo("eng")
       assertThat(tabs[1].languageCode).isEqualTo("fra")
     }
+
+    @Test
+    fun `createTabs uppercases tab names using the app language`() = runTest {
+      every { kiwixDataStore.prefLanguage } returns MutableStateFlow("tr")
+      every { context.getString(R.string.all_languages) } returns "Tüm diller"
+
+      assertThat(useCase.createTabs("all").first().displayName).isEqualTo("TÜM DİLLER")
+      assertThat(useCase.createTabs("eng").first().displayName).isEqualTo("İNGİLİZCE")
+    }
   }
 
   @Nested
