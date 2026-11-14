@@ -59,6 +59,17 @@ sealed class KiwixDialog(
     constructor(zimNameList: String) : this(listOf(zimNameList))
   }
 
+  data class MoveLegacyBooks(override val args: List<Any>) :
+    KiwixDialog(
+      R.string.move_books_title,
+      R.string.move_books_message,
+      R.string.move,
+      R.string.no_thanks
+    ),
+    HasBodyFormatArgs {
+    constructor(count: Int, size: String) : this(listOf(count, size))
+  }
+
   data class FileCopyMoveError(override val args: List<Any>) :
     KiwixDialog(
       null,

@@ -99,6 +99,7 @@ import kotlin.time.Duration.Companion.milliseconds
 
 const val ACTION_GET_CONTENT = "GET_CONTENT"
 const val GET_CONTENT_SHORTCUT_ID = "get_content_shortcut"
+private const val LEGACY_BOOKS_PROMPT_DELAY = 1500L
 
 @AndroidEntryPoint
 class KiwixMainActivity : CoreMainActivity() {
@@ -112,6 +113,8 @@ class KiwixMainActivity : CoreMainActivity() {
   @Inject lateinit var storageDeviceProvider: StorageDeviceProvider
 
   @Inject lateinit var objectBoxDataMigrationHandler: ObjectBoxDataMigrationHandler
+
+  @Inject lateinit var legacyBooksPrompt: LegacyBooksPrompt
 
   @Inject
   @MainDispatcher
@@ -210,6 +213,13 @@ class KiwixMainActivity : CoreMainActivity() {
           }
       }
       DialogHost(alertDialogShower)
+      LaunchedEffect(Unit) {
+        // Let the migrations below finish first.
+        delay(LEGACY_BOOKS_PROMPT_DELAY.milliseconds)
+        if (!kiwixDataStore.showIntro.first()) {
+          legacyBooksPrompt.show(alertDialogShower, lifecycleScope)
+        }
+      }
     }
     runMigrations()
     intent?.let {

@@ -117,6 +117,12 @@ abstract class HistoryRoomDao : PageDao {
 
   @Query("DELETE FROM HistoryRoomEntity")
   abstract fun deleteAllHistory()
+
+  @Query(
+    "UPDATE HistoryRoomEntity SET zimReaderSource = :newLocation " +
+      "WHERE zimReaderSource = :oldLocation"
+  )
+  abstract fun relocateBook(oldLocation: String, newLocation: String): Int
 }
 
 class HistoryRoomDaoCoverts {

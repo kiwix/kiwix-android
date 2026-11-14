@@ -27,6 +27,7 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.preferencesDataStore
 import dagger.hilt.android.qualifiers.ApplicationContext
+import eu.mhutti1.utils.storage.StorageDeviceUtils
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
@@ -489,9 +490,25 @@ class KiwixDataStore @Inject constructor(
       ?: context.filesDir.path // a workaround for emulators
   }
 
+  // Documents survives uninstall; app-specific media dir is the pre-Android 11 fallback.
   private suspend fun defaultPublicStorage(): String = withContext(ioDispatcher) {
+    StorageDeviceUtils.publicDocumentsDirectory(context)?.path
+      ?: legacyDefaultStorage()
+  }
+
+  fun legacyDefaultStorage(): String =
     ContextWrapper(context).externalMediaDirs[ZERO]?.path
       ?: context.filesDir.path // a workaround for emulators
+
+  val legacyBooksMoveDeclined: Flow<Boolean> =
+    context.kiwixDataStore.data.map { prefs ->
+      prefs[PreferencesKeys.PREF_LEGACY_BOOKS_MOVE_DECLINED] ?: false
+    }
+
+  suspend fun setLegacyBooksMoveDeclined(declined: Boolean) {
+    context.kiwixDataStore.edit { prefs ->
+      prefs[PreferencesKeys.PREF_LEGACY_BOOKS_MOVE_DECLINED] = declined
+    }
   }
 
   val selectedStoragePosition: Flow<Int> =
@@ -705,6 +722,7 @@ class KiwixDataStore @Inject constructor(
     // Prefs
     const val PREF_LANG = "pref_language_chooser"
     const val PREF_STORAGE = "pref_select_folder"
+    const val PREF_LEGACY_BOOKS_MOVE_DECLINED = "pref_legacy_books_move_declined"
     const val STORAGE_POSITION = "storage_position"
     const val PREF_WIFI_ONLY = "pref_wifi_only"
     const val PREF_KIWIX_MOBILE = "kiwix-mobile"

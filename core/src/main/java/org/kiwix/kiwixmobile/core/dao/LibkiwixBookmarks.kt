@@ -248,6 +248,16 @@ class LibkiwixBookmarks @Inject constructor(
     }
   }
 
+  /** Re-reads a bookmarked book from its new [file] after it was moved. */
+  suspend fun relocateBook(bookId: String, file: File) {
+    ensureInitialized()
+    if (!isBookAlreadyExistInLibrary(bookId)) return
+    library.removeBookById(bookId)
+    libraryBooksList = library.booksIds.toList()
+    addBookToLibrary(file = file)
+    writeBookMarksAndSaveLibraryToFile()
+  }
+
   private fun addBookToLibraryIfNotExist(libKiwixBook: Book?) {
     libKiwixBook?.let { book ->
       if (!isBookAlreadyExistInLibrary(book.id)) {

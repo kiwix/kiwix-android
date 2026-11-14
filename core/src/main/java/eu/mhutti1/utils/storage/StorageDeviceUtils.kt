@@ -36,7 +36,23 @@ object StorageDeviceUtils {
     context: Context,
     ioDispatcher: CoroutineDispatcher
   ) = withContext(ioDispatcher) {
-    validate(externalMediaFilesDirsDevices(context), true)
+    val mediaDirs = externalMediaFilesDirsDevices(context)
+    // Internal storage means Documents where usable, so books survive uninstall.
+    val documents = publicDocumentsDirectory(context)
+      ?.let { validate(listOf(StorageDevice(it, true)), true) }
+      .orEmpty()
+    validate(documents.ifEmpty { mediaDirs.take(1) } + mediaDirs.drop(1), true)
+  }
+
+  /** Shared Documents; from Android 11 apps may create files there by path without permission. */
+  @JvmStatic
+  fun publicDocumentsDirectory(context: Context): File? {
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) return null
+    return generateSequence(context.getExternalFilesDir(null)) { it.parentFile }
+      .firstOrNull { it.name == "Android" }
+      ?.parentFile
+      ?.let { File(it, Environment.DIRECTORY_DOCUMENTS) }
+      ?.takeIf { it.isDirectory || it.mkdirs() }
   }
 
   @JvmStatic
