@@ -71,8 +71,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
-import androidx.compose.ui.semantics.hideFromAccessibility
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.font.FontWeight.Companion.W400
@@ -670,11 +670,7 @@ private fun SeekBarPreference(
     modifier = Modifier
       .fillMaxWidth()
       .padding(vertical = TWELVE_DP)
-      .semantics {
-        testTag = SEEKBAR_PREFERENCE_TESTING_TAG
-        contentDescription = title
-        hideFromAccessibility()
-      }
+      .testTag(SEEKBAR_PREFERENCE_TESTING_TAG)
   ) {
     PreferenceTitleText(title)
     PreferenceSummaryText(summary)
@@ -685,7 +681,11 @@ private fun SeekBarPreference(
         onValueChange(rounded)
       },
       valueRange = valueRange.first.toFloat()..valueRange.last.toFloat(),
-      steps = valueRange.last - valueRange.first - 1
+      steps = valueRange.last - valueRange.first - 1,
+      modifier = Modifier.semantics {
+        contentDescription = title
+        stateDescription = summary
+      }
     )
   }
 }
@@ -706,13 +706,7 @@ fun ListPreference(
     selected = selectedOption
   }
 
-  Column(
-    modifier = Modifier
-      .fillMaxWidth()
-      .clickable { showDialog = true }
-  ) {
-    PreferenceItem(stringResource(titleId), summary) { showDialog = true }
-  }
+  PreferenceItem(stringResource(titleId), summary) { showDialog = true }
 
   if (showDialog) {
     KiwixBasicDialogFrame(
@@ -793,10 +787,7 @@ private fun PreferenceItem(title: String, summary: String, onClick: () -> Unit) 
       .fillMaxWidth()
       .clickable(onClick = onClick)
       .padding(vertical = TWELVE_DP)
-      .semantics {
-        testTag = PREFERENCE_ITEM_TESTING_TAG + title
-        hideFromAccessibility()
-      }
+      .semantics { testTag = PREFERENCE_ITEM_TESTING_TAG + title }
   ) {
     PreferenceTitleText(title)
     PreferenceSummaryText(summary)

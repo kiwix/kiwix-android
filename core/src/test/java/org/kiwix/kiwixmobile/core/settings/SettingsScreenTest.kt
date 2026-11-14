@@ -20,11 +20,19 @@ package org.kiwix.kiwixmobile.core.settings
 
 import android.os.Build
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.ui.semantics.SemanticsActions
+import androidx.compose.ui.semantics.SemanticsProperties
+import androidx.compose.ui.test.SemanticsMatcher
+import androidx.compose.ui.test.assert
+import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsOff
 import androidx.compose.ui.test.assertIsOn
 import androidx.compose.ui.test.assertTextEquals
+import androidx.compose.ui.test.hasAnyAncestor
+import androidx.compose.ui.test.hasClickAction
 import androidx.compose.ui.test.hasContentDescription
+import androidx.compose.ui.test.hasStateDescription
 import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.createComposeRule
@@ -766,6 +774,72 @@ class SettingsScreenTest {
       .onNodeWithText(systemLanguageLabel)
       .performClick()
     verify { mockViewModel.updateAppLanguage(Locale.ROOT.language) }
+  }
+
+  /**
+   * Matches a node that accessibility services such as TalkBack can reach: neither the node
+   * nor any of its ancestors is hidden from accessibility.
+   */
+  private val isReachableByAccessibilityServices =
+    SemanticsMatcher.keyNotDefined(SemanticsProperties.HideFromAccessibility) and
+      !hasAnyAncestor(SemanticsMatcher.keyIsDefined(SemanticsProperties.HideFromAccessibility))
+
+  @Test
+  fun preferenceItems_areReachableByAccessibilityServices() {
+    renderSettingsScreen(
+      createMockViewModel(uiState = SettingsUiState(permissionItem = true to "Allowed"))
+    )
+    listOf(
+      R.string.pref_theme,
+      R.string.pref_clear_all_history_title,
+      R.string.pref_clear_all_notes_title,
+      R.string.pref_import_bookmark_title,
+      R.string.pref_export_bookmark_title,
+      R.string.pref_allow_to_read_or_write_zim_files_on_sd_card,
+      R.string.pref_info_version,
+      R.string.pref_credits
+    ).map(context::getString).forEach { title ->
+      scrollToTag(PREFERENCE_ITEM_TESTING_TAG + title)
+      composeTestRule
+        .onNodeWithTag(PREFERENCE_ITEM_TESTING_TAG + title)
+        .assert(isReachableByAccessibilityServices)
+        .assert(hasText(title))
+        .assert(hasClickAction())
+    }
+  }
+
+  @Test
+  fun textZoomSlider_isReachableByAccessibilityServicesWithItsValue() {
+    renderSettingsScreen(createMockViewModel())
+    scrollToTag(SEEKBAR_PREFERENCE_TESTING_TAG)
+    composeTestRule
+      .onNode(
+        hasContentDescription(context.getString(R.string.pref_text_zoom_title)) and
+          hasAnyAncestor(hasTestTag(SEEKBAR_PREFERENCE_TESTING_TAG))
+      )
+      .assert(isReachableByAccessibilityServices)
+      .assert(hasStateDescription(context.getString(R.string.percentage, DEFAULT_ZOOM)))
+      .assert(SemanticsMatcher.keyIsDefined(SemanticsActions.SetProgress))
+  }
+
+  @Test
+  fun listPreference_isASingleClickableItem() {
+    composeTestRule.setContent {
+      ListPreference(
+        titleId = R.string.pref_theme,
+        summary = "System default",
+        options = listOf("Light", "Dark", "System default"),
+        selectedOption = "System default",
+        onOptionSelected = {}
+      )
+    }
+    composeTestRule
+      .onAllNodes(hasClickAction())
+      .assertCountEquals(1)
+    composeTestRule
+      .onNode(hasClickAction())
+      .assert(hasText(context.getString(R.string.pref_theme)))
+      .assert(hasText("System default"))
   }
 
   @Test
