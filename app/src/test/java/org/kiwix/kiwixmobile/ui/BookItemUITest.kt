@@ -277,6 +277,15 @@ class BookItemUITest {
   }
 
   @Test
+  fun bookItem_whenNormalMode_cardHasNoSelectedState() {
+    bookItem(index = 0, bookOnDisk = createBookOnDisk(), selectionMode = SelectionMode.NORMAL)
+
+    composeTestRule
+      .onNodeWithTag(BOOK_ITEM_TESTING_TAG)
+      .assert(SemanticsMatcher.keyNotDefined(SemanticsProperties.Selected))
+  }
+
+  @Test
   fun bookItem_contentDescriptionsHaveNoIndexSuffix() {
     bookItem(
       index = 3,

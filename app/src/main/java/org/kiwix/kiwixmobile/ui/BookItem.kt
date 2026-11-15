@@ -125,7 +125,10 @@ fun BookItem(
           }
         )
         .testTag(BOOK_ITEM_TESTING_TAG)
-        .semantics { selected = isSelected }
+        .semantics {
+          // Only in selection mode, so that TalkBack does not say "Not selected" on every book.
+          if (selectionMode == SelectionMode.MULTI) selected = isSelected
+        }
     ) {
       BookContent(
         book = bookOnDisk.book,
