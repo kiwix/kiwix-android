@@ -264,7 +264,7 @@ class LocalLibraryScreenTest {
     // Verify the checkbox or selection state.
     // In BookItem, it uses BOOK_ITEM_CHECKBOX_TESTING_TAG + index
     composeTestRule
-      .onNodeWithTag("${BOOK_ITEM_CHECKBOX_TESTING_TAG}0")
+      .onNodeWithTag("${BOOK_ITEM_CHECKBOX_TESTING_TAG}0", useUnmergedTree = true)
       .assertIsDisplayed()
   }
 

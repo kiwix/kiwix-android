@@ -167,7 +167,7 @@ class ZimHostRobot : BaseRobot() {
   private fun selectZimFile(position: Int, composeTestRule: ComposeContentTestRule) {
     try {
       composeTestRule
-        .onNodeWithTag("$BOOK_ITEM_CHECKBOX_TESTING_TAG$position")
+        .onNodeWithTag("$BOOK_ITEM_CHECKBOX_TESTING_TAG$position", useUnmergedTree = true)
         .assertIsDisplayed()
     } catch (_: AssertionError) {
       composeTestRule.onAllNodesWithTag(BOOK_ITEM_TESTING_TAG)[position + 1].performClick()
@@ -177,7 +177,7 @@ class ZimHostRobot : BaseRobot() {
   fun assertItemHostedOnServer(itemCount: Int, composeTestRule: ComposeContentTestRule) {
     for (i in 0 until itemCount) {
       composeTestRule
-        .onNodeWithTag("$BOOK_ITEM_CHECKBOX_TESTING_TAG${i + 1}")
+        .onNodeWithTag("$BOOK_ITEM_CHECKBOX_TESTING_TAG${i + 1}", useUnmergedTree = true)
         .assertIsDisplayed()
     }
   }

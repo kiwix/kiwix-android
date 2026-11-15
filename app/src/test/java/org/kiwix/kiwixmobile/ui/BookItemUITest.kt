@@ -19,7 +19,13 @@
 package org.kiwix.kiwixmobile.ui
 
 import android.os.Build
+import androidx.compose.ui.semantics.SemanticsProperties
+import androidx.compose.ui.test.SemanticsMatcher
+import androidx.compose.ui.test.assert
+import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertIsNotSelected
+import androidx.compose.ui.test.assertIsSelected
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.longClick
 import androidx.compose.ui.test.onNodeWithTag
@@ -151,7 +157,7 @@ class BookItemUITest {
       selectionMode = SelectionMode.NORMAL
     )
 
-    composeTestRule.onNodeWithTag("${BOOK_ITEM_CHECKBOX_TESTING_TAG}0").assertDoesNotExist()
+    composeTestRule.onNodeWithTag("${BOOK_ITEM_CHECKBOX_TESTING_TAG}0", useUnmergedTree = true).assertDoesNotExist()
   }
 
   @Test
@@ -210,7 +216,7 @@ class BookItemUITest {
       selectionMode = SelectionMode.MULTI
     )
 
-    composeTestRule.onNodeWithTag("${BOOK_ITEM_CHECKBOX_TESTING_TAG}0").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("${BOOK_ITEM_CHECKBOX_TESTING_TAG}0", useUnmergedTree = true).assertIsDisplayed()
   }
 
   @Test
@@ -223,7 +229,7 @@ class BookItemUITest {
       selectionMode = SelectionMode.MULTI
     )
 
-    composeTestRule.onNodeWithTag("${BOOK_ITEM_CHECKBOX_TESTING_TAG}0").assertDoesNotExist()
+    composeTestRule.onNodeWithTag("${BOOK_ITEM_CHECKBOX_TESTING_TAG}0", useUnmergedTree = true).assertDoesNotExist()
   }
 
   @Test
@@ -239,10 +245,51 @@ class BookItemUITest {
     )
 
     composeTestRule
-      .onNodeWithTag("${BOOK_ITEM_CHECKBOX_TESTING_TAG}0")
+      .onNodeWithTag("${BOOK_ITEM_CHECKBOX_TESTING_TAG}0", useUnmergedTree = true)
       .performClick()
 
     assertTrue(invoked)
+  }
+
+  @Test
+  fun bookItem_whenSelected_cardIsSelectedAndCheckmarkIsDecorative() {
+    bookItem(
+      index = 0,
+      bookOnDisk = createBookOnDisk(isSelected = true),
+      selectionMode = SelectionMode.MULTI
+    )
+
+    composeTestRule.onNodeWithTag(BOOK_ITEM_TESTING_TAG).assertIsSelected()
+    composeTestRule
+      .onNodeWithTag("${BOOK_ITEM_CHECKBOX_TESTING_TAG}0", useUnmergedTree = true)
+      .assert(SemanticsMatcher.keyNotDefined(SemanticsProperties.ContentDescription))
+  }
+
+  @Test
+  fun bookItem_whenNotSelected_cardIsNotSelected() {
+    bookItem(
+      index = 0,
+      bookOnDisk = createBookOnDisk(isSelected = false),
+      selectionMode = SelectionMode.MULTI
+    )
+
+    composeTestRule.onNodeWithTag(BOOK_ITEM_TESTING_TAG).assertIsNotSelected()
+  }
+
+  @Test
+  fun bookItem_contentDescriptionsHaveNoIndexSuffix() {
+    bookItem(
+      index = 3,
+      bookOnDisk = createBookOnDisk(isSelected = true),
+      selectionMode = SelectionMode.MULTI
+    )
+
+    composeTestRule
+      .onAllNodes(hasContentDescriptionEndingInDigit(), useUnmergedTree = true)
+      .assertCountEquals(0)
+    composeTestRule
+      .onNodeWithTag(OFFLINE_IMAGE_TEST_TAG, useUnmergedTree = true)
+      .assert(SemanticsMatcher.keyNotDefined(SemanticsProperties.ContentDescription))
   }
 
   @Test

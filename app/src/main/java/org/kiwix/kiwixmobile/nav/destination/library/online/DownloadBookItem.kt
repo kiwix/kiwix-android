@@ -44,7 +44,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
 import com.tonyodev.fetch2.Error
@@ -80,7 +79,6 @@ const val RESUME_ICON_TESTING_TAG = "resumeIconTestingTag"
 
 @Composable
 fun DownloadBookItem(
-  index: Int,
   item: LibraryDownloadItem,
   onPauseResumeClick: (LibraryDownloadItem) -> Unit,
   onStopClick: (LibraryDownloadItem) -> Unit
@@ -108,14 +106,13 @@ fun DownloadBookItem(
     LibraryCard(
       modifier = Modifier.testTag(DOWNLOAD_BOOK_ITEM_TESTING_TAG)
     ) {
-      DownloadBookContent(index, item, onPauseResumeClick, onStopClick)
+      DownloadBookContent(item, onPauseResumeClick, onStopClick)
     }
   }
 }
 
 @Composable
 private fun DownloadBookContent(
-  index: Int,
   item: LibraryDownloadItem,
   onPauseResumeClick: (LibraryDownloadItem) -> Unit,
   onStopClick: (LibraryDownloadItem) -> Unit
@@ -133,11 +130,10 @@ private fun DownloadBookContent(
         .padding(start = SIXTEEN_DP, end = EIGHT_DP),
       horizontalAlignment = Alignment.Start
     ) {
-      BookTitle(item.title, index)
+      BookTitle(item.title)
       Spacer(modifier = Modifier.height(FOUR_DP))
       BookDescription(
         bookDescription = item.description.orEmpty(),
-        index = index,
         style = MaterialTheme.typography.bodyMedium.copy(color = Color.Gray),
         color = Color.Unspecified,
         minLines = 2
@@ -145,9 +141,7 @@ private fun DownloadBookContent(
       Spacer(modifier = Modifier.height(FOUR_DP))
       ContentLoadingProgressBar(
         progressBarStyle = ProgressBarStyle.HORIZONTAL,
-        modifier = Modifier
-          .padding(horizontal = ONE_DP)
-          .semantics { contentDescription = item.hashCode().toString() },
+        modifier = Modifier.padding(horizontal = ONE_DP),
         progress = item.progress
       )
       Spacer(modifier = Modifier.height(FOUR_DP))
@@ -182,8 +176,7 @@ fun PauseStopButtonsRow(
     DownloadActionButton(
       icon = getPauseResumeButtonIcon(isPaused),
       iconTestTag = if (isPaused) RESUME_ICON_TESTING_TAG else PAUSE_ICON_TESTING_TAG,
-      contentDescription = context.getString(string.tts_pause) +
-        "/${context.getString(string.tts_resume)}/${item.hashCode()}",
+      contentDescription = context.getString(if (isPaused) string.tts_resume else string.tts_pause),
       buttonTestTag = DOWNLOADING_PAUSE_BUTTON_TESTING_TAG,
       buttonShape = buttonShape,
       borderStroke = borderStroke,
@@ -193,7 +186,7 @@ fun PauseStopButtonsRow(
     DownloadActionButton(
       icon = IconItem.Drawable(R.drawable.ic_stop_24dp),
       iconTestTag = null,
-      contentDescription = context.getString(string.stop) + item.hashCode(),
+      contentDescription = context.getString(string.stop),
       buttonTestTag = DOWNLOADING_STOP_BUTTON_TESTING_TAG,
       buttonShape = buttonShape,
       borderStroke = borderStroke,
@@ -263,7 +256,6 @@ private fun DownloadStateRow(item: LibraryDownloadItem) {
       modifier = Modifier
         .weight(1f)
         .testTag(DOWNLOADING_STATE_TEXT_TESTING_TAG)
-        .semantics { contentDescription = downloadState + item.hashCode() }
     )
     Text(
       text = getDownloadedSizeText(item.bytesDownloaded, item.totalSizeBytes),

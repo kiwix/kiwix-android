@@ -9,7 +9,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import coil3.compose.AsyncImage
 import org.kiwix.kiwixmobile.core.R
@@ -22,6 +21,10 @@ import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FOUR_DP
 const val ONLINE_LIBRARY_IMAGE_TEST_TAG = "onlineLibraryImageTestingTag"
 const val OFFLINE_IMAGE_TEST_TAG = "localLibraryImageTestingTag"
 
+/**
+ * The icon of a book. It is decorative by default, because the book title is next to it.
+ * Give a [contentDescription] only when no text near the icon names the book.
+ */
 @Composable
 fun BookIcon(
   modifier: Modifier = Modifier,
@@ -31,8 +34,6 @@ fun BookIcon(
   contentDescription: String? = null,
   testTag: String? = if (isOnlineLibrary) ONLINE_LIBRARY_IMAGE_TEST_TAG else OFFLINE_IMAGE_TEST_TAG
 ) {
-  val defaultContentDescription =
-    stringResource(R.string.fav_icon) + (iconSource?.hashCode() ?: "")
   val imageModifier = modifier
     .size(size)
     .clip(RoundedCornerShape(FOUR_DP))
@@ -42,14 +43,14 @@ fun BookIcon(
   if (isOnlineLibrary) {
     AsyncImage(
       model = iconSource,
-      contentDescription = contentDescription ?: defaultContentDescription,
+      contentDescription = contentDescription,
       modifier = imageModifier,
       error = painterResource(R.drawable.default_zim_file_icon)
     )
   } else {
     Image(
       painter = Base64String(iconSource).toPainter(),
-      contentDescription = contentDescription ?: defaultContentDescription,
+      contentDescription = contentDescription,
       modifier = imageModifier
     )
   }

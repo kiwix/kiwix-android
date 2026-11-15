@@ -23,8 +23,12 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.semantics.SemanticsProperties
+import androidx.compose.ui.test.SemanticsMatcher
+import androidx.compose.ui.test.assert
+import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertIsDisplayed
-import androidx.compose.ui.test.hasContentDescription
+import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onAllNodesWithTag
@@ -47,11 +51,13 @@ import org.junit.runner.RunWith
 import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.entity.LibkiwixBook
+import org.kiwix.kiwixmobile.core.ui.components.ONLINE_LIBRARY_IMAGE_TEST_TAG
 import org.kiwix.kiwixmobile.core.utils.ZERO
 import org.kiwix.kiwixmobile.core.zim_manager.Byte
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.HumanReadableCount
 import org.kiwix.kiwixmobile.ui.BookItemScreen.BOOK_ARTICLE_COUNT_TEST_TAG
 import org.kiwix.kiwixmobile.ui.formatBookDate
+import org.kiwix.kiwixmobile.ui.hasContentDescriptionEndingInDigit
 import org.kiwix.kiwixmobile.zimManager.Fat32Checker.Companion.FOUR_GIGABYTES_IN_BYTES
 import org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState
 import org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState.CanWrite4GbFile
@@ -137,7 +143,6 @@ class OnlineBookItemUITest {
   ) {
     composeTestRule.setContent {
       OnlineBookItem(
-        index = ZERO,
         item = item,
         availableSpaceCalculator = mockAvailableSpaceCalculator,
         onBookItemClick = onBookItemClick
@@ -185,7 +190,7 @@ class OnlineBookItemUITest {
   fun onlineBookItem_bookTitleIsInTree() {
     setContent(item = mockBookItem(book = mockLibkiwixBook(title = "Kotlin")))
     composeTestRule
-      .onNode(hasContentDescription("Kotlin", substring = true))
+      .onNode(hasText("Kotlin", substring = true))
       .assertExists()
   }
 
@@ -193,7 +198,7 @@ class OnlineBookItemUITest {
   fun onlineBookItem_bookDescriptionIsInTree() {
     setContent(item = mockBookItem(book = mockLibkiwixBook(description = "A programming language")))
     composeTestRule
-      .onNode(hasContentDescription("A programming language$ZERO"))
+      .onNode(hasText("A programming language"))
       .assertExists()
   }
 
@@ -206,12 +211,12 @@ class OnlineBookItemUITest {
   }
 
   @Test
-  fun onlineBookItem_bookSizeContentDescriptionIsCorrect() {
+  fun onlineBookItem_bookSizeTextIsCorrect() {
     setContent(item = mockBookItem(book = mockLibkiwixBook(size = "51200")))
     val expectedSize = Byte("51200").humanReadable
     composeTestRule
-      .onNode(hasContentDescription("$expectedSize$ZERO"))
-      .assertExists()
+      .onNodeWithTag(ONLINE_BOOK_SIZE_TEXT_TESTING_TAG, useUnmergedTree = true)
+      .assertTextEquals(expectedSize)
   }
 
   @Test
@@ -220,7 +225,7 @@ class OnlineBookItemUITest {
     setContent(item = mockBookItem(book = mockLibkiwixBook(date = date)))
     val formattedDate = formatBookDate(date)
     composeTestRule
-      .onNode(hasContentDescription(formattedDate, substring = true))
+      .onNode(hasText(formattedDate, substring = true))
       .assertExists()
   }
 
@@ -253,7 +258,7 @@ class OnlineBookItemUITest {
   }
 
   @Test
-  fun onlineBookItem_bookArticleCountContentDescriptionIsCorrect() {
+  fun onlineBookItem_bookArticleCountTextIsCorrect() {
     val articleCount = "100"
     val mediaCount = "20"
     setContent(
@@ -267,20 +272,18 @@ class OnlineBookItemUITest {
       .toHumanReadable(context, R.string.mediaCount)
     val combined = "$articlesStr • $mediasStr"
     composeTestRule
-      .onNode(hasContentDescription("$combined$ZERO"))
-      .assertExists()
+      .onNodeWithTag(BOOK_ARTICLE_COUNT_TEST_TAG, useUnmergedTree = true)
+      .assertTextEquals(combined)
   }
 
   @Test
   fun onlineBookItem_bookIconIsInTree() {
     val favicon = "https://kiwix.org/favicon.png"
     setContent(item = mockBookItem(book = mockLibkiwixBook(favicon = favicon)))
-    val expectedDesc = context.getString(
-      R.string.fav_icon
-    ) + favicon.hashCode()
     composeTestRule
-      .onNode(hasContentDescription(expectedDesc))
+      .onNodeWithTag(ONLINE_LIBRARY_IMAGE_TEST_TAG, useUnmergedTree = true)
       .assertExists()
+      .assert(SemanticsMatcher.keyNotDefined(SemanticsProperties.ContentDescription))
   }
 
   @Test
@@ -524,7 +527,6 @@ class OnlineBookItemUITest {
 
     composeTestRule.setContent {
       OnlineBookItem(
-        index = ZERO,
         item = item,
         availableSpaceCalculator = mockAvailableSpaceCalculator,
         onBookItemClick = mockOnBookItemClick
@@ -575,13 +577,11 @@ class OnlineBookItemUITest {
     composeTestRule.setContent {
       Column {
         OnlineBookItem(
-          index = 0,
           item = item1,
           availableSpaceCalculator = mockAvailableSpaceCalculator,
           onBookItemClick = mockOnBookItemClick
         )
         OnlineBookItem(
-          index = 1,
           item = item2,
           availableSpaceCalculator = mockAvailableSpaceCalculator,
           onBookItemClick = mockOnBookItemClick
@@ -601,7 +601,7 @@ class OnlineBookItemUITest {
   }
 
   @Test
-  fun onlineBookItem_multipleItems_titlesAreDistinctByIndex() {
+  fun onlineBookItem_multipleItems_titlesAreDistinct() {
     val item1 =
       mockBookItem(book = mockLibkiwixBook(id = "book-id-1", title = "Kotlin", date = "2024-01-01"))
     val item2 =
@@ -610,13 +610,11 @@ class OnlineBookItemUITest {
     composeTestRule.setContent {
       Column {
         OnlineBookItem(
-          index = 0,
           item = item1,
           availableSpaceCalculator = mockAvailableSpaceCalculator,
           onBookItemClick = mockOnBookItemClick
         )
         OnlineBookItem(
-          index = 1,
           item = item2,
           availableSpaceCalculator = mockAvailableSpaceCalculator,
           onBookItemClick = mockOnBookItemClick
@@ -624,8 +622,15 @@ class OnlineBookItemUITest {
       }
     }
     composeTestRule.waitForIdle()
-    composeTestRule.onNode(hasContentDescription("Kotlin${formattedDate}0")).assertExists()
-    composeTestRule.onNode(hasContentDescription("Java${formattedDate}1")).assertExists()
+    composeTestRule
+      .onNode(hasText("Kotlin $formattedDate"), useUnmergedTree = true)
+      .assertExists()
+    composeTestRule
+      .onNode(hasText("Java $formattedDate"), useUnmergedTree = true)
+      .assertExists()
+    composeTestRule
+      .onAllNodes(hasContentDescriptionEndingInDigit(), useUnmergedTree = true)
+      .assertCountEquals(0)
   }
 
   @Test
@@ -637,13 +642,11 @@ class OnlineBookItemUITest {
     composeTestRule.setContent {
       Column {
         OnlineBookItem(
-          index = 0,
           item = item1,
           availableSpaceCalculator = mockAvailableSpaceCalculator,
           onBookItemClick = onClickItem1
         )
         OnlineBookItem(
-          index = 1,
           item = item2,
           availableSpaceCalculator = mockAvailableSpaceCalculator,
           onBookItemClick = onClickItem2

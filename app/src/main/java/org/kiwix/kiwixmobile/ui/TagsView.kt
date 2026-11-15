@@ -34,8 +34,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.contentDescription
-import androidx.compose.ui.semantics.semantics
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.ui.theme.TagPictureContainerDark
 import org.kiwix.kiwixmobile.core.ui.theme.TagPictureContainerLight
@@ -64,7 +62,7 @@ import org.kiwix.kiwixmobile.core.zim_manager.KiwixTag.TagValue.YES
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun TagsView(tags: List<KiwixTag>, modifier: Modifier = Modifier, index: Int) {
+fun TagsView(tags: List<KiwixTag>, modifier: Modifier = Modifier) {
   FlowRow(
     modifier = modifier,
     horizontalArrangement = Arrangement.spacedBy(EIGHT_DP),
@@ -74,7 +72,6 @@ fun TagsView(tags: List<KiwixTag>, modifier: Modifier = Modifier, index: Int) {
       val picture = stringResource(R.string.tag_pic)
       TagChip(
         text = picture,
-        contentDescription = "$picture$index",
         containerColorLight = TagPictureContainerLight,
         containerColorDark = TagPictureContainerDark,
         contentColorLight = TagPictureContentLight,
@@ -85,7 +82,6 @@ fun TagsView(tags: List<KiwixTag>, modifier: Modifier = Modifier, index: Int) {
       val video = stringResource(R.string.tag_vid)
       TagChip(
         text = video,
-        contentDescription = "$video$index",
         containerColorLight = TagVideoContainerLight,
         containerColorDark = TagVideoContainerDark,
         contentColorLight = TagVideoContentLight,
@@ -100,7 +96,6 @@ fun TagsView(tags: List<KiwixTag>, modifier: Modifier = Modifier, index: Int) {
       val textOnly = stringResource(R.string.tag_text_only)
       TagChip(
         text = textOnly,
-        contentDescription = "$textOnly$index",
         containerColorLight = TagTextOnlyContainerLight,
         containerColorDark = TagTextOnlyContainerDark,
         contentColorLight = TagTextOnlyContentLight,
@@ -111,7 +106,6 @@ fun TagsView(tags: List<KiwixTag>, modifier: Modifier = Modifier, index: Int) {
       val shortText = stringResource(R.string.tag_short_text)
       TagChip(
         text = shortText,
-        contentDescription = "$shortText$index",
         containerColorLight = TagShortTextContainerLight,
         containerColorDark = TagShortTextContainerDark,
         contentColorLight = TagShortTextContentLight,
@@ -124,7 +118,6 @@ fun TagsView(tags: List<KiwixTag>, modifier: Modifier = Modifier, index: Int) {
 @Composable
 private fun TagChip(
   text: String,
-  contentDescription: String,
   containerColorLight: Color,
   containerColorDark: Color,
   contentColorLight: Color,
@@ -135,8 +128,7 @@ private fun TagChip(
     modifier = Modifier
       .clip(RoundedCornerShape(FOUR_DP))
       .background(if (isDark) containerColorDark else containerColorLight)
-      .padding(horizontal = EIGHT_DP, vertical = FOUR_DP)
-      .semantics { this.contentDescription = contentDescription },
+      .padding(horizontal = EIGHT_DP, vertical = FOUR_DP),
     contentAlignment = Alignment.Center
   ) {
     Text(
