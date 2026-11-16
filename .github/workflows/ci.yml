@@ -23,11 +23,9 @@ jobs:
     name: Automated tests
     strategy:
       matrix:
+        # Android 17 (api-level 37.0, google_apis) temporarily disabled, see #5284.
         api-level: [ 25, 30, 33, 34, 35, 36 ]
         target: [ default ]
-        include:
-          - api-level: '37.0'
-            target: google_apis
       fail-fast: true
     runs-on: ubuntu-24.04
     steps:
@@ -218,11 +216,9 @@ jobs:
     name: Automated tests for Branded app
     strategy:
       matrix:
+        # Android 17 (api-level 37.0, google_apis) temporarily disabled, see #5284.
         api-level: [ 25, 30, 33, 34, 35, 36 ]
         target: [ default ]
-        include:
-          - api-level: '37.0'
-            target: google_apis
       fail-fast: true
     runs-on: ubuntu-24.04
     steps:
