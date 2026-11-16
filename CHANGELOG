@@ -1,6 +1,6 @@
 4.0.0
 New Features:
-* Support for Android 16. (@MohitMaliFtechiz https://github.com/kiwix/kiwix-android/pull/4231)
+* Support for Android 17. (@MohitMaliFtechiz https://github.com/kiwix/kiwix-android/pull/5272)
 * Added support for Android's per-app language setting. (@MohitMaliFtechiz https://github.com/kiwix/kiwix-android/pull/4228)
 * Migrated the entire application UI from XML/Fragments to Jetpack Compose. (@MohitMaliFtechiz, @SOUMEN-PAL, @jackq97, @itsPronay, @atharvyadav22, @harshsomankar123-tech https://github.com/kiwix/kiwix-android/issues/4572, https://github.com/kiwix/kiwix-android/issues/2669)
 * Migrated on-disk storage of Books/ZIM files from ObjectBox to libkiwix/Room. (@MohitMaliFtechiz https://github.com/kiwix/kiwix-android/pull/4334, https://github.com/kiwix/kiwix-android/pull/4396)
@@ -15,6 +15,7 @@ New Features:
 * Introduced similarly-spelled suggestion results in search. (@MohitMaliFtechiz https://github.com/kiwix/kiwix-android/pull/4445)
 * Added `zim://` scheme deep link support. (@onyx243 https://github.com/kiwix/kiwix-android/pull/4324)
 * "Random Article" feature is now known as "Random Page". (@atharvyadav22 https://github.com/kiwix/kiwix-android/pull/5004)
+* "Download" tab is now known as "Explore". (@SunilKumarPradhan https://github.com/kiwix/kiwix-android/pull/5203)
 * Added an "Open" action to completed download notifications, and the ability to resume a paused download from the notification. (@harshsomankar123-tech https://github.com/kiwix/kiwix-android/pull/4729)
 * Added a "back to top" button in the online library. (@harshsomankar123-tech https://github.com/kiwix/kiwix-android/pull/4774)
 * Modernized the in-app rating experience with Google Play's In-App Review API(For Play Store variant). (@harshsomankar123-tech https://github.com/kiwix/kiwix-android/pull/4869)
