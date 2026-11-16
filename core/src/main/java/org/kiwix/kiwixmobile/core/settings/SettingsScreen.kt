@@ -690,7 +690,6 @@ private fun SeekBarPreference(
   }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ListPreference(
   titleId: Int,

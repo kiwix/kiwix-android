@@ -154,20 +154,6 @@ class SettingsScreenTest {
       .performScrollToNode(hasContentDescription(contentDescription))
   }
 
-  /**
-   * Clicks a SwitchPreference identified by its title (contentDescription).
-   * Uses the testTag to disambiguate the Column container from
-   * the inner Switch, which share the same contentDescription.
-   */
-  private fun clickSwitchPreference(title: String) {
-    scrollToTag(SWITCH_PREFERENCE_TESTING_TAG)
-    // Scroll specifically to the switch with this content description
-    scrollToContentDescription(title)
-    composeTestRule
-      .onNodeWithTag(SWITCH_PREFERENCE_TESTING_TAG)
-      .performClick()
-  }
-
   @Test
   fun settingsScreen_topBar_displaysSettingsTitle() {
     renderSettingsScreen(createMockViewModel())
@@ -738,7 +724,8 @@ class SettingsScreenTest {
     val systemLanguageName = systemLocale.getDisplayLanguage(systemLocale).replaceFirstChar {
       if (it.isLowerCase()) it.titlecase(systemLocale) else "$it"
     }
-    val systemLanguageLabel = context.getString(R.string.system_language_with_name, systemLanguageName)
+    val systemLanguageLabel =
+      context.getString(R.string.system_language_with_name, systemLanguageName)
 
     renderSettingsScreen(
       createMockViewModel(
@@ -760,7 +747,8 @@ class SettingsScreenTest {
     val systemLanguageName = systemLocale.getDisplayLanguage(systemLocale).replaceFirstChar {
       if (it.isLowerCase()) it.titlecase(systemLocale) else "$it"
     }
-    val systemLanguageLabel = context.getString(R.string.system_language_with_name, systemLanguageName)
+    val systemLanguageLabel =
+      context.getString(R.string.system_language_with_name, systemLanguageName)
     val mockViewModel = createMockViewModel(
       uiState = SettingsUiState(shouldShowLanguageCategory = true)
     )
@@ -787,7 +775,12 @@ class SettingsScreenTest {
   @Test
   fun preferenceItems_areReachableByAccessibilityServices() {
     renderSettingsScreen(
-      createMockViewModel(uiState = SettingsUiState(permissionItem = true to "Allowed"))
+      createMockViewModel(
+        uiState = SettingsUiState(
+          permissionItem = true to "Allowed",
+          shouldShowLanguageCategory = true
+        )
+      )
     )
     listOf(
       R.string.pref_theme,
@@ -795,6 +788,7 @@ class SettingsScreenTest {
       R.string.pref_clear_all_notes_title,
       R.string.pref_import_bookmark_title,
       R.string.pref_export_bookmark_title,
+      R.string.pref_language_title,
       R.string.pref_allow_to_read_or_write_zim_files_on_sd_card,
       R.string.pref_info_version,
       R.string.pref_credits
