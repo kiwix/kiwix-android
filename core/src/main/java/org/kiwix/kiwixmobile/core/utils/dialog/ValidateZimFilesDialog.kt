@@ -38,6 +38,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import org.kiwix.kiwixmobile.core.R
@@ -58,6 +59,8 @@ import org.kiwix.kiwixmobile.core.utils.ComposeDimens.ONE_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SIX_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.VALIDATION_BOOK_ICON_SIZE
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.VALIDATION_BOOK_TITLE_TEXT
+
+const val VALIDATE_ZIM_FILE_STATUS_ICON_TESTING_TAG = "validateZimFileStatusIconTestingTag"
 
 @Composable
 fun ValidateZimDialog(
@@ -153,8 +156,8 @@ private fun ValidateZimItemRow(index: Int, item: ValidateZimItemState) {
 
         Icon(
           painter = iconItem.first.toPainter(),
-          contentDescription = stringResource(R.string.status) + index,
-          modifier = modifier,
+          contentDescription = stringResource(R.string.status),
+          modifier = modifier.testTag("$VALIDATE_ZIM_FILE_STATUS_ICON_TESTING_TAG$index"),
           tint = iconItem.second
         )
       }

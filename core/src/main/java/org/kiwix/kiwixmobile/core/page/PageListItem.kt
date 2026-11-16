@@ -31,9 +31,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.selected
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.style.TextOverflow
@@ -46,6 +47,8 @@ import org.kiwix.kiwixmobile.core.utils.ComposeDimens.PAGE_LIST_ITEM_FAVICON_SIZ
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SIXTEEN_DP
 
 const val PAGE_ITEM_TESTING_TAG = "pageItemTestingTag"
+const val PAGE_ITEM_ICON_TESTING_TAG = "pageItemIconTestingTag"
+const val PAGE_ITEM_TITLE_TESTING_TAG = "pageItemTitleTestingTag"
 
 @Composable
 fun PageListItem(
@@ -65,23 +68,27 @@ fun PageListItem(
         horizontal = SIXTEEN_DP,
         vertical = EIGHT_DP
       )
-      .semantics { testTag = PAGE_ITEM_TESTING_TAG },
+      .semantics {
+        testTag = PAGE_ITEM_TESTING_TAG
+        if (page.isSelected) selected = true
+      },
     verticalAlignment = Alignment.CenterVertically
   ) {
-    val description = stringResource(R.string.fav_icon) + index
+    // Decorative: the title is next to the icon, and the row tells accessibility
+    // services that it is selected.
     if (page.isSelected) {
       Image(
         painter = painterResource(id = R.drawable.ic_check_circle_blue_24dp),
-        contentDescription = description,
+        contentDescription = null,
         modifier = Modifier
           .size(PAGE_LIST_ITEM_FAVICON_SIZE)
+          .testTag("$PAGE_ITEM_ICON_TESTING_TAG$index")
       )
     } else {
       BookIcon(
         iconSource = page.favicon,
         size = PAGE_LIST_ITEM_FAVICON_SIZE,
-        contentDescription = description,
-        testTag = null
+        testTag = "$PAGE_ITEM_ICON_TESTING_TAG$index"
       )
     }
 
@@ -92,7 +99,7 @@ fun PageListItem(
       style = MaterialTheme.typography.bodyLarge,
       modifier = Modifier
         .weight(1f)
-        .semantics { contentDescription = "${page.title}$index" },
+        .testTag("$PAGE_ITEM_TITLE_TESTING_TAG$index"),
       maxLines = ONE,
       overflow = TextOverflow.Ellipsis
     )

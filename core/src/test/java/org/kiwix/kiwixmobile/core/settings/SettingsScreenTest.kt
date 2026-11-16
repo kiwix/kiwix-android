@@ -20,10 +20,12 @@ package org.kiwix.kiwixmobile.core.settings
 
 import android.os.Build
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.SemanticsActions
 import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.test.SemanticsMatcher
 import androidx.compose.ui.test.assert
+import androidx.compose.ui.test.assertContentDescriptionEquals
 import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsOff
@@ -36,6 +38,7 @@ import androidx.compose.ui.test.hasStateDescription
 import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.onNodeWithContentDescription
@@ -880,6 +883,38 @@ class SettingsScreenTest {
       "Expected selected option to be 'Dark' but was '$selectedOption'",
       selectedOption == "Dark"
     )
+  }
+
+  @Test
+  fun listPreference_optionRows_areRadioButtonsReadAsTheirLabel() {
+    val options = listOf("Light", "Dark", "System default")
+    composeTestRule.setContent {
+      ListPreference(
+        titleId = R.string.pref_theme,
+        summary = "System default",
+        options = options,
+        selectedOption = "Dark",
+        onOptionSelected = {}
+      )
+    }
+    composeTestRule
+      .onNodeWithText(context.getString(R.string.pref_theme))
+      .performClick()
+    val rows = composeTestRule.onAllNodesWithTag(DIALOG_PREFERENCE_ITEM_TESTING_TAG)
+    rows.assertCountEquals(options.size)
+    options.forEachIndexed { index, option ->
+      rows[index]
+        .assert(SemanticsMatcher.expectValue(SemanticsProperties.Role, Role.RadioButton))
+        .assertContentDescriptionEquals(option)
+        .assert(SemanticsMatcher.expectValue(SemanticsProperties.Selected, option == "Dark"))
+    }
+    // The radio button inside each row has no click action and no description of its own.
+    composeTestRule
+      .onAllNodes(
+        hasClickAction() and hasAnyAncestor(hasTestTag(DIALOG_PREFERENCE_ITEM_TESTING_TAG)),
+        useUnmergedTree = true
+      )
+      .assertCountEquals(0)
   }
 
   @Test

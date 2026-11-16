@@ -20,12 +20,14 @@ package org.kiwix.kiwixmobile.core.page.history
 
 import android.os.Build
 import androidx.annotation.StringRes
+import androidx.compose.ui.semantics.SemanticsProperties
+import androidx.compose.ui.test.SemanticsMatcher
+import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsEnabled
 import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.junit4.createComposeRule
-import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
@@ -82,7 +84,7 @@ class NavigationHistoryDialogTest {
       .assertIsDisplayed()
       .assertTextEquals(context.getString(R.string.no_history))
     composeTestRule
-      .onNodeWithContentDescription("Page Title 00")
+      .onNodeWithTag("${NAVIGATION_HISTORY_ITEM_TITLE_TESTING_TAG}0")
       .assertDoesNotExist()
   }
 
@@ -90,12 +92,11 @@ class NavigationHistoryDialogTest {
   fun populatedList_rendersExpectedNumberOfItems() {
     val items = createTestHistoryItems(ITEM_COUNT_FIVE)
     setDialogScreen(navigationHistoryList = items)
-    // Each NavigationHistoryItem has Text with
-    // contentDescription = "${item.title}$index"
     items.forEachIndexed { index, item ->
       composeTestRule
-        .onNodeWithContentDescription("${item.title}$index")
+        .onNodeWithTag("$NAVIGATION_HISTORY_ITEM_TITLE_TESTING_TAG$index", useUnmergedTree = true)
         .assertIsDisplayed()
+        .assertTextEquals(item.title)
     }
   }
 
@@ -115,10 +116,11 @@ class NavigationHistoryDialogTest {
     // Verify the page title text is displayed
     composeTestRule.onNodeWithText("Kiwix Article").assertIsDisplayed()
 
-    // Verify the favicon image is displayed.
-    // contentDescription is "Favicon" + index (from stringResource(R.string.fav_icon) + index)
-    val faviconDescription = context.getString(R.string.fav_icon) + "0"
-    composeTestRule.onNodeWithContentDescription(faviconDescription).assertIsDisplayed()
+    // The favicon is decorative, so it has no content description.
+    composeTestRule
+      .onNodeWithTag("${NAVIGATION_HISTORY_ITEM_ICON_TESTING_TAG}0", useUnmergedTree = true)
+      .assertIsDisplayed()
+      .assert(SemanticsMatcher.keyNotDefined(SemanticsProperties.ContentDescription))
   }
 
   @Test

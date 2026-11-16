@@ -225,6 +225,9 @@ const val TAB_SWITCHER_VIEW_TESTING_TAG = "tabSwitcherViewTestingTag"
 const val READER_SCREEN_TESTING_TAG = "readerScreenTestingTag"
 const val NEW_TAB_BUTTON_TESTING_TAG = "newTabButtonTestingTag"
 const val TAB_TITLE_TESTING_TAG = "tabTitleTestingTag"
+const val CLOSE_TAB_BUTTON_TESTING_TAG = "closeTabButtonTestingTag"
+const val TABLE_OF_CONTENT_HEADER_TESTING_TAG = "tableOfContentHeaderTestingTag"
+const val TABLE_OF_CONTENT_SECTION_TESTING_TAG = "tableOfContentSectionTestingTag"
 const val READER_BOTTOM_BAR_BOOKMARK_BUTTON_TESTING_TAG = "readerBottomBarBookmarkButtonTestingTag"
 const val READER_BOTTOM_BAR_PREVIOUS_SCREEN_BUTTON_TESTING_TAG =
   "readerBottomBarPreviousScreenButtonTestingTag"
@@ -484,7 +487,7 @@ fun TableDrawerSheet(
               )
             }
             .padding(horizontal = SIXTEEN_DP, vertical = TWELVE_DP)
-            .semantics { contentDescription = "${title}${title.hashCode()}" }
+            .testTag(TABLE_OF_CONTENT_HEADER_TESTING_TAG)
         )
       }
       itemsIndexed(sections) { index, section ->
@@ -507,7 +510,7 @@ fun TableDrawerSheet(
               )
             }
             .padding(start = paddingStart.dp, top = EIGHT_DP, bottom = EIGHT_DP, end = SIXTEEN_DP)
-            .semantics { contentDescription = "${section.title}$index" }
+            .testTag("$TABLE_OF_CONTENT_SECTION_TESTING_TAG$index")
         )
       }
     }
@@ -1342,11 +1345,13 @@ private fun TabItemHeader(
     )
     IconButton(
       onClick = { onReaderAction(CloseTab(index)) },
-      modifier = Modifier.size(TWENTY_FOUR_DP)
+      modifier = Modifier
+        .size(TWENTY_FOUR_DP)
+        .testTag("$CLOSE_TAB_BUTTON_TESTING_TAG$index")
     ) {
       Icon(
         painter = painterResource(id = R.drawable.ic_clear_white_24dp),
-        contentDescription = stringResource(R.string.close_tab) + index,
+        contentDescription = stringResource(R.string.close_tab),
         modifier = Modifier.size(CLOSE_TAB_ICON_SIZE),
         tint = MaterialTheme.colorScheme.onSurfaceVariant
       )
@@ -1423,7 +1428,8 @@ private fun ColumnScope.TabItemCard(
               layoutParams = FrameLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT)
               // Prevent clicking inside the webView when tabs are active.
               setOnClickListener { onReaderAction(SelectTab(index)) }
-              contentDescription = "${webView.contentDescription}${webView.hashCode()}"
+              // The Compose card around this view handles the tap for accessibility services.
+              importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_NO
             }
             addView(clickableView)
           }

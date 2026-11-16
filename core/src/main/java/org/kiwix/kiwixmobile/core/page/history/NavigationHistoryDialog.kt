@@ -42,6 +42,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
@@ -67,6 +68,9 @@ import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogHost
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixBasicDialogFrame
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
+
+const val NAVIGATION_HISTORY_ITEM_ICON_TESTING_TAG = "navigationHistoryItemIconTestingTag"
+const val NAVIGATION_HISTORY_ITEM_TITLE_TESTING_TAG = "navigationHistoryItemTitleTestingTag"
 
 @Suppress("ComposableLambdaParameterNaming")
 @OptIn(ExperimentalMaterial3Api::class)
@@ -183,9 +187,11 @@ private fun NavigationHistoryItem(
   ) {
     Image(
       painter = IconItem.MipmapImage(R.mipmap.ic_launcher_round).toPainter(),
-      contentDescription = stringResource(R.string.fav_icon) + index,
+      // Decorative: the title is next to the icon.
+      contentDescription = null,
       modifier = Modifier
         .size(PAGE_LIST_ITEM_FAVICON_SIZE)
+        .testTag("$NAVIGATION_HISTORY_ITEM_ICON_TESTING_TAG$index")
     )
 
     Spacer(modifier = Modifier.width(SIXTEEN_DP))
@@ -195,7 +201,7 @@ private fun NavigationHistoryItem(
       style = MaterialTheme.typography.bodyLarge,
       modifier = Modifier
         .weight(1f)
-        .semantics { contentDescription = "${item.title}$index" },
+        .testTag("$NAVIGATION_HISTORY_ITEM_TITLE_TESTING_TAG$index"),
       maxLines = ONE,
       overflow = TextOverflow.Ellipsis
     )
