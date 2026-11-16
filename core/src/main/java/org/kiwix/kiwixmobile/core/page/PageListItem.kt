@@ -38,11 +38,13 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import org.kiwix.kiwixmobile.core.R
-import org.kiwix.kiwixmobile.core.downloader.model.Base64String
-import org.kiwix.kiwixmobile.core.downloader.model.toPainter
 import org.kiwix.kiwixmobile.core.page.adapter.Page
+import org.kiwix.kiwixmobile.core.page.history.models.HistoryListItem.HistoryItem
+import org.kiwix.kiwixmobile.core.ui.components.BookIcon
 import org.kiwix.kiwixmobile.core.ui.components.ONE
+import org.kiwix.kiwixmobile.core.ui.theme.KiwixTheme
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.EIGHT_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.PAGE_LIST_ITEM_FAVICON_SIZE
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SIXTEEN_DP
@@ -71,16 +73,21 @@ fun PageListItem(
       .semantics { testTag = PAGE_ITEM_TESTING_TAG },
     verticalAlignment = Alignment.CenterVertically
   ) {
-    Image(
-      painter = if (page.isSelected) {
-        painterResource(id = R.drawable.ic_check_circle_blue_24dp)
-      } else {
-        Base64String(page.favicon).toPainter()
-      },
-      contentDescription = stringResource(R.string.fav_icon) + index,
-      modifier = Modifier
-        .size(PAGE_LIST_ITEM_FAVICON_SIZE)
-    )
+    if (page.isSelected) {
+      Image(
+        painter = painterResource(id = R.drawable.ic_check_circle_blue_24dp),
+        contentDescription = stringResource(R.string.fav_icon) + index,
+        modifier = Modifier
+          .size(PAGE_LIST_ITEM_FAVICON_SIZE)
+      )
+    } else {
+      BookIcon(
+        iconSource = page.favicon,
+        size = PAGE_LIST_ITEM_FAVICON_SIZE,
+        contentDescription = stringResource(R.string.fav_icon) + index,
+        testTag = null
+      )
+    }
 
     Spacer(modifier = Modifier.width(SIXTEEN_DP))
 
@@ -92,6 +99,28 @@ fun PageListItem(
         .semantics { contentDescription = "${page.title}$index" },
       maxLines = ONE,
       overflow = TextOverflow.Ellipsis
+    )
+  }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun PageListItemPreview() {
+  KiwixTheme {
+    PageListItem(
+      index = 0,
+      page = HistoryItem(
+        zimId = "sample_zim_id",
+        zimName = "Sample Book",
+        zimReaderSource = null,
+        favicon = null,
+        historyUrl = "https://example.com",
+        title = "Sample Article",
+        dateString = "Today",
+        timeStamp = 0L
+      ),
+      onItemClick = {},
+      onItemLongClick = {}
     )
   }
 }

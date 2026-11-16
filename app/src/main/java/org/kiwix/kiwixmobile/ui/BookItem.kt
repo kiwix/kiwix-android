@@ -20,7 +20,6 @@ package org.kiwix.kiwixmobile.ui
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
@@ -46,7 +45,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.TextStyle
@@ -56,13 +54,9 @@ import androidx.compose.ui.text.style.BaselineShift
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.withStyle
-import coil3.compose.AsyncImage
-import org.kiwix.kiwixmobile.core.downloader.model.Base64String
-import org.kiwix.kiwixmobile.core.downloader.model.toPainter
 import org.kiwix.kiwixmobile.core.entity.LibkiwixBook
-import org.kiwix.kiwixmobile.core.ui.theme.IconBeigeBackground
+import org.kiwix.kiwixmobile.core.ui.components.BookIcon
 import org.kiwix.kiwixmobile.core.ui.theme.KiwixTheme
-import org.kiwix.kiwixmobile.core.utils.ComposeDimens.BOOK_ICON_SIZE
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FOUR_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SIXTEEN_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TWELVE_DP
@@ -76,8 +70,6 @@ import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.SelectionMode
 import org.kiwix.kiwixmobile.ui.BookItemScreen.BOOK_ARTICLE_COUNT_TEST_TAG
 import org.kiwix.kiwixmobile.ui.BookItemScreen.BOOK_ITEM_CHECKBOX_TESTING_TAG
 import org.kiwix.kiwixmobile.ui.BookItemScreen.BOOK_ITEM_TESTING_TAG
-import org.kiwix.kiwixmobile.ui.BookItemScreen.OFFLINE_IMAGE_TEST_TAG
-import org.kiwix.kiwixmobile.ui.BookItemScreen.ONLINE_LIBRARY_IMAGE_TEST_TAG
 import java.text.SimpleDateFormat
 import java.util.Locale
 import org.kiwix.kiwixmobile.core.R as CoreR
@@ -253,28 +245,6 @@ private fun BookSelectedIcon(
         }
       )
   )
-}
-
-@Composable
-fun BookIcon(iconSource: String, isOnlineLibrary: Boolean) {
-  val modifier = Modifier
-    .size(BOOK_ICON_SIZE)
-    .clip(RoundedCornerShape(FOUR_DP))
-    .background(IconBeigeBackground)
-  if (isOnlineLibrary) {
-    AsyncImage(
-      model = iconSource,
-      contentDescription = stringResource(CoreR.string.fav_icon) + iconSource.hashCode(),
-      modifier = modifier.testTag(ONLINE_LIBRARY_IMAGE_TEST_TAG),
-      error = painterResource(CoreR.drawable.default_zim_file_icon)
-    )
-  } else {
-    Image(
-      painter = Base64String(iconSource).toPainter(),
-      contentDescription = stringResource(CoreR.string.fav_icon) + iconSource.hashCode(),
-      modifier = modifier.testTag(OFFLINE_IMAGE_TEST_TAG)
-    )
-  }
 }
 
 @Composable
@@ -457,9 +427,6 @@ fun formatBookDate(rawDate: String): String = runCatching {
 }.getOrDefault(rawDate)
 
 object BookItemScreen {
-  const val ONLINE_LIBRARY_IMAGE_TEST_TAG = "onlineLibraryImageTestingTag"
-  const val OFFLINE_IMAGE_TEST_TAG = "localLibraryImageTestingTag"
-
   const val BOOK_ARTICLE_COUNT_TEST_TAG = "bookArticleCountTestingTag"
   const val BOOK_ITEM_CHECKBOX_TESTING_TAG = "bookItemCheckboxTestingTag"
   const val BOOK_ITEM_TESTING_TAG = "bookItemTestingTag"
