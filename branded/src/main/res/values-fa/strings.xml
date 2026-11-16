@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
+* Darafsh
 * FarsiNevis
 -->
 <resources>
   <string name="retry">تلاش دوباره</string>
+  <string name="invalid_installation">نصب نامعتبر است. لطفاً فایل ZIM را دانلود کنید.\nمطمئن شوید وای‌فای روشن است و فضای ذخیره‌سازی کافی دارید.</string>
 </resources>

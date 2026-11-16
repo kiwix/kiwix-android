@@ -25,7 +25,7 @@
   <string name="external_redirect_message">Zdaj boste preusmerjeni na našo %s.</string>
   <string name="support_donation_platform">platformo za donacije</string>
   <string name="about_app_page">stran o aplikaciji</string>
-  <string name="menu_wifi_hotspot">Dostopna točka Wi-Fi</string>
+  <string name="menu_wifi_hotspot" fuzzy="true">Dostopna točka Wi-Fi</string>
   <string name="save_media">Shrani predstavnost kot …</string>
   <string name="save_media_error">Pri poskusu shranjevanja predstavnosti je prišlo do napake!</string>
   <string name="invalid_media_source">Izbrana predstavnost ni najdena.</string>
@@ -37,23 +37,23 @@
   <string name="open_in_new_tab">Odprem povezavo na novem zavihku?</string>
   <string name="hotspot_service_channel_name">Kanal storitve dostopne točke</string>
   <string name="hotspot_failed_title">Dostopne točke ni bilo mogoče zagnati</string>
-  <string name="hotspot_failed_message">Videti je, da je vaša dostopna točka že vklopljena. Za nadaljevanje onemogočite dostopno točko Wi-Fi.</string>
+  <string name="hotspot_failed_message" fuzzy="true">Videti je, da je vaša dostopna točka že vklopljena. Za nadaljevanje onemogočite dostopno točko Wi-Fi.</string>
   <string name="go_to_wifi_settings_label">Pojdi na nastavitve Wi-Fi</string>
   <string name="connection_refused">Povezava zavrnjena.</string>
   <string name="hotspot_running">Aktivna dostopna točka</string>
-  <string name="no_books_selected_toast_message">Prosimo, najprej izberite knjige</string>
+  <string name="no_books_selected_toast_message" fuzzy="true">Prosimo, najprej izberite knjige</string>
   <string name="server_failed_message">Strežnika ni bilo mogoče zagnati. Vklopite dostopno točko.</string>
   <string name="server_failed_toast_message">Strežnika ni bilo mogoče zagnati.</string>
   <string name="server_started_successfully_toast_message">Strežnik se je uspešno zagnal.</string>
   <string name="server_stopped_successfully_toast_message">Strežnik se je uspešno zaustavil.</string>
   <string name="hotspot_turned_on">Dostopna točka vklopljena</string>
   <string name="hotspot_details_message">Tu so podatki o vaši lokalni dostopni točki. \n\nSSID  : %1$s \nGeslo : %2$s</string>
-  <string name="server_textview_default_message">Izberite datoteke, ki jih želite gostiti v strežniku</string>
+  <string name="server_textview_default_message" fuzzy="true">Izberite datoteke, ki jih želite gostiti v strežniku</string>
   <string name="progress_dialog_starting_server">Zaganjanje strežnika</string>
   <string name="hotspot_dialog_title">Navodila za gostitev knjig</string>
   <string name="wifi_dialog_title">Zaznana povezava Wi-Fi</string>
   <string name="wifi_dialog_body">Za ogled knjig v drugih napravah poskrbite, da bodo vse naprave povezane v isto omrežje Wi-Fi.</string>
-  <string name="hotspot_dialog_message">Če želite, da ta funkcija deluje, morate najprej ročno vklopiti dostopno točko Wi-Fi ali zagotoviti, da sta gostiteljska in sprejemna naprava v istem omrežju Wi-Fi</string>
+  <string name="hotspot_dialog_message" fuzzy="true">Če želite, da ta funkcija deluje, morate najprej ročno vklopiti dostopno točko Wi-Fi ali zagotoviti, da sta gostiteljska in sprejemna naprava v istem omrežju Wi-Fi</string>
   <string name="hotspot_dialog_neutral_button">NADALJUJ</string>
   <string name="hotspot_channel_description">Posodobitve o stanju vaše dostopne točke/strežnika.</string>
   <string name="hotspot_notification_content_title">Dostopna točka Kiwix</string>
@@ -167,9 +167,9 @@
   <string name="pref_free_storage">%s prosto</string>
   <string name="choose_storage_to_download_book">Izberite shrambo za prenos knjige</string>
   <string name="delete_zim_failed">Žal nekaterih datotek ni bilo mogoče izbrisati. Poskusite uporabiti upravitelja datotek.</string>
-  <string name="tts_pause">premor</string>
-  <string name="tts_resume">nadaljuj</string>
-  <string name="stop">ustavi</string>
+  <string name="tts_pause" fuzzy="true">premor</string>
+  <string name="tts_resume" fuzzy="true">nadaljuj</string>
+  <string name="stop" fuzzy="true">ustavi</string>
   <string name="notification_pause_button_text">Premor</string>
   <string name="notification_resume_button_text">Nadaljuj</string>
   <string name="internal_storage">Notranji</string>
@@ -194,16 +194,16 @@
   <string name="time_left">preostanka</string>
   <string name="time_today">Danes</string>
   <string name="time_yesterday">Včeraj</string>
-  <string name="pref_external_link_popup_title">Opozori pri vnosu zunanjih povezav</string>
+  <string name="pref_external_link_popup_title" fuzzy="true">Opozori pri vnosu zunanjih povezav</string>
   <string name="pref_external_link_popup_summary">Prikaže pojavno okno, da opozori na dodatne stroške ali da povezave ne delujejo v načinu brez povezave.</string>
-  <string name="external_link_popup_dialog_title">Dostopanje do zunanje povezave!</string>
-  <string name="external_link_popup_dialog_message">Odpirate zunanjo povezavo. To bi lahko povzročilo dodatne stroške prenosa podatkov ali preprosto ne bo delovalo, ko boste brez povezave.\nŽelite nadaljevati?</string>
+  <string name="external_link_popup_dialog_title" fuzzy="true">Dostopanje do zunanje povezave!</string>
+  <string name="external_link_popup_dialog_message" fuzzy="true">Odpirate zunanjo povezavo. To bi lahko povzročilo dodatne stroške prenosa podatkov ali preprosto ne bo delovalo, ko boste brez povezave.\nŽelite nadaljevati?</string>
   <string name="do_not_ask_anymore">Ne sprašuj več</string>
-  <string name="your_languages">Izbrani jeziki:</string>
+  <string name="your_languages" fuzzy="true">Izbrani jeziki:</string>
   <string name="your_language">Izbrani jezik: %s</string>
-  <string name="other_languages">Drugi jeziki:</string>
+  <string name="other_languages" fuzzy="true">Drugi jeziki:</string>
   <string name="downloading">Prenašanje</string>
-  <string name="no_items_msg">Na voljo ni noben predmet</string>
+  <string name="no_items_msg" fuzzy="true">Na voljo ni noben predmet</string>
   <string name="crash_title">No… To je neprijetno</string>
   <string name="crash_description">Zdi se, da smo se zrušili.\n\nSte nam pripravljeni pomagati tako, da pošljete poročilo o zrušitvi?</string>
   <string name="crash_checkbox_language">Jezikovne nastavitve</string>
@@ -216,7 +216,7 @@
   <string name="new_tab_shortcut_label">Nov zavihek</string>
   <string name="get_content_shortcut_label">Pridobi vsebino</string>
   <string name="fav_icon">Zaznamka</string>
-  <string name="pagesCount">%s člankov</string>
+  <string name="pagesCount" fuzzy="true">%s člankov</string>
   <string name="get_started">Začni</string>
   <string name="download_books">Prenesi knjige</string>
   <string name="humankind_knowledge">Znanje človeštva na vašem telefonu.</string>

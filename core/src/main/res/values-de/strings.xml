@@ -33,6 +33,7 @@
 * Symposiarch
 * ThisCarthing
 * TomatoCake
+* Translatemax
 * Umlaut
 -->
 <resources>
@@ -50,7 +51,7 @@
   <string name="external_redirect_message">Du wirst nun zu unserer %s weitergeleitet.</string>
   <string name="support_donation_platform">Spendenplattform</string>
   <string name="about_app_page"> Über die App Seite.</string>
-  <string name="menu_wifi_hotspot">WiFi Hotspot</string>
+  <string name="menu_wifi_hotspot" fuzzy="true">WiFi Hotspot</string>
   <string name="save_media">Medium speichern</string>
   <string name="save_media_error">Beim Versuch, das Medium zu speichern, ist ein Fehler aufgetreten!</string>
   <string name="invalid_media_source">Die ausgewählten Medien wurden nicht gefunden.</string>
@@ -62,23 +63,23 @@
   <string name="open_in_new_tab">Link in neuer Registerkarte öffnen?</string>
   <string name="hotspot_service_channel_name">Hotspot Servicekanal</string>
   <string name="hotspot_failed_title">Hotspot konnte nicht gestartet werden</string>
-  <string name="hotspot_failed_message">Es scheint, Ihr Hotspot ist bereits aktiviert. Bitte deaktivieren Sie Ihren Wi-Fi Hotspot, um weiterzumachen.</string>
+  <string name="hotspot_failed_message" fuzzy="true">Es scheint, Ihr Hotspot ist bereits aktiviert. Bitte deaktivieren Sie Ihren Wi-Fi Hotspot, um weiterzumachen.</string>
   <string name="go_to_wifi_settings_label">Gehen Sie zu den Wi-Fi Einstellungen</string>
   <string name="connection_refused">Verbindung abgelehnt.</string>
   <string name="hotspot_running">Aktiver Hotspot</string>
-  <string name="no_books_selected_toast_message">Bitte zuerst Bücher aussuchen</string>
+  <string name="no_books_selected_toast_message" fuzzy="true">Bitte zuerst Bücher aussuchen</string>
   <string name="server_failed_message">Der Server konnte nicht gestartet werden. Bitte aktivieren Sie Ihren Hotspot</string>
   <string name="server_failed_toast_message">Der Server konnte nicht gestartet werden.</string>
   <string name="server_started_successfully_toast_message">Server erfolgreich gestartet.</string>
   <string name="server_stopped_successfully_toast_message">Server erfolgreich gestoppt.</string>
   <string name="hotspot_turned_on">Hotspot aktiviert</string>
   <string name="hotspot_details_message">Nachfolgend finden Sie die Details Ihres lokalen Hotspot.\nSSID : %1$s \nPass : %2$s</string>
-  <string name="server_textview_default_message">Wählen Sie die Dateien aus, die Sie auf dem Server hosten möchten</string>
+  <string name="server_textview_default_message" fuzzy="true">Wählen Sie die Dateien aus, die Sie auf dem Server hosten möchten</string>
   <string name="progress_dialog_starting_server">Server wird gestartet</string>
   <string name="hotspot_dialog_title">Anleitung zum Hosten von Büchern</string>
   <string name="wifi_dialog_title">Wi-Fi-Verbindung festgestellt</string>
   <string name="wifi_dialog_body">Um Bücher auf anderen Geräten anzusehen, stellen Sie bitte sicher, dass alle Geräte mit demselben WiFi-Netzwerk verbunden sind.</string>
-  <string name="hotspot_dialog_message">Damit diese Funktionalität funktioniert, müssen Sie zuerst den WiFi-Hotspot manuell aktivieren oder sicherstellen, dass Host und Empfangsgerät im selben WiFi-Netzwerk angemeldet sind</string>
+  <string name="hotspot_dialog_message" fuzzy="true">Damit diese Funktionalität funktioniert, müssen Sie zuerst den WiFi-Hotspot manuell aktivieren oder sicherstellen, dass Host und Empfangsgerät im selben WiFi-Netzwerk angemeldet sind</string>
   <string name="hotspot_dialog_neutral_button">WEITER</string>
   <string name="hotspot_channel_description">Updates zum Status Ihres Hotspots/Servers.</string>
   <string name="hotspot_notification_content_title">Kiwix-Hotspot</string>
@@ -192,9 +193,9 @@
   <string name="pref_free_storage">%s frei</string>
   <string name="choose_storage_to_download_book">Speicherort für Buch-Download wählen</string>
   <string name="delete_zim_failed">Leider konnten wir einige Dateien nicht löschen. Sie sollten versuchen, stattdessen einen Dateimanager zu verwenden.</string>
-  <string name="tts_pause">pausieren</string>
-  <string name="tts_resume">fortfahren</string>
-  <string name="stop">abbrechen</string>
+  <string name="tts_pause" fuzzy="true">pausieren</string>
+  <string name="tts_resume" fuzzy="true">fortfahren</string>
+  <string name="stop" fuzzy="true">abbrechen</string>
   <string name="notification_pause_button_text">Pausieren</string>
   <string name="notification_resume_button_text">fortfahren</string>
   <string name="internal_storage">Intern</string>
@@ -219,16 +220,19 @@
   <string name="time_left">verbleibend</string>
   <string name="time_today">Heute</string>
   <string name="time_yesterday">Gestern</string>
-  <string name="pref_external_link_popup_title">Beim Öffnen externer Links warnen</string>
+  <string name="pref_external_link_popup_title" fuzzy="true">Beim Öffnen externer Links warnen</string>
   <string name="pref_external_link_popup_summary">Popups für Warnungen über zusätzliche Kosten oder das Nichtfunktionieren von Offlinelinks anzeigen.</string>
-  <string name="external_link_popup_dialog_title">Zugriff auf externen Link!</string>
-  <string name="external_link_popup_dialog_message">Sie öffnen gerade einen externen Link. Dies könnte zu zusätzlichen Kosten für die Datenübermittlung führen oder wird nicht funktionieren, wenn Sie offline sind. Möchten Sie fortfahren?</string>
+  <string name="external_link_popup_dialog_title" fuzzy="true">Zugriff auf externen Link!</string>
+  <string name="external_link_popup_dialog_message" fuzzy="true">Sie öffnen gerade einen externen Link. Dies könnte zu zusätzlichen Kosten für die Datenübermittlung führen oder wird nicht funktionieren, wenn Sie offline sind. Möchten Sie fortfahren?</string>
   <string name="do_not_ask_anymore">Nicht mehr nachfragen</string>
   <string name="your_languages">Ausgewählte Sprachen:</string>
   <string name="your_language">Ausgewählte Sprache: %s</string>
-  <string name="other_languages">Weitere Sprachen:</string>
+  <string name="other_languages">Andere Sprachen</string>
+  <string name="move_up">Nach oben verschieben</string>
+  <string name="move_down">nach unten verschieben</string>
+  <string name="reorder_language">Sprache neu ordnen</string>
   <string name="downloading">Herunterladen</string>
-  <string name="no_items_msg">Keine Objekte verfügbar</string>
+  <string name="no_items_msg" fuzzy="true">Keine Objekte verfügbar</string>
   <string name="crash_title">Also… Das ist peinlich.</string>
   <string name="crash_description">Es sieht aus, als wären wir abgestürzt.\n\nWürde es Ihnen etwas ausmachen, uns bei der Behebung dieses Problems zu helfen, indem Sie uns die Absturzmeldung schicken?</string>
   <string name="crash_checkbox_language">Ihre Spracheinstellungen</string>
@@ -241,7 +245,7 @@
   <string name="new_tab_shortcut_label">Neue Registerkarte</string>
   <string name="get_content_shortcut_label">Inhalte abrufen</string>
   <string name="fav_icon">Favicon</string>
-  <string name="pagesCount">%s Artikel</string>
+  <string name="pagesCount" fuzzy="true">%s Artikel</string>
   <string name="get_started">Anfangen</string>
   <string name="download_books">Bücher herunterladen</string>
   <string name="humankind_knowledge">Das Wissen der Menschheit, auf Ihrem Handy.</string>
