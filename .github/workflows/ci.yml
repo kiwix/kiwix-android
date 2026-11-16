@@ -23,7 +23,7 @@ jobs:
     name: Automated tests
     strategy:
       matrix:
-        api-level: [ 25, 30, 33, 34, 35, 36 ]
+        api-level: [ 25, 30, 33, 34, 35, 36, '37.0' ]
         target: [ default ]
       fail-fast: true
     runs-on: ubuntu-24.04
@@ -140,7 +140,7 @@ jobs:
     name: Automated tests for PlayStore variant
     strategy:
       matrix:
-        api-level: [ 25, 30, 33, 34, 35, 36 ]
+        api-level: [ 25, 30, 33, 34, 35, 36, '37.0' ]
         target: [ default ]
       fail-fast: true
     runs-on: ubuntu-24.04
@@ -212,7 +212,7 @@ jobs:
     name: Automated tests for Branded app
     strategy:
       matrix:
-        api-level: [ 25, 30, 33, 34, 35, 36 ]
+        api-level: [ 25, 30, 33, 34, 35, 36, '37.0' ]
         target: [ default ]
       fail-fast: true
     runs-on: ubuntu-24.04
@@ -284,7 +284,7 @@ jobs:
     name: Automated tests on Tablet
     strategy:
       matrix:
-        api-level: [ 25, 30, 33, 34, 35, 36 ]
+        api-level: [ 25, 30, 33, 34, 35, 36, '37.0' ]
         target: [ default ]
       fail-fast: true
     runs-on: ubuntu-24.04
