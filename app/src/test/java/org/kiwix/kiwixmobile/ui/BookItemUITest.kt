@@ -34,13 +34,15 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.kiwix.kiwixmobile.core.entity.LibkiwixBook
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
+import org.kiwix.kiwixmobile.core.ui.components.BookIcon
+import org.kiwix.kiwixmobile.core.ui.components.OFFLINE_IMAGE_TEST_TAG
+import org.kiwix.kiwixmobile.core.ui.components.ONLINE_LIBRARY_IMAGE_TEST_TAG
 import org.kiwix.kiwixmobile.core.zim_manager.Byte
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListItem.BookOnDisk
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.SelectionMode
 import org.kiwix.kiwixmobile.ui.BookItemScreen.BOOK_ARTICLE_COUNT_TEST_TAG
 import org.kiwix.kiwixmobile.ui.BookItemScreen.BOOK_ITEM_CHECKBOX_TESTING_TAG
 import org.kiwix.kiwixmobile.ui.BookItemScreen.BOOK_ITEM_TESTING_TAG
-import org.kiwix.kiwixmobile.ui.BookItemScreen.OFFLINE_IMAGE_TEST_TAG
 import org.kiwix.sharedFunctions.TestApplication
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
@@ -269,7 +271,7 @@ class BookItemUITest {
     }
 
     composeTestRule
-      .onNodeWithTag(BookItemScreen.ONLINE_LIBRARY_IMAGE_TEST_TAG)
+      .onNodeWithTag(ONLINE_LIBRARY_IMAGE_TEST_TAG)
       .assertIsDisplayed()
   }
 

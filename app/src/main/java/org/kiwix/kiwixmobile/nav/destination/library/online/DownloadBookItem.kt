@@ -52,6 +52,7 @@ import com.tonyodev.fetch2.Status
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadState
+import org.kiwix.kiwixmobile.core.ui.components.BookIcon
 import org.kiwix.kiwixmobile.core.ui.components.ContentLoadingProgressBar
 import org.kiwix.kiwixmobile.core.ui.components.ProgressBarStyle
 import org.kiwix.kiwixmobile.core.ui.models.IconItem
@@ -66,7 +67,6 @@ import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SIXTEEN_DP
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.TWELVE_DP
 import org.kiwix.kiwixmobile.core.zim_manager.Byte
 import org.kiwix.kiwixmobile.ui.BookDescription
-import org.kiwix.kiwixmobile.ui.BookIcon
 import org.kiwix.kiwixmobile.ui.BookTitle
 import org.kiwix.kiwixmobile.ui.LibraryCard
 import org.kiwix.kiwixmobile.zimManager.libraryView.LibraryListItem.LibraryDownloadItem
@@ -126,7 +126,7 @@ private fun DownloadBookContent(
       .fillMaxWidth(),
     verticalAlignment = Alignment.Top
   ) {
-    BookIcon(item.favIconUrl, isOnlineLibrary = true)
+    BookIcon(iconSource = item.favIconUrl, isOnlineLibrary = true)
     Column(
       modifier = Modifier
         .weight(1f)
@@ -289,7 +289,7 @@ private fun getDownloadStateText(item: LibraryDownloadItem, context: Context): S
 
 private fun getDownloadedSizeText(downloadedBytes: Long, totalBytes: Long): String {
   if (totalBytes <= 0 || downloadedBytes <= 0) return ""
-  val downloadedText = Byte(downloadedBytes.toString()).humanReadable
-  val totalText = Byte(totalBytes.toString()).humanReadable
+  val downloadedText = Byte("$downloadedBytes").humanReadable
+  val totalText = Byte("$totalBytes").humanReadable
   return "$downloadedText/$totalText"
 }
