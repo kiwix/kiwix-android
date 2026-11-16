@@ -18,7 +18,6 @@
 
 package org.kiwix.kiwixmobile.ui
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
@@ -97,7 +96,6 @@ fun LibraryCard(
   }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun BookItem(
   index: Int,
@@ -210,7 +208,7 @@ fun BookIconAndSize(
     horizontalAlignment = Alignment.CenterHorizontally,
     modifier = modifier.padding(end = SIXTEEN_DP)
   ) {
-    BookIcon(iconSource, isOnlineLibrary = isOnlineLibrary)
+    BookIcon(iconSource = iconSource, isOnlineLibrary = isOnlineLibrary)
     Spacer(modifier = Modifier.height(FOUR_DP))
     BookSize(
       size = Byte(size).humanReadable,

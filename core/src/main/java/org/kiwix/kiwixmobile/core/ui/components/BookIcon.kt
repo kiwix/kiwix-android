@@ -10,14 +10,12 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import coil3.compose.AsyncImage
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.downloader.model.Base64String
 import org.kiwix.kiwixmobile.core.downloader.model.toPainter
 import org.kiwix.kiwixmobile.core.ui.theme.IconBeigeBackground
-import org.kiwix.kiwixmobile.core.ui.theme.KiwixTheme
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.BOOK_ICON_SIZE
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FOUR_DP
 
@@ -26,9 +24,9 @@ const val OFFLINE_IMAGE_TEST_TAG = "localLibraryImageTestingTag"
 
 @Composable
 fun BookIcon(
+  modifier: Modifier = Modifier,
   iconSource: String?,
   isOnlineLibrary: Boolean = false,
-  modifier: Modifier = Modifier,
   size: Dp = BOOK_ICON_SIZE,
   contentDescription: String? = null,
   testTag: String? = if (isOnlineLibrary) ONLINE_LIBRARY_IMAGE_TEST_TAG else OFFLINE_IMAGE_TEST_TAG
@@ -53,17 +51,6 @@ fun BookIcon(
       painter = Base64String(iconSource).toPainter(),
       contentDescription = contentDescription ?: defaultContentDescription,
       modifier = imageModifier
-    )
-  }
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun BookIconPreview() {
-  KiwixTheme {
-    BookIcon(
-      iconSource = null,
-      isOnlineLibrary = false
     )
   }
 }

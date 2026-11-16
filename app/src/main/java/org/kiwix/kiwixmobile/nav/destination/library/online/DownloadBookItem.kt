@@ -126,7 +126,7 @@ private fun DownloadBookContent(
       .fillMaxWidth(),
     verticalAlignment = Alignment.Top
   ) {
-    BookIcon(item.favIconUrl, isOnlineLibrary = true)
+    BookIcon(iconSource = item.favIconUrl, isOnlineLibrary = true)
     Column(
       modifier = Modifier
         .weight(1f)
@@ -289,7 +289,7 @@ private fun getDownloadStateText(item: LibraryDownloadItem, context: Context): S
 
 private fun getDownloadedSizeText(downloadedBytes: Long, totalBytes: Long): String {
   if (totalBytes <= 0 || downloadedBytes <= 0) return ""
-  val downloadedText = Byte(downloadedBytes.toString()).humanReadable
-  val totalText = Byte(totalBytes.toString()).humanReadable
+  val downloadedText = Byte("$downloadedBytes").humanReadable
+  val totalText = Byte("$totalBytes").humanReadable
   return "$downloadedText/$totalText"
 }
