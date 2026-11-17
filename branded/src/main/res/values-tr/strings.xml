@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
 * BaRaN6161 TURK
+* Efygz
 * MohitMali
 -->
 <resources>
   <string name="retry">Tekrar dene</string>
-  <string name="invalid_installation" fuzzy="true">Geçersiz Kurulum Lütfen Zim’i indirin.\n  WiFi’nin açık olduğundan ve yeterli depolama alanınız olduğundan emin olun</string>
+  <string name="invalid_installation">Geçersiz kurulum. Lütfen ZIM dosyasını indirin! WiFi açık olduğundan ve yeterli depolama alanınız olduğundan emin olun.</string>
 </resources>

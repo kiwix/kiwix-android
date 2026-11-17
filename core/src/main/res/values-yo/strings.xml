@@ -19,7 +19,7 @@
   <string name="menu_support_kiwix">Igbaruku to kiwix</string>
   <string name="menu_support_kiwix_for_custom_apps">Igbaruku %s</string>
   <string name="menu_about_app">Nípa %s app</string>
-  <string name="menu_wifi_hotspot">Wifi Hotspot</string>
+  <string name="menu_wifi_hotspot" fuzzy="true">Wifi Hotspot</string>
   <string name="save_media">Fi Media pamọ</string>
   <string name="save_media_error">Aṣiṣe waye nigbati o n gbiyanju lati fipamọ media!</string>
   <string name="save_media_saved">A ti fipamọ media si %s</string>
@@ -28,23 +28,23 @@
   <string name="open_in_new_tab">Ṣii ọna asopọ ni ojuiwe titun?</string>
   <string name="hotspot_service_channel_name">Ìkànnì Iṣẹ Hotspot</string>
   <string name="hotspot_failed_title">Kuna lati bẹrẹ hotspot</string>
-  <string name="hotspot_failed_message">O dabi pe aaye ibi-ipamọ rẹ ti wa ni titan kalẹ. Jọwọ mu wifi hotspot rẹ lati tẹsiwaju.</string>
+  <string name="hotspot_failed_message" fuzzy="true">O dabi pe aaye ibi-ipamọ rẹ ti wa ni titan kalẹ. Jọwọ mu wifi hotspot rẹ lati tẹsiwaju.</string>
   <string name="go_to_wifi_settings_label">Lọ si awọn eto WIFI</string>
   <string name="connection_refused">Ko isolupo.</string>
   <string name="hotspot_running">Hotspot nṣiṣẹ</string>
-  <string name="no_books_selected_toast_message">Jọwọ yan awọn iwe ni akọkọ</string>
+  <string name="no_books_selected_toast_message" fuzzy="true">Jọwọ yan awọn iwe ni akọkọ</string>
   <string name="server_failed_message">Ko le bẹrẹ olupin. Jọwọ tan-an hotspot rẹ</string>
   <string name="server_failed_toast_message">Ko le bẹrẹ olupin.</string>
   <string name="server_started_successfully_toast_message">Iṣẹ́ ìsọfúnni náà bẹ̀rẹ̀ dáadáa.</string>
   <string name="server_stopped_successfully_toast_message">Olupin duro ni aṣeyọri.</string>
   <string name="hotspot_turned_on">Hotspot wa ni titan</string>
   <string name="hotspot_details_message">Atẹle ni awọn alaye ti agbegbe hotspot agbegbe rẹ. \nSSID : %1$s \n Pass : %2$s</string>
-  <string name="server_textview_default_message">Yan awọn faili ti o fẹ lati gbalejo lori olupin naa</string>
+  <string name="server_textview_default_message" fuzzy="true">Yan awọn faili ti o fẹ lati gbalejo lori olupin naa</string>
   <string name="progress_dialog_starting_server">Olupin ibẹrẹ</string>
   <string name="hotspot_dialog_title">Awọn ilana fun alejo awọn iwe ohun</string>
   <string name="wifi_dialog_title">Asopọ WiFi ti ri</string>
   <string name="wifi_dialog_body">Lati le wo awọn iwe lori awọn ẹrọ miiran, jọwọ rii daju pe gbogbo awọn ẹrọ ni asopọ si Nẹtiwọọki WiFi kanna.</string>
-  <string name="hotspot_dialog_message">Ni ibere fun ẹya ara ẹrọ yii lati ṣiṣẹ o nilo lati kọkọ tan aaye WIFI rẹ pẹlu ọwọ tabi rii daju pe ẹrọ agbalejo ati ẹrọ olugba wa lori nẹtiwọọki WiFi kanna.</string>
+  <string name="hotspot_dialog_message" fuzzy="true">Ni ibere fun ẹya ara ẹrọ yii lati ṣiṣẹ o nilo lati kọkọ tan aaye WIFI rẹ pẹlu ọwọ tabi rii daju pe ẹrọ agbalejo ati ẹrọ olugba wa lori nẹtiwọọki WiFi kanna.</string>
   <string name="hotspot_dialog_neutral_button">TESIWAJU</string>
   <string name="hotspot_channel_description">Awọn imudojuiwọn nipa ipo hotspot/ olupin rẹ.</string>
   <string name="hotspot_notification_content_title">Ìkànnì Kiwix</string>
@@ -135,9 +135,9 @@
   <string name="pref_storage">Ibi ipamọ</string>
   <string name="pref_current_folder">Folda lọwọlọwọ</string>
   <string name="delete_zim_failed">Ma binu a ko le pa awọn faili kan rẹ. O yẹ ki o gbiyanju lilo oluṣakoso faili dipo.</string>
-  <string name="tts_pause">da duro</string>
-  <string name="tts_resume">bẹrẹ pada</string>
-  <string name="stop">dúró</string>
+  <string name="tts_pause" fuzzy="true">da duro</string>
+  <string name="tts_resume" fuzzy="true">bẹrẹ pada</string>
+  <string name="stop" fuzzy="true">dúró</string>
   <string name="internal_storage">Àárín</string>
   <string name="external_storage">Ita</string>
   <string name="yes">Bẹ́ẹ̀ni</string>
@@ -159,14 +159,14 @@
   <string name="time_left">osi</string>
   <string name="time_today">Òní</string>
   <string name="time_yesterday">Àná</string>
-  <string name="pref_external_link_popup_title">Kilọ nigba titẹ awọn ọna asopọ ita</string>
+  <string name="pref_external_link_popup_title" fuzzy="true">Kilọ nigba titẹ awọn ọna asopọ ita</string>
   <string name="pref_external_link_popup_summary">Ṣe afihan agbejade lati kilo nipa awọn idiyele afikun tabi ko ṣiṣẹ ni awọn ọna asopọ aisinipo.</string>
-  <string name="external_link_popup_dialog_title">Nwọle Ọna asopọ Ita!</string>
+  <string name="external_link_popup_dialog_title" fuzzy="true">Nwọle Ọna asopọ Ita!</string>
   <string name="external_link_popup_dialog_message" fuzzy="true">O n wọle si ọna asopọ ita. Eyi le ja si awọn idiyele afikun fun gbigbe data tabi kii yoo ṣiṣẹ nigbati o ba wa ni offline. Ṣe o fẹ tẹsiwaju bi?</string>
   <string name="do_not_ask_anymore">Maṣe beere mọ</string>
-  <string name="your_languages">Yan ede</string>
-  <string name="other_languages">Awọn ede miiran:</string>
-  <string name="no_items_msg">Ko si nkan to wa</string>
+  <string name="your_languages" fuzzy="true">Yan ede</string>
+  <string name="other_languages" fuzzy="true">Awọn ede miiran:</string>
+  <string name="no_items_msg" fuzzy="true">Ko si nkan to wa</string>
   <string name="crash_title">O dara… Eyi jẹ didamu</string>
   <string name="crash_description" fuzzy="true">Ó jọ pé a ṣubú. yor_Latnyor_Latnyor_Latn ni o Ṣé wàá fẹ́ ràn wá lọ́wọ́ láti yanjú ìṣòro yìí nípa rírán àwọn ìsọfúnni tó wà nísàlẹ̀ yìí ránṣẹ́?</string>
   <string name="crash_checkbox_language">Awọn Eto Ede Rẹ</string>
@@ -179,7 +179,7 @@
   <string name="new_tab_shortcut_label">Titun taabu</string>
   <string name="get_content_shortcut_label">Be contented with what you have.</string>
   <string name="fav_icon">Favicon</string>
-  <string name="pagesCount">%s ìwé</string>
+  <string name="pagesCount" fuzzy="true">%s ìwé</string>
   <string name="get_started">Wa bẹrẹ</string>
   <string name="download_books">Download awọn iwe ohun</string>
   <string name="humankind_knowledge">Imọ eniyan, lori foonu rẹ.</string>

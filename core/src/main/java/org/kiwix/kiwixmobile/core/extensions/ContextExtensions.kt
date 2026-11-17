@@ -22,11 +22,13 @@ import android.content.Context
 import android.content.Context.RECEIVER_NOT_EXPORTED
 import android.content.Intent
 import android.content.IntentFilter
+import android.content.res.Resources
 import android.net.Uri
 import android.os.Build
 import android.provider.Settings
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.annotation.StringRes
 import org.kiwix.kiwixmobile.core.base.BaseBroadcastReceiver
 import java.util.Locale
 
@@ -98,3 +100,14 @@ fun Context.navigateToAppSettings() {
 
 fun Context.isAirplaneModeOn(): Boolean =
   Settings.Global.getInt(contentResolver, Settings.Global.AIRPLANE_MODE_ON, 0) != 0
+
+/**
+ * Picks between a singular and plural string resource based on [count], instead of relying on
+ * Android's `<plurals>`/CLDR quantity system, which requires every locale to define every
+ * grammatical quantity category (zero/one/two/few/many/other) applicable to that language.
+ */
+fun Resources.getCountString(
+  @StringRes singularRes: Int,
+  @StringRes pluralRes: Int,
+  count: Int
+): String = getString(if (count == 1) singularRes else pluralRes, count)

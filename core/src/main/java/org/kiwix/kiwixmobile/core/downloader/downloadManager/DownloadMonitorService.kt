@@ -53,6 +53,7 @@ import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.dao.DownloadRoomDao
 import org.kiwix.kiwixmobile.core.dao.entities.PauseReason
 import org.kiwix.kiwixmobile.core.di.IoDispatcher
+import org.kiwix.kiwixmobile.core.extensions.getCountString
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.utils.ACTIVE_DOWNLOAD_GROUP_KEY
 import org.kiwix.kiwixmobile.core.utils.COMPLETED_DOWNLOAD_GROUP_KEY
@@ -582,9 +583,9 @@ class DownloadMonitorService : Service() {
     val summaryNotification = NotificationCompat.Builder(this, DOWNLOAD_NOTIFICATION_CHANNEL_ID)
       .setSmallIcon(android.R.drawable.stat_sys_download_done)
       .setContentTitle(
-        resources.getQuantityString(
-          R.plurals.downloaded_files_count,
-          completedNotificationTitles.size,
+        resources.getCountString(
+          R.string.downloaded_files_count_singular,
+          R.string.downloaded_files_count_plural,
           completedNotificationTitles.size
         )
       )

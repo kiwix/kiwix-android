@@ -25,7 +25,7 @@
   <string name="search_label">ค้นหา</string>
   <string name="choose_file">เลือกไฟล์เนื้อหา (*.zim)</string>
   <string name="open_in_new_tab">ต้องการเปิดลิงก์ในแท็บใหม่หรือไม่</string>
-  <string name="no_books_selected_toast_message">กรุณาเลือกหน้งสือก่อน</string>
+  <string name="no_books_selected_toast_message" fuzzy="true">กรุณาเลือกหน้งสือก่อน</string>
   <string name="hotspot_dialog_neutral_button">ดำเนินการต่อ</string>
   <string name="error_file_not_found">ข้อผิดพลาด:ไม่พบไฟล์ ZIM ที่เลือก %s</string>
   <string name="zim_not_opened" fuzzy="true">ไม่สามารถเปิดไฟล์ zim ได้</string>
@@ -73,9 +73,9 @@
   <string name="help_11">การดาวน์โหลดไฟล์ ZIM ในแอพจะอยู่ในไดเรกทอรีจัดเก็บข้อมูลภายนอกในโฟลเดอร์ชื่อ Kiwix</string>
   <string name="pref_current_folder">โฟลเดอร์ปัจจุบัน</string>
   <string name="delete_zim_failed">ขออภัย เราไม่สามารถลบไฟล์บางชิ้น คุณควรลองใช้โปรแกรมจัดการไฟล์แทน</string>
-  <string name="tts_pause">หยุดชั่วคราว</string>
-  <string name="tts_resume">ทำต่อ</string>
-  <string name="stop">หยุด</string>
+  <string name="tts_pause" fuzzy="true">หยุดชั่วคราว</string>
+  <string name="tts_resume" fuzzy="true">ทำต่อ</string>
+  <string name="stop" fuzzy="true">หยุด</string>
   <string name="external_storage">ภายนอก</string>
   <string name="confirm_stop_download_title">หยุดดาวน์โหลดหรือไม่?</string>
   <string name="confirm_stop_download_msg">คุณแน่ใจหรือไม่ว่าต้องการหยุดดาวน์โหลดนี้?</string>

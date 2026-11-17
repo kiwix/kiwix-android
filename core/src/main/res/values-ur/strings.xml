@@ -14,7 +14,7 @@
   <string name="menu_read_aloud">بلند آواز سے پڑھیں</string>
   <string name="menu_read_aloud_stop">بلند آواز سے پڑھنا بند کریں</string>
   <string name="menu_support_kiwix">کیوکس کی حمایت کریں</string>
-  <string name="menu_wifi_hotspot">وائی فائی ہاٹ سپاٹ</string>
+  <string name="menu_wifi_hotspot" fuzzy="true">وائی فائی ہاٹ سپاٹ</string>
   <string name="save_media">میڈیا کو محفوظ کریں۔</string>
   <string name="save_media_error">میڈیا کو محفوظ کرتے وقت ایک خرابی پیش آگئی!</string>
   <string name="search_label">تلاش</string>
@@ -22,23 +22,23 @@
   <string name="open_in_new_tab">نئے ٹیب میں لنک کھولیں؟</string>
   <string name="hotspot_service_channel_name">ہاٹ سپاٹ سروس چینل</string>
   <string name="hotspot_failed_title">ہاٹ اسپاٹ شروع کرنے میں ناکام</string>
-  <string name="hotspot_failed_message">ایسا لگتا ہے کہ آپ کا ہاٹ اسپاٹ پہلے ہی آن ہے۔ جاری رکھنے کے لیے براہ کرم اپنے وائی فائی ہاٹ اسپاٹ کو غیر بند کریں۔</string>
+  <string name="hotspot_failed_message" fuzzy="true">ایسا لگتا ہے کہ آپ کا ہاٹ اسپاٹ پہلے ہی آن ہے۔ جاری رکھنے کے لیے براہ کرم اپنے وائی فائی ہاٹ اسپاٹ کو غیر بند کریں۔</string>
   <string name="go_to_wifi_settings_label">وائی فائی کی ترتیبات پر جائیں۔</string>
   <string name="connection_refused">کنکشن سے انکار کر دیا گیا۔</string>
   <string name="hotspot_running">ہاٹ سپاٹ چل رہا ہے۔</string>
-  <string name="no_books_selected_toast_message">براہ کرم پہلے کتابیں منتخب کریں۔</string>
+  <string name="no_books_selected_toast_message" fuzzy="true">براہ کرم پہلے کتابیں منتخب کریں۔</string>
   <string name="server_failed_message">سرور شروع نہیں ہو سکا۔ براہ کرم اپنا ہاٹ اسپاٹ آن کریں۔</string>
   <string name="server_failed_toast_message">سرور شروع نہیں ہو سکا۔</string>
   <string name="server_started_successfully_toast_message">سرور کامیابی سے شروع ہو گیا۔</string>
   <string name="server_stopped_successfully_toast_message">سرور کامیابی سے رک گیا۔</string>
   <string name="hotspot_turned_on">ہاٹ سپاٹ آن ہو گیا۔</string>
   <string name="hotspot_details_message">آپ کے مقامی ہاٹ سپاٹ کی تفصیلات درج ذیل ہیں۔ \nSSID : %1$s \nPass : %2$s</string>
-  <string name="server_textview_default_message">ان فائلوں کو منتخب کریں جن کی آپ سرور پر میزبانی کرنا چاہتے ہیں۔</string>
+  <string name="server_textview_default_message" fuzzy="true">ان فائلوں کو منتخب کریں جن کی آپ سرور پر میزبانی کرنا چاہتے ہیں۔</string>
   <string name="progress_dialog_starting_server">سرور شروع ہو رہا ہے۔</string>
   <string name="hotspot_dialog_title">کتابوں کی میزبانی کے لیے ہدایات</string>
   <string name="wifi_dialog_title">وائی فائی کنکشن کا پتہ چلا</string>
   <string name="wifi_dialog_body">دیگر آلات پر کتابیں دیکھنے کے لیے، براہ کرم یقینی بنائیں کہ تمام آلات ایک ہی وائی فائی نیٹ ورک سے جڑے ہوئے ہیں۔</string>
-  <string name="hotspot_dialog_message">اس خصوصیت کے کام کرنے کے لیے آپ کو پہلے اپنے وائی فائی ہاٹ اسپاٹ کو دستی طور پر آن کرنا ہوگا یا اس بات کو یقینی بنانا ہوگا کہ ہوسٹ ڈیوائس اور ریسیور ڈیوائس ایک ہی وائی فائی نیٹ ورک پر ہیں۔</string>
+  <string name="hotspot_dialog_message" fuzzy="true">اس خصوصیت کے کام کرنے کے لیے آپ کو پہلے اپنے وائی فائی ہاٹ اسپاٹ کو دستی طور پر آن کرنا ہوگا یا اس بات کو یقینی بنانا ہوگا کہ ہوسٹ ڈیوائس اور ریسیور ڈیوائس ایک ہی وائی فائی نیٹ ورک پر ہیں۔</string>
   <string name="hotspot_dialog_neutral_button">آگے بڑھیں</string>
   <string name="hotspot_channel_description">آپ کے ہاٹ اسپاٹ/سرور کی حالت کے بارے میں اپ ڈیٹس۔</string>
   <string name="hotspot_notification_content_title">کیویکس ہاٹ سپاٹ</string>

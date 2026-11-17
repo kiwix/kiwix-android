@@ -43,6 +43,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.extensions.getCountString
 import org.kiwix.kiwixmobile.core.search.SEARCH_FIELD_TESTING_TAG
 import org.kiwix.kiwixmobile.core.ui.components.CONTENT_LOADING_PROGRESS_BAR_TESTING_TAG
 import org.kiwix.kiwixmobile.core.ui.components.NAVIGATION_ICON_TESTING_TAG
@@ -568,7 +569,11 @@ class LanguageScreenUITest {
   fun languageScreen_whenBookCountIsOne_singularBookCountIsDisplayed() {
     val language = mockLanguage(languageCode = "en", active = false, occurrencesOfLanguage = 1)
     mockLanguageScreen(state = State.Content(listOf(language)))
-    val expected = context.resources.getQuantityString(R.plurals.book_count, 1, 1)
+    val expected = context.resources.getCountString(
+      R.string.book_count_singular,
+      R.string.book_count_plural,
+      1
+    )
     composeTestRule.onNodeWithText(expected).assertIsDisplayed()
   }
 
@@ -576,7 +581,11 @@ class LanguageScreenUITest {
   fun languageScreen_whenBookCountIsMultiple_pluralBookCountIsDisplayed() {
     val language = mockLanguage(languageCode = "en", active = false, occurrencesOfLanguage = 5)
     mockLanguageScreen(state = State.Content(listOf(language)))
-    val expected = context.resources.getQuantityString(R.plurals.book_count, 5, 5)
+    val expected = context.resources.getCountString(
+      R.string.book_count_singular,
+      R.string.book_count_plural,
+      5
+    )
     composeTestRule.onNodeWithText(expected).assertIsDisplayed()
   }
 

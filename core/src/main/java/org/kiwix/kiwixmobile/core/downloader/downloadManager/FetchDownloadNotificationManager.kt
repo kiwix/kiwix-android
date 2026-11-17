@@ -66,6 +66,7 @@ import org.kiwix.kiwixmobile.core.Intents
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.dao.DownloadRoomDao
 import org.kiwix.kiwixmobile.core.di.IoDispatcher
+import org.kiwix.kiwixmobile.core.extensions.getCountString
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
 import org.kiwix.kiwixmobile.core.utils.ACTIVE_DOWNLOAD_GROUP_KEY
 import org.kiwix.kiwixmobile.core.utils.DOWNLOAD_NOTIFICATION_CHANNEL_ID
@@ -130,9 +131,9 @@ class FetchDownloadNotificationManager @Inject constructor(
     notificationBuilder
       .setSmallIcon(android.R.drawable.stat_sys_download)
       .setContentTitle(
-        context.resources.getQuantityString(
-          R.plurals.downloading_files_count,
-          activeDownloadNotifications.size,
+        context.resources.getCountString(
+          R.string.downloading_files_count_singular,
+          R.string.downloading_files_count_plural,
           activeDownloadNotifications.size
         )
       )

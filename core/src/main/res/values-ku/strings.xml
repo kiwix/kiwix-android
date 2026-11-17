@@ -18,7 +18,7 @@
   <string name="menu_read_aloud">Bi dengê bilind bixwîne</string>
   <string name="menu_read_aloud_stop">Xwendina dengê bilind rawestîne</string>
   <string name="menu_support_kiwix">Piştgiriya Kiwix-ê Bike</string>
-  <string name="menu_wifi_hotspot">Kitêban Bihewîne</string>
+  <string name="menu_wifi_hotspot" fuzzy="true">Kitêban Bihewîne</string>
   <string name="save_media">Medyayê Tomar Bike</string>
   <string name="save_media_error">Gava ku medya dihat tomarkirin çewtiyek derket holêǃ</string>
   <string name="save_media_saved">Medya li %s hate qeydkirin</string>
@@ -27,23 +27,23 @@
   <string name="open_in_new_tab">Bila lînk di hilpekîneke nû de were vekirin?</string>
   <string name="hotspot_service_channel_name">Kanala Xizmetê ya Hotspotê</string>
   <string name="hotspot_failed_title">Bi ser neket ku hotspotê bide destpêkirin</string>
-  <string name="hotspot_failed_message">Wisa dixuye ku hotspot-a te jixwe vekirî ye. Ji kerema xwe ji bo dewamkirinê wîfiya hotspot-a xwe bigire.</string>
+  <string name="hotspot_failed_message" fuzzy="true">Wisa dixuye ku hotspot-a te jixwe vekirî ye. Ji kerema xwe ji bo dewamkirinê wîfiya hotspot-a xwe bigire.</string>
   <string name="go_to_wifi_settings_label">Here mîhengên WÎFÎyê</string>
   <string name="connection_refused">Girêdan hate redkirin.</string>
   <string name="hotspot_running">Xebitandina Hotspotê</string>
-  <string name="no_books_selected_toast_message">Ji kerema xwe pêşî kitêban bibijêre</string>
+  <string name="no_books_selected_toast_message" fuzzy="true">Ji kerema xwe pêşî kitêban bibijêre</string>
   <string name="server_failed_message">Server dest pê nebû. Ji kerema xwe hotspot-a xwe bigire</string>
   <string name="server_failed_toast_message">Nikare serverê bide destpêkirin.</string>
   <string name="server_started_successfully_toast_message">Server bi serkeftinî dest pê kir.</string>
   <string name="server_stopped_successfully_toast_message">Server bi serkeftinî hate sekinandin.</string>
   <string name="hotspot_turned_on">Hotspot hate vekirin</string>
   <string name="hotspot_details_message">Li jêr detayên hotspota te ya lokal hene.\nSSID : %1$s \nPass : %2$s</string>
-  <string name="server_textview_default_message">Dosyeyên ku tu dixwazî li ser serverê bihewînî - bikî mêvan bibijêre</string>
+  <string name="server_textview_default_message" fuzzy="true">Dosyeyên ku tu dixwazî li ser serverê bihewînî - bikî mêvan bibijêre</string>
   <string name="progress_dialog_starting_server">Serverê dide destpêkirin</string>
   <string name="hotspot_dialog_title">Talîmatên ji bo hewandina kitêban</string>
   <string name="wifi_dialog_title">Girêdana WîFî-yê hate tesbîtkirin</string>
   <string name="wifi_dialog_body">Ji bo ku kitêban li ser cîhazên din bibînî, ji kerema xwe jê emîn bibe ku hemû cîhaz girêdayî eynî Tora Wîfiyê ne.</string>
-  <string name="hotspot_dialog_message">Ji bo ku ev taybetmendî bixebite divê tu pêşî hotspot-a Wîfiyê bi destan vekî an jê piştrast bî ku cîhaza hewandinê û cîhaza wergir (receiver) girêdayî eynî tora Wîfiyê bin.</string>
+  <string name="hotspot_dialog_message" fuzzy="true">Ji bo ku ev taybetmendî bixebite divê tu pêşî hotspot-a Wîfiyê bi destan vekî an jê piştrast bî ku cîhaza hewandinê û cîhaza wergir (receiver) girêdayî eynî tora Wîfiyê bin.</string>
   <string name="hotspot_dialog_neutral_button">HATE DEWAMKIRIN</string>
   <string name="hotspot_channel_description">Nûkirinên derbarê halê hotspot/server-a te.</string>
   <string name="hotspot_notification_content_title">Hotspota Kiwix-ê.</string>
@@ -130,9 +130,9 @@
   <string name="pref_storage">Depokirin</string>
   <string name="pref_current_folder">Peldanka niha</string>
   <string name="delete_zim_failed">Mixabin nebû ku em hin peldankan jê bibin. Li şûna wê, divê tu rêvebereke peldankekî bi kar bînî.</string>
-  <string name="tts_pause">rawestîne</string>
-  <string name="tts_resume">dewam bike</string>
-  <string name="stop">rawestîne</string>
+  <string name="tts_pause" fuzzy="true">rawestîne</string>
+  <string name="tts_resume" fuzzy="true">dewam bike</string>
+  <string name="stop" fuzzy="true">rawestîne</string>
   <string name="internal_storage">Daxilî</string>
   <string name="external_storage">Derveyî</string>
   <string name="yes">Erê</string>
@@ -154,14 +154,14 @@
   <string name="time_left">çep</string>
   <string name="time_today">Îro</string>
   <string name="time_yesterday">Do</string>
-  <string name="pref_external_link_popup_title">Dema ku têketina girêdanên derveyî hişyariyê bide</string>
+  <string name="pref_external_link_popup_title" fuzzy="true">Dema ku têketina girêdanên derveyî hişyariyê bide</string>
   <string name="pref_external_link_popup_summary">Bi popup-ê hişyarî bide gava ku bi girêdanên online û di bihayên zêde de nexebite.</string>
-  <string name="external_link_popup_dialog_title">Tevlîkirina Girêdana Derveyî</string>
-  <string name="external_link_popup_dialog_message">Tu lînkeke xaricî tevlî dikî. Ev tişt dibe ku ji ber neqla daneyê bibe sedema mesrefên zêdetir an jî gava tu oflayn bî, nexebite. Gelo tu dixwazî dewam bikî?</string>
+  <string name="external_link_popup_dialog_title" fuzzy="true">Tevlîkirina Girêdana Derveyî</string>
+  <string name="external_link_popup_dialog_message" fuzzy="true">Tu lînkeke xaricî tevlî dikî. Ev tişt dibe ku ji ber neqla daneyê bibe sedema mesrefên zêdetir an jî gava tu oflayn bî, nexebite. Gelo tu dixwazî dewam bikî?</string>
   <string name="do_not_ask_anymore">Zêdetir nepirse</string>
-  <string name="your_languages">Zimanên bijartîː</string>
-  <string name="other_languages">Zimanên din:</string>
-  <string name="no_items_msg">Ti hêmanekî berdest tine</string>
+  <string name="your_languages" fuzzy="true">Zimanên bijartîː</string>
+  <string name="other_languages" fuzzy="true">Zimanên din:</string>
+  <string name="no_items_msg" fuzzy="true">Ti hêmanekî berdest tine</string>
   <string name="crash_title">Baş e… Ev Şermker e</string>
   <string name="crash_description" fuzzy="true">Wisa dixuye ku em hilweşiyan. \n\nGelo tu dixwazî alî me bikî ku em vê problemê çareser bikin bi şandina agahiyên li jêr?</string>
   <string name="crash_checkbox_language">Mîhengên Te yên Zimanî</string>
@@ -174,7 +174,7 @@
   <string name="new_tab_shortcut_label">Hilpekîna nû</string>
   <string name="get_content_shortcut_label">Naverokê bîne</string>
   <string name="fav_icon">Favîkon</string>
-  <string name="pagesCount">%s gotar</string>
+  <string name="pagesCount" fuzzy="true">%s gotar</string>
   <string name="get_started">Dest pê bike</string>
   <string name="download_books">Kitêban daxîne</string>
   <string name="humankind_knowledge">Îlmê çeşîdê însanan, li ser telefona te ye.</string>
