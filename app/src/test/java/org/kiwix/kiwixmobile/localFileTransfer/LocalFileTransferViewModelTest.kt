@@ -185,8 +185,8 @@ class LocalFileTransferViewModelTest {
         viewModel.onSearchMenuClicked()
         val event = awaitItem()
         assertThat(event).isInstanceOf(UiEvent.RequestPermission::class.java)
-        assertThat((event as UiEvent.RequestPermission).permission)
-          .isEqualTo(android.Manifest.permission.ACCESS_FINE_LOCATION)
+        assertThat((event as UiEvent.RequestPermission).permissions)
+          .isEqualTo(listOf(android.Manifest.permission.ACCESS_FINE_LOCATION))
       }
     }
 
@@ -199,8 +199,8 @@ class LocalFileTransferViewModelTest {
       viewModel.onSearchMenuClicked()
       val event = awaitItem()
       assertThat(event).isInstanceOf(UiEvent.RequestPermission::class.java)
-      assertThat((event as UiEvent.RequestPermission).permission)
-        .isEqualTo(android.Manifest.permission.NEARBY_WIFI_DEVICES)
+      assertThat((event as UiEvent.RequestPermission).permissions)
+        .isEqualTo(listOf(android.Manifest.permission.NEARBY_WIFI_DEVICES))
     }
   }
 
@@ -215,8 +215,8 @@ class LocalFileTransferViewModelTest {
         viewModel.onSearchMenuClicked()
         val event = awaitItem()
         assertThat(event).isInstanceOf(UiEvent.RequestPermission::class.java)
-        assertThat((event as UiEvent.RequestPermission).permission)
-          .isEqualTo(ACCESS_LOCAL_NETWORK)
+        assertThat((event as UiEvent.RequestPermission).permissions)
+          .isEqualTo(listOf(ACCESS_LOCAL_NETWORK, NEARBY_WIFI_DEVICES))
       }
     }
 
@@ -225,6 +225,7 @@ class LocalFileTransferViewModelTest {
     runTest {
       every { permissionChecker.isAndroid17orAbove() } returns true
       coEvery { permissionChecker.hasAccessLocalNetworkPermission() } returns true
+      coEvery { permissionChecker.hasNearbyWifiPermission() } returns true
       coEvery { permissionChecker.hasWriteExternalStoragePermission() } returns true
       createViewModel()
 
@@ -246,8 +247,8 @@ class LocalFileTransferViewModelTest {
       viewModel.onSearchMenuClicked()
       val event = awaitItem()
       assertThat(event).isInstanceOf(UiEvent.RequestPermission::class.java)
-      assertThat((event as UiEvent.RequestPermission).permission)
-        .isEqualTo(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
+      assertThat((event as UiEvent.RequestPermission).permissions)
+        .isEqualTo(listOf(android.Manifest.permission.WRITE_EXTERNAL_STORAGE))
     }
   }
 
@@ -377,7 +378,7 @@ class LocalFileTransferViewModelTest {
   fun `onPermissionRationaleRequired emits nearby wifi dialog for access local network`() =
     runTest {
       viewModel.events.test {
-        viewModel.onPermissionRationaleRequired(ACCESS_LOCAL_NETWORK)
+        viewModel.onPermissionRationaleRequired(listOf(ACCESS_LOCAL_NETWORK))
         val event = awaitItem()
         assertThat(event).isInstanceOf(UiEvent.ShowDialog::class.java)
         assertThat((event as UiEvent.ShowDialog).dialog)
@@ -388,7 +389,7 @@ class LocalFileTransferViewModelTest {
   @Test
   fun `onPermissionRationaleRequired emits ShowDialog for nearby wifi`() = runTest {
     viewModel.events.test {
-      viewModel.onPermissionRationaleRequired(NEARBY_WIFI_DEVICES)
+      viewModel.onPermissionRationaleRequired(listOf(NEARBY_WIFI_DEVICES))
       val event = awaitItem()
       assertThat(event).isInstanceOf(UiEvent.ShowDialog::class.java)
       assertThat((event as UiEvent.ShowDialog).dialog)
@@ -399,7 +400,7 @@ class LocalFileTransferViewModelTest {
   @Test
   fun `onPermissionRationaleRequired emits ShowDialog for fine location`() = runTest {
     viewModel.events.test {
-      viewModel.onPermissionRationaleRequired(ACCESS_FINE_LOCATION)
+      viewModel.onPermissionRationaleRequired(listOf(ACCESS_FINE_LOCATION))
       val event = awaitItem()
       assertThat(event).isInstanceOf(UiEvent.ShowDialog::class.java)
       assertThat((event as UiEvent.ShowDialog).dialog)
@@ -410,7 +411,7 @@ class LocalFileTransferViewModelTest {
   @Test
   fun `onPermissionRationaleRequired emits ShowDialog for storage`() = runTest {
     viewModel.events.test {
-      viewModel.onPermissionRationaleRequired(WRITE_EXTERNAL_STORAGE)
+      viewModel.onPermissionRationaleRequired(listOf(WRITE_EXTERNAL_STORAGE))
       val event = awaitItem()
       assertThat(event).isInstanceOf(UiEvent.ShowDialog::class.java)
       assertThat((event as UiEvent.ShowDialog).dialog)
@@ -481,11 +482,18 @@ class LocalFileTransferViewModelTest {
     every { WifiDirectManager.getFileName(uri) } returns "status_test.zim"
     viewModel.initialize(listOf(uri), alertDialogShower)
 
-    viewModel.onFileStatusChanged(0, FileItem.FileStatus.SENT)
-
+    // Subscribe before triggering the change, so this only passes if a new value is actually
+    // emitted to existing collectors - not just if the final state happens to be correct.
+    // A FileItem mutated in place (rather than replaced via copy()) would make the "old" and
+    // "new" UiState compare as equal, and StateFlow would silently skip the emission.
     viewModel.uiState.test {
-      val state = awaitItem()
-      assertThat(state.transferFiles.first().fileStatus).isEqualTo(FileItem.FileStatus.SENT)
+      assertThat(awaitItem().transferFiles.first().fileStatus)
+        .isEqualTo(FileItem.FileStatus.TO_BE_SENT)
+
+      viewModel.onFileStatusChanged(0, FileItem.FileStatus.SENT)
+
+      assertThat(awaitItem().transferFiles.first().fileStatus)
+        .isEqualTo(FileItem.FileStatus.SENT)
     }
   }
 

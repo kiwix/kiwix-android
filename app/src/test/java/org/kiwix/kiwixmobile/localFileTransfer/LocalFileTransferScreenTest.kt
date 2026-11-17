@@ -239,8 +239,7 @@ class LocalFileTransferScreenTest {
 
   @Test
   fun localFileTransferScreen_transferFiles_showsStatusIconForSent() {
-    val file = FileItem("sent.zim")
-    file.fileStatus = FileItem.FileStatus.SENT
+    val file = FileItem("sent.zim").copy(fileStatus = FileItem.FileStatus.SENT)
     renderScreen(createTestState(transferFiles = listOf(file)))
     composeTestRule
       .onNodeWithContentDescription(
@@ -250,8 +249,7 @@ class LocalFileTransferScreenTest {
 
   @Test
   fun localFileTransferScreen_transferFiles_showsStatusIconForError() {
-    val file = FileItem("error.zim")
-    file.fileStatus = FileItem.FileStatus.ERROR
+    val file = FileItem("error.zim").copy(fileStatus = FileItem.FileStatus.ERROR)
     renderScreen(createTestState(transferFiles = listOf(file)))
     composeTestRule
       .onNodeWithContentDescription(
@@ -262,8 +260,7 @@ class LocalFileTransferScreenTest {
   @Test
   fun localFileTransferScreen_transferFiles_multipleStatusIcons() {
     val file1 = FileItem("file1.zim")
-    val file2 = FileItem("file2.zim")
-    file2.fileStatus = FileItem.FileStatus.SENT
+    val file2 = FileItem("file2.zim").copy(fileStatus = FileItem.FileStatus.SENT)
     renderScreen(createTestState(transferFiles = listOf(file1, file2)))
     composeTestRule
       .onNodeWithContentDescription(

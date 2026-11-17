@@ -93,6 +93,7 @@ class WifiDirectManager @Inject constructor(
   private var isFileSender = false
 
   private var hasSenderStartedConnection = false
+  private var isHandshakeInProgress = false
   private lateinit var lifecycleCoroutineScope: CoroutineScope
   private lateinit var alertDialogShower: AlertDialogShower
 
@@ -171,6 +172,7 @@ class WifiDirectManager @Inject constructor(
       manager?.requestConnectionInfo(channel, this)
     } else {
       // Not connected after connection change -> Disconnected
+      isHandshakeInProgress = false
       callbacks?.onConnectionToPeersLost()
     }
   }
@@ -244,21 +246,30 @@ class WifiDirectManager @Inject constructor(
   }
 
   private fun performHandshakeWith(groupInfo: WifiP2pInfo) {
+    if (isHandshakeInProgress) {
+      Log.d(TAG, "Handshake already in progress, ignoring duplicate connection info callback")
+      return
+    }
+    isHandshakeInProgress = true
     Log.d(TAG, "Starting handshake")
     lifecycleCoroutineScope.launch {
-      val peerGroupHandshake =
-        if (isFileSender) {
-          SenderHandShake(this@WifiDirectManager, groupInfo, ioDispatcher)
+      try {
+        val peerGroupHandshake =
+          if (isFileSender) {
+            SenderHandShake(this@WifiDirectManager, groupInfo, ioDispatcher)
+          } else {
+            ReceiverHandShake(this@WifiDirectManager, groupInfo, ioDispatcher)
+          }
+        val inetAddress = peerGroupHandshake.handshake()
+        if (inetAddress != null) {
+          startFileTransfer(groupInfo, inetAddress)
         } else {
-          ReceiverHandShake(this@WifiDirectManager, groupInfo, ioDispatcher)
+          Log.d(TAG, "InetAddress is null")
+          onFileTransferAsyncTaskComplete(false)
+          context.toast(R.string.connection_refused)
         }
-      val inetAddress = peerGroupHandshake.handshake()
-      if (inetAddress != null) {
-        startFileTransfer(groupInfo, inetAddress)
-      } else {
-        Log.d(TAG, "InetAddress is null")
-        onFileTransferAsyncTaskComplete(false)
-        context.toast(R.string.connection_refused)
+      } finally {
+        isHandshakeInProgress = false
       }
     }
   }
@@ -297,7 +308,6 @@ class WifiDirectManager @Inject constructor(
   }
 
   fun changeStatus(itemIndex: Int, status: FileStatus) {
-    filesForTransfer[itemIndex].fileStatus = status
     callbacks?.onFileStatusChanged(itemIndex, status)
     if (status == FileStatus.ERROR) {
       context.toast(

@@ -169,7 +169,11 @@ class LocalFileTransferViewModel @Inject constructor(
 
   private suspend fun checkFineLocationOrWifiPermission(): Boolean {
     val hasLocalPermission = if (isAndroid17OrAbove) {
-      permissionChecker.hasAccessLocalNetworkPermission()
+      // On Android 17, WifiP2pManager's discovery APIs still gate on NEARBY_WIFI_DEVICES even
+      // though ACCESS_LOCAL_NETWORK is the permission now shown under "Nearby devices" - both
+      // need to be granted, so they're requested together.
+      permissionChecker.hasAccessLocalNetworkPermission() &&
+        permissionChecker.hasNearbyWifiPermission()
     } else if (isAndroid13OrAbove) {
       permissionChecker.hasNearbyWifiPermission()
     } else {
@@ -184,21 +188,23 @@ class LocalFileTransferViewModel @Inject constructor(
   private suspend fun checkExternalStorageWritePermission(): Boolean {
     val isGranted = permissionChecker.hasWriteExternalStoragePermission()
     if (!isGranted) {
-      requestPermission(WRITE_EXTERNAL_STORAGE)
+      requestPermission(listOf(WRITE_EXTERNAL_STORAGE))
     }
     return isGranted
   }
 
-  private suspend fun requestPermission(permission: String) {
-    _events.emit(RequestPermission(permission))
+  private suspend fun requestPermission(permissions: List<String>) {
+    _events.emit(RequestPermission(permissions))
   }
 
-  fun onPermissionRationaleRequired(permission: String) {
-    val dialog = when (permission) {
+  fun onPermissionRationaleRequired(permissions: List<String>) {
+    val dialog = when {
       // Both sit in Android's "Nearby devices" permission group, so share the same rationale.
-      ACCESS_LOCAL_NETWORK, NEARBY_WIFI_DEVICES -> DialogEvent.ShowNearbyWifiRationale
-      ACCESS_FINE_LOCATION -> DialogEvent.ShowLocationRationale
-      WRITE_EXTERNAL_STORAGE -> DialogEvent.ShowStorageRationale
+      permissions.any { it == ACCESS_LOCAL_NETWORK || it == NEARBY_WIFI_DEVICES } ->
+        DialogEvent.ShowNearbyWifiRationale
+
+      permissions.contains(ACCESS_FINE_LOCATION) -> DialogEvent.ShowLocationRationale
+      permissions.contains(WRITE_EXTERNAL_STORAGE) -> DialogEvent.ShowStorageRationale
       else -> null
     }
     dialog?.let { showDialog(it) }
@@ -233,11 +239,10 @@ class LocalFileTransferViewModel @Inject constructor(
 
   override fun onFileStatusChanged(itemIndex: Int, fileStatus: FileItem.FileStatus) {
     _uiState.update { state ->
-      val tempTransferList = state.transferFiles.toMutableList()
-      if (itemIndex in tempTransferList.indices) {
-        tempTransferList[itemIndex].fileStatus = fileStatus
+      val updatedFiles = state.transferFiles.mapIndexed { index, item ->
+        if (index == itemIndex) item.copy(fileStatus = fileStatus) else item
       }
-      state.copy(transferFiles = tempTransferList)
+      state.copy(transferFiles = updatedFiles)
     }
   }
 
@@ -254,11 +259,11 @@ class LocalFileTransferViewModel @Inject constructor(
   }
 
   val locationPermission = if (isAndroid17OrAbove) {
-    ACCESS_LOCAL_NETWORK
+    listOf(ACCESS_LOCAL_NETWORK, NEARBY_WIFI_DEVICES)
   } else if (isAndroid13OrAbove) {
-    NEARBY_WIFI_DEVICES
+    listOf(NEARBY_WIFI_DEVICES)
   } else {
-    ACCESS_FINE_LOCATION
+    listOf(ACCESS_FINE_LOCATION)
   }
 
   override fun onCleared() {
@@ -286,7 +291,7 @@ sealed class DialogEvent {
 }
 
 sealed class UiEvent {
-  data class RequestPermission(val permission: String) : UiEvent()
+  data class RequestPermission(val permissions: List<String>) : UiEvent()
   object NavigateBack : UiEvent()
   data class ShowDialog(val dialog: DialogEvent) : UiEvent()
 }
