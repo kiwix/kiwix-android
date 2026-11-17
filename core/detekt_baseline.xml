@@ -1,82 +1,47 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" ?>
 <SmellBaseline>
   <ManuallySuppressedIssues/>
   <CurrentIssues>
-    <ID>EmptyFunctionBlock:BooksOnDiskViewHolder.kt$BookOnDiskViewHolder.BookViewHolder${ }</ID>
-    <ID>EmptyFunctionBlock:OnSwipeTouchListener.kt$OnSwipeTouchListener${}</ID>
-    <ID>ForbiddenComment:JNIInitialiser.kt$JNIInitialiser$// TODO: Consider surfacing to user</ID>
-    <ID>ForbiddenComment:NetworkUtilsTest.kt$NetworkUtilsTest$// TODO: find a way to assert regex matching via JUnit and rewrite the test</ID>
-    <ID>LongMethod:ChunkUtilsTest.kt$ChunkUtilsTest$@Test fun testGetChunks()</ID>
-    <ID>LongMethod:TabsAdapter.kt$TabsAdapter$@SuppressLint("ResourceType") override fun onCreateViewHolder( parent: ViewGroup, viewType: Int ): ViewHolder</ID>
-    <ID>LongParameterList:KiwixDialog.kt$KiwixDialog$( val title: Int?, val message: Int?, val positiveMessage: Int, val negativeMessage: Int?, val cancelable: Boolean = true, val icon: Int? = null, val neutralMessage: Int? = null, val getView: (() -> View)? = null )</ID>
-    <ID>LongParameterList:MainMenu.kt$MainMenu$( private val activity: Activity, zimFileReader: ZimFileReader?, menu: Menu, webViews: MutableList&lt;KiwixWebView>, urlIsValid: Boolean, disableReadAloud: Boolean = false, disableTabs: Boolean = false, private val menuClickListener: MenuClickListener )</ID>
-    <ID>LongParameterList:MainMenu.kt$MainMenu.Factory$( menu: Menu, webViews: MutableList&lt;KiwixWebView>, urlIsValid: Boolean, menuClickListener: MenuClickListener, disableReadAloud: Boolean, disableTabs: Boolean )</ID>
-    <ID>LongParameterList:PageTestHelpers.kt$( bookmarkTitle: String = "bookmarkTitle", isSelected: Boolean = false, id: Long = 2, zimId: String = "zimId", zimName: String = "zimName", zimFilePath: String = "zimFilePath", bookmarkUrl: String = "bookmarkUrl", favicon: String = "favicon" )</ID>
-    <ID>LongParameterList:Repository.kt$Repository$( private val libkiwixBookOnDisk: LibkiwixBookOnDisk, private val libkiwixBookmarks: LibkiwixBookmarks, private val historyRoomDao: HistoryRoomDao, private val webViewHistoryRoomDao: WebViewHistoryRoomDao, private val notesRoomDao: NotesRoomDao, private val recentSearchRoomDao: RecentSearchRoomDao, private val zimReaderContainer: ZimReaderContainer, @param:IoDispatcher private val ioDispatcher: CoroutineDispatcher )</ID>
-    <ID>MagicNumber:HumanReadableCount.kt$HumanReadableCount$3</ID>
-    <ID>MagicNumber:CompatFindActionModeCallback.kt$CompatFindActionModeCallback$100</ID>
-    <ID>MagicNumber:DownloadItem.kt$DownloadItem$1000L</ID>
-    <ID>MagicNumber:SearchState.kt$SearchState$100</ID>
-    <ID>MagicNumber:DownloaderModule.kt$DownloaderModule$5</ID>
-    <ID>MagicNumber:FileUtils.kt$FileUtils$3</ID>
-    <ID>MagicNumber:JNIInitialiser.kt$JNIInitialiser$1024</ID>
-    <ID>MagicNumber:Byte.kt$Byte$1000.0</ID>
-    <ID>MagicNumber:MainMenu.kt$MainMenu$99</ID>
-    <ID>MagicNumber:ReaderMenuState.kt$ReaderMenuState$99</ID>
-    <ID>MagicNumber:OnSwipeTouchListener.kt$OnSwipeTouchListener.GestureListener$100</ID>
-    <ID>MagicNumber:SearchResultGenerator.kt$ZimSearchResultGenerator$200</ID>
-    <ID>MagicNumber:Seconds.kt$Seconds$24</ID>
-    <ID>MagicNumber:Seconds.kt$Seconds$60</ID>
-    <ID>MagicNumber:Seconds.kt$Seconds$60.0</ID>
-    <ID>MagicNumber:TabsAdapter.kt$TabsAdapter$8</ID>
-    <ID>MagicNumber:ZimFileReader.kt$ZimFileReader$1024</ID>
-    <ID>MatchingDeclarationName:PageTestHelpers.kt$PageImpl : Page</ID>
-    <ID>MaxLineLength:BookUtilsTest.kt$BookUtilsTest$// this case uses the result from the container nested class inside LanguageUtils. It will be tested in LanguageUtilsTest</ID>
-    <ID>MaxLineLength:MetaLinkNetworkEntityTest.kt$MetaLinkNetworkEntityTest$"http://www.mirrorservice.org/sites/download.kiwix.org/zim/wikipedia/wikipedia_af_all_nopic_2016-05.zim"</ID>
-    <ID>MaxLineLength:NetworkUtilsTest.kt$NetworkUtilsTest$// Here the Method should return the substring between the first '?' character and the nearest '/' character preceeding it</ID>
-    <ID>NestedBlockDepth:FileUtils.kt$FileUtils$@JvmStatic @Synchronized fun deleteZimFile(path: String)</ID>
-    <ID>NestedBlockDepth:FileUtils.kt$FileUtils$@JvmStatic suspend fun getLocalFilePathByUri( context: Context, uri: Uri ): String?</ID>
-    <ID>NestedBlockDepth:ImageUtils.kt$ImageUtils$private fun getBitmapFromView(width: Int, height: Int, viewToDrawFrom: View): Bitmap?</ID>
-    <ID>NestedBlockDepth:JNIInitialiser.kt$JNIInitialiser$private fun loadICUData(context: Context): String?</ID>
-    <ID>NestedBlockDepth:OnSwipeTouchListener.kt$OnSwipeTouchListener.GestureListener$override fun onFling( e1: MotionEvent, e2: MotionEvent, velocityX: Float, velocityY: Float ): Boolean</ID>
-    <ID>NestedBlockDepth:StorageDeviceUtils.kt$StorageDeviceUtils$// Amazingly file.canWrite() does not always return the correct value private fun canWrite(file: File): Boolean</ID>
-    <ID>PackageNaming:HumanReadableCount.kt$package org.kiwix.kiwixmobile.core.zim_manager.fileselect_view</ID>
-    <ID>PackageNaming:BooksOnDiskListItem.kt$package org.kiwix.kiwixmobile.core.zim_manager.fileselect_view</ID>
-    <ID>PackageNaming:Byte.kt$package org.kiwix.kiwixmobile.core.zim_manager</ID>
-    <ID>PackageNaming:KiwixTag.kt$package org.kiwix.kiwixmobile.core.zim_manager</ID>
-    <ID>PackageNaming:Language.kt$package org.kiwix.kiwixmobile.core.zim_manager</ID>
-    <ID>PackageNaming:Category.kt$package org.kiwix.kiwixmobile.core.zim_manager</ID>
-    <ID>PackageNaming:MountPointProducer.kt$package org.kiwix.kiwixmobile.core.zim_manager</ID>
-    <ID>PackageNaming:SelectionMode.kt$package org.kiwix.kiwixmobile.core.zim_manager.fileselect_view</ID>
-    <ID>PackageNaming:TagsView.kt$package org.kiwix.kiwixmobile.core.zim_manager</ID>
-    <ID>PackageNaming:ConnectivityObserver.kt$package org.kiwix.kiwixmobile.core.zim_manager</ID>
-    <ID>PackageNaming:NetworkState.kt$package org.kiwix.kiwixmobile.core.zim_manager</ID>
-    <ID>ReturnCount:FileUtils.kt$FileUtils$@JvmStatic fun getAllZimParts(book: Book): List&lt;File></ID>
-    <ID>ReturnCount:FileUtils.kt$FileUtils$@JvmStatic suspend fun getLocalFilePathByUri( context: Context, uri: Uri ): String?</ID>
-    <ID>ReturnCount:FileUtils.kt$FileUtils$@JvmStatic suspend fun hasPart(file: File): Boolean</ID>
-    <ID>ReturnCount:FileUtils.kt$FileUtils$@Synchronized private fun deleteZimFileParts(path: String): Boolean</ID>
-    <ID>ReturnCount:ImageUtils.kt$ImageUtils$private fun getBitmapFromView(width: Int, height: Int, viewToDrawFrom: View): Bitmap?</ID>
-    <ID>ReturnCount:OnSwipeTouchListener.kt$OnSwipeTouchListener.GestureListener$override fun onFling( e1: MotionEvent, e2: MotionEvent, velocityX: Float, velocityY: Float ): Boolean</ID>
-    <ID>TooGenericExceptionCaught:CompatFindActionModeCallback.kt$CompatFindActionModeCallback$exception: Exception</ID>
-    <ID>TooGenericExceptionCaught:JNIInitialiser.kt$JNIInitialiser$e: Exception</ID>
-    <ID>TooGenericExceptionCaught:LibkiwixBookmarks.kt$LibkiwixBookmarks$exception: Exception</ID>
-    <ID>TooGenericExceptionCaught:OnSwipeTouchListener.kt$OnSwipeTouchListener.GestureListener$exception: Exception</ID>
-    <ID>TooGenericExceptionCaught:ZimFileReader.kt$ZimFileReader$exception: Exception</ID>
-    <ID>TooGenericExceptionThrown:AdapterDelegateManager.kt$AdapterDelegateManager$throw RuntimeException("No delegate registered for $item")</ID>
-    <ID>TooGenericExceptionThrown:Bytes.kt$Bytes$throw RuntimeException("impossible value $size")</ID>
-    <ID>TooGenericExceptionThrown:ContextExtensions.kt$throw RuntimeException("invalid attribute $attributeRes")</ID>
-    <ID>TooGenericExceptionThrown:CursorExtensions.kt$throw RuntimeException("$columnName not found in $columnNames")</ID>
-    <ID>TooGenericExceptionThrown:CursorExtensions.kt$throw RuntimeException("Unexpected return type ${T::class.java.simpleName}")</ID>
-    <ID>TooGenericExceptionThrown:ThemeConfig.kt$ThemeConfig.Theme.Companion$throw RuntimeException("Invalid theme $theme")</ID>
-    <ID>TooGenericExceptionThrown:ThemeConfig.kt$ThemeConfig.UiMode.Companion$throw RuntimeException("Invalid theme $uiMode")</ID>
-    <ID>TopLevelPropertyNaming:Bytes.kt$const val Eb = Pb * 1024</ID>
-    <ID>TopLevelPropertyNaming:Bytes.kt$const val Gb = Mb * 1024</ID>
-    <ID>TopLevelPropertyNaming:Bytes.kt$const val Kb = 1 * 1024L</ID>
-    <ID>TopLevelPropertyNaming:Bytes.kt$const val Mb = Kb * 1024</ID>
-    <ID>TopLevelPropertyNaming:Bytes.kt$const val Pb = Tb * 1024</ID>
-    <ID>TopLevelPropertyNaming:Bytes.kt$const val Tb = Gb * 1024</ID>
-    <ID>PackageNaming:ReadAloudNotificationManager.kt$package org.kiwix.kiwixmobile.core.read_aloud</ID>
-    <ID>PackageNaming:ReadAloudService.kt$package org.kiwix.kiwixmobile.core.read_aloud</ID>
-    <ID>PackageNaming:ReadAloudCallbacks.kt$package org.kiwix.kiwixmobile.core.read_aloud</ID>
+    <ID>AbstractClassCanBeConcreteClass:CoreApp.kt:CoreApp$CoreApp</ID>
+    <ID>AbstractClassCanBeInterface:Action.kt:Action$Action</ID>
+    <ID>AbstractClassCanBeInterface:BooksOnDiskListItem.kt:BooksOnDiskListItem$BooksOnDiskListItem</ID>
+    <ID>AbstractClassCanBeInterface:HistoryListItem.kt:HistoryListItem$HistoryListItem</ID>
+    <ID>AbstractClassCanBeInterface:IconItem.kt:IconItem$IconItem</ID>
+    <ID>AbstractClassCanBeInterface:KiwixTag.kt:KiwixTag$KiwixTag</ID>
+    <ID>AbstractClassCanBeInterface:SaveResult.kt:SaveResult$SaveResult</ID>
+    <ID>AbstractClassCanBeInterface:SearchListItem.kt:SearchListItem$SearchListItem</ID>
+    <ID>AbstractClassCanBeInterface:ShortcutUtils.kt:ShortcutResult$ShortcutResult</ID>
+    <ID>AbstractClassCanBeInterface:ValidateZimViewModel.kt:ValidateZimViewModel.ValidationStatus$ValidationStatus</ID>
+    <ID>Deprecation:FileLogger.kt:FileLogger$exec</ID>
+    <ID>LongParameterList:Repository.kt:Repository</ID>
+    <ID>MagicNumber:DownloadItem.kt:DownloadItem$1000L</ID>
+    <ID>MagicNumber:FileUtils.kt:FileUtils$3</ID>
+    <ID>MagicNumber:JNIInitialiser.kt:JNIInitialiser$1024</ID>
+    <ID>MagicNumber:ReaderMenuState.kt:ReaderMenuState$99</ID>
+    <ID>MagicNumber:Seconds.kt:Seconds$24</ID>
+    <ID>MagicNumber:Seconds.kt:Seconds$60</ID>
+    <ID>MagicNumber:Seconds.kt:Seconds$60.0</ID>
+    <ID>MagicNumber:ZimFileReader.kt:ZimFileReader$1024</ID>
+    <ID>NestedBlockDepth:JNIInitialiser.kt:JNIInitialiser$private fun loadICUData: String?</ID>
+    <ID>PackageNaming:BooksOnDiskListItem.kt:package org.kiwix.kiwixmobile.core.zim_manager.fileselect_view</ID>
+    <ID>PackageNaming:Byte.kt:package org.kiwix.kiwixmobile.core.zim_manager</ID>
+    <ID>PackageNaming:Category.kt:package org.kiwix.kiwixmobile.core.zim_manager</ID>
+    <ID>PackageNaming:ConnectivityObserver.kt:package org.kiwix.kiwixmobile.core.zim_manager</ID>
+    <ID>PackageNaming:HumanReadableCount.kt:package org.kiwix.kiwixmobile.core.zim_manager.fileselect_view</ID>
+    <ID>PackageNaming:KiwixTag.kt:package org.kiwix.kiwixmobile.core.zim_manager</ID>
+    <ID>PackageNaming:Language.kt:package org.kiwix.kiwixmobile.core.zim_manager</ID>
+    <ID>PackageNaming:MountPointProducer.kt:package org.kiwix.kiwixmobile.core.zim_manager</ID>
+    <ID>PackageNaming:NetworkState.kt:package org.kiwix.kiwixmobile.core.zim_manager</ID>
+    <ID>PackageNaming:ReadAloudCallbacks.kt:package org.kiwix.kiwixmobile.core.read_aloud</ID>
+    <ID>PackageNaming:ReadAloudNotificationManager.kt:package org.kiwix.kiwixmobile.core.read_aloud</ID>
+    <ID>PackageNaming:ReadAloudService.kt:package org.kiwix.kiwixmobile.core.read_aloud</ID>
+    <ID>PackageNaming:SelectionMode.kt:package org.kiwix.kiwixmobile.core.zim_manager.fileselect_view</ID>
+    <ID>TooGenericExceptionCaught:JNIInitialiser.kt:JNIInitialiser$e: Exception</ID>
+    <ID>TooGenericExceptionCaught:ZimFileReader.kt:ZimFileReader$exception: Exception</ID>
+    <ID>TooGenericExceptionThrown:Bytes.kt:Bytes$throw RuntimeException("impossible value $size")</ID>
+    <ID>TooGenericExceptionThrown:CursorExtensions.kt:throw RuntimeException("$columnName not found in $columnNames")</ID>
+    <ID>TooGenericExceptionThrown:CursorExtensions.kt:throw RuntimeException("Unexpected return type ${T::class.java.simpleName}")</ID>
+    <ID>TooGenericExceptionThrown:ThemeConfig.kt:ThemeConfig.Theme.Companion$throw RuntimeException("Invalid theme $theme")</ID>
+    <ID>TooGenericExceptionThrown:ThemeConfig.kt:ThemeConfig.UiMode.Companion$throw RuntimeException("Invalid theme $uiMode")</ID>
   </CurrentIssues>
 </SmellBaseline>

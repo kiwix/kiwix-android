@@ -241,6 +241,7 @@ class KiwixTextToSpeech internal constructor(
   /**
    * Starts speaking the WebView content aloud (or stops it if TTS is speaking now).
    */
+  @Suppress("DEPRECATION")
   fun readAloud(webView: WebView, showTtsLanguageDownloadDialog: () -> Unit) {
     if (currentTTSTask?.paused == true) {
       onSpeakingListener.onSpeakingEnded()

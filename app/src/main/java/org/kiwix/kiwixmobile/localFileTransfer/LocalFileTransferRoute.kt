@@ -19,6 +19,7 @@
 package org.kiwix.kiwixmobile.localFileTransfer
 
 import android.Manifest.permission.ACCESS_FINE_LOCATION
+import android.Manifest.permission.ACCESS_LOCAL_NETWORK
 import android.Manifest.permission.NEARBY_WIFI_DEVICES
 import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
 import android.app.Activity
@@ -67,7 +68,9 @@ internal fun LocalFileTransferScreenRoute(
   uris: List<Uri>
 ) {
   val alertDialogShower = remember { AlertDialogShower() }
-  viewModel.initialize(uris, alertDialogShower)
+  LaunchedEffect(Unit) {
+    viewModel.initialize(uris, alertDialogShower)
+  }
   val context = LocalContext.current
   val uiState by viewModel.uiState.collectAsStateWithLifecycle()
   val locationPermission = rememberPermissionState(viewModel.locationPermission)
@@ -144,7 +147,7 @@ private fun handleDialog(
       alertDialogShower.show(
         KiwixDialog.NearbyWifiPermissionRationale,
         { context.navigateToAppSettings() },
-        { context.toast(string.discovery_needs_wifi) }
+        { context.toast(string.permission_refused_nearby) }
       )
 
     DialogEvent.ShowLocationRationale ->
@@ -188,7 +191,7 @@ private fun handlePermissionRequest(
   onPermissionRationaleRequired: (String) -> Unit
 ) {
   val state = when (permission) {
-    NEARBY_WIFI_DEVICES, ACCESS_FINE_LOCATION -> locationPermission
+    NEARBY_WIFI_DEVICES, ACCESS_FINE_LOCATION, ACCESS_LOCAL_NETWORK -> locationPermission
     WRITE_EXTERNAL_STORAGE -> storagePermission
     else -> null
   } ?: return

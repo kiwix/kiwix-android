@@ -72,7 +72,8 @@ it will scan your storage and recognize all your ZIM files.
 Kiwix requires the following permissions to fully work:
 
 - `ACCESS_FINE_LOCATION`: For device discovery on Android 12 and below.
-- `NEARBY_WIFI_DEVICES`: For device discovery on Android 13 and above.
+- `NEARBY_WIFI_DEVICES`: For device discovery on Android 13 to 16.
+- `ACCESS_LOCAL_NETWORK`: For device discovery on Android 17 and above.
 - `READ_EXTERNAL_STORAGE`: To access ZIM files.
 - `WRITE_EXTERNAL_STORAGE`: To download ZIM files and export bookmarks.
 - `POST_NOTIFICATIONS`: For notifications.

@@ -27,6 +27,9 @@ interface KiwixPermissionChecker {
   suspend fun hasWriteExternalStoragePermission(): Boolean
   suspend fun hasReadExternalStoragePermission(): Boolean
 
+  @RequiresApi(Build.VERSION_CODES.CINNAMON_BUN)
+  suspend fun hasAccessLocalNetworkPermission(): Boolean
+
   @RequiresApi(Build.VERSION_CODES.TIRAMISU)
   suspend fun hasNearbyWifiPermission(): Boolean
   suspend fun hasFineLocationPermission(): Boolean
@@ -35,14 +38,17 @@ interface KiwixPermissionChecker {
   fun shouldShowRationale(activity: Activity, permission: String): Boolean
   suspend fun hasNotificationPermission(): Boolean
 
-  @ChecksSdkIntAtLeast(api = Build.VERSION_CODES.TIRAMISU)
-  fun isAndroid13orAbove(): Boolean
+  @ChecksSdkIntAtLeast(api = Build.VERSION_CODES.O)
+  fun isAndroid8OrAbove(): Boolean
 
   @ChecksSdkIntAtLeast(api = Build.VERSION_CODES.R)
   fun isAndroid11OrAbove(): Boolean
 
-  @ChecksSdkIntAtLeast(api = Build.VERSION_CODES.O)
-  fun isAndroid8OrAbove(): Boolean
+  @ChecksSdkIntAtLeast(api = Build.VERSION_CODES.TIRAMISU)
+  fun isAndroid13orAbove(): Boolean
+
+  @ChecksSdkIntAtLeast(api = Build.VERSION_CODES.CINNAMON_BUN)
+  fun isAndroid17orAbove(): Boolean
 
   suspend fun isManageExternalStoragePermissionGranted(): Boolean
 }
