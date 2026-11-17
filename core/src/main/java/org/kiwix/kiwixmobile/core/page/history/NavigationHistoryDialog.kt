@@ -69,7 +69,6 @@ import org.kiwix.kiwixmobile.core.utils.dialog.DialogHost
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixBasicDialogFrame
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
 
-const val NAVIGATION_HISTORY_ITEM_ICON_TESTING_TAG = "navigationHistoryItemIconTestingTag"
 const val NAVIGATION_HISTORY_ITEM_TITLE_TESTING_TAG = "navigationHistoryItemTitleTestingTag"
 
 @Suppress("ComposableLambdaParameterNaming")
@@ -187,11 +186,9 @@ private fun NavigationHistoryItem(
   ) {
     Image(
       painter = IconItem.MipmapImage(R.mipmap.ic_launcher_round).toPainter(),
-      // Decorative: the title is next to the icon.
       contentDescription = null,
       modifier = Modifier
         .size(PAGE_LIST_ITEM_FAVICON_SIZE)
-        .testTag("$NAVIGATION_HISTORY_ITEM_ICON_TESTING_TAG$index")
     )
 
     Spacer(modifier = Modifier.width(SIXTEEN_DP))

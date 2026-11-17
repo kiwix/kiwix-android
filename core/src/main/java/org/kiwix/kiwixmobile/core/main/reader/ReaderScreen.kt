@@ -1428,8 +1428,7 @@ private fun ColumnScope.TabItemCard(
               layoutParams = FrameLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT)
               // Prevent clicking inside the webView when tabs are active.
               setOnClickListener { onReaderAction(SelectTab(index)) }
-              // The Compose card around this view handles the tap for accessibility services.
-              importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_NO
+              contentDescription = webView.contentDescription
             }
             addView(clickableView)
           }

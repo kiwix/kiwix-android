@@ -57,6 +57,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
+import androidx.compose.material3.minimumInteractiveComponentSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -770,8 +771,11 @@ private fun ListOptions(
             contentDescription = option
           }
       ) {
-        // The row handles the click and the selected state, so TalkBack reads one control.
-        RadioButton(selected = option == selected, onClick = null)
+        RadioButton(
+          selected = option == selected,
+          onClick = null,
+          modifier = Modifier.minimumInteractiveComponentSize()
+        )
         Text(text = option, style = MaterialTheme.typography.bodyLarge)
       }
     }

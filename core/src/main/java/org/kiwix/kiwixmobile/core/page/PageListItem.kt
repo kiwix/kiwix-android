@@ -74,8 +74,6 @@ fun PageListItem(
       },
     verticalAlignment = Alignment.CenterVertically
   ) {
-    // Decorative: the title is next to the icon, and the row tells accessibility
-    // services that it is selected.
     if (page.isSelected) {
       Image(
         painter = painterResource(id = R.drawable.ic_check_circle_blue_24dp),

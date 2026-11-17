@@ -20,13 +20,12 @@ package org.kiwix.kiwixmobile.core.page.history
 
 import android.os.Build
 import androidx.annotation.StringRes
-import androidx.compose.ui.semantics.SemanticsProperties
-import androidx.compose.ui.test.SemanticsMatcher
-import androidx.compose.ui.test.assert
+import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsEnabled
 import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.assertTextEquals
+import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
@@ -116,11 +115,9 @@ class NavigationHistoryDialogTest {
     // Verify the page title text is displayed
     composeTestRule.onNodeWithText("Kiwix Article").assertIsDisplayed()
 
-    // The favicon is decorative, so it has no content description.
     composeTestRule
-      .onNodeWithTag("${NAVIGATION_HISTORY_ITEM_ICON_TESTING_TAG}0", useUnmergedTree = true)
-      .assertIsDisplayed()
-      .assert(SemanticsMatcher.keyNotDefined(SemanticsProperties.ContentDescription))
+      .onAllNodes(hasContentDescription(context.getString(R.string.fav_icon), substring = true))
+      .assertCountEquals(0)
   }
 
   @Test

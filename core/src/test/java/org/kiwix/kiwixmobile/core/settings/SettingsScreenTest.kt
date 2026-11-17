@@ -27,6 +27,7 @@ import androidx.compose.ui.test.SemanticsMatcher
 import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.assertContentDescriptionEquals
 import androidx.compose.ui.test.assertCountEquals
+import androidx.compose.ui.test.assertHeightIsAtLeast
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsOff
 import androidx.compose.ui.test.assertIsOn
@@ -46,6 +47,7 @@ import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollToNode
+import androidx.compose.ui.unit.dp
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -69,6 +71,8 @@ import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
 import org.robolectric.annotation.Config
 import java.util.Locale
+
+private val MINIMUM_TOUCH_TARGET = 48.dp
 
 /**
  * Behavior-driven UI tests for SettingsScreen.
@@ -907,8 +911,8 @@ class SettingsScreenTest {
         .assert(SemanticsMatcher.expectValue(SemanticsProperties.Role, Role.RadioButton))
         .assertContentDescriptionEquals(option)
         .assert(SemanticsMatcher.expectValue(SemanticsProperties.Selected, option == "Dark"))
+        .assertHeightIsAtLeast(MINIMUM_TOUCH_TARGET)
     }
-    // The radio button inside each row has no click action and no description of its own.
     composeTestRule
       .onAllNodes(
         hasClickAction() and hasAnyAncestor(hasTestTag(DIALOG_PREFERENCE_ITEM_TESTING_TAG)),

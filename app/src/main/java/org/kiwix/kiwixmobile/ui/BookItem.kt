@@ -126,7 +126,6 @@ fun BookItem(
         )
         .testTag(BOOK_ITEM_TESTING_TAG)
         .semantics {
-          // Only in selection mode, so that TalkBack does not say "Not selected" on every book.
           if (selectionMode == SelectionMode.MULTI) selected = isSelected
         }
     ) {
@@ -214,10 +213,6 @@ fun BookIconAndSize(
   }
 }
 
-/**
- * Shows that the book is selected. The icon is decorative: the card tells accessibility
- * services that it is selected, and a tap on the icon goes to the card.
- */
 @Composable
 private fun BookSelectedIcon(
   index: Int,

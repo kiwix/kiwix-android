@@ -259,7 +259,6 @@ private fun SpellingSuggestionItem(
       overflow = Ellipsis
     )
 
-    // Decorative: a tap anywhere on the row searches for the suggestion.
     Box(
       modifier = Modifier
         .size(OPEN_IN_NEW_TAB_ICON_SIZE)

@@ -21,10 +21,6 @@ import org.kiwix.kiwixmobile.core.utils.ComposeDimens.FOUR_DP
 const val ONLINE_LIBRARY_IMAGE_TEST_TAG = "onlineLibraryImageTestingTag"
 const val OFFLINE_IMAGE_TEST_TAG = "localLibraryImageTestingTag"
 
-/**
- * The icon of a book. It is decorative by default, because the book title is next to it.
- * Give a [contentDescription] only when no text near the icon names the book.
- */
 @Composable
 fun BookIcon(
   modifier: Modifier = Modifier,
