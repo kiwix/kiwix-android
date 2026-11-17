@@ -303,12 +303,10 @@
   <string name="paused_state">暂停</string>
   <string name="paused_offline_state">已暂停（设备离线）</string>
   <string name="failed_state">失败：%s</string>
-  <plurals name="downloading_files_count">
-    <item quantity="other">%d个文件正在下载</item>
-  </plurals>
-  <plurals name="downloaded_files_count">
-    <item quantity="other">%d个文件已下载</item>
-  </plurals>
+  <string name="downloading_files_count_singular">%d个文件正在下载</string>
+  <string name="downloading_files_count_plural">%d个文件正在下载</string>
+  <string name="downloaded_files_count_singular">%d个文件已下载</string>
+  <string name="downloaded_files_count_plural">%d个文件已下载</string>
   <string name="custom_download_error_message_for_authentication_failed">无法下载此 ZIM 文件。请尝试从 Play 商店重新安装此应用程序。</string>
   <string name="save">保存</string>
   <string name="note">笔记</string>
@@ -331,9 +329,8 @@
   <string name="ext_storage_permission_not_granted">错误：没有访问存储空间的权限</string>
   <string name="notes_deletion_successful">已删除整个笔记文件夹</string>
   <string name="notes_deletion_unsuccessful">有些文件未被删除</string>
-  <plurals name="book_count">
-    <item quantity="other">%d本书籍</item>
-  </plurals>
+  <string name="book_count_singular">%d本书籍</string>
+  <string name="book_count_plural">%d本书籍</string>
   <string name="books_count">%d 本书</string>
   <string name="discovery_initiated">侦测启动</string>
   <string name="discovery_failed">侦测失败</string>

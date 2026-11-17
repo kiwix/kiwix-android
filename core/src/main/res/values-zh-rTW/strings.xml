@@ -295,10 +295,8 @@
   <string name="ext_storage_permission_not_granted">錯誤：未授予儲存權限</string>
   <string name="notes_deletion_successful">整個註釋檔案夾已刪除</string>
   <string name="notes_deletion_unsuccessful">一些檔案未刪除</string>
-  <plurals name="book_count">
-    <item quantity="one">%d 本書籍</item>
-    <item quantity="other">%d 本書籍</item>
-  </plurals>
+  <string name="book_count_singular">%d 本書籍</string>
+  <string name="book_count_plural">%d 本書籍</string>
   <string name="books_count">%d 個書籍</string>
   <string name="discovery_initiated">初始偵測</string>
   <string name="discovery_failed">偵測失敗</string>

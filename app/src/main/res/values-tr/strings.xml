@@ -24,10 +24,6 @@
   <string name="select_category_content_description">Bu dili seçmek, indirilebilir kitapların o dilde olanlarının en üstte görüntülenmesine öncelik verecektir.</string>
   <string name="save_categories">Kategorileri kaydet</string>
   <string name="your_selected_categories">Seçili kategoriler:</string>
-  <plurals name="and_more">
-    <item quantity="one">ve %d benzeri</item>
-    <item quantity="other">ve %d benzeri</item>
-  </plurals>
   <string name="your_categories">Seçili kategoriler:</string>
   <string name="your_category">Seçili kategori: %s</string>
 </resources>

@@ -212,10 +212,8 @@
   <string name="confirmation_alert_dialog_message">Net gespäichert Ännerunge verwerfen?</string>
   <string name="delete_notes_confirmation_msg">All d’Notize läschen?</string>
   <string name="notes_deletion_unsuccessful">E puer Fichiere goufen net geläscht</string>
-  <plurals name="book_count">
-    <item quantity="one">%d Buch</item>
-    <item quantity="other">%d Bicher</item>
-  </plurals>
+  <string name="book_count_singular">%d Buch</string>
+  <string name="book_count_plural">%d Bicher</string>
   <string name="books_count">%d Buch/Bicher</string>
   <string name="your_device">Ären Apparat:</string>
   <string name="device_name">Numm vum Apparat</string>

@@ -277,14 +277,10 @@
   <string name="paused_state">متوقف</string>
   <string name="paused_offline_state">متوقف‌شده (دستگاه آفلاین است)</string>
   <string name="failed_state">ناموفق: %s</string>
-  <plurals name="downloading_files_count">
-    <item quantity="one">%d پرونده در حال بارگیری</item>
-    <item quantity="other">%d پرونده در حال بارگیری</item>
-  </plurals>
-  <plurals name="downloaded_files_count">
-    <item quantity="one">%d پرونده بارگیری شد</item>
-    <item quantity="other">%d پرونده بارگیری شد</item>
-  </plurals>
+  <string name="downloading_files_count_singular">%d پرونده در حال بارگیری</string>
+  <string name="downloading_files_count_plural">%d پرونده در حال بارگیری</string>
+  <string name="downloaded_files_count_singular">%d پرونده بارگیری شد</string>
+  <string name="downloaded_files_count_plural">%d پرونده بارگیری شد</string>
   <string name="custom_download_error_message_for_authentication_failed">پروندهٔ ZIM بارگیری نشد. لطفاً برنامه را دوباره از فروشگاه گوگل پلی نصب کنید.</string>
   <string name="save">ذخیره</string>
   <string name="note">یادداشت</string>
@@ -307,10 +303,8 @@
   <string name="ext_storage_permission_not_granted">خطا: اجازهٔ دسترسی به فضای ذخیره‌سازی داده نشده است</string>
   <string name="notes_deletion_successful">کل پوشهٔ یادداشت‌ها حذف شد</string>
   <string name="notes_deletion_unsuccessful">برخی پرونده‌ها حذف نشدند</string>
-  <plurals name="book_count">
-    <item quantity="one">%d کتاب</item>
-    <item quantity="other">%d کتاب</item>
-  </plurals>
+  <string name="book_count_singular">%d کتاب</string>
+  <string name="book_count_plural">%d کتاب</string>
   <string name="books_count">%d کتاب</string>
   <string name="discovery_initiated">جستجوی دستگاه‌های دیگر آغاز شد</string>
   <string name="discovery_failed">جستجوی دستگاه‌های دیگر ناموفق بود</string>

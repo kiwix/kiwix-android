@@ -47,7 +47,6 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.CustomAccessibilityAction
 import androidx.compose.ui.semantics.contentDescription
@@ -106,9 +105,12 @@ fun LanguageItemRow(
         }
         LanguageTitles(language, Modifier.weight(1f))
         Text(
-          text = pluralStringResource(
-            R.plurals.book_count,
-            language.occurencesOfLanguage,
+          text = stringResource(
+            if (language.occurencesOfLanguage == 1) {
+              R.string.book_count_singular
+            } else {
+              R.string.book_count_plural
+            },
             language.occurencesOfLanguage
           ),
           modifier = Modifier.padding(start = ComposeDimens.EIGHT_DP),

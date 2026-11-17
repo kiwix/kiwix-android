@@ -294,10 +294,8 @@
   <string name="ext_storage_permission_not_granted">Fout: opslagrechten zijn niet verleend</string>
   <string name="notes_deletion_successful">De gehele aantekeningenmap is verwijderd</string>
   <string name="notes_deletion_unsuccessful">Sommige bestanden zijn niet verwijderd</string>
-  <plurals name="book_count">
-    <item quantity="one">%d boek</item>
-    <item quantity="other">%d boeken</item>
-  </plurals>
+  <string name="book_count_singular">%d boek</string>
+  <string name="book_count_plural">%d boeken</string>
   <string name="books_count">%d boek(en)</string>
   <string name="discovery_initiated">Ontdekking gestart</string>
   <string name="discovery_failed">Ontdekking mislukt</string>

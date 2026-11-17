@@ -304,14 +304,10 @@
   <string name="paused_state">En pause</string>
   <string name="paused_offline_state">En pause (appareil hors ligne)</string>
   <string name="failed_state">Échec : %s</string>
-  <plurals name="downloading_files_count">
-    <item quantity="one">%d fichier en cours de téléchargement</item>
-    <item quantity="other">%d fichiers en cours de téléchargement</item>
-  </plurals>
-  <plurals name="downloaded_files_count">
-    <item quantity="one">%d fichier téléchargé</item>
-    <item quantity="other">%d fichiers téléchargés</item>
-  </plurals>
+  <string name="downloading_files_count_singular">%d fichier en cours de téléchargement</string>
+  <string name="downloading_files_count_plural">%d fichiers en cours de téléchargement</string>
+  <string name="downloaded_files_count_singular">%d fichier téléchargé</string>
+  <string name="downloaded_files_count_plural">%d fichiers téléchargés</string>
   <string name="custom_download_error_message_for_authentication_failed">Le fichier ZIM n’a pas pu être téléchargé, veuillez essayer de réinstaller l’application depuis le Play Store.</string>
   <string name="save">Enregistrer</string>
   <string name="note">Note</string>
@@ -334,9 +330,8 @@
   <string name="ext_storage_permission_not_granted">Erreur : permissions de stockage non accordées</string>
   <string name="notes_deletion_successful">Dossier de notes entièrement supprimé</string>
   <string name="notes_deletion_unsuccessful">Certains fichiers n’ont pas été supprimés</string>
-  <plurals name="book_count">
-    <item quantity="other">un= %d livre</item>
-  </plurals>
+  <string name="book_count_singular">%d livre</string>
+  <string name="book_count_plural">%d livres</string>
   <string name="books_count">%d livre(s)</string>
   <string name="discovery_initiated">Découverte mise en place</string>
   <string name="discovery_failed">La découverte a échoué</string>

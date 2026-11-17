@@ -287,14 +287,10 @@
   <string name="paused_state">متوقف مؤقتًا</string>
   <string name="paused_offline_state">تم الإيقاف المؤقت (الجهاز غير متصل بالإنترنت)</string>
   <string name="failed_state">فشل: %s</string>
-  <plurals name="downloading_files_count">
-    <item quantity="one">%d ملف يتم تنزيله</item>
-    <item quantity="other"> %d ملف يتم تنزيله</item>
-  </plurals>
-  <plurals name="downloaded_files_count">
-    <item quantity="one">%d ملف تم تنزيله</item>
-    <item quantity="other"> %d ملف تم تنزيله</item>
-  </plurals>
+  <string name="downloading_files_count_singular">%d ملف يتم تنزيله</string>
+  <string name="downloading_files_count_plural">%d ملف يتم تنزيله</string>
+  <string name="downloaded_files_count_singular">%d ملف تم تنزيله</string>
+  <string name="downloaded_files_count_plural">%d ملف تم تنزيله</string>
   <string name="custom_download_error_message_for_authentication_failed">تعذر تنزيل ملف ZIM. يُرجى إعادة تثبيت التطبيق من متجر Play.</string>
   <string name="save">حفظ</string>
   <string name="note">ملاحظة</string>
@@ -317,10 +313,8 @@
   <string name="ext_storage_permission_not_granted">خطأ: إذن التخزين لم يمنح</string>
   <string name="notes_deletion_successful">{تم حذف} حُذف مجلد الملاحظات بالكامل</string>
   <string name="notes_deletion_unsuccessful"> بعض الملفات لم تحذف { لم تحذف بعض الملفات}</string>
-  <plurals name="book_count">
-    <item quantity="one">%d كتاب</item>
-    <item quantity="other"> %d كتب</item>
-  </plurals>
+  <string name="book_count_singular">%d كتاب</string>
+  <string name="book_count_plural">%d كتب</string>
   <string name="books_count">%d كتاب</string>
   <string name="discovery_initiated">بدأ الاكتشاف</string>
   <string name="discovery_failed">فشل الاكتشاف</string>

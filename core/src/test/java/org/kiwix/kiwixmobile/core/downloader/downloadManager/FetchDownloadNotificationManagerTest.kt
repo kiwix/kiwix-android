@@ -39,6 +39,7 @@ import org.junit.runner.RunWith
 import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.dao.DownloadRoomDao
+import org.kiwix.kiwixmobile.core.extensions.getCountString
 import org.kiwix.kiwixmobile.core.utils.ACTIVE_DOWNLOAD_GROUP_KEY
 import org.kiwix.kiwixmobile.core.utils.DOWNLOAD_NOTIFICATION_CHANNEL_ID
 import org.robolectric.RobolectricTestRunner
@@ -124,7 +125,11 @@ class FetchDownloadNotificationManagerTest {
     assertEquals(ACTIVE_DOWNLOAD_GROUP_KEY, notification.group)
     assertTrue(NotificationCompat.isGroupSummary(notification))
     assertEquals(
-      context.resources.getQuantityString(R.plurals.downloading_files_count, 1, 1),
+      context.resources.getCountString(
+        R.string.downloading_files_count_singular,
+        R.string.downloading_files_count_plural,
+        1
+      ),
       notification.extras.getCharSequence(Notification.EXTRA_TITLE).toString()
     )
     assertEquals(
@@ -152,7 +157,11 @@ class FetchDownloadNotificationManagerTest {
     assertTrue(result)
     val notification = builder.build()
     assertEquals(
-      context.resources.getQuantityString(R.plurals.downloading_files_count, 3, 3),
+      context.resources.getCountString(
+        R.string.downloading_files_count_singular,
+        R.string.downloading_files_count_plural,
+        3
+      ),
       notification.extras.getCharSequence(Notification.EXTRA_TITLE).toString()
     )
     assertEquals(
@@ -182,7 +191,11 @@ class FetchDownloadNotificationManagerTest {
     assertTrue(result)
     val notification = builder.build()
     assertEquals(
-      context.resources.getQuantityString(R.plurals.downloading_files_count, 1, 1),
+      context.resources.getCountString(
+        R.string.downloading_files_count_singular,
+        R.string.downloading_files_count_plural,
+        1
+      ),
       notification.extras.getCharSequence(Notification.EXTRA_TITLE).toString()
     )
     assertEquals(

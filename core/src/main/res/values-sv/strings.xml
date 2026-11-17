@@ -296,10 +296,8 @@
   <string name="ext_storage_permission_not_granted">Fel: Lagringsbehörigheter har inte beviljats</string>
   <string name="notes_deletion_successful">Raderade hela anteckningsmappen</string>
   <string name="notes_deletion_unsuccessful">Vissa filer raderades inte</string>
-  <plurals name="book_count">
-    <item quantity="one">%d bok</item>
-    <item quantity="other">%d böcker</item>
-  </plurals>
+  <string name="book_count_singular">%d bok</string>
+  <string name="book_count_plural">%d böcker</string>
   <string name="books_count">%d bok/böcker</string>
   <string name="discovery_initiated">Inleder upptäckt</string>
   <string name="discovery_failed">Upptäckt misslyckades</string>

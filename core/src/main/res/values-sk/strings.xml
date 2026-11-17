@@ -289,12 +289,8 @@
   <string name="ext_storage_permission_not_granted">Chyba: Oprávnenie k úložisku nebolo udelené</string>
   <string name="notes_deletion_successful">Zmazaný celý adresár s poznámkami</string>
   <string name="notes_deletion_unsuccessful">Niektoré súbory neboli zmazané</string>
-  <plurals name="book_count">
-    <item quantity="one">%d kniha</item>
-    <item quantity="few">%d knihy</item>
-    <item quantity="many">%d knihy</item>
-    <item quantity="other">%d kníh</item>
-  </plurals>
+  <string name="book_count_singular">%d kniha</string>
+  <string name="book_count_plural">%d kníh</string>
   <string name="books_count">%d kníh</string>
   <string name="discovery_initiated">Objavovanie začaté</string>
   <string name="discovery_failed">Objavovanie zlyhalo</string>

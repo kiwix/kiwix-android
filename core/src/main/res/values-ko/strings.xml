@@ -301,9 +301,8 @@
   <string name="ext_storage_permission_not_granted">오류: 스토리지 권한이 없습니다</string>
   <string name="notes_deletion_successful">전체 노트 폴더가 삭제되었습니다.</string>
   <string name="notes_deletion_unsuccessful">일부 파일은 삭제되지 않았습니다</string>
-  <plurals name="book_count">
-    <item quantity="other">책 %d권</item>
-  </plurals>
+  <string name="book_count_singular">책 %d권</string>
+  <string name="book_count_plural">책 %d권</string>
   <string name="books_count">책 %d권</string>
   <string name="discovery_initiated">발견을 시작했습니다</string>
   <string name="discovery_failed">발견을 실패했습니다</string>

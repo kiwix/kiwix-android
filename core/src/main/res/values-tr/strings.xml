@@ -311,10 +311,8 @@
   <string name="ext_storage_permission_not_granted">Hata: Depolama izinleri verilmemiş</string>
   <string name="notes_deletion_successful">Tüm notlar klasörü silindi</string>
   <string name="notes_deletion_unsuccessful">Bazı dosyalar silinmedi</string>
-  <plurals name="book_count">
-    <item quantity="one">%d kitap</item>
-    <item quantity="other">%d kitap</item>
-  </plurals>
+  <string name="book_count_singular">%d kitap</string>
+  <string name="book_count_plural">%d kitap</string>
   <string name="books_count">%d kitap</string>
   <string name="discovery_initiated">Keşif başladı</string>
   <string name="discovery_failed">Keşif başarısız oldu</string>
