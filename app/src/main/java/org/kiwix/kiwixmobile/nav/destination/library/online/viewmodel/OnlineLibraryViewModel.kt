@@ -326,6 +326,17 @@ class OnlineLibraryViewModel @Inject constructor(
     }
   }
 
+  private fun clearAvailableBooks() {
+    _uiState.update { current ->
+      val items = current.items.filterNot { it is BookItem }
+      current.copy(
+        items = items,
+        noContentMessage = noContentMessageWhenItemsComesFromOnlineSource(items),
+        showNoContent = items.isEmpty()
+      )
+    }
+  }
+
   private fun noContentMessageWhenItemsComesFromOnlineSource(items: List<LibraryListItem>): String =
     when {
       items.isEmpty() -> if (connectivityManager.isNetworkAvailable()) {
@@ -410,30 +421,30 @@ class OnlineLibraryViewModel @Inject constructor(
         )
         totalPages = result.totalPages
         networkBooks.value = result.books
+        if (result.books.isEmpty()) {
+          clearAvailableBooks()
+        }
         _uiState.update {
           it.copy(
             showScanningProgressBar = false,
             isRefreshing = false,
             isLoadingMore = result.isLoadingMore,
-            showNoContent = result.books.isEmpty(),
+            showNoContent = result.books.isEmpty() && it.items.isEmpty(),
             noContentMessage = if (result.books.isEmpty()) {
-              noContentMessageWhenItemsComesFromOnlineSource(emptyList())
+              noContentMessageWhenItemsComesFromOnlineSource(it.items)
             } else {
               ""
             }
           )
         }
-        if (result.books.isEmpty()) {
-          updateLibraryItems(emptyList())
-        }
       }
 
       is TabSelectedResult.FetchNeeded -> {
         onlineLibraryTabsUseCase.resetLoadingMore()
+        clearAvailableBooks()
         _uiState.update {
           it.copy(
             isLoadingMore = false,
-            items = emptyList(),
             showNoContent = false,
             noContentMessage = "",
             showScanningProgressBar = true,
@@ -571,7 +582,7 @@ class OnlineLibraryViewModel @Inject constructor(
 
       is OnlineLibraryState.Error -> {
         if (networkBooks.value.isEmpty()) {
-          updateLibraryItems(emptyList())
+          clearAvailableBooks()
         }
         resetDownloadState()
       }
@@ -597,7 +608,7 @@ class OnlineLibraryViewModel @Inject constructor(
       }
       resetDownloadState()
       if (result.updatedBooks.isEmpty() || isAllRemoteBooksAlreadyDownloaded(result.updatedBooks)) {
-        updateLibraryItems(emptyList())
+        clearAvailableBooks()
       }
     } else {
       resetDownloadState()

@@ -991,6 +991,90 @@ class OnlineLibraryViewModelTest {
   }
 
   @Nested
+  inner class PreserveActiveDownloads {
+    private fun populateLibrary(): List<LibraryListItem> {
+      val downloadItems = listOf(
+        LibraryListItem.DividerItem(Long.MAX_VALUE, "Downloading"),
+        mockk<LibraryListItem.LibraryDownloadItem>(relaxed = true)
+      )
+      viewModel.setUiStateForTest(
+        viewModel.uiState.value.copy(
+          items = downloadItems + mockk<LibraryListItem.BookItem>(relaxed = true)
+        )
+      )
+      return downloadItems
+    }
+
+    private fun prepareLanguageTabs() {
+      viewModel.setUiStateForTest(
+        viewModel.uiState.value.copy(
+          tabs = listOf(
+            OnlineLibraryViewModel.LanguageTab("eng", "ENGLISH"),
+            OnlineLibraryViewModel.LanguageTab("fra", "FRENCH")
+          ),
+          selectedTabIndex = 0
+        )
+      )
+    }
+
+    @Test
+    fun `empty catalog response keeps active downloads visible`() = runTest {
+      val expectedItems = populateLibrary()
+      viewModel.handleLibraryState(
+        Success(
+          request = OnlineLibraryRequest(isLoadMoreItem = false, page = 0),
+          books = emptyList(),
+          totalPages = 1
+        )
+      )
+
+      assertThat(viewModel.uiState.value.items).containsExactlyElementsOf(expectedItems)
+      assertFalse(viewModel.uiState.value.showNoContent)
+      assertThat(viewModel.uiState.value.noContentMessage).isEmpty()
+    }
+
+    @Test
+    fun `catalog error keeps active downloads visible`() = runTest {
+      val expectedItems = populateLibrary()
+      viewModel.handleLibraryState(
+        OnlineLibraryViewModel.OnlineLibraryState.Error(
+          request = OnlineLibraryRequest(isLoadMoreItem = false, page = 0)
+        )
+      )
+
+      assertThat(viewModel.uiState.value.items).containsExactlyElementsOf(expectedItems)
+      assertFalse(viewModel.uiState.value.showNoContent)
+    }
+
+    @Test
+    fun `switching to an unloaded language tab keeps active downloads visible`() = runTest {
+      val expectedItems = populateLibrary()
+      prepareLanguageTabs()
+
+      viewModel.selectTab(1)
+
+      assertThat(viewModel.uiState.value.items).containsExactlyElementsOf(expectedItems)
+      assertTrue(viewModel.uiState.value.showScanningProgressBar)
+    }
+
+    @Test
+    fun `switching to an empty cached language tab keeps active downloads visible`() = runTest {
+      val expectedItems = populateLibrary()
+      prepareLanguageTabs()
+      viewModel.tabDataMap["fra"] = OnlineLibraryViewModel.TabData(
+        books = emptyList(),
+        isLoaded = true
+      )
+
+      viewModel.selectTab(1)
+
+      assertThat(viewModel.uiState.value.items).containsExactlyElementsOf(expectedItems)
+      assertFalse(viewModel.uiState.value.showNoContent)
+      assertFalse(viewModel.uiState.value.showScanningProgressBar)
+    }
+  }
+
+  @Nested
   inner class HandleLoadMore {
     @Test
     fun `when already loading more then does nothing`() = runTest {
