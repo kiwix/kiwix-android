@@ -86,9 +86,10 @@ abstract class PeerGroupHandshake(
 
   private fun readHandshakeAndExchangeMetaData(): InetAddress? =
     try {
-      ServerSocket(PEER_HANDSHAKE_PORT)
+      ServerSocket()
         .use { serverSocket ->
           serverSocket.reuseAddress = true
+          serverSocket.bind(InetSocketAddress(PEER_HANDSHAKE_PORT))
           val server = serverSocket.accept()
           val objectInputStream = ObjectInputStream(server.getInputStream())
           val kiwixHandShakeMessage = objectInputStream.readObject()

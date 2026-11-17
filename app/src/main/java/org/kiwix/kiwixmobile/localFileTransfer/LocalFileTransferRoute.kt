@@ -18,9 +18,6 @@
 
 package org.kiwix.kiwixmobile.localFileTransfer
 
-import android.Manifest.permission.ACCESS_FINE_LOCATION
-import android.Manifest.permission.ACCESS_LOCAL_NETWORK
-import android.Manifest.permission.NEARBY_WIFI_DEVICES
 import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
 import android.app.Activity
 import android.content.Context
@@ -41,7 +38,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.MultiplePermissionsState
 import com.google.accompanist.permissions.PermissionState
+import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import com.google.accompanist.permissions.rememberPermissionState
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.R.string
@@ -73,7 +72,7 @@ internal fun LocalFileTransferScreenRoute(
   }
   val context = LocalContext.current
   val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-  val locationPermission = rememberPermissionState(viewModel.locationPermission)
+  val locationPermissions = rememberMultiplePermissionsState(viewModel.locationPermission)
   val storagePermission = if (uiState.isWritePermissionRequired) {
     rememberPermissionState(WRITE_EXTERNAL_STORAGE)
   } else {
@@ -97,8 +96,8 @@ internal fun LocalFileTransferScreenRoute(
         )
 
         is RequestPermission -> handlePermissionRequest(
-          permission = event.permission,
-          locationPermission = locationPermission,
+          permissions = event.permissions,
+          locationPermissions = locationPermissions,
           storagePermission = storagePermission,
           onPermissionGranted = viewModel::onPermissionGranted,
           onPermissionRationaleRequired = viewModel::onPermissionRationaleRequired
@@ -184,19 +183,19 @@ private fun handleDialog(
 
 @OptIn(ExperimentalPermissionsApi::class)
 private fun handlePermissionRequest(
-  permission: String,
-  locationPermission: PermissionState,
+  permissions: List<String>,
+  locationPermissions: MultiplePermissionsState,
   storagePermission: PermissionState?,
   onPermissionGranted: () -> Unit,
-  onPermissionRationaleRequired: (String) -> Unit
+  onPermissionRationaleRequired: (List<String>) -> Unit
 ) {
-  val state = when (permission) {
-    NEARBY_WIFI_DEVICES, ACCESS_FINE_LOCATION, ACCESS_LOCAL_NETWORK -> locationPermission
-    WRITE_EXTERNAL_STORAGE -> storagePermission
-    else -> null
-  } ?: return
-
-  state.handlePermissionRequest(onPermissionGranted) {
-    onPermissionRationaleRequired(state.permission)
+  if (permissions.contains(WRITE_EXTERNAL_STORAGE)) {
+    storagePermission?.handlePermissionRequest(onPermissionGranted) {
+      onPermissionRationaleRequired(permissions)
+    }
+  } else {
+    locationPermissions.handlePermissionRequest(onPermissionGranted) {
+      onPermissionRationaleRequired(permissions)
+    }
   }
 }
