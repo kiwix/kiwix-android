@@ -24,6 +24,7 @@ import android.content.res.Configuration
 import android.content.res.Resources
 import android.os.Build
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.os.LocaleListCompat
 import kotlinx.coroutines.flow.first
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import java.util.Locale
@@ -45,6 +46,17 @@ object LocaleHelper {
         getSystemLocale(context)
       }
     }
+
+  @JvmStatic
+  suspend fun syncPrefLanguageWithAppLocales(
+    kiwixDataStore: KiwixDataStore,
+    appLocales: LocaleListCompat = AppCompatDelegate.getApplicationLocales()
+  ) {
+    val appLanguage = appLocales[0]?.language ?: Locale.ROOT.language
+    if (kiwixDataStore.prefLanguage.first() != appLanguage) {
+      kiwixDataStore.setPrefLanguage(appLanguage)
+    }
+  }
 
   fun getSystemLocale(context: Context): Locale {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
