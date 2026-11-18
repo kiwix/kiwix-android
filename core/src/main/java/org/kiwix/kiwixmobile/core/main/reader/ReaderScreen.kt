@@ -1309,6 +1309,7 @@ fun TabItemView(
       TabItemHeader(title, index, webView, onReaderAction)
       TabItemCard(
         webView,
+        title,
         showTabSwitcher,
         onReaderAction,
         index
@@ -1403,6 +1404,7 @@ private fun TabFaviconOrBadge(
 @Composable
 private fun ColumnScope.TabItemCard(
   webView: KiwixWebView,
+  title: String,
   showTabSwitcher: Boolean,
   onReaderAction: (ReaderAction) -> Unit,
   index: Int
@@ -1428,7 +1430,7 @@ private fun ColumnScope.TabItemCard(
               layoutParams = FrameLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT)
               // Prevent clicking inside the webView when tabs are active.
               setOnClickListener { onReaderAction(SelectTab(index)) }
-              contentDescription = webView.contentDescription
+              contentDescription = title
             }
             addView(clickableView)
           }
