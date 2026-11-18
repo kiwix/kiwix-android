@@ -3,8 +3,8 @@ include(
   ":app",
   ":branded",
   ":install_time_asset",
-  ":objectboxmigration",
-  ":defaultmigration",
+  ":playstoremodule",
+  ":standalonemodule",
   ":benchmark"
 )
 rootProject.name = "kiwix-android"

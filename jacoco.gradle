@@ -44,7 +44,7 @@ tasks.register('jacocoInstrumentationTestReport', JacocoReport) {
   def fileFilter = ['**/R.class', '**/R$*.class', '**/BuildConfig.*', '**/Manifest*.*', '**/*Test*.*', 'android/**/*.*']
 
   rootProject.subprojects.each { proj ->
-    if (proj.name != "defaultmigration") {
+    if (proj.name != "standalonemodule") {
       // "branded" builds the "customexample" flavor, so its variant is "customexampleDebug"
       // rather than plain "debug" like every other module.
       def variant = proj.name == "branded" ? "customexampleDebug" : "debug"

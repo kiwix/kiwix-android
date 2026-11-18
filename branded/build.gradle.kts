@@ -72,8 +72,9 @@ androidComponents {
 }
 
 dependencies {
-  // Keep the migration for branded apps, since they are released on playStore.
-  implementation(project(":objectboxmigration"))
+  // Branded apps are released on playStore, so they get :playstoremodule (ObjectBox migration,
+  // in-app review, and any future GMS-dependent feature) rather than :standalonemodule.
+  implementation(project(":playstoremodule"))
 }
 
 fun ApplicationProductFlavor.createDownloadTask(

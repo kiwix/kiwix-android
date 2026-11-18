@@ -34,7 +34,7 @@ val disableSingingRequested = providers.gradleProperty("disableSigning").isPrese
 val autoModifiedTrackedFiles = listOf(
   File("$rootDir/core/src/main/res/values-b+be+tarask/strings.xml"),
   File("$rootDir/core/src/main/res/values-b+be+tarask+old/strings.xml"),
-  File("$rootDir/objectboxmigration/objectbox-models/default.json")
+  File("$rootDir/playstoremodule/objectbox-models/default.json")
 )
 val trackedFileBackupDir = File("$rootDir/build/tracked-file-backups")
 
@@ -156,16 +156,16 @@ androidComponents {
 dependencies {
   androidTestImplementation(Libs.leakcanary_android_instrumentation)
   androidTestImplementation(Libs.shark_android)
-  // inject migration module in test cases.
-  androidTestImplementation(project(":objectboxmigration"))
-  // Inject the migration module for the debug variant, as it is used by the test module.
-  debugImplementation(project(":objectboxmigration"))
-  // inject default module for all variant.
-  releaseImplementation(project(":defaultmigration"))
-  add("nightlyImplementation", project(":defaultmigration"))
-  add("standaloneImplementation", project(":defaultmigration"))
-  // inject migration module in playStore variant.
-  add("playStoreImplementation", project(":objectboxmigration"))
+  // inject playstoremodule module in test cases.
+  androidTestImplementation(project(":playstoremodule"))
+  // Inject the playstoremodule module for the debug variant, as it is used by the test module.
+  debugImplementation(project(":playstoremodule"))
+  // inject standalonemodule module for all other variants.
+  releaseImplementation(project(":standalonemodule"))
+  add("nightlyImplementation", project(":standalonemodule"))
+  add("standaloneImplementation", project(":standalonemodule"))
+  // inject playstoremodule module in playStore variant.
+  add("playStoreImplementation", project(":playstoremodule"))
 
   // Document File
   implementation(Libs.select_folder_document_file)

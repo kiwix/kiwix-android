@@ -54,7 +54,6 @@ dependencies {
   implementation(Libs.kotlinx_coroutines_android)
   implementation(Libs.zxing)
   implementation(Libs.CORE_SPLASH_SCREEN)
-  implementation(Libs.PLAYSTORE_REVIEW_KTX)
   api(Libs.MEDIA3_SESSION)
   api(Libs.MEDIA3_COMMON)
 }
