@@ -35,5 +35,5 @@ object Config {
   // Version Information
   const val versionMajor = 4 // Major version component of the app's version name and version code.
   const val versionMinor = 0 // Minor version component of the app's version name and version code.
-  const val versionPatch = 0 // Patch version component of the app's version name and version code.
+  const val versionPatch = 1 // Patch version component of the app's version name and version code.
 }
