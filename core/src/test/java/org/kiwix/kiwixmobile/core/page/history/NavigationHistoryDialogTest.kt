@@ -20,12 +20,10 @@ package org.kiwix.kiwixmobile.core.page.history
 
 import android.os.Build
 import androidx.annotation.StringRes
-import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsEnabled
 import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.assertTextEquals
-import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
@@ -113,11 +111,13 @@ class NavigationHistoryDialogTest {
     )
     setDialogScreen(navigationHistoryList = items)
     // Verify the page title text is displayed
-    composeTestRule.onNodeWithText("Kiwix Article").assertIsDisplayed()
+    composeTestRule
+      .onNodeWithTag("${NAVIGATION_HISTORY_ITEM_TITLE_TESTING_TAG}0", useUnmergedTree = true)
+      .assertTextEquals("Kiwix Article")
 
     composeTestRule
-      .onAllNodes(hasContentDescription(context.getString(R.string.fav_icon), substring = true))
-      .assertCountEquals(0)
+      .onNodeWithTag("${NAVIGATION_HISTORY_ITEM_FAVICON_TESTING_TAG}0", useUnmergedTree = true)
+      .assertIsDisplayed()
   }
 
   @Test

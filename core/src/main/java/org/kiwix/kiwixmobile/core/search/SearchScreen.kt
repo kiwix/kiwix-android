@@ -19,7 +19,6 @@
 package org.kiwix.kiwixmobile.core.search
 
 import android.annotation.SuppressLint
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
@@ -63,7 +62,6 @@ import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.font.FontWeight
@@ -319,7 +317,6 @@ private fun NoSearchResultView() {
   )
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun SearchListItem(
   searchListItem: SearchListItem,

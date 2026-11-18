@@ -686,7 +686,6 @@ private fun formatTime(millis: Long): String {
   return String.format(Locale.US, "%02d:%02d", minutes, seconds)
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Suppress("LongMethod", "MagicNumber")
 @Composable
 private fun TtsControls(

@@ -70,6 +70,7 @@ import org.kiwix.kiwixmobile.core.utils.dialog.KiwixBasicDialogFrame
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
 
 const val NAVIGATION_HISTORY_ITEM_TITLE_TESTING_TAG = "navigationHistoryItemTitleTestingTag"
+const val NAVIGATION_HISTORY_ITEM_FAVICON_TESTING_TAG = "navigationHistoryItemFaviconTestingTag"
 
 @Suppress("ComposableLambdaParameterNaming")
 @OptIn(ExperimentalMaterial3Api::class)
@@ -189,6 +190,7 @@ private fun NavigationHistoryItem(
       contentDescription = null,
       modifier = Modifier
         .size(PAGE_LIST_ITEM_FAVICON_SIZE)
+        .testTag("$NAVIGATION_HISTORY_ITEM_FAVICON_TESTING_TAG$index")
     )
 
     Spacer(modifier = Modifier.width(SIXTEEN_DP))
