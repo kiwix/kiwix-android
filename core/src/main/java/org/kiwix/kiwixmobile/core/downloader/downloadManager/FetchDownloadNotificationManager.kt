@@ -125,7 +125,11 @@ class FetchDownloadNotificationManager @Inject constructor(
     val activeDownloadNotifications = downloadNotifications.filter {
       it.isDownloading || it.isPaused || it.isQueued
     }
-    if (activeDownloadNotifications.isEmpty()) return false
+    if (activeDownloadNotifications.isEmpty()) {
+      downloadNotificationManager.cancel(groupId)
+      downloadNotificationManager.cancel(DOWNLOAD_SERVICE_NOTIFICATION_ID)
+      return false
+    }
     val style = NotificationCompat.InboxStyle()
     activeDownloadNotifications.forEach { style.addLine(it.title) }
     notificationBuilder

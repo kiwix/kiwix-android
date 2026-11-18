@@ -19,6 +19,7 @@
 package org.kiwix.kiwixmobile.core.downloader.downloadManager
 
 import android.app.Notification
+import android.app.NotificationManager
 import android.content.Context
 import android.os.Build
 import androidx.core.app.NotificationCompat
@@ -92,6 +93,28 @@ class FetchDownloadNotificationManagerTest {
 
     assertFalse(result)
     assertNull(builder.build().group)
+  }
+
+  @Test
+  fun `cancels a leftover group summary once no download is active`() {
+    val notificationManager =
+      context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+    val leftoverSummary = newBuilder()
+      .setSmallIcon(android.R.drawable.stat_sys_download)
+      .setGroup(ACTIVE_DOWNLOAD_GROUP_KEY)
+      .setGroupSummary(true)
+      .build()
+    notificationManager.notify(ZERO_GROUP_ID, leftoverSummary)
+    notificationManager.notify(DOWNLOAD_SERVICE_NOTIFICATION_ID, leftoverSummary)
+
+    fetchDownloadNotificationManager.updateGroupSummaryNotification(
+      ZERO_GROUP_ID,
+      newBuilder(),
+      listOf(downloadNotification(Status.COMPLETED, "Completed book")),
+      context
+    )
+
+    assertTrue(notificationManager.activeNotifications.isEmpty())
   }
 
   @Test
