@@ -89,6 +89,7 @@ import org.kiwix.kiwixmobile.core.main.ZIM_HOST_DEEP_LINK_SCHEME
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader.Companion.CONTENT_PREFIX
 import org.kiwix.kiwixmobile.core.ui.theme.AppleRed
 import org.kiwix.kiwixmobile.core.utils.HUNDERED
+import org.kiwix.kiwixmobile.core.utils.LocaleHelper
 import org.kiwix.kiwixmobile.core.utils.StorageDeviceProvider
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogHost
 import org.kiwix.kiwixmobile.nav.destination.library.local.ExternalZimIntentHandler
@@ -220,6 +221,7 @@ class KiwixMainActivity : CoreMainActivity() {
     lifecycleScope.launch {
       migrateInternalToPublicAppDirectory()
       migratedToPerAppLanguage()
+      LocaleHelper.syncPrefLanguageWithAppLocales(kiwixDataStore)
     }
     // run the migration on background thread to avoid any UI related issues.
     CoroutineScope(ioDispatcher).launch {

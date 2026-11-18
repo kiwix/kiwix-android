@@ -24,6 +24,8 @@ import android.content.res.Resources
 import android.os.LocaleList
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.os.LocaleListCompat
+import io.mockk.clearMocks
+import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.flow.flowOf
@@ -44,6 +46,7 @@ class LocaleHelperTest {
 
   @BeforeEach
   fun setup() {
+    clearMocks(kiwixDataStore)
     configuration.setLocales(LocaleList(Locale.ENGLISH))
     every { context.resources } returns resources
     every { resources.configuration } returns configuration
@@ -89,6 +92,43 @@ class LocaleHelperTest {
     val locale = LocaleHelper.getAppLocale(context, kiwixDataStore)
 
     assertEquals(Locale.ENGLISH.language, locale.language)
+  }
+
+  @Test
+  fun `syncPrefLanguageWithAppLocales resets stale prefLanguage when app locales is empty`() =
+    runTest {
+      every { kiwixDataStore.prefLanguage } returns flowOf("en")
+
+      LocaleHelper.syncPrefLanguageWithAppLocales(
+        kiwixDataStore,
+        LocaleListCompat.getEmptyLocaleList()
+      )
+
+      coVerify { kiwixDataStore.setPrefLanguage(Locale.ROOT.language) }
+    }
+
+  @Test
+  fun `syncPrefLanguageWithAppLocales stores app locale language when it differs`() = runTest {
+    every { kiwixDataStore.prefLanguage } returns flowOf("en")
+
+    LocaleHelper.syncPrefLanguageWithAppLocales(
+      kiwixDataStore,
+      LocaleListCompat.forLanguageTags("fr")
+    )
+
+    coVerify { kiwixDataStore.setPrefLanguage("fr") }
+  }
+
+  @Test
+  fun `syncPrefLanguageWithAppLocales does nothing when already in sync`() = runTest {
+    every { kiwixDataStore.prefLanguage } returns flowOf("fr")
+
+    LocaleHelper.syncPrefLanguageWithAppLocales(
+      kiwixDataStore,
+      LocaleListCompat.forLanguageTags("fr")
+    )
+
+    coVerify(exactly = 0) { kiwixDataStore.setPrefLanguage(any()) }
   }
 
   @Test
