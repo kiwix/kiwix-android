@@ -28,6 +28,7 @@ import androidx.test.core.app.ApplicationProvider
 import com.tonyodev.fetch2.Download
 import com.tonyodev.fetch2.DownloadNotification
 import com.tonyodev.fetch2.Status
+import com.tonyodev.fetch2.util.DEFAULT_NOTIFICATION_TIMEOUT_AFTER_RESET
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -47,6 +48,8 @@ import org.kiwix.kiwixmobile.core.utils.ACTIVE_DOWNLOAD_GROUP_KEY
 import org.kiwix.kiwixmobile.core.utils.DOWNLOAD_NOTIFICATION_CHANNEL_ID
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
+import org.robolectric.shadows.ShadowSystemClock
+import java.time.Duration
 
 @OptIn(ExperimentalCoroutinesApi::class)
 @RunWith(RobolectricTestRunner::class)
@@ -70,12 +73,24 @@ class FetchDownloadNotificationManagerTest {
     )
   }
 
-  private fun downloadNotification(status: Status, title: String) =
+  private fun downloadNotification(status: Status, title: String, notificationId: Int = title.hashCode()) =
     DownloadNotification().apply {
       this.status = status
       this.title = title
-      notificationId = title.hashCode()
+      this.notificationId = notificationId
     }
+
+  private fun advanceClockBy(millis: Long) {
+    ShadowSystemClock.advanceBy(Duration.ofMillis(millis))
+  }
+
+  private fun postSummary(vararg downloadNotifications: DownloadNotification) =
+    fetchDownloadNotificationManager.updateGroupSummaryNotification(
+      ZERO_GROUP_ID,
+      newBuilder(),
+      downloadNotifications.toList(),
+      context
+    )
 
   private fun newBuilder() = NotificationCompat.Builder(context, DOWNLOAD_NOTIFICATION_CHANNEL_ID)
 
@@ -288,6 +303,90 @@ class FetchDownloadNotificationManagerTest {
       listOf("Downloading book"),
       notification.extras.getCharSequenceArray(Notification.EXTRA_TEXT_LINES)?.map { it.toString() }
     )
+  }
+
+  @Test
+  fun `active download notification never times out so it is not re-posted as a new alert`() {
+    val builder = newBuilder()
+    val downloading = downloadNotification(Status.DOWNLOADING, "Wikipedia").apply {
+      namespace = "LibkiwixDefaultFetchNamespace"
+      progress = 10
+    }
+
+    fetchDownloadNotificationManager.updateNotification(builder, downloading, context)
+
+    val notification = builder.build()
+    assertEquals(DEFAULT_NOTIFICATION_TIMEOUT_AFTER_RESET, notification.timeoutAfter)
+    assertTrue(notification.flags and Notification.FLAG_ONLY_ALERT_ONCE != 0)
+  }
+
+  @Test
+  fun `skips re-posting a downloading notification within the repost interval`() {
+    val downloading = downloadNotification(Status.DOWNLOADING, "Wikipedia")
+
+    assertTrue(fetchDownloadNotificationManager.shouldUpdateNotification(downloading))
+    advanceClockBy(MIN_NOTIFICATION_REPOST_INTERVAL_MS - 1)
+    assertFalse(fetchDownloadNotificationManager.shouldUpdateNotification(downloading))
+    advanceClockBy(1)
+    assertTrue(fetchDownloadNotificationManager.shouldUpdateNotification(downloading))
+  }
+
+  @Test
+  fun `throttles each download notification independently`() {
+    val first = downloadNotification(Status.DOWNLOADING, "First", notificationId = 1)
+    val second = downloadNotification(Status.DOWNLOADING, "Second", notificationId = 2)
+
+    assertTrue(fetchDownloadNotificationManager.shouldUpdateNotification(first))
+    assertTrue(fetchDownloadNotificationManager.shouldUpdateNotification(second))
+    assertFalse(fetchDownloadNotificationManager.shouldUpdateNotification(first))
+    assertFalse(fetchDownloadNotificationManager.shouldUpdateNotification(second))
+  }
+
+  @Test
+  fun `posts a status change immediately even within the repost interval`() {
+    assertTrue(
+      fetchDownloadNotificationManager.shouldUpdateNotification(
+        downloadNotification(Status.DOWNLOADING, "Wikipedia")
+      )
+    )
+    assertTrue(
+      fetchDownloadNotificationManager.shouldUpdateNotification(
+        downloadNotification(Status.PAUSED, "Wikipedia")
+      )
+    )
+    assertTrue(
+      fetchDownloadNotificationManager.shouldUpdateNotification(
+        downloadNotification(Status.DOWNLOADING, "Wikipedia")
+      )
+    )
+  }
+
+  @Test
+  fun `never re-posts a completed download notification`() {
+    assertFalse(
+      fetchDownloadNotificationManager.shouldUpdateNotification(
+        downloadNotification(Status.COMPLETED, "Wikipedia")
+      )
+    )
+  }
+
+  @Test
+  fun `skips an unchanged group summary within the repost interval`() {
+    val downloading = downloadNotification(Status.DOWNLOADING, "Wikipedia")
+
+    assertTrue(postSummary(downloading))
+    assertFalse(postSummary(downloading))
+    advanceClockBy(MIN_NOTIFICATION_REPOST_INTERVAL_MS)
+    assertTrue(postSummary(downloading))
+  }
+
+  @Test
+  fun `posts the group summary immediately when the active downloads change`() {
+    val first = downloadNotification(Status.DOWNLOADING, "First", notificationId = 1)
+    val second = downloadNotification(Status.DOWNLOADING, "Second", notificationId = 2)
+
+    assertTrue(postSummary(first))
+    assertTrue(postSummary(first, second))
   }
 
   companion object {
