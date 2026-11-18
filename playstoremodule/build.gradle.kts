@@ -1,11 +1,27 @@
+import org.gradle.kotlin.dsl.apply
 import plugin.KiwixConfigurationPlugin
 
 plugins {
   id("com.android.library")
 }
+
+buildscript {
+  repositories {
+    google()
+    mavenCentral()
+    maven { setUrl("https://jitpack.io") }
+  }
+
+  dependencies {
+    classpath(Libs.objectbox_gradle_plugin)
+  }
+}
+
 plugins.apply(KiwixConfigurationPlugin::class)
+apply(plugin = "io.objectbox")
+
 android {
-  namespace = "org.kiwix.kiwixmobile.migration"
+  namespace = "org.kiwix.kiwixmobile.playstoremodule"
 
   defaultConfig {
     minSdk = Config.minSdk
@@ -23,6 +39,8 @@ android {
 }
 
 dependencies {
+  implementation(Libs.objectbox_kotlin)
+  implementation(Libs.PLAYSTORE_REVIEW_KTX)
   api(project(":core"))
 }
 

@@ -38,7 +38,7 @@ dependencies {
   implementation(Libs.espresso_core)
   implementation(Libs.uiautomator)
   implementation(Libs.BENCHMARK_MACRO_JUNIT4)
-  add("benchmarkImplementation", project(":objectboxmigration"))
+  add("benchmarkImplementation", project(":playstoremodule"))
 }
 
 androidComponents {

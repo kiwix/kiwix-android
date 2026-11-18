@@ -21,10 +21,8 @@ import android.app.Activity
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.ConnectivityManager
-import android.util.Log
 import androidx.core.net.toUri
 import androidx.lifecycle.lifecycleScope
-import com.google.android.play.core.review.ReviewManagerFactory
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import org.kiwix.kiwixmobile.core.compat.CompatHelper.Companion.getPackageInformation
@@ -37,17 +35,12 @@ import javax.inject.Inject
 const val VISITS_REQUIRED_TO_SHOW_RATE_DIALOG = 20
 const val READING_MILESTONE_THRESHOLD = 10
 
-// #5023: intentionally unscoped (was the app's custom @ActivityScope). A single binding can only
-// declare one @Scope, and this needs to resolve in both the legacy CoreActivityComponent (custom
-// @ActivityScope) and Hilt's ActivityComponent (@ActivityScoped) during the migration - no scope
-// annotation is the only one both accept. It's injected into exactly one field per Activity
-// (CoreMainActivity.rateDialogHandler), so losing the per-Activity instance cache here has no
-// observable effect.
 class RateDialogHandler @Inject constructor(
   private val activity: Activity,
   private val libkiwixBookOnDisk: LibkiwixBookOnDisk,
   private val kiwixDataStore: KiwixDataStore,
-  private val connectivityManager: ConnectivityManager
+  private val connectivityManager: ConnectivityManager,
+  private val inAppReviewFlow: InAppReviewFlow
 ) {
   fun checkForRateDialog() {
     (activity as CoreMainActivity).lifecycleScope.launch {
@@ -56,7 +49,7 @@ class RateDialogHandler @Inject constructor(
 
       if (shouldShowRateDialog(newCount) && connectivityManager.isNetworkAvailable()) {
         kiwixDataStore.setRateAppPromptShown()
-        launchInAppReviewFlow()
+        inAppReviewFlow.launch()
       }
     }
   }
@@ -124,27 +117,5 @@ class RateDialogHandler @Inject constructor(
     val twoWeeksInMillis = 14 * 24 * 60 * 60 * 1000L
     // Check if the time difference is at least 2 weeks
     return timeDifference >= twoWeeksInMillis
-  }
-
-  @Suppress("TooGenericExceptionCaught")
-  private fun launchInAppReviewFlow() {
-    try {
-      val reviewManager = ReviewManagerFactory.create(activity)
-      reviewManager.requestReviewFlow()
-        .addOnCompleteListener { requestTask ->
-          if (requestTask.isSuccessful) {
-            val reviewInfo = requestTask.result
-            reviewManager.launchReviewFlow(activity, reviewInfo)
-          } else {
-            Log.e(TAG, "Failed to request review flow", requestTask.exception)
-          }
-        }
-    } catch (exception: Exception) {
-      Log.e(TAG, "Unexpected error while launching in-app review", exception)
-    }
-  }
-
-  companion object {
-    private const val TAG = "RateDialogHandler"
   }
 }

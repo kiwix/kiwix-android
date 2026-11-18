@@ -39,13 +39,13 @@ class AllProjectConfigurer {
 
   fun applyPlugins(target: Project) {
     target.plugins.apply("org.jetbrains.kotlin.plugin.compose")
-    // `:objectboxmigration` applies kapt itself (see its build.gradle.kts) for the ObjectBox
+    // `:playstoremodule` applies kapt itself (see its build.gradle.kts) for the ObjectBox
     // annotation processor, which doesn't support ksp. Kotlin Gradle Plugin forces a task-graph
     // dependency between kapt's stub generation and ksp whenever both are applied to the same
     // module, which is circular here, so ksp is skipped for that module. Dagger/Hilt's compiler
     // only needs ksp everywhere else, now that the unused dagger-android/dagger-android-processor
     // (which forced kapt project-wide) has been removed - see issue #5023.
-    if (target.name != "objectboxmigration") {
+    if (target.name != "playstoremodule") {
       target.plugins.apply("com.google.devtools.ksp")
     } else {
       target.plugins.apply("com.android.legacy-kapt")
@@ -247,7 +247,7 @@ class AllProjectConfigurer {
       testImplementation(Libs.core_testing)
       compileOnly(Libs.javax_annotation_api)
       implementation(Libs.HILT_ANDROID)
-      // `:objectboxmigration`'s `DatabaseModule.providesBoxStore()` has an `@Provides` method
+      // `:playstoremodule`'s `DatabaseModule.providesBoxStore()` has an `@Provides` method
       // whose body references the ObjectBox-generated `MyObjectBox`, so the annotation
       // processor still needs to run there to emit `DatabaseModule_ProvidesBoxStoreFactory`.
       // It has to run via kapt rather than ksp in this one module though: ksp and kapt would
@@ -255,7 +255,7 @@ class AllProjectConfigurer {
       // exist, kapt's stub generation is forced to wait on ksp by Kotlin Gradle Plugin), which
       // is circular. A single kaptDebugKotlin task can run both the ObjectBox and Hilt
       // annotation processors without that conflict.
-      if (target.name != "objectboxmigration") {
+      if (target.name != "playstoremodule") {
         ksp(Libs.HILT_ANDROID_COMPILER)
       } else {
         kapt(Libs.HILT_ANDROID_COMPILER)
@@ -266,7 +266,7 @@ class AllProjectConfigurer {
       implementation(Libs.roomKtx)
       annotationProcessor(Libs.roomCompiler)
       implementation(Libs.roomRuntime)
-      if (target.name != "objectboxmigration") {
+      if (target.name != "playstoremodule") {
         ksp(Libs.roomCompiler)
       }
       implementation(Libs.tracing)

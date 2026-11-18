@@ -13,7 +13,7 @@ repositories {
 dependencies {
   implementation("com.android.tools.build:gradle:9.4.0")
   implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:2.4.10")
-  // Provides AGP's kapt plugin (`com.android.legacy-kapt`), used by `:objectboxmigration`.
+  // Provides AGP's kapt plugin (`com.android.legacy-kapt`), used by `:playstoremodule` (ObjectBox).
   implementation("com.android.tools.build:gradle-kotlin:9.4.0")
   implementation("com.google.devtools.ksp:com.google.devtools.ksp.gradle.plugin:2.3.13")
   implementation("com.google.dagger:hilt-android-gradle-plugin:2.60.1")

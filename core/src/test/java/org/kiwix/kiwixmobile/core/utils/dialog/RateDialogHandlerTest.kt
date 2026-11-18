@@ -23,8 +23,6 @@ import android.content.pm.PackageManager
 import android.net.ConnectivityManager
 import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.lifecycle.lifecycleScope
-import com.google.android.play.core.review.ReviewManager
-import com.google.android.play.core.review.ReviewManagerFactory
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
@@ -57,6 +55,7 @@ class RateDialogHandlerTest {
   private lateinit var rateDialogHandler: RateDialogHandler
   private lateinit var packageManager: PackageManager
   private lateinit var connectivityManager: ConnectivityManager
+  private lateinit var inAppReviewFlow: InAppReviewFlow
 
   @BeforeEach
   fun setup() {
@@ -73,6 +72,7 @@ class RateDialogHandlerTest {
     coEvery { kiwixDataStore.setRateAppPromptShown() } returns Unit
     libkiwixBookOnDisk = mockk(relaxed = true)
     connectivityManager = mockk(relaxed = true)
+    inAppReviewFlow = mockk(relaxed = true)
 
     mockkObject(CompatHelper.Companion)
     every { connectivityManager.isNetworkAvailable() } returns true
@@ -87,7 +87,13 @@ class RateDialogHandlerTest {
     coEvery { libkiwixBookOnDisk.getBooks() } returns listOf(mockk())
 
     rateDialogHandler =
-      RateDialogHandler(activity, libkiwixBookOnDisk, kiwixDataStore, connectivityManager)
+      RateDialogHandler(
+        activity,
+        libkiwixBookOnDisk,
+        kiwixDataStore,
+        connectivityManager,
+        inAppReviewFlow
+      )
 
     mockkStatic("androidx.lifecycle.LifecycleOwnerKt")
     val mockLifecycleScope = mockk<LifecycleCoroutineScope>(relaxed = true)
@@ -174,14 +180,9 @@ class RateDialogHandlerTest {
     runTest {
       coEvery { kiwixDataStore.incrementRateAppVisitCount() } returns 20
 
-      val mockReviewManager = mockk<ReviewManager>(relaxed = true)
-      mockkStatic(ReviewManagerFactory::class)
-      every { ReviewManagerFactory.create(any()) } returns mockReviewManager
-
       rateDialogHandler.checkForRateDialog()
 
-      verify { ReviewManagerFactory.create(activity) }
-      verify { mockReviewManager.requestReviewFlow() }
+      verify { inAppReviewFlow.launch() }
       coVerify { kiwixDataStore.setRateAppPromptShown() }
     }
 
@@ -190,13 +191,9 @@ class RateDialogHandlerTest {
     coEvery { kiwixDataStore.incrementRateAppVisitCount() } returns 20
     every { connectivityManager.isNetworkAvailable() } returns false
 
-    val mockReviewManager = mockk<ReviewManager>(relaxed = true)
-    mockkStatic(ReviewManagerFactory::class)
-    every { ReviewManagerFactory.create(any()) } returns mockReviewManager
-
     rateDialogHandler.checkForRateDialog()
 
-    verify(exactly = 0) { ReviewManagerFactory.create(any()) }
+    verify(exactly = 0) { inAppReviewFlow.launch() }
     coVerify(exactly = 0) { kiwixDataStore.setRateAppPromptShown() }
   }
 
@@ -206,13 +203,9 @@ class RateDialogHandlerTest {
       coEvery { kiwixDataStore.incrementRateAppVisitCount() } returns 6
       coEvery { kiwixDataStore.rateAppReadingCount } returns flowOf(0)
 
-      val mockReviewManager = mockk<ReviewManager>(relaxed = true)
-      mockkStatic(ReviewManagerFactory::class)
-      every { ReviewManagerFactory.create(any()) } returns mockReviewManager
-
       rateDialogHandler.checkForRateDialog()
 
-      verify(exactly = 0) { ReviewManagerFactory.create(any()) }
+      verify(exactly = 0) { inAppReviewFlow.launch() }
       coVerify(exactly = 0) { kiwixDataStore.setRateAppPromptShown() }
     }
 
@@ -221,14 +214,10 @@ class RateDialogHandlerTest {
     runTest {
       coEvery { kiwixDataStore.isPlayStoreBuild } returns flowOf(false)
 
-      val mockReviewManager = mockk<ReviewManager>(relaxed = true)
-      mockkStatic(ReviewManagerFactory::class)
-      every { ReviewManagerFactory.create(any()) } returns mockReviewManager
-
       rateDialogHandler.checkForRateDialog()
 
       coVerify(exactly = 0) { kiwixDataStore.incrementRateAppVisitCount() }
-      verify(exactly = 0) { ReviewManagerFactory.create(any()) }
+      verify(exactly = 0) { inAppReviewFlow.launch() }
       coVerify(exactly = 0) { kiwixDataStore.setRateAppPromptShown() }
     }
 
@@ -276,15 +265,10 @@ class RateDialogHandlerTest {
       coEvery { kiwixDataStore.isBrandedApp } returns flowOf(true)
       coEvery { kiwixDataStore.incrementRateAppVisitCount() } returns 20
 
-      val mockReviewManager = mockk<ReviewManager>(relaxed = true)
-      mockkStatic(ReviewManagerFactory::class)
-      every { ReviewManagerFactory.create(any()) } returns mockReviewManager
-
       rateDialogHandler.checkForRateDialog()
 
       coVerify(exactly = 1) { kiwixDataStore.incrementRateAppVisitCount() }
-      verify(exactly = 1) { ReviewManagerFactory.create(activity) }
-      verify(exactly = 1) { mockReviewManager.requestReviewFlow() }
+      verify(exactly = 1) { inAppReviewFlow.launch() }
       coVerify(exactly = 1) { kiwixDataStore.setRateAppPromptShown() }
     }
 
