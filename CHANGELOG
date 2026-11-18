@@ -1,3 +1,9 @@
+4.0.1
+Bug Fixes:
+* Re-enabled publishing to F-Droid and IzzyOnDroid, which was blocked by the Play Store's In-App Review API dependency. (@MohitMaliFtechiz https://github.com/kiwix/kiwix-android/pull/5294)
+* App ignored the previously configured language setting after installing/upgrading to 4.0.0, defaulting to the device's system language instead. (@harshsomankar123-tech https://github.com/kiwix/kiwix-android/pull/5291)
+* Screen readers (TalkBack) read out confusing numbers mixed into button and item labels. (@itsmunzir https://github.com/kiwix/kiwix-android/pull/5274)
+
 4.0.0
 New Features:
 * Support for Android 17. (@MohitMaliFtechiz https://github.com/kiwix/kiwix-android/pull/5272)
