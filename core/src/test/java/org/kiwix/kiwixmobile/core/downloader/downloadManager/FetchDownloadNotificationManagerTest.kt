@@ -21,9 +21,11 @@ package org.kiwix.kiwixmobile.core.downloader.downloadManager
 import android.app.Notification
 import android.app.NotificationManager
 import android.content.Context
+import android.net.Uri
 import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.test.core.app.ApplicationProvider
+import com.tonyodev.fetch2.Download
 import com.tonyodev.fetch2.DownloadNotification
 import com.tonyodev.fetch2.Status
 import io.mockk.every
@@ -115,6 +117,38 @@ class FetchDownloadNotificationManagerTest {
     )
 
     assertTrue(notificationManager.activeNotifications.isEmpty())
+  }
+
+  @Test
+  fun `shows a paused summary instead of a stale downloading count when all downloads pause`() {
+    val notificationManager =
+      context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+    fetchDownloadNotificationManager.postDownloadUpdate(fetchDownload(Status.PAUSED))
+
+    val summary = notificationManager.activeNotifications.single { it.id == ZERO_GROUP_ID }
+    assertTrue(NotificationCompat.isGroupSummary(summary.notification))
+    assertEquals(
+      context.getString(R.string.paused_state),
+      summary.notification.extras.getCharSequence(Notification.EXTRA_TITLE).toString()
+    )
+    assertEquals(
+      listOf(PAUSED_FILE_NAME),
+      summary.notification.extras.getCharSequenceArray(Notification.EXTRA_TEXT_LINES)
+        ?.map { it.toString() }
+    )
+
+    fetchDownloadNotificationManager.postDownloadUpdate(fetchDownload(Status.DELETED))
+
+    assertTrue(notificationManager.activeNotifications.none { it.id == ZERO_GROUP_ID })
+  }
+
+  private fun fetchDownload(status: Status) = mockk<Download>(relaxed = true).also {
+    every { it.id } returns PAUSED_DOWNLOAD_ID
+    every { it.group } returns ZERO_GROUP_ID
+    every { it.status } returns status
+    every { it.fileUri } returns Uri.parse("file:///downloads/$PAUSED_FILE_NAME")
+    every { it.namespace } returns "LibGlobalFetchLib"
   }
 
   @Test
@@ -229,5 +263,7 @@ class FetchDownloadNotificationManagerTest {
 
   companion object {
     private const val ZERO_GROUP_ID = 0
+    private const val PAUSED_DOWNLOAD_ID = 42
+    private const val PAUSED_FILE_NAME = "wikipedia_en_all.zim"
   }
 }
