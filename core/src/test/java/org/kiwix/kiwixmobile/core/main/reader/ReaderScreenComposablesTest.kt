@@ -24,7 +24,12 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.semantics.SemanticsProperties
+import androidx.compose.ui.test.SemanticsMatcher
+import androidx.compose.ui.test.assert
+import androidx.compose.ui.test.assertContentDescriptionEquals
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.click
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.longClick
@@ -545,6 +550,28 @@ class ReaderScreenComposablesTest {
   }
 
   @Test
+  fun readerScreen_tableOfContentDrawer_entriesAreReadAsTheirTitles() {
+    val sections = mutableListOf(
+      DocumentSection("Section 1", "section1", 1),
+      DocumentSection("Section 2", "section2", 2)
+    )
+    renderReaderScreen(
+      createTestState(showTableOfContentDrawer = true, documentSections = sections)
+    )
+    composeTestRule.waitForIdle()
+    composeTestRule
+      .onNodeWithTag(TABLE_OF_CONTENT_HEADER_TESTING_TAG)
+      .assertTextEquals("Contents")
+      .assert(SemanticsMatcher.keyNotDefined(SemanticsProperties.ContentDescription))
+    sections.forEachIndexed { index, section ->
+      composeTestRule
+        .onNodeWithTag("$TABLE_OF_CONTENT_SECTION_TESTING_TAG$index")
+        .assertTextEquals(section.title)
+        .assert(SemanticsMatcher.keyNotDefined(SemanticsProperties.ContentDescription))
+    }
+  }
+
+  @Test
   fun readerScreen_tabSwitcher_visibleWhenEnabled() {
     renderReaderScreen(createTestState(showTabSwitcher = true))
     composeTestRule.waitForIdle()
@@ -623,10 +650,8 @@ class ReaderScreenComposablesTest {
     composeTestRule.waitForIdle()
 
     composeTestRule
-      .onNodeWithContentDescription(
-        context.getString(R.string.close_tab) + "0",
-        useUnmergedTree = true
-      )
+      .onNodeWithTag("${CLOSE_TAB_BUTTON_TESTING_TAG}0")
+      .assertContentDescriptionEquals(context.getString(R.string.close_tab))
       .performClick()
     assertEquals(ReaderAction.CloseTab(0), action)
   }

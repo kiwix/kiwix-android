@@ -48,6 +48,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
@@ -91,6 +92,7 @@ const val YOUR_DEVICE_SHOW_CASE_TAG = "yourDeviceShowCaseTag"
 const val PEER_DEVICE_LIST_SHOW_CASE_TAG = "peerDeviceListShowCaseTag"
 const val FILE_FOR_TRANSFER_SHOW_CASE_TAG = "fileForTransferShowCaseTag"
 const val URIS_KEY = "localFileTransferUriKey"
+const val FILE_ITEM_STATUS_ICON_TESTING_TAG = "fileItemStatusIconTestingTag"
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Suppress("ComposableLambdaParameterNaming")
@@ -344,8 +346,8 @@ fun TransferFileItem(
 
         Icon(
           painter = painterResource(iconRes),
-          contentDescription = stringResource(R.string.status) + index,
-          modifier = modifier
+          contentDescription = stringResource(R.string.status),
+          modifier = modifier.testTag("$FILE_ITEM_STATUS_ICON_TESTING_TAG$index")
         )
       }
     }

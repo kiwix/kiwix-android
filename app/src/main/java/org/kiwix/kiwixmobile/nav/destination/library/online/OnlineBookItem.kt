@@ -54,7 +54,6 @@ const val ONLINE_BOOK_OVERLAY_TESTING_TAG = "onlineBookOverlayTestingTag"
 
 @Composable
 fun OnlineBookItem(
-  index: Int,
   item: BookItem,
   availableSpaceCalculator: AvailableSpaceCalculator,
   onBookItemClick: (BookItem) -> Unit
@@ -78,7 +77,6 @@ fun OnlineBookItem(
           book = item.book,
           tags = item.tags,
           isOnlineLibrary = true,
-          index = index,
           sizeModifier = Modifier.testTag(ONLINE_BOOK_SIZE_TEXT_TESTING_TAG)
         )
         ShowDetectingFileSystemUi(

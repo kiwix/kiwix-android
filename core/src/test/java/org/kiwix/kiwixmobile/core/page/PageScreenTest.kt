@@ -21,8 +21,12 @@ package org.kiwix.kiwixmobile.core.page
 import android.os.Build
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.ui.semantics.SemanticsProperties
+import androidx.compose.ui.test.SemanticsMatcher
+import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsNotEnabled
+import androidx.compose.ui.test.assertIsSelected
 import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.hasSetTextAction
 import androidx.compose.ui.test.isToggleable
@@ -240,8 +244,9 @@ class PageScreenTest {
     renderPageScreen(state = TestPageState(pageItems = pages))
     pages.forEachIndexed { index, page ->
       composeTestRule
-        .onNodeWithContentDescription("${page.title}$index")
+        .onNodeWithTag("$PAGE_ITEM_TITLE_TESTING_TAG$index", useUnmergedTree = true)
         .assertIsDisplayed()
+        .assertTextEquals(page.title)
     }
   }
 
@@ -397,12 +402,27 @@ class PageScreenTest {
       id = 1L
     )
     renderPageScreen(state = TestPageState(pageItems = listOf(selectedPage)))
-    // When isSelected is true, the favicon is replaced with a check circle icon.
-    // The contentDescription for the image is "Favicon" + index.
-    val faviconDescription = context.getString(R.string.fav_icon) + "0"
+    // When isSelected is true, the favicon is replaced with a check circle icon. The icon is
+    // decorative: the row tells accessibility services that the page is selected.
     composeTestRule
-      .onNodeWithContentDescription(faviconDescription)
+      .onNodeWithTag("${PAGE_ITEM_ICON_TESTING_TAG}0", useUnmergedTree = true)
       .assertIsDisplayed()
+      .assert(SemanticsMatcher.keyNotDefined(SemanticsProperties.ContentDescription))
+    composeTestRule
+      .onNodeWithTag(PAGE_ITEM_TESTING_TAG)
+      .assertIsSelected()
+  }
+
+  @Test
+  fun pageItem_whenNotSelected_rowHasNoSelectedStateAndFaviconIsDecorative() {
+    val page = TestPage(title = "Page", url = "https://example.com/page", id = 1L)
+    renderPageScreen(state = TestPageState(pageItems = listOf(page)))
+    composeTestRule
+      .onNodeWithTag(PAGE_ITEM_TESTING_TAG)
+      .assert(SemanticsMatcher.keyNotDefined(SemanticsProperties.Selected))
+    composeTestRule
+      .onNodeWithTag("${PAGE_ITEM_ICON_TESTING_TAG}0", useUnmergedTree = true)
+      .assert(SemanticsMatcher.keyNotDefined(SemanticsProperties.ContentDescription))
   }
 
   @Test

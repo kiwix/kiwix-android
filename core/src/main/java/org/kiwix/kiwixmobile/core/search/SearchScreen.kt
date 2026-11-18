@@ -19,7 +19,6 @@
 package org.kiwix.kiwixmobile.core.search
 
 import android.annotation.SuppressLint
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
@@ -63,7 +62,6 @@ import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.font.FontWeight
@@ -94,6 +92,7 @@ const val SEARCH_FIELD_TESTING_TAG = "searchFieldTestingTag"
 const val NO_SEARCH_RESULT_TESTING_TAG = "noSearchResultTestingTag"
 const val SEARCH_ITEM_TESTING_TAG = "searchItemTestingTag"
 const val OPEN_ITEM_IN_NEW_TAB_ICON_TESTING_TAG = "openItemInNewTagIconTestingTag"
+const val SEARCH_SUGGESTION_TESTING_TAG = "searchSuggestionTestingTag"
 const val LOADING_ITEMS_BEFORE = 3
 
 const val VOICE_SEARCH_TESTING_TAG = "voiceSearchTestingTag"
@@ -252,21 +251,21 @@ private fun SpellingSuggestionItem(
       modifier = Modifier
         .weight(1f)
         .padding(horizontal = EIGHT_DP)
-        .semantics { contentDescription = "$suggestionText$index" },
+        .testTag("$SEARCH_SUGGESTION_TESTING_TAG$index"),
       fontSize = SEARCH_ITEM_TEXT_SIZE,
       maxLines = 1,
       overflow = Ellipsis
     )
 
-    IconButton(
-      onClick = { },
+    Box(
       modifier = Modifier
         .size(OPEN_IN_NEW_TAB_ICON_SIZE)
-        .padding(end = SIX_DP)
+        .padding(end = SIX_DP),
+      contentAlignment = Alignment.Center
     ) {
       Icon(
         painter = painterResource(id = R.drawable.action_search),
-        contentDescription = stringResource(id = R.string.search_label) + index,
+        contentDescription = null,
       )
     }
   }
@@ -318,7 +317,6 @@ private fun NoSearchResultView() {
   )
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun SearchListItem(
   searchListItem: SearchListItem,
@@ -369,8 +367,7 @@ private fun SearchListItem(
       ) {
         Icon(
           painter = painterResource(id = R.drawable.ic_open_in_new_24dp),
-          contentDescription =
-            stringResource(R.string.search_open_in_new_tab) + searchListItem.hashCode()
+          contentDescription = stringResource(R.string.search_open_in_new_tab)
         )
       }
     }

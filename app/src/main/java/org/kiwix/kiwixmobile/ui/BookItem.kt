@@ -19,7 +19,6 @@
 package org.kiwix.kiwixmobile.ui
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -44,7 +43,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.selected
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -67,6 +66,7 @@ import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListIte
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.HumanReadableCount
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.SelectionMode
 import org.kiwix.kiwixmobile.ui.BookItemScreen.BOOK_ARTICLE_COUNT_TEST_TAG
+import org.kiwix.kiwixmobile.ui.BookItemScreen.BOOK_DESCRIPTION_TEST_TAG
 import org.kiwix.kiwixmobile.ui.BookItemScreen.BOOK_ITEM_CHECKBOX_TESTING_TAG
 import org.kiwix.kiwixmobile.ui.BookItemScreen.BOOK_ITEM_TESTING_TAG
 import java.text.SimpleDateFormat
@@ -125,19 +125,16 @@ fun BookItem(
           }
         )
         .testTag(BOOK_ITEM_TESTING_TAG)
+        .semantics {
+          if (selectionMode == SelectionMode.MULTI) selected = isSelected
+        }
     ) {
       BookContent(
         book = bookOnDisk.book,
         tags = bookOnDisk.tags,
         isOnlineLibrary = false,
-        index = index,
         trailingContent = if (isSelected) {
-          {
-            BookSelectedIcon(
-              index = index,
-              onClick = { onMultiSelect?.invoke(bookOnDisk) }
-            )
-          }
+          { BookSelectedIcon(index = index) }
         } else {
           null
         }
@@ -152,7 +149,6 @@ fun BookContent(
   book: LibkiwixBook,
   tags: List<KiwixTag>,
   isOnlineLibrary: Boolean,
-  index: Int,
   modifier: Modifier = Modifier,
   sizeModifier: Modifier = Modifier,
   trailingContent: (@Composable () -> Unit)? = null,
@@ -167,7 +163,6 @@ fun BookContent(
       iconSource = book.favicon,
       size = book.size,
       isOnlineLibrary = isOnlineLibrary,
-      index = index,
       sizeModifier = sizeModifier
     )
 
@@ -177,7 +172,6 @@ fun BookContent(
       date = book.date,
       description = book.description.orEmpty(),
       tags = tags,
-      index = index,
       articleCount = book.articleCount,
       mediaCount = book.mediaCount
     )
@@ -200,7 +194,6 @@ fun BookIconAndSize(
   iconSource: String,
   size: String,
   isOnlineLibrary: Boolean,
-  index: Int,
   modifier: Modifier = Modifier,
   sizeModifier: Modifier = Modifier
 ) {
@@ -212,7 +205,6 @@ fun BookIconAndSize(
     Spacer(modifier = Modifier.height(FOUR_DP))
     BookSize(
       size = Byte(size).humanReadable,
-      index = index,
       style = MaterialTheme.typography.labelSmall,
       textAlign = TextAlign.Center,
       color = Color.Unspecified,
@@ -224,24 +216,15 @@ fun BookIconAndSize(
 @Composable
 private fun BookSelectedIcon(
   index: Int,
-  modifier: Modifier = Modifier,
-  onClick: (() -> Unit)? = null
+  modifier: Modifier = Modifier
 ) {
   Image(
     painter = painterResource(id = CoreR.drawable.ic_check_circle_blue_24dp),
-    contentDescription = "$BOOK_ITEM_CHECKBOX_TESTING_TAG$index",
+    contentDescription = null,
     modifier = modifier
       .size(TWENTY_EIGHT_DP)
       .testTag("$BOOK_ITEM_CHECKBOX_TESTING_TAG$index")
-      .semantics { contentDescription = "true$index" }
       .clip(CircleShape)
-      .then(
-        if (onClick != null) {
-          Modifier.clickable(onClick = onClick)
-        } else {
-          Modifier
-        }
-      )
   )
 }
 
@@ -252,7 +235,6 @@ fun BookDetails(
   date: String,
   description: String,
   tags: List<KiwixTag>,
-  index: Int,
   articleCount: String? = null,
   mediaCount: String? = null
 ) {
@@ -264,14 +246,12 @@ fun BookDetails(
       BookAnnotatedTitle(
         title = title,
         date = date,
-        index = index,
         modifier = Modifier.weight(1f)
       )
     }
     Spacer(modifier = Modifier.height(FOUR_DP))
     BookDescription(
       bookDescription = description,
-      index = index,
       style = MaterialTheme.typography.bodyMedium.copy(color = Color.Gray),
       color = Color.Unspecified,
       minLines = 2
@@ -282,7 +262,7 @@ fun BookDetails(
       horizontalArrangement = Arrangement.SpaceBetween,
       verticalAlignment = Alignment.CenterVertically
     ) {
-      TagsView(tags, index = index)
+      TagsView(tags)
       Row(
         modifier = Modifier
           .weight(1f, fill = false)
@@ -292,8 +272,7 @@ fun BookDetails(
       ) {
         BookArticleCount(
           articleCount = articleCount,
-          mediaCount = mediaCount,
-          index = index
+          mediaCount = mediaCount
         )
       }
     }
@@ -304,7 +283,6 @@ fun BookDetails(
 private fun BookAnnotatedTitle(
   title: String,
   date: String,
-  index: Int,
   modifier: Modifier = Modifier
 ) {
   val titleStyle = MaterialTheme.typography.titleSmall.copy(
@@ -331,14 +309,12 @@ private fun BookAnnotatedTitle(
     style = titleStyle,
     maxLines = 2,
     overflow = TextOverflow.Ellipsis,
-    modifier = modifier.semantics {
-      contentDescription = "$title$formattedDate$index"
-    }
+    modifier = modifier
   )
 }
 
 @Composable
-fun BookArticleCount(articleCount: String?, mediaCount: String?, index: Int) {
+fun BookArticleCount(articleCount: String?, mediaCount: String?) {
   val context = LocalContext.current
   val articlesStr =
     HumanReadableCount(articleCount.orEmpty())
@@ -353,9 +329,7 @@ fun BookArticleCount(articleCount: String?, mediaCount: String?, index: Int) {
     text = combined,
     style = MaterialTheme.typography.labelMedium,
     color = MaterialTheme.colorScheme.onSurfaceVariant,
-    modifier = Modifier
-      .testTag(BOOK_ARTICLE_COUNT_TEST_TAG)
-      .semantics { contentDescription = "$combined$index" }
+    modifier = Modifier.testTag(BOOK_ARTICLE_COUNT_TEST_TAG)
   )
 }
 
@@ -363,7 +337,6 @@ fun BookArticleCount(articleCount: String?, mediaCount: String?, index: Int) {
 fun BookSize(
   size: String,
   modifier: Modifier = Modifier,
-  index: Int,
   style: TextStyle = MaterialTheme.typography.bodyMedium,
   color: Color = MaterialTheme.colorScheme.onTertiary,
   textAlign: TextAlign? = null
@@ -373,14 +346,13 @@ fun BookSize(
     style = style,
     color = color,
     textAlign = textAlign,
-    modifier = modifier.semantics { contentDescription = "$size$index" }
+    modifier = modifier
   )
 }
 
 @Composable
 fun BookTitle(
   title: String,
-  index: Int,
   modifier: Modifier = Modifier,
   style: TextStyle = MaterialTheme.typography.titleSmall.copy(
     fontWeight = FontWeight.SemiBold,
@@ -392,14 +364,13 @@ fun BookTitle(
     style = style,
     maxLines = 2,
     overflow = TextOverflow.Ellipsis,
-    modifier = modifier.semantics { contentDescription = "$title$index" }
+    modifier = modifier
   )
 }
 
 @Composable
 fun BookDescription(
   bookDescription: String,
-  index: Int,
   style: TextStyle = MaterialTheme.typography.bodyMedium,
   color: Color = MaterialTheme.colorScheme.onSecondary,
   minLines: Int = 1
@@ -411,7 +382,7 @@ fun BookDescription(
     minLines = minLines,
     maxLines = 2,
     overflow = TextOverflow.Ellipsis,
-    modifier = Modifier.semantics { contentDescription = "$bookDescription$index" }
+    modifier = Modifier.testTag(BOOK_DESCRIPTION_TEST_TAG)
   )
 }
 
@@ -426,6 +397,7 @@ fun formatBookDate(rawDate: String): String = runCatching {
 
 object BookItemScreen {
   const val BOOK_ARTICLE_COUNT_TEST_TAG = "bookArticleCountTestingTag"
+  const val BOOK_DESCRIPTION_TEST_TAG = "bookDescriptionTestingTag"
   const val BOOK_ITEM_CHECKBOX_TESTING_TAG = "bookItemCheckboxTestingTag"
   const val BOOK_ITEM_TESTING_TAG = "bookItemTestingTag"
 }

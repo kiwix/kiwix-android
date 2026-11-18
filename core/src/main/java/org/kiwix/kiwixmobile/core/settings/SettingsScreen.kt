@@ -57,6 +57,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
+import androidx.compose.material3.minimumInteractiveComponentSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -70,6 +71,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.stateDescription
@@ -760,6 +762,7 @@ private fun ListOptions(
           .fillMaxWidth()
           .selectable(
             selected = option == selected,
+            role = Role.RadioButton,
             onClick = { onOptionSelected(option) }
           )
           .padding(vertical = EIGHT_DP)
@@ -770,8 +773,8 @@ private fun ListOptions(
       ) {
         RadioButton(
           selected = option == selected,
-          onClick = { onOptionSelected(option) },
-          modifier = Modifier.semantics { contentDescription = "$option${option.hashCode()}" }
+          onClick = null,
+          modifier = Modifier.minimumInteractiveComponentSize()
         )
         Text(text = option, style = MaterialTheme.typography.bodyLarge)
       }

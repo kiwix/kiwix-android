@@ -20,6 +20,7 @@ package org.kiwix.kiwixmobile.localFileTransfer
 
 import android.net.wifi.p2p.WifiP2pDevice
 import android.os.Build
+import androidx.compose.ui.test.assertContentDescriptionEquals
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
@@ -232,9 +233,9 @@ class LocalFileTransferScreenTest {
     val file = FileItem("pending.zim")
     renderScreen(createTestState(transferFiles = listOf(file)))
     composeTestRule
-      .onNodeWithContentDescription(
-        context.getString(R.string.status) + "0"
-      ).assertIsDisplayed()
+      .onNodeWithTag("${FILE_ITEM_STATUS_ICON_TESTING_TAG}0", useUnmergedTree = true)
+      .assertIsDisplayed()
+      .assertContentDescriptionEquals(context.getString(R.string.status))
   }
 
   @Test
@@ -242,9 +243,9 @@ class LocalFileTransferScreenTest {
     val file = FileItem("sent.zim").copy(fileStatus = FileItem.FileStatus.SENT)
     renderScreen(createTestState(transferFiles = listOf(file)))
     composeTestRule
-      .onNodeWithContentDescription(
-        context.getString(R.string.status) + "0"
-      ).assertIsDisplayed()
+      .onNodeWithTag("${FILE_ITEM_STATUS_ICON_TESTING_TAG}0", useUnmergedTree = true)
+      .assertIsDisplayed()
+      .assertContentDescriptionEquals(context.getString(R.string.status))
   }
 
   @Test
@@ -252,9 +253,9 @@ class LocalFileTransferScreenTest {
     val file = FileItem("error.zim").copy(fileStatus = FileItem.FileStatus.ERROR)
     renderScreen(createTestState(transferFiles = listOf(file)))
     composeTestRule
-      .onNodeWithContentDescription(
-        context.getString(R.string.status) + "0"
-      ).assertIsDisplayed()
+      .onNodeWithTag("${FILE_ITEM_STATUS_ICON_TESTING_TAG}0", useUnmergedTree = true)
+      .assertIsDisplayed()
+      .assertContentDescriptionEquals(context.getString(R.string.status))
   }
 
   @Test
@@ -263,13 +264,13 @@ class LocalFileTransferScreenTest {
     val file2 = FileItem("file2.zim").copy(fileStatus = FileItem.FileStatus.SENT)
     renderScreen(createTestState(transferFiles = listOf(file1, file2)))
     composeTestRule
-      .onNodeWithContentDescription(
-        context.getString(R.string.status) + "0"
-      ).assertIsDisplayed()
+      .onNodeWithTag("${FILE_ITEM_STATUS_ICON_TESTING_TAG}0", useUnmergedTree = true)
+      .assertIsDisplayed()
+      .assertContentDescriptionEquals(context.getString(R.string.status))
     composeTestRule
-      .onNodeWithContentDescription(
-        context.getString(R.string.status) + "1"
-      ).assertIsDisplayed()
+      .onNodeWithTag("${FILE_ITEM_STATUS_ICON_TESTING_TAG}1", useUnmergedTree = true)
+      .assertIsDisplayed()
+      .assertContentDescriptionEquals(context.getString(R.string.status))
   }
 
   @Test

@@ -22,8 +22,15 @@ import android.os.Build
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.semantics.ProgressBarRangeInfo
+import androidx.compose.ui.semantics.SemanticsProperties
+import androidx.compose.ui.test.SemanticsMatcher
+import androidx.compose.ui.test.assert
+import androidx.compose.ui.test.assertContentDescriptionEquals
+import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertIsDisplayed
-import androidx.compose.ui.test.hasContentDescription
+import androidx.compose.ui.test.assertRangeInfoEquals
+import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.createComposeRule
@@ -47,7 +54,11 @@ import org.kiwix.kiwixmobile.core.CoreApp
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.downloader.model.DownloadState
 import org.kiwix.kiwixmobile.core.downloader.model.Seconds
+import org.kiwix.kiwixmobile.core.ui.components.CONTENT_LOADING_PROGRESS_BAR_TESTING_TAG
+import org.kiwix.kiwixmobile.core.ui.components.ONLINE_LIBRARY_IMAGE_TEST_TAG
 import org.kiwix.kiwixmobile.core.zim_manager.Byte
+import org.kiwix.kiwixmobile.ui.BookItemScreen.BOOK_DESCRIPTION_TEST_TAG
+import org.kiwix.kiwixmobile.ui.hasContentDescriptionEndingInDigit
 import org.kiwix.kiwixmobile.zimManager.libraryView.LibraryListItem.LibraryDownloadItem
 import org.kiwix.sharedFunctions.TestApplication
 import org.robolectric.RobolectricTestRunner
@@ -61,7 +72,6 @@ class DownloadBookItemUITest {
   @JvmField
   val composeTestRule = createComposeRule()
 
-  private val testIndex = 0
   private val context get() = RuntimeEnvironment.getApplication()
 
   private lateinit var mockOnPauseResumeClick: (LibraryDownloadItem) -> Unit
@@ -118,7 +128,6 @@ class DownloadBookItemUITest {
   ) {
     composeTestRule.setContent {
       DownloadBookItem(
-        index = 0,
         item = item,
         onPauseResumeClick = onPauseResumeClick,
         onStopClick = onStopClick
@@ -139,7 +148,7 @@ class DownloadBookItemUITest {
   fun downloadBookItem_bookTitleIsDisplayed() {
     setContent(item = mockLibraryDownloadItem(title = "Wikipedia"))
     composeTestRule
-      .onNode(hasContentDescription("Wikipedia$testIndex"))
+      .onNode(hasText("Wikipedia"))
       .assertIsDisplayed()
   }
 
@@ -147,7 +156,7 @@ class DownloadBookItemUITest {
   fun downloadBookItem_bookDescriptionIsDisplayed() {
     setContent(item = mockLibraryDownloadItem(description = "The free encyclopedia"))
     composeTestRule
-      .onNode(hasContentDescription("The free encyclopedia$testIndex"))
+      .onNode(hasText("The free encyclopedia"))
       .assertIsDisplayed()
   }
 
@@ -164,8 +173,8 @@ class DownloadBookItemUITest {
     setContent(item = mockLibraryDownloadItem(description = ""))
 
     composeTestRule
-      .onNode(hasContentDescription(testIndex.toString()))
-      .assertExists()
+      .onNodeWithTag(BOOK_DESCRIPTION_TEST_TAG)
+      .assertTextEquals("")
   }
 
   @Test
@@ -183,10 +192,9 @@ class DownloadBookItemUITest {
       eta = Seconds(90L)
     )
     setContent(item = item)
-    val expectedDesc = item.readableEta.toString() + item.hashCode()
     composeTestRule
-      .onNode(hasContentDescription(expectedDesc))
-      .assertIsDisplayed()
+      .onNodeWithTag(DOWNLOADING_STATE_TEXT_TESTING_TAG)
+      .assertTextEquals(item.readableEta.toString())
   }
 
   @Test
@@ -205,10 +213,9 @@ class DownloadBookItemUITest {
       currentDownloadState = Status.QUEUED
     )
     setContent(item = item)
-    val expectedDesc = DownloadState.Pending.toReadableState(context).toString() + item.hashCode()
     composeTestRule
-      .onNode(hasContentDescription(expectedDesc))
-      .assertIsDisplayed()
+      .onNodeWithTag(DOWNLOADING_STATE_TEXT_TESTING_TAG)
+      .assertTextEquals(DownloadState.Pending.toReadableState(context).toString())
   }
 
   @Test
@@ -218,10 +225,9 @@ class DownloadBookItemUITest {
       currentDownloadState = Status.PAUSED
     )
     setContent(item = item)
-    val expectedDesc = DownloadState.Paused.toReadableState(context).toString() + item.hashCode()
     composeTestRule
-      .onNode(hasContentDescription(expectedDesc))
-      .assertIsDisplayed()
+      .onNodeWithTag(DOWNLOADING_STATE_TEXT_TESTING_TAG)
+      .assertTextEquals(DownloadState.Paused.toReadableState(context).toString())
   }
 
   @Test
@@ -231,11 +237,9 @@ class DownloadBookItemUITest {
       currentDownloadState = Status.COMPLETED
     )
     setContent(item = item)
-    val expectedDesc =
-      DownloadState.Successful.toReadableState(context).toString() + item.hashCode()
     composeTestRule
-      .onNode(hasContentDescription(expectedDesc))
-      .assertIsDisplayed()
+      .onNodeWithTag(DOWNLOADING_STATE_TEXT_TESTING_TAG)
+      .assertTextEquals(DownloadState.Successful.toReadableState(context).toString())
   }
 
   @Test
@@ -246,12 +250,11 @@ class DownloadBookItemUITest {
       downloadError = Error.NONE
     )
     setContent(item = item)
-    val expectedDesc =
-      DownloadState.Failed(Error.UNKNOWN, null).toReadableState(context).toString() +
-        item.hashCode()
     composeTestRule
-      .onNode(hasContentDescription(expectedDesc))
-      .assertIsDisplayed()
+      .onNodeWithTag(DOWNLOADING_STATE_TEXT_TESTING_TAG)
+      .assertTextEquals(
+        DownloadState.Failed(Error.UNKNOWN, null).toReadableState(context).toString()
+      )
   }
 
   @Test
@@ -372,7 +375,6 @@ class DownloadBookItemUITest {
       triggerRecompose.value
 
       DownloadBookItem(
-        index = testIndex,
         item = item,
         onPauseResumeClick = mockOnPauseResumeClick,
         onStopClick = mockOnStopClick
@@ -429,7 +431,6 @@ class DownloadBookItemUITest {
       itemState = remember { mutableStateOf(runningItem) }
 
       DownloadBookItem(
-        index = testIndex,
         item = itemState.value,
         onPauseResumeClick = mockOnPauseResumeClick,
         onStopClick = mockOnStopClick
@@ -439,11 +440,8 @@ class DownloadBookItemUITest {
     composeTestRule.waitForIdle()
 
     composeTestRule
-      .onNode(
-        hasContentDescription(
-          runningItem.readableEta.toString() + runningItem.hashCode()
-        )
-      ).assertIsDisplayed()
+      .onNodeWithTag(DOWNLOADING_STATE_TEXT_TESTING_TAG)
+      .assertTextEquals(runningItem.readableEta.toString())
 
     val pausedItem = runningItem.copy(
       downloadState = DownloadState.Paused
@@ -454,24 +452,58 @@ class DownloadBookItemUITest {
     }
 
     composeTestRule.waitForIdle()
-    val expectedPausedDescription =
-      DownloadState.Paused.toReadableState(context).toString() +
-        pausedItem.hashCode()
-
     composeTestRule
-      .onNode(hasContentDescription(expectedPausedDescription))
-      .assertIsDisplayed()
+      .onNodeWithTag(DOWNLOADING_STATE_TEXT_TESTING_TAG)
+      .assertTextEquals(DownloadState.Paused.toReadableState(context).toString())
   }
 
   @Test
-  fun downloadBookItem_bookIconIsDisplayed() {
-    val favicon = "https://kiwix.org/favicon.png"
-    setContent(item = mockLibraryDownloadItem(favIconUrl = favicon))
-    val expectedDesc =
-      context.getString(R.string.fav_icon) + favicon.hashCode()
+  fun downloadBookItem_bookIconIsDisplayedAndDecorative() {
+    setContent(item = mockLibraryDownloadItem(favIconUrl = "https://kiwix.org/favicon.png"))
     composeTestRule
-      .onNode(hasContentDescription(expectedDesc))
+      .onNodeWithTag(ONLINE_LIBRARY_IMAGE_TEST_TAG)
       .assertIsDisplayed()
+      .assert(SemanticsMatcher.keyNotDefined(SemanticsProperties.ContentDescription))
+  }
+
+  @Test
+  fun downloadBookItem_progressBarExposesItsProgress() {
+    setContent(item = mockLibraryDownloadItem(progress = 50))
+    composeTestRule
+      .onNodeWithTag(CONTENT_LOADING_PROGRESS_BAR_TESTING_TAG, useUnmergedTree = true)
+      .assertRangeInfoEquals(ProgressBarRangeInfo(current = 0.5f, range = 0f..1f))
+  }
+
+  @Test
+  fun downloadBookItem_whenRunning_buttonsAreLabeledPauseAndStop() {
+    setContent(item = mockLibraryDownloadItem(downloadState = DownloadState.Running))
+    composeTestRule
+      .onNodeWithTag(PAUSE_ICON_TESTING_TAG, useUnmergedTree = true)
+      .assertContentDescriptionEquals(context.getString(R.string.tts_pause))
+    composeTestRule
+      .onNodeWithTag(DOWNLOADING_STOP_BUTTON_TESTING_TAG)
+      .assertContentDescriptionEquals(context.getString(R.string.stop))
+  }
+
+  @Test
+  fun downloadBookItem_whenPaused_pauseResumeButtonIsLabeledResume() {
+    setContent(
+      item = mockLibraryDownloadItem(
+        downloadState = DownloadState.Paused,
+        currentDownloadState = Status.PAUSED
+      )
+    )
+    composeTestRule
+      .onNodeWithTag(RESUME_ICON_TESTING_TAG, useUnmergedTree = true)
+      .assertContentDescriptionEquals(context.getString(R.string.tts_resume))
+  }
+
+  @Test
+  fun downloadBookItem_contentDescriptionsHaveNoNumericSuffix() {
+    setContent()
+    composeTestRule
+      .onAllNodes(hasContentDescriptionEndingInDigit(), useUnmergedTree = true)
+      .assertCountEquals(0)
   }
 
   @Test
