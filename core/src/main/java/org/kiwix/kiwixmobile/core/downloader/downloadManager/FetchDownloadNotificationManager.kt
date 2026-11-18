@@ -141,7 +141,18 @@ class FetchDownloadNotificationManager @Inject constructor(
       .setGroup(ACTIVE_DOWNLOAD_GROUP_KEY)
       .setGroupSummary(true)
       .setOnlyAlertOnce(true)
-    return true
+    return if (DownloadMonitorService.isDownloadMonitorServiceRunning) {
+      // Reuse the foreground service notification as the group summary so it is not shown
+      // as a separate generic notification.
+      downloadNotificationManager.cancel(groupId)
+      downloadNotificationManager.notify(
+        DOWNLOAD_SERVICE_NOTIFICATION_ID,
+        notificationBuilder.build()
+      )
+      false
+    } else {
+      true
+    }
   }
 
   override fun shouldUpdateNotification(downloadNotification: DownloadNotification): Boolean =
