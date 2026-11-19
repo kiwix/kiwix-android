@@ -74,6 +74,7 @@ class FetchDownloadNotificationManagerTest {
     DownloadNotification().apply {
       this.status = status
       this.title = title
+      notificationId = title.hashCode()
     }
 
   private fun newBuilder() = NotificationCompat.Builder(context, DOWNLOAD_NOTIFICATION_CHANNEL_ID)
@@ -141,6 +142,34 @@ class FetchDownloadNotificationManagerTest {
     fetchDownloadNotificationManager.postDownloadUpdate(fetchDownload(Status.DELETED))
 
     assertTrue(notificationManager.activeNotifications.none { it.id == ZERO_GROUP_ID })
+  }
+
+  @Test
+  fun `keeps paused downloads in the summary while another download is active`() {
+    fetchDownloadNotificationManager.postDownloadUpdate(fetchDownload(Status.PAUSED))
+    val builder = newBuilder()
+
+    val result = fetchDownloadNotificationManager.updateGroupSummaryNotification(
+      ZERO_GROUP_ID,
+      builder,
+      listOf(downloadNotification(Status.DOWNLOADING, "Downloading book")),
+      context
+    )
+
+    assertTrue(result)
+    val notification = builder.build()
+    assertEquals(
+      context.resources.getCountString(
+        R.string.downloading_files_count_singular,
+        R.string.downloading_files_count_plural,
+        2
+      ),
+      notification.extras.getCharSequence(Notification.EXTRA_TITLE).toString()
+    )
+    assertEquals(
+      listOf("Downloading book", PAUSED_FILE_NAME),
+      notification.extras.getCharSequenceArray(Notification.EXTRA_TEXT_LINES)?.map { it.toString() }
+    )
   }
 
   private fun fetchDownload(status: Status) = mockk<Download>(relaxed = true).also {

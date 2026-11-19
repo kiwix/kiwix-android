@@ -125,20 +125,21 @@ class FetchDownloadNotificationManager @Inject constructor(
   ): Boolean {
     val activeTitles = downloadNotifications
       .filter { it.isDownloading || it.isPaused || it.isQueued }
-      .map { it.title }
-    val pausedTitles = synchronized(pausedDownloadTitles) { pausedDownloadTitles.values.toList() }
-    if (activeTitles.isEmpty() && pausedTitles.isEmpty()) {
+      .associate { it.notificationId to it.title }
+    val pausedTitles = synchronized(pausedDownloadTitles) { pausedDownloadTitles.toMap() }
+    val titles = activeTitles + pausedTitles.filterKeys { it !in activeTitles }
+    if (titles.isEmpty()) {
       downloadNotificationManager.cancel(groupId)
       downloadNotificationManager.cancel(DOWNLOAD_SERVICE_NOTIFICATION_ID)
       return false
     }
     val style = NotificationCompat.InboxStyle()
-    activeTitles.ifEmpty { pausedTitles }.forEach(style::addLine)
-    val summaryTitle = if (activeTitles.isNotEmpty()) {
+    titles.values.forEach(style::addLine)
+    val summaryTitle = if (downloadNotifications.any { it.isDownloading || it.isQueued }) {
       context.resources.getCountString(
         R.string.downloading_files_count_singular,
         R.string.downloading_files_count_plural,
-        activeTitles.size
+        titles.size
       )
     } else {
       context.getString(R.string.paused_state)
