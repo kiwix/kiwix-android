@@ -344,6 +344,7 @@ class DownloadMonitorService : Service() {
       .setContentText(getString(string.download_notification_channel_description))
       .setSmallIcon(android.R.drawable.stat_sys_download)
       .setGroup(ACTIVE_DOWNLOAD_GROUP_KEY)
+      .setGroupSummary(true)
       .setOnlyAlertOnce(true)
       .setWhen(System.currentTimeMillis())
       .build()

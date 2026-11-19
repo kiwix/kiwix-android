@@ -84,6 +84,7 @@ class FetchDownloadNotificationManager @Inject constructor(
   @param:IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : DefaultFetchNotificationManager(context) {
   private val notificationBuilderLock = Any()
+  private val pausedDownloadTitles = mutableMapOf<Int, String>()
 
   private val downloadNotificationManager: NotificationManager by lazy {
     context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
@@ -122,26 +123,57 @@ class FetchDownloadNotificationManager @Inject constructor(
     downloadNotifications: List<DownloadNotification>,
     context: Context
   ): Boolean {
-    val activeDownloadNotifications = downloadNotifications.filter {
-      it.isDownloading || it.isPaused || it.isQueued
+    val activeTitles = downloadNotifications
+      .filter { it.isDownloading || it.isPaused || it.isQueued }
+      .associate { it.notificationId to it.title }
+    val pausedTitles = synchronized(pausedDownloadTitles) { pausedDownloadTitles.toMap() }
+    val titles = activeTitles + pausedTitles.filterKeys { it !in activeTitles }
+    if (titles.isEmpty()) {
+      downloadNotificationManager.cancel(groupId)
+      downloadNotificationManager.cancel(DOWNLOAD_SERVICE_NOTIFICATION_ID)
+      return false
     }
-    if (activeDownloadNotifications.isEmpty()) return false
     val style = NotificationCompat.InboxStyle()
-    activeDownloadNotifications.forEach { style.addLine(it.title) }
+    titles.values.forEach(style::addLine)
+    val summaryTitle = if (downloadNotifications.any { it.isDownloading || it.isQueued }) {
+      context.resources.getCountString(
+        R.string.downloading_files_count_singular,
+        R.string.downloading_files_count_plural,
+        titles.size
+      )
+    } else {
+      context.getString(R.string.paused_state)
+    }
     notificationBuilder
       .setSmallIcon(android.R.drawable.stat_sys_download)
-      .setContentTitle(
-        context.resources.getCountString(
-          R.string.downloading_files_count_singular,
-          R.string.downloading_files_count_plural,
-          activeDownloadNotifications.size
-        )
-      )
+      .setContentTitle(summaryTitle)
       .setStyle(style)
       .setGroup(ACTIVE_DOWNLOAD_GROUP_KEY)
       .setGroupSummary(true)
       .setOnlyAlertOnce(true)
-    return true
+    return if (DownloadMonitorService.isDownloadMonitorServiceRunning) {
+      // Reuse the foreground service notification as the group summary so it is not shown
+      // as a separate generic notification.
+      downloadNotificationManager.cancel(groupId)
+      downloadNotificationManager.notify(
+        DOWNLOAD_SERVICE_NOTIFICATION_ID,
+        notificationBuilder.build()
+      )
+      false
+    } else {
+      true
+    }
+  }
+
+  override fun postDownloadUpdate(download: Download): Boolean {
+    synchronized(pausedDownloadTitles) {
+      if (download.status == Status.PAUSED) {
+        pausedDownloadTitles[download.id] = getDownloadNotificationTitle(download)
+      } else {
+        pausedDownloadTitles.remove(download.id)
+      }
+    }
+    return super.postDownloadUpdate(download)
   }
 
   override fun shouldUpdateNotification(downloadNotification: DownloadNotification): Boolean =
