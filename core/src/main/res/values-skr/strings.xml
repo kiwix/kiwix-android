@@ -110,6 +110,7 @@
   <string name="wiki_article_title">وکی مضمون عنوان</string>
   <string name="note_save_successful">نوٹ محفوظ تھیا</string>
   <string name="delete_notes_confirmation_msg">سارے نوٹس مٹاؤں؟</string>
+  <string name="book_count_plural">%d کتاباں</string>
   <string name="books_count">%d کتاب(اں)</string>
   <string name="your_device">تہاݙی ڈیوائس:</string>
   <string name="status">حیثیت</string>

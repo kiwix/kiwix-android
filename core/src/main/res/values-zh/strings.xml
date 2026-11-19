@@ -53,7 +53,7 @@
   <string name="external_redirect_message">您将被重定向至%s。</string>
   <string name="support_donation_platform">捐款平台</string>
   <string name="about_app_page">关于应用程序页面</string>
-  <string name="menu_wifi_hotspot" fuzzy="true">无线热点</string>
+  <string name="menu_wifi_hotspot">热点</string>
   <string name="save_media">保存媒体</string>
   <string name="save_media_error">尝试保存该媒体时出错！</string>
   <string name="invalid_media_source">找不到所选媒体。</string>
@@ -65,7 +65,7 @@
   <string name="open_in_new_tab">在新标签页打开链接?</string>
   <string name="hotspot_service_channel_name">热点服务频道</string>
   <string name="hotspot_failed_title">启动热点失败</string>
-  <string name="hotspot_failed_message" fuzzy="true">似乎您的热点已经开启了。请先禁用您的 wifi 热点以继续。</string>
+  <string name="hotspot_failed_message">似乎您的热点已经开启了。请先禁用您的 WiFi 热点以继续。</string>
   <string name="go_to_wifi_settings_label">转到 WiFi 设置</string>
   <string name="connection_refused">连接被拒绝。</string>
   <string name="hotspot_running">运行中的热点</string>
@@ -82,7 +82,7 @@
   <string name="hotspot_dialog_title">书籍共享说明</string>
   <string name="wifi_dialog_title">检测到 WiFi 连接</string>
   <string name="wifi_dialog_body">为了在其他设备上查看书籍，请确认所有设备都连接到同一个局域网络。</string>
-  <string name="hotspot_dialog_message" fuzzy="true">要让此功能正常运作，你需要先手动启动 WiFi 热点，或者确定主机和接受设备在同一个 WiFi 网络上。</string>
+  <string name="hotspot_dialog_message">要让此功能正常运作，你需要先手动启动 WiFi 热点，或者确定主机和接受设备在同一个 WiFi 网络上。</string>
   <string name="hotspot_dialog_neutral_button">继续</string>
   <string name="hotspot_channel_description">关于你的无线网络热点/服务器的更新</string>
   <string name="hotspot_notification_content_title">Kiwix 热点</string>
@@ -255,7 +255,7 @@
   <string name="move_down">下移</string>
   <string name="reorder_language">重新排序语言</string>
   <string name="downloading">下载中</string>
-  <string name="no_items_msg" fuzzy="true">没有可用的项目</string>
+  <string name="no_items_msg">未找到书籍</string>
   <string name="crash_title">呃…这太尴尬了</string>
   <string name="crash_description">看起来我们崩溃了。\n\n您是否介意通过发送崩溃报告来帮助我们解决此问题？</string>
   <string name="crash_checkbox_language">您的语言设置</string>
@@ -339,6 +339,7 @@
   <string name="permission_rationale_location">Android 需要位置权限才能允许应用程序检测对等设备</string>
   <string name="permission_rationale_nearby">Android 需要获得附近设备权限，以允许应用程序检测对等设备</string>
   <string name="permission_refused_location">在没有定位权限的情况下无法找到对等设备</string>
+  <string name="permission_refused_nearby">在没有附近权限的情况下无法找到对等设备</string>
   <string name="permission_refused_storage">在没有存储权限的情况下无法读取 ZIM 文件</string>
   <string name="request_enable_location">开启定位服务以寻找对等设备</string>
   <string name="discovery_needs_location">在没有定位服务的情况下无法寻找对等设备</string>

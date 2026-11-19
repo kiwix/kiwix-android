@@ -313,6 +313,7 @@
   <string name="permission_rationale_location">اندروید برای شناسایی دستگاه‌های دیگر به اجازهٔ دسترسی به مکان نیاز دارد</string>
   <string name="permission_rationale_nearby">اندروید برای شناسایی دستگاه‌های دیگر به اجازهٔ دسترسی به دستگاه‌های نزدیک نیاز دارد</string>
   <string name="permission_refused_location">بدون اجازهٔ دسترسی به مکان، نمی‌توان دستگاه‌های دیگر را پیدا کرد</string>
+  <string name="permission_refused_nearby">بدون مجوز دسترسی به دستگاه‌های نزدیک، یافتن دستگاه‌های همتا ممکن نیست</string>
   <string name="permission_refused_storage">بدون اجازهٔ دسترسی به فضای ذخیره‌سازی، نمی‌توان به پرونده‌های ZIM دسترسی داشت</string>
   <string name="request_enable_location">برای شناسایی دستگاه‌های دیگر، مکان‌یابی را فعال کنید</string>
   <string name="discovery_needs_location">بدون فعال‌بودن خدمات مکان‌یابی، نمی‌توان دستگاه‌های دیگر را پیدا کرد</string>

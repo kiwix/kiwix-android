@@ -159,6 +159,7 @@
   <string name="no_files_here">여기에 파일이 없습니다</string>
   <string name="download_no_space">다운로드할 공간이 충분하지 않습니다.</string>
   <string name="download">다운로드</string>
+  <string name="explore">찾아보기</string>
   <string name="download_notification_channel_name">다운로드 알림 채널 이름</string>
   <string name="download_notification_channel_description">ZIM 파일을 다운로드하는 중…</string>
   <string name="space_available">사용 가능한 공간:</string>
@@ -167,6 +168,10 @@
   <string name="zim_no_pic">그림 없음</string>
   <string name="zim_no_vid">동영상 없음</string>
   <string name="no_network_connection">네트워크 연결 없음</string>
+  <string name="action_load_online_library">온라인 라이브러리 불러오기</string>
+  <string name="action_download_book">이 책을 다운로드</string>
+  <string name="action_load_languages">언어 목록 불러오기</string>
+  <string name="action_load_categories">분류 목록 불러오기</string>
   <string name="help_2">Kiwix의 역할이 무엇입니까?</string>
   <string name="help_3">Kiwix는 오프라인 콘텐츠 리더입니다. 브라우저와 매우 비슷하게 동작하지만 온라인 웹 페이지에 접근하지 않고, ZIM 포맷 파일에서 내용을 읽습니다.</string>
   <string name="help_4">Kiwix는 본래 오프라인 상태에서 위키백과를 제공하도록 설계되었습니다만, 다른 콘텐츠도 읽을 수 있습니다.</string>
@@ -279,6 +284,10 @@
   <string name="paused_state">일시 중단됨</string>
   <string name="paused_offline_state">일시 정지됨 (기기가 오프라인 상태)</string>
   <string name="failed_state">실패: %s</string>
+  <string name="downloading_files_count_singular">%d개의 파일을 다운로드 중입니다</string>
+  <string name="downloading_files_count_plural">%d개의 파일을 다운로드 중입니다</string>
+  <string name="downloaded_files_count_singular">%d개의 파일이 다운로드되었습니다</string>
+  <string name="downloaded_files_count_plural">%d개의 파일이 다운로드되었습니다</string>
   <string name="custom_download_error_message_for_authentication_failed">ZIM 파일을 다운로드할 수 없습니다. 플레이 스토어에서 애플리케이션을 다시 설치해 보십시오.</string>
   <string name="save">저장</string>
   <string name="note">노트</string>
