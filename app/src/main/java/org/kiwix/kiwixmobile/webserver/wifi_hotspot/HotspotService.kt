@@ -221,6 +221,7 @@ class HotspotService :
   private fun stopHotspotAndDismissNotification() {
     webServerHelper?.stopAndroidWebServer()
     currentlyHostedPaths = emptyList()
+    ServerUtils.serverAddress = ""
     zimHostCallbacks?.onServerStopped()
     stopForeground(STOP_FOREGROUND_REMOVE)
     stopSelf()

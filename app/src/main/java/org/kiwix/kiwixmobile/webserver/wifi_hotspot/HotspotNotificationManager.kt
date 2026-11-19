@@ -88,7 +88,11 @@ class HotspotNotificationManager @Inject constructor(
       .setContentText(context.getString(R.string.hotspot_running))
       .setContentIntent(contentIntent)
       .apply {
-        uri?.let { setLargeIcon(generateQR.createQR(it)) }
+        uri?.takeIf(String::isNotBlank)?.let { qrContent ->
+          runCatching { generateQR.createQR(qrContent) }
+            .getOrNull()
+            ?.let(::setLargeIcon)
+        }
       }.setSmallIcon(R.mipmap.ic_launcher)
       .setWhen(System.currentTimeMillis())
       .addAction(
