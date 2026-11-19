@@ -198,7 +198,9 @@ class HotspotService :
       }
     if (serverStatus?.isServerStarted == true) {
       currentlyHostedPaths = paths
-      zimHostCallbacks?.onServerStarted(webServerHelper?.getServerAddress().orEmpty())
+      val address = webServerHelper?.getServerAddress().orEmpty()
+      ServerUtils.serverAddress = address
+      zimHostCallbacks?.onServerStarted(address)
       startForegroundNotificationHelper()
       if (!restart) {
         Toast
@@ -217,6 +219,7 @@ class HotspotService :
   private fun stopHotspotAndDismissNotification() {
     webServerHelper?.stopAndroidWebServer()
     currentlyHostedPaths = emptyList()
+    ServerUtils.serverAddress = ""
     zimHostCallbacks?.onServerStopped()
     stopForeground(STOP_FOREGROUND_REMOVE)
     stopSelf()
@@ -233,9 +236,11 @@ class HotspotService :
   }
 
   private fun startForegroundNotificationHelper() {
+    val address = webServerHelper?.getServerAddress()?.takeIf(String::isNotBlank)
+      ?: serverAddress.takeIf(String::isNotBlank)
     startForeground(
       HotspotNotificationManager.HOTSPOT_NOTIFICATION_ID,
-      hotspotNotificationManager?.buildForegroundNotification(serverAddress)
+      hotspotNotificationManager?.buildForegroundNotification(address)
     )
   }
 
