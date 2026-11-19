@@ -22,7 +22,6 @@ import android.os.Build
 import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.test.SemanticsMatcher
 import androidx.compose.ui.test.assert
-import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsNotSelected
 import androidx.compose.ui.test.assertIsSelected
@@ -50,6 +49,7 @@ import org.kiwix.kiwixmobile.ui.BookItemScreen.BOOK_ARTICLE_COUNT_TEST_TAG
 import org.kiwix.kiwixmobile.ui.BookItemScreen.BOOK_ITEM_CHECKBOX_TESTING_TAG
 import org.kiwix.kiwixmobile.ui.BookItemScreen.BOOK_ITEM_TESTING_TAG
 import org.kiwix.sharedFunctions.TestApplication
+import org.kiwix.sharedFunctions.assertAccessibilitySemantics
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 import java.io.File
@@ -293,9 +293,7 @@ class BookItemUITest {
       selectionMode = SelectionMode.MULTI
     )
 
-    composeTestRule
-      .onAllNodes(hasContentDescriptionEndingInDigit(), useUnmergedTree = true)
-      .assertCountEquals(0)
+    composeTestRule.assertAccessibilitySemantics()
     composeTestRule
       .onNodeWithTag(OFFLINE_IMAGE_TEST_TAG, useUnmergedTree = true)
       .assert(SemanticsMatcher.keyNotDefined(SemanticsProperties.ContentDescription))

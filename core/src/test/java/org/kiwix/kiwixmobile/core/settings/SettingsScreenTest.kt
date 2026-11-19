@@ -68,6 +68,7 @@ import org.kiwix.kiwixmobile.core.ui.components.NavigationIcon
 import org.kiwix.kiwixmobile.core.ui.components.TOOLBAR_TITLE_TESTING_TAG
 import org.kiwix.kiwixmobile.core.utils.LocaleHelper
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore.Companion.DEFAULT_ZOOM
+import org.kiwix.sharedFunctions.assertAccessibilitySemantics
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
 import org.robolectric.annotation.Config
@@ -190,6 +191,7 @@ class SettingsScreenTest {
     composeTestRule
       .onNodeWithTag(SETTINGS_LIST_TESTING_TAG)
       .assertIsDisplayed()
+    composeTestRule.assertAccessibilitySemantics()
   }
 
   @Test
@@ -958,6 +960,7 @@ class SettingsScreenTest {
         useUnmergedTree = true
       )
       .assertCountEquals(0)
+    composeTestRule.assertAccessibilitySemantics()
   }
 
   @Test

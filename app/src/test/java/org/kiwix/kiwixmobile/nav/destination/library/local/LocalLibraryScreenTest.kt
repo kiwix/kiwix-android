@@ -50,6 +50,7 @@ import org.kiwix.kiwixmobile.ui.BookItemScreen.BOOK_ITEM_CHECKBOX_TESTING_TAG
 import org.kiwix.kiwixmobile.ui.BookItemScreen.BOOK_ITEM_TESTING_TAG
 import org.kiwix.kiwixmobile.zimManager.fileselectView.FileSelectListState
 import org.kiwix.sharedFunctions.TestApplication
+import org.kiwix.sharedFunctions.assertAccessibilitySemantics
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
 import org.robolectric.annotation.Config
@@ -158,6 +159,7 @@ class LocalLibraryScreenTest {
     composeTestRule
       .onNodeWithText("English")
       .assertIsDisplayed()
+    composeTestRule.assertAccessibilitySemantics()
   }
 
   @Test

@@ -26,7 +26,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.test.SemanticsMatcher
 import androidx.compose.ui.test.assert
-import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.hasText
@@ -57,7 +56,6 @@ import org.kiwix.kiwixmobile.core.zim_manager.Byte
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.HumanReadableCount
 import org.kiwix.kiwixmobile.ui.BookItemScreen.BOOK_ARTICLE_COUNT_TEST_TAG
 import org.kiwix.kiwixmobile.ui.formatBookDate
-import org.kiwix.kiwixmobile.ui.hasContentDescriptionEndingInDigit
 import org.kiwix.kiwixmobile.zimManager.Fat32Checker.Companion.FOUR_GIGABYTES_IN_BYTES
 import org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState
 import org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState.CanWrite4GbFile
@@ -67,6 +65,7 @@ import org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState.NotEnoughSp
 import org.kiwix.kiwixmobile.zimManager.libraryView.AvailableSpaceCalculator
 import org.kiwix.kiwixmobile.zimManager.libraryView.LibraryListItem.BookItem
 import org.kiwix.sharedFunctions.TestApplication
+import org.kiwix.sharedFunctions.assertAccessibilitySemantics
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
 import org.robolectric.annotation.Config
@@ -628,9 +627,7 @@ class OnlineBookItemUITest {
     composeTestRule
       .onNode(hasText("Java $formattedDate"), useUnmergedTree = true)
       .assertExists()
-    composeTestRule
-      .onAllNodes(hasContentDescriptionEndingInDigit(), useUnmergedTree = true)
-      .assertCountEquals(0)
+    composeTestRule.assertAccessibilitySemantics()
   }
 
   @Test
