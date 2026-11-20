@@ -279,7 +279,7 @@ sealed class KiwixDestination(val route: String) {
       isVoice: Boolean = false
     ): String =
       SEARCH_SCREEN +
-        "?$NAV_ARG_SEARCH_STRING=$searchString" +
+        "?$NAV_ARG_SEARCH_STRING=${Uri.encode(searchString)}" +
         "&$TAG_FROM_TAB_SWITCHER=$isOpenedFromTabView" +
         "&$EXTRA_IS_WIDGET_VOICE=$isVoice"
   }
