@@ -54,6 +54,7 @@ import org.kiwix.kiwixmobile.core.main.reader.helper.TabsManager
 import org.kiwix.kiwixmobile.core.ui.components.CONTENT_LOADING_PROGRESS_BAR_TESTING_TAG
 import org.kiwix.kiwixmobile.core.ui.components.FIND_IN_SEARCH_VIEW_TESTING_TAG
 import org.kiwix.kiwixmobile.core.ui.models.IconItem
+import org.kiwix.sharedFunctions.assertAccessibilitySemantics
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
 import org.robolectric.annotation.Config
@@ -569,6 +570,7 @@ class ReaderScreenComposablesTest {
         .assertTextEquals(section.title)
         .assert(SemanticsMatcher.keyNotDefined(SemanticsProperties.ContentDescription))
     }
+    composeTestRule.assertAccessibilitySemantics()
   }
 
   @Test
@@ -654,6 +656,7 @@ class ReaderScreenComposablesTest {
       .assertContentDescriptionEquals(context.getString(R.string.close_tab))
       .performClick()
     assertEquals(ReaderAction.CloseTab(0), action)
+    composeTestRule.assertAccessibilitySemantics()
   }
 
   @Test

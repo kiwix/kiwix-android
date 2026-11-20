@@ -57,6 +57,7 @@ import org.kiwix.kiwixmobile.core.ui.components.NavigationIcon
 import org.kiwix.kiwixmobile.core.ui.components.TOOLBAR_TITLE_TESTING_TAG
 import org.kiwix.kiwixmobile.core.ui.models.ActionMenuItem
 import org.kiwix.kiwixmobile.core.ui.models.IconItem
+import org.kiwix.sharedFunctions.assertAccessibilitySemantics
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
 import org.robolectric.annotation.Config
@@ -248,6 +249,7 @@ class PageScreenTest {
         .assertIsDisplayed()
         .assertTextEquals(page.title)
     }
+    composeTestRule.assertAccessibilitySemantics()
   }
 
   @Test
@@ -411,6 +413,7 @@ class PageScreenTest {
     composeTestRule
       .onNodeWithTag(PAGE_ITEM_TESTING_TAG)
       .assertIsSelected()
+    composeTestRule.assertAccessibilitySemantics()
   }
 
   @Test

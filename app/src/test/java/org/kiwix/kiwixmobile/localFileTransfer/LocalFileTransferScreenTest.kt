@@ -39,6 +39,7 @@ import org.kiwix.kiwixmobile.core.ui.components.SHOWCASE_VIEW_NEXT_BUTTON_TESTIN
 import org.kiwix.kiwixmobile.core.ui.models.ActionMenuItem
 import org.kiwix.kiwixmobile.core.ui.models.IconItem
 import org.kiwix.sharedFunctions.TestApplication
+import org.kiwix.sharedFunctions.assertAccessibilitySemantics
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
 import org.robolectric.annotation.Config
@@ -271,6 +272,7 @@ class LocalFileTransferScreenTest {
       .onNodeWithTag("${FILE_ITEM_STATUS_ICON_TESTING_TAG}1", useUnmergedTree = true)
       .assertIsDisplayed()
       .assertContentDescriptionEquals(context.getString(R.string.status))
+    composeTestRule.assertAccessibilitySemantics()
   }
 
   @Test

@@ -38,6 +38,7 @@ import org.kiwix.kiwixmobile.core.page.NO_ITEMS_TEXT_TESTING_TAG
 import org.kiwix.kiwixmobile.core.page.history.models.NavigationHistoryListItem
 import org.kiwix.kiwixmobile.core.ui.components.NAVIGATION_ICON_TESTING_TAG
 import org.kiwix.kiwixmobile.core.ui.components.TOOLBAR_TITLE_TESTING_TAG
+import org.kiwix.sharedFunctions.assertAccessibilitySemantics
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
 import org.robolectric.annotation.Config
@@ -95,6 +96,7 @@ class NavigationHistoryDialogTest {
         .assertIsDisplayed()
         .assertTextEquals(item.title)
     }
+    composeTestRule.assertAccessibilitySemantics()
   }
 
   @Test

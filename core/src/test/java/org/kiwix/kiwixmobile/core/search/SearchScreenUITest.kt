@@ -42,6 +42,7 @@ import org.kiwix.kiwixmobile.core.search.viewmodel.SearchScreenUiState
 import org.kiwix.kiwixmobile.core.search.viewmodel.SearchViewModel
 import org.kiwix.kiwixmobile.core.ui.models.ActionMenuItem
 import org.kiwix.kiwixmobile.core.ui.models.IconItem
+import org.kiwix.sharedFunctions.assertAccessibilitySemantics
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
 import org.robolectric.annotation.Config
@@ -136,6 +137,7 @@ class SearchScreenUITest {
     )
     composeTestRule.onNodeWithText("Wikipedia").assertIsDisplayed()
     composeTestRule.onNodeWithText("Wiktionary").assertIsDisplayed()
+    composeTestRule.assertAccessibilitySemantics()
   }
 
   @Test

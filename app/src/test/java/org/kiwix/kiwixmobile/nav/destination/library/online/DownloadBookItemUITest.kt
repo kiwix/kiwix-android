@@ -27,7 +27,6 @@ import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.test.SemanticsMatcher
 import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.assertContentDescriptionEquals
-import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertRangeInfoEquals
 import androidx.compose.ui.test.assertTextEquals
@@ -58,9 +57,9 @@ import org.kiwix.kiwixmobile.core.ui.components.CONTENT_LOADING_PROGRESS_BAR_TES
 import org.kiwix.kiwixmobile.core.ui.components.ONLINE_LIBRARY_IMAGE_TEST_TAG
 import org.kiwix.kiwixmobile.core.zim_manager.Byte
 import org.kiwix.kiwixmobile.ui.BookItemScreen.BOOK_DESCRIPTION_TEST_TAG
-import org.kiwix.kiwixmobile.ui.hasContentDescriptionEndingInDigit
 import org.kiwix.kiwixmobile.zimManager.libraryView.LibraryListItem.LibraryDownloadItem
 import org.kiwix.sharedFunctions.TestApplication
+import org.kiwix.sharedFunctions.assertAccessibilitySemantics
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
 import org.robolectric.annotation.Config
@@ -501,9 +500,7 @@ class DownloadBookItemUITest {
   @Test
   fun downloadBookItem_contentDescriptionsHaveNoNumericSuffix() {
     setContent()
-    composeTestRule
-      .onAllNodes(hasContentDescriptionEndingInDigit(), useUnmergedTree = true)
-      .assertCountEquals(0)
+    composeTestRule.assertAccessibilitySemantics()
   }
 
   @Test
