@@ -3,6 +3,7 @@ import org.gradle.kotlin.dsl.register
 buildscript {
   repositories {
     google()
+    maven { setUrl("https://maven-central.storage-download.googleapis.com/maven2/") }
     mavenCentral()
     maven { setUrl("https://jitpack.io") }
   }
@@ -24,6 +25,7 @@ plugins {
 allprojects {
   repositories {
     google()
+    maven { setUrl("https://maven-central.storage-download.googleapis.com/maven2/") }
     mavenCentral()
     maven { setUrl("https://jitpack.io") }
   }

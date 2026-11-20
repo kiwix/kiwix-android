@@ -16,6 +16,7 @@ permissions:
 env:
   JAVA_VERSION: 21
   ANDROID_EMULATOR_WAIT_TIME_BEFORE_KILL: 720
+  GRADLE_OPTS: "-Dorg.gradle.internal.http.connectionTimeout=60000 -Dorg.gradle.internal.http.socketTimeout=60000 -Dorg.gradle.internal.network.retry.max.attempts=6 -Dorg.gradle.internal.network.retry.initial.backOff=2000"
 
 jobs:
 
@@ -106,8 +107,6 @@ jobs:
       - name: Run benchmarks
         if: ${{ matrix.api-level==30 }}
         uses: reactivecircus/android-emulator-runner@v2
-        env:
-          GRADLE_OPTS: "-Dorg.gradle.internal.http.connectionTimeout=60000 -Dorg.gradle.internal.http.socketTimeout=60000 -Dorg.gradle.internal.network.retry.max.attempts=6 -Dorg.gradle.internal.network.retry.initial.backOff=2000"
         with:
           api-level: 30
           target: ${{ matrix.target }}
@@ -456,6 +455,7 @@ jobs:
         with:
           java-version: ${{ env.JAVA_VERSION }}
           distribution: temurin
+          cache: 'gradle'
 
       - name: Set up Android NDK
         uses: nttld/setup-ndk@v1
