@@ -28,6 +28,16 @@ jobs:
           java-version: 21
           distribution: temurin
 
+      - name: Restore Cache
+        uses: actions/cache/restore@v6
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
       - name: Set up Android NDK
         uses: nttld/setup-ndk@v1
         with:
@@ -134,3 +144,12 @@ jobs:
           echo "Gradle publish failed with an unexpected error:"
           cat gradle_output.log
           exit $EXIT_CODE
+
+      - name: Save Cache
+        if: always()
+        uses: actions/cache/save@v6
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
