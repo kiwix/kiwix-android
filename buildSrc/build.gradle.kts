@@ -2,9 +2,6 @@ plugins {
   `kotlin-dsl`
 }
 repositories {
-  // Google's read-only mirror of Maven Central, tried first to avoid
-  // Maven Central's CI rate limiting (HTTP 429), see #5295.
-  maven { setUrl("https://maven-central.storage-download.googleapis.com/maven2/") }
   mavenCentral()
   google()
   maven {

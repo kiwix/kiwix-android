@@ -48,7 +48,16 @@ jobs:
         with:
           distribution: temurin
           java-version: ${{ env.JAVA_VERSION }}
-          cache: 'gradle'
+
+      - name: Restore Cache
+        uses: actions/cache/restore@v6
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
 
       - name: Enable KVM
         run: |
@@ -136,6 +145,15 @@ jobs:
           path: |
             **/reports/
 
+      - name: Save Cache
+        if: always()
+        uses: actions/cache/save@v6
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
+
   automated-tests-playstore:
     name: Automated tests for PlayStore variant
     strategy:
@@ -166,7 +184,16 @@ jobs:
         with:
           distribution: temurin
           java-version: ${{ env.JAVA_VERSION }}
-          cache: 'gradle'
+
+      - name: Restore Cache
+        uses: actions/cache/restore@v6
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
 
       - name: Enable KVM
         run: |
@@ -211,6 +238,15 @@ jobs:
           profile: pixel_2
           script: bash contrib/instrumentation-release.sh
 
+      - name: Save Cache
+        if: always()
+        uses: actions/cache/save@v6
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
+
   automated-tests-branded-apps:
     name: Automated tests for Branded app
     strategy:
@@ -239,7 +275,16 @@ jobs:
         with:
           distribution: temurin
           java-version: ${{ env.JAVA_VERSION }}
-          cache: 'gradle'
+
+      - name: Restore Cache
+        uses: actions/cache/restore@v6
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
 
       - name: Enable KVM
         run: |
@@ -284,6 +329,15 @@ jobs:
           profile: pixel_2
           script: bash contrib/instrumentation-brandedapps.sh
 
+      - name: Save Cache
+        if: always()
+        uses: actions/cache/save@v6
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
+
   automated-tests-on-tablet:
     name: Automated tests on Tablet
     strategy:
@@ -314,7 +368,16 @@ jobs:
         with:
           distribution: temurin
           java-version: ${{ env.JAVA_VERSION }}
-          cache: 'gradle'
+
+      - name: Restore Cache
+        uses: actions/cache/restore@v6
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
 
       - name: Enable KVM
         run: |
@@ -359,6 +422,15 @@ jobs:
           profile: pixel_c
           script: bash contrib/instrumentation-file-opening-on-tablet.sh
 
+      - name: Save Cache
+        if: always()
+        uses: actions/cache/save@v6
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
+
   code-formatting-job:
     name: Code Formatting
     runs-on: ubuntu-24.04
@@ -374,7 +446,16 @@ jobs:
         with:
           java-version: ${{ env.JAVA_VERSION }}
           distribution: temurin
-          cache: 'gradle'
+
+      - name: Restore Cache
+        uses: actions/cache/restore@v6
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
 
       - name: Static Analysis
         run: ./gradlew ktlintCheck
@@ -385,6 +466,15 @@ jobs:
         with:
           name: ktlint-report
           path: '**/build/reports/ktlint'
+
+      - name: Save Cache
+        if: always()
+        uses: actions/cache/save@v6
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
 
   detekt:
     name: Detekt
@@ -401,7 +491,16 @@ jobs:
         with:
           java-version: ${{ env.JAVA_VERSION }}
           distribution: temurin
-          cache: 'gradle'
+
+      - name: Restore Cache
+        uses: actions/cache/restore@v6
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
 
       - name: Static Analysis
         run: ./gradlew detektDebug detektCustomexampleDebug
@@ -411,6 +510,15 @@ jobs:
         with:
           name: detekt-report
           path: '**/build/reports/detekt'
+
+      - name: Save Cache
+        if: always()
+        uses: actions/cache/save@v6
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
 
   lint:
     name: Lint
@@ -428,7 +536,16 @@ jobs:
         with:
           java-version: ${{ env.JAVA_VERSION }}
           distribution: temurin
-          cache: 'gradle'
+
+      - name: Restore Cache
+        uses: actions/cache/restore@v6
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
 
       - name: Run Debug Lint
         run: ./gradlew app:lintDebug branded:lintCustomexampleDebug
@@ -439,6 +556,15 @@ jobs:
         with:
           name: lint-report
           path: '**/build/reports/lint-results-*'
+
+      - name: Save Cache
+        if: always()
+        uses: actions/cache/save@v6
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
 
   assemble:
     name: Assemble
@@ -455,7 +581,16 @@ jobs:
         with:
           java-version: ${{ env.JAVA_VERSION }}
           distribution: temurin
-          cache: 'gradle'
+
+      - name: Restore Cache
+        uses: actions/cache/restore@v6
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
 
       - name: Set up Android NDK
         uses: nttld/setup-ndk@v1
@@ -475,3 +610,12 @@ jobs:
           name: kiwix-android
           path: |
             **/*.apk
+
+      - name: Save Cache
+        if: always()
+        uses: actions/cache/save@v6
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}

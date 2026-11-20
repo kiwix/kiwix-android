@@ -3,7 +3,6 @@ import plugin.KiwixConfigurationPlugin
 buildscript {
   repositories {
     google()
-    maven { setUrl("https://maven-central.storage-download.googleapis.com/maven2/") }
     mavenCentral()
     maven { setUrl("https://jitpack.io") }
   }
