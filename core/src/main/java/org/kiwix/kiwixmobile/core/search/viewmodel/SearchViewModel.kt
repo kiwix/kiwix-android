@@ -181,9 +181,10 @@ class SearchViewModel @Inject constructor(
    */
   private suspend fun reopenLastZimFileIfNeeded() {
     if (zimReaderContainer.zimFileReader != null) return
-    zimReaderContainer.setZimReaderSource(
+    val zimReaderSource = withContext(ioDispatcher) {
       ZimReaderSource.fromDatabaseValue(kiwixDataStore.currentZimFile.first())
-    )
+    }
+    zimReaderContainer.setZimReaderSource(zimReaderSource)
   }
 
   /**
