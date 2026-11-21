@@ -31,6 +31,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -41,6 +42,7 @@ import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.dao.RecentSearchRoomDao
 import org.kiwix.kiwixmobile.core.di.IoDispatcher
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
+import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
 import org.kiwix.kiwixmobile.core.search.SearchListItem
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.ActivityResultReceived
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.ConfirmedDelete
@@ -66,6 +68,7 @@ import org.kiwix.kiwixmobile.core.search.viewmodel.effects.ShowDeleteSearchDialo
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.ShowToast
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.StartSpeechInput
 import org.kiwix.kiwixmobile.core.utils.ZERO
+import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.effects.CloseKeyboard
 import org.kiwix.libzim.SuggestionSearch
@@ -80,6 +83,7 @@ class SearchViewModel @Inject constructor(
   private val recentSearchRoomDao: RecentSearchRoomDao,
   private val zimReaderContainer: ZimReaderContainer,
   private val searchResultGenerator: SearchResultGenerator,
+  private val kiwixDataStore: KiwixDataStore,
   private val searchMutex: Mutex = Mutex(),
   @param:IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : ViewModel() {
@@ -135,6 +139,7 @@ class SearchViewModel @Inject constructor(
   }
 
   private suspend fun reducer() {
+    reopenLastZimFileIfNeeded()
     combine(
       searchResults(),
       recentSearchRoomDao.recentSearches(zimReaderContainer.id),
@@ -168,6 +173,18 @@ class SearchViewModel @Inject constructor(
     }.collect {
       // Do nothing as state is already updated.
     }
+  }
+
+  /**
+   * After process death, the Search screen can be restored before the reader
+   * opens the ZIM file again. Reopen the last ZIM file so search keeps working.
+   */
+  private suspend fun reopenLastZimFileIfNeeded() {
+    if (zimReaderContainer.zimFileReader != null) return
+    val zimReaderSource = withContext(ioDispatcher) {
+      ZimReaderSource.fromDatabaseValue(kiwixDataStore.currentZimFile.first())
+    }
+    zimReaderContainer.setZimReaderSource(zimReaderSource)
   }
 
   /**
