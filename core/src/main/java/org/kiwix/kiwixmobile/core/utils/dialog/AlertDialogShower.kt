@@ -66,6 +66,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
 import androidx.core.content.ContextCompat
 import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.extensions.uppercaseWithAppLocale
 import org.kiwix.kiwixmobile.core.ui.models.toPainter
 import org.kiwix.kiwixmobile.core.ui.theme.KiwixDialogTheme
 import org.kiwix.kiwixmobile.core.ui.theme.LightGrey
@@ -230,7 +231,7 @@ fun DialogConfirmButton(
       contentPadding = PaddingValues(horizontal = startEndPadding)
     ) {
       Text(
-        text = confirmButtonText.uppercase(),
+        text = confirmButtonText.uppercaseWithAppLocale(),
         fontWeight = FontWeight.Medium,
         letterSpacing = DIALOG_BUTTON_TEXT_LETTER_SPACING,
         fontSize = DIALOG_BUTTONS_TEXT_SIZE,
@@ -255,7 +256,7 @@ fun DialogDismissButton(
       contentPadding = PaddingValues(horizontal = ZERO.dp)
     ) {
       Text(
-        text = stringResource(id = it).uppercase(),
+        text = stringResource(id = it).uppercaseWithAppLocale(),
         fontWeight = FontWeight.Medium,
         letterSpacing = DIALOG_BUTTON_TEXT_LETTER_SPACING,
         fontSize = DIALOG_BUTTONS_TEXT_SIZE,
@@ -282,7 +283,7 @@ private fun DialogNaturalButton(
       contentPadding = PaddingValues(horizontal = startEndPadding)
     ) {
       Text(
-        text = stringResource(id = it).uppercase(),
+        text = stringResource(id = it).uppercaseWithAppLocale(),
         fontWeight = FontWeight.Medium,
         letterSpacing = DIALOG_BUTTON_TEXT_LETTER_SPACING,
         fontSize = DIALOG_BUTTONS_TEXT_SIZE,

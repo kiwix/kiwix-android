@@ -37,7 +37,7 @@ fun SnackbarHostState.snack(
   lifecycleScope.launch {
     val result = showSnackbar(
       message = message,
-      actionLabel = actionLabel?.uppercase(),
+      actionLabel = actionLabel,
       duration = snackbarDuration
     )
     if (result == SnackbarResult.ActionPerformed) {
