@@ -66,5 +66,8 @@ internal fun DependencyHandlerScope.implementation(dependency: String) =
 internal fun DependencyHandlerScope.annotationProcessor(dependency: String) =
   addDependency("annotationProcessor", dependency)
 
+internal fun DependencyHandlerScope.coreLibraryDesugaring(dependency: String) =
+  addDependency("coreLibraryDesugaring", dependency)
+
 private fun DependencyHandlerScope.addDependency(configurationName: String, dependency: String) =
   add(configurationName, dependency)

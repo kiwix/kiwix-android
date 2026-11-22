@@ -218,9 +218,9 @@ object Libs {
   const val testing_ktx: String = "com.jraska.livedata:testing-ktx:" + Versions.testing_ktx
 
   /**
-   * https://github.com/JakeWharton/ThreeTenABP/
+   * https://developer.android.com/studio/write/java8-support#library-desugaring
    */
-  const val threetenabp: String = "com.jakewharton.threetenabp:threetenabp:" + Versions.threetenabp
+  const val desugar_jdk_libs: String = "com.android.tools:desugar_jdk_libs:" + Versions.desugar_jdk_libs
 
   /**
    * https://developer.android.com/testing
