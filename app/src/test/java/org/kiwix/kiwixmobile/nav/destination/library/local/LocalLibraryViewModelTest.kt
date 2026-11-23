@@ -33,6 +33,7 @@ import org.kiwix.kiwixmobile.core.StorageObserver
 import org.kiwix.kiwixmobile.core.base.BackPressActivityExtensions
 import org.kiwix.kiwixmobile.core.dao.LibkiwixBookOnDisk
 import org.kiwix.kiwixmobile.core.data.DataSource
+import org.kiwix.kiwixmobile.core.entity.LibkiwixBook
 import org.kiwix.kiwixmobile.core.main.MainRepositoryActions
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
@@ -125,6 +126,13 @@ class LocalLibraryViewModelTest {
     unmockkStatic(Uri::class)
   }
 
+  private fun createBookOnDisk(id: String = "book1", isSelected: Boolean = false): BookOnDisk =
+    BookOnDisk(
+      book = LibkiwixBook().apply { this.id = id },
+      zimReaderSource = mockk(relaxed = true),
+      isSelected = isSelected
+    )
+
   private fun createViewModel(): LocalLibraryViewModel {
     val vm = LocalLibraryViewModel(
       libkiwixBookOnDisk,
@@ -183,8 +191,7 @@ class LocalLibraryViewModelTest {
 
   @Test
   fun `state updates when datasource emits new books`() = runTest {
-    val bookItem = mockk<BookOnDisk>(relaxed = true)
-    every { bookItem.id } returns "testId"
+    val bookItem = createBookOnDisk("testId")
     every { dataSource.booksOnDiskAsListItems() } returns flowOf(listOf(bookItem))
 
     // Re-create VM to pick up mock emission
@@ -273,13 +280,7 @@ class LocalLibraryViewModelTest {
 
   @Test
   fun `RequestSelect toggles book selection on`() = runTest {
-    val bookOnDisk = mockk<BookOnDisk>(relaxed = true)
-    every { bookOnDisk.id } returns "book1"
-    every { bookOnDisk.isSelected } returns false
-    every { bookOnDisk.copy(isSelected = true) } returns mockk(relaxed = true) {
-      every { id } returns "book1"
-      every { isSelected } returns true
-    }
+    val bookOnDisk = createBookOnDisk("book1", false)
     every { dataSource.booksOnDiskAsListItems() } returns flowOf(listOf(bookOnDisk))
 
     viewModel.onClearedExposed()
@@ -402,7 +403,7 @@ class LocalLibraryViewModelTest {
 
   @Test
   fun `onBookItemClick requests navigate when permission granted`() = runTest {
-    val bookOnDisk = mockk<BookOnDisk>(relaxed = true)
+    val bookOnDisk = createBookOnDisk()
     coEvery { kiwixPermissionChecker.isManageExternalStoragePermissionGranted() } returns true
 
     viewModel.sideEffects.test {
@@ -414,7 +415,7 @@ class LocalLibraryViewModelTest {
 
   @Test
   fun `onBookItemClick shows permission dialog when permission not granted`() = runTest {
-    val bookOnDisk = mockk<BookOnDisk>(relaxed = true)
+    val bookOnDisk = createBookOnDisk()
     coEvery { kiwixPermissionChecker.isManageExternalStoragePermissionGranted() } returns false
     every { kiwixPermissionChecker.isAndroid11OrAbove() } returns true
 
@@ -453,7 +454,7 @@ class LocalLibraryViewModelTest {
 
   @Test
   fun `onBookItemLongClick requests multi selection when permission granted`() = runTest {
-    val bookOnDisk = mockk<BookOnDisk>(relaxed = true)
+    val bookOnDisk = createBookOnDisk()
 
     coEvery {
       kiwixPermissionChecker.isManageExternalStoragePermissionGranted()
@@ -473,7 +474,7 @@ class LocalLibraryViewModelTest {
 
   @Test
   fun `onBookItemLongClick shows manage permission dialog when permission denied`() = runTest {
-    val bookOnDisk = mockk<BookOnDisk>(relaxed = true)
+    val bookOnDisk = createBookOnDisk()
 
     coEvery {
       kiwixPermissionChecker.isManageExternalStoragePermissionGranted()
@@ -493,7 +494,7 @@ class LocalLibraryViewModelTest {
 
   @Test
   fun `onMultiSelect triggers selection side effect`() = runTest {
-    val bookOnDisk = mockk<BookOnDisk>(relaxed = true)
+    val bookOnDisk = createBookOnDisk()
     viewModel.sideEffects.test {
       viewModel.onMultiSelect(bookOnDisk)
       assertTrue(awaitItem() === None)
@@ -632,17 +633,7 @@ class LocalLibraryViewModelTest {
 
   @Test
   fun `handleUserBackPressed clears selection in multi mode`() = runTest {
-    val book = mockk<BookOnDisk>(relaxed = true)
-
-    every { book.id } returns "book1"
-    every { book.isSelected } returns false
-
-    val selectedBook = mockk<BookOnDisk>(relaxed = true)
-
-    every { selectedBook.id } returns "book1"
-    every { selectedBook.isSelected } returns true
-
-    every { book.copy(isSelected = true) } returns selectedBook
+    val book = createBookOnDisk("book1", false)
 
     every { dataSource.booksOnDiskAsListItems() } returns flowOf(listOf(book))
 
@@ -677,17 +668,7 @@ class LocalLibraryViewModelTest {
 
   @Test
   fun `onNavigationIconClick finishes multi mode when selection mode is multi`() = runTest {
-    val book = mockk<BookOnDisk>(relaxed = true)
-
-    every { book.id } returns "book1"
-    every { book.isSelected } returns false
-
-    val selectedBook = mockk<BookOnDisk>(relaxed = true)
-
-    every { selectedBook.id } returns "book1"
-    every { selectedBook.isSelected } returns true
-
-    every { book.copy(isSelected = true) } returns selectedBook
+    val book = createBookOnDisk("book1", false)
 
     every { dataSource.booksOnDiskAsListItems() } returns flowOf(listOf(book))
 
@@ -1060,4 +1041,45 @@ class LocalLibraryViewModelTest {
       cancelAndIgnoreRemainingEvents()
     }
   }
+
+  @Test
+  fun `RequestSelectAllBooks updates state with all selected and maintains MULTI mode`() = runTest {
+    val book = createBookOnDisk("1", false)
+    every { dataSource.booksOnDiskAsListItems() } returns flowOf(listOf(book))
+    viewModel.onClearedExposed()
+    viewModel = createViewModel()
+    advanceUntilIdle()
+
+    viewModel.uiState.test {
+      awaitItem()
+
+      viewModel.localLibraryUiActions.emit(LocalLibraryViewModel.LocalLibraryUiActions.RequestSelectAllBooks)
+
+      val updatedState = awaitItem()
+      assertThat(updatedState.fileSelectListState.selectionMode).isEqualTo(SelectionMode.MULTI)
+      assertThat(updatedState.fileSelectListState.areAllBooksSelected).isTrue()
+      cancelAndIgnoreRemainingEvents()
+    }
+  }
+
+  @Test
+  fun `RequestDeselectAllBooks updates state with none selected and maintains MULTI mode`() =
+    runTest {
+      val book = createBookOnDisk("1", true)
+      every { dataSource.booksOnDiskAsListItems() } returns flowOf(listOf(book))
+      viewModel.onClearedExposed()
+      viewModel = createViewModel()
+      advanceUntilIdle()
+
+      viewModel.uiState.test {
+        awaitItem()
+
+        viewModel.localLibraryUiActions.emit(LocalLibraryViewModel.LocalLibraryUiActions.RequestDeselectAllBooks)
+
+        val updatedState = awaitItem()
+        assertThat(updatedState.fileSelectListState.selectionMode).isEqualTo(SelectionMode.MULTI)
+        assertThat(updatedState.fileSelectListState.areAllBooksSelected).isFalse()
+        cancelAndIgnoreRemainingEvents()
+      }
+    }
 }

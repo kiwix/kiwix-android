@@ -30,4 +30,10 @@ data class FileSelectListState(
     get() = bookOnDiskListItems
       .filterIsInstance<BookOnDisk>()
       .filter { it.isSelected }
+
+  val areAllBooksSelected: Boolean
+    get() {
+      val allBooks = bookOnDiskListItems.filterIsInstance<BookOnDisk>()
+      return allBooks.isNotEmpty() && allBooks.all { it.isSelected }
+    }
 }
