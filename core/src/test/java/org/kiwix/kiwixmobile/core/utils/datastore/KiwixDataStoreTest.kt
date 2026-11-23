@@ -187,6 +187,27 @@ class KiwixDataStoreTest {
   }
 
   @Test
+  fun `disableAnimations returns false by default`() = runTest {
+    assertThat(kiwixDataStore.disableAnimations.first()).isFalse()
+  }
+
+  @Test
+  fun `setDisableAnimations toggles disableAnimations`() = runTest {
+    kiwixDataStore.setDisableAnimations(true)
+    assertThat(kiwixDataStore.disableAnimations.first()).isTrue()
+  }
+
+  @Test
+  fun `disableAnimations emits updates`() = runTest {
+    kiwixDataStore.disableAnimations.test {
+      assertThat(awaitItem()).isFalse()
+      kiwixDataStore.setDisableAnimations(true)
+      assertThat(awaitItem()).isTrue()
+      cancelAndIgnoreRemainingEvents()
+    }
+  }
+
+  @Test
   fun `openNewTabInBackground returns false by default`() = runTest {
     assertThat(kiwixDataStore.openNewTabInBackground.first()).isFalse()
   }
