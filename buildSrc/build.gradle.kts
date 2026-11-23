@@ -1,6 +1,16 @@
-plugins {
-  `kotlin-dsl`
+buildscript {
+  repositories {
+    google()
+    maven { setUrl("https://maven-central.storage-download.googleapis.com/maven2/") }
+    mavenCentral()
+    gradlePluginPortal()
+  }
+  dependencies {
+    classpath("org.gradle.kotlin:gradle-kotlin-dsl-plugins:6.7.13")
+  }
 }
+apply(plugin = "org.gradle.kotlin.kotlin-dsl")
+
 repositories {
   google()
   maven { setUrl("https://maven-central.storage-download.googleapis.com/maven2/") }
