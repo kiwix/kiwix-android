@@ -2,8 +2,9 @@ plugins {
   `kotlin-dsl`
 }
 repositories {
-  mavenCentral()
   google()
+  maven { setUrl("https://maven-central.storage-download.googleapis.com/maven2/") }
+  mavenCentral()
   maven {
     setUrl("https://plugins.gradle.org/m2/")
   }

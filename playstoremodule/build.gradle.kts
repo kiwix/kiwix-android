@@ -24,7 +24,7 @@ android {
   namespace = "org.kiwix.kiwixmobile.playstoremodule"
 
   defaultConfig {
-    minSdk = Config.minSdk
+    minSdk = Config.MIN_SDK
 
     testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     consumerProguardFiles("consumer-rules.pro")

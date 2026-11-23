@@ -4,11 +4,11 @@ plugins {
 
 android {
   namespace = "org.kiwix.kiwixmobile.benchmark"
-  compileSdk = Config.compileSdk
+  compileSdk = Config.COMPILE_SDK
 
   defaultConfig {
-    minSdk = Config.minSdk
-    targetSdk = Config.targetSdk
+    minSdk = Config.MIN_SDK
+    targetSdk = Config.TARGET_SDK
 
     testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     testInstrumentationRunnerArguments["androidx.benchmark.suppressErrors"] = "EMULATOR"
