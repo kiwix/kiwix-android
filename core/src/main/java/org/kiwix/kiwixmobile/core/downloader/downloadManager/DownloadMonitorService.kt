@@ -36,6 +36,7 @@ import com.tonyodev.fetch2.Status
 import com.tonyodev.fetch2.util.DEFAULT_NOTIFICATION_TIMEOUT_AFTER_RESET
 import com.tonyodev.fetch2core.DownloadBlock
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -326,16 +327,21 @@ class DownloadMonitorService : Service() {
   }
 
   private fun startForegroundService() {
-    runCatching {
-      scope?.launch {
-        fetchDownloadNotificationManager.createNotificationChannels(
-          this@DownloadMonitorService,
-          notificationManager
-        )
+    scope?.launch {
+      fetchDownloadNotificationManager.createNotificationChannels(
+        this@DownloadMonitorService,
+        notificationManager
+      )
+      runCatching {
         startForeground(DOWNLOAD_SERVICE_NOTIFICATION_ID, buildForegroundNotification())
-        startPausedDownloadsDueToAndroidServiceLimitation()
+      }.onFailure {
+        if (it is CancellationException) throw it
+        it.printStackTrace()
+        showDownloadBackgroundLimitReachNotification()
+        return@launch
       }
-    }.onFailure { it.printStackTrace() }
+      startPausedDownloadsDueToAndroidServiceLimitation()
+    }
   }
 
   private suspend fun buildForegroundNotification(): Notification =
