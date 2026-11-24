@@ -48,6 +48,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 import org.kiwix.kiwixmobile.core.Intents
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.R.string
@@ -268,8 +269,8 @@ class DownloadMonitorService : Service() {
    * timeout limit). By storing this information, we can later identify and automatically
    * resume only those downloads when the app returns to the foreground.
    */
-  private fun updatePauseReasonInDatabase(downloadId: Long) {
-    taskFlow.tryEmit {
+  private suspend fun updatePauseReasonInDatabase(downloadId: Long) {
+    withContext(ioDispatcher) {
       // Update the download entity in database so that we can resume all downloads
       // once app become visible in foreground
       downloadRoomDao.getEntityForDownloadId(downloadId)?.let { downloadRoomEntity ->
