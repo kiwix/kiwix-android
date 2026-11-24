@@ -50,6 +50,7 @@ class Fat32Checker constructor(
     MutableStateFlow<FileSystemState>(FileSystemState.DetectingFileSystem)
   val fileSystemStates: StateFlow<FileSystemState> = _fileSystemStates.asStateFlow()
   private var fileObserver: FileObserver? = null
+  private var isDisposed = false
   private val requestCheckSystemFileType = MutableSharedFlow<Unit>(replay = 1).apply {
     tryEmit(Unit)
   }
@@ -65,16 +66,27 @@ class Fat32Checker constructor(
           val storageFile = File(storage)
           if (!storageFile.exists()) {
             _fileSystemStates.emit(NotEnoughSpaceFor4GbFile)
+            replaceFileObserver(null)
             return@collectLatest
           }
           val systemState = toFileSystemState(storageFile)
           _fileSystemStates.emit(systemState)
-          fileObserver?.stopWatching()
-          fileObserver =
-            if (systemState == NotEnoughSpaceFor4GbFile) createFileObserver(storageFile) else null
+          replaceFileObserver(storageFile.takeIf { systemState == NotEnoughSpaceFor4GbFile })
         }
     }
   }
+
+  private fun replaceFileObserver(storageFile: File?) = synchronized(FILE_OBSERVER_LOCK) {
+    fileObserver?.stopWatching()
+    fileObserver = if (isDisposed) null else storageFile?.let(::startFileObserver)
+  }
+
+  private fun startFileObserver(storageFile: File): FileObserver? =
+    try {
+      createFileObserver(storageFile).apply { startWatching() }
+    } catch (_: ConcurrentModificationException) {
+      null
+    }
 
   private fun createFileObserver(storageFile: File): FileObserver =
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
@@ -82,14 +94,14 @@ class Fat32Checker constructor(
         override fun onEvent(event: Int, path: String?) {
           requestCheckSystemFileType.tryEmit(Unit)
         }
-      }.apply { startWatching() }
+      }
     } else {
       @Suppress("DEPRECATION")
       object : FileObserver(storageFile.path, MOVED_FROM or DELETE) {
         override fun onEvent(event: Int, path: String?) {
           requestCheckSystemFileType.tryEmit(Unit)
         }
-      }.apply { startWatching() }
+      }
     }
 
   private fun toFileSystemState(storageFile: File) =
@@ -116,13 +128,17 @@ class Fat32Checker constructor(
   }
 
   fun dispose() {
-    fileObserver?.stopWatching()
-    fileObserver = null
+    synchronized(FILE_OBSERVER_LOCK) {
+      isDisposed = true
+      fileObserver?.stopWatching()
+      fileObserver = null
+    }
     scope.cancel()
   }
 
   companion object {
     const val FOUR_GIGABYTES_IN_BYTES = 4L * 1024L * 1024L * 1024L
+    private val FILE_OBSERVER_LOCK = Any()
   }
 
   sealed class FileSystemState {
