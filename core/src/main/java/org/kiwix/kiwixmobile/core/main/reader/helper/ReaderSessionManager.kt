@@ -69,11 +69,20 @@ class ReaderSessionManager @Inject constructor(
 
   suspend fun saveReaderSession(onComplete: () -> Unit = {}) {
     withTabsMutationLock {
-      clearAndSaveLatestReaderSession(getWebViewHistoryList())
+      val tabsState = withContext(mainDispatcher) { tabsManager.currentState() }
+      val savedTabs = getWebViewHistoryList(tabsState)
+      clearAndSaveLatestReaderSession(savedTabs.map { it.second })
+      lastSavedTabs = savedTabs.map { it.first }
       val source = zimFileManager.zimReaderSource?.toDatabase()
       kiwixDataStore.apply {
         setCurrentZimFile(source.orEmpty())
-        setCurrentTab(tabsManager.currentState().selectedIndex)
+        // Read the selected tab again: the user may have switched tabs while the
+        // history was being written.
+        val selectedTab = withContext(mainDispatcher) { tabsManager.currentState().currentWebView }
+        setCurrentTab(
+          savedTabIndexOf(selectedTab)
+            ?: fallbackTabIndex(tabsState, savedTabs.map { it.first })
+        )
       }
       Log.d(
         TAG_KIWIX,
@@ -81,6 +90,49 @@ class ReaderSessionManager @Inject constructor(
       )
       onComplete.invoke()
     }
+  }
+
+  /**
+   * The tabs stored by the last [saveReaderSession], in the order they are saved.
+   * The saved tab index must point into this list, because it is the list that will
+   * be restored.
+   */
+  @Volatile
+  private var lastSavedTabs: List<KiwixWebView> = emptyList()
+
+  /**
+   * Saves only the selected tab, for example when the user switches tabs.
+   *
+   * Switching tabs does not load a page, so [saveReaderSession] is not called for it.
+   * Without this, the app reopens the tab that last loaded a page instead of the tab
+   * the user was reading.
+   *
+   * If the selected tab is not in the saved history yet (for example a new tab that is
+   * still loading), nothing is saved here. The next [saveReaderSession] saves it.
+   *
+   * This does not take [savingTabsMutex] on purpose: it is called from `selectTab`,
+   * which can run while the lock is already held (for example when a new main page tab
+   * is created), and the mutex is not reentrant.
+   */
+  suspend fun saveCurrentTab() {
+    val selectedTab = withContext(mainDispatcher) { tabsManager.currentState().currentWebView }
+    savedTabIndexOf(selectedTab)?.let { kiwixDataStore.setCurrentTab(it) }
+  }
+
+  private fun savedTabIndexOf(webView: KiwixWebView?): Int? =
+    webView?.let { tab -> lastSavedTabs.indexOfFirst { it === tab }.takeIf { it >= ZERO } }
+
+  /**
+   * Used when the selected tab itself is not saved (for example it has no page yet).
+   * Picks the nearest saved tab before it.
+   */
+  private fun fallbackTabIndex(
+    tabsState: TabsManager.TabsState,
+    savedTabs: List<KiwixWebView>
+  ): Int {
+    val tabsBefore = tabsState.webViews.take(tabsState.selectedIndex)
+    val savedTabsBefore = savedTabs.count { saved -> tabsBefore.any { it === saved } }
+    return (savedTabsBefore - 1).coerceIn(ZERO, max(savedTabs.size - 1, ZERO))
   }
 
   private suspend fun clearAndSaveLatestReaderSession(webViewHistoryEntityList: List<WebViewHistoryEntity>) {
@@ -157,12 +209,17 @@ class ReaderSessionManager @Inject constructor(
   private fun contentUrl(entryPath: String?): String =
     "$entryPath".addContentPrefix
 
-  private suspend fun getWebViewHistoryList(): List<WebViewHistoryEntity> {
+  /**
+   * Returns the tabs that can be saved, each paired with its history entity.
+   */
+  private suspend fun getWebViewHistoryList(
+    tabsState: TabsManager.TabsState
+  ): List<Pair<KiwixWebView, WebViewHistoryEntity>> {
     return withContext(mainDispatcher) {
-      val webViewHistoryEntityList = arrayListOf<WebViewHistoryEntity>()
-      tabsManager.currentState().webViews.forEachIndexed { index, view ->
+      val webViewHistoryEntityList = arrayListOf<Pair<KiwixWebView, WebViewHistoryEntity>>()
+      tabsState.webViews.forEachIndexed { index, view ->
         if (view.url == null) return@forEachIndexed
-        getWebViewHistoryEntity(view, index)?.let(webViewHistoryEntityList::add)
+        getWebViewHistoryEntity(view, index)?.let { webViewHistoryEntityList.add(view to it) }
       }
       return@withContext webViewHistoryEntityList
     }
@@ -217,6 +274,7 @@ class ReaderSessionManager @Inject constructor(
   }
 
   suspend fun clearWebViewHistory() {
+    lastSavedTabs = emptyList()
     tabsManager.getCurrentWebView()?.clearHistory()
     runCatching {
       withContext(ioDispatcher) {

@@ -175,6 +175,7 @@ internal class CoreReaderViewModelTest {
     every { readAloudManager.currentVoiceName } returns null
     every { readAloudManager.getAvailableVoices() } returns emptyList()
     every { readAloudManager.isPaused } returns false
+    coEvery { readerSessionManager.saveCurrentTab() } just Runs
 
     viewModel = TestCoreReaderViewModel(
       context,
@@ -925,6 +926,35 @@ internal class CoreReaderViewModelTest {
       // Update the bottomToolbar arrows
       assertThat(viewModel.uiState.value.isPreviousPageButtonEnable).isTrue()
       assertThat(viewModel.uiState.value.isNextPageButtonEnable).isFalse()
+    }
+
+    @Test
+    fun selectTab_savesSelectedTab() = runTest {
+      viewModel.isWebViewHistoryRestoring = false
+
+      viewModel.selectTab(1)
+
+      verify { readerWebViewManager.setCurrentWebViewIndex(1) }
+      coVerify(exactly = 1) { readerSessionManager.saveCurrentTab() }
+    }
+
+    @Test
+    fun selectTab_whileRestoringTabs_doesNotSaveSelectedTab() = runTest {
+      viewModel.isWebViewHistoryRestoring = true
+
+      viewModel.selectTab(1)
+
+      verify { readerWebViewManager.setCurrentWebViewIndex(1) }
+      coVerify(exactly = 0) { readerSessionManager.saveCurrentTab() }
+    }
+
+    @Test
+    fun onAction_SelectTab_savesSelectedTab() = runTest {
+      viewModel.onAction(ReaderAction.SelectTab(2))
+      advanceUntilIdle()
+
+      verify { readerWebViewManager.setCurrentWebViewIndex(2) }
+      coVerify { readerSessionManager.saveCurrentTab() }
     }
 
     @Test

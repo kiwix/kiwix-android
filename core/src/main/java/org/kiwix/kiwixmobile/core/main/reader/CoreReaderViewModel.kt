@@ -1241,6 +1241,11 @@ abstract class CoreReaderViewModel(
     updateUrlFlow()
     updateTableOfContents()
     updateTitle()
+    // Switching tabs does not load a page, so save the selected tab here. Skip it while
+    // tabs are being restored, because the tab list is not complete yet.
+    if (!isWebViewHistoryRestoring) {
+      readerSessionManager.saveCurrentTab()
+    }
   }
 
   override fun openExternalUrl(intent: Intent) {
