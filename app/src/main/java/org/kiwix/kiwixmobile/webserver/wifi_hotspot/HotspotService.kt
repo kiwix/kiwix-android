@@ -199,7 +199,10 @@ class HotspotService :
     if (serverStatus?.isServerStarted == true) {
       currentlyHostedPaths = paths
       zimHostCallbacks?.onServerStarted(webServerHelper?.getServerAddress().orEmpty())
-      startForegroundNotificationHelper()
+      if (!startForegroundNotificationHelper()) {
+        stopHotspotAndDismissNotification()
+        return
+      }
       if (!restart) {
         Toast
           .makeText(
@@ -232,12 +235,13 @@ class HotspotService :
     zimHostCallbacks = myCallback
   }
 
-  private fun startForegroundNotificationHelper() {
-    startForeground(
-      HotspotNotificationManager.HOTSPOT_NOTIFICATION_ID,
-      hotspotNotificationManager?.buildForegroundNotification(serverAddress)
-    )
-  }
+  private fun startForegroundNotificationHelper(): Boolean =
+    runCatching {
+      startForeground(
+        HotspotNotificationManager.HOTSPOT_NOTIFICATION_ID,
+        hotspotNotificationManager?.buildForegroundNotification(serverAddress)
+      )
+    }.onFailure { it.printStackTrace() }.isSuccess
 
   override fun onIpAddressValid() {
     zimHostCallbacks?.onIpAddressValid()

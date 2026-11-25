@@ -162,4 +162,22 @@ class HotspotServiceTest {
       }
       verify(exactly = 1) { toast.show() }
     }
+
+  @Test
+  fun `stops the server when it cannot be promoted to foreground`() = runTest {
+    ServerUtils.isServerStarted = true
+    hotspotService.currentlyHostedPaths = listOf("/path1", "/path2")
+    every { dataSource.getLanguageCategorizedBooks() } returns flowOf(
+      listOf(bookOnDisk("id1", "/path1"))
+    )
+    coEvery { webServerHelper.startServerHelper(any(), true) } returns
+      ServerStatus(isServerStarted = true, errorMessage = null)
+    every { hotspotService.startForeground(any(), any()) } throws IllegalStateException()
+
+    hotspotService.resyncServerWithRemainingBooks()
+
+    verify(exactly = 1) { webServerHelper.stopAndroidWebServer() }
+    verify(exactly = 1) { zimHostCallbacks.onServerStopped() }
+    verify(exactly = 1) { hotspotService.stopSelf() }
+  }
 }
