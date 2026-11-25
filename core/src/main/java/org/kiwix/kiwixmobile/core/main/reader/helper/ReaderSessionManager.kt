@@ -110,9 +110,8 @@ class ReaderSessionManager @Inject constructor(
    * If the selected tab is not in the saved history yet (for example a new tab that is
    * still loading), nothing is saved here. The next [saveReaderSession] saves it.
    *
-   * This does not take [savingTabsMutex] on purpose: it is called from `selectTab`,
-   * which can run while the lock is already held (for example when a new main page tab
-   * is created), and the mutex is not reentrant.
+   * This does not take [savingTabsMutex]: it only writes one value, so it does not need
+   * the lock.
    */
   suspend fun saveCurrentTab() {
     val selectedTab = withContext(mainDispatcher) { tabsManager.currentState().currentWebView }

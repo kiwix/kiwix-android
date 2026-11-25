@@ -487,7 +487,7 @@ class ReaderSessionManagerTest {
       saveSession(tabs, selectedIndex = 0)
       mockTabs(tabs, selectedIndex = 1)
 
-      // selectTab can run while the lock is held, so this must not deadlock.
+      // saveCurrentTab does not take the lock, so calling it while the lock is held works.
       readerSessionManager.withTabsMutationLock { readerSessionManager.saveCurrentTab() }
 
       coVerify { kiwixDataStore.setCurrentTab(1) }
