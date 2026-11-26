@@ -36,6 +36,7 @@ import com.tonyodev.fetch2.Status
 import com.tonyodev.fetch2.util.DEFAULT_NOTIFICATION_TIMEOUT_AFTER_RESET
 import com.tonyodev.fetch2core.DownloadBlock
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -47,6 +48,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 import org.kiwix.kiwixmobile.core.Intents
 import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.R.string
@@ -267,8 +269,8 @@ class DownloadMonitorService : Service() {
    * timeout limit). By storing this information, we can later identify and automatically
    * resume only those downloads when the app returns to the foreground.
    */
-  private fun updatePauseReasonInDatabase(downloadId: Long) {
-    taskFlow.tryEmit {
+  private suspend fun updatePauseReasonInDatabase(downloadId: Long) {
+    withContext(ioDispatcher) {
       // Update the download entity in database so that we can resume all downloads
       // once app become visible in foreground
       downloadRoomDao.getEntityForDownloadId(downloadId)?.let { downloadRoomEntity ->
@@ -326,16 +328,21 @@ class DownloadMonitorService : Service() {
   }
 
   private fun startForegroundService() {
-    runCatching {
-      scope?.launch {
-        fetchDownloadNotificationManager.createNotificationChannels(
-          this@DownloadMonitorService,
-          notificationManager
-        )
+    scope?.launch {
+      fetchDownloadNotificationManager.createNotificationChannels(
+        this@DownloadMonitorService,
+        notificationManager
+      )
+      runCatching {
         startForeground(DOWNLOAD_SERVICE_NOTIFICATION_ID, buildForegroundNotification())
-        startPausedDownloadsDueToAndroidServiceLimitation()
+      }.onFailure {
+        if (it is CancellationException) throw it
+        it.printStackTrace()
+        showDownloadBackgroundLimitReachNotification()
+        return@launch
       }
-    }.onFailure { it.printStackTrace() }
+      startPausedDownloadsDueToAndroidServiceLimitation()
+    }
   }
 
   private suspend fun buildForegroundNotification(): Notification =
