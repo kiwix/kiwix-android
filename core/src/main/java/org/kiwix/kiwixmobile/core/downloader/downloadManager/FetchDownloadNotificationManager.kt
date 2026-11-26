@@ -29,6 +29,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.Build
+import android.os.SystemClock
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationCompat.Builder
@@ -77,6 +78,7 @@ import javax.inject.Inject
 
 const val DOWNLOAD_NOTIFICATION_TITLE = "OPEN_ZIM_FILE"
 const val DOWNLOAD_NOTIFICATION_ID = "DOWNLOAD_NOTIFICATION_ID"
+const val MIN_NOTIFICATION_REPOST_INTERVAL_MS = 1_900L
 
 class FetchDownloadNotificationManager @Inject constructor(
   @param:ApplicationContext val context: Context,
@@ -85,6 +87,9 @@ class FetchDownloadNotificationManager @Inject constructor(
 ) : DefaultFetchNotificationManager(context) {
   private val notificationBuilderLock = Any()
   private val pausedDownloadTitles = mutableMapOf<Int, String>()
+  private val lastPostedDownloadNotifications = mutableMapOf<Int, Pair<Status, Long>>()
+  private var lastPostedSummaryLines: List<String> = emptyList()
+  private var lastSummaryPostedAt = 0L
 
   private val downloadNotificationManager: NotificationManager by lazy {
     context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
@@ -133,8 +138,6 @@ class FetchDownloadNotificationManager @Inject constructor(
       downloadNotificationManager.cancel(DOWNLOAD_SERVICE_NOTIFICATION_ID)
       return false
     }
-    val style = NotificationCompat.InboxStyle()
-    titles.values.forEach(style::addLine)
     val summaryTitle = if (downloadNotifications.any { it.isDownloading || it.isQueued }) {
       context.resources.getCountString(
         R.string.downloading_files_count_singular,
@@ -144,6 +147,18 @@ class FetchDownloadNotificationManager @Inject constructor(
     } else {
       context.getString(R.string.paused_state)
     }
+    return isSummaryDueForRepost(listOf(summaryTitle) + titles.values) &&
+      postGroupSummary(groupId, notificationBuilder, summaryTitle, titles.values)
+  }
+
+  private fun postGroupSummary(
+    groupId: Int,
+    notificationBuilder: NotificationCompat.Builder,
+    summaryTitle: String,
+    titles: Collection<String>
+  ): Boolean {
+    val style = NotificationCompat.InboxStyle()
+    titles.forEach(style::addLine)
     notificationBuilder
       .setSmallIcon(android.R.drawable.stat_sys_download)
       .setContentTitle(summaryTitle)
@@ -176,8 +191,39 @@ class FetchDownloadNotificationManager @Inject constructor(
     return super.postDownloadUpdate(download)
   }
 
-  override fun shouldUpdateNotification(downloadNotification: DownloadNotification): Boolean =
-    !downloadNotification.isCompleted && super.shouldUpdateNotification(downloadNotification)
+  override fun shouldUpdateNotification(downloadNotification: DownloadNotification): Boolean {
+    if (downloadNotification.isCompleted ||
+      !super.shouldUpdateNotification(downloadNotification)
+    ) {
+      lastPostedDownloadNotifications.remove(downloadNotification.notificationId)
+      return false
+    }
+    return isDueForRepost(downloadNotification)
+  }
+
+  private fun isDueForRepost(downloadNotification: DownloadNotification): Boolean {
+    val now = SystemClock.elapsedRealtime()
+    val lastPosted = lastPostedDownloadNotifications[downloadNotification.notificationId]
+    val isRecentDuplicate = downloadNotification.isDownloading &&
+      lastPosted?.first == downloadNotification.status &&
+      now - lastPosted.second < MIN_NOTIFICATION_REPOST_INTERVAL_MS
+    if (!isRecentDuplicate) {
+      lastPostedDownloadNotifications[downloadNotification.notificationId] =
+        downloadNotification.status to now
+    }
+    return !isRecentDuplicate
+  }
+
+  private fun isSummaryDueForRepost(summaryLines: List<String>): Boolean {
+    val now = SystemClock.elapsedRealtime()
+    val isRecentDuplicate = summaryLines == lastPostedSummaryLines &&
+      now - lastSummaryPostedAt < MIN_NOTIFICATION_REPOST_INTERVAL_MS
+    if (!isRecentDuplicate) {
+      lastPostedSummaryLines = summaryLines
+      lastSummaryPostedAt = now
+    }
+    return !isRecentDuplicate
+  }
 
   override fun getSubtitleText(
     context: Context,
@@ -264,9 +310,10 @@ class FetchDownloadNotificationManager @Inject constructor(
         if (downloadNotification.progress < ZERO) ZERO else downloadNotification.progress
       notificationBuilder.setProgress(maxProgress, progress, progressIndeterminate)
     }
+    notificationBuilder.setTimeoutAfter(DEFAULT_NOTIFICATION_TIMEOUT_AFTER_RESET)
     when {
       downloadNotification.isDownloading ->
-        notificationBuilder.setTimeoutAfter(getNotificationTimeOutMillis())
+        notificationBuilder
           .addAction(
             drawable.fetch_notification_pause,
             context.getString(R.string.notification_pause_button_text),
@@ -279,7 +326,7 @@ class FetchDownloadNotificationManager @Inject constructor(
           )
 
       downloadNotification.isPaused ->
-        notificationBuilder.setTimeoutAfter(DEFAULT_NOTIFICATION_TIMEOUT_AFTER_RESET)
+        notificationBuilder
           .addAction(
             drawable.fetch_notification_resume,
             context.getString(R.string.notification_resume_button_text),
@@ -292,14 +339,14 @@ class FetchDownloadNotificationManager @Inject constructor(
           )
 
       downloadNotification.isQueued ->
-        notificationBuilder.setTimeoutAfter(DEFAULT_NOTIFICATION_TIMEOUT_AFTER_RESET)
+        notificationBuilder
           .addAction(
             drawable.fetch_notification_cancel,
             context.getString(R.string.cancel),
             getActionPendingIntent(downloadNotification, DownloadNotification.ActionType.DELETE)
           )
 
-      else -> notificationBuilder.setTimeoutAfter(DEFAULT_NOTIFICATION_TIMEOUT_AFTER_RESET)
+      else -> Unit
     }
     notificationCustomisation(downloadNotification, notificationBuilder, context)
   }
