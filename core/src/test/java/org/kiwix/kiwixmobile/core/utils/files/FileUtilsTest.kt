@@ -25,6 +25,7 @@ import android.util.Log
 import android.webkit.URLUtil
 import io.mockk.clearAllMocks
 import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
@@ -95,11 +96,32 @@ class FileUtilsTest {
   }
 
   @Test
+  fun getAllZimParts_whenFileEndsWithUppercaseZimAndExists_returnsOriginalFile() {
+    testWith(".ZIM", true)
+  }
+
+  @Test
+  fun getAllZimParts_whenSplitFileHasUppercaseExtension_returnsAllChunks() = runTest {
+    every { mockFile.path } returns "/storage/emulated/0/WIKI.ZIMAA"
+    givenExistingFiles("/storage/emulated/0/WIKI.ZIMAA", "/storage/emulated/0/WIKI.ZIMAB")
+    assertEquals(
+      listOf("/storage/emulated/0/WIKI.ZIMAA", "/storage/emulated/0/WIKI.ZIMAB"),
+      FileUtils.getAllZimParts(testBook, testDispatcher).map(File::invariantSeparatorsPath)
+    )
+  }
+
+  @Test
   fun getAllZimParts_whenNoFileExistsAtAnyLocation_returnsEmptyList() = runTest {
     every { mockFile.path } returns "${fileName}zimab"
     coEvery { mockFile.isFileExist(testDispatcher) } returns false
     coEvery { any<File>().isFileExist(testDispatcher) } returns false
     assertEquals(0, FileUtils.getAllZimParts(testBook, testDispatcher).size)
+  }
+
+  private fun givenExistingFiles(vararg paths: String) {
+    coEvery { any<File>().isFileExist(testDispatcher) } answers {
+      firstArg<File>().invariantSeparatorsPath in paths
+    }
   }
 
   private fun testWith(extension: String, fileExists: Boolean) = runTest {
@@ -144,6 +166,19 @@ class FileUtilsTest {
   }
 
   @Test
+  fun hasPart_whenFileEndsWithUppercaseZim_returnsFalse() = runTest {
+    val path = "/storage/emulated/0/WIKI.ZIM"
+    coEvery { any<File>().isFileExist(testDispatcher) } returns true
+    assertFalse(FileUtils.hasPart(File(path), testDispatcher))
+  }
+
+  @Test
+  fun hasPart_whenSplitFileWithUppercaseExtensionHasPart_returnsTrue() = runTest {
+    givenExistingFiles("/storage/emulated/0/WIKI.ZIMAA", "/storage/emulated/0/WIKI.ZIMAB.part")
+    assertTrue(FileUtils.hasPart(File("/storage/emulated/0/WIKI.ZIMAA"), testDispatcher))
+  }
+
+  @Test
   fun hasPart_whenNoFilesExistForZimPath_returnsFalse() = runTest {
     val path = "/storage/emulated/0/wiki.zim"
     coEvery { any<File>().isFileExist(testDispatcher) } returns false
@@ -182,6 +217,21 @@ class FileUtilsTest {
     FileUtils.deleteZimFile("/storage/emulated/0/wiki.zimaa.part.part", testDispatcher)
   }
 
+  @Test
+  fun deleteZimFile_whenExtensionIsUppercase_deletesFile() = runTest {
+    val path = "/storage/emulated/0/WIKI.ZIM"
+    FileUtils.deleteZimFile(path, testDispatcher)
+    coVerify { File(path).deleteFile(testDispatcher) }
+  }
+
+  @Test
+  fun deleteZimFile_whenSplitFileHasUppercaseExtension_deletesAllChunks() = runTest {
+    givenExistingFiles("/storage/emulated/0/WIKI.ZIMAA", "/storage/emulated/0/WIKI.ZIMAB")
+    FileUtils.deleteZimFile("/storage/emulated/0/WIKI.ZIMAA", testDispatcher)
+    coVerify { File("/storage/emulated/0/WIKI.ZIMAA").deleteFile(testDispatcher) }
+    coVerify { File("/storage/emulated/0/WIKI.ZIMAB").deleteFile(testDispatcher) }
+  }
+
   // ======== isValidZimFile ========
 
   @Test
@@ -190,6 +240,9 @@ class FileUtilsTest {
     assertTrue(FileUtils.isValidZimFile("test.zimaa"))
     assertTrue(FileUtils.isValidZimFile("/storage/emulated/0/wikipedia.zim"))
     assertTrue(FileUtils.isValidZimFile("/storage/emulated/0/wikipedia.zimaa"))
+    assertTrue(FileUtils.isValidZimFile("TEST.ZIM"))
+    assertTrue(FileUtils.isValidZimFile("/storage/emulated/0/Wikipedia.Zim"))
+    assertTrue(FileUtils.isValidZimFile("TEST.ZIMAA"))
   }
 
   @Test
@@ -207,6 +260,7 @@ class FileUtilsTest {
     assertTrue(FileUtils.isSplittedZimFile("test.zimaa"))
     assertTrue(FileUtils.isSplittedZimFile("test.zimab"))
     assertTrue(FileUtils.isSplittedZimFile("test.zimaz"))
+    assertTrue(FileUtils.isSplittedZimFile("TEST.ZIMAB"))
   }
 
   @Test

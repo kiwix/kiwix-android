@@ -118,7 +118,7 @@ class FileSearch @Inject constructor(
         !dir.name.equals("obb", ignoreCase = true) &&
         !dir.name.startsWith(".", ignoreCase = true)
     }.filter {
-      it.extension.isAny(*zimFileExtensions)
+      it.extension.lowercase().isAny(*zimFileExtensions)
     }.toList()
 }
 
