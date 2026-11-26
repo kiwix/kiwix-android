@@ -26,59 +26,70 @@ import androidx.core.net.toUri
 import androidx.documentfile.provider.DocumentFile
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.currentCoroutineContext
+import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.withContext
 import org.kiwix.kiwixmobile.core.di.IoDispatcher
 import org.kiwix.kiwixmobile.core.utils.HUNDERED
 import org.kiwix.kiwixmobile.core.utils.ZERO
 import java.io.File
-import java.io.FileInputStream
 import java.io.FileNotFoundException
-import java.io.FileOutputStream
+import java.io.IOException
+import java.io.InputStream
+import java.io.OutputStream
 import javax.inject.Inject
 
 class FileOperationHandlerImpl @Inject constructor(
   @param:ApplicationContext private val context: Context,
   @param:IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : FileOperationHandler {
-  @Suppress("MagicNumber")
   override suspend fun copy(
     sourceUri: Uri,
     destinationFile: File,
     onProgress: suspend (Int) -> Unit
   ) {
     withContext(ioDispatcher) {
-      val contentResolver = context.contentResolver
-      val parcelFileDescriptor =
-        contentResolver.openFileDescriptor(sourceUri, "r")
-          ?: throw FileNotFoundException("The selected file could not be opened")
-      var totalBytesTransferred = 0L
-      parcelFileDescriptor.use { pfd ->
-        FileInputStream(pfd.fileDescriptor).channel.use { sourceChannel ->
-          FileOutputStream(destinationFile).channel.use { destinationChannel ->
-            val fileSize = sourceChannel.size()
-            if (fileSize <= 0L) {
-              // if the file does not have any content simply returns.
-              onProgress(HUNDERED)
-              return@withContext
-            }
-
-            var bytesTransferred: Long
-            val bufferSize = 1024 * 1024
-            while (totalBytesTransferred < fileSize) {
-              // Transfer data from source to destination in chunks
-              bytesTransferred = sourceChannel.transferTo(
-                totalBytesTransferred,
-                bufferSize.toLong(),
-                destinationChannel
-              )
-              totalBytesTransferred += bytesTransferred
-              val progress = (totalBytesTransferred * HUNDERED / fileSize).toInt()
-              onProgress.invoke(progress.coerceAtMost(HUNDERED))
-            }
+      val source = context.contentResolver.openAssetFileDescriptor(sourceUri, "r")
+        ?: throw FileNotFoundException("The selected file could not be opened")
+      source.use { descriptor ->
+        val fileSize = descriptor.length
+        val bytesCopied = descriptor.createInputStream().use { input ->
+          destinationFile.outputStream().use { output ->
+            copyStream(input, output, fileSize, onProgress)
           }
+        }
+        if (bytesCopied == 0L || (fileSize >= 0L && bytesCopied != fileSize)) {
+          throw IOException("The selected ZIM file is empty or could not be copied completely")
+        }
+      }
+      onProgress(HUNDERED)
+    }
+  }
+
+  private suspend fun copyStream(
+    input: InputStream,
+    output: OutputStream,
+    fileSize: Long,
+    onProgress: suspend (Int) -> Unit
+  ): Long {
+    val buffer = ByteArray(COPY_BUFFER_SIZE)
+    var bytesCopied = 0L
+    var lastProgress = ZERO
+    while (true) {
+      currentCoroutineContext().ensureActive()
+      val bytesRead = input.read(buffer)
+      if (bytesRead == -1) break
+      output.write(buffer, 0, bytesRead)
+      bytesCopied += bytesRead
+      if (fileSize > 0 && bytesCopied < fileSize) {
+        val progress = (bytesCopied * HUNDERED / fileSize).toInt()
+        if (progress != lastProgress) {
+          onProgress(progress)
+          lastProgress = progress
         }
       }
     }
+    return bytesCopied
   }
 
   override suspend fun move(
@@ -149,5 +160,9 @@ class FileOperationHandlerImpl @Inject constructor(
       selectedFile.delete()
       it.printStackTrace()
     }.getOrDefault(false)
+  }
+
+  private companion object {
+    const val COPY_BUFFER_SIZE = 1024 * 1024
   }
 }
