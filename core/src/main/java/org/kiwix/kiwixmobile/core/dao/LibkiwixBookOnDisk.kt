@@ -50,6 +50,8 @@ import org.kiwix.kiwixmobile.core.utils.StorageDeviceProvider
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils
 import org.kiwix.kiwixmobile.core.utils.files.Log
+import org.kiwix.kiwixmobile.core.utils.safeStopWatching
+import org.kiwix.kiwixmobile.core.utils.startWatchingWithRetry
 import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListItem.BookOnDisk
 import org.kiwix.libkiwix.Book
 import org.kiwix.libkiwix.Library
@@ -120,23 +122,25 @@ class LibkiwixBookOnDisk @Inject constructor(
       .flatMap { rootDir -> rootDir.walkTopDown().filter(File::isDirectory) }
       .distinctBy(File::getAbsolutePath)
 
-    directoriesToWatch.forEach(::watchDirectory)
+    directoriesToWatch.forEach { watchDirectory(it) }
   }
 
-  private fun watchDirectory(directory: File) {
+  private suspend fun watchDirectory(directory: File) {
     val path = runCatching { directory.canonicalPath }.getOrDefault(directory.absolutePath)
     if (fileObservers.containsKey(path)) return
     runCatching {
       val observer = createFileObserver(directory)
-      if (fileObservers.putIfAbsent(path, observer) == null) {
-        observer.startWatching()
+      if (fileObservers.putIfAbsent(path, observer) == null &&
+        !observer.startWatchingWithRetry()
+      ) {
+        fileObservers.remove(path, observer)
       }
     }.onFailure { it.printStackTrace() }
   }
 
   private fun unwatchDirectory(directory: File) {
     val path = runCatching { directory.canonicalPath }.getOrDefault(directory.absolutePath)
-    fileObservers.remove(path)?.stopWatching()
+    fileObservers.remove(path)?.safeStopWatching()
   }
 
   private fun createFileObserver(watchDir: File): FileObserver {
@@ -176,7 +180,7 @@ class LibkiwixBookOnDisk @Inject constructor(
 
   private suspend fun handleMovedIn(file: File) {
     if (file.isDirectory) {
-      file.walkTopDown().filter(File::isDirectory).forEach(::watchDirectory)
+      file.walkTopDown().filter(File::isDirectory).forEach { watchDirectory(it) }
       file.walkTopDown().filter { isZimFile(it.name) }.forEach { addBookFromFile(it) }
     } else {
       addZimFileIfValid(file)

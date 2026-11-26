@@ -31,8 +31,12 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import org.kiwix.kiwixmobile.core.di.IoDispatcher
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
+import org.kiwix.kiwixmobile.core.utils.safeStopWatching
+import org.kiwix.kiwixmobile.core.utils.startWatchingWithRetry
 import org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState.CanWrite4GbFile
 import org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState.CannotWrite4GbFile
 import org.kiwix.kiwixmobile.zimManager.Fat32Checker.FileSystemState.NotEnoughSpaceFor4GbFile
@@ -49,7 +53,10 @@ class Fat32Checker constructor(
   private val _fileSystemStates =
     MutableStateFlow<FileSystemState>(FileSystemState.DetectingFileSystem)
   val fileSystemStates: StateFlow<FileSystemState> = _fileSystemStates.asStateFlow()
-  private var fileObserver: FileObserver? = null
+
+  @Volatile private var fileObserver: FileObserver? = null
+
+  @Volatile private var isDisposed = false
   private val requestCheckSystemFileType = MutableSharedFlow<Unit>(replay = 1).apply {
     tryEmit(Unit)
   }
@@ -65,14 +72,28 @@ class Fat32Checker constructor(
           val storageFile = File(storage)
           if (!storageFile.exists()) {
             _fileSystemStates.emit(NotEnoughSpaceFor4GbFile)
+            replaceFileObserver(null)
             return@collectLatest
           }
           val systemState = toFileSystemState(storageFile)
           _fileSystemStates.emit(systemState)
-          fileObserver?.stopWatching()
-          fileObserver =
-            if (systemState == NotEnoughSpaceFor4GbFile) createFileObserver(storageFile) else null
+          replaceFileObserver(storageFile.takeIf { systemState == NotEnoughSpaceFor4GbFile })
         }
+    }
+  }
+
+  private suspend fun replaceFileObserver(storageFile: File?) {
+    fileObserverMutex.withLock {
+      fileObserver?.safeStopWatching()
+      fileObserver = null
+      if (storageFile == null || isDisposed) return@replaceFileObserver
+      val observer = createFileObserver(storageFile)
+      if (!observer.startWatchingWithRetry()) return@replaceFileObserver
+      fileObserver = observer
+      if (isDisposed) {
+        observer.safeStopWatching()
+        fileObserver = null
+      }
     }
   }
 
@@ -82,14 +103,14 @@ class Fat32Checker constructor(
         override fun onEvent(event: Int, path: String?) {
           requestCheckSystemFileType.tryEmit(Unit)
         }
-      }.apply { startWatching() }
+      }
     } else {
       @Suppress("DEPRECATION")
       object : FileObserver(storageFile.path, MOVED_FROM or DELETE) {
         override fun onEvent(event: Int, path: String?) {
           requestCheckSystemFileType.tryEmit(Unit)
         }
-      }.apply { startWatching() }
+      }
     }
 
   private fun toFileSystemState(storageFile: File) =
@@ -116,13 +137,15 @@ class Fat32Checker constructor(
   }
 
   fun dispose() {
-    fileObserver?.stopWatching()
+    isDisposed = true
+    fileObserver?.safeStopWatching()
     fileObserver = null
     scope.cancel()
   }
 
   companion object {
     const val FOUR_GIGABYTES_IN_BYTES = 4L * 1024L * 1024L * 1024L
+    private val fileObserverMutex = Mutex()
   }
 
   sealed class FileSystemState {
