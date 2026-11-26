@@ -18,9 +18,11 @@
 
 package org.kiwix.kiwixmobile.core.qr
 
+import android.graphics.Bitmap
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.SmallTest
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertThrows
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -47,6 +49,40 @@ class GenerateQRTest {
     assertEquals(32768, qr.byteCount)
     assertEquals(128, qr.width)
     assertEquals(128, qr.height)
+    qr.recycle()
+  }
+
+  @Test fun testCreateQRWithEmptyContentThrows() {
+    assertThrows(IllegalArgumentException::class.java) {
+      GenerateQR().createQR("")
+    }
+  }
+
+  @Test fun testCreateQRWithBlankContent() {
+    assertQrCreated(GenerateQR().createQR("   "))
+  }
+
+  @Test fun testCreateQRWithServerAddresses() {
+    listOf(
+      "http://192.168.43.1:8080/",
+      "http://[fe80::1c2b:3cff:fe4d:5e6f]:8080/",
+      "http://10.0.2.15:8080/content/wikipedia_en_all/A/Main_Page?lang=हिन्दी&q=a b"
+    ).forEach { assertQrCreated(GenerateQR().createQR(it)) }
+  }
+
+  @Test fun testCreateQRWithLongContent() {
+    assertQrCreated(GenerateQR().createQR("http://192.168.43.1:8080/" + "a".repeat(1000)))
+  }
+
+  @Test fun testCreateQRWithContentExceedingCapacityThrows() {
+    assertThrows(Exception::class.java) {
+      GenerateQR().createQR("a".repeat(5000))
+    }
+  }
+
+  private fun assertQrCreated(qr: Bitmap) {
+    assertEquals(512, qr.width)
+    assertEquals(512, qr.height)
     qr.recycle()
   }
 }

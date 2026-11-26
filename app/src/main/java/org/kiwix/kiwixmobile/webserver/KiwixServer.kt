@@ -89,14 +89,7 @@ class KiwixServer @Inject constructor(
       }
   }
 
-  fun getServerAddress(): String? {
-    val serverAccessUrls = jniKiwixServer.serverAccessUrls
-    return if (serverAccessUrls.size > 0) {
-      serverAccessUrls[0]
-    } else {
-      null
-    }
-  }
+  fun getServerAddress(): String? = firstValidServerAddress(jniKiwixServer.serverAccessUrls)
 
   fun startServer(port: Int): Boolean {
     jniKiwixServer.setPort(port)
@@ -105,3 +98,6 @@ class KiwixServer @Inject constructor(
 
   fun stopServer() = jniKiwixServer.stop()
 }
+
+internal fun firstValidServerAddress(urls: Array<out String?>?): String? =
+  urls?.firstOrNull { !it.isNullOrBlank() }
