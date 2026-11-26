@@ -230,7 +230,7 @@ class AllProjectConfigurer {
 
   fun configureDependencies(target: Project) {
     target.dependencies {
-      coreLibraryDesugaring(Libs.desugar_jdk_libs)
+      coreLibraryDesugaring(Libs.DESUGAR_JDK_LIBS)
       implementation(Libs.KOTLIN_STDLIB_JDK8)
       implementation(Libs.appcompat)
       implementation(Libs.appcompat_resource)

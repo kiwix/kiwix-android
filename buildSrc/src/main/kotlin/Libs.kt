@@ -220,7 +220,8 @@ object Libs {
   /**
    * https://developer.android.com/studio/write/java8-support#library-desugaring
    */
-  const val desugar_jdk_libs: String = "com.android.tools:desugar_jdk_libs:" + Versions.desugar_jdk_libs
+  const val DESUGAR_JDK_LIBS: String =
+    "com.android.tools:desugar_jdk_libs:" + Versions.DESUGAR_JDK_LIBS
 
   /**
    * https://developer.android.com/testing
