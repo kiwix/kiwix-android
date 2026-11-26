@@ -19,38 +19,22 @@
 package org.kiwix.kiwixmobile.webserver
 
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Test
 
 class KiwixServerTest {
   @Test
-  fun `returns first address when it is valid`() {
-    assertEquals(
-      "http://192.168.43.1:8080/",
-      firstValidServerAddress(arrayOf("http://192.168.43.1:8080/", "http://10.0.2.15:8080/"))
-    )
-  }
-
-  @Test
-  fun `skips empty and blank addresses`() {
-    assertEquals(
-      "http://10.0.2.15:8080/",
-      firstValidServerAddress(arrayOf("", "  ", null, "http://10.0.2.15:8080/"))
-    )
-  }
-
-  @Test
-  fun `returns null when all addresses are blank`() {
-    assertNull(firstValidServerAddress(arrayOf("", " ")))
-  }
-
-  @Test
-  fun `returns null when there are no addresses`() {
-    assertNull(firstValidServerAddress(emptyArray()))
-  }
-
-  @Test
-  fun `returns null when urls array is null`() {
-    assertNull(firstValidServerAddress(null))
+  fun testFirstValidServerAddress() {
+    val validAddress = "http://192.168.43.1:8080/"
+    val fallbackAddress = "http://10.0.2.15:8080/"
+    listOf(
+      arrayOf(validAddress, fallbackAddress) to validAddress,
+      arrayOf("", fallbackAddress) to fallbackAddress,
+      arrayOf("  ", null, fallbackAddress) to fallbackAddress,
+      arrayOf("", " ") to null,
+      emptyArray<String?>() to null,
+      null to null
+    ).forEach { (urls, expected) ->
+      assertEquals(expected, firstValidServerAddress(urls), "urls=${urls?.toList()}")
+    }
   }
 }

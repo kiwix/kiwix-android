@@ -18,7 +18,6 @@
 
 package org.kiwix.kiwixmobile.core.qr
 
-import android.graphics.Bitmap
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.SmallTest
 import org.junit.Assert.assertEquals
@@ -52,37 +51,28 @@ class GenerateQRTest {
     qr.recycle()
   }
 
-  @Test fun testCreateQRWithEmptyContentThrows() {
-    assertThrows(IllegalArgumentException::class.java) {
-      GenerateQR().createQR("")
-    }
-  }
-
-  @Test fun testCreateQRWithBlankContent() {
-    assertQrCreated(GenerateQR().createQR("   "))
-  }
-
-  @Test fun testCreateQRWithServerAddresses() {
-    listOf(
+  @Test fun testCreateQRWithEdgeCases() {
+    val validContents = listOf(
       "http://192.168.43.1:8080/",
       "http://[fe80::1c2b:3cff:fe4d:5e6f]:8080/",
-      "http://10.0.2.15:8080/content/wikipedia_en_all/A/Main_Page?lang=हिन्दी&q=a b"
-    ).forEach { assertQrCreated(GenerateQR().createQR(it)) }
-  }
-
-  @Test fun testCreateQRWithLongContent() {
-    assertQrCreated(GenerateQR().createQR("http://192.168.43.1:8080/" + "a".repeat(1000)))
-  }
-
-  @Test fun testCreateQRWithContentExceedingCapacityThrows() {
-    assertThrows(Exception::class.java) {
-      GenerateQR().createQR("a".repeat(5000))
+      "http://10.0.2.15:8080/content/wikipedia_en_all/A/Main_Page?lang=हिन्दी&q=a b",
+      "http://192.168.43.1:8080/" + "a".repeat(1000)
+    )
+    validContents.forEach {
+      val qr = GenerateQR().createQR(it)
+      assertEquals(512, qr.width)
+      assertEquals(512, qr.height)
+      qr.recycle()
     }
-  }
 
-  private fun assertQrCreated(qr: Bitmap) {
-    assertEquals(512, qr.width)
-    assertEquals(512, qr.height)
-    qr.recycle()
+    val invalidContents = listOf(
+      "" to IllegalArgumentException::class.java,
+      "   " to IllegalArgumentException::class.java,
+      "\n\t" to IllegalArgumentException::class.java,
+      "a".repeat(5000) to Exception::class.java
+    )
+    invalidContents.forEach { (content, exception) ->
+      assertThrows(exception) { GenerateQR().createQR(content) }
+    }
   }
 }

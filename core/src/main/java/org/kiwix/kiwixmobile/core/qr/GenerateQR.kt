@@ -47,6 +47,7 @@ class GenerateQR @Inject constructor() {
     foregroundColor: Int = Color.BLACK,
     backgroundColor: Int = Color.WHITE
   ): Bitmap {
+    require(code.isNotBlank()) { "Found blank contents" }
     val hints = hashMapOf<EncodeHintType, Int>().also {
       it[EncodeHintType.MARGIN] = 1
     }
