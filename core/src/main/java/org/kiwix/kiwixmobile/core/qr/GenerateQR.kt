@@ -27,6 +27,7 @@ import com.google.zxing.BarcodeFormat
 import com.google.zxing.EncodeHintType
 import com.google.zxing.qrcode.QRCodeWriter
 import javax.inject.Inject
+import kotlin.jvm.Throws
 
 /**
  * Utility class to generate QR codes.
@@ -41,6 +42,7 @@ class GenerateQR @Inject constructor() {
    * @param backgroundColor The background color of the QR code.
    */
   @SuppressLint("UseKtx")
+  @Throws(IllegalArgumentException::class)
   fun createQR(
     code: String,
     size: Int = 512,
