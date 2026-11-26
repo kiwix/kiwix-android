@@ -19,6 +19,7 @@ package org.kiwix.kiwixmobile.core.utils
 
 import android.os.FileObserver
 import kotlinx.coroutines.delay
+import kotlin.time.Duration.Companion.milliseconds
 
 const val FILE_OBSERVER_RETRY_ATTEMPTS = 5
 const val FILE_OBSERVER_RETRY_DELAY_MS = 500L
@@ -30,9 +31,9 @@ suspend fun FileObserver.startWatchingWithRetry(
   repeat(attempts) { attempt ->
     try {
       startWatching()
-      return true
+      return@startWatchingWithRetry true
     } catch (_: ConcurrentModificationException) {
-      if (attempt < attempts - 1) delay(retryDelayMs)
+      if (attempt < attempts - 1) delay(retryDelayMs.milliseconds)
     }
   }
   return false
@@ -42,7 +43,7 @@ fun FileObserver.safeStopWatching(attempts: Int = FILE_OBSERVER_RETRY_ATTEMPTS) 
   repeat(attempts) {
     try {
       stopWatching()
-      return
+      return@safeStopWatching
     } catch (_: ConcurrentModificationException) {
       Thread.yield()
     }

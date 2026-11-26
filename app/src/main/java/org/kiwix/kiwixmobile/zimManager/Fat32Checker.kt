@@ -86,9 +86,9 @@ class Fat32Checker constructor(
     fileObserverMutex.withLock {
       fileObserver?.safeStopWatching()
       fileObserver = null
-      if (storageFile == null || isDisposed) return
+      if (storageFile == null || isDisposed) return@replaceFileObserver
       val observer = createFileObserver(storageFile)
-      if (!observer.startWatchingWithRetry()) return
+      if (!observer.startWatchingWithRetry()) return@replaceFileObserver
       fileObserver = observer
       if (isDisposed) {
         observer.safeStopWatching()
