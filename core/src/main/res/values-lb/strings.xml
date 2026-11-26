@@ -197,6 +197,8 @@
   <string name="running_state">Amgaang</string>
   <string name="complete">Komplettéieren</string>
   <string name="paused_state">Pauséiert</string>
+  <string name="downloaded_files_count_singular">%d Fichier erofgelueden</string>
+  <string name="downloaded_files_count_plural">%d Fichieren erofgelueden</string>
   <string name="custom_download_error_message_for_authentication_failed">De ZIM-Fichier konnt net erofgeluede ginn. Probéiert wgl. d\'App vum Play Store aus nei z\'installéieren.</string>
   <string name="save">Späicheren</string>
   <string name="note">Notiz</string>

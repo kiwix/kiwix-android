@@ -249,6 +249,10 @@
   <string name="complete">Končano</string>
   <string name="paused_state">Premor</string>
   <string name="failed_state">Neuspešno: %s</string>
+  <string name="downloading_files_count_singular">%d datoteka se prenaša</string>
+  <string name="downloading_files_count_plural">%d datotek se prenaša</string>
+  <string name="downloaded_files_count_singular">%d datoteka prenesena</string>
+  <string name="downloaded_files_count_plural">%d datotek prenesenih</string>
   <string name="custom_download_error_message_for_authentication_failed">Datoteke ZIM ni bilo mogoče prenesti. Poskusite znova namestiti aplikacijo iz trgovine Play.</string>
   <string name="save">Shrani</string>
   <string name="note">Beležka</string>
@@ -271,6 +275,8 @@
   <string name="ext_storage_permission_not_granted">Napaka: Dovoljenja za shranjevanje niso podeljena</string>
   <string name="notes_deletion_successful">Izbrisana je celotna mapa z beležkami</string>
   <string name="notes_deletion_unsuccessful">Nekatere datoteke niso izbrisane</string>
+  <string name="book_count_singular">%d knjiga</string>
+  <string name="book_count_plural">%d knjig</string>
   <string name="books_count">%d knjig(a/e)</string>
   <string name="discovery_initiated">Odkrivanje začeto</string>
   <string name="discovery_failed">Odkrivanje ni uspelo</string>
@@ -279,6 +285,7 @@
   <string name="permission_rationale_location">Android zahteva dovoljenje za lokacijo, da lahko aplikaciji omogoči zaznavanje enakovrednih naprav</string>
   <string name="permission_rationale_nearby">Android zahteva dovoljenje za bližnje naprave, da lahko aplikaciji omogoči zaznavanje enakovrednih naprav</string>
   <string name="permission_refused_location">Enakovrednih naprav ni mogoče najti brez dovoljenj za lokacijo</string>
+  <string name="permission_refused_nearby">Enakovrednih naprav ni mogoče najti brez dovoljenj za bližnje</string>
   <string name="permission_refused_storage">Do datotek ZIM ni mogoče dostopati brez dovoljenja za shranjevanje</string>
   <string name="request_enable_location">Omogočite lokacijo, da bo mogoče zaznavanje enakovrednih naprav</string>
   <string name="discovery_needs_location">Enakovrednih naprav ni mogoče odkriti brez lokacijskih storitev</string>

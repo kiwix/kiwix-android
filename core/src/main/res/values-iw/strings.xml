@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Authors:
+* A100Star
 * Amire80
 * Ghsuvr
 * Guycn2
@@ -24,7 +25,7 @@
   <string name="menu_support_kiwix">לתמוך בקיוויקס</string>
   <string name="menu_support_kiwix_for_custom_apps">תמיכה ביישום %s</string>
   <string name="menu_about_app">אודות יישום %s</string>
-  <string name="menu_wifi_hotspot" fuzzy="true">לארח ספרים</string>
+  <string name="menu_wifi_hotspot">Hotspot</string>
   <string name="save_media">שמירת מדיה</string>
   <string name="save_media_error">אירעה שגיאה בעת ניסיון לשמור את המדיה!</string>
   <string name="invalid_media_source">המדיה שנבחרה לא נמצאה.</string>
@@ -36,7 +37,7 @@
   <string name="open_in_new_tab">לפתוח קישור בלשונית חדשה?</string>
   <string name="hotspot_service_channel_name">ערוץ שירות נקודת חיבור</string>
   <string name="hotspot_failed_title">הפעלת נקודת חיבור לא עבדה</string>
-  <string name="hotspot_failed_message" fuzzy="true">נראה שנקודת החיבור כבר מופעלת אצלך. נא לכבות את נקודת החיבור שלך כדי להמשיך.</string>
+  <string name="hotspot_failed_message">נראה שה־Hotspot שלך כבר פעיל. יש לכבות אותו כדי להמשיך.</string>
   <string name="go_to_wifi_settings_label">לעבור להגדרות וייפיי</string>
   <string name="connection_refused">החיבור סורב.</string>
   <string name="hotspot_running">נקודת החיבור פועלת</string>
@@ -53,7 +54,7 @@
   <string name="hotspot_dialog_title">הנחיות לאירוח ספרים</string>
   <string name="wifi_dialog_title">חיבור WiFi אותר</string>
   <string name="wifi_dialog_body">כדי לצפות בספרים במכשירים אחרים, נא לוודא שכל המכשירים מחוברים לאותה הרשת האלחוטית.</string>
-  <string name="hotspot_dialog_message" fuzzy="true">כדי שהאפשרות הזאת תוכל לפעול עליך להפעיל את הנקודה החמה ידנית או לוודא שמכשירי האירוח והקבלה הם באותה רשת אלחוטית.</string>
+  <string name="hotspot_dialog_message">כדי להשתמש בתכונה זו, יש להפעיל תחילה את ה־Hotspot באופן ידני, או לוודא שהמכשיר המארח והמכשיר המקבל מחוברים לאותה רשת Wi-Fi.</string>
   <string name="hotspot_dialog_neutral_button">להמשיך</string>
   <string name="hotspot_channel_description">עדכונים על מצב נקודת החיבור והשרת שלך.</string>
   <string name="hotspot_notification_content_title">נקודת חיבור של קיוויקס</string>
@@ -169,15 +170,15 @@
   <string name="pref_free_storage">פנוי: %s</string>
   <string name="choose_storage_to_download_book">יש לבחור אחסון כדי להוריד את הספר</string>
   <string name="delete_zim_failed">לא הצלחנו למחוק קבצים מסוימים. עליך לנסות להשתמש במנהל קבצים במקום זאת, עמך הסליחה.</string>
-  <string name="tts_pause" fuzzy="true">השהיה</string>
-  <string name="tts_resume" fuzzy="true">המשך</string>
+  <string name="tts_pause">השהיה</string>
+  <string name="tts_resume">המשך</string>
   <string name="tts_increase_speed">האצת המהירות</string>
   <string name="tts_decrease_speed">האטת המהירות</string>
   <string name="tts_normal_speed">רגילה</string>
   <string name="tts_speech_speed">מהירות דיבור</string>
   <string name="tts_select_voice">בחירת קול</string>
   <string name="tts_controls">פקדי הקראה</string>
-  <string name="stop" fuzzy="true">עצירה</string>
+  <string name="stop">עצירה</string>
   <string name="notification_pause_button_text">השהיה</string>
   <string name="notification_resume_button_text">המשך</string>
   <string name="internal_storage">פנימי</string>
@@ -212,7 +213,7 @@
   <string name="other_languages">שפות אחרות</string>
   <string name="reorder_language">סידור השפה מחדש</string>
   <string name="downloading">מתבצעת הורדה</string>
-  <string name="no_items_msg" fuzzy="true">אין פריטים זמינים</string>
+  <string name="no_items_msg">לא נמצאו ספרים</string>
   <string name="crash_title">טוב… זה מביך</string>
   <string name="crash_description">נראה שקרסנו.\n\nמתחשק לך לעזור לנו לתקן את הבעיה הזאת באמצעות שליחת דוח הקריסה?</string>
   <string name="crash_checkbox_language">הגדרות השפה שלך</string>

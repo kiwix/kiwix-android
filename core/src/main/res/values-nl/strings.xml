@@ -28,7 +28,7 @@
   <string name="external_redirect_message">U wordt nu naar ons %s doorverwezen.</string>
   <string name="support_donation_platform">donatieplatform</string>
   <string name="about_app_page">pagina over de app</string>
-  <string name="menu_wifi_hotspot" fuzzy="true">WiFi-hotspot</string>
+  <string name="menu_wifi_hotspot">Hotspot</string>
   <string name="save_media">Media opslaan</string>
   <string name="save_media_error">Er is een fout opgetreden bij het opslaan van de media!</string>
   <string name="invalid_media_source">Het geselecteerde mediabestand is niet gevonden.</string>
@@ -40,7 +40,7 @@
   <string name="open_in_new_tab">Koppeling openen in nieuw tabblad?</string>
   <string name="hotspot_service_channel_name">Hotspot-dienstkanaal</string>
   <string name="hotspot_failed_title">Kan hotspot niet starten</string>
-  <string name="hotspot_failed_message" fuzzy="true">Het lijkt erop dat uw hotspot al aan staat. Schakel uw WiFi-hotspot uit om door te gaan.</string>
+  <string name="hotspot_failed_message">Het lijkt erop dat uw hotspot al aan staat. Schakel uw WiFi-hotspot uit om door te gaan.</string>
   <string name="go_to_wifi_settings_label">Naar de WiFi-instellingen</string>
   <string name="connection_refused">Verbinding geweigerd.</string>
   <string name="hotspot_running">Hotspot actief</string>
@@ -57,7 +57,7 @@
   <string name="hotspot_dialog_title">Instructies voor het onderbrengen van boeken</string>
   <string name="wifi_dialog_title">WiFi-verbinding gedetecteerd</string>
   <string name="wifi_dialog_body">Als u boeken op andere apparaten wilt bekijken, zorg er dan voor dat alle apparaten met hetzelfde WiFi-netwerk zijn verbonden.</string>
-  <string name="hotspot_dialog_message" fuzzy="true">Om deze functie te laten werken, moet u eerst uw WiFi-hotspot handmatig inschakelen of ervoor zorgen dat het hostapparaat en het ontvangerapparaat zich op hetzelfde WiFi-netwerk bevinden</string>
+  <string name="hotspot_dialog_message">Om deze functie te laten werken, moet u eerst uw WiFi-hotspot handmatig inschakelen of ervoor zorgen dat het hostapparaat en het ontvangerapparaat zich op hetzelfde WiFi-netwerk bevinden</string>
   <string name="hotspot_dialog_neutral_button">DOORGAAN</string>
   <string name="hotspot_channel_description">Berichten over de status van uw hotspot/server.</string>
   <string name="hotspot_notification_content_title">Kiwix-hotspot</string>
@@ -224,7 +224,7 @@
   <string name="move_down">Omlaag verplaatsen</string>
   <string name="reorder_language">Taal opnieuw ordenen</string>
   <string name="downloading">Aan het downloaden</string>
-  <string name="no_items_msg" fuzzy="true">Niets beschikbaar</string>
+  <string name="no_items_msg">Geen boeken gevonden</string>
   <string name="crash_title">Ai… dit is nogal pijnlijk</string>
   <string name="crash_description">Het lijkt erop dat we zijn gecrasht.\n\nWilt u ons helpen dit probleem op te lossen door de crashgegevens in te sturen?</string>
   <string name="crash_checkbox_language">Uw taalinstellingen</string>
