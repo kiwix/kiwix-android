@@ -30,6 +30,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.CoroutineDispatcher
 import org.kiwix.kiwixmobile.core.di.IoDispatcher
+import org.kiwix.kiwixmobile.core.di.ShowSearchSuggestionsSpellChecked
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.zim_manager.MountPointProducer
 import org.kiwix.kiwixmobile.nav.destination.library.local.CopyMoveProgressBarController
@@ -78,5 +79,9 @@ abstract class KiwixModule {
     @Provides
     fun provideWifiManager(@ApplicationContext context: Context): WifiManager =
       context.applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
+
+    @Provides
+    @ShowSearchSuggestionsSpellChecked
+    fun provideShowSearchSuggestionsSpellChecked(): Boolean = false
   }
 }

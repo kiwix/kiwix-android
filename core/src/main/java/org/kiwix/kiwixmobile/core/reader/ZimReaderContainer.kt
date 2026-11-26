@@ -20,6 +20,8 @@ package org.kiwix.kiwixmobile.core.reader
 import android.webkit.WebResourceResponse
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import org.kiwix.kiwixmobile.core.di.IoDispatcher
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader.Factory
@@ -32,6 +34,8 @@ class ZimReaderContainer @Inject constructor(
   private val zimFileReaderFactory: Factory,
   @param:IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) {
+  private val zimReaderSourceMutex = Mutex()
+
   var zimFileReader: ZimFileReader? = null
     set(value) {
       field?.dispose()
@@ -41,9 +45,9 @@ class ZimReaderContainer @Inject constructor(
   suspend fun setZimReaderSource(
     zimReaderSource: ZimReaderSource?,
     showSearchSuggestionsSpellChecked: Boolean = false
-  ) {
+  ) = zimReaderSourceMutex.withLock {
     if (zimReaderSource == zimFileReader?.zimReaderSource) {
-      return
+      return@withLock
     }
     zimFileReader = withContext(ioDispatcher) {
       if (zimReaderSource?.exists(ioDispatcher) == true &&

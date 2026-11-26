@@ -41,6 +41,7 @@ import kotlinx.coroutines.withContext
 import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.di.IoDispatcher
 import org.kiwix.kiwixmobile.core.di.MainDispatcher
+import org.kiwix.kiwixmobile.core.di.ShowSearchSuggestionsSpellChecked
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.getObservableNavigationResult
 import org.kiwix.kiwixmobile.core.extensions.browserIntent
 import org.kiwix.kiwixmobile.core.extensions.isFileExist
@@ -104,6 +105,7 @@ class BrandedReaderViewModel @Inject constructor(
   readAloudManager: ReadAloudManager,
   donationDialogHandler: DonationDialogHandler,
   findInPageManager: FindInPageManager,
+  @ShowSearchSuggestionsSpellChecked showSearchSuggestionsSpellChecked: Boolean,
   @MainDispatcher mainDispatcher: MainCoroutineDispatcher,
   @param:IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : CoreReaderViewModel(
@@ -125,6 +127,7 @@ class BrandedReaderViewModel @Inject constructor(
     readAloudManager,
     donationDialogHandler,
     findInPageManager,
+    showSearchSuggestionsSpellChecked,
     mainDispatcher,
     ioDispatcher
   ) {
@@ -274,9 +277,6 @@ class BrandedReaderViewModel @Inject constructor(
       }
     }
   }
-
-  override fun shouldShowSpellCheckedSuggestions(): Boolean =
-    BuildConfig.SHOW_SEARCH_SUGGESTIONS_SPELLCHECKED
 
   override fun isBrandedApp(): Boolean = true
   override fun isTocSidebarEnabled(): Boolean = !BuildConfig.DISABLE_SIDEBAR

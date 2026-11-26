@@ -108,6 +108,9 @@ fun SearchScreen(
   navigationIcon: @Composable () -> Unit
 ) {
   val lazyListState = rememberLazyListState()
+  LaunchedEffect(Unit) {
+    searchViewModel.reopenLastZimFileIfNeeded()
+  }
   Scaffold(
     topBar = {
       KiwixAppBar(

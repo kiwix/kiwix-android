@@ -28,6 +28,7 @@ import kotlinx.coroutines.delay
 import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.di.IoDispatcher
 import org.kiwix.kiwixmobile.core.di.MainDispatcher
+import org.kiwix.kiwixmobile.core.di.ShowSearchSuggestionsSpellChecked
 import org.kiwix.kiwixmobile.core.extensions.ActivityExtensions.getObservableNavigationResult
 import org.kiwix.kiwixmobile.core.extensions.isFileExist
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
@@ -89,6 +90,7 @@ class KiwixReaderViewModel @Inject constructor(
   readAloudManager: ReadAloudManager,
   donationDialogHandler: DonationDialogHandler,
   findInPageManager: FindInPageManager,
+  @ShowSearchSuggestionsSpellChecked showSearchSuggestionsSpellChecked: Boolean,
   @MainDispatcher mainDispatcher: MainCoroutineDispatcher,
   @param:IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : CoreReaderViewModel(
@@ -110,10 +112,10 @@ class KiwixReaderViewModel @Inject constructor(
     readAloudManager,
     donationDialogHandler,
     findInPageManager,
+    showSearchSuggestionsSpellChecked,
     mainDispatcher,
     ioDispatcher
   ) {
-  override fun shouldShowSpellCheckedSuggestions(): Boolean = false
   override fun isBrandedApp(): Boolean = false
   override fun isTocSidebarEnabled(): Boolean = true
 

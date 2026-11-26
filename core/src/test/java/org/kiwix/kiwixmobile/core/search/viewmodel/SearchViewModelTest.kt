@@ -28,7 +28,6 @@ import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.test.TestCoroutineScheduler
 import kotlinx.coroutines.test.TestScope
@@ -43,6 +42,7 @@ import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.dao.RecentSearchRoomDao
+import org.kiwix.kiwixmobile.core.main.reader.helper.ZimFileManager
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.search.SearchListItem.RecentSearchListItem
@@ -67,7 +67,6 @@ import org.kiwix.kiwixmobile.core.search.viewmodel.effects.SearchArgumentProcess
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.ShowDeleteSearchDialog
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.ShowToast
 import org.kiwix.kiwixmobile.core.search.viewmodel.effects.StartSpeechInput
-import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.effects.CloseKeyboard
 import org.kiwix.libzim.SuggestionSearch
@@ -82,10 +81,11 @@ internal class SearchViewModelTest {
   private val recentSearchRoomDao: RecentSearchRoomDao = mockk()
   private val zimReaderContainer: ZimReaderContainer = mockk()
   private val searchResultGenerator: SearchResultGenerator = mockk()
-  private val kiwixDataStore: KiwixDataStore = mockk()
+  private val zimFileManager: ZimFileManager = mockk()
   private val zimFileReader: ZimFileReader = mockk()
   private val dialogShower = mockk<AlertDialogShower>(relaxed = true)
   private val searchMutex: Mutex = mockk()
+  private val showSearchSuggestionsSpellChecked = false
 
   lateinit var viewModel: SearchViewModel
 
@@ -104,17 +104,24 @@ internal class SearchViewModelTest {
     } returns null
     every { zimReaderContainer.id } returns "id"
     every { recentSearchRoomDao.recentSearches("id") } returns recentsFromDb
-    viewModel =
-      SearchViewModel(
-        recentSearchRoomDao,
-        zimReaderContainer,
-        searchResultGenerator,
-        kiwixDataStore,
-        searchMutex,
-        mainDispatcherRule.dispatcher
-      ).apply {
-        setAlertDialogShower(dialogShower)
-      }
+    coEvery { zimFileManager.restoreLastOpenedZimFileIfNeeded(any()) } returns null
+    viewModel = newSearchViewModel()
+    // Mirrors what SearchScreen does as soon as it enters composition.
+    viewModel.reopenLastZimFileIfNeeded()
+  }
+
+  private fun newSearchViewModel(
+    showSearchSuggestionsSpellChecked: Boolean = this.showSearchSuggestionsSpellChecked
+  ) = SearchViewModel(
+    recentSearchRoomDao,
+    zimReaderContainer,
+    searchResultGenerator,
+    zimFileManager,
+    showSearchSuggestionsSpellChecked,
+    searchMutex,
+    mainDispatcherRule.dispatcher
+  ).apply {
+    setAlertDialogShower(dialogShower)
   }
 
   @Nested
@@ -277,24 +284,53 @@ internal class SearchViewModelTest {
   @Nested
   inner class RestoreZimFile {
     @Test
-    fun init_whenNoZimFileIsOpen_reopensLastZimFile() = runTest {
-      val zimFilePath = "/storage/emulated/0/Download/test.zim"
-      every { zimReaderContainer.zimFileReader } returns null
-      every { kiwixDataStore.currentZimFile } returns flowOf(zimFilePath)
-      coEvery { zimReaderContainer.setZimReaderSource(any()) } returns Unit
+    fun reopenLastZimFileIfNeeded_whenCalled_delegatesRestorationToZimFileManager() = runTest {
       coEvery { searchResultGenerator.generateSearchResults(any(), null) } returns null
 
-      SearchViewModel(
-        recentSearchRoomDao,
-        zimReaderContainer,
-        searchResultGenerator,
-        kiwixDataStore,
-        searchMutex,
-        mainDispatcherRule.dispatcher
-      )
+      val freshViewModel = newSearchViewModel()
+      freshViewModel.reopenLastZimFileIfNeeded()
       advanceUntilIdle()
 
-      coVerify { zimReaderContainer.setZimReaderSource(match { it?.file?.path == zimFilePath }) }
+      // The actual "reopen the last used ZIM file" logic (reading the stored path,
+      // validating it, honouring the spell-check flag) is owned and tested by
+      // ZimFileManagerTest; SearchViewModel should only delegate to it.
+      coVerify { zimFileManager.restoreLastOpenedZimFileIfNeeded(showSearchSuggestionsSpellChecked) }
+    }
+
+    @Test
+    fun reopenLastZimFileIfNeeded_whenCalled_passesThroughTheAppSpellCheckSetting() = runTest {
+      coEvery { searchResultGenerator.generateSearchResults(any(), null) } returns null
+
+      val freshViewModel = newSearchViewModel(showSearchSuggestionsSpellChecked = true)
+      freshViewModel.reopenLastZimFileIfNeeded()
+      advanceUntilIdle()
+
+      // Regression test: the previous fix for #5313 silently defaulted this flag to
+      // `false` on restore, which could re-open the archive without spell-check
+      // suggestions even on builds that enable them.
+      coVerify { zimFileManager.restoreLastOpenedZimFileIfNeeded(true) }
+    }
+
+    @Test
+    fun reducer_whenZimFileNotYetRestored_withholdsSearchResultsUntilRestored() = runTest {
+      val suggestionSearch: SuggestionSearch = mockk()
+      coEvery {
+        searchResultGenerator.generateSearchResults("term", zimFileReader)
+      } returns suggestionSearch
+      val freshViewModel = newSearchViewModel()
+
+      freshViewModel.onSearchValueChanged("term")
+      recentsFromDb.tryEmit(emptyList())
+      advanceUntilIdle()
+
+      // The reducer is gated behind reopenLastZimFileIfNeeded(), so no search results
+      // should be produced until the screen triggers the restore.
+      assertThat(freshViewModel.uiState.value.searchState.searchTerm).isEqualTo("")
+
+      freshViewModel.reopenLastZimFileIfNeeded()
+      advanceUntilIdle()
+
+      assertThat(freshViewModel.uiState.value.searchState.searchTerm).isEqualTo("term")
     }
   }
 
