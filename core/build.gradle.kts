@@ -27,8 +27,6 @@ android {
 fun shouldUseLocalVersion() = File(projectDir, "libs").exists()
 
 dependencies {
-  // use jdk8 java.time backport, as long app < Build.VERSION_CODES.O
-  implementation(Libs.threetenabp)
 
   // Get kiwixlib online if it is not populated locally
   if (!shouldUseLocalVersion()) {

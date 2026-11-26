@@ -90,9 +90,9 @@ import org.kiwix.kiwixmobile.core.utils.ComposeDimens.PAGE_SWITCH_ROW_BOTTOM_MAR
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.SIXTEEN_DP
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogHost
-import org.threeten.bp.LocalDate
-import org.threeten.bp.format.DateTimeFormatter
-import org.threeten.bp.format.DecimalStyle
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.time.format.DecimalStyle
 
 const val SWITCH_TEXT_TESTING_TAG = "switchTextTestingTag"
 const val NO_ITEMS_TEXT_TESTING_TAG = "noItemsTextTestingTag"

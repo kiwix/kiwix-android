@@ -38,11 +38,9 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
 import androidx.compose.ui.test.performTouchInput
-import com.jakewharton.threetenabp.AndroidThreeTen
 import kotlinx.coroutines.flow.MutableStateFlow
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
-import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -60,7 +58,7 @@ import org.kiwix.kiwixmobile.core.ui.models.IconItem
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
 import org.robolectric.annotation.Config
-import org.threeten.bp.LocalDate
+import java.time.LocalDate
 
 /**
  * Behavior-driven UI tests for [PageScreen].
@@ -82,11 +80,6 @@ class PageScreenTest {
   val composeTestRule = createComposeRule()
 
   private val context get() = RuntimeEnvironment.getApplication()
-
-  @Before
-  fun setUp() {
-    AndroidThreeTen.init(context)
-  }
 
   /**
    * Minimal [Page] implementation used exclusively for testing.

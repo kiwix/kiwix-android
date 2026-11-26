@@ -23,7 +23,7 @@ import org.kiwix.kiwixmobile.core.page.adapter.Page
 import org.kiwix.kiwixmobile.core.page.adapter.PageRelated
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
-import org.threeten.bp.LocalDate
+import java.time.LocalDate
 
 sealed class HistoryListItem : PageRelated {
   data class HistoryItem constructor(

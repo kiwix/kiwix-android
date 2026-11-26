@@ -18,7 +18,7 @@
 
 package org.kiwix.kiwixmobile.core.extensions
 
-import org.threeten.bp.LocalDate
+import java.time.LocalDate
 import java.util.Calendar
 import java.util.GregorianCalendar
 

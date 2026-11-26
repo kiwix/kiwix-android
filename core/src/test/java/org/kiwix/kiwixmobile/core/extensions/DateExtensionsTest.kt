@@ -21,7 +21,7 @@ package org.kiwix.kiwixmobile.core.extensions
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
-import org.threeten.bp.LocalDate
+import java.time.LocalDate
 import java.util.Locale
 import java.util.TimeZone
 

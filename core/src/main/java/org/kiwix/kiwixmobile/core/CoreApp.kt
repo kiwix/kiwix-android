@@ -21,7 +21,6 @@ import android.app.Application
 import android.os.Build
 import android.os.StrictMode
 import android.os.StrictMode.VmPolicy
-import com.jakewharton.threetenabp.AndroidThreeTen
 import dagger.hilt.android.EarlyEntryPoints
 import org.kiwix.kiwixmobile.core.di.CoreAppEntryPoint
 import org.kiwix.kiwixmobile.core.utils.files.FileLogger
@@ -53,7 +52,6 @@ abstract class CoreApp : Application() {
     themeConfig = entryPoint.themeConfig()
     jniInitialiser = entryPoint.jniInitialiser()
     fileLogger = entryPoint.fileLogger()
-    AndroidThreeTen.init(this)
     themeConfig.init()
     fileLogger.writeLogFile(this)
     configureStrictMode()

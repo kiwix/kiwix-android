@@ -60,7 +60,7 @@ object Versions {
 
   const val testing_ktx: String = "1.3.0"
 
-  const val threetenabp: String = "1.3.0"
+  const val DESUGAR_JDK_LIBS: String = "2.1.5"
 
   const val uiautomator: String = "2.3.0"
 

@@ -104,6 +104,7 @@ class AllProjectConfigurer {
         encoding = "UTF-8"
         sourceCompatibility = Config.javaVersion
         targetCompatibility = Config.javaVersion
+        isCoreLibraryDesugaringEnabled = true
       }
       target.extensions.configure<KotlinAndroidExtension> {
         compilerOptions {
@@ -229,6 +230,7 @@ class AllProjectConfigurer {
 
   fun configureDependencies(target: Project) {
     target.dependencies {
+      coreLibraryDesugaring(Libs.DESUGAR_JDK_LIBS)
       implementation(Libs.KOTLIN_STDLIB_JDK8)
       implementation(Libs.appcompat)
       implementation(Libs.appcompat_resource)
