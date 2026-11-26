@@ -197,12 +197,13 @@ class HotspotService :
         webServerHelper?.startServerHelper(paths, restart)
       }
     if (serverStatus?.isServerStarted == true) {
-      currentlyHostedPaths = paths
-      zimHostCallbacks?.onServerStarted(webServerHelper?.getServerAddress().orEmpty())
       if (!startForegroundNotificationHelper()) {
         stopHotspotAndDismissNotification()
+        onServerFailedToStart(R.string.server_failed_toast_message)
         return
       }
+      currentlyHostedPaths = paths
+      zimHostCallbacks?.onServerStarted(webServerHelper?.getServerAddress().orEmpty())
       if (!restart) {
         Toast
           .makeText(

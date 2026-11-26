@@ -30,7 +30,6 @@ import io.mockk.unmockkStatic
 import io.mockk.verify
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.flowOf
@@ -53,7 +52,6 @@ import org.kiwix.sharedFunctions.MainDispatcherRule
  * LibkiwixBookOnDisk.bookRemovals (issue #4341): the *server* must restart with the
  * reduced book list when a hosted ZIM is deleted, not just the Hotspot screen's UI.
  */
-@OptIn(ExperimentalCoroutinesApi::class)
 class HotspotServiceTest {
   @JvmField
   @RegisterExtension
@@ -179,5 +177,7 @@ class HotspotServiceTest {
     verify(exactly = 1) { webServerHelper.stopAndroidWebServer() }
     verify(exactly = 1) { zimHostCallbacks.onServerStopped() }
     verify(exactly = 1) { hotspotService.stopSelf() }
+    verify(exactly = 0) { zimHostCallbacks.onServerStarted(any()) }
+    verify(exactly = 1) { zimHostCallbacks.onServerFailedToStart(R.string.server_failed_toast_message) }
   }
 }
