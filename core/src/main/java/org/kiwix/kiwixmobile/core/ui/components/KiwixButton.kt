@@ -27,6 +27,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight.Companion.SemiBold
+import org.kiwix.kiwixmobile.core.extensions.uppercaseWithAppLocale
 import org.kiwix.kiwixmobile.core.ui.theme.DenimBlue800
 import org.kiwix.kiwixmobile.core.ui.theme.White
 import org.kiwix.kiwixmobile.core.utils.ComposeDimens.BUTTON_DEFAULT_ELEVATION
@@ -59,7 +60,7 @@ fun KiwixButton(
     )
   ) {
     Text(
-      text = buttonText.uppercase(),
+      text = buttonText.uppercaseWithAppLocale(),
       letterSpacing = DEFAULT_LETTER_SPACING,
       style = MaterialTheme.typography.labelLarge.copy(fontWeight = SemiBold)
     )

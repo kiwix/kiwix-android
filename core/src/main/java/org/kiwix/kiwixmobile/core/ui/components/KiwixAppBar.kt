@@ -56,6 +56,7 @@ import androidx.compose.ui.semantics.hideFromAccessibility
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextOverflow
 import org.kiwix.kiwixmobile.core.R
+import org.kiwix.kiwixmobile.core.extensions.uppercaseWithAppLocale
 import org.kiwix.kiwixmobile.core.ui.models.ActionMenuItem
 import org.kiwix.kiwixmobile.core.ui.models.toPainter
 import org.kiwix.kiwixmobile.core.ui.theme.KiwixTheme
@@ -182,7 +183,7 @@ private fun MainMenuItems(mainActions: List<ActionMenuItem>) {
           modifier = modifier
         ) {
           Text(
-            text = menuItem.iconButtonText.uppercase(),
+            text = menuItem.iconButtonText.uppercaseWithAppLocale(),
             color = getMenuItemTextColor(menuItem),
             maxLines = 1,
             overflow = TextOverflow.Ellipsis

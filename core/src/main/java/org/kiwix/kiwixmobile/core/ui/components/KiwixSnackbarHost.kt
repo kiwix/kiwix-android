@@ -22,10 +22,13 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Snackbar
+import androidx.compose.material3.SnackbarData
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarVisuals
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import org.kiwix.kiwixmobile.core.extensions.uppercaseWithAppLocale
 import org.kiwix.kiwixmobile.core.ui.theme.DenimBlue200
 import org.kiwix.kiwixmobile.core.ui.theme.DenimBlue400
 import org.kiwix.kiwixmobile.core.ui.theme.KiwixSnackToastTheme
@@ -53,8 +56,9 @@ fun KiwixSnackbarHost(snackbarHostState: SnackbarHostState) {
       hostState = snackbarHostState,
       modifier = Modifier.padding(horizontal = SIXTEEN_DP, vertical = EIGHT_DP)
     ) { snackbarData ->
+      val actionLabel = snackbarData.visuals.actionLabel?.uppercaseWithAppLocale()
       Snackbar(
-        snackbarData = snackbarData,
+        snackbarData = SnackbarDataWithActionLabel(snackbarData, actionLabel),
         shape = MaterialTheme.shapes.large,
         containerColor = containerColor,
         contentColor = contentColor,
@@ -63,3 +67,16 @@ fun KiwixSnackbarHost(snackbarHostState: SnackbarHostState) {
     }
   }
 }
+
+private class SnackbarDataWithActionLabel(
+  snackbarData: SnackbarData,
+  actionLabel: String?
+) : SnackbarData by snackbarData {
+  override val visuals: SnackbarVisuals =
+    SnackbarVisualsWithActionLabel(snackbarData.visuals, actionLabel)
+}
+
+private class SnackbarVisualsWithActionLabel(
+  visuals: SnackbarVisuals,
+  override val actionLabel: String?
+) : SnackbarVisuals by visuals
