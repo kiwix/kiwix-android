@@ -40,8 +40,6 @@ import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onAllNodesWithTag
-import androidx.compose.ui.test.onAllNodesWithText
-import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
@@ -371,6 +369,9 @@ class SettingsScreenTest {
       .onNodeWithTag(context.getString(R.string.pref_wifi_only))
       .assertIsDisplayed()
       .assertIsOn()
+    composeTestRule
+      .onNodeWithText(context.getString(R.string.pref_wifi_only_summary))
+      .assertIsDisplayed()
   }
 
   @Test
@@ -436,11 +437,8 @@ class SettingsScreenTest {
     )
     renderSettingsScreen(viewModel)
     scrollToContentDescription(context.getString(R.string.pref_wifi_only))
-    // pref_wifi_only is used for both title and summary so use onAllNodesWithText to avoid
-    // ambiguous-node errors and pick the first match.
     composeTestRule
-      .onAllNodesWithText(context.getString(R.string.pref_wifi_only))
-      .onFirst()
+      .onNodeWithText(context.getString(R.string.pref_wifi_only_summary))
       .performClick()
     verify { viewModel.setWifiOnly(false) }
   }
