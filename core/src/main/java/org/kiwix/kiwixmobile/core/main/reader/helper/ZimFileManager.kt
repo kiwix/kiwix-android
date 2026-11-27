@@ -19,16 +19,20 @@
 package org.kiwix.kiwixmobile.core.main.reader.helper
 
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.withContext
 import org.kiwix.kiwixmobile.core.di.IoDispatcher
 import org.kiwix.kiwixmobile.core.main.reader.helper.ZimFileManager.OpenZimResult.InvalidFile
 import org.kiwix.kiwixmobile.core.main.reader.helper.ZimFileManager.OpenZimResult.Success
 import org.kiwix.kiwixmobile.core.reader.ZimFileReader
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.reader.ZimReaderSource
+import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import javax.inject.Inject
 
 class ZimFileManager @Inject constructor(
   private val zimReaderContainer: ZimReaderContainer,
+  private val kiwixDataStore: KiwixDataStore,
   @param:IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) {
   suspend fun openZimFileInReader(
@@ -42,6 +46,16 @@ class ZimFileManager @Inject constructor(
     } ?: run {
       InvalidFile
     }
+  }
+
+  suspend fun restoreLastOpenedZimFileIfNeeded(
+    showSearchSuggestionsSpellChecked: Boolean
+  ): OpenZimResult? {
+    if (zimReaderContainer.zimFileReader != null) return null
+    val source = withContext(ioDispatcher) {
+      ZimReaderSource.fromDatabaseValue(kiwixDataStore.currentZimFile.first())
+    }
+    return source?.let { openZimFileInReader(it, showSearchSuggestionsSpellChecked) }
   }
 
   suspend fun close() {

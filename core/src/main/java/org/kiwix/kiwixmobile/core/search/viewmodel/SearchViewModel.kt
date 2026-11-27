@@ -21,6 +21,7 @@ package org.kiwix.kiwixmobile.core.search.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
@@ -40,6 +41,8 @@ import org.kiwix.kiwixmobile.core.R
 import org.kiwix.kiwixmobile.core.base.SideEffect
 import org.kiwix.kiwixmobile.core.dao.RecentSearchRoomDao
 import org.kiwix.kiwixmobile.core.di.IoDispatcher
+import org.kiwix.kiwixmobile.core.di.ShowSearchSuggestionsSpellChecked
+import org.kiwix.kiwixmobile.core.main.reader.helper.ZimFileManager
 import org.kiwix.kiwixmobile.core.reader.ZimReaderContainer
 import org.kiwix.kiwixmobile.core.search.SearchListItem
 import org.kiwix.kiwixmobile.core.search.viewmodel.Action.ActivityResultReceived
@@ -80,6 +83,8 @@ class SearchViewModel @Inject constructor(
   private val recentSearchRoomDao: RecentSearchRoomDao,
   private val zimReaderContainer: ZimReaderContainer,
   private val searchResultGenerator: SearchResultGenerator,
+  private val zimFileManager: ZimFileManager,
+  @param:ShowSearchSuggestionsSpellChecked private val showSearchSuggestionsSpellChecked: Boolean,
   private val searchMutex: Mutex = Mutex(),
   @param:IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : ViewModel() {
@@ -94,6 +99,7 @@ class SearchViewModel @Inject constructor(
   private val searchOrigin = MutableStateFlow(FromWebView)
   private lateinit var alertDialogShower: AlertDialogShower
   private val debouncedSearchQuery = MutableStateFlow("")
+  private val zimFileRestored = CompletableDeferred<Unit>()
 
   init {
     viewModelScope.launch { reducer() }
@@ -135,6 +141,7 @@ class SearchViewModel @Inject constructor(
   }
 
   private suspend fun reducer() {
+    zimFileRestored.await()
     combine(
       searchResults(),
       recentSearchRoomDao.recentSearches(zimReaderContainer.id),
@@ -167,6 +174,24 @@ class SearchViewModel @Inject constructor(
       }
     }.collect {
       // Do nothing as state is already updated.
+    }
+  }
+
+  /**
+   * After process death, the Search screen can be restored before the Reader
+   * opens the ZIM file again. Called once by [org.kiwix.kiwixmobile.core.search.SearchScreen]
+   * when it enters composition, so the restore is driven by the screen actually being shown
+   * rather than happening implicitly as a side effect of the reducer.
+   *
+   * Delegates to [ZimFileManager.restoreLastOpenedZimFileIfNeeded] (the same helper the Reader
+   * relies on) so search keeps working, and so the restored archive honours the app's
+   * spell-check setting instead of silently defaulting it off. [reducer] waits on
+   * [zimFileRestored] so the first search results are computed against the restored ZIM file.
+   */
+  fun reopenLastZimFileIfNeeded() {
+    viewModelScope.launch {
+      zimFileManager.restoreLastOpenedZimFileIfNeeded(showSearchSuggestionsSpellChecked)
+      zimFileRestored.complete(Unit)
     }
   }
 

@@ -195,6 +195,7 @@ internal class CoreReaderViewModelTest {
       readAloudManager,
       donationDialogHandler,
       findInPageManager,
+      false,
       mainDispatcherRule.mainDispatcher,
       mainDispatcherRule.dispatcher
     )
@@ -2196,12 +2197,11 @@ internal class CoreReaderViewModelTest {
         coEvery {
           zimFileManager.openZimFileInReader(
             zimReaderSource,
-            viewModel.shouldShowSpellCheckedSuggestions()
+            false
           )
         } returns ZimFileManager.OpenZimResult.Success(zimFileReader)
         every { viewModel.isBrandedApp() } returns false
         coEvery { readerWebViewManager.destroyAllTabs() } just Runs
-        every { viewModel.shouldShowSpellCheckedSuggestions() } returns false
         coEvery { kiwixPermissionChecker.hasReadExternalStoragePermission() } returns true
         coEvery { viewModel.updateTitle() } just Runs
         coEvery { viewModel.observeBookmarks(zimFileReader) } just Runs
@@ -2227,7 +2227,6 @@ internal class CoreReaderViewModelTest {
 
         every { viewModel.isBrandedApp() } returns false
         coEvery { readerWebViewManager.destroyAllTabs() } just Runs
-        every { viewModel.shouldShowSpellCheckedSuggestions() } returns false
         coEvery { kiwixPermissionChecker.hasReadExternalStoragePermission() } returns true
 
         val zimReaderSource = mockk<ZimReaderSource>()
@@ -2235,7 +2234,7 @@ internal class CoreReaderViewModelTest {
         coEvery {
           zimFileManager.openZimFileInReader(
             zimReaderSource,
-            viewModel.shouldShowSpellCheckedSuggestions()
+            false
           )
         } returns ZimFileManager.OpenZimResult.InvalidFile
         coEvery { viewModel.exitBook(any()) } just Runs
@@ -3187,6 +3186,7 @@ internal class CoreReaderViewModelTest {
     readAloudManager: ReadAloudManager,
     donationDialogHandler: DonationDialogHandler,
     findInPageManager: FindInPageManager,
+    showSearchSuggestionsSpellChecked: Boolean,
     mainDispatcher: MainCoroutineDispatcher,
     ioDispatcher: CoroutineDispatcher
   ) : CoreReaderViewModel(
@@ -3208,6 +3208,7 @@ internal class CoreReaderViewModelTest {
       readAloudManager,
       donationDialogHandler,
       findInPageManager,
+      showSearchSuggestionsSpellChecked,
       mainDispatcher,
       ioDispatcher
     ) {
@@ -3230,7 +3231,6 @@ internal class CoreReaderViewModelTest {
     override fun invalidZimFileFound(onInvalidZimFileFound: () -> Unit) {
     }
 
-    override fun shouldShowSpellCheckedSuggestions(): Boolean = false
     override fun isTocSidebarEnabled(): Boolean = true
     override fun isBrandedApp(): Boolean = false
 

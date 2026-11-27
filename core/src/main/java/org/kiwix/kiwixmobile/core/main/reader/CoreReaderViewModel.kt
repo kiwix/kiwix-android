@@ -69,6 +69,7 @@ import org.kiwix.kiwixmobile.core.R.string
 import org.kiwix.kiwixmobile.core.base.BackPressActivityExtensions
 import org.kiwix.kiwixmobile.core.di.IoDispatcher
 import org.kiwix.kiwixmobile.core.di.MainDispatcher
+import org.kiwix.kiwixmobile.core.di.ShowSearchSuggestionsSpellChecked
 import org.kiwix.kiwixmobile.core.extensions.browserIntent
 import org.kiwix.kiwixmobile.core.extensions.navigateToAppSettings
 import org.kiwix.kiwixmobile.core.main.CoreMainActivity
@@ -167,6 +168,7 @@ abstract class CoreReaderViewModel(
   private val readAloudManager: ReadAloudManager,
   private val donationDialogHandler: DonationDialogHandler,
   private val findInPageManager: FindInPageManager,
+  @param:ShowSearchSuggestionsSpellChecked private val showSearchSuggestionsSpellChecked: Boolean,
   @param:MainDispatcher private val mainDispatcher: MainCoroutineDispatcher,
   @param:IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : ViewModel(),
@@ -1301,7 +1303,7 @@ abstract class CoreReaderViewModel(
       // must be recreated to avoid retaining references to the previous ZIM.
       readerWebViewManager.destroyAllTabs()
       val result =
-        zimFileManager.openZimFileInReader(zimReaderSource, shouldShowSpellCheckedSuggestions())
+        zimFileManager.openZimFileInReader(zimReaderSource, showSearchSuggestionsSpellChecked)
       when (result) {
         is Success -> {
           // Show content if there is `Open Library` button showing
@@ -1868,12 +1870,6 @@ abstract class CoreReaderViewModel(
    */
 
   abstract fun invalidZimFileFound(onInvalidZimFileFound: () -> Unit)
-
-  /**
-   * Returns a boolean value based on child viewModel implementation,
-   * indicating whether to show spell-checked suggestions in search.
-   */
-  abstract fun shouldShowSpellCheckedSuggestions(): Boolean
 
   /**
    * Returns a boolean value based on child viewModel implementation,
