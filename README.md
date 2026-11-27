@@ -1,9 +1,6 @@
-<a href="https://play.google.com/store/apps/details?id=org.kiwix.kiwixmobile" target="_blank" align="left">
-  <img src="https://play.google.com/intl/en/badges/images/badge_new.png" alt="Get it on Google Play" height="30" />
-</a>
-<a href="https://apt.izzysoft.de/fdroid/index/apk/org.kiwix.kiwixmobile.standalone" target="_blank" align="left">
-  <img src="https://gitlab.com/IzzyOnDroid/repo/-/raw/master/assets/IzzyOnDroid2.png" alt="Get it on IzzyOnDroid" height="29" />
-</a>
+<a href="https://play.google.com/store/apps/details?id=org.kiwix.kiwixmobile" target="_blank" align="left"><img src="https://play.google.com/intl/en/badges/images/badge_new.png" alt="Get it on Google Play" height="30" /></a>
+<a href="https://f-droid.org/packages/org.kiwix.kiwixmobile.standalone/" target="_blank" align="left"><img src="https://f-droid.org/badge/get-it-on.svg" alt="Get it on F-Droid" height="29" /></a>
+<a href="https://apt.izzysoft.de/fdroid/index/apk/org.kiwix.kiwixmobile.standalone" target="_blank" align="left"><img src="https://gitlab.com/IzzyOnDroid/repo/-/raw/master/assets/IzzyOnDroid2.png" alt="Get it on IzzyOnDroid" height="29" /></a>
 
 # Kiwix Android
 
