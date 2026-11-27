@@ -107,20 +107,20 @@ class Transaction(
     ).execute().prettyPrint()
   }
 
-  fun addToTrackInDraft(apks: List<ReleaseApk>): Track =
+  fun addToTrack(apks: List<ReleaseApk>): Track =
     publisher.edits().tracks().update(packageName, editId, "internal", Track().apply {
       releases = listOf(TrackRelease().apply {
-        status = "draft"
+        status = "completed"
         name = apks.first().versionName
         versionCodes = apks.map { it.versionCode?.toLong() }
       })
       track = "internal"
     }).execute().prettyPrint()
 
-  fun addBundleToTrackInDraft(versionCode: Int?, versionName: String?): Track =
+  fun addBundleToTrack(versionCode: Int?, versionName: String?): Track =
     publisher.edits().tracks().update(packageName, editId, "internal", Track().apply {
       releases = listOf(TrackRelease().apply {
-        status = "draft"
+        status = "completed"
         name = versionName
         versionCodes = listOf(versionCode?.toLong())
       })
