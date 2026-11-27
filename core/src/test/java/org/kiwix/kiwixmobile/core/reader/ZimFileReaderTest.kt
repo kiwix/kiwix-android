@@ -22,12 +22,15 @@ import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
 import org.kiwix.kiwixmobile.core.zim_manager.Byte
 import org.kiwix.libzim.Archive
+import org.kiwix.libzim.DirectAccessInfo
+import org.kiwix.libzim.Item
 import org.kiwix.libzim.SuggestionSearcher
 import java.io.File
 
@@ -174,5 +177,35 @@ class ZimFileReaderTest {
         "Café" to "Café"
       ).forEach { (url, decoded) -> assertEquals(decoded, url.decodeUrl, "decoded $url") }
     }
+  }
+
+  @Nested
+  inner class DirectAccessInfoTest {
+    @Test
+    fun getInputStreamFromDirectAccessInfoReturnsNullWhenFileCannotBeOpened() {
+      val reader = ZimFileReader(
+        ZimReaderSource(File("testzim.zim")),
+        mockk(relaxed = true),
+        mockk(relaxed = true),
+        Dispatchers.Unconfined
+      )
+      val item = TestItem(2048L)
+      val infoPair = DirectAccessInfo().apply {
+        filename = "test.zim"
+        offset = 0L
+      }
+      val nonExistentFile = File("non_existent_file.zim")
+      assertNull(reader.getInputStreamFromDirectAccessInfo(item, nonExistentFile, infoPair))
+    }
+
+    @Test
+    fun parcelFileDescriptorReturnsNullWhenFileDoesNotExist() {
+      val nonExistentFile = File("non_existent_file.zim")
+      assertNull(parcelFileDescriptor(nonExistentFile))
+    }
+  }
+
+  open class TestItem(private val testSize: Long = 2048L) : Item() {
+    override fun getSize(): Long = testSize
   }
 }

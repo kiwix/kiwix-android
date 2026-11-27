@@ -20,6 +20,7 @@ package org.kiwix.kiwixmobile.core.reader
 import android.content.res.AssetFileDescriptor
 import android.os.ParcelFileDescriptor
 import android.util.Base64
+import androidx.annotation.VisibleForTesting
 import androidx.core.net.toUri
 import eu.mhutti1.utils.storage.KB
 import kotlinx.coroutines.CoroutineDispatcher
@@ -287,6 +288,7 @@ class ZimFileReader(
           }
           // Return the input stream from the direct access information
           return@loadContent getInputStreamFromDirectAccessInfo(item, file, infoPair)
+            ?: ByteArrayInputStream(item.data?.data)
         }
       }
     }
@@ -352,6 +354,7 @@ class ZimFileReader(
         return@withContext loadAssetFromCache(uri)
       }
       return@withContext getInputStreamFromDirectAccessInfo(item, file, infoPair)
+        ?: loadAssetFromCache(uri)
     }
 
   private fun getDirectAccessInfoOfItem(item: Item?, uri: String): DirectAccessInfo? =
@@ -366,18 +369,33 @@ class ZimFileReader(
       null
     }
 
-  private fun getInputStreamFromDirectAccessInfo(
+  @Suppress("TooGenericExceptionCaught")
+  @VisibleForTesting
+  internal fun getInputStreamFromDirectAccessInfo(
     item: Item?,
     file: File,
     infoPair: DirectAccessInfo
-  ): InputStream? =
-    item?.itemSize()?.let {
-      AssetFileDescriptor(
-        parcelFileDescriptor(file),
-        infoPair.offset,
-        it
-      ).createInputStream()
+  ): InputStream? {
+    var parcelFileDescriptor: ParcelFileDescriptor? = null
+    return try {
+      item?.itemSize()?.let {
+        parcelFileDescriptor = parcelFileDescriptor(file) ?: return null
+        AssetFileDescriptor(
+          parcelFileDescriptor,
+          infoPair.offset,
+          it
+        ).createInputStream()
+      }
+    } catch (exception: Exception) {
+      Log.e(
+        TAG,
+        "Could not get input stream from direct access info for file = $file",
+        exception
+      )
+      runCatching { parcelFileDescriptor?.close() }
+      null
     }
+  }
 
   @Throws(IOException::class)
   private fun loadAssetFromCache(uri: String): FileInputStream = File(
@@ -489,8 +507,17 @@ val String.decodeUrl: String
 val String.truncateMimeType: String
   get() = replace("^([^ ]+).*$", "$1").substringBefore(";")
 
-private fun parcelFileDescriptor(file: File): ParcelFileDescriptor? =
-  ParcelFileDescriptor.open(file, ParcelFileDescriptor.MODE_READ_ONLY)
+@VisibleForTesting
+internal fun parcelFileDescriptor(file: File): ParcelFileDescriptor? =
+  try {
+    ParcelFileDescriptor.open(file, ParcelFileDescriptor.MODE_READ_ONLY)
+  } catch (ioException: IOException) {
+    Log.e(TAG, "Could not open parcel file descriptor for file = $file", ioException)
+    null
+  } catch (securityException: SecurityException) {
+    Log.e(TAG, "Permission denied opening parcel file descriptor for file = $file", securityException)
+    null
+  }
 
 // Default illustration size for ZIM file favicons
 const val ILLUSTRATION_SIZE = 48
