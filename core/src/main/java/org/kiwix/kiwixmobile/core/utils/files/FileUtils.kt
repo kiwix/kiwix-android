@@ -568,7 +568,7 @@ object FileUtils {
   ): List<File> = withContext(ioDispatcher) {
     val files = ArrayList<File>()
     book.file?.let {
-      if (it.path.endsWith(".zim", ignoreCase = true) || it.path.endsWith(".zim.part")) {
+      if (it.path.endsWith(".zim", ignoreCase = true) || it.path.endsWith(".zim.part", ignoreCase = true)) {
         if (it.isFileExist(ioDispatcher)) {
           files.add(it)
         } else {

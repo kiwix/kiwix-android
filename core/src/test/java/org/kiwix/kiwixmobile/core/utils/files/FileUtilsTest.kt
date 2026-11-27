@@ -101,6 +101,11 @@ class FileUtilsTest {
   }
 
   @Test
+  fun getAllZimParts_whenFileEndsWithUppercaseZimPartAndExists_returnsOriginalFile() {
+    testWith(".ZIM.part", true)
+  }
+
+  @Test
   fun getAllZimParts_whenSplitFileHasUppercaseExtension_returnsAllChunks() = runTest {
     every { mockFile.path } returns "/storage/emulated/0/WIKI.ZIMAA"
     givenExistingFiles("/storage/emulated/0/WIKI.ZIMAA", "/storage/emulated/0/WIKI.ZIMAB")
