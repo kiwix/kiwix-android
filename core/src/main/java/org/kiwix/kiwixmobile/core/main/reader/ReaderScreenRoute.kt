@@ -20,13 +20,20 @@ package org.kiwix.kiwixmobile.core.main.reader
 
 import android.Manifest
 import android.Manifest.permission.POST_NOTIFICATIONS
+import android.content.ActivityNotFoundException
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
+import android.net.Uri
 import android.os.IBinder
 import android.view.ActionMode
 import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts.PickVisualMedia
+import androidx.activity.result.contract.ActivityResultContracts.TakePicture
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
@@ -73,10 +80,12 @@ import org.kiwix.kiwixmobile.core.ui.components.NavigationIcon
 import org.kiwix.kiwixmobile.core.ui.theme.KiwixTheme
 import org.kiwix.kiwixmobile.core.utils.LanguageUtils
 import org.kiwix.kiwixmobile.core.utils.TAG_FILE_SEARCHED
+import org.kiwix.kiwixmobile.core.utils.TAG_KIWIX
 import org.kiwix.kiwixmobile.core.utils.ZERO
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.dialog.DialogHost
 import org.kiwix.kiwixmobile.core.utils.dialog.KiwixDialog
+import org.kiwix.kiwixmobile.core.utils.files.Log
 import java.io.File
 import java.io.IOException
 
@@ -104,6 +113,17 @@ fun ReaderScreenRoute(
   } else {
     null
   }
+  val pickImageLauncher = rememberLauncherForActivityResult(PickVisualMedia()) { uri ->
+    if (uri != null) {
+      activity.toast(string.image_selected)
+    }
+  }
+  val takePictureLauncher = rememberLauncherForActivityResult(TakePicture()) { success ->
+    if (success) {
+      activity.toast(string.photo_captured)
+    }
+  }
+
   DisposableEffect(Unit) {
     onDispose {
       runCatching {
@@ -134,7 +154,9 @@ fun ReaderScreenRoute(
     lifeCycleScope,
     navHostController,
     readPermissionState,
-    notificationPermission
+    notificationPermission,
+    pickImageLauncher,
+    takePictureLauncher
   )
   KiwixTheme {
     ReaderScreen(
@@ -279,6 +301,8 @@ private fun CollectEffect(
   navHostController: NavHostController,
   readPermissionState: PermissionState,
   notificationPermission: PermissionState?,
+  pickImageLauncher: ActivityResultLauncher<PickVisualMediaRequest>,
+  takePictureLauncher: ActivityResultLauncher<Uri>,
 ) {
   LaunchedEffect(Unit) {
     viewModel.effects.collect { effect ->
@@ -304,10 +328,33 @@ private fun CollectEffect(
         is ReaderEffect.ShowAddNoteDialog ->
           showAddNoteDialog(alertDialogShower, addNoteViewModel, effect.kiwixWebView)
 
-        ReaderEffect.ShowTTSLanguageDialog ->
+        is ReaderEffect.ShowTTSLanguageDialog ->
           activity.externalLinkOpener.showTTSLanguageDownloadDialog()
+
+        ReaderEffect.PickImage ->
+          pickImageLauncher.launch(PickVisualMediaRequest(PickVisualMedia.ImageOnly))
+
+        is ReaderEffect.TakePhoto ->
+          launchCameraCapture(activity, effect.photoFile, takePictureLauncher)
       }
     }
+  }
+}
+
+private fun launchCameraCapture(
+  context: Context,
+  photoFile: File,
+  takePictureLauncher: ActivityResultLauncher<Uri>
+) {
+  val photoUri = FileProvider.getUriForFile(
+    context,
+    "${context.packageName}.fileprovider",
+    photoFile
+  )
+  try {
+    takePictureLauncher.launch(photoUri)
+  } catch (e: ActivityNotFoundException) {
+    Log.e(TAG_KIWIX, "No camera application available", e)
   }
 }
 

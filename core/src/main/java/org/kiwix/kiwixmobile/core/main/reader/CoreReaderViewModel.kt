@@ -140,6 +140,7 @@ import org.kiwix.kiwixmobile.core.utils.files.Log
 import org.kiwix.kiwixmobile.core.utils.titleToEntryPath
 import org.kiwix.kiwixmobile.core.utils.urlSuffixToParsableUrl
 import java.io.File
+import java.io.IOException
 import kotlin.math.abs
 import kotlin.time.Duration.Companion.milliseconds
 
@@ -294,6 +295,9 @@ abstract class CoreReaderViewModel(
     data object ClearActivityIntentAction : ReaderEffect
     data class SharePdfFile(val pdfFile: File) : ReaderEffect
     data object RequestNotificationPermission : ReaderEffect
+
+    data object PickImage : ReaderEffect
+    data class TakePhoto(val photoFile: File) : ReaderEffect
   }
 
   private val coroutineJobs: MutableList<Job> = mutableListOf()
@@ -1274,6 +1278,23 @@ abstract class CoreReaderViewModel(
       ReaderEffect.EnableLeftSideBar
     }
     emitEffect(effect)
+  }
+
+  override fun onShowImageChooser(isCaptureEnabled: Boolean) {
+    if (!isCaptureEnabled) {
+      emitEffect(ReaderEffect.PickImage)
+      return
+    }
+    launchInViewModelScope {
+      try {
+        val photoFile = withContext(ioDispatcher) {
+          File.createTempFile("kiwix_photo_", ".jpg", context.cacheDir)
+        }
+        emitEffect(ReaderEffect.TakePhoto(photoFile))
+      } catch (e: IOException) {
+        Log.e(TAG_KIWIX, "Failed to create temporary camera photo file", e)
+      }
+    }
   }
 
   private suspend fun updateBottomToolbarArrowsAlpha() {

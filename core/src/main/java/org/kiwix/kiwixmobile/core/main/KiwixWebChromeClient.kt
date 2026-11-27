@@ -17,7 +17,9 @@
  */
 package org.kiwix.kiwixmobile.core.main
 
+import android.net.Uri
 import android.view.ViewGroup
+import android.webkit.ValueCallback
 import android.webkit.WebView
 import org.kiwix.videowebview.VideoEnabledWebChromeClient
 
@@ -33,5 +35,15 @@ class KiwixWebChromeClient(
   override fun onReceivedTitle(view: WebView, title: String) {
     super.onReceivedTitle(view, title)
     callback.webViewTitleUpdated(title)
+  }
+
+  override fun onShowFileChooser(
+    webView: WebView,
+    filePathCallback: ValueCallback<Array<Uri>>,
+    fileChooserParams: FileChooserParams
+  ): Boolean {
+    filePathCallback.onReceiveValue(null)
+    callback.onShowImageChooser(fileChooserParams.isCaptureEnabled)
+    return true
   }
 }

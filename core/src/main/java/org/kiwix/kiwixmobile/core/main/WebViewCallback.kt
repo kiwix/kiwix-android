@@ -31,4 +31,5 @@ interface WebViewCallback {
   fun webViewPageChanged(page: Int, maxPages: Int)
   fun webViewLongClick(url: String)
   fun onFullscreenVideoToggled(isFullScreen: Boolean)
+  fun onShowImageChooser(isCaptureEnabled: Boolean)
 }
