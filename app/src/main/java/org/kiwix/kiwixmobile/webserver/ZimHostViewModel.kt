@@ -305,13 +305,21 @@ class ZimHostViewModel @Inject constructor(
     }
   }
 
-  private fun getQrIcon(ip: String?) =
+  private fun getQrIcon(ip: String?): IconItem {
     if (ip.isNullOrBlank()) {
-      IconItem.Drawable(R.drawable.ic_storage)
-    } else {
-      val qr = generateQr.createQR(ip)
-      IconItem.ImageBitmap(qr.asImageBitmap())
+      return IconItem.Drawable(R.drawable.ic_storage)
     }
+
+    val qrBitmap = runCatching {
+      generateQr.createQR(ip)
+    }.onFailure {
+      Log.e("ZimHostViewModel", "Could not generate QR code", it)
+    }.getOrNull()
+
+    return qrBitmap?.let {
+      IconItem.ImageBitmap(it.asImageBitmap())
+    } ?: IconItem.Drawable(R.drawable.ic_storage)
+  }
 
   override fun onServerStopped() {
     layoutStopped()

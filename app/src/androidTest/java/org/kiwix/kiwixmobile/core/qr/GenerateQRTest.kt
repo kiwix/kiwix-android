@@ -21,6 +21,7 @@ package org.kiwix.kiwixmobile.core.qr
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.SmallTest
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertThrows
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -48,5 +49,30 @@ class GenerateQRTest {
     assertEquals(128, qr.width)
     assertEquals(128, qr.height)
     qr.recycle()
+  }
+
+  @Test fun testCreateQRWithEdgeCases() {
+    val validContents = listOf(
+      "http://192.168.43.1:8080/",
+      "http://[fe80::1c2b:3cff:fe4d:5e6f]:8080/",
+      "http://10.0.2.15:8080/content/wikipedia_en_all/A/Main_Page?lang=हिन्दी&q=a b",
+      "http://192.168.43.1:8080/" + "a".repeat(1000)
+    )
+    validContents.forEach {
+      val qr = GenerateQR().createQR(it)
+      assertEquals(512, qr.width)
+      assertEquals(512, qr.height)
+      qr.recycle()
+    }
+
+    val invalidContents = listOf(
+      "" to IllegalArgumentException::class.java,
+      "   " to IllegalArgumentException::class.java,
+      "\n\t" to IllegalArgumentException::class.java,
+      "a".repeat(5000) to Exception::class.java
+    )
+    invalidContents.forEach { (content, exception) ->
+      assertThrows(exception) { GenerateQR().createQR(content) }
+    }
   }
 }
