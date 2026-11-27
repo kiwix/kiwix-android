@@ -132,13 +132,12 @@ object FileUtils {
           filePath = filePath.substring(0, filePath.length - ChunkUtils.PART.length)
         }
         val file = File(filePath)
-        if (file.path.substring(file.path.length - 3) != "zim") {
+        if (!file.path.endsWith("zim", ignoreCase = true)) {
           var alphabetFirst = 'a'
           fileloop@ while (alphabetFirst <= 'z') {
             var alphabetSecond = 'a'
             while (alphabetSecond <= 'z') {
-              val chunkPath =
-                filePath.substring(0, filePath.length - 2) + alphabetFirst + alphabetSecond
+              val chunkPath = getChunkPath(filePath, alphabetFirst, alphabetSecond)
               val fileChunk = File(chunkPath)
               if (fileChunk.isFileExist(ioDispatcher)) {
                 fileChunk.deleteFile(ioDispatcher)
@@ -569,7 +568,7 @@ object FileUtils {
   ): List<File> = withContext(ioDispatcher) {
     val files = ArrayList<File>()
     book.file?.let {
-      if (it.path.endsWith(".zim") || it.path.endsWith(".zim.part")) {
+      if (it.path.endsWith(".zim", ignoreCase = true) || it.path.endsWith(".zim.part", ignoreCase = true)) {
         if (it.isFileExist(ioDispatcher)) {
           files.add(it)
         } else {
@@ -579,7 +578,7 @@ object FileUtils {
         var path = it.path
         for (firstCharacter in 'a'..'z') {
           for (secondCharacter in 'a'..'z') {
-            path = path.substring(0, path.length - 2) + firstCharacter + secondCharacter
+            path = getChunkPath(path, firstCharacter, secondCharacter)
             when {
               File(path).isFileExist(ioDispatcher) -> files.add(File(path))
               File("$path.part").isFileExist(ioDispatcher) -> files.add(File("$path.part"))
@@ -598,7 +597,7 @@ object FileUtils {
     withContext(ioDispatcher) {
       var tempFile = file
       tempFile = File(getFileName(tempFile.path, ioDispatcher))
-      if (tempFile.path.endsWith(".zim")) {
+      if (tempFile.path.endsWith(".zim", ignoreCase = true)) {
         return@withContext false
       }
       if (tempFile.path.endsWith(".part")) {
@@ -607,7 +606,7 @@ object FileUtils {
       val path = tempFile.path
       for (firstCharacter in 'a'..'z') {
         for (secondCharacter in 'a'..'z') {
-          val chunkPath = path.substring(0, path.length - 2) + firstCharacter + secondCharacter
+          val chunkPath = getChunkPath(path, firstCharacter, secondCharacter)
           val fileChunk = File("$chunkPath.part")
           if (fileChunk.isFileExist(ioDispatcher)) {
             return@withContext true
@@ -618,6 +617,18 @@ object FileUtils {
       }
       return@withContext false
     }
+
+  /**
+   * Returns the path of the split ZIM chunk with the given two-letter suffix, keeping the
+   * letter case of the existing extension, e.g. "wiki.zimaa" -> "wiki.zimab" and
+   * "WIKI.ZIMAA" -> "WIKI.ZIMAB".
+   */
+  private fun getChunkPath(path: String, firstCharacter: Char, secondCharacter: Char): String {
+    val basePath = path.substring(0, path.length - 2)
+    val suffix = "$firstCharacter$secondCharacter"
+    val isUpperCaseExtension = basePath.lastOrNull()?.isUpperCase() == true
+    return basePath + if (isUpperCaseExtension) suffix.uppercase() else suffix
+  }
 
   @JvmStatic
   suspend fun getFileName(fileName: String, ioDispatcher: CoroutineDispatcher): String =
@@ -641,7 +652,7 @@ object FileUtils {
 
   @JvmStatic
   fun isValidZimFile(filePath: String): Boolean =
-    filePath.endsWith(".zim") || filePath.endsWith(".zimaa")
+    filePath.endsWith(".zim", ignoreCase = true) || filePath.endsWith(".zimaa", ignoreCase = true)
 
   /**
    * Determines whether the given file path corresponds to a split ZIM file.
@@ -654,7 +665,7 @@ object FileUtils {
    */
   @JvmStatic
   fun isSplittedZimFile(filePath: String): Boolean =
-    filePath.matches(Regex(".*\\.zima.$"))
+    filePath.matches(Regex(".*\\.zima.$", RegexOption.IGNORE_CASE))
 
   /**
    * Get the main storage path for a given storage name (SD card or USB stick).

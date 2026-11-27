@@ -104,6 +104,18 @@ class FileSearchTest {
     }
 
     @Test
+    fun `scan of directory returns files with an uppercase extension`() = runTest {
+      val zimFile = File(tempDir, "fileToFind.ZIM").apply { createNewFile() }
+      val zimaaFile = File(tempDir, "fileToFind2.ZIMAA").apply { createNewFile() }
+      every { contentResolver.query(any(), any(), any(), any(), any()) } returns null
+      every { storageDevice.name } returns tempDir.absolutePath
+      fileSearch.scan(scanningProgressListener).test {
+        assertThat(awaitItem()).containsExactlyInAnyOrder(zimFile, zimaaFile)
+        awaitComplete()
+      }
+    }
+
+    @Test
     fun `scan of directory recursively traverses filesystem`() = runTest {
       val subDir = File(tempDir, "dir").apply { mkdirs() }
       val zimFile = File(subDir, "fileToFind.zim").apply { createNewFile() }
