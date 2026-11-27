@@ -245,7 +245,7 @@ fun ApplicationProductFlavor.createPublishApkWithExpansionTask(file: File): Task
           apks.forEach(::uploadApk)
           uploadExpansionTo(file, apks.first().versionCode)
           apks.drop(1).forEach { attachExpansionTo(apks.first().versionCode, it) }
-          addToTrackInDraft(apks)
+          addToTrack(apks)
         }
     }
   }
@@ -269,7 +269,7 @@ fun ApplicationProductFlavor.createPublishBundleWithAssetPlayDelivery(): TaskPro
             )
           if (generatedBundleFile.exists()) {
             uploadBundle(generatedBundleFile)
-            addBundleToTrackInDraft("7$versionCode".toInt(), versionName)
+            addBundleToTrack("7$versionCode".toInt(), versionName)
           } else {
             throw FileNotFoundException("Unable to find generated aab file")
           }
