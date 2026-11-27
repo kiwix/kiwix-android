@@ -176,14 +176,16 @@ class ReaderWebViewManager @Inject constructor(
     readerSessionManager.withTabsMutationLock {
       runCatching {
         withContext(mainDispatcher) {
-          setCurrentWebViewIndex(ZERO)
+          setCurrentWebViewIndex(ZERO, save = false)
           tabsManager.clearTabsState()
-          webViewHistoryItemList.forEach { webViewHistoryItem ->
+          val restoredTabs = webViewHistoryItemList.map { webViewHistoryItem ->
             val webView = createNewTab(newTabConfig)
             readerSessionManager.restoreTabState(webView, webViewHistoryItem)
             addNewTabInTabsManager(webView, newTabConfig)
+            webView
           }
-          setCurrentWebViewIndex(currentTab)
+          readerSessionManager.setRestoredTabs(restoredTabs)
+          setCurrentWebViewIndex(currentTab, save = false)
           RestoreTabsResult.TabsRestored
         }
       }.getOrElse { RestoreTabsResult.ErrorInRestoringTabs(it) }
@@ -212,8 +214,15 @@ class ReaderWebViewManager @Inject constructor(
     }
   }
 
-  fun setCurrentWebViewIndex(index: Int) {
+  /**
+   * Selects the tab at [index]. Switching tabs does not load a page, so the selected tab
+   * is saved here when [save] is true. Pass false while tabs are being restored.
+   */
+  suspend fun setCurrentWebViewIndex(index: Int, save: Boolean = true) {
     tabsManager.setCurrentWebViewIndex(index)
+    if (save) {
+      readerSessionManager.saveCurrentTab()
+    }
   }
 
   suspend fun destroyAllTabs() {

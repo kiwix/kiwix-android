@@ -334,6 +334,8 @@ class ReaderWebViewManagerTest {
         readerSessionManager.restoreTabState(any(), history[0])
         readerSessionManager.restoreTabState(any(), history[1])
       }
+      verify { readerSessionManager.setRestoredTabs(match { it.size == 2 }) }
+      coVerify(exactly = 0) { readerSessionManager.saveCurrentTab() }
     }
 
     @Test
@@ -546,12 +548,19 @@ class ReaderWebViewManagerTest {
     }
 
     @Test
-    fun `setCurrentWebViewIndex delegates to tabsManager`() {
+    fun `setCurrentWebViewIndex selects the tab and saves it`() = runTest {
       readerWebViewManager.setCurrentWebViewIndex(3)
 
-      verify {
-        tabsManager.setCurrentWebViewIndex(3)
-      }
+      verify { tabsManager.setCurrentWebViewIndex(3) }
+      coVerify(exactly = 1) { readerSessionManager.saveCurrentTab() }
+    }
+
+    @Test
+    fun `setCurrentWebViewIndex does not save when save is false`() = runTest {
+      readerWebViewManager.setCurrentWebViewIndex(3, save = false)
+
+      verify { tabsManager.setCurrentWebViewIndex(3) }
+      coVerify(exactly = 0) { readerSessionManager.saveCurrentTab() }
     }
   }
 

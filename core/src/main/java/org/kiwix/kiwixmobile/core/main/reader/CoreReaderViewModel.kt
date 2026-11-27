@@ -1236,16 +1236,12 @@ abstract class CoreReaderViewModel(
     }
 
   protected open suspend fun selectTab(position: Int) {
-    readerWebViewManager.setCurrentWebViewIndex(position)
+    // Do not save while tabs are being restored, because the tab list is not complete yet.
+    readerWebViewManager.setCurrentWebViewIndex(position, save = !isWebViewHistoryRestoring)
     updateBottomToolbarVisibility()
     updateUrlFlow()
     updateTableOfContents()
     updateTitle()
-    // Switching tabs does not load a page, so save the selected tab here. Skip it while
-    // tabs are being restored, because the tab list is not complete yet.
-    if (!isWebViewHistoryRestoring) {
-      readerSessionManager.saveCurrentTab()
-    }
   }
 
   override fun openExternalUrl(intent: Intent) {

@@ -72,7 +72,7 @@ class ReaderSessionManager @Inject constructor(
       val tabsState = withContext(mainDispatcher) { tabsManager.currentState() }
       val savedTabs = getWebViewHistoryList(tabsState)
       clearAndSaveLatestReaderSession(savedTabs.map { it.second })
-      lastSavedTabs = savedTabs.map { it.first }
+      tabsManager.savedTabs = savedTabs.map { it.first }
       val source = zimFileManager.zimReaderSource?.toDatabase()
       kiwixDataStore.apply {
         setCurrentZimFile(source.orEmpty())
@@ -93,14 +93,6 @@ class ReaderSessionManager @Inject constructor(
   }
 
   /**
-   * The tabs stored by the last [saveReaderSession], in the order they are saved.
-   * The saved tab index must point into this list, because it is the list that will
-   * be restored.
-   */
-  @Volatile
-  private var lastSavedTabs: List<KiwixWebView> = emptyList()
-
-  /**
    * Saves only the selected tab, for example when the user switches tabs.
    *
    * Switching tabs does not load a page, so [saveReaderSession] is not called for it.
@@ -118,8 +110,17 @@ class ReaderSessionManager @Inject constructor(
     savedTabIndexOf(selectedTab)?.let { kiwixDataStore.setCurrentTab(it) }
   }
 
+  /**
+   * Called after the saved tabs are restored. The restored tabs are new objects in the
+   * same order as the saved history, so they become the saved tabs. Without this,
+   * switching tabs after a restart saves nothing until a page loads.
+   */
+  fun setRestoredTabs(restoredTabs: List<KiwixWebView>) {
+    tabsManager.savedTabs = restoredTabs
+  }
+
   private fun savedTabIndexOf(webView: KiwixWebView?): Int? =
-    webView?.let { tab -> lastSavedTabs.indexOfFirst { it === tab }.takeIf { it >= ZERO } }
+    webView?.let { tab -> tabsManager.savedTabs.indexOfFirst { it === tab }.takeIf { it >= ZERO } }
 
   /**
    * Used when the selected tab itself is not saved (for example it has no page yet).
@@ -273,7 +274,7 @@ class ReaderSessionManager @Inject constructor(
   }
 
   suspend fun clearWebViewHistory() {
-    lastSavedTabs = emptyList()
+    tabsManager.savedTabs = emptyList()
     tabsManager.getCurrentWebView()?.clearHistory()
     runCatching {
       withContext(ioDispatcher) {

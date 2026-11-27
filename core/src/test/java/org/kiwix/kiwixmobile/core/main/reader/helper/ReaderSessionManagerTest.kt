@@ -60,6 +60,9 @@ class ReaderSessionManagerTest {
   @BeforeEach
   fun setup() {
     clearAllMocks()
+    var savedTabs = emptyList<KiwixWebView>()
+    every { tabsManager.savedTabs } answers { savedTabs }
+    every { tabsManager.savedTabs = any() } answers { savedTabs = firstArg() }
     readerSessionManager = ReaderSessionManager(
       tabsManager,
       zimFileManager,
@@ -468,6 +471,16 @@ class ReaderSessionManagerTest {
       readerSessionManager.saveCurrentTab()
 
       coVerify(exactly = 0) { kiwixDataStore.setCurrentTab(any()) }
+    }
+
+    @Test
+    fun `saveCurrentTab saves the selected tab after tabs are restored`() = runTest {
+      readerSessionManager.setRestoredTabs(tabs)
+      mockTabs(tabs, selectedIndex = 1)
+
+      readerSessionManager.saveCurrentTab()
+
+      coVerify(exactly = 1) { kiwixDataStore.setCurrentTab(1) }
     }
 
     @Test

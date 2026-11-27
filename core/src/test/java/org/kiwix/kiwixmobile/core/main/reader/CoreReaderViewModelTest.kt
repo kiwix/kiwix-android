@@ -175,7 +175,6 @@ internal class CoreReaderViewModelTest {
     every { readAloudManager.currentVoiceName } returns null
     every { readAloudManager.getAvailableVoices() } returns emptyList()
     every { readAloudManager.isPaused } returns false
-    coEvery { readerSessionManager.saveCurrentTab() } just Runs
 
     viewModel = TestCoreReaderViewModel(
       context,
@@ -934,8 +933,7 @@ internal class CoreReaderViewModelTest {
 
       viewModel.selectTab(1)
 
-      verify { readerWebViewManager.setCurrentWebViewIndex(1) }
-      coVerify(exactly = 1) { readerSessionManager.saveCurrentTab() }
+      coVerify { readerWebViewManager.setCurrentWebViewIndex(1, save = true) }
     }
 
     @Test
@@ -944,8 +942,7 @@ internal class CoreReaderViewModelTest {
 
       viewModel.selectTab(1)
 
-      verify { readerWebViewManager.setCurrentWebViewIndex(1) }
-      coVerify(exactly = 0) { readerSessionManager.saveCurrentTab() }
+      coVerify { readerWebViewManager.setCurrentWebViewIndex(1, save = false) }
     }
 
     @Test
@@ -953,8 +950,7 @@ internal class CoreReaderViewModelTest {
       viewModel.onAction(ReaderAction.SelectTab(2))
       advanceUntilIdle()
 
-      verify { readerWebViewManager.setCurrentWebViewIndex(2) }
-      coVerify { readerSessionManager.saveCurrentTab() }
+      coVerify { readerWebViewManager.setCurrentWebViewIndex(2, save = true) }
     }
 
     @Test
