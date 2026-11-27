@@ -133,7 +133,7 @@ private fun DrawerMenuItemView(item: DrawerMenuItem) {
     leadingContent = {
       Icon(
         painter = painterResource(id = item.iconRes),
-        contentDescription = item.title,
+        contentDescription = null,
         tint = item.iconTint ?: LocalContentColor.current
       )
     },
