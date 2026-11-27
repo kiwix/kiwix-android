@@ -3,6 +3,7 @@ import org.gradle.kotlin.dsl.register
 buildscript {
   repositories {
     google()
+    maven { setUrl("https://maven-central.storage-download.googleapis.com/maven2/") }
     mavenCentral()
     maven { setUrl("https://jitpack.io") }
   }
@@ -24,8 +25,16 @@ plugins {
 allprojects {
   repositories {
     google()
+    maven { setUrl("https://maven-central.storage-download.googleapis.com/maven2/") }
     mavenCentral()
-    maven { setUrl("https://jitpack.io") }
+    // `com.github.tonyofrancis.Fetch` only exists on JitPack. Without this, Gradle still
+    // probes google()/the mirror/mavenCentral() first, and a transient 429 from any of those
+    // (rather than a clean 404) aborts resolution before it ever reaches JitPack. `exclusiveContent`
+    // routes this group straight to JitPack, skipping the other repos for it entirely.
+    exclusiveContent {
+      forRepository { maven { setUrl("https://jitpack.io") } }
+      filter { includeGroup("com.github.tonyofrancis.Fetch") }
+    }
   }
 }
 

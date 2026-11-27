@@ -61,7 +61,7 @@ class AllProjectConfigurer {
   fun configureApplicationExtension(target: Project) {
     target.extensions.configure<ApplicationExtension> {
       defaultConfig {
-        targetSdk = Config.targetSdk
+        targetSdk = Config.TARGET_SDK
       }
       configureBaseExtensions(this, target)
     }
@@ -89,9 +89,9 @@ class AllProjectConfigurer {
       // Using the same NDK version as in `java-libkiwix`, because with the default Gradle NDK,
       // the debug symbols are not included in the Android App Bundle (AAB).
       ndkVersion = Config.NDK_VERSION
-      compileSdk = Config.compileSdk
+      compileSdk = Config.COMPILE_SDK
       defaultConfig.apply {
-        minSdk = Config.minSdk
+        minSdk = Config.MIN_SDK
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
       }
 
@@ -131,6 +131,17 @@ class AllProjectConfigurer {
           all {
             it.also { testTask ->
               testTask.useJUnitPlatform()
+              // Robolectric fetches android-all jars directly via HTTP at test runtime,
+              // bypassing Gradle's own repositories — point it at the same mirror to avoid
+              // repo1.maven.org's 429s (see https://robolectric.org/configuring/).
+              testTask.systemProperty(
+                "robolectric.dependency.repo.url",
+                "https://maven-central.storage-download.googleapis.com/maven2"
+              )
+              testTask.systemProperty(
+                "robolectric.dependency.repo.id",
+                "google-maven-central-mirror"
+              )
               testTask.testLogging {
                 setEvents(setOf("passed", "skipped", "failed", "standardOut", "standardError"))
                 testTask.outputs.upToDateWhen { false }
