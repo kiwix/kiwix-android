@@ -22,6 +22,7 @@ import android.Manifest.permission.POST_NOTIFICATIONS
 import android.app.Activity
 import android.app.Application
 import android.content.Intent
+import android.net.Uri
 import android.view.ActionMode
 import android.view.Menu
 import android.view.ViewGroup
@@ -140,6 +141,7 @@ import org.kiwix.kiwixmobile.core.utils.files.Log
 import org.kiwix.kiwixmobile.core.utils.titleToEntryPath
 import org.kiwix.kiwixmobile.core.utils.urlSuffixToParsableUrl
 import java.io.File
+import java.io.IOException
 import kotlin.math.abs
 import kotlin.time.Duration.Companion.milliseconds
 
@@ -294,6 +296,9 @@ abstract class CoreReaderViewModel(
     data object ClearActivityIntentAction : ReaderEffect
     data class SharePdfFile(val pdfFile: File) : ReaderEffect
     data object RequestNotificationPermission : ReaderEffect
+
+    data object PickImage : ReaderEffect
+    data class TakePhoto(val photoFile: File) : ReaderEffect
   }
 
   private val coroutineJobs: MutableList<Job> = mutableListOf()
@@ -307,6 +312,8 @@ abstract class CoreReaderViewModel(
   private var hideBackToTopJob: Job? = null
   private var pdfJob: Job? = null
   private var actionMode: ActionMode? = null
+  private var pendingImageSelectionCallback: ((Uri?) -> Unit)? = null
+  private var isCameraCapture = false
 
   val isAndroid13OrAbove = kiwixPermissionChecker.isAndroid13orAbove()
 
@@ -1274,6 +1281,39 @@ abstract class CoreReaderViewModel(
       ReaderEffect.EnableLeftSideBar
     }
     emitEffect(effect)
+  }
+
+  override fun onShowImageChooser(
+    isCaptureEnabled: Boolean,
+    onImageSelected: (Uri?) -> Unit
+  ) {
+    pendingImageSelectionCallback = onImageSelected
+    isCameraCapture = isCaptureEnabled
+    if (!isCaptureEnabled) {
+      emitEffect(ReaderEffect.PickImage)
+      return
+    }
+    launchInViewModelScope {
+      try {
+        val photoFile = withContext(ioDispatcher) {
+          File.createTempFile("kiwix_photo_", ".jpg", context.cacheDir)
+        }
+        emitEffect(ReaderEffect.TakePhoto(photoFile))
+      } catch (e: IOException) {
+        Log.e(TAG_KIWIX, "Failed to create temporary camera photo file", e)
+        this@CoreReaderViewModel.onImageSelected(null)
+      }
+    }
+  }
+
+  fun onImageSelected(uri: Uri?) {
+    pendingImageSelectionCallback?.invoke(uri)
+    pendingImageSelectionCallback = null
+    if (uri != null) {
+      val message = if (isCameraCapture) string.photo_captured else string.image_selected
+      emitEffect(ReaderEffect.ShowToast(context.getString(message)))
+    }
+    isCameraCapture = false
   }
 
   private suspend fun updateBottomToolbarArrowsAlpha() {

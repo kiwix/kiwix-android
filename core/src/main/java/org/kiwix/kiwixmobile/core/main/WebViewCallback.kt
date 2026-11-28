@@ -18,6 +18,7 @@
 package org.kiwix.kiwixmobile.core.main
 
 import android.content.Intent
+import android.net.Uri
 import android.webkit.WebView
 
 interface WebViewCallback {
@@ -31,4 +32,5 @@ interface WebViewCallback {
   fun webViewPageChanged(page: Int, maxPages: Int)
   fun webViewLongClick(url: String)
   fun onFullscreenVideoToggled(isFullScreen: Boolean)
+  fun onShowImageChooser(isCaptureEnabled: Boolean, onImageSelected: (Uri?) -> Unit)
 }
