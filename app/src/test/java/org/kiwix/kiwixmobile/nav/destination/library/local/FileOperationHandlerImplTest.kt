@@ -20,9 +20,9 @@ package org.kiwix.kiwixmobile.nav.destination.library.local
 
 import android.content.ContentResolver
 import android.content.Context
+import android.content.res.AssetFileDescriptor
 import android.database.Cursor
 import android.net.Uri
-import android.os.ParcelFileDescriptor
 import android.provider.DocumentsContract
 import androidx.documentfile.provider.DocumentFile
 import io.mockk.clearAllMocks
@@ -35,7 +35,7 @@ import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
-import org.junit.jupiter.api.Assertions.assertNotNull
+import org.junit.jupiter.api.Assertions.assertInstanceOf
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
@@ -45,8 +45,8 @@ import org.junit.jupiter.api.io.TempDir
 import org.kiwix.kiwixmobile.core.utils.ZERO
 import org.kiwix.sharedFunctions.MainDispatcherRule
 import java.io.File
-import java.io.FileInputStream
 import java.io.FileNotFoundException
+import java.io.IOException
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class FileOperationHandlerImplTest {
@@ -86,93 +86,67 @@ class FileOperationHandlerImplTest {
     clearAllMocks()
   }
 
+  private fun stubSource(file: File, size: Long = file.length()) {
+    val descriptor = mockk<AssetFileDescriptor>(relaxed = true)
+    every { contentResolver.openAssetFileDescriptor(sourceUri, "r") } returns descriptor
+    every { descriptor.length } returns size
+    every { descriptor.createInputStream() } answers { file.inputStream() }
+  }
+
   @Nested
   inner class Copy {
     @Test
-    fun whenOpenFileDescriptorReturnsNull_throwsFileNotFoundException() = runTest {
-      every { contentResolver.openFileDescriptor(sourceUri, "r") } returns null
+    fun whenSourceCannotBeOpened_throwsFileNotFoundException() = runTest {
+      every { contentResolver.openAssetFileDescriptor(sourceUri, "r") } returns null
 
-      var thrown: Throwable? = null
-      try {
-        fileOperationHandler.copy(
-          sourceUri = sourceUri,
-          destinationFile = destinationFile,
-          onProgress = {}
-        )
-      } catch (e: FileNotFoundException) {
-        thrown = e
-      }
+      val failure = runCatching {
+        fileOperationHandler.copy(sourceUri, destinationFile, onProgress = {})
+      }.exceptionOrNull()
 
-      assertNotNull(thrown)
+      assertInstanceOf(FileNotFoundException::class.java, failure)
     }
 
     @Test
-    fun whenFileEmpty_emitsHundredProgress() = runTest {
-      val emptyFile = File(tempDir, "empty.txt").apply { createNewFile() }
+    fun whenSourceIsEmpty_doesNotReportCompletion() = runTest {
+      val sourceFile = File(tempDir, "empty.zim").apply { createNewFile() }
+      val destination = File(tempDir, "destination.zim")
+      stubSource(sourceFile)
+      val progress = mutableListOf<Int>()
 
-      val parcelFileDescriptor =
-        mockk<ParcelFileDescriptor>()
+      val failure = runCatching {
+        fileOperationHandler.copy(sourceUri, destination) { progress.add(it) }
+      }.exceptionOrNull()
 
-      every {
-        contentResolver.openFileDescriptor(sourceUri, "r")
-      } returns parcelFileDescriptor
-
-      every {
-        parcelFileDescriptor.fileDescriptor
-      } returns FileInputStream(emptyFile).fd
-
-      var progress = 0
-
-      fileOperationHandler.copy(
-        sourceUri = sourceUri,
-        destinationFile = File(tempDir, "destination.txt").apply { createNewFile() },
-        onProgress = {
-          progress = it
-        }
-      )
-
-      assertEquals(100, progress)
+      assertInstanceOf(IOException::class.java, failure)
+      assertTrue(progress.isEmpty())
     }
 
     @Test
-    fun whenFileHasContent_updatesProgress() = runTest {
-      val sourceFile = File(tempDir, "source.txt").apply {
-        writeText("Kiwix testing content")
-      }
+    fun whenSourceHasKnownLength_copiesContentAndReportsCompletion() = runTest {
+      val sourceFile = File(tempDir, "source.zim").apply { writeText("Kiwix testing content") }
+      val destination = File(tempDir, "destination.zim")
+      stubSource(sourceFile)
+      val progress = mutableListOf<Int>()
 
-      val destinationFile = File(tempDir, "destination.txt").apply {
-        createNewFile()
-      }
+      fileOperationHandler.copy(sourceUri, destination) { progress.add(it) }
 
-      val sourceUri: Uri = mockk()
+      assertEquals(sourceFile.readText(), destination.readText())
+      assertEquals(listOf(100), progress)
+    }
 
-      val parcelFileDescriptor =
-        mockk<ParcelFileDescriptor>(relaxed = true)
+    @Test
+    fun whenSourceEndsBeforeReportedLength_doesNotReportCompletion() = runTest {
+      val sourceFile = File(tempDir, "source.zim").apply { writeText("Kiwix testing content") }
+      val destination = File(tempDir, "destination.zim")
+      stubSource(sourceFile, sourceFile.length() * 2)
+      val progress = mutableListOf<Int>()
 
-      every {
-        contentResolver.openFileDescriptor(sourceUri, "r")
-      } returns parcelFileDescriptor
+      val failure = runCatching {
+        fileOperationHandler.copy(sourceUri, destination) { progress.add(it) }
+      }.exceptionOrNull()
 
-      every {
-        parcelFileDescriptor.fileDescriptor
-      } returns FileInputStream(sourceFile).fd
-
-      var latestProgress = 0
-
-      fileOperationHandler.copy(
-        sourceUri = sourceUri,
-        destinationFile = destinationFile,
-        onProgress = {
-          latestProgress = it
-        }
-      )
-
-      assertEquals(100, latestProgress)
-
-      assertEquals(
-        sourceFile.readText(),
-        destinationFile.readText()
-      )
+      assertInstanceOf(IOException::class.java, failure)
+      assertEquals(listOf(50), progress)
     }
   }
 
@@ -207,30 +181,24 @@ class FileOperationHandlerImplTest {
     }
 
     @Test
-    fun whenParentUriNull_fallsBackToCopyAndReturnsTrue() = runTest {
-      val destinationFile = File("test")
+    fun whenMovingSourceWithUnknownLength_copiesContentBeforeReportingSuccess() = runTest {
+      val sourceFile = File(tempDir, "source.zim").apply { writeText("Kiwix testing content") }
+      val destination = File(tempDir, "destination.zim")
       every { selectedFile.parentFile } returns null
+      stubSource(sourceFile, AssetFileDescriptor.UNKNOWN_LENGTH)
+      val progress = mutableListOf<Int>()
 
-      val parcelFileDescriptor = mockk<ParcelFileDescriptor>(relaxed = true)
+      val result = fileOperationHandler.move(
+        selectedFile = selectedFile,
+        sourceUri = sourceUri,
+        destinationFolderUri = destinationFolderUri,
+        destinationFile = destination,
+        onProgress = { progress.add(it) }
+      )
 
-      every {
-        contentResolver.openFileDescriptor(sourceUri, "r")
-      } returns parcelFileDescriptor
-
-      val result =
-        fileOperationHandler.move(
-          selectedFile = selectedFile,
-          sourceUri = sourceUri,
-          destinationFolderUri = destinationFolderUri,
-          destinationFile = destinationFile,
-          onProgress = {}
-        )
-
-      assertEquals(true, result)
-
-      verify(exactly = 1) {
-        contentResolver.openFileDescriptor(sourceUri, "r")
-      }
+      assertTrue(result)
+      assertEquals(sourceFile.readText(), destination.readText())
+      assertEquals(listOf(100), progress)
     }
 
     @Nested
