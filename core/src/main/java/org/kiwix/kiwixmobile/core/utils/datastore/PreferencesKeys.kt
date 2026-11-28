@@ -77,6 +77,8 @@ object PreferencesKeys {
   val PREF_SHOW_COPY_MOVE_STORAGE_SELECTION_DIALOG =
     booleanPreferencesKey(KiwixDataStore.PREF_SHOW_COPY_MOVE_STORAGE_SELECTION_DIALOG)
   val PREF_STORAGE = stringPreferencesKey(KiwixDataStore.PREF_STORAGE)
+  val PREF_LEGACY_BOOKS_MOVE_DECLINED =
+    booleanPreferencesKey(KiwixDataStore.PREF_LEGACY_BOOKS_MOVE_DECLINED)
   val STORAGE_POSITION = intPreferencesKey(KiwixDataStore.STORAGE_POSITION)
   val PREF_IS_FIRST_RUN = booleanPreferencesKey(KiwixDataStore.PREF_IS_FIRST_RUN)
   val IS_PLAY_STORE_BUILD = booleanPreferencesKey(KiwixDataStore.IS_PLAY_STORE_BUILD)

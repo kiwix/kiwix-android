@@ -24,6 +24,7 @@ import androidx.annotation.VisibleForTesting
 import androidx.documentfile.provider.DocumentFile
 import dagger.hilt.android.qualifiers.ApplicationContext
 import eu.mhutti1.utils.storage.StorageDevice
+import eu.mhutti1.utils.storage.StorageDeviceUtils
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
@@ -43,6 +44,7 @@ import org.kiwix.kiwixmobile.core.utils.INTERNAL_SELECT_POSITION
 import org.kiwix.kiwixmobile.core.utils.datastore.KiwixDataStore
 import org.kiwix.kiwixmobile.core.utils.dialog.AlertDialogShower
 import org.kiwix.kiwixmobile.core.utils.files.FileUtils
+import org.kiwix.kiwixmobile.core.utils.files.LegacyBooksMover.Companion.KIWIX_DIRECTORY
 import org.kiwix.kiwixmobile.nav.destination.library.local.CopyMoveProgressBarController
 import org.kiwix.kiwixmobile.nav.destination.library.local.FileOperationHandler
 import org.kiwix.kiwixmobile.nav.destination.library.local.MultipleFilesProcessAction
@@ -437,8 +439,15 @@ class CopyMoveFileHandler @Inject constructor(
     return destinationFile
   }
 
+  // In Documents, books go to the Kiwix subfolder like downloads.
   private suspend fun getSelectedStorageRoot(): File =
-    unitTestStorage ?: File(kiwixDataStore.selectedStorage.first())
+    unitTestStorage ?: File(kiwixDataStore.selectedStorage.first()).let { storage ->
+      if (storage == StorageDeviceUtils.publicDocumentsDirectory(context)) {
+        File(storage, KIWIX_DIRECTORY).apply { mkdirs() }
+      } else {
+        storage
+      }
+    }
 
   private fun requireSelectedFileUri(): Uri =
     selectedFileUri ?: throw FileNotFoundException("Selected file uri not found")

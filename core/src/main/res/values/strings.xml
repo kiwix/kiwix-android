@@ -466,4 +466,9 @@
   <string name="shortcut_name_label">Shortcut name</string>
   <string name="open_xiaomi_settings">Open Settings</string>
   <string name="xiaomi_permission_required">This device requires shortcut permission to be granted before adding a shortcut to the home screen. Please grant the permission in settings.</string>
+  <string name="move_books_title">Keep your books after uninstall?</string>
+  <string name="move_books_message">Books in app storage (count: %1$d, size: %2$s) are deleted when Kiwix is uninstalled. Move them to Documents/Kiwix?</string>
+  <string name="moving_books_progress">Moving books</string>
+  <string name="move_books_done">Books moved: %1$d</string>
+  <string name="move_books_failed">Books not moved: %1$d</string>
 </resources>

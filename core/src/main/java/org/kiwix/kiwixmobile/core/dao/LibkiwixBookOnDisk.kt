@@ -56,6 +56,7 @@ import org.kiwix.kiwixmobile.core.zim_manager.fileselect_view.BooksOnDiskListIte
 import org.kiwix.libkiwix.Book
 import org.kiwix.libkiwix.Library
 import org.kiwix.libkiwix.Manager
+import org.kiwix.libzim.Archive
 import java.io.File
 import java.util.concurrent.ConcurrentHashMap
 import javax.inject.Inject
@@ -334,6 +335,12 @@ class LibkiwixBookOnDisk @Inject constructor(
         updateLocalBooksFlow()
       }
     }
+  }
+
+  suspend fun insertFile(path: String) {
+    // Same as a finished download: read the metadata from the archive.
+    val book = withContext(ioDispatcher) { Book().apply { update(Archive(path)) } }
+    insert(listOf(book))
   }
 
   private fun addBookToLibraryIfNotExist(libKiwixBook: Book?) {

@@ -25,6 +25,7 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.datastore.preferences.core.edit
 import androidx.test.core.app.ApplicationProvider
 import app.cash.turbine.test
+import eu.mhutti1.utils.storage.StorageDeviceUtils
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.assertj.core.api.Assertions.assertThat
@@ -67,6 +68,7 @@ class KiwixDataStoreTest {
   }
 
   private fun expectedDefaultPublicStorage(storageContext: Context): String {
+    StorageDeviceUtils.publicDocumentsDirectory(storageContext)?.let { return it.path }
     val defaultPublicStorage =
       ContextWrapper(storageContext).externalMediaDirs.firstOrNull()?.path
         ?: storageContext.filesDir.path
@@ -786,6 +788,27 @@ class KiwixDataStoreTest {
     assertThat(selectedStorage).isEqualTo(expectedDefaultPublicStorage(storageContext))
     assertThat(storageContext.kiwixDataStore.data.first()[PreferencesKeys.PREF_STORAGE])
       .isEqualTo(expectedDefaultPublicStorage(storageContext))
+  }
+
+  @Test
+  fun `selectedStorage defaults to Documents from Android 11`() = runTest {
+    val (_, storageDataStore) = storageAwareDataStore()
+    assertThat(File(storageDataStore.selectedStorage.first()).name).isEqualTo("Documents")
+  }
+
+  @Test
+  @Config(sdk = [Build.VERSION_CODES.Q])
+  fun `selectedStorage keeps the app media default on Android 10`() = runTest {
+    val (storageContext, storageDataStore) = storageAwareDataStore()
+    assertThat(storageDataStore.selectedStorage.first())
+      .isEqualTo(ContextWrapper(storageContext).externalMediaDirs.first().path)
+  }
+
+  @Test
+  fun `legacyBooksMoveDeclined is false until declined`() = runTest {
+    assertFalse(kiwixDataStore.legacyBooksMoveDeclined.first())
+    kiwixDataStore.setLegacyBooksMoveDeclined(true)
+    assertTrue(kiwixDataStore.legacyBooksMoveDeclined.first())
   }
 
   @Test

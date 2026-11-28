@@ -352,4 +352,9 @@
   <string name="resuming_state">This text is shown to inform the user that the current state of download is resuming.</string>
   <string name="downloading_state">This text is shown to inform the user that the current state of download is actively in progress.</string>
   <string name="download_failed_state">This text is shown to inform the user when a download has failed.</string>
+  <string name="move_books_title">Title of the dialog offering to move books out of app storage, which is deleted on uninstall.</string>
+  <string name="move_books_message">Dialog message. %1$d is the number of books, %2$s their total size. "Documents/Kiwix" is a folder name.</string>
+  <string name="moving_books_progress">Title of the progress dialog while books are moved.</string>
+  <string name="move_books_done">Shown after moving books. %1$d is the number of books moved.</string>
+  <string name="move_books_failed">Shown when some books were not moved. %1$d is the number of books that failed.</string>
 </resources>
