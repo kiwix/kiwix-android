@@ -531,7 +531,7 @@ private fun ExtrasCategory(
     if (settingsUiState.shouldShowPrefWifiOnlyPreference) {
       SwitchPreference(
         title = stringResource(R.string.pref_wifi_only),
-        summary = stringResource(R.string.pref_wifi_only),
+        summary = stringResource(R.string.pref_wifi_only_summary),
         checked = wifiOnly,
         onCheckedChange = { coreSettingsViewModel.setWifiOnly(it) }
       )
