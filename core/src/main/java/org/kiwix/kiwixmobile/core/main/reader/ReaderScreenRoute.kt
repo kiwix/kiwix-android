@@ -45,6 +45,7 @@ import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.unit.dp
 import androidx.core.content.FileProvider
@@ -114,14 +115,13 @@ fun ReaderScreenRoute(
     null
   }
   val pickImageLauncher = rememberLauncherForActivityResult(PickVisualMedia()) { uri ->
-    if (uri != null) {
-      activity.toast(string.image_selected)
-    }
+    viewModel.onImageSelected(uri)
   }
+  var pendingPhotoUri by rememberSaveable { mutableStateOf<Uri?>(null) }
   val takePictureLauncher = rememberLauncherForActivityResult(TakePicture()) { success ->
-    if (success) {
-      activity.toast(string.photo_captured)
-    }
+    val capturedUri = if (success) pendingPhotoUri else null
+    pendingPhotoUri = null
+    viewModel.onImageSelected(capturedUri)
   }
 
   DisposableEffect(Unit) {
@@ -155,8 +155,18 @@ fun ReaderScreenRoute(
     navHostController,
     readPermissionState,
     notificationPermission,
-    pickImageLauncher,
-    takePictureLauncher
+    onLaunchImagePicker = {
+      launchImagePicker(pickImageLauncher) { viewModel.onImageSelected(null) }
+    },
+    onLaunchCamera = { photoFile ->
+      launchCameraCapture(
+        context = activity,
+        photoFile = photoFile,
+        takePictureLauncher = takePictureLauncher,
+        onPhotoUriReady = { pendingPhotoUri = it },
+        onLaunchFailed = { viewModel.onImageSelected(null) }
+      )
+    }
   )
   KiwixTheme {
     ReaderScreen(
@@ -301,8 +311,8 @@ private fun CollectEffect(
   navHostController: NavHostController,
   readPermissionState: PermissionState,
   notificationPermission: PermissionState?,
-  pickImageLauncher: ActivityResultLauncher<PickVisualMediaRequest>,
-  takePictureLauncher: ActivityResultLauncher<Uri>,
+  onLaunchImagePicker: () -> Unit,
+  onLaunchCamera: (File) -> Unit,
 ) {
   LaunchedEffect(Unit) {
     viewModel.effects.collect { effect ->
@@ -331,30 +341,51 @@ private fun CollectEffect(
         is ReaderEffect.ShowTTSLanguageDialog ->
           activity.externalLinkOpener.showTTSLanguageDownloadDialog()
 
-        ReaderEffect.PickImage ->
-          pickImageLauncher.launch(PickVisualMediaRequest(PickVisualMedia.ImageOnly))
+        ReaderEffect.PickImage -> onLaunchImagePicker()
 
-        is ReaderEffect.TakePhoto ->
-          launchCameraCapture(activity, effect.photoFile, takePictureLauncher)
+        is ReaderEffect.TakePhoto -> onLaunchCamera(effect.photoFile)
       }
     }
+  }
+}
+
+private fun launchImagePicker(
+  pickImageLauncher: ActivityResultLauncher<PickVisualMediaRequest>,
+  onLaunchFailed: () -> Unit
+) {
+  try {
+    pickImageLauncher.launch(PickVisualMediaRequest(PickVisualMedia.ImageOnly))
+  } catch (e: ActivityNotFoundException) {
+    Log.e(TAG_KIWIX, "No photo picker application available", e)
+    onLaunchFailed()
   }
 }
 
 private fun launchCameraCapture(
   context: Context,
   photoFile: File,
-  takePictureLauncher: ActivityResultLauncher<Uri>
+  takePictureLauncher: ActivityResultLauncher<Uri>,
+  onPhotoUriReady: (Uri?) -> Unit,
+  onLaunchFailed: () -> Unit
 ) {
-  val photoUri = FileProvider.getUriForFile(
-    context,
-    "${context.packageName}.fileprovider",
-    photoFile
-  )
+  val photoUri = try {
+    FileProvider.getUriForFile(
+      context,
+      "${context.packageName}.fileprovider",
+      photoFile
+    )
+  } catch (e: IllegalArgumentException) {
+    Log.e(TAG_KIWIX, "Failed to resolve temporary camera photo URI", e)
+    onLaunchFailed()
+    return
+  }
+  onPhotoUriReady(photoUri)
   try {
     takePictureLauncher.launch(photoUri)
   } catch (e: ActivityNotFoundException) {
     Log.e(TAG_KIWIX, "No camera application available", e)
+    onPhotoUriReady(null)
+    onLaunchFailed()
   }
 }
 

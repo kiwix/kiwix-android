@@ -42,8 +42,9 @@ class KiwixWebChromeClient(
     filePathCallback: ValueCallback<Array<Uri>>,
     fileChooserParams: FileChooserParams
   ): Boolean {
-    filePathCallback.onReceiveValue(null)
-    callback.onShowImageChooser(fileChooserParams.isCaptureEnabled)
+    callback.onShowImageChooser(fileChooserParams.isCaptureEnabled) { uri ->
+      filePathCallback.onReceiveValue(uri?.let { arrayOf(it) })
+    }
     return true
   }
 }
