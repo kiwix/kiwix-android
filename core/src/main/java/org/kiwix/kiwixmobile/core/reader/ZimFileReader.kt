@@ -369,7 +369,6 @@ class ZimFileReader(
       null
     }
 
-  @Suppress("TooGenericExceptionCaught")
   @VisibleForTesting
   internal fun getInputStreamFromDirectAccessInfo(
     item: Item?,
@@ -377,24 +376,20 @@ class ZimFileReader(
     infoPair: DirectAccessInfo
   ): InputStream? {
     var parcelFileDescriptor: ParcelFileDescriptor? = null
-    return try {
+    return runCatching {
       item?.itemSize()?.let {
-        parcelFileDescriptor = parcelFileDescriptor(file) ?: return null
-        AssetFileDescriptor(
-          parcelFileDescriptor,
-          infoPair.offset,
-          it
-        ).createInputStream()
+        parcelFileDescriptor =
+          parcelFileDescriptor(file) ?: return@getInputStreamFromDirectAccessInfo null
+        assetFileInputStream(parcelFileDescriptor, infoPair.offset, it)
       }
-    } catch (exception: Exception) {
+    }.onFailure {
       Log.e(
         TAG,
         "Could not get input stream from direct access info for file = $file",
-        exception
+        it
       )
       runCatching { parcelFileDescriptor?.close() }
-      null
-    }
+    }.getOrNull()
   }
 
   @Throws(IOException::class)
@@ -515,9 +510,21 @@ internal fun parcelFileDescriptor(file: File): ParcelFileDescriptor? =
     Log.e(TAG, "Could not open parcel file descriptor for file = $file", ioException)
     null
   } catch (securityException: SecurityException) {
-    Log.e(TAG, "Permission denied opening parcel file descriptor for file = $file", securityException)
+    Log.e(
+      TAG,
+      "Permission denied opening parcel file descriptor for file = $file",
+      securityException
+    )
     null
   }
+
+@VisibleForTesting
+internal fun assetFileInputStream(
+  parcelFileDescriptor: ParcelFileDescriptor,
+  offset: Long,
+  length: Long
+): InputStream =
+  AssetFileDescriptor(parcelFileDescriptor, offset, length).createInputStream()
 
 // Default illustration size for ZIM file favicons
 const val ILLUSTRATION_SIZE = 48

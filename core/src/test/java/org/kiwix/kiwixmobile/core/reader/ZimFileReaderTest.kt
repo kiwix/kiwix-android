@@ -18,9 +18,14 @@
 
 package org.kiwix.kiwixmobile.core.reader
 
+import android.os.ParcelFileDescriptor
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.mockkStatic
+import io.mockk.unmockkAll
+import io.mockk.verify
 import kotlinx.coroutines.Dispatchers
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Nested
@@ -33,6 +38,8 @@ import org.kiwix.libzim.DirectAccessInfo
 import org.kiwix.libzim.Item
 import org.kiwix.libzim.SuggestionSearcher
 import java.io.File
+import java.io.FileInputStream
+import java.io.IOException
 
 class ZimFileReaderTest {
   @Nested
@@ -181,27 +188,123 @@ class ZimFileReaderTest {
 
   @Nested
   inner class DirectAccessInfoTest {
+    @AfterEach
+    fun tearDown() {
+      unmockkAll()
+    }
+
+    private fun reader() = ZimFileReader(
+      ZimReaderSource(File("testzim.zim")),
+      mockk(relaxed = true),
+      mockk(relaxed = true),
+      Dispatchers.Unconfined
+    )
+
+    private fun directAccessInfo() = DirectAccessInfo().apply {
+      filename = "test.zim"
+      offset = 0L
+    }
+
     @Test
     fun getInputStreamFromDirectAccessInfoReturnsNullWhenFileCannotBeOpened() {
-      val reader = ZimFileReader(
-        ZimReaderSource(File("testzim.zim")),
-        mockk(relaxed = true),
-        mockk(relaxed = true),
-        Dispatchers.Unconfined
-      )
-      val item = TestItem(2048L)
-      val infoPair = DirectAccessInfo().apply {
-        filename = "test.zim"
-        offset = 0L
-      }
       val nonExistentFile = File("non_existent_file.zim")
-      assertNull(reader.getInputStreamFromDirectAccessInfo(item, nonExistentFile, infoPair))
+      assertNull(
+        reader().getInputStreamFromDirectAccessInfo(
+          TestItem(2048L),
+          nonExistentFile,
+          directAccessInfo()
+        )
+      )
     }
 
     @Test
     fun parcelFileDescriptorReturnsNullWhenFileDoesNotExist() {
       val nonExistentFile = File("non_existent_file.zim")
       assertNull(parcelFileDescriptor(nonExistentFile))
+    }
+
+    @Test
+    fun getInputStreamFromDirectAccessInfoReturnsNullWhenItemIsNull() {
+      val nonExistentFile = File("non_existent_file.zim")
+      assertNull(
+        reader().getInputStreamFromDirectAccessInfo(
+          null,
+          nonExistentFile,
+          directAccessInfo()
+        )
+      )
+    }
+
+    @Test
+    fun getInputStreamFromDirectAccessInfoReturnsNullWhenItemSizeThrows() {
+      val item = object : Item() {
+        override fun getSize(): Long = throw IllegalStateException("size unavailable")
+      }
+      val nonExistentFile = File("non_existent_file.zim")
+      assertNull(
+        reader().getInputStreamFromDirectAccessInfo(
+          item,
+          nonExistentFile,
+          directAccessInfo()
+        )
+      )
+    }
+
+    @Test
+    fun parcelFileDescriptorReturnsNullWhenOpenThrowsIOException() {
+      mockkStatic(ParcelFileDescriptor::class)
+      every { ParcelFileDescriptor.open(any(), any()) } throws IOException("boom")
+      assertNull(parcelFileDescriptor(File("test.zim")))
+    }
+
+    @Test
+    fun parcelFileDescriptorReturnsNullWhenOpenThrowsSecurityException() {
+      mockkStatic(ParcelFileDescriptor::class)
+      every {
+        ParcelFileDescriptor.open(
+          any(),
+          any()
+        )
+      } throws SecurityException("permission denied")
+      assertNull(parcelFileDescriptor(File("test.zim")))
+    }
+
+    @Test
+    fun getInputStreamFromDirectAccessInfoClosesParcelFileDescriptorWhenCreatingInputStreamFails() {
+      val parcelFileDescriptor = mockk<ParcelFileDescriptor>(relaxed = true)
+      mockkStatic("org.kiwix.kiwixmobile.core.reader.ZimFileReaderKt")
+      every { parcelFileDescriptor(any()) } returns parcelFileDescriptor
+      every { assetFileInputStream(parcelFileDescriptor, any(), any()) } throws
+        IOException("read failed")
+
+      val result =
+        reader().getInputStreamFromDirectAccessInfo(
+          TestItem(2048L),
+          File("test.zim"),
+          directAccessInfo()
+        )
+
+      assertNull(result)
+      verify(exactly = 1) { parcelFileDescriptor.close() }
+    }
+
+    @Test
+    fun getInputStreamFromDirectAccessInfoReturnsInputStreamOnSuccess() {
+      val parcelFileDescriptor = mockk<ParcelFileDescriptor>(relaxed = true)
+      val inputStream = mockk<FileInputStream>(relaxed = true)
+      mockkStatic("org.kiwix.kiwixmobile.core.reader.ZimFileReaderKt")
+      every { parcelFileDescriptor(any()) } returns parcelFileDescriptor
+      every { assetFileInputStream(parcelFileDescriptor, any(), any()) } returns inputStream
+
+      val result =
+        reader().getInputStreamFromDirectAccessInfo(
+          TestItem(2048L),
+          File("test.zim"),
+          directAccessInfo()
+        )
+
+      assertEquals(inputStream, result)
+      verify(exactly = 0) { parcelFileDescriptor.close() }
     }
   }
 
