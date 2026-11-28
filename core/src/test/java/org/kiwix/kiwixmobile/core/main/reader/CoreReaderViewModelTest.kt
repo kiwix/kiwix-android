@@ -929,6 +929,32 @@ internal class CoreReaderViewModelTest {
     }
 
     @Test
+    fun selectTab_savesSelectedTab() = runTest {
+      viewModel.isWebViewHistoryRestoring = false
+
+      viewModel.selectTab(1)
+
+      coVerify { readerWebViewManager.setCurrentWebViewIndex(1, save = true) }
+    }
+
+    @Test
+    fun selectTab_whileRestoringTabs_doesNotSaveSelectedTab() = runTest {
+      viewModel.isWebViewHistoryRestoring = true
+
+      viewModel.selectTab(1)
+
+      coVerify { readerWebViewManager.setCurrentWebViewIndex(1, save = false) }
+    }
+
+    @Test
+    fun onAction_SelectTab_savesSelectedTab() = runTest {
+      viewModel.onAction(ReaderAction.SelectTab(2))
+      advanceUntilIdle()
+
+      coVerify { readerWebViewManager.setCurrentWebViewIndex(2, save = true) }
+    }
+
+    @Test
     fun onAction_OpenSearch_callsOpenSearch() = runTest {
       val viewModel = spyk(viewModel)
 

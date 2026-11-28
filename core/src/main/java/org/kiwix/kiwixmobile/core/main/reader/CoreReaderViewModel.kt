@@ -1238,7 +1238,8 @@ abstract class CoreReaderViewModel(
     }
 
   protected open suspend fun selectTab(position: Int) {
-    readerWebViewManager.setCurrentWebViewIndex(position)
+    // Do not save while tabs are being restored, because the tab list is not complete yet.
+    readerWebViewManager.setCurrentWebViewIndex(position, save = !isWebViewHistoryRestoring)
     updateBottomToolbarVisibility()
     updateUrlFlow()
     updateTableOfContents()

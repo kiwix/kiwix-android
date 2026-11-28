@@ -56,6 +56,14 @@ class TabsManager @Inject constructor() {
   fun currentState() = _tabState.value
 
   /**
+   * The tabs stored in the saved reader session, in the order they are saved.
+   * Kept here because this class is a singleton, so every [ReaderSessionManager]
+   * sees the same list.
+   */
+  @Volatile
+  var savedTabs: List<KiwixWebView> = emptyList()
+
+  /**
    * Add the webView in the current list.
    * @param webView: Webview for adding in the list.
    * @param selectTab: A boolean value, if false it will add the webView in background.

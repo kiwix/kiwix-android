@@ -60,6 +60,9 @@ class ReaderSessionManagerTest {
   @BeforeEach
   fun setup() {
     clearAllMocks()
+    var savedTabs = emptyList<KiwixWebView>()
+    every { tabsManager.savedTabs } answers { savedTabs }
+    every { tabsManager.savedTabs = any() } answers { savedTabs = firstArg() }
     readerSessionManager = ReaderSessionManager(
       tabsManager,
       zimFileManager,
@@ -298,16 +301,55 @@ class ReaderSessionManagerTest {
     @Test
     fun `saveReaderSession saves selected tab index`() = runTest {
       mockSaveReaderSessionDependencies()
-
-      mockCurrentTabs(selectedIndex = 3)
-
-      every { zimFileManager.zimReaderSource } returns null
+      mockZimReader()
+      val tabs = List(4) { mockWebView(url = "url$it") }
+      mockCurrentTabs(tabs, selectedIndex = 3)
 
       readerSessionManager.saveReaderSession()
 
       coVerify {
         kiwixDataStore.setCurrentTab(3)
       }
+    }
+
+    @Test
+    fun `saveReaderSession maps selected tab to its index in the saved list`() = runTest {
+      mockSaveReaderSessionDependencies()
+      mockZimReader()
+      // The middle tab has no page yet, so it is not saved.
+      val tabs = listOf(mockWebView("url1"), mockWebView(url = null), mockWebView("url3"))
+      mockCurrentTabs(tabs, selectedIndex = 2)
+
+      readerSessionManager.saveReaderSession()
+
+      coVerify {
+        mainRepositoryActions.saveWebViewPageHistory(match { it.size == 2 })
+        kiwixDataStore.setCurrentTab(1)
+      }
+    }
+
+    @Test
+    fun `saveReaderSession uses the previous saved tab when selected tab is not saved`() =
+      runTest {
+        mockSaveReaderSessionDependencies()
+        mockZimReader()
+        val tabs = listOf(mockWebView("url1"), mockWebView("url2"), mockWebView(historySize = 0))
+        mockCurrentTabs(tabs, selectedIndex = 2)
+
+        readerSessionManager.saveReaderSession()
+
+        coVerify { kiwixDataStore.setCurrentTab(1) }
+      }
+
+    @Test
+    fun `saveReaderSession saves first tab when no tab is saved`() = runTest {
+      mockSaveReaderSessionDependencies()
+      mockZimReader()
+      mockCurrentTabs(listOf(mockWebView(url = null)), selectedIndex = 0)
+
+      readerSessionManager.saveReaderSession()
+
+      coVerify { kiwixDataStore.setCurrentTab(0) }
     }
 
     private fun mockZimReader(id: String = "zim-id") {
@@ -353,6 +395,147 @@ class ReaderSessionManagerTest {
       every { webView.saveState(any()) } returns history
       every { history.size } returns historySize
 
+      return webView
+    }
+  }
+
+  @Nested
+  inner class SaveCurrentTabTest {
+    private lateinit var tabs: List<KiwixWebView>
+
+    @BeforeEach
+    fun setUp() {
+      coEvery { kiwixDataStore.setCurrentTab(any()) } just Runs
+      coEvery { kiwixDataStore.setCurrentZimFile(any()) } just Runs
+      coEvery { mainRepositoryActions.clearWebViewPageHistory() } just Runs
+      coEvery { mainRepositoryActions.saveWebViewPageHistory(any()) } just Runs
+      every { zimFileManager.zimReaderSource } returns null
+      val zimReader = mockk<ZimFileReader>()
+      every { zimReader.id } returns "zim-id"
+      every { zimReaderContainer.zimFileReader } returns zimReader
+      tabs = listOf(savedTab(), savedTab(), savedTab())
+    }
+
+    @Test
+    fun `saveCurrentTab saves only the selected tab`() = runTest {
+      saveSession(tabs, selectedIndex = 0)
+      mockTabs(tabs, selectedIndex = 1)
+
+      readerSessionManager.saveCurrentTab()
+
+      coVerify(exactly = 1) { kiwixDataStore.setCurrentTab(1) }
+      coVerify(exactly = 1) { mainRepositoryActions.saveWebViewPageHistory(any()) }
+    }
+
+    @Test
+    fun `saveCurrentTab uses the index in the saved history`() = runTest {
+      // The middle tab has no page, so it is not in the saved history.
+      val withBlankTab = listOf(tabs[0], savedTab(url = null), tabs[2])
+      saveSession(withBlankTab, selectedIndex = 0)
+      mockTabs(withBlankTab, selectedIndex = 2)
+
+      readerSessionManager.saveCurrentTab()
+
+      coVerify { kiwixDataStore.setCurrentTab(1) }
+    }
+
+    @Test
+    fun `saveCurrentTab matches the saved history when a tab was closed after saving`() =
+      runTest {
+        val fourTabs = tabs + savedTab()
+        saveSession(fourTabs, selectedIndex = 0)
+        // Tab 1 is closed, but the undo snackbar is still showing, so nothing is saved yet.
+        mockTabs(listOf(fourTabs[0], fourTabs[2], fourTabs[3]), selectedIndex = 2)
+
+        readerSessionManager.saveCurrentTab()
+
+        // The saved history still has 4 tabs, and the selected tab is the 4th one.
+        coVerify { kiwixDataStore.setCurrentTab(3) }
+      }
+
+    @Test
+    fun `saveCurrentTab saves nothing for a tab that is not saved yet`() = runTest {
+      saveSession(tabs, selectedIndex = 0)
+      mockTabs(tabs + savedTab(), selectedIndex = 3)
+
+      readerSessionManager.saveCurrentTab()
+
+      coVerify(exactly = 1) { kiwixDataStore.setCurrentTab(any()) }
+      coVerify(exactly = 0) { kiwixDataStore.setCurrentTab(3) }
+    }
+
+    @Test
+    fun `saveCurrentTab saves nothing before the first full save`() = runTest {
+      mockTabs(tabs, selectedIndex = 1)
+
+      readerSessionManager.saveCurrentTab()
+
+      coVerify(exactly = 0) { kiwixDataStore.setCurrentTab(any()) }
+    }
+
+    @Test
+    fun `saveCurrentTab saves the selected tab after tabs are restored`() = runTest {
+      readerSessionManager.setRestoredTabs(tabs)
+      mockTabs(tabs, selectedIndex = 1)
+
+      readerSessionManager.saveCurrentTab()
+
+      coVerify(exactly = 1) { kiwixDataStore.setCurrentTab(1) }
+    }
+
+    @Test
+    fun `saveCurrentTab saves nothing after the history is cleared`() = runTest {
+      saveSession(tabs, selectedIndex = 0)
+      every { tabsManager.getCurrentWebView() } returns tabs[0]
+      readerSessionManager.clearWebViewHistory()
+      mockTabs(tabs, selectedIndex = 1)
+
+      readerSessionManager.saveCurrentTab()
+
+      coVerify(exactly = 0) { kiwixDataStore.setCurrentTab(1) }
+    }
+
+    @Test
+    fun `saveCurrentTab does not wait for the tabs lock`() = runTest {
+      saveSession(tabs, selectedIndex = 0)
+      mockTabs(tabs, selectedIndex = 1)
+
+      // saveCurrentTab does not take the lock, so calling it while the lock is held works.
+      readerSessionManager.withTabsMutationLock { readerSessionManager.saveCurrentTab() }
+
+      coVerify { kiwixDataStore.setCurrentTab(1) }
+    }
+
+    @Test
+    fun `saveReaderSession saves the tab selected while the history was written`() = runTest {
+      mockTabs(tabs, selectedIndex = 0)
+      coEvery { mainRepositoryActions.saveWebViewPageHistory(any()) } answers {
+        // The user switches tabs while the history is being written.
+        mockTabs(tabs, selectedIndex = 2)
+      }
+
+      readerSessionManager.saveReaderSession()
+
+      coVerify { kiwixDataStore.setCurrentTab(2) }
+      coVerify(exactly = 0) { kiwixDataStore.setCurrentTab(0) }
+    }
+
+    private suspend fun saveSession(webViews: List<KiwixWebView>, selectedIndex: Int) {
+      mockTabs(webViews, selectedIndex)
+      readerSessionManager.saveReaderSession()
+    }
+
+    private fun mockTabs(webViews: List<KiwixWebView>, selectedIndex: Int) {
+      every { tabsManager.currentState() } returns
+        TabsManager.TabsState(webViews = webViews, selectedIndex = selectedIndex)
+    }
+
+    private fun savedTab(url: String? = "url"): KiwixWebView {
+      val webView = mockk<KiwixWebView>(relaxed = true)
+      val history = mockk<WebBackForwardList>()
+      every { history.size } returns 1
+      every { webView.url } returns url
+      every { webView.saveState(any()) } returns history
       return webView
     }
   }
